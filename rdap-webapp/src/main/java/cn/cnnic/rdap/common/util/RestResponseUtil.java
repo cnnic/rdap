@@ -51,7 +51,7 @@ public class RestResponseUtil {
 	 * all ErrorMessage map,must be init before call
 	 * getErrorMessageByErrorCode()
 	 */
-	private static Map<String, ErrorMessage> errorMessageMap = null;
+	private static Map<Long, ErrorMessage> errorMessageMap = null;
 
 	private static ErrorMessageService errorMessageService;
 
@@ -75,10 +75,11 @@ public class RestResponseUtil {
 	 * @return ErrorMessage
 	 */
 	private static ErrorMessage getErrorMessageByErrorCode(String errorCode) {
+		Long codeLongVal =  Long.valueOf(errorCode);
 		if (null == errorMessageMap) {
 			initErrorMessages();
 		}
-		ErrorMessage result = errorMessageMap.get(errorCode);
+		ErrorMessage result = errorMessageMap.get(codeLongVal);
 		if (null != result) {
 			return result;
 		}

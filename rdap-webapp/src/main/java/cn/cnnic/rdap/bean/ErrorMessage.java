@@ -30,6 +30,11 @@
  */
 package cn.cnnic.rdap.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -48,7 +53,7 @@ public class ErrorMessage {
 	/**
 	 * HTTP response code
 	 */
-	private String code;
+	private Long errorCode;
 	/**
 	 * title of error
 	 */
@@ -56,7 +61,7 @@ public class ErrorMessage {
 	/**
 	 * description of error
 	 */
-	private String description;
+	private List<String> description = new ArrayList<String>();
 
 	/**
 	 * get null safe ErrorMessage
@@ -67,6 +72,22 @@ public class ErrorMessage {
 		return new ErrorMessage();
 	}
 
+
+	/**
+	 * add a description string to description list
+	 * 
+	 * @param descriptionStr
+	 */
+	public void addDescription(String descriptionStr) {
+		if (StringUtils.isBlank(descriptionStr)) {
+			return;
+		}
+		if (null == this.description) {
+			this.description = new ArrayList<String>();
+		}
+		this.description.add(descriptionStr);
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -75,12 +96,12 @@ public class ErrorMessage {
 		this.id = id;
 	}
 
-	public String getCode() {
-		return code;
+	public Long getErrorCode() {
+		return errorCode;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setErrorCode(Long errorCode) {
+		this.errorCode = errorCode;
 	}
 
 	public String getTitle() {
@@ -91,12 +112,11 @@ public class ErrorMessage {
 		this.title = title;
 	}
 
-	public String getDescription() {
+	public List<String> getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(List<String> description) {
 		this.description = description;
 	}
-
 }

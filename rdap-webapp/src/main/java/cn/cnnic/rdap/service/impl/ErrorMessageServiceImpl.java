@@ -57,12 +57,12 @@ public class ErrorMessageServiceImpl implements ErrorMessageService {
 	private ErrorMessageDao errorMessageDao;
 
 	@Override
-	public Map<String, ErrorMessage> getAllErrorMessageMap() {
+	public Map<Long, ErrorMessage> getAllErrorMessageMap() {
 		List<ErrorMessage> errorMessages = errorMessageDao
 				.getAllErrorMessages();
-		Map<String, ErrorMessage> errorMessageMap = new HashMap<String, ErrorMessage>();
+		Map<Long, ErrorMessage> errorMessageMap = new HashMap<Long, ErrorMessage>();
 		for (ErrorMessage errorMessage : errorMessages) {
-			errorMessageMap.put(errorMessage.getCode(), errorMessage);
+			errorMessageMap.put(errorMessage.getErrorCode(), errorMessage);
 		}
 		return errorMessageMap;
 	}

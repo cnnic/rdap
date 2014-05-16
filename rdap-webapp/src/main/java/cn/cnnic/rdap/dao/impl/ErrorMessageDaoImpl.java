@@ -64,9 +64,9 @@ public class ErrorMessageDaoImpl implements ErrorMessageDao {
 					public ErrorMessage mapRow(ResultSet rs, int rowNum)
 							throws SQLException {
 						ErrorMessage errorMessage = new ErrorMessage();
-						errorMessage.setCode(rs.getString("ERROR_CODE"));
+						errorMessage.setErrorCode(rs.getLong("ERROR_CODE"));
 						errorMessage.setTitle(rs.getString("TITLE"));
-						errorMessage.setDescription(rs.getString("DESCRIPTION"));
+						errorMessage.addDescription(rs.getString("DESCRIPTION"));
 						return errorMessage;
 					}
 				});

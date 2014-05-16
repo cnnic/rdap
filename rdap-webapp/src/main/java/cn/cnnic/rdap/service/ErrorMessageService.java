@@ -46,5 +46,5 @@ public interface ErrorMessageService {
 	 * 
 	 * @return ErrorMessage map,[key:ErrorMessage id,value:ErrorMessage]
 	 */
-	public Map<String, ErrorMessage> getAllErrorMessageMap();
+	public Map<Long, ErrorMessage> getAllErrorMessageMap();
 }

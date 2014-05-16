@@ -48,13 +48,13 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ContextConfiguration(locations = {
 		"/spring/spring-applicationContext-test.xml",
 		"/spring/spring-servlet.xml" })
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DbUnitTestExecutionListener.class })
 @Transactional
-//@WebAppConfiguration
 public abstract class BaseTest {
 
 }

@@ -65,7 +65,7 @@ public class ErrorMessageServiceImplTest extends BaseTest {
 	// @DatabaseTearDown("teardown.xml")
 	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
 	public void testGetAllErrorMessageMap() {
-		Map<String, ErrorMessage> errorMessageMap = errorMessageService
+		Map<Long, ErrorMessage> errorMessageMap = errorMessageService
 				.getAllErrorMessageMap();
 		Assert.notNull(errorMessageMap);
 		assertEquals(3, errorMessageMap.size());
