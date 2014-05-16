@@ -28,40 +28,91 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import org.apache.commons.lang.StringUtils;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * base notice class
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+public abstract class BaseNotice extends BaseModel {
 	/**
-	 * query model object
+	 * notice type enum
 	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
+	 * @author jiashuo
+	 * 
 	 */
-	public T query(QueryParam queryParam);
+	public enum NoticeType {
+		Notice("notice"), REMARK("remark");
+		/**
+		 * type name
+		 */
+		private String name;
+
+		private NoticeType(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
 
 	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
+	 * title
 	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	private String title;
+	/**
+	 * description
+	 */
+	private List<String> description = new ArrayList<String>();
+	/**
+	 * links
+	 */
+	private List<Link> links;
+
+	/**
+	 * add a description
+	 * 
+	 * @param descriptionStr
+	 */
+	public void addDescription(String descriptionStr) {
+		if (StringUtils.isBlank(descriptionStr)) {
+			return;
+		}
+		if (null == this.description) {
+			this.description = new ArrayList<String>();
+		}
+		this.description.add(descriptionStr);
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public List<String> getDescription() {
+		return description;
+	}
+
+	public void setDescription(List<String> description) {
+		this.description = description;
+	}
+
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
 }

@@ -28,40 +28,42 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cn.cnnic.rdap.bean.ErrorMessage;
+import cn.cnnic.rdap.dao.ErrorMessageDao;
+import cn.cnnic.rdap.service.ErrorMessageService;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * error message service implementation
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
-	/**
-	 * query model object
-	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
-	 */
-	public T query(QueryParam queryParam);
+@Service
+public class ErrorMessageServiceImpl implements ErrorMessageService {
 
 	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
+	 * ErrorMessageDao
 	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	@Autowired
+	private ErrorMessageDao errorMessageDao;
+
+	@Override
+	public Map<String, ErrorMessage> getAllErrorMessageMap() {
+		List<ErrorMessage> errorMessages = errorMessageDao
+				.getAllErrorMessages();
+		Map<String, ErrorMessage> errorMessageMap = new HashMap<String, ErrorMessage>();
+		for (ErrorMessage errorMessage : errorMessages) {
+			errorMessageMap.put(errorMessage.getCode(), errorMessage);
+		}
+		return errorMessageMap;
+	}
 }

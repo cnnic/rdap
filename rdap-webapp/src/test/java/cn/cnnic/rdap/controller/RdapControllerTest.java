@@ -28,72 +28,70 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.common.util;
+package cn.cnnic.rdap.controller;
 
-import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
-import cn.cnnic.rdap.bean.Domain;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for RestResponseUtil
+ * Test for RdapController
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
-public class RestResponseUtilTest extends BaseTest {
+public class RdapControllerTest extends BaseTest {
+
+//	@Autowired
+	private WebApplicationContext wac;
+
+	private MockMvc mockMvc;
+
+//	@Before
+//	public void setup() {
+//		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+//	}
 
 	/**
-	 * test create ResponseEntity with HTTP code 200
+	 * test query exist autnum
+	 * 
+	 * @throws Exception
 	 */
 	@Test
-	public void testCreateResponse200() {
-		String domainName = "cnnic.cn";
-		Domain domain = new Domain();
-		domain.setLdhName(domainName);
-		ResponseEntity<Domain> result = RestResponseUtil
-				.createResponse200(domain);
-		Assert.notNull(result);
-		assertEquals(result.getBody().getLdhName(), domainName);
-		assertEquals(result.getStatusCode(), HttpStatus.OK);
+	// @DatabaseTearDown("teardown.xml")
+//	@DatabaseSetup("autnum.xml")
+	public void testQueryExistAutnum() throws Exception {
+		String autnumStr = "1";
+//		mockMvc.perform(
+//				get("/.well-known/rdap/autnum/" + autnumStr)
+//						.accept(MediaType
+//								.parseMediaType("application/json;charset=UTF-8")))
+//				.andExpect(status().isOk())
+//				.andExpect(content().contentType("application/json"))
+//				.andExpect(jsonPath("$.country").value("zh"));
 	}
 
 	/**
-	 * test create ResponseEntity with HTTP code 400
+	 * test query non exist autnum
 	 */
 	@Test
-	public void testCreateResponse400() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse400();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * test create ResponseEntity with HTTP code 404
-	 */
-	@Test
-	public void testCreateResponse404() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse404();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
-	}
-
-	/**
-	 * test create ResponseEntity with HTTP code 500
-	 */
-	@Test
-	public void testCreateResponse500() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse500();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+//	@DatabaseTearDown("teardown.xml")
+	public void testQueryNonExistAutnum() {
+		String nonExistAutnumStr = "1000";
 	}
 }

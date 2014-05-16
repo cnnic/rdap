@@ -28,76 +28,64 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.controller;
+package cn.cnnic.rdap.service.impl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import static org.junit.Assert.*;
 
+import java.util.List;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.Assert;
 
+import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.common.util.AutnumValidator;
-import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.QueryService;
-import cn.cnnic.rdap.service.RdapConformanceService;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 /**
- * controller for query and search.All methods return message in JSON format.
+ * Test for QueryServiceImpl
  * 
  * @author jiashuo
  * 
  */
-@RestController
-@RequestMapping("/{dot}well-known/rdap")
-public class RdapController {
-	/**
-	 * query service
-	 */
+@SuppressWarnings("rawtypes")
+public class QueryServiceImplTest extends BaseTest {
+	@Autowired
+	private QueryParser queryParser;
 	@Autowired
 	private QueryService queryService;
 
-	@Autowired
-	private QueryParser queryParser;
-
-	@Autowired
-	private RdapConformanceService rdapConformanceService;
-
-	@RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
-	public ResponseEntity queryAs(@PathVariable String autnum,
-			HttpServletRequest request, HttpServletResponse response) {
-		if (!AutnumValidator.isValidAutnum(autnum)) {
-			return RestResponseUtil.createResponse400();
-		}
-		Autnum result = queryService.queryAutnum(queryParser
-				.parseQueryParam(autnum));
-		if (null != result) {
-			rdapConformanceService.setRdapConformance(result);
-			return RestResponseUtil.createResponse200(result);
-		}
-		return RestResponseUtil.createResponse404();
+	/**
+	 * test query exist autnum
+	 */
+	@Test
+	// @DatabaseTearDown("teardown.xml")
+	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+	public void testQueryAutnum() {
+		String autnumStr = "1";
+		Autnum autnum = queryService.queryAutnum(queryParser
+				.parseQueryParam(autnumStr));
+		Assert.notNull(autnum);
+		assertEquals(autnum.getId(), Long.valueOf(autnumStr));
+		assertEquals(autnum.getCountry(), "zh");
+		assertEquals(autnum.getEndAutnum().longValue(), 10L);
+		assertEquals(autnum.getLang(), "cn");
+		assertEquals(autnum.getName(), "name1");
+		List<String> statusList = autnum.getStatus();
+		assertThat(statusList, CoreMatchers.hasItems("validated"));
 	}
 
-	/**
-	 * query domain by domain name
-	 * 
-	 * @param domainName
-	 *            domain name
-	 * @param response
-	 *            servlet response
-	 * @return JSON formated result,with HTTP code
-	 */
-	@RequestMapping(value = "/domain/{domainName}")
-	public ResponseEntity<Domain> queryDomain(@PathVariable String domainName,
-			HttpServletResponse response) {
-		Domain domain = queryService.queryDomain(new QueryParam(domainName));
-		return RestResponseUtil.createResponse200(domain);
+	@Test
+	public void testQueryDomain() {
+		// TODO:add validation
+		String domainName = "cnnic.cn";
+		Domain domain = queryService.queryDomain(queryParser
+				.parseQueryParam(domainName));
+		assertNull(domain);
 	}
 }

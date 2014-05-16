@@ -28,34 +28,49 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.service;
+package cn.cnnic.rdap.common.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.dao.DomainQueryDao;
+import org.apache.commons.lang.StringUtils;
 
 /**
- * query service implementation
+ * autnum validator
  * 
  * @author jiashuo
  * 
  */
-@Service
-public class QueryServiceImpl implements QueryService {
+public class AutnumValidator {
 	/**
-	 * domain DAO
+	 * max autnum str length:10
 	 */
-	@Autowired
-	private DomainQueryDao domainDao;
+	private static final int AUTNUM_MAX_LENGTH = 10;
+	/**
+	 * minimum autnum
+	 */
+	private static Long MIN_AS_NUM = 0L;
+	/**
+	 * maximum autnum
+	 */
+	private static Long MAX_AS_NUM = 4294967295L;
 
 	/**
-	 * query domain by domain name
+	 * check validity of autnum
+	 * 
+	 * @param autnum
+	 *            autnum str
+	 * @return true if valid, false if not
 	 */
-	@Override
-	public Domain queryDomain(QueryParam queryParam) {
-		return domainDao.query(queryParam);
+	public static boolean isValidAutnum(String autnum) {
+		if (StringUtils.isBlank(autnum) || autnum.length() > AUTNUM_MAX_LENGTH) {
+			return false;
+		}
+		if (!autnum.equals(String.valueOf(MIN_AS_NUM))
+				&& !autnum.matches("^[1-9][0-9]{0,9}$")) {
+			return false;
+		}
+		Long longValue = Long.valueOf(autnum);
+		if (longValue < MIN_AS_NUM || longValue > MAX_AS_NUM) {
+			return false;
+		}
+		return true;
 	}
 }

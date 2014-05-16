@@ -28,40 +28,21 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
-
-import java.util.List;
+package cn.cnnic.rdap.service;
 
 import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * RDAP conformance service is used to add rdapConformance to model
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+public interface RdapConformanceService {
 	/**
-	 * query model object
+	 * set rdapConformance to model
 	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
+	 * @param model
 	 */
-	public T query(QueryParam queryParam);
-
-	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
-	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	public void setRdapConformance(BaseModel model);
 }

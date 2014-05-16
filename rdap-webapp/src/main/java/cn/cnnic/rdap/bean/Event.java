@@ -28,40 +28,55 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.bean;
 
-import java.util.List;
+import java.sql.Timestamp;
+import java.util.Date;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * event represents events that have occurred on an instance of an object class
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+public class Event extends BaseModel {
 	/**
-	 * query model object
-	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
+	 * a string denoting the reason for the event
 	 */
-	public T query(QueryParam queryParam);
+	private String eventAction;
+	/**
+	 * an optional identifier denoting the actor responsible for the event
+	 */
+	private String eventActor;
+	/**
+	 * the time and date the event occurred,UTC
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+	private Timestamp eventDate;
 
-	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
-	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	public String getEventAction() {
+		return eventAction;
+	}
+
+	public void setEventAction(String eventAction) {
+		this.eventAction = eventAction;
+	}
+
+	public String getEventActor() {
+		return eventActor;
+	}
+
+	public void setEventActor(String eventActor) {
+		this.eventActor = eventActor;
+	}
+
+	public Timestamp getEventDate() {
+		return eventDate;
+	}
+
+	public void setEventDate(Timestamp eventDate) {
+		this.eventDate = eventDate;
+	}
 }

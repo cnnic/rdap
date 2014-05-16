@@ -30,8 +30,14 @@
  */
 package cn.cnnic.rdap.common.util;
 
+import java.util.Map;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import cn.cnnic.rdap.bean.ErrorMessage;
+import cn.cnnic.rdap.service.ErrorMessageService;
 
 /**
  * RestResponseUtil is used to create ResponseEntity.
@@ -39,12 +45,51 @@ import org.springframework.http.ResponseEntity;
  * @author jiashuo
  * 
  */
+@Component
 public class RestResponseUtil {
+	/**
+	 * all ErrorMessage map,must be init before call
+	 * getErrorMessageByErrorCode()
+	 */
+	private static Map<String, ErrorMessage> errorMessageMap = null;
+
+	private static ErrorMessageService errorMessageService;
+
+	@PostConstruct
+	private void init() {
+		initErrorMessages();
+	}
+
+	/**
+	 * init ErrorMessages list
+	 */
+	private static void initErrorMessages() {
+		errorMessageMap = errorMessageService.getAllErrorMessageMap();
+	}
+
+	/**
+	 * get ErrorMessage by error code
+	 * 
+	 * @param errorCode
+	 *            error code
+	 * @return ErrorMessage
+	 */
+	private static ErrorMessage getErrorMessageByErrorCode(String errorCode) {
+		if (null == errorMessageMap) {
+			initErrorMessages();
+		}
+		ErrorMessage result = errorMessageMap.get(errorCode);
+		if (null != result) {
+			return result;
+		}
+		return ErrorMessage.getNullErrorMessage();
+	}
 
 	/**
 	 * create response with HTTP status code 200
 	 * 
-	 * @param response model object
+	 * @param response
+	 *            model object
 	 * @return ResponseEntity
 	 */
 	public static <T> ResponseEntity<T> createResponse200(T response) {
@@ -54,30 +99,52 @@ public class RestResponseUtil {
 	/**
 	 * create response with HTTP status code 400
 	 * 
-	 * @param response model object
+	 * @param response
+	 *            model object
 	 * @return ResponseEntity
 	 */
-	public static <T> ResponseEntity<T> createResponse400(T response) {
-		return new ResponseEntity<T>(response, HttpStatus.BAD_REQUEST);
+	public static ResponseEntity<ErrorMessage> createResponse400() {
+		return createCommonErrorResponse(HttpStatus.BAD_REQUEST);
 	}
 
 	/**
 	 * create response with HTTP status code 404
 	 * 
-	 * @param response model object
+	 * @param response
+	 *            model object
 	 * @return ResponseEntity
 	 */
-	public static <T> ResponseEntity<T> createResponse404(T response) {
-		return new ResponseEntity<T>(response, HttpStatus.NOT_FOUND);
+	public static ResponseEntity<ErrorMessage> createResponse404() {
+		return createCommonErrorResponse(HttpStatus.NOT_FOUND);
 	}
 
 	/**
 	 * create response with HTTP status code 500
 	 * 
-	 * @param response model object
+	 * @param response
+	 *            model object
 	 * @return ResponseEntity
 	 */
-	public static <T> ResponseEntity<T> createResponse500(T response) {
-		return new ResponseEntity<T>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	public static ResponseEntity<ErrorMessage> createResponse500() {
+		return createCommonErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	/**
+	 * create error response
+	 * 
+	 * @param errorStatus
+	 *            HttpStatus of error message
+	 * @return ResponseEntity
+	 */
+	private static ResponseEntity<ErrorMessage> createCommonErrorResponse(
+			HttpStatus errorStatus) {
+		ErrorMessage errorMessage = getErrorMessageByErrorCode(errorStatus
+				.toString());
+		return new ResponseEntity<ErrorMessage>(errorMessage, errorStatus);
+	}
+
+	@Autowired
+	public void setErrorMessageService(ErrorMessageService errorMessageService) {
+		RestResponseUtil.errorMessageService = errorMessageService;
 	}
 }

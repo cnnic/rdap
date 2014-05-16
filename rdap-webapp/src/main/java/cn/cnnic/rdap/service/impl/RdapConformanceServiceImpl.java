@@ -28,40 +28,32 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * RdapConformanceService implementation
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
-	/**
-	 * query model object
-	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
-	 */
-	public T query(QueryParam queryParam);
+@Service
+public class RdapConformanceServiceImpl implements RdapConformanceService {
 
-	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
-	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	@Override
+	public void setRdapConformance(BaseModel model) {
+		if (null == model) {
+			return;
+		}
+		List<String> rdapConformance = new ArrayList<String>();
+		rdapConformance.add("rdap_level_0");// TODO: load from database
+		model.setRdapConformance(rdapConformance);
+	}
 }

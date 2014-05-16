@@ -30,17 +30,15 @@
  */
 package cn.cnnic.rdap;
 
-import javax.sql.DataSource;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
 
 /**
  * base class for all test classes.Test can rollback after test complete.
@@ -48,38 +46,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @author jiashuo
  * 
  */
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/spring/spring-applicationContext-test.xml" })
-@TransactionConfiguration
+@ContextConfiguration(locations = {
+		"/spring/spring-applicationContext-test.xml",
+		"/spring/spring-servlet.xml" })
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+		DbUnitTestExecutionListener.class })
 @Transactional
-public abstract class BaseTest extends
-		AbstractTransactionalJUnit4SpringContextTests {
+//@WebAppConfiguration
+public abstract class BaseTest {
 
-	/**
-	 * datasource
-	 */
-	@Autowired
-	protected DataSource dataSource;
-
-	/**
-	 * init() must be override by Test classes.
-	 * 
-	 * @throws Exception
-	 */
-	protected abstract void init() throws Exception;
-
-	@Before
-	public void before() throws Exception {
-		init();
-	}
-
-	@After
-	public void after() throws Exception {
-	}
-
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		super.setDataSource(dataSource);
-		this.dataSource = dataSource;
-	}
 }

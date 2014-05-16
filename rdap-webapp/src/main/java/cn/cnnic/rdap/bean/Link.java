@@ -28,40 +28,111 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import org.apache.commons.lang.StringUtils;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
-	/**
-	 * query model object
-	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
-	 */
-	public T query(QueryParam queryParam);
+public class Link extends BaseModel {
+
+	private String value;
+	private String rel;// TODO:enum accroding to rfc5988
+	private String href;
+	private List<String> hreflang = new ArrayList<String>();
+	private List<String> title = new ArrayList<String>();
+	private String media;
+	private String type;
 
 	/**
-	 * * query Model list, as nested models of other Model
+	 * add a hreflang
 	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
+	 * @param hreflangStr
 	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	public void addHreflang(String hreflangStr) {
+		if (StringUtils.isBlank(hreflangStr)) {
+			return;
+		}
+		if (null == this.hreflang) {
+			this.hreflang = new ArrayList<String>();
+		}
+		this.hreflang.add(hreflangStr);
+	}
+
+	/**
+	 * add a title
+	 * 
+	 * @param titleStr
+	 */
+	public void addTitle(String titleStr) {
+		if (StringUtils.isBlank(titleStr)) {
+			return;
+		}
+		if (null == this.title) {
+			this.title = new ArrayList<String>();
+		}
+		this.title.add(titleStr);
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getRel() {
+		return rel;
+	}
+
+	public void setRel(String rel) {
+		this.rel = rel;
+	}
+
+	public String getHref() {
+		return href;
+	}
+
+	public void setHref(String href) {
+		this.href = href;
+	}
+
+	public List<String> getHreflang() {
+		return hreflang;
+	}
+
+	public void setHreflang(List<String> hreflang) {
+		this.hreflang = hreflang;
+	}
+
+	public List<String> getTitle() {
+		return title;
+	}
+
+	public void setTitle(List<String> title) {
+		this.title = title;
+	}
+
+	public String getMedia() {
+		return media;
+	}
+
+	public void setMedia(String media) {
+		this.media = media;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 }

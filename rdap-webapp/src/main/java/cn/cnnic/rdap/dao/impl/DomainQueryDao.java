@@ -28,55 +28,58 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * query and search type
+ * domain query DAO
  * 
  * @author jiashuo
  * 
  */
-public enum QueryType {
-	DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-			"autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"), SEARCHENTITY(
-			"searchEntity"), SEARCHNAMESERVER("searchNameserver");
-	/**
-	 * name of query type
-	 */
-	private String name;
+@Repository
+public class DomainQueryDao extends AbstractQueryDao<Domain> {
 
 	/**
-	 * default construction
-	 * 
-	 * @param name
-	 *            query type name
+	 * query domain by domain name.
 	 */
-	private QueryType(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * get query type be name
-	 * 
-	 * @param name
-	 *            :query type name
-	 * @return query type if name is valid, null if not
-	 */
-	public static QueryType getQueryType(String name) {
-		QueryType[] queryTypes = QueryType.values();
-		for (QueryType joinType : queryTypes) {
-			if (joinType.getName().equals(name)) {
-				return joinType;
-			}
+	@Override
+	public Domain query(QueryParam queryParam) {
+		final String domainName = queryParam.getQ();
+		final String sql = "select * from RDAP_DOMAIN where LDH_NAME= ? limit 1";
+		List<Domain> result = jdbcTemplate.query(
+				new PreparedStatementCreator() {
+					public PreparedStatement createPreparedStatement(
+							Connection connection) throws SQLException {
+						PreparedStatement ps = connection.prepareStatement(sql);
+						ps.setString(1, domainName);
+						return ps;
+					}
+				}, new RowMapper<Domain>() {
+					public Domain mapRow(ResultSet rs, int rowNum)
+							throws SQLException {
+						Domain domain = new Domain();
+						domain.setLdhName(rs.getString("LDH_NAME"));
+						domain.setHandle(rs.getString("HANDLE"));
+						return domain;
+					}
+				});
+		if (null == result || result.size() == 0) {
+			return null;
 		}
-		return null;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		return result.get(0);
 	}
 }

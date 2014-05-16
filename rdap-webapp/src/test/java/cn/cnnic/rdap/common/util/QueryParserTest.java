@@ -28,55 +28,37 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.common.util;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.controller.support.QueryParser;
 
 /**
- * query and search type
+ * Test for QueryParser
  * 
  * @author jiashuo
  * 
  */
-public enum QueryType {
-	DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-			"autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"), SEARCHENTITY(
-			"searchEntity"), SEARCHNAMESERVER("searchNameserver");
-	/**
-	 * name of query type
-	 */
-	private String name;
+@SuppressWarnings("rawtypes")
+public class QueryParserTest extends BaseTest {
+	@Autowired
+	private QueryParser queryParser;
 
 	/**
-	 * default construction
-	 * 
-	 * @param name
-	 *            query type name
+	 * test valid autnum of one number
 	 */
-	private QueryType(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * get query type be name
-	 * 
-	 * @param name
-	 *            :query type name
-	 * @return query type if name is valid, null if not
-	 */
-	public static QueryType getQueryType(String name) {
-		QueryType[] queryTypes = QueryType.values();
-		for (QueryType joinType : queryTypes) {
-			if (joinType.getName().equals(name)) {
-				return joinType;
-			}
-		}
-		return null;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	@Test
+	public void testParseQ() {
+		String q = "3";
+		QueryParam queryParam = queryParser.parseQueryParam(q);
+		assertNotNull(queryParam);
+		assertEquals(q, queryParam.getQ());
 	}
 }

@@ -28,55 +28,81 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.common.util;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 /**
- * query and search type
+ * Test for RestResponseUtil
  * 
  * @author jiashuo
  * 
  */
-public enum QueryType {
-	DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-			"autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"), SEARCHENTITY(
-			"searchEntity"), SEARCHNAMESERVER("searchNameserver");
-	/**
-	 * name of query type
-	 */
-	private String name;
+@SuppressWarnings("rawtypes")
+public class AutnumValidatorTest {
 
 	/**
-	 * default construction
-	 * 
-	 * @param name
-	 *            query type name
+	 * test valid autnum of one number
 	 */
-	private QueryType(String name) {
-		this.name = name;
+	@Test
+	public void testValidAutnumOfOneNum() {
+		String validAutnum = "3";
+		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
 	}
 
 	/**
-	 * get query type be name
-	 * 
-	 * @param name
-	 *            :query type name
-	 * @return query type if name is valid, null if not
+	 * test valid autnum of two number
 	 */
-	public static QueryType getQueryType(String name) {
-		QueryType[] queryTypes = QueryType.values();
-		for (QueryType joinType : queryTypes) {
-			if (joinType.getName().equals(name)) {
-				return joinType;
-			}
-		}
-		return null;
+	@Test
+	public void testValidAutnumOfTwoNum() {
+		String validAutnum = "13";
+		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
 	}
 
-	public String getName() {
-		return name;
+	/**
+	 * test valid autnum of ten number
+	 */
+	@Test
+	public void testValidAutnumOfTenNum() {
+		String validAutnum = "1234567890";
+		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	/**
+	 * test valid autnum of min autnum
+	 */
+	@Test
+	public void testValidAutnumOfMin() {
+		String validAutnum = "0";
+		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
+	}
+
+	/**
+	 * test valid autnum of max autnum
+	 */
+	@Test
+	public void testValidAutnumOfMax() {
+		String validAutnum = "4294967295";
+		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
+	}
+
+	/**
+	 * test invalid autnum of negative num
+	 */
+	@Test
+	public void testInValidAutnumOfNegativeNum() {
+		String validAutnum = "-13";
+		assertFalse(AutnumValidator.isValidAutnum(validAutnum));
+	}
+	/**
+	 * test invalid autnum of negative num
+	 */
+	@Test
+	public void testInValidAutnumOfLargeNum() {
+		String validAutnum = "4294967296";
+		assertFalse(AutnumValidator.isValidAutnum(validAutnum));
 	}
 }

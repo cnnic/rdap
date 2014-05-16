@@ -50,6 +50,12 @@ public class QueryParam {
 		this.q = q;
 	}
 
+	/**
+	 * default construction
+	 * 
+	 * @param q
+	 *            query parameter
+	 */
 	public QueryParam(String q) {
 		super();
 		this.q = q;
