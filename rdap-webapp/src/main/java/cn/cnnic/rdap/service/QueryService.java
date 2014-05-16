@@ -30,6 +30,7 @@
  */
 package cn.cnnic.rdap.service;
 
+import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.QueryParam;
 
@@ -47,4 +48,12 @@ public interface QueryService {
 	 * @return domain object
 	 */
 	public Domain queryDomain(QueryParam queryParam);
+
+	/**
+	 * query autnm
+	 * 
+	 * @param queryParam
+	 * @return autnum
+	 */
+	public Autnum queryAutnum(QueryParam queryParam);
 }

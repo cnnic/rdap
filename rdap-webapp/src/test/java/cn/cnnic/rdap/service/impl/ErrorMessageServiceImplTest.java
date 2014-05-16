@@ -28,55 +28,46 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.service.impl;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.Map;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.ErrorMessage;
+import cn.cnnic.rdap.controller.support.QueryParser;
+import cn.cnnic.rdap.service.ErrorMessageService;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 /**
- * query and search type
+ * Test for QueryServiceImpl
  * 
  * @author jiashuo
  * 
  */
-public enum QueryType {
-	DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-			"autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"), SEARCHENTITY(
-			"searchEntity"), SEARCHNAMESERVER("searchNameserver");
-	/**
-	 * name of query type
-	 */
-	private String name;
+@SuppressWarnings("rawtypes")
+public class ErrorMessageServiceImplTest extends BaseTest {
+	@Autowired
+	private QueryParser queryParser;
+	@Autowired
+	private ErrorMessageService errorMessageService;
 
 	/**
-	 * default construction
-	 * 
-	 * @param name
-	 *            query type name
+	 * test query exist autnum
 	 */
-	private QueryType(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * get query type be name
-	 * 
-	 * @param name
-	 *            :query type name
-	 * @return query type if name is valid, null if not
-	 */
-	public static QueryType getQueryType(String name) {
-		QueryType[] queryTypes = QueryType.values();
-		for (QueryType joinType : queryTypes) {
-			if (joinType.getName().equals(name)) {
-				return joinType;
-			}
-		}
-		return null;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	@Test
+	// @DatabaseTearDown("teardown.xml")
+	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+	public void testGetAllErrorMessageMap() {
+		Map<Long, ErrorMessage> errorMessageMap = errorMessageService
+				.getAllErrorMessageMap();
+		Assert.notNull(errorMessageMap);
+		assertEquals(3, errorMessageMap.size());
 	}
 }

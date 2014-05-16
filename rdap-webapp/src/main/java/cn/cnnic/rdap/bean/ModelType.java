@@ -31,42 +31,36 @@
 package cn.cnnic.rdap.bean;
 
 /**
- * query and search type
+ * model type.
  * 
  * @author jiashuo
  * 
  */
-public enum QueryType {
+public enum ModelType {
 	DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-			"autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"), SEARCHENTITY(
-			"searchEntity"), SEARCHNAMESERVER("searchNameserver");
+			"autnum"), HELP("help"), IP("ip"), Event("event"), Link("link"), PublicId(
+			"publicId"), Remark("remark");
 	/**
-	 * name of query type
+	 * name of model type
 	 */
 	private String name;
 
-	/**
-	 * default construction
-	 * 
-	 * @param name
-	 *            query type name
-	 */
-	private QueryType(String name) {
+	private ModelType(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * get query type be name
+	 * get model type be name
 	 * 
 	 * @param name
-	 *            :query type name
-	 * @return query type if name is valid, null if not
+	 *            :model type name
+	 * @return model type name
 	 */
-	public static QueryType getQueryType(String name) {
-		QueryType[] queryTypes = QueryType.values();
-		for (QueryType joinType : queryTypes) {
-			if (joinType.getName().equals(name)) {
-				return joinType;
+	public static ModelType getModelType(String name) {
+		ModelType[] modelTypes = ModelType.values();
+		for (ModelType modelType : modelTypes) {
+			if (modelType.getName().equals(name)) {
+				return modelType;
 			}
 		}
 		return null;

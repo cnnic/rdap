@@ -28,40 +28,95 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import org.apache.commons.lang.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * error message for HTTP response
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+@JsonInclude(Include.NON_EMPTY)
+public class ErrorMessage {
 	/**
-	 * query model object
-	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
+	 * identity of object
 	 */
-	public T query(QueryParam queryParam);
+	private Long id;
+	/**
+	 * HTTP response code
+	 */
+	private Long errorCode;
+	/**
+	 * title of error
+	 */
+	private String title;
+	/**
+	 * description of error
+	 */
+	private List<String> description = new ArrayList<String>();
 
 	/**
-	 * * query Model list, as nested models of other Model
+	 * get null safe ErrorMessage
 	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
+	 * @return ErrorMessage with null properties
 	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	public static ErrorMessage getNullErrorMessage() {
+		return new ErrorMessage();
+	}
+
+
+	/**
+	 * add a description string to description list
+	 * 
+	 * @param descriptionStr
+	 */
+	public void addDescription(String descriptionStr) {
+		if (StringUtils.isBlank(descriptionStr)) {
+			return;
+		}
+		if (null == this.description) {
+			this.description = new ArrayList<String>();
+		}
+		this.description.add(descriptionStr);
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(Long errorCode) {
+		this.errorCode = errorCode;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public List<String> getDescription() {
+		return description;
+	}
+
+	public void setDescription(List<String> description) {
+		this.description = description;
+	}
 }

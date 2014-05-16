@@ -28,55 +28,68 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.dao.impl;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
+import java.util.List;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.Autnum;
+import cn.cnnic.rdap.controller.support.QueryParser;
+import cn.cnnic.rdap.dao.QueryDao;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * query and search type
+ * Test for autnum DAO
  * 
  * @author jiashuo
  * 
  */
-public enum QueryType {
-	DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-			"autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"), SEARCHENTITY(
-			"searchEntity"), SEARCHNAMESERVER("searchNameserver");
-	/**
-	 * name of query type
-	 */
-	private String name;
+@SuppressWarnings("rawtypes")
+public class AutnumQueryDaoTest extends BaseTest {
+	@Autowired
+	private QueryParser queryParser;
+	@Autowired
+	private QueryDao<Autnum> autnumQueryDao;
 
 	/**
-	 * default construction
-	 * 
-	 * @param name
-	 *            query type name
+	 * test query exist autnum
 	 */
-	private QueryType(String name) {
-		this.name = name;
+	@Test
+//	@DatabaseTearDown("teardown.xml")
+	@DatabaseSetup("autnum.xml")
+	public void testQueryExistAutnum() {
+		String autnumStr = "1";
+		Autnum autnum = autnumQueryDao.query(queryParser
+				.parseQueryParam(autnumStr));
+		Assert.notNull(autnum);
+		assertEquals(autnum.getId(), Long.valueOf(autnumStr));
+		assertEquals(autnum.getCountry(), "zh");
+		assertEquals(autnum.getEndAutnum().longValue(), 10L);
+		assertEquals(autnum.getLang(), "cn");
+		assertEquals(autnum.getName(), "name1");
+		List<String> statusList = autnum.getStatus();
+		assertThat(statusList, CoreMatchers.hasItems("validated"));
 	}
 
 	/**
-	 * get query type be name
-	 * 
-	 * @param name
-	 *            :query type name
-	 * @return query type if name is valid, null if not
+	 * test query non exist autnum
 	 */
-	public static QueryType getQueryType(String name) {
-		QueryType[] queryTypes = QueryType.values();
-		for (QueryType joinType : queryTypes) {
-			if (joinType.getName().equals(name)) {
-				return joinType;
-			}
-		}
-		return null;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	@Test
+	@DatabaseTearDown("teardown.xml")
+	public void testQueryNonExistAutnum() {
+		String nonExistAutnumStr = "1000";
+		Autnum autnum = autnumQueryDao.query(queryParser
+				.parseQueryParam(nonExistAutnumStr));
+		Assert.isNull(autnum);
 	}
 }

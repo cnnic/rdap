@@ -27,6 +27,7 @@
 		<property name="supportedMediaTypes">
 			<list>
 				<value>application/json;charset=UTF-8</value>
+				<value>application/rdap+json;charset=UTF-8</value>
 			</list>
 		</property>
 	</bean>

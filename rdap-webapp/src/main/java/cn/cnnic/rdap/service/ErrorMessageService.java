@@ -28,40 +28,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.service;
 
-import java.util.List;
+import java.util.Map;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.ErrorMessage;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * error message interface
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+public interface ErrorMessageService {
 	/**
-	 * query model object
+	 * get all ErrorMessage
 	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
+	 * @return ErrorMessage map,[key:ErrorMessage id,value:ErrorMessage]
 	 */
-	public T query(QueryParam queryParam);
-
-	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
-	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	public Map<Long, ErrorMessage> getAllErrorMessageMap();
 }

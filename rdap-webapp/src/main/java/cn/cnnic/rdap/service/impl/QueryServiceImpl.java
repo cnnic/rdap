@@ -28,40 +28,54 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.service.impl;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.Autnum;
+import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.dao.impl.AutnumQueryDao;
+import cn.cnnic.rdap.dao.impl.DomainQueryDao;
+import cn.cnnic.rdap.service.QueryService;
+import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * query service implementation
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+@Service
+public class QueryServiceImpl implements QueryService {
 	/**
-	 * query model object
-	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
+	 * rdap conformance service
 	 */
-	public T query(QueryParam queryParam);
+	@Autowired
+	private RdapConformanceService rdapConformanceService;
+	/**
+	 * domain DAO
+	 */
+	@Autowired
+	private DomainQueryDao domainDao;
 
 	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
+	 * autnum DAO
 	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	@Autowired
+	private AutnumQueryDao autnumQueryDao;
+
+	/**
+	 * query domain by domain name
+	 */
+	@Override
+	public Domain queryDomain(QueryParam queryParam) {
+		return domainDao.query(queryParam);
+	}
+
+	@Override
+	public Autnum queryAutnum(QueryParam queryParam) {
+		return autnumQueryDao.query(queryParam);
+	}
 }

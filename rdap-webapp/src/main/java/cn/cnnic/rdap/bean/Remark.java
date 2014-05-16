@@ -28,40 +28,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.dao;
-
-import java.util.List;
-
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+package cn.cnnic.rdap.bean;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * remark model denotes information about the object class.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
-	/**
-	 * query model object
-	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
-	 */
-	public T query(QueryParam queryParam);
-
-	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
-	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+public class Remark extends BaseNotice {
 }

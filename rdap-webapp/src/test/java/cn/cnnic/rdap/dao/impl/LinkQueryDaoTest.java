@@ -28,72 +28,70 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.common.util;
+package cn.cnnic.rdap.dao.impl;
 
 import static org.junit.Assert.assertEquals;
-
+import java.util.List;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import cn.cnnic.rdap.BaseTest;
-import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.Link;
+import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.controller.support.QueryParser;
+import cn.cnnic.rdap.dao.QueryDao;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 /**
- * Test for RestResponseUtil
+ * Test for link DAO
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
-public class RestResponseUtilTest extends BaseTest {
+public class LinkQueryDaoTest extends BaseTest {
+	@Autowired
+	private QueryParser queryParser;
+	@Autowired
+	private QueryDao<Link> linkQueryDao;
 
 	/**
-	 * test create ResponseEntity with HTTP code 200
+	 * test query exist event
 	 */
 	@Test
-	public void testCreateResponse200() {
-		String domainName = "cnnic.cn";
-		Domain domain = new Domain();
-		domain.setLdhName(domainName);
-		ResponseEntity<Domain> result = RestResponseUtil
-				.createResponse200(domain);
-		Assert.notNull(result);
-		assertEquals(result.getBody().getLdhName(), domainName);
-		assertEquals(result.getStatusCode(), HttpStatus.OK);
+	// @DatabaseTearDown("teardown.xml")
+	@DatabaseSetup("link.xml")
+	public void testQueryExistLink() {
+		Long autnumId = 1L;
+		List<Link> links = linkQueryDao.queryAsInnerObjects(autnumId,
+				ModelType.AUTNUM);
+		assertNotNull(links);
+		assertEquals(links.size(), 1);
+		Link link = links.get(0);
+		assertNotNull(link);
+		assertEquals(link.getValue(), "http://example.com/context_uri");
+		List<String> titleList = link.getTitle();
+		assertNotNull(titleList);
+		assertThat(titleList,
+				CoreMatchers.hasItems("Title1 of Link1", "Title2 of Link1"));
+		List<String> hreflangList = link.getHreflang();
+		assertThat(hreflangList, CoreMatchers.hasItems("en", "zh"));
 	}
 
 	/**
-	 * test create ResponseEntity with HTTP code 400
+	 * test query non exist event
 	 */
 	@Test
-	public void testCreateResponse400() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse400();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * test create ResponseEntity with HTTP code 404
-	 */
-	@Test
-	public void testCreateResponse404() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse404();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
-	}
-
-	/**
-	 * test create ResponseEntity with HTTP code 500
-	 */
-	@Test
-	public void testCreateResponse500() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse500();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+	// @DatabaseTearDown("teardown.xml")
+	@DatabaseSetup("event.xml")
+	public void testQueryNonExistEvent() {
+		Long nonExistAutnumId = 10000L;
+		List<Link> links = linkQueryDao.queryAsInnerObjects(nonExistAutnumId,
+				ModelType.AUTNUM);
+		assertNotNull(links);
+		assertEquals(links.size(), 0);
 	}
 }

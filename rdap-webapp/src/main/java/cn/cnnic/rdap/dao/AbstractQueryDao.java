@@ -30,8 +30,14 @@
  */
 package cn.cnnic.rdap.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import cn.cnnic.rdap.bean.BaseModel;
+import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.QueryParam;
 
 /**
  * abstract query DAO, base class for all query DAO.
@@ -39,12 +45,25 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @author jiashuo
  * 
  */
-public abstract class AbstractQueryDao implements QueryDao {
+public abstract class AbstractQueryDao<T extends BaseModel> implements
+		QueryDao<T> {
 	/**
 	 * JDBC template simplifies the use of JDBC and helps to avoid common
-	 * errors. It executes core JDBC workflow, leaving application code to
-	 * provide SQL and extract results.
+	 * errors.
 	 */
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
+
+	@Override
+	public T query(QueryParam queryParam) {
+		throw new UnsupportedOperationException(
+				"must be implemented in sub class if I'am called.");
+	}
+
+	@Override
+	public List<T> queryAsInnerObjects(Long outerObjectId,
+			ModelType outerModelType) {
+		throw new UnsupportedOperationException(
+				"must be implemented in sub class if I'am called.");
+	}
 }

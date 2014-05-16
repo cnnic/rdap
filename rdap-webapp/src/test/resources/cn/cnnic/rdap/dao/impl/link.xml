@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_LINK LINK_ID="1" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="autnum" LINK_ID="1" />
+	<RDAP_LINK_HREFLANG LINK_ID="1" HREFLANG="en"/>
+	<RDAP_LINK_HREFLANG LINK_ID="1" HREFLANG="zh"/>
+	<RDAP_LINK_TITLE LINK_ID="1" TITLE="Title1 of Link1"/>
+	<RDAP_LINK_TITLE LINK_ID="1" TITLE="Title2 of Link1"/>
+</dataset>

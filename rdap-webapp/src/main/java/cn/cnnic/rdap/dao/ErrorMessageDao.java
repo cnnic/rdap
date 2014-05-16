@@ -31,37 +31,19 @@
 package cn.cnnic.rdap.dao;
 
 import java.util.List;
-
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.ErrorMessage;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * error message DAO
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+public interface ErrorMessageDao {
 	/**
-	 * query model object
+	 * get all error messages list
 	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
+	 * @return error messages list
 	 */
-	public T query(QueryParam queryParam);
-
-	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
-	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+	public List<ErrorMessage> getAllErrorMessages();
 }

@@ -28,74 +28,72 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.dao.impl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.Event;
+import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.controller.support.QueryParser;
+import cn.cnnic.rdap.dao.QueryDao;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * base class of all model. Model is designed according to <a
- * href="http://tools.ietf.org/id/draft-ietf-weirds-json-response-07.txt"
- * >draft-ietf-weirds-json-response</a>
+ * Test for event DAO
  * 
  * @author jiashuo
  * 
  */
-@JsonInclude(Include.NON_EMPTY)
-@JsonIgnoreProperties(value = { "id", "objectType" })
-public class BaseModel {
-	/**
-	 * specifications used in the construction of the response
-	 */
-	private List<String> rdapConformance;
-	/**
-	 * identity of object
-	 */
-	private Long id;
+@SuppressWarnings("rawtypes")
+public class EventQueryDaoTest extends BaseTest {
+	@Autowired
+	private QueryParser queryParser;
+	@Autowired
+	private QueryDao<Event> eventQueryDao;
 
 	/**
-	 * language identifier, as described by [RFC5646]
+	 * test query exist event
 	 */
-	private String lang;
+	@Test
+//	@DatabaseTearDown("teardown.xml")
+	@DatabaseSetup("event.xml")
+	public void testQueryExistEvent() {
+		Long autnumId = 1L;
+		List<Event> events = eventQueryDao.queryAsInnerObjects(autnumId,
+				ModelType.AUTNUM);
+		Assert.notNull(events);
+		assertEquals(events.size(), 1);
+		Event event = events.get(0);
+		Assert.notNull(event);
+		assertEquals(event.getEventAction(), "action1");
+		assertEquals(event.getEventActor(), "jiashuo");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		assertEquals(dateFormat.format(event.getEventDate()),
+				"2014-01-01 00:01:01");
+	}
 
 	/**
-	 * get model type, value is simple name of class
-	 * 
-	 * @return simple name of class
+	 * test query non exist event
 	 */
-	public String getObjectType() {
-		return getClass().getSimpleName().toLowerCase();
-	}
-
-	/**
-	 * get identity of object
-	 * 
-	 * @return identity
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public List<String> getRdapConformance() {
-		return rdapConformance;
-	}
-
-	public void setRdapConformance(List<String> rdapConformance) {
-		this.rdapConformance = rdapConformance;
-	}
-
-	public String getLang() {
-		return lang;
-	}
-
-	public void setLang(String lang) {
-		this.lang = lang;
+	@Test
+//	@DatabaseTearDown("teardown.xml")
+	@DatabaseSetup("event.xml")
+	public void testQueryNonExistEvent() {
+		Long nonExistAutnumId = 10000L;
+		List<Event> events = eventQueryDao.queryAsInnerObjects(
+				nonExistAutnumId, ModelType.AUTNUM);
+		Assert.notNull(events);
+		assertEquals(events.size(), 0);
 	}
 }

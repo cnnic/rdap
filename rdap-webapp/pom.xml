@@ -10,7 +10,7 @@
 	<groupId>cn.cnnic.rdap</groupId>
 	<artifactId>rdap-webapp</artifactId>
 	<packaging>war</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<name>rdap-webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
@@ -23,6 +23,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${dependency.spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>aopalliance</groupId>
+					<artifactId>aopalliance</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -33,12 +39,16 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${dependency.spring.version}</version>
-			<!-- <exclusions>
-				<exclusion>
+			<exclusions>
+				<!-- <exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-tx</artifactId>
+				</exclusion> -->
+				<exclusion>
+					<groupId>aopalliance</groupId>
+					<artifactId>aopalliance</artifactId>
 				</exclusion>
-			</exclusions> -->
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -71,9 +81,29 @@
 			<version>2.3.2</version>
 		</dependency>
 		<dependency>
+		   <groupId>com.googlecode.ez-vcard</groupId>
+		   <artifactId>ez-vcard</artifactId>
+		   <version>0.9.3</version>
+		   <exclusions>
+				<exclusion>
+					<groupId>org.jsoup</groupId>
+					<artifactId>jsoup</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.freemarker</groupId>
+					<artifactId>freemarker</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- test -->
@@ -87,6 +117,31 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${dependency.spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.4.9</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.springtestdbunit</groupId>
+			<artifactId>spring-test-dbunit</artifactId>
+			<version>1.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>0.9.1</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- dao implementation  -->
@@ -103,11 +158,20 @@
 	<build>
 		<finalName>rdap-webapp</finalName>
 		<plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
-      </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		      <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-javadoc-plugin</artifactId>
+		        <version>2.9.1</version>
+		      </plugin>
     </plugins>
 	</build>
 </project>
