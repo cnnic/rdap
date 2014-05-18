@@ -14,6 +14,22 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<filter>
+		<filter-name>HttpMethodFilter</filter-name>
+		<filter-class>cn.cnnic.rdap.controller.support.HttpMethodFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HttpMethodFilter</filter-name>
+		<url-pattern>/.well-known/rdap/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>InvalidUriFilter</filter-name>
+		<filter-class>cn.cnnic.rdap.controller.support.InvalidUriFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>InvalidUriFilter</filter-name>
+		<url-pattern>/.well-known/rdap/*</url-pattern>
+	</filter-mapping>
 	<servlet>
 		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
 		<servlet-class>

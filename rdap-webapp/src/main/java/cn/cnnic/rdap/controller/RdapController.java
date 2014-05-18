@@ -58,46 +58,55 @@ import cn.cnnic.rdap.service.RdapConformanceService;
 @RestController
 @RequestMapping("/{dot}well-known/rdap")
 public class RdapController {
-	/**
-	 * query service
-	 */
-	@Autowired
-	private QueryService queryService;
+    /**
+     * query service
+     */
+    @Autowired
+    private QueryService queryService;
 
-	@Autowired
-	private QueryParser queryParser;
+    @Autowired
+    private QueryParser queryParser;
 
-	@Autowired
-	private RdapConformanceService rdapConformanceService;
+    @Autowired
+    private RdapConformanceService rdapConformanceService;
 
-	@RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
-	public ResponseEntity queryAs(@PathVariable String autnum,
-			HttpServletRequest request, HttpServletResponse response) {
-		if (!AutnumValidator.isValidAutnum(autnum)) {
-			return RestResponseUtil.createResponse400();
-		}
-		Autnum result = queryService.queryAutnum(queryParser
-				.parseQueryParam(autnum));
-		if (null != result) {
-			rdapConformanceService.setRdapConformance(result);
-			return RestResponseUtil.createResponse200(result);
-		}
-		return RestResponseUtil.createResponse404();
-	}
+    @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
+    public ResponseEntity queryAs(@PathVariable String autnum,
+            HttpServletRequest request, HttpServletResponse response) {
+        if (!AutnumValidator.isValidAutnum(autnum)) {
+            return RestResponseUtil.createResponse400();
+        }
+        Autnum result = queryService.queryAutnum(queryParser
+                .parseQueryParam(autnum));
+        if (null != result) {
+            rdapConformanceService.setRdapConformance(result);
+            return RestResponseUtil.createResponse200(result);
+        }
+        return RestResponseUtil.createResponse404();
+    }
 
-	/**
-	 * query domain by domain name
-	 * 
-	 * @param domainName
-	 *            domain name
-	 * @param response
-	 *            servlet response
-	 * @return JSON formated result,with HTTP code
-	 */
-	@RequestMapping(value = "/domain/{domainName}")
-	public ResponseEntity<Domain> queryDomain(@PathVariable String domainName,
-			HttpServletResponse response) {
-		Domain domain = queryService.queryDomain(new QueryParam(domainName));
-		return RestResponseUtil.createResponse200(domain);
-	}
+    /**
+     * query domain by domain name
+     * 
+     * @param domainName
+     *            domain name
+     * @param response
+     *            servlet response
+     * @return JSON formated result,with HTTP code
+     */
+    @RequestMapping(value = "/domain/{domainName}")
+    public ResponseEntity<Domain> queryDomain(@PathVariable String domainName,
+            HttpServletResponse response) {
+        Domain domain = queryService.queryDomain(new QueryParam(domainName));
+        return RestResponseUtil.createResponse200(domain);
+    }
+
+    /**
+     * other invalid query uri will response 400 error.
+     */
+    @RequestMapping(value = "/**")
+    public ResponseEntity error400(HttpServletRequest request,
+            HttpServletResponse response) {
+        return RestResponseUtil.createResponse400();
+    }
 }
