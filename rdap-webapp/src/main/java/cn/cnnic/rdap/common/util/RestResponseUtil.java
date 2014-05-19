@@ -42,6 +42,7 @@ import org.springframework.stereotype.Component;
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.service.ErrorMessageService;
 import cn.cnnic.rdap.service.RdapConformanceService;
+import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
 /**
  * RestResponseUtil is used to create ResponseEntity.
@@ -51,114 +52,113 @@ import cn.cnnic.rdap.service.RdapConformanceService;
  */
 @Component
 public class RestResponseUtil {
-	/**
-	 * all ErrorMessage map,must be init before call
-	 * getErrorMessageByErrorCode()
-	 */
-	private static Map<Long, ErrorMessage> errorMessageMap = null;
+    /**
+     * all ErrorMessage map,must be init before call
+     * getErrorMessageByErrorCode()
+     */
+    private static Map<Long, ErrorMessage> errorMessageMap = null;
 
-	private static ErrorMessageService errorMessageService;
-	
-	private static RdapConformanceService rdapConformanceService;
+    private static ErrorMessageService errorMessageService;
 
-	@PostConstruct
-	private void init() {
-		initErrorMessages();
-	}
+    private static ResponseDecorator responseDecorator;
 
-	/**
-	 * init ErrorMessages list
-	 */
-	private static void initErrorMessages() {
-		errorMessageMap = errorMessageService.getAllErrorMessageMap();
-	}
+    @PostConstruct
+    private void init() {
+        initErrorMessages();
+    }
 
-	/**
-	 * get ErrorMessage by error code
-	 * 
-	 * @param errorCode
-	 *            error code
-	 * @return ErrorMessage
-	 */
-	private static ErrorMessage getErrorMessageByErrorCode(String errorCode) {
-		Long codeLongVal = Long.valueOf(errorCode);
-		if (null == errorMessageMap) {
-			initErrorMessages();
-		}
-		ErrorMessage result = errorMessageMap.get(codeLongVal);
-		if (null != result) {
-			return result;
-		}
-		return ErrorMessage.getNullErrorMessage();
-	}
+    /**
+     * init ErrorMessages list
+     */
+    private static void initErrorMessages() {
+        errorMessageMap = errorMessageService.getAllErrorMessageMap();
+    }
 
-	/**
-	 * create response with HTTP status code 200
-	 * 
-	 * @param response
-	 *            model object
-	 * @return ResponseEntity
-	 */
-	public static <T> ResponseEntity<T> createResponse200(T response) {
-		return new ResponseEntity<T>(response, HttpStatus.OK);
-	}
+    /**
+     * get ErrorMessage by error code
+     * 
+     * @param errorCode
+     *            error code
+     * @return ErrorMessage
+     */
+    private static ErrorMessage getErrorMessageByErrorCode(String errorCode) {
+        Long codeLongVal = Long.valueOf(errorCode);
+        if (null == errorMessageMap) {
+            initErrorMessages();
+        }
+        ErrorMessage result = errorMessageMap.get(codeLongVal);
+        if (null != result) {
+            return result;
+        }
+        return ErrorMessage.getNullErrorMessage();
+    }
 
-	/**
-	 * create response with HTTP status code 400
-	 * 
-	 * @param response
-	 *            model object
-	 * @return ResponseEntity
-	 */
-	public static ResponseEntity<ErrorMessage> createResponse400() {
-		return createCommonErrorResponse(HttpStatus.BAD_REQUEST);
-	}
+    /**
+     * create response with HTTP status code 200
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static <T> ResponseEntity<T> createResponse200(T response) {
+        return new ResponseEntity<T>(response, HttpStatus.OK);
+    }
 
-	/**
-	 * create response with HTTP status code 404
-	 * 
-	 * @param response
-	 *            model object
-	 * @return ResponseEntity
-	 */
-	public static ResponseEntity<ErrorMessage> createResponse404() {
-		return createCommonErrorResponse(HttpStatus.NOT_FOUND);
-	}
+    /**
+     * create response with HTTP status code 400
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static ResponseEntity<ErrorMessage> createResponse400() {
+        return createCommonErrorResponse(HttpStatus.BAD_REQUEST);
+    }
 
-	/**
-	 * create response with HTTP status code 500
-	 * 
-	 * @param response
-	 *            model object
-	 * @return ResponseEntity
-	 */
-	public static ResponseEntity<ErrorMessage> createResponse500() {
-		return createCommonErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+    /**
+     * create response with HTTP status code 404
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static ResponseEntity<ErrorMessage> createResponse404() {
+        return createCommonErrorResponse(HttpStatus.NOT_FOUND);
+    }
 
-	/**
-	 * create error response
-	 * 
-	 * @param errorStatus
-	 *            HttpStatus of error message
-	 * @return ResponseEntity
-	 */
-	private static ResponseEntity<ErrorMessage> createCommonErrorResponse(
-			HttpStatus errorStatus) {
-		ErrorMessage errorMessage = getErrorMessageByErrorCode(errorStatus
-				.toString());
-		RestResponseUtil.rdapConformanceService.setRdapConformance(errorMessage);
-		return new ResponseEntity<ErrorMessage>(errorMessage, errorStatus);
-	}
+    /**
+     * create response with HTTP status code 500
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static ResponseEntity<ErrorMessage> createResponse500() {
+        return createCommonErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
-	@Autowired
-	public void setErrorMessageService(ErrorMessageService errorMessageService) {
-		RestResponseUtil.errorMessageService = errorMessageService;
-	}
+    /**
+     * create error response
+     * 
+     * @param errorStatus
+     *            HttpStatus of error message
+     * @return ResponseEntity
+     */
+    private static ResponseEntity<ErrorMessage> createCommonErrorResponse(
+            HttpStatus errorStatus) {
+        ErrorMessage errorMessage = getErrorMessageByErrorCode(errorStatus
+                .toString());
+        responseDecorator.decorateResponse(errorMessage);
+        return new ResponseEntity<ErrorMessage>(errorMessage, errorStatus);
+    }
 
-	@Autowired
-    public void setRdapConformanceService(
-            RdapConformanceService rdapConformanceService) {
-        RestResponseUtil.rdapConformanceService = rdapConformanceService;
+    @Autowired
+    public void setErrorMessageService(ErrorMessageService errorMessageService) {
+        RestResponseUtil.errorMessageService = errorMessageService;
+    }
+
+    @Autowired
+    public void setResponseDecorator(ResponseDecorator responseDecorator) {
+        RestResponseUtil.responseDecorator = responseDecorator;
     }
 }

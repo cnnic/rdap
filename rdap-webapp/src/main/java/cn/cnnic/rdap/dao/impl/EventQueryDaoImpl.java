@@ -57,9 +57,9 @@ import cn.cnnic.rdap.dao.QueryDao;
  * 
  */
 @Repository
-public class EventQueryDao extends AbstractQueryDao<Event> {
+public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
     @Autowired
-    @Qualifier("linkQueryDao")
+    @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
 
     /**

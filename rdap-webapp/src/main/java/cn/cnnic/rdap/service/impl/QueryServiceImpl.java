@@ -36,8 +36,8 @@ import org.springframework.stereotype.Service;
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.dao.impl.AutnumQueryDao;
-import cn.cnnic.rdap.dao.impl.DomainQueryDao;
+import cn.cnnic.rdap.dao.impl.AutnumQueryDaoImpl;
+import cn.cnnic.rdap.dao.impl.DomainQueryDaoImpl;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
@@ -58,13 +58,13 @@ public class QueryServiceImpl implements QueryService {
 	 * domain DAO
 	 */
 	@Autowired
-	private DomainQueryDao domainDao;
+	private DomainQueryDaoImpl domainDao;
 
 	/**
 	 * autnum DAO
 	 */
 	@Autowired
-	private AutnumQueryDao autnumQueryDao;
+	private AutnumQueryDaoImpl autnumQueryDao;
 
 	/**
 	 * query domain by domain name

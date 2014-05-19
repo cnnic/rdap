@@ -28,49 +28,58 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.dao.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * model type.
+ * domain query DAO
  * 
  * @author jiashuo
  * 
  */
-public enum ModelType {
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-            "autnum"), HELP("help"), IP("ip"), Event("event"), Link("link"), PublicId(
-            "publicId"), Remark("remark"), Notice("notice");
-    /**
-     * name of model type
-     */
-    private String name;
+@Repository
+public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
-    private ModelType(String name) {
-        this.name = name;
-    }
-
-    /**
-     * get model type be name
-     * 
-     * @param name
-     *            :model type name
-     * @return model type name
-     */
-    public static ModelType getModelType(String name) {
-        ModelType[] modelTypes = ModelType.values();
-        for (ModelType modelType : modelTypes) {
-            if (modelType.getName().equals(name)) {
-                return modelType;
-            }
-        }
-        return null;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**
+	 * query domain by domain name.
+	 */
+	@Override
+	public Domain query(QueryParam queryParam) {
+		final String domainName = queryParam.getQ();
+		final String sql = "select * from RDAP_DOMAIN where LDH_NAME= ? limit 1";
+		List<Domain> result = jdbcTemplate.query(
+				new PreparedStatementCreator() {
+					public PreparedStatement createPreparedStatement(
+							Connection connection) throws SQLException {
+						PreparedStatement ps = connection.prepareStatement(sql);
+						ps.setString(1, domainName);
+						return ps;
+					}
+				}, new RowMapper<Domain>() {
+					public Domain mapRow(ResultSet rs, int rowNum)
+							throws SQLException {
+						Domain domain = new Domain();
+						domain.setLdhName(rs.getString("LDH_NAME"));
+						domain.setHandle(rs.getString("HANDLE"));
+						return domain;
+					}
+				});
+		if (null == result || result.size() == 0) {
+			return null;
+		}
+		return result.get(0);
+	}
 }

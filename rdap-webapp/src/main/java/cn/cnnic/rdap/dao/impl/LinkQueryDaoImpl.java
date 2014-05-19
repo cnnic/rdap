@@ -57,7 +57,7 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
  * 
  */
 @Repository
-public class LinkQueryDao extends AbstractQueryDao<Link> {
+public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
 
     /**
      * query link as inner objects of other object

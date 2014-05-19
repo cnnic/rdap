@@ -47,55 +47,68 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_EMPTY)
 @JsonIgnoreProperties(value = { "id", "objectType" })
 public class BaseModel {
-	/**
-	 * specifications used in the construction of the response
-	 */
-	private List<String> rdapConformance;
-	/**
-	 * identity of object
-	 */
-	private Long id;
+    /**
+     * specifications used in the construction of the response
+     */
+    private List<String> rdapConformance;
+    /**
+     * identity of object.
+     */
+    private Long id;
 
-	/**
-	 * language identifier, as described by [RFC5646]
-	 */
-	private String lang;
+    /**
+     * language identifier, as described by [RFC5646].
+     */
+    private String lang;
 
-	/**
-	 * get model type, value is simple name of class
-	 * 
-	 * @return simple name of class
-	 */
-	public String getObjectType() {
-		return getClass().getSimpleName().toLowerCase();
-	}
+    /**
+     * notice.
+     */
+    private List<Notice> notices;
 
-	/**
-	 * get identity of object
-	 * 
-	 * @return identity
-	 */
-	public Long getId() {
-		return id;
-	}
+    /**
+     * get model type, value is simple name of class.
+     * 
+     * @return simple name of class
+     */
+    public String getObjectType() {
+        return getClass().getSimpleName().toLowerCase();
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    /**
+     * get identity of object.
+     * 
+     * @return identity
+     */
+    public Long getId() {
+        return id;
+    }
 
-	public List<String> getRdapConformance() {
-		return rdapConformance;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setRdapConformance(List<String> rdapConformance) {
-		this.rdapConformance = rdapConformance;
-	}
+    public List<String> getRdapConformance() {
+        return rdapConformance;
+    }
 
-	public String getLang() {
-		return lang;
-	}
+    public void setRdapConformance(List<String> rdapConformance) {
+        this.rdapConformance = rdapConformance;
+    }
 
-	public void setLang(String lang) {
-		this.lang = lang;
-	}
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public List<Notice> getNotices() {
+        return notices;
+    }
+
+    public void setNotices(List<Notice> notices) {
+        this.notices = notices;
+    }
 }
