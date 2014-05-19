@@ -46,120 +46,127 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
-import cn.cnnic.rdap.bean.BaseNotice.NoticeType;
+import cn.cnnic.rdap.bean.Autnum;
+import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * remark query DAO
+ * autnum query DAO
  * 
  * @author jiashuo
  * 
  */
 @Repository
-public class RemarkQueryDao extends AbstractQueryDao<Remark> {
+public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
 	@Autowired
-	@Qualifier("linkQueryDao")
+	@Qualifier("remarkQueryDaoImpl")
+	private QueryDao<Remark> remarkQueryDao;
+	@Autowired
+	@Qualifier("linkQueryDaoImpl")
 	private QueryDao<Link> linkQueryDao;
+	@Autowired
+	@Qualifier("eventQueryDaoImpl")
+	private QueryDao<Event> eventQueryDao;
 
 	/**
-	 * query remarks as inner objects
+	 * query autnum.If more than one results exist, the minimal (exact) result
+	 * will returned.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Remark> queryAsInnerObjects(final Long outerObjectId,
-			final ModelType outerModelType) {
-		List<Remark> remarks = queryWithoutInnerObjects(outerObjectId,
-				outerModelType);
-		queryAndSetInnerObjects(remarks);
-		return remarks;
+	public Autnum query(QueryParam queryParam) {
+		Autnum autnum = queryWithoutInnerObjects(queryParam);
+		queryAndSetInnerObjects(autnum);
+		return autnum;
 	}
 
 	/**
-	 * query inner objects, and set them to remarks
+	 * query inner objects of autnum,and set fill them to autnum
 	 * 
-	 * @param remarks
-	 *            remark list
+	 * @param autnum
+	 *            inner objects will be filled
 	 */
-	private void queryAndSetInnerObjects(List<Remark> remarks) {
-		if (null == remarks || remarks.size() == 0) {
+	private void queryAndSetInnerObjects(Autnum autnum) {
+		if (null == autnum) {
 			return;
 		}
-		for (Remark remark : remarks) {
-			queryAndSetInnerObjects(remark);
-		}
+		Long autnumId = autnum.getId();
+		List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(autnumId,
+				ModelType.AUTNUM);
+		autnum.setRemarks(remarks);
+		List<Link> links = linkQueryDao.queryAsInnerObjects(autnumId,
+				ModelType.AUTNUM);
+		autnum.setLinks(links);
+		List<Event> events = eventQueryDao.queryAsInnerObjects(autnumId,
+				ModelType.AUTNUM);
+		autnum.setEvents(events);
 	}
 
 	/**
-	 * query inner objects, and set them to remark
+	 * query autnum, without inner objects
 	 * 
-	 * @param remark
-	 *            remark after set inner objects
+	 * @param queryParam
+	 *            query parameter
+	 * @return autnum
 	 */
-	private void queryAndSetInnerObjects(Remark remark) {
-		if (null == remark) {
-			return;
-		}
-		List<Link> links = linkQueryDao.queryAsInnerObjects(remark.getId(),
-				ModelType.Remark);
-		remark.setLinks(links);
-	}
-
-	/**
-	 * query remark, without inner objects
-	 * 
-	 * @param outerObjectId
-	 *            object id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return remark list
-	 */
-	private List<Remark> queryWithoutInnerObjects(final Long outerObjectId,
-			final ModelType outerModelType) {
-		final String sql = "select notice.*, description.description  from RDAP_NOTICE notice"
-				+ " inner join REL_NOTICE_REGISTRATION rel "
-				+ " on (rel.NOTICE_ID = notice.NOTICE_ID and rel.REL_ID = ? and rel.REL_OBJECT_TYPE = ? and notice.TYPE=?) "
-				+ " left outer join RDAP_NOTICE_DESCRIPTION description "
-				+ " on notice.NOTICE_ID = description.NOTICE_ID";
-		List<Remark> result = jdbcTemplate.query(
+	private Autnum queryWithoutInnerObjects(QueryParam queryParam) {
+		final String autnumQ = queryParam.getQ();
+		final String sql = "select *,end_autnum - start_autnum as asInterval "
+				+ " from RDAP_AUTNUM autnum left outer join RDAP_AUTNUM_STATUS status "
+				+ " on autnum.as_id = status.as_id "
+				+ "where autnum.start_autnum <= ? and end_autnum >= ? order by asInterval ";
+		List<Autnum> result = jdbcTemplate.query(
 				new PreparedStatementCreator() {
 					public PreparedStatement createPreparedStatement(
 							Connection connection) throws SQLException {
 						PreparedStatement ps = connection.prepareStatement(sql);
-						ps.setLong(1, outerObjectId);
-						ps.setString(2, outerModelType.getName());
-						ps.setString(3, NoticeType.REMARK.getName());
+						ps.setString(1, autnumQ);
+						ps.setString(2, autnumQ);
 						return ps;
 					}
-				}, new RemarkResultSetExtractor());
-		return result;
+				}, new AutnumResultSetExtractor());
+		Autnum autnum = null;
+		if (null != result && result.size() > 0) {
+			autnum = result.get(0);
+		}
+		return autnum;
 	}
 
 	/**
-	 * remark ResultSetExtractor, extract data from ResultSet
+	 * autnum ResultSetExtractor, extract data from ResultSet
 	 * 
 	 * @author jiashuo
 	 * 
 	 */
-	class RemarkResultSetExtractor implements ResultSetExtractor<List<Remark>> {
+	class AutnumResultSetExtractor implements ResultSetExtractor<List<Autnum>> {
 		@Override
-		public List<Remark> extractData(ResultSet rs) throws SQLException,
+		public List<Autnum> extractData(ResultSet rs) throws SQLException,
 				DataAccessException {
-			List<Remark> result = new ArrayList<Remark>();
-			Map<Long, Remark> remarkMapById = new HashMap<Long, Remark>();
+			List<Autnum> result = new ArrayList<Autnum>();
+			Map<Long, Autnum> autnumMapById = new HashMap<Long, Autnum>();
 			while (rs.next()) {
-				Long remarkId = rs.getLong("NOTICE_ID");
-				Remark remark = remarkMapById.get(remarkId);
-				if (null == remark) {
-					remark = new Remark();
-					remark.setId(remarkId);
-					remark.setTitle(rs.getString("TITLE"));
-					remarkMapById.put(remarkId, remark);
-					result.add(remark);
+				Long autnumId = rs.getLong("as_id");
+				Autnum autnum = autnumMapById.get(autnumId);
+				if (null == autnum) {
+					autnum = new Autnum();
+					autnum.setId(autnumId);
+					autnum.setHandle(rs.getString("HANDLE"));
+					autnum.setStartAutnum(rs.getLong("START_AUTNUM"));
+					autnum.setEndAutnum(rs.getLong("END_AUTNUM"));
+					autnum.setName(rs.getString("NAME"));
+					autnum.setType(rs.getString("TYPE"));
+					autnum.setCountry(rs.getString("COUNTRY"));
+					autnum.setLang(rs.getString("LANG"));
+					autnum.setPort43(rs.getString("PORT43"));
+					result.add(autnum);
+					autnumMapById.put(autnumId, autnum);
 				}
-				remark.addDescription(rs.getString("DESCRIPTION"));
+				autnum.addStatus(rs.getString("STATUS"));
 			}
 			return result;
 		}

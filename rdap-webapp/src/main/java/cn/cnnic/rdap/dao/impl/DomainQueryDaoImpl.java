@@ -30,47 +30,56 @@
  */
 package cn.cnnic.rdap.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import cn.cnnic.rdap.bean.ErrorMessage;
-import cn.cnnic.rdap.dao.ErrorMessageDao;
+import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * error message DAO implementation
+ * domain query DAO
  * 
  * @author jiashuo
  * 
  */
 @Repository
-public class ErrorMessageDaoImpl implements ErrorMessageDao {
-	@Autowired
-	protected JdbcTemplate jdbcTemplate;
+public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
 	/**
-	 * get all erroMessage
+	 * query domain by domain name.
 	 */
 	@Override
-	public List<ErrorMessage> getAllErrorMessages() {
-		final String sql = "select * from RDAP_ERRORMESSAGE";
-		List<ErrorMessage> result = jdbcTemplate.query(sql,
-				new RowMapper<ErrorMessage>() {
-					public ErrorMessage mapRow(ResultSet rs, int rowNum)
+	public Domain query(QueryParam queryParam) {
+		final String domainName = queryParam.getQ();
+		final String sql = "select * from RDAP_DOMAIN where LDH_NAME= ? limit 1";
+		List<Domain> result = jdbcTemplate.query(
+				new PreparedStatementCreator() {
+					public PreparedStatement createPreparedStatement(
+							Connection connection) throws SQLException {
+						PreparedStatement ps = connection.prepareStatement(sql);
+						ps.setString(1, domainName);
+						return ps;
+					}
+				}, new RowMapper<Domain>() {
+					public Domain mapRow(ResultSet rs, int rowNum)
 							throws SQLException {
-						ErrorMessage errorMessage = new ErrorMessage();
-						errorMessage.setErrorCode(rs.getLong("ERROR_CODE"));
-						errorMessage.setTitle(rs.getString("TITLE"));
-						errorMessage.addDescription(rs.getString("DESCRIPTION"));
-						errorMessage.setLang(rs.getString("LANG"));
-						return errorMessage;
+						Domain domain = new Domain();
+						domain.setLdhName(rs.getString("LDH_NAME"));
+						domain.setHandle(rs.getString("HANDLE"));
+						return domain;
 					}
 				});
-		return result;
+		if (null == result || result.size() == 0) {
+			return null;
+		}
+		return result.get(0);
 	}
 }

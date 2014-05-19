@@ -47,7 +47,7 @@ import cn.cnnic.rdap.common.util.AutnumValidator;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.QueryService;
-import cn.cnnic.rdap.service.RdapConformanceService;
+import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
 /**
  * controller for query and search.All methods return message in JSON format.
@@ -68,7 +68,7 @@ public class RdapController {
     private QueryParser queryParser;
 
     @Autowired
-    private RdapConformanceService rdapConformanceService;
+    private ResponseDecorator responseDecorator;
 
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
@@ -79,7 +79,7 @@ public class RdapController {
         Autnum result = queryService.queryAutnum(queryParser
                 .parseQueryParam(autnum));
         if (null != result) {
-            rdapConformanceService.setRdapConformance(result);
+            responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();

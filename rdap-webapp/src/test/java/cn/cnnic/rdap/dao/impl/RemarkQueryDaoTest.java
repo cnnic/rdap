@@ -59,7 +59,7 @@ public class RemarkQueryDaoTest extends BaseTest {
 	@Autowired
 	private QueryParser queryParser;
 	@Autowired
-	private RemarkQueryDao remarkQueryDao;
+	private RemarkQueryDaoImpl remarkQueryDao;
 
 	/**
 	 * test query exist event

@@ -46,127 +46,120 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
-import cn.cnnic.rdap.bean.Autnum;
-import cn.cnnic.rdap.bean.Event;
+import cn.cnnic.rdap.bean.BaseNotice.NoticeType;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * autnum query DAO
+ * remark query DAO
  * 
  * @author jiashuo
  * 
  */
 @Repository
-public class AutnumQueryDao extends AbstractQueryDao<Autnum> {
+public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
 	@Autowired
-	@Qualifier("remarkQueryDao")
-	private QueryDao<Remark> remarkQueryDao;
-	@Autowired
-	@Qualifier("linkQueryDao")
+	@Qualifier("linkQueryDaoImpl")
 	private QueryDao<Link> linkQueryDao;
-	@Autowired
-	@Qualifier("eventQueryDao")
-	private QueryDao<Event> eventQueryDao;
 
 	/**
-	 * query autnum.If more than one results exist, the minimal (exact) result
-	 * will returned.
+	 * query remarks as inner objects
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public Autnum query(QueryParam queryParam) {
-		Autnum autnum = queryWithoutInnerObjects(queryParam);
-		queryAndSetInnerObjects(autnum);
-		return autnum;
+	public List<Remark> queryAsInnerObjects(final Long outerObjectId,
+			final ModelType outerModelType) {
+		List<Remark> remarks = queryWithoutInnerObjects(outerObjectId,
+				outerModelType);
+		queryAndSetInnerObjects(remarks);
+		return remarks;
 	}
 
 	/**
-	 * query inner objects of autnum,and set fill them to autnum
+	 * query inner objects, and set them to remarks
 	 * 
-	 * @param autnum
-	 *            inner objects will be filled
+	 * @param remarks
+	 *            remark list
 	 */
-	private void queryAndSetInnerObjects(Autnum autnum) {
-		if (null == autnum) {
+	private void queryAndSetInnerObjects(List<Remark> remarks) {
+		if (null == remarks || remarks.size() == 0) {
 			return;
 		}
-		Long autnumId = autnum.getId();
-		List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(autnumId,
-				ModelType.AUTNUM);
-		autnum.setRemarks(remarks);
-		List<Link> links = linkQueryDao.queryAsInnerObjects(autnumId,
-				ModelType.AUTNUM);
-		autnum.setLinks(links);
-		List<Event> events = eventQueryDao.queryAsInnerObjects(autnumId,
-				ModelType.AUTNUM);
-		autnum.setEvents(events);
+		for (Remark remark : remarks) {
+			queryAndSetInnerObjects(remark);
+		}
 	}
 
 	/**
-	 * query autnum, without inner objects
+	 * query inner objects, and set them to remark
 	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return autnum
+	 * @param remark
+	 *            remark after set inner objects
 	 */
-	private Autnum queryWithoutInnerObjects(QueryParam queryParam) {
-		final String autnumQ = queryParam.getQ();
-		final String sql = "select *,end_autnum - start_autnum as asInterval "
-				+ " from RDAP_AUTNUM autnum left outer join RDAP_AUTNUM_STATUS status "
-				+ " on autnum.as_id = status.as_id "
-				+ "where autnum.start_autnum <= ? and end_autnum >= ? order by asInterval ";
-		List<Autnum> result = jdbcTemplate.query(
+	private void queryAndSetInnerObjects(Remark remark) {
+		if (null == remark) {
+			return;
+		}
+		List<Link> links = linkQueryDao.queryAsInnerObjects(remark.getId(),
+				ModelType.Remark);
+		remark.setLinks(links);
+	}
+
+	/**
+	 * query remark, without inner objects
+	 * 
+	 * @param outerObjectId
+	 *            object id of outer object
+	 * @param outerModelType
+	 *            model type of outer object
+	 * @return remark list
+	 */
+	private List<Remark> queryWithoutInnerObjects(final Long outerObjectId,
+			final ModelType outerModelType) {
+		final String sql = "select notice.*, description.description  from RDAP_NOTICE notice"
+				+ " inner join REL_NOTICE_REGISTRATION rel "
+				+ " on (rel.NOTICE_ID = notice.NOTICE_ID and rel.REL_ID = ? and rel.REL_OBJECT_TYPE = ? and notice.TYPE=?) "
+				+ " left outer join RDAP_NOTICE_DESCRIPTION description "
+				+ " on notice.NOTICE_ID = description.NOTICE_ID";
+		List<Remark> result = jdbcTemplate.query(
 				new PreparedStatementCreator() {
 					public PreparedStatement createPreparedStatement(
 							Connection connection) throws SQLException {
 						PreparedStatement ps = connection.prepareStatement(sql);
-						ps.setString(1, autnumQ);
-						ps.setString(2, autnumQ);
+						ps.setLong(1, outerObjectId);
+						ps.setString(2, outerModelType.getName());
+						ps.setString(3, NoticeType.REMARK.getName());
 						return ps;
 					}
-				}, new AutnumResultSetExtractor());
-		Autnum autnum = null;
-		if (null != result && result.size() > 0) {
-			autnum = result.get(0);
-		}
-		return autnum;
+				}, new RemarkResultSetExtractor());
+		return result;
 	}
 
 	/**
-	 * autnum ResultSetExtractor, extract data from ResultSet
+	 * remark ResultSetExtractor, extract data from ResultSet
 	 * 
 	 * @author jiashuo
 	 * 
 	 */
-	class AutnumResultSetExtractor implements ResultSetExtractor<List<Autnum>> {
+	class RemarkResultSetExtractor implements ResultSetExtractor<List<Remark>> {
 		@Override
-		public List<Autnum> extractData(ResultSet rs) throws SQLException,
+		public List<Remark> extractData(ResultSet rs) throws SQLException,
 				DataAccessException {
-			List<Autnum> result = new ArrayList<Autnum>();
-			Map<Long, Autnum> autnumMapById = new HashMap<Long, Autnum>();
+			List<Remark> result = new ArrayList<Remark>();
+			Map<Long, Remark> remarkMapById = new HashMap<Long, Remark>();
 			while (rs.next()) {
-				Long autnumId = rs.getLong("as_id");
-				Autnum autnum = autnumMapById.get(autnumId);
-				if (null == autnum) {
-					autnum = new Autnum();
-					autnum.setId(autnumId);
-					autnum.setHandle(rs.getString("HANDLE"));
-					autnum.setStartAutnum(rs.getLong("START_AUTNUM"));
-					autnum.setEndAutnum(rs.getLong("END_AUTNUM"));
-					autnum.setName(rs.getString("NAME"));
-					autnum.setType(rs.getString("TYPE"));
-					autnum.setCountry(rs.getString("COUNTRY"));
-					autnum.setLang(rs.getString("LANG"));
-					autnum.setPort43(rs.getString("PORT43"));
-					result.add(autnum);
-					autnumMapById.put(autnumId, autnum);
+				Long remarkId = rs.getLong("NOTICE_ID");
+				Remark remark = remarkMapById.get(remarkId);
+				if (null == remark) {
+					remark = new Remark();
+					remark.setId(remarkId);
+					remark.setTitle(rs.getString("TITLE"));
+					remarkMapById.put(remarkId, remark);
+					result.add(remark);
 				}
-				autnum.addStatus(rs.getString("STATUS"));
+				remark.addDescription(rs.getString("DESCRIPTION"));
 			}
 			return result;
 		}

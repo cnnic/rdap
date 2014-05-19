@@ -42,77 +42,77 @@ import org.apache.commons.lang.StringUtils;
  * 
  */
 public abstract class BaseNotice extends BaseModel {
-	/**
-	 * notice type enum
-	 * 
-	 * @author jiashuo
-	 * 
-	 */
-	public enum NoticeType {
-		Notice("notice"), REMARK("remark");
-		/**
-		 * type name
-		 */
-		private String name;
+    /**
+     * notice type enum
+     * 
+     * @author jiashuo
+     * 
+     */
+    public enum NoticeType {
+        Notice("notice"), REMARK("remark"), HELP("help");
+        /**
+         * type name
+         */
+        private String name;
 
-		private NoticeType(String name) {
-			this.name = name;
-		}
+        private NoticeType(String name) {
+            this.name = name;
+        }
 
-		public String getName() {
-			return name;
-		}
-	}
+        public String getName() {
+            return name;
+        }
+    }
 
-	/**
-	 * title
-	 */
-	private String title;
-	/**
-	 * description
-	 */
-	private List<String> description = new ArrayList<String>();
-	/**
-	 * links
-	 */
-	private List<Link> links;
+    /**
+     * title
+     */
+    private String title;
+    /**
+     * description
+     */
+    private List<String> description = new ArrayList<String>();
+    /**
+     * links
+     */
+    private List<Link> links;
 
-	/**
-	 * add a description
-	 * 
-	 * @param descriptionStr
-	 */
-	public void addDescription(String descriptionStr) {
-		if (StringUtils.isBlank(descriptionStr)) {
-			return;
-		}
-		if (null == this.description) {
-			this.description = new ArrayList<String>();
-		}
-		this.description.add(descriptionStr);
-	}
+    /**
+     * add a description
+     * 
+     * @param descriptionStr
+     */
+    public void addDescription(String descriptionStr) {
+        if (StringUtils.isBlank(descriptionStr)) {
+            return;
+        }
+        if (null == this.description) {
+            this.description = new ArrayList<String>();
+        }
+        this.description.add(descriptionStr);
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public List<String> getDescription() {
-		return description;
-	}
+    public List<String> getDescription() {
+        return description;
+    }
 
-	public void setDescription(List<String> description) {
-		this.description = description;
-	}
+    public void setDescription(List<String> description) {
+        this.description = description;
+    }
 
-	public List<Link> getLinks() {
-		return links;
-	}
+    public List<Link> getLinks() {
+        return links;
+    }
 
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 }
