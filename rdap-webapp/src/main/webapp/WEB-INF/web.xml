@@ -15,11 +15,11 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<filter>
-		<filter-name>HttpMethodFilter</filter-name>
-		<filter-class>cn.cnnic.rdap.controller.support.HttpMethodFilter</filter-class>
+		<filter-name>HttpRequestFilter</filter-name>
+		<filter-class>cn.cnnic.rdap.controller.support.HttpRequestFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>HttpMethodFilter</filter-name>
+		<filter-name>HttpRequestFilter</filter-name>
 		<url-pattern>/.well-known/rdap/*</url-pattern>
 	</filter-mapping>
 	<filter>

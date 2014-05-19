@@ -158,5 +158,4 @@ public class NoticeDaoImpl implements NoticeDao {
             return result;
         }
     }
-
 }

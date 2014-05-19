@@ -114,6 +114,28 @@ public class RestResponseUtil {
     public static ResponseEntity<ErrorMessage> createResponse400() {
         return createCommonErrorResponse(HttpStatus.BAD_REQUEST);
     }
+    
+    /**
+     * create response with HTTP status code 405
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static ResponseEntity<ErrorMessage> createResponse405() {
+        return createCommonErrorResponse(HttpStatus.METHOD_NOT_ALLOWED);
+    }
+    
+    /**
+     * create response with HTTP status code 415
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static ResponseEntity<ErrorMessage> createResponse415() {
+        return createCommonErrorResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
 
     /**
      * create response with HTTP status code 404
