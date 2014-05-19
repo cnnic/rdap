@@ -155,6 +155,7 @@ public class AutnumQueryDao extends AbstractQueryDao<Autnum> {
 				if (null == autnum) {
 					autnum = new Autnum();
 					autnum.setId(autnumId);
+					autnum.setHandle(rs.getString("HANDLE"));
 					autnum.setStartAutnum(rs.getLong("START_AUTNUM"));
 					autnum.setEndAutnum(rs.getLong("END_AUTNUM"));
 					autnum.setName(rs.getString("NAME"));
