@@ -117,7 +117,7 @@ public class AutnumQueryDao extends AbstractQueryDao<Autnum> {
 	private Autnum queryWithoutInnerObjects(QueryParam queryParam) {
 		final String autnumQ = queryParam.getQ();
 		final String sql = "select *,end_autnum - start_autnum as asInterval "
-				+ " from RDAP_AUTNUM autnum join RDAP_AUTNUM_STATUS status "
+				+ " from RDAP_AUTNUM autnum left outer join RDAP_AUTNUM_STATUS status "
 				+ " on autnum.as_id = status.as_id "
 				+ "where autnum.start_autnum <= ? and end_autnum >= ? order by asInterval ";
 		List<Autnum> result = jdbcTemplate.query(

@@ -31,6 +31,7 @@
 package cn.cnnic.rdap.bean;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -41,41 +42,54 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * 
  */
 public class Event extends BaseModel {
-	/**
-	 * a string denoting the reason for the event
-	 */
-	private String eventAction;
-	/**
-	 * an optional identifier denoting the actor responsible for the event
-	 */
-	private String eventActor;
-	/**
-	 * the time and date the event occurred,UTC
-	 */
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-	private Timestamp eventDate;
+    /**
+     * a string denoting the reason for the event
+     */
+    private String eventAction;
+    /**
+     * an optional identifier denoting the actor responsible for the event
+     */
+    private String eventActor;
+    /**
+     * the time and date the event occurred,UTC
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+    private Timestamp eventDate;
 
-	public String getEventAction() {
-		return eventAction;
-	}
+    /**
+     * links
+     */
+    private List<Link> links;
 
-	public void setEventAction(String eventAction) {
-		this.eventAction = eventAction;
-	}
+    public String getEventAction() {
+        return eventAction;
+    }
 
-	public String getEventActor() {
-		return eventActor;
-	}
+    public void setEventAction(String eventAction) {
+        this.eventAction = eventAction;
+    }
 
-	public void setEventActor(String eventActor) {
-		this.eventActor = eventActor;
-	}
+    public String getEventActor() {
+        return eventActor;
+    }
 
-	public Timestamp getEventDate() {
-		return eventDate;
-	}
+    public void setEventActor(String eventActor) {
+        this.eventActor = eventActor;
+    }
 
-	public void setEventDate(Timestamp eventDate) {
-		this.eventDate = eventDate;
-	}
+    public Timestamp getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Timestamp eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 }
