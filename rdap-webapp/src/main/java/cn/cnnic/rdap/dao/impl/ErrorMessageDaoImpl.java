@@ -67,6 +67,7 @@ public class ErrorMessageDaoImpl implements ErrorMessageDao {
 						errorMessage.setErrorCode(rs.getLong("ERROR_CODE"));
 						errorMessage.setTitle(rs.getString("TITLE"));
 						errorMessage.addDescription(rs.getString("DESCRIPTION"));
+						errorMessage.setLang(rs.getString("LANG"));
 						return errorMessage;
 					}
 				});

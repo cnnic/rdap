@@ -31,13 +31,17 @@
 package cn.cnnic.rdap.common.util;
 
 import java.util.Map;
+
 import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.service.ErrorMessageService;
+import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
  * RestResponseUtil is used to create ResponseEntity.
@@ -54,6 +58,8 @@ public class RestResponseUtil {
 	private static Map<Long, ErrorMessage> errorMessageMap = null;
 
 	private static ErrorMessageService errorMessageService;
+	
+	private static RdapConformanceService rdapConformanceService;
 
 	@PostConstruct
 	private void init() {
@@ -141,6 +147,7 @@ public class RestResponseUtil {
 			HttpStatus errorStatus) {
 		ErrorMessage errorMessage = getErrorMessageByErrorCode(errorStatus
 				.toString());
+		RestResponseUtil.rdapConformanceService.setRdapConformance(errorMessage);
 		return new ResponseEntity<ErrorMessage>(errorMessage, errorStatus);
 	}
 
@@ -148,4 +155,10 @@ public class RestResponseUtil {
 	public void setErrorMessageService(ErrorMessageService errorMessageService) {
 		RestResponseUtil.errorMessageService = errorMessageService;
 	}
+
+	@Autowired
+    public void setRdapConformanceService(
+            RdapConformanceService rdapConformanceService) {
+        RestResponseUtil.rdapConformanceService = rdapConformanceService;
+    }
 }

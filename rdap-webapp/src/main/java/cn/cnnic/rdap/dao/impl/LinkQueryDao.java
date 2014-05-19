@@ -59,224 +59,221 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 @Repository
 public class LinkQueryDao extends AbstractQueryDao<Link> {
 
-	/**
-	 * query link as inner objects of other object
-	 */
-	@Override
-	public List<Link> queryAsInnerObjects(final Long outerObjectId,
-			final ModelType outerModelType) {
-		List<Link> linksWithHreflang = queryLinkWithHreflang(outerObjectId,
-				outerModelType);
-		List<Long> linksIds = getLinksIds(linksWithHreflang);
-		List<LinkTitle> linksTitle = queryLinksTitle(linksIds);
-		List<Link> result = setTitleToLinks(linksWithHreflang, linksTitle);
-		return result;
-	}
+    /**
+     * query link as inner objects of other object
+     */
+    @Override
+    public List<Link> queryAsInnerObjects(final Long outerObjectId,
+            final ModelType outerModelType) {
+        List<Link> linksWithHreflang = queryLinkWithHreflang(outerObjectId,
+                outerModelType);
+        List<Long> linksIds = getLinksIds(linksWithHreflang);
+        List<LinkTitle> linksTitle = queryLinksTitle(linksIds);
+        List<Link> result = setTitleToLinks(linksWithHreflang, linksTitle);
+        return result;
+    }
 
-	/**
-	 * set title to links. This method will modify links
-	 * 
-	 * @param links
-	 *            link list
-	 * @param linksTitle
-	 *            link title
-	 * @return modified link list
-	 */
-	private List<Link> setTitleToLinks(List<Link> links,
-			List<LinkTitle> linksTitle) {
-		if (null == links || null == linksTitle || linksTitle.size() == 0) {
-			return links;
-		}
-		for (LinkTitle linkTitle : linksTitle) {
-			setTitleToLink(linkTitle, links);
-		}
-		return links;
-	}
+    /**
+     * set title to links. This method will modify links
+     * 
+     * @param links
+     *            link list
+     * @param linksTitle
+     *            link title
+     * @return modified link list
+     */
+    private List<Link> setTitleToLinks(List<Link> links,
+            List<LinkTitle> linksTitle) {
+        if (null == links || null == linksTitle || linksTitle.size() == 0) {
+            return links;
+        }
+        for (LinkTitle linkTitle : linksTitle) {
+            setTitleToLink(linkTitle, links);
+        }
+        return links;
+    }
 
-	/**
-	 * set title to link. This method will modify link in links
-	 * 
-	 * @param linkTitle
-	 *            link title
-	 * @param links
-	 *            link list
-	 */
-	private void setTitleToLink(LinkTitle linkTitle, List<Link> links) {
-		if (null == links) {
-			return;
-		}
-		Link link = findLinkFromListById(linkTitle.getLinkId(), links);
-		if (null != link) {
-			link.addTitle(linkTitle.getTitle());
-		}
-	}
+    /**
+     * set title to link. This method will modify link in links
+     * 
+     * @param linkTitle
+     *            link title
+     * @param links
+     *            link list
+     */
+    private void setTitleToLink(LinkTitle linkTitle, List<Link> links) {
+        if (null == links) {
+            return;
+        }
+        Link link = findLinkFromListById(linkTitle.getLinkId(), links);
+        if (null != link) {
+            link.addTitle(linkTitle.getTitle());
+        }
+    }
 
-	/**
-	 * find link from link list by link id
-	 * 
-	 * @param linkId
-	 *            link id
-	 * @param links
-	 *            link list
-	 * @return link if find, null if not
-	 */
-	private Link findLinkFromListById(Long linkId, List<Link> links) {
-		if (null == links || null == linkId) {
-			return null;
-		}
-		for (Link link : links) {
-			if (linkId.equals(link.getId())) {
-				return link;
-			}
-		}
-		return null;
-	}
+    /**
+     * find link from link list by link id
+     * 
+     * @param linkId
+     *            link id
+     * @param links
+     *            link list
+     * @return link if find, null if not
+     */
+    private Link findLinkFromListById(Long linkId, List<Link> links) {
+        if (null == links || null == linkId) {
+            return null;
+        }
+        for (Link link : links) {
+            if (linkId.equals(link.getId())) {
+                return link;
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * get all link id from link list
-	 * 
-	 * @param links
-	 *            link list
-	 * @return link id list
-	 */
-	private List<Long> getLinksIds(List<Link> links) {
-		List<Long> result = new ArrayList<Long>();
-		if (null == links) {
-			return result;
-		}
-		for (Link link : links) {
-			result.add(link.getId());
-		}
-		return result;
-	}
+    /**
+     * get all link id from link list
+     * 
+     * @param links
+     *            link list
+     * @return link id list
+     */
+    private List<Long> getLinksIds(List<Link> links) {
+        List<Long> result = new ArrayList<Long>();
+        if (null == links) {
+            return result;
+        }
+        for (Link link : links) {
+            result.add(link.getId());
+        }
+        return result;
+    }
 
-	/**
-	 * query link's title
-	 * 
-	 * @param linksIds
-	 *            link id list
-	 * @return link title list
-	 */
-	private List<LinkTitle> queryLinksTitle(List<Long> linksIds) {
-		final String linksIdsJoinedByComma = StringUtils.join(linksIds, ",");
-		final String sql = "select * from RDAP_LINK_TITLE where LINK_ID in (?)";
-		List<LinkTitle> result = jdbcTemplate.query(
-				new PreparedStatementCreator() {
-					public PreparedStatement createPreparedStatement(
-							Connection connection) throws SQLException {
-						PreparedStatement ps = connection.prepareStatement(sql);
-						ps.setString(1, linksIdsJoinedByComma);
-						return ps;
-					}
-				}, new RowMapper<LinkTitle>() {
-					@Override
-					public LinkTitle mapRow(ResultSet rs, int rowNum)
-							throws SQLException {
-						return new LinkTitle(rs.getLong("LINK_ID"), rs
-								.getString("TITLE"));
-					}
+    /**
+     * query link's title
+     * 
+     * @param linksIds
+     *            link id list
+     * @return link title list
+     */
+    private List<LinkTitle> queryLinksTitle(List<Long> linksIds) {
+        if(null == linksIds || linksIds.size() == 0){
+            return new ArrayList<LinkTitle>();
+        }
+        final String linksIdsJoinedByComma = StringUtils.join(linksIds, ",");
+        final String sqlTpl = "select * from RDAP_LINK_TITLE where LINK_ID in (%s)";
+        final String sql = String.format(sqlTpl, linksIdsJoinedByComma);
+        List<LinkTitle> result = jdbcTemplate.query(sql,
+                new RowMapper<LinkTitle>() {
+                    @Override
+                    public LinkTitle mapRow(ResultSet rs, int rowNum)
+                            throws SQLException {
+                        return new LinkTitle(rs.getLong("LINK_ID"), rs
+                                .getString("TITLE"));
+                    }
 
-				});
-		return result;
-	}
+                });
+        return result;
+    }
 
-	/**
-	 * query link with hreflang
-	 * 
-	 * @param outerObjectId
-	 *            object id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return link list
-	 */
-	private List<Link> queryLinkWithHreflang(final Long outerObjectId,
-			final ModelType outerModelType) {
-		final String sql = "select link.*,hreflang.HREFLANG from RDAP_LINK link"
-				+ " inner join REL_LINK_OBJECT rel "
-				+ " on (rel.LINK_ID = link.LINK_ID and rel.REL_ID = ? and rel.REL_OBJECT_TYPE =?) "
-				+ " left outer join RDAP_LINK_HREFLANG hreflang "
-				+ " on link.LINK_ID = hreflang.LINK_ID";
-		List<Link> result = jdbcTemplate.query(new PreparedStatementCreator() {
-			public PreparedStatement createPreparedStatement(
-					Connection connection) throws SQLException {
-				PreparedStatement ps = connection.prepareStatement(sql);
-				ps.setLong(1, outerObjectId);
-				ps.setString(2, outerModelType.getName());
-				return ps;
-			}
-		}, new LinkWithHreflangResultSetExtractor());
-		return result;
-	}
+    /**
+     * query link with hreflang
+     * 
+     * @param outerObjectId
+     *            object id of outer object
+     * @param outerModelType
+     *            model type of outer object
+     * @return link list
+     */
+    private List<Link> queryLinkWithHreflang(final Long outerObjectId,
+            final ModelType outerModelType) {
+        final String sql = "select link.*,hreflang.HREFLANG from RDAP_LINK link"
+                + " inner join REL_LINK_OBJECT rel "
+                + " on (rel.LINK_ID = link.LINK_ID and rel.REL_ID = ? and rel.REL_OBJECT_TYPE =?) "
+                + " left outer join RDAP_LINK_HREFLANG hreflang "
+                + " on link.LINK_ID = hreflang.LINK_ID";
+        List<Link> result = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setLong(1, outerObjectId);
+                ps.setString(2, outerModelType.getName());
+                return ps;
+            }
+        }, new LinkWithHreflangResultSetExtractor());
+        return result;
+    }
 
-	/**
-	 * link ResultSetExtractor, extract data from ResultSet
-	 * 
-	 * @author jiashuo
-	 * 
-	 */
-	class LinkWithHreflangResultSetExtractor implements
-			ResultSetExtractor<List<Link>> {
-		@Override
-		public List<Link> extractData(ResultSet rs) throws SQLException,
-				DataAccessException {
-			List<Link> result = new ArrayList<Link>();
-			Map<Long, Link> mapById = new HashMap<Long, Link>();
-			while (rs.next()) {
-				Long linkId = rs.getLong("LINK_ID");
-				Link link = mapById.get(linkId);
-				if (null == link) {
-					link = new Link();
-					link.setId(rs.getLong("LINK_ID"));
-					link.setValue(rs.getString("VALUE"));
-					link.setRel(rs.getString("REL"));
-					link.setHref(rs.getString("HREF"));
-					link.setMedia(rs.getString("MEDIA"));
-					link.setType(rs.getString("TYPE"));
-					result.add(link);
-					mapById.put(linkId, link);
-				}
-				link.addHreflang(rs.getString("HREFLANG"));
-			}
-			return result;
-		}
-	}
+    /**
+     * link ResultSetExtractor, extract data from ResultSet
+     * 
+     * @author jiashuo
+     * 
+     */
+    class LinkWithHreflangResultSetExtractor implements
+            ResultSetExtractor<List<Link>> {
+        @Override
+        public List<Link> extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            List<Link> result = new ArrayList<Link>();
+            Map<Long, Link> mapById = new HashMap<Long, Link>();
+            while (rs.next()) {
+                Long linkId = rs.getLong("LINK_ID");
+                Link link = mapById.get(linkId);
+                if (null == link) {
+                    link = new Link();
+                    link.setId(rs.getLong("LINK_ID"));
+                    link.setValue(rs.getString("VALUE"));
+                    link.setRel(rs.getString("REL"));
+                    link.setHref(rs.getString("HREF"));
+                    link.setMedia(rs.getString("MEDIA"));
+                    link.setType(rs.getString("TYPE"));
+                    result.add(link);
+                    mapById.put(linkId, link);
+                }
+                link.addHreflang(rs.getString("HREFLANG"));
+            }
+            return result;
+        }
+    }
 
-	/**
-	 * link title. Only used in LinkQueryDao class
-	 * 
-	 * @author jiashuo
-	 * 
-	 */
-	class LinkTitle {
-		/**
-		 * link id
-		 */
-		private Long linkId;
-		/**
-		 * link title str
-		 */
-		private String title;
+    /**
+     * link title. Only used in LinkQueryDao class
+     * 
+     * @author jiashuo
+     * 
+     */
+    class LinkTitle {
+        /**
+         * link id
+         */
+        private Long linkId;
+        /**
+         * link title str
+         */
+        private String title;
 
-		public Long getLinkId() {
-			return linkId;
-		}
+        public Long getLinkId() {
+            return linkId;
+        }
 
-		public void setLinkId(Long linkId) {
-			this.linkId = linkId;
-		}
+        public void setLinkId(Long linkId) {
+            this.linkId = linkId;
+        }
 
-		public String getTitle() {
-			return title;
-		}
+        public String getTitle() {
+            return title;
+        }
 
-		public void setTitle(String title) {
-			this.title = title;
-		}
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
-		public LinkTitle(Long linkId, String title) {
-			super();
-			this.linkId = linkId;
-			this.title = title;
-		}
-	}
+        public LinkTitle(Long linkId, String title) {
+            super();
+            this.linkId = linkId;
+            this.title = title;
+        }
+    }
 }

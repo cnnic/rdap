@@ -45,7 +45,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * 
  */
 @JsonInclude(Include.NON_EMPTY)
-public class ErrorMessage {
+public class ErrorMessage extends BaseModel{
 	/**
 	 * identity of object
 	 */
