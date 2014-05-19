@@ -28,53 +28,42 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.controller.support;
+package cn.cnnic.rdap.service.impl;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
-import javax.servlet.http.HttpServletResponse;
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
-import org.springframework.http.ResponseEntity;
-
-import cn.cnnic.rdap.bean.ErrorMessage;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.Autnum;
 
 /**
- * Filter helper.
+ * Test for RdapConformanceServiceImpl
  * 
  * @author jiashuo
  * 
  */
-public class FilterHelper {
-    /**
-     * write response.
-     * 
-     * @param responseEntity
-     * @param response
-     * @throws IOException
-     */
-    public static void writeResponse(
-            ResponseEntity<ErrorMessage> responseEntity,
-            HttpServletResponse response) throws IOException {
-        response.setHeader("Content-Type", "application/rdap+json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter writer = response.getWriter();
-        response.setStatus(responseEntity.getStatusCode().value());
-        String jsonStr = beanToJSON(responseEntity.getBody());
-        writer.print(jsonStr);
-    }
+@SuppressWarnings("rawtypes")
+public class ResponseDecoratorTest extends BaseTest {
+    @Autowired
+    private ResponseDecorator responseDecorator;
 
     /**
-     * convert bean to JSON format String.
-     * 
-     * @param object
-     * @return
-     * @throws IOException
+     * test query exist autnum
      */
-    private static String beanToJSON(Object object) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
+    @Test
+    public void testSetRdapConformanceToAutnum() {
+        Autnum autnum = new Autnum();
+        Assert.notNull(autnum);
+        assertNull(autnum.getRdapConformance());
+        responseDecorator.decorateResponse(autnum);
+        assertNotNull(autnum.getRdapConformance());
+        assertThat(autnum.getRdapConformance(),
+                CoreMatchers.hasItems("rdap_level_0"));
     }
 }

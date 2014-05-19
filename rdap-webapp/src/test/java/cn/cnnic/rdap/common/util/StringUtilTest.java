@@ -28,53 +28,54 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.controller.support;
+package cn.cnnic.rdap.common.util;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import static org.junit.Assert.assertEquals;
 
-import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
-import org.springframework.http.ResponseEntity;
+import org.junit.Test;
 
-import cn.cnnic.rdap.bean.ErrorMessage;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cn.cnnic.rdap.BaseTest;
 
 /**
- * Filter helper.
+ * Test for StringUtil
  * 
  * @author jiashuo
  * 
  */
-public class FilterHelper {
+@SuppressWarnings("rawtypes")
+public class StringUtilTest extends BaseTest {
+
     /**
-     * write response.
+     * test encoded URL.
      * 
-     * @param responseEntity
-     * @param response
-     * @throws IOException
+     * @throws UnsupportedEncodingException
      */
-    public static void writeResponse(
-            ResponseEntity<ErrorMessage> responseEntity,
-            HttpServletResponse response) throws IOException {
-        response.setHeader("Content-Type", "application/rdap+json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter writer = response.getWriter();
-        response.setStatus(responseEntity.getStatusCode().value());
-        String jsonStr = beanToJSON(responseEntity.getBody());
-        writer.print(jsonStr);
+    @Test
+    public void testEncodedURL() throws UnsupportedEncodingException {
+        String qEncode = URLEncoder.encode("中文。中国", "UTF-8");
+        String expectURL = "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value="
+                + qEncode;
+        String encodedURL = expectURL;
+        String result = StringUtil.urlEncode(encodedURL);
+        assertEquals(expectURL, result);
     }
 
     /**
-     * convert bean to JSON format String.
+     * test decoded URL.
      * 
-     * @param object
-     * @return
-     * @throws IOException
+     * @throws UnsupportedEncodingException
      */
-    private static String beanToJSON(Object object) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
+    @Test
+    public void testDecodedURL() throws UnsupportedEncodingException {
+        String qEncode = URLEncoder.encode("中文。中国", "UTF-8");
+        String expectURL = "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value="
+                + qEncode;
+        String decodedURL = "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value=中文。中国";
+        String result = StringUtil.urlEncode(decodedURL);
+        assertEquals(expectURL, result);
     }
+
 }

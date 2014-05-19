@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -48,6 +50,7 @@ import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
@@ -58,6 +61,8 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
  */
 @Repository
 public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
+    private static Logger logger = LoggerFactory
+            .getLogger(LinkQueryDaoImpl.class);
 
     /**
      * query link as inner objects of other object
@@ -158,7 +163,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
      * @return link title list
      */
     private List<LinkTitle> queryLinksTitle(List<Long> linksIds) {
-        if(null == linksIds || linksIds.size() == 0){
+        if (null == linksIds || linksIds.size() == 0) {
             return new ArrayList<LinkTitle>();
         }
         final String linksIdsJoinedByComma = StringUtils.join(linksIds, ",");
@@ -230,12 +235,24 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
                     link.setMedia(rs.getString("MEDIA"));
                     link.setType(rs.getString("TYPE"));
                     result.add(link);
+                    encodeUriAndSetToLink(link);
                     mapById.put(linkId, link);
                 }
                 link.addHreflang(rs.getString("HREFLANG"));
             }
             return result;
         }
+    }
+
+    /**
+     * encode URI for properties 'value' and 'href' in link,and set properties
+     * to link.
+     * 
+     * @param link
+     */
+    private void encodeUriAndSetToLink(Link link) {
+        link.setHref(StringUtil.urlEncode(link.getHref()));
+        link.setValue(StringUtil.urlEncode(link.getValue()));
     }
 
     /**

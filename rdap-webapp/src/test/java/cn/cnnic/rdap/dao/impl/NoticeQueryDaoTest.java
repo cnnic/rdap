@@ -28,53 +28,61 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.controller.support;
+package cn.cnnic.rdap.dao.impl;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
-import org.springframework.http.ResponseEntity;
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import cn.cnnic.rdap.bean.ErrorMessage;
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.Link;
+import cn.cnnic.rdap.bean.Notice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 /**
- * Filter helper.
+ * Test for notice DAO
  * 
  * @author jiashuo
  * 
  */
-public class FilterHelper {
-    /**
-     * write response.
-     * 
-     * @param responseEntity
-     * @param response
-     * @throws IOException
-     */
-    public static void writeResponse(
-            ResponseEntity<ErrorMessage> responseEntity,
-            HttpServletResponse response) throws IOException {
-        response.setHeader("Content-Type", "application/rdap+json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter writer = response.getWriter();
-        response.setStatus(responseEntity.getStatusCode().value());
-        String jsonStr = beanToJSON(responseEntity.getBody());
-        writer.print(jsonStr);
-    }
+@SuppressWarnings("rawtypes")
+public class NoticeQueryDaoTest extends BaseTest {
+    @Autowired
+    private NoticeDaoImpl noticeDaoImpl;
 
     /**
-     * convert bean to JSON format String.
-     * 
-     * @param object
-     * @return
-     * @throws IOException
+     * test query exist notice
      */
-    private static String beanToJSON(Object object) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "notice.xml")
+    public void testGetAllNotices() {
+        List<Notice> notices = noticeDaoImpl.getAllNotices();
+        Long noticeId = 1L;
+        assertNotNull(notices);
+        assertTrue(notices.size() > 0);
+        for (Notice notice : notices) {
+            if (noticeId.equals(notice.getId())) {
+                continue;
+            }
+            assertEquals("Terms of Use", notice.getTitle());
+            assertThat(notice.getDescription(),
+                    CoreMatchers.hasItems("description1", "description2"));
+            List<Link> links = notice.getLinks();
+            assertNotNull(links);
+            assertEquals(1, links.size());
+            Link link = links.get(0);
+            assertNotNull(link);
+            assertEquals("http://example.com/context_uri", link.getValue());
+        }
     }
 }

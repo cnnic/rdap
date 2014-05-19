@@ -35,6 +35,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * consists of information about the network registration and entities related
  * to the autnum registration
@@ -42,164 +44,167 @@ import org.apache.commons.lang.StringUtils;
  * @author jiashuo
  * 
  */
+@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "startAutnum",
+        "endAutnum", "name", "type", "status", "country", "remarks", "links",
+        "events", "entities", "port43", "lang" })
 public class Autnum extends BaseModel {
-	/**
-	 * handle of autnum
-	 */
-	private String handle;
-	/**
-	 * start number
-	 */
-	private Long startAutnum;
-	/**
-	 * end number
-	 */
-	private Long endAutnum;
-	/**
-	 * name
-	 */
-	private String name;
-	/**
-	 * RIR-specific classification of the autnum
-	 */
-	private String type;
-	/**
-	 * 2 character country code of the autnum
-	 */
-	private String country;
-	/**
-	 * status
-	 */
-	private List<String> status = new ArrayList<String>();
-	/**
-	 * sub entities
-	 */
-	private List<Entity> entities;
-	/**
-	 * remarks
-	 */
-	private List<Remark> remarks;
-	/**
-	 * links
-	 */
-	private List<Link> links;
-	/**
-	 * port43
-	 */
-	private String port43;
-	/**
-	 * events
-	 */
-	private List<Event> events;
+    /**
+     * handle of autnum
+     */
+    private String handle;
+    /**
+     * start number
+     */
+    private Long startAutnum;
+    /**
+     * end number
+     */
+    private Long endAutnum;
+    /**
+     * name
+     */
+    private String name;
+    /**
+     * RIR-specific classification of the autnum
+     */
+    private String type;
+    /**
+     * 2 character country code of the autnum
+     */
+    private String country;
+    /**
+     * status
+     */
+    private List<String> status = new ArrayList<String>();
+    /**
+     * sub entities
+     */
+    private List<Entity> entities;
+    /**
+     * remarks
+     */
+    private List<Remark> remarks;
+    /**
+     * links
+     */
+    private List<Link> links;
+    /**
+     * port43
+     */
+    private String port43;
+    /**
+     * events
+     */
+    private List<Event> events;
 
-	/**
-	 * add a status string to status list
-	 * 
-	 * @param statusStr
-	 */
-	public void addStatus(String statusStr) {
-		if (StringUtils.isBlank(statusStr)) {
-			return;
-		}
-		if (null == this.status) {
-			this.status = new ArrayList<String>();
-		}
-		this.status.add(statusStr);
-	}
+    /**
+     * add a status string to status list
+     * 
+     * @param statusStr
+     */
+    public void addStatus(String statusStr) {
+        if (StringUtils.isBlank(statusStr)) {
+            return;
+        }
+        if (null == this.status) {
+            this.status = new ArrayList<String>();
+        }
+        this.status.add(statusStr);
+    }
 
-	public String getHandle() {
-		return handle;
-	}
+    public String getHandle() {
+        return handle;
+    }
 
-	public void setHandle(String handle) {
-		this.handle = handle;
-	}
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
 
-	public Long getStartAutnum() {
-		return startAutnum;
-	}
+    public Long getStartAutnum() {
+        return startAutnum;
+    }
 
-	public void setStartAutnum(Long startAutnum) {
-		this.startAutnum = startAutnum;
-	}
+    public void setStartAutnum(Long startAutnum) {
+        this.startAutnum = startAutnum;
+    }
 
-	public Long getEndAutnum() {
-		return endAutnum;
-	}
+    public Long getEndAutnum() {
+        return endAutnum;
+    }
 
-	public void setEndAutnum(Long endAutnum) {
-		this.endAutnum = endAutnum;
-	}
+    public void setEndAutnum(Long endAutnum) {
+        this.endAutnum = endAutnum;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public String getCountry() {
-		return country;
-	}
+    public String getCountry() {
+        return country;
+    }
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
-	public List<String> getStatus() {
-		return status;
-	}
+    public List<String> getStatus() {
+        return status;
+    }
 
-	public void setStatus(List<String> status) {
-		this.status = status;
-	}
+    public void setStatus(List<String> status) {
+        this.status = status;
+    }
 
-	public List<Entity> getEntities() {
-		return entities;
-	}
+    public List<Entity> getEntities() {
+        return entities;
+    }
 
-	public void setEntities(List<Entity> entities) {
-		this.entities = entities;
-	}
+    public void setEntities(List<Entity> entities) {
+        this.entities = entities;
+    }
 
-	public List<Remark> getRemarks() {
-		return remarks;
-	}
+    public List<Remark> getRemarks() {
+        return remarks;
+    }
 
-	public void setRemarks(List<Remark> remarks) {
-		this.remarks = remarks;
-	}
+    public void setRemarks(List<Remark> remarks) {
+        this.remarks = remarks;
+    }
 
-	public List<Link> getLinks() {
-		return links;
-	}
+    public List<Link> getLinks() {
+        return links;
+    }
 
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 
-	public String getPort43() {
-		return port43;
-	}
+    public String getPort43() {
+        return port43;
+    }
 
-	public void setPort43(String port43) {
-		this.port43 = port43;
-	}
+    public void setPort43(String port43) {
+        this.port43 = port43;
+    }
 
-	public List<Event> getEvents() {
-		return events;
-	}
+    public List<Event> getEvents() {
+        return events;
+    }
 
-	public void setEvents(List<Event> events) {
-		this.events = events;
-	}
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
 }

@@ -49,51 +49,68 @@ import cn.cnnic.rdap.bean.Domain;
 @SuppressWarnings("rawtypes")
 public class RestResponseUtilTest extends BaseTest {
 
-	/**
-	 * test create ResponseEntity with HTTP code 200
-	 */
-	@Test
-	public void testCreateResponse200() {
-		String domainName = "cnnic.cn";
-		Domain domain = new Domain();
-		domain.setLdhName(domainName);
-		ResponseEntity<Domain> result = RestResponseUtil
-				.createResponse200(domain);
-		Assert.notNull(result);
-		assertEquals(result.getBody().getLdhName(), domainName);
-		assertEquals(result.getStatusCode(), HttpStatus.OK);
-	}
+    /**
+     * test create ResponseEntity with HTTP code 200
+     */
+    @Test
+    public void testCreateResponse200() {
+        String domainName = "cnnic.cn";
+        Domain domain = new Domain();
+        domain.setLdhName(domainName);
+        ResponseEntity<Domain> result = RestResponseUtil
+                .createResponse200(domain);
+        Assert.notNull(result);
+        assertEquals(result.getBody().getLdhName(), domainName);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+    }
 
-	/**
-	 * test create ResponseEntity with HTTP code 400
-	 */
-	@Test
-	public void testCreateResponse400() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse400();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
-	}
+    /**
+     * test create ResponseEntity with HTTP code 400
+     */
+    @Test
+    public void testCreateResponse400() {
+        ResponseEntity result = RestResponseUtil.createResponse400();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
+    }
 
-	/**
-	 * test create ResponseEntity with HTTP code 404
-	 */
-	@Test
-	public void testCreateResponse404() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse404();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
-	}
+    /**
+     * test create ResponseEntity with HTTP code 404
+     */
+    @Test
+    public void testCreateResponse404() {
+        ResponseEntity result = RestResponseUtil.createResponse404();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+    }
 
-	/**
-	 * test create ResponseEntity with HTTP code 500
-	 */
-	@Test
-	public void testCreateResponse500() {
-		ResponseEntity result = RestResponseUtil
-				.createResponse500();
-		Assert.notNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+    /**
+     * test create ResponseEntity with HTTP code 405
+     */
+    @Test
+    public void testCreateResponse405() {
+        ResponseEntity result = RestResponseUtil.createResponse405();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * test create ResponseEntity with HTTP code 415
+     */
+    @Test
+    public void testCreateResponse415() {
+        ResponseEntity result = RestResponseUtil.createResponse415();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    /**
+     * test create ResponseEntity with HTTP code 500
+     */
+    @Test
+    public void testCreateResponse500() {
+        ResponseEntity result = RestResponseUtil.createResponse500();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

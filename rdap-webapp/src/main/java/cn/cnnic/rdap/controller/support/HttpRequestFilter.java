@@ -43,34 +43,75 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.http.ResponseEntity;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 
 /**
- * filter HTTP method,only support HTTP GET.
+ * filter HTTP request.
  * 
  * @author jiashuo
  * 
  */
-public class HttpMethodFilter implements Filter {
+public class HttpRequestFilter implements Filter {
+    private static final String VALID_CONTENT_TYPE = "application/rdap+json";
 
     @Override
     public void doFilter(ServletRequest arg0, ServletResponse arg1,
             FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) arg0;
         HttpServletResponse response = (HttpServletResponse) arg1;
-        String method = request.getMethod();
-        List<String> allowMethods = new ArrayList<String>();
-        allowMethods.add("GET");
-        if (!allowMethods.contains(method)) {
+        boolean httpMethodIsValid = httpMethodIsValid(request);
+        if (!httpMethodIsValid) {
             ResponseEntity<ErrorMessage> responseEntity = RestResponseUtil
-                    .createResponse400();
+                    .createResponse405();
+            FilterHelper.writeResponse(responseEntity, response);
+            return;
+        }
+        boolean contentTypeIsValid = contentTypeIsValid(request);
+        if (!contentTypeIsValid) {
+            ResponseEntity<ErrorMessage> responseEntity = RestResponseUtil
+                    .createResponse415();
             FilterHelper.writeResponse(responseEntity, response);
             return;
         }
         chain.doFilter(request, response);
+    }
+
+    /**
+     * check if content type is valid.
+     * 
+     * @param request
+     *            HttpServletRequest
+     * @return true if valid, false if not
+     */
+    private boolean contentTypeIsValid(HttpServletRequest request) {
+        String acceptHeader = request.getHeader("Accept");
+        if (StringUtils.isBlank(acceptHeader)) {
+            return true;
+        }
+        if (VALID_CONTENT_TYPE.equals(acceptHeader)
+                || acceptHeader.startsWith(VALID_CONTENT_TYPE + ";")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * check if HTTP METHOD is valid.
+     * 
+     * @param request
+     *            HttpServletRequest
+     * @return true if valid, false if not
+     */
+    private boolean httpMethodIsValid(HttpServletRequest request) {
+        String method = request.getMethod();
+        List<String> allowMethods = new ArrayList<String>();
+        allowMethods.add("GET");
+        boolean httpMethodIsValid = allowMethods.contains(method);
+        return httpMethodIsValid;
     }
 
     @Override
