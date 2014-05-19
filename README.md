@@ -3,6 +3,12 @@
    * Get [war file](https://github.com/cnnic/rdap/tree/develop/rdap-webapp/target/rdap-webapp.war) builded by JDK6.(Higer JDK version is not supported, and must build from source)
       
    * Build war file from source
+   
       [Install Git](http://git-scm.com/book/en/Getting-Started-Installing-Git)
+
+      execute command:
+      ```
+      git clone
+      ```
 
 1. [Develop Guide](https://github.com/cnnic/rdap/wiki/Develop%20Guide)
