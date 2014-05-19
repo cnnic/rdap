@@ -28,58 +28,57 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.dao.impl;
+package cn.cnnic.rdap.controller.support;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.dao.AbstractQueryDao;
+import org.springframework.http.ResponseEntity;
+
+import cn.cnnic.rdap.bean.ErrorMessage;
+import cn.cnnic.rdap.common.util.RestResponseUtil;
 
 /**
- * domain query DAO
+ * filter HTTP method,only support HTTP GET.
  * 
  * @author jiashuo
  * 
  */
-@Repository
-public class DomainQueryDao extends AbstractQueryDao<Domain> {
+public class HttpMethodFilter implements Filter {
 
-	/**
-	 * query domain by domain name.
-	 */
-	@Override
-	public Domain query(QueryParam queryParam) {
-		final String domainName = queryParam.getQ();
-		final String sql = "select * from RDAP_DOMAIN where LDH_NAME= ? limit 1";
-		List<Domain> result = jdbcTemplate.query(
-				new PreparedStatementCreator() {
-					public PreparedStatement createPreparedStatement(
-							Connection connection) throws SQLException {
-						PreparedStatement ps = connection.prepareStatement(sql);
-						ps.setString(1, domainName);
-						return ps;
-					}
-				}, new RowMapper<Domain>() {
-					public Domain mapRow(ResultSet rs, int rowNum)
-							throws SQLException {
-						Domain domain = new Domain();
-						domain.setLdhName(rs.getString("LDH_NAME"));
-						domain.setHandle(rs.getString("HANDLE"));
-						return domain;
-					}
-				});
-		if (null == result || result.size() == 0) {
-			return null;
-		}
-		return result.get(0);
-	}
+    @Override
+    public void doFilter(ServletRequest arg0, ServletResponse arg1,
+            FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) arg0;
+        HttpServletResponse response = (HttpServletResponse) arg1;
+        String method = request.getMethod();
+        List<String> allowMethods = new ArrayList<String>();
+        allowMethods.add("GET");
+        if (!allowMethods.contains(method)) {
+            ResponseEntity<ErrorMessage> responseEntity = RestResponseUtil
+                    .createResponse400();
+            FilterHelper.writeResponse(responseEntity, response);
+            return;
+        }
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
+    }
+
+    @Override
+    public void destroy() {
+
+    }
 }
