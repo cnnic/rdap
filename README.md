@@ -24,26 +24,20 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
       *  execute commands:
           ```
 		cd WORK_DIR	(WORK_DIR must be real dir)
-		cd rdap/rdap-webapp
+		cd rdap-develop/rdap-develop/rdap-webapp
 		mvn package -Dmaven.test.skip=true (for windows7 and windows8, you may use 'mvn.bat' instead of 'mvn')
-		ll target/rdap.war (rdap.war is the artifact)
+		(target/rdap.war  is the build war file)
 
           ```
 1. Deploy rdap.war to tomcat
-   * copy rdap.war to $TOMCAT_HOME/webapps
-   * unzip $TOMCAT_HOME/webapps/rdap.war ,this step will create folder 'rdap' in $TOMCAT_HOME/webapps/. Command In linux is :
-
-	   	```
-			cd $TOMCAT_HOME/webapps/     ($TOMCAT_HOME must be replaced by real dir)
-			unzip rdap.war 
-		```
+   * unzip rdap.war to $TOMCAT_HOME/webapps/, This step will create folder 'rdap' in $TOMCAT_HOME/webapps/
 		
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
 	
 		```
-			jdbc.url: change to your installed Mysql url in step 'Install Mysql and init database'
-			jdbc.username: change to your Mysql username in step 'Install Mysql and init database', default is 'whois'
-			jdbc.password: change to your Mysql password in step 'Install Mysql and init database', default is 'cnnic'
+			jdbc.url: value change to installed Mysql url in step 'Install Mysql and init database'
+			jdbc.username: value change to Mysql username in step 'Install Mysql and init database', default is 'whois'
+			jdbc.password: value change to Mysql password in step 'Install Mysql and init database', default is 'cnnic'
 		```
 
    * Start up tomcat
@@ -55,6 +49,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 
    * Test
 	   	```
-			curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap/.well-known/rdap	(change '8080' to real tomcat HTTP port if it's not 8080)
+			curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap/.well-known/rdap
+			(change '8080' to real tomcat HTTP port if it's not 8080)
 		```
 	It's successful if response contains 'rdapConformance'. 
