@@ -31,8 +31,12 @@
 package cn.cnnic.rdap.common.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -92,6 +96,9 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse405();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.METHOD_NOT_ALLOWED);
+        assertTrue(result.getHeaders().containsKey("Allow"));
+        assertThat(result.getHeaders().get("Allow"),
+                CoreMatchers.hasItems(HttpMethod.GET.toString()));
     }
 
     /**

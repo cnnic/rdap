@@ -31,7 +31,6 @@
 package cn.cnnic.rdap.common.util;
 
 import java.net.URI;
-import java.net.URL;
 import java.net.URLDecoder;
 
 import org.apache.commons.lang.StringUtils;
@@ -46,6 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StringUtil {
     private static Logger logger = LoggerFactory.getLogger(StringUtil.class);
+    private static final String CHAR_SET_UTF8 = "UTF-8";
 
     /**
      * encoded url with UTF-8 encoding. This will escape protocol(eg:'http://')
@@ -61,11 +61,8 @@ public class StringUtil {
         }
         String result = str;
         try {
-            String decodedURL = URLDecoder.decode(str, "UTF-8");
-            URL url = new URL(decodedURL);
-            URI uri = new URI(url.getProtocol(), url.getUserInfo(),
-                    url.getHost(), url.getPort(), url.getPath(),
-                    url.getQuery(), url.getRef());
+            String decodedURL = URLDecoder.decode(str, CHAR_SET_UTF8);
+            URI uri = new URI(decodedURL);
             result = uri.toASCIIString();
         } catch (Exception e) {
             logger.error(e.getMessage());

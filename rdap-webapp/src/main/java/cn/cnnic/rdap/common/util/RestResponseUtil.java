@@ -30,18 +30,21 @@
  */
 package cn.cnnic.rdap.common.util;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.service.ErrorMessageService;
-import cn.cnnic.rdap.service.RdapConformanceService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
 /**
@@ -114,7 +117,7 @@ public class RestResponseUtil {
     public static ResponseEntity<ErrorMessage> createResponse400() {
         return createCommonErrorResponse(HttpStatus.BAD_REQUEST);
     }
-    
+
     /**
      * create response with HTTP status code 405
      * 
@@ -123,9 +126,15 @@ public class RestResponseUtil {
      * @return ResponseEntity
      */
     public static ResponseEntity<ErrorMessage> createResponse405() {
-        return createCommonErrorResponse(HttpStatus.METHOD_NOT_ALLOWED);
+        HttpHeaders headers = new HttpHeaders();
+        Set<HttpMethod> allowMethods = new HashSet<HttpMethod>();
+        allowMethods.add(HttpMethod.GET);
+        headers.setAllow(allowMethods);
+        ResponseEntity<ErrorMessage> response = createErrorResponseWithHeaders(
+                HttpStatus.METHOD_NOT_ALLOWED, headers);
+        return response;
     }
-    
+
     /**
      * create response with HTTP status code 415
      * 
@@ -172,6 +181,22 @@ public class RestResponseUtil {
                 .toString());
         responseDecorator.decorateResponse(errorMessage);
         return new ResponseEntity<ErrorMessage>(errorMessage, errorStatus);
+    }
+
+    /**
+     * create error response,with headers
+     * 
+     * @param errorStatus
+     *            HttpStatus of error message
+     * @return ResponseEntity
+     */
+    private static ResponseEntity<ErrorMessage> createErrorResponseWithHeaders(
+            HttpStatus errorStatus, HttpHeaders responseHeaders) {
+        ErrorMessage errorMessage = getErrorMessageByErrorCode(errorStatus
+                .toString());
+        responseDecorator.decorateResponse(errorMessage);
+        return new ResponseEntity<ErrorMessage>(errorMessage, responseHeaders,
+                errorStatus);
     }
 
     @Autowired

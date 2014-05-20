@@ -77,5 +77,20 @@ public class StringUtilTest extends BaseTest {
         String result = StringUtil.urlEncode(decodedURL);
         assertEquals(expectURL, result);
     }
-
+    
+    /**
+     * test decoded URL.
+     * 
+     * @throws UnsupportedEncodingException
+     */
+    @Test
+    public void testDecodedURLForIDN() throws UnsupportedEncodingException {
+        String decodedURL = "http://网络中心.中国/链接1";
+        String encodeURL = URLEncoder.encode(decodedURL, "UTF-8");
+        String expectURL = "http://%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%BF%83.%E4%B8%AD%E5%9B%BD/%E9%93%BE%E6%8E%A51";
+        String result = StringUtil.urlEncode(decodedURL);
+        assertEquals(expectURL, result);
+        result = StringUtil.urlEncode(encodeURL);
+        assertEquals(expectURL, result);
+    }
 }
