@@ -31,7 +31,7 @@
    * unzip $TOMCAT_HOME/webapps/rdap.war ,this step will create folder 'rdap' in $TOMCAT_HOME/webapps/. Command In linux is :
 
 	   	```
-			cd $TOMCAT_HOME/webapps/     (you must replace $TOMCAT_HOME for real dir)
+			cd $TOMCAT_HOME/webapps/     ($TOMCAT_HOME must be replaced by real dir)
 			unzip rdap.war 
 		```
 		
@@ -46,7 +46,7 @@
    * Start up tomcat
 	   
 		```
-			cd $TOMCAT_HOME
+			cd $TOMCAT_HOME		($TOMCAT_HOME must be replaced by real dir)
 			bin/startup.sh
 		```
 
