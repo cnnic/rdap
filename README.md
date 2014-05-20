@@ -27,7 +27,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 		cd rdap
 		git checkout develop
 		cd rdap-webapp
-		mvn package -Dmaven.test.skip=true (for windows7 and windows8, you may execute: 'mvn.bat package')
+		mvn package -Dmaven.test.skip=true (for windows7 and windows8, you may use 'mvn.bat' instead of 'mvn')
 		ll target/rdap.war (rdap.war is the artifact)
 
           ```
