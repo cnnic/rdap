@@ -23,8 +23,9 @@
 		cd rdap/rdap-webapp
 		mvn package (for windows7 and windows8, you may execute: 'mvn.bat package')
 		ll target/rdap.war (rdap.war is the artifact)
-	        
+
           ```
+          
 1. [Install Tomcat7])(ttp://tomcat.apache.org/download-70.cgi) or higer version, tomcat root folder called 'TOMCAT_HOME'
 1. Deploy rdap.war to tomcat
    * copy rdap.war to $TOMCAT_HOME/webapps
