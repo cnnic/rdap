@@ -1,13 +1,13 @@
 1. Install JDK6(Java SE Development Kit 6), or higer verison: [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html)
 1. Install Mysql and init database.
    * [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version.  
-   * Download sql init file [whois.sql](https://github.com/cnnic/rdap/blob/develop/rdap-webapp/build/rdap.sql)
+   * Download sql init file [rdap.sql](https://github.com/cnnic/rdap/blob/develop/rdap-webapp/build/rdap.sql)
    * Login into Mysql, and add user, and init database schema: 
    ```
    	mysql -h127.0.0.1 -uroot -p
    	ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic';
    	PRIVILEGES;
-   	source whois.sql;
+   	source rdap.sql;
    ```
 
 1. Get war file. There are two methods to get war file:
