@@ -21,7 +21,7 @@
 		git  config --global http.sslVerify false 
 		git clone https://github.com/cnnic/rdap.git
 		cd rdap/rdap-webapp
-		mvn package (for windows7 and windows8, you may execute: 'mvn.bat package')
+		mvn package -Dmaven.test.skip=true (for windows7 and windows8, you may execute: 'mvn.bat package')
 		ll target/rdap.war (rdap.war is the artifact)
 
           ```
