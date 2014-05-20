@@ -150,7 +150,7 @@
 		<mysql.client.version>5.1.6</mysql.client.version>
 	</properties>
 	<build>
-		<finalName>rdap-webapp</finalName>
+		<finalName>rdap</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
