@@ -12,9 +12,8 @@
 
 1. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, tomcat root folder called 'TOMCAT_HOME' (which contains folders:bin,conf,lib,webapps,etc.), and HTTP port use default port 8080.
 
-1. Get war file. There are two methods to get war file:
+1. Get war file 'rdap.war'. There are two methods to get war file
    * Get [war file](https://github.com/cnnic/rdap/blob/develop/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version is not supported, and must build from source)
-      
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *   [Install Git](http://git-scm.com/book/en/Getting-Started-Installing-Git)
@@ -27,7 +26,6 @@
 		ll target/rdap.war (rdap.war is the artifact)
 
           ```
-      
 1. Deploy rdap.war to tomcat
    * copy rdap.war to $TOMCAT_HOME/webapps
    * unzip $TOMCAT_HOME/webapps/rdap.war ,this step will create folder 'rdap' in $TOMCAT_HOME/webapps/. Command In linux is :
