@@ -5,7 +5,7 @@
    * Login into Mysql, and add user, and init database schema: 
    ```
    	mysql -h127.0.0.1 -uroot -p
-   	ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic';
+   	ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic';  （'whois' and 'cnnic' are username and password used to login）
    	PRIVILEGES;
    	source rdap.sql;
    ```
@@ -33,10 +33,12 @@
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
 	```
 		jdbc.url: change to your installed Mysql url in step 'Install Mysql and init database'
+		jdbc.username: change to your Mysql username in step 'Install Mysql and init database', default is 'whois'
+		jdbc.password: change to your Mysql password in step 'Install Mysql and init database', default is 'cnnic'
 	```
    * Start up tomcat
    	```
 		cd $TOMCAT_HOME
 		bin/startup.sh
 	```
-   * RDAP url: http://127.0.0.1:8080/rdap
+   * Test:  curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap
