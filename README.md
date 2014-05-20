@@ -4,11 +4,11 @@
       
    * Build war file from source
    
-      [Install Git](http://git-scm.com/book/en/Getting-Started-Installing-Git)
+      *   [Install Git](http://git-scm.com/book/en/Getting-Started-Installing-Git)
 
-      execute command:
-      ```
-      git clone
-      ```
+      *  execute command:
+          ```
+          git clone
+          ```
 
 1. [Develop Guide](https://github.com/cnnic/rdap/wiki/Develop%20Guide)
