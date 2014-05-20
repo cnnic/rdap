@@ -26,7 +26,7 @@
 
           ```
           
-1. [Install Tomcat7])(ttp://tomcat.apache.org/download-70.cgi) or higer version, tomcat root folder called 'TOMCAT_HOME'
+1. [Install Tomcat7])(ttp://tomcat.apache.org/download-70.cgi) or higer version, tomcat root folder called 'TOMCAT_HOME', and HTTP port use 8080.
 1. Deploy rdap.war to tomcat
    * copy rdap.war to $TOMCAT_HOME/webapps
    * Unzip $TOMCAT_HOME/webapps/rdap.war
