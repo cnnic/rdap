@@ -6,8 +6,8 @@
    * Download sql init file [rdap.sql](https://raw.githubusercontent.com/cnnic/rdap/develop/rdap-webapp/build/rdap.sql)
    * Login into Mysql, and add user, and init database schema: 
    ```
-   	mysql -h127.0.0.1 -uroot -p	(this step will prompt password input, and password for 'root' should be inputed)
-   	ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic';  （'whois' and 'cnnic' are username and password used to login）
+   	mysql -h127.0.0.1 -uroot -p		(this step will prompt password input, and password for 'root' should be inputed)
+   	ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic'	  （'whois' and 'cnnic' are username and password used to login）
    	PRIVILEGES;
    	source rdap.sql;
    ```
@@ -23,9 +23,9 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
       *  [Download source zip file](https://github.com/cnnic/rdap/archive/develop.zip), unzip it to WORK_DIR
       *  execute commands:
           ```
-		cd WORK_DIR	(WORK_DIR must be real dir)
+		cd WORK_DIR		#WORK_DIR must be real dir
 		cd rdap-develop/rdap-develop/rdap-webapp
-		mvn package -Dmaven.test.skip=true (for windows7 and windows8, you may use 'mvn.bat' instead of 'mvn')
+		mvn package -Dmaven.test.skip=true	 #for windows7 and windows8, you may use 'mvn.bat' instead of 'mvn'
 		(target/rdap.war  is the build war file)
 
           ```
@@ -43,7 +43,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
    * Start up tomcat
 	   
 		```
-			cd $TOMCAT_HOME		($TOMCAT_HOME must be replaced by real dir)
+			cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
 			bin/startup.sh
 		```
 
