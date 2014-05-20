@@ -32,6 +32,7 @@ package cn.cnnic.rdap.common.util;
 
 import java.net.URI;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -62,6 +63,8 @@ public class StringUtil {
         String result = str;
         try {
             String decodedURL = URLDecoder.decode(str, CHAR_SET_UTF8);
+            decodedURL = decodedURL.replaceAll("\\\\",
+                    URLEncoder.encode("\\", CHAR_SET_UTF8));
             URI uri = new URI(decodedURL);
             result = uri.toASCIIString();
         } catch (Exception e) {
