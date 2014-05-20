@@ -1,6 +1,8 @@
 1. Install JDK6(Java SE Development Kit 6), or higer verison: [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html)
+(Skip this step if JDK6 already installed)
 1. Install Mysql and init database.
    * [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version.  
+     (Skip this step if Mysql5 or higer version already installed)
    * Download sql init file [rdap.sql](https://github.com/cnnic/rdap/blob/develop/rdap-webapp/build/rdap.sql)
    * Login into Mysql, and add user, and init database schema: 
    ```
@@ -10,7 +12,8 @@
    	source rdap.sql;
    ```
 
-1. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, tomcat root folder called 'TOMCAT_HOME' (which contains folders:bin,conf,lib,webapps,etc.), and HTTP port use default port 8080.
+1. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).
+Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
 
 1. Get war file 'rdap.war'. There are two methods to get war file
    * Get [war file](https://github.com/cnnic/rdap/blob/develop/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version is not supported, and must build from source)
