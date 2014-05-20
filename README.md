@@ -55,6 +55,6 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 
    * Test
 	   	```
-			curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap/.well-known/rdap
+			curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap/.well-known/rdap	(change '8080' to real tomcat HTTP port if it's not 8080)
 		```
 	It's successful if response contains 'rdapConformance'. 
