@@ -22,14 +22,20 @@
 		git clone https://github.com/cnnic/rdap.git
 		cd rdap/rdap-webapp
 		mvn package (for windows7 and windows8, you may execute: 'mvn.bat package')
-		ll target/whois.war (whois.war is the artifact)
+		ll target/rdap.war (rdap.war is the artifact)
 	        
           ```
 1. [Install Tomcat7])(ttp://tomcat.apache.org/download-70.cgi) or higer version, tomcat root folder called 'TOMCAT_HOME'
-1. Deploy whois.war to tomcat
-   * copy whois.war to $TOMCAT_HOME/webapps
+1. Deploy rdap.war to tomcat
+   * copy rdap.war to $TOMCAT_HOME/webapps
    * Unzip $TOMCAT_HOME/webapps/rdap.war
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
 	```
 		jdbc.url: change to your installed Mysql url in step 'Install Mysql and init database'
 	```
+   * Start up tomcat
+   	```
+		cd $TOMCAT_HOME
+		bin/startup.sh
+	```
+   * RDAP url: http://127.0.0.1:8080/rdap
