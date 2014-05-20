@@ -26,19 +26,29 @@
 
           ```
           
-1. [Install Tomcat7])(ttp://tomcat.apache.org/download-70.cgi) or higer version, tomcat root folder called 'TOMCAT_HOME', and HTTP port use 8080.
+1. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, tomcat root folder called 'TOMCAT_HOME' (which contains folders:bin,conf,lib,webapps,etc.), and HTTP port use default port 8080.
 1. Deploy rdap.war to tomcat
    * copy rdap.war to $TOMCAT_HOME/webapps
-   * Unzip $TOMCAT_HOME/webapps/rdap.war
+   * unzip $TOMCAT_HOME/webapps/rdap.war ,this step will create folder 'rdap' in $TOMCAT_HOME/webapps/. Command In linux is :
+
+	   	```
+			cd $TOMCAT_HOME/webapps/     (you must replace $TOMCAT_HOME for real dir)
+			unzip rdap.war 
+		```
+		
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
-	```
-		jdbc.url: change to your installed Mysql url in step 'Install Mysql and init database'
-		jdbc.username: change to your Mysql username in step 'Install Mysql and init database', default is 'whois'
-		jdbc.password: change to your Mysql password in step 'Install Mysql and init database', default is 'cnnic'
-	```
+	
+		```
+			jdbc.url: change to your installed Mysql url in step 'Install Mysql and init database'
+			jdbc.username: change to your Mysql username in step 'Install Mysql and init database', default is 'whois'
+			jdbc.password: change to your Mysql password in step 'Install Mysql and init database', default is 'cnnic'
+		```
+
    * Start up tomcat
-   	```
-		cd $TOMCAT_HOME
-		bin/startup.sh
-	```
+	   
+		```
+			cd $TOMCAT_HOME
+			bin/startup.sh
+		```
+
    * Test:  curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap
