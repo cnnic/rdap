@@ -20,7 +20,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *   [Install Git](http://git-scm.com/book/en/Getting-Started-Installing-Git)
-      *  enter into a folder where is used for download source code and build, which is called 'WORK_DIR', execute command:
+      *  make a dir used to download source code and build, which is called 'WORK_DIR',enter into this dir, and execute command:
           ```
 		git  config --global http.sslVerify false 
 		git clone https://github.com/cnnic/rdap.git
