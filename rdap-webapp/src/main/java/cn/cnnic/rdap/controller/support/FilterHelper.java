@@ -32,9 +32,12 @@ package cn.cnnic.rdap.controller.support;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
@@ -59,6 +62,14 @@ public class FilterHelper {
             ResponseEntity<ErrorMessage> responseEntity,
             HttpServletResponse response) throws IOException {
         response.setHeader("Content-Type", "application/rdap+json");
+        HttpHeaders headers = responseEntity.getHeaders();
+        Set<String> headerKeys = headers.keySet();
+        for (String headerKey : headerKeys) {
+            List<String> headerValues = headers.get(headerKey);
+            for (String headerValue : headerValues) {
+                response.setHeader(headerKey, headerValue);
+            }
+        }
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();
         response.setStatus(responseEntity.getStatusCode().value());

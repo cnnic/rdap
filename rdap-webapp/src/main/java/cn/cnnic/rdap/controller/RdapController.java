@@ -33,6 +33,8 @@ package cn.cnnic.rdap.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,6 +60,7 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
 @RestController
 @RequestMapping("/{dot}well-known/rdap")
 public class RdapController {
+    private static Logger logger = LoggerFactory.getLogger(RdapController.class);
     /**
      * query service
      */
@@ -73,6 +76,7 @@ public class RdapController {
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
             HttpServletRequest request, HttpServletResponse response) {
+        logger.info("query autnum:"+autnum);
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
