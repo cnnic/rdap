@@ -30,6 +30,6 @@
    * copy whois.war to $TOMCAT_HOME/webapps
    * Unzip $TOMCAT_HOME/webapps/rdap.war
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
-   ```
-	jdbc.url: change to your installed Mysql url in step 'Install Mysql and init database'
-   ```
+	```
+		jdbc.url: change to your installed Mysql url in step 'Install Mysql and init database'
+	```
