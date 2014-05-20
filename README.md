@@ -52,5 +52,6 @@
 
    * Test
 	   	```
-			curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap
+			curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap/.well-known/rdap
 		```
+	It's successful if response contains 'rdapConformance'. 
