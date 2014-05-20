@@ -19,14 +19,12 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
    * Get [war file](https://github.com/cnnic/rdap/blob/develop/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version is not supported, and must build from source)
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
-      *   [Install Git](http://git-scm.com/book/en/Getting-Started-Installing-Git)
-      *  make a dir used to download source code and build, which is called 'WORK_DIR',enter into this dir, and execute commands:
+      *  make a dir used to download source code and build, which is called 'WORK_DIR'
+      *  [Download source zip file](https://github.com/cnnic/rdap/archive/develop.zip), unzip it to WORK_DIR
+      *  execute commands:
           ```
-		git  config --global http.sslVerify false 
-		git clone https://github.com/cnnic/rdap.git
-		cd rdap
-		git checkout develop
-		cd rdap-webapp
+		cd WORK_DIR	(WORK_DIR must be real dir)
+		cd rdap/rdap-webapp
 		mvn package -Dmaven.test.skip=true (for windows7 and windows8, you may use 'mvn.bat' instead of 'mvn')
 		ll target/rdap.war (rdap.war is the artifact)
 
