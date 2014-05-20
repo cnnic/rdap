@@ -6,7 +6,7 @@
    * Download sql init file [rdap.sql](https://raw.githubusercontent.com/cnnic/rdap/develop/rdap-webapp/build/rdap.sql)
    * Login into Mysql, and add user, and init database schema: 
    ```
-   	mysql -h127.0.0.1 -uroot -p	#this step will prompt password input, and password for 'root' should be inputed
+   	mysql -h127.0.0.1 -uroot -p		#this step will prompt password input, and password for 'root' should be inputed
    	ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic'	#'whois' and 'cnnic' are username and password used to login
    	PRIVILEGES;
    	source rdap.sql;
