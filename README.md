@@ -17,7 +17,7 @@
 	   ```
       * Add user, and init database schema: 
 	   ```
-	   	GRANT ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic';	#'whois' and 'cnnic' are username and password used to login
+	   	GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USERNAME'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';	# '$MYSQL_USERNAME' and '$MYSQL_PASSWORD' must be replaced by custom username and password, and they will be used in following steps
 	   	FLUSH PRIVILEGES;
 	   	source rdap.sql;
 	   ```
@@ -50,8 +50,8 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 	
 		```
 			jdbc.url: value change to installed Mysql url in step 'Install Mysql and init database'
-			jdbc.username: value change to Mysql username in step 'Install Mysql and init database', default is 'whois'
-			jdbc.password: value change to Mysql password in step 'Install Mysql and init database', default is 'cnnic'
+			jdbc.username: value change to $MYSQL_USERNAME in step 'Install Mysql and init database'
+			jdbc.password: value change to $MYSQL_PASSWORD in step 'Install Mysql and init database'
 		```
 
    * Start up tomcat
