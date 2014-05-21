@@ -1,4 +1,4 @@
-### Tested OS
+### Operating environment
 Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windows8
 ### Install Instruction
 1. Install JDK6(Java SE Development Kit 6), or higer verison: [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html)
