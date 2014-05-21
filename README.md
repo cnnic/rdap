@@ -17,7 +17,7 @@
 	   ```
       * Add user, and init database schema: 
 	   ```
-	   	GRANT ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic'	#'whois' and 'cnnic' are username and password used to login
+	   	GRANT ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic';	#'whois' and 'cnnic' are username and password used to login
 	   	FLUSH PRIVILEGES;
 	   	source rdap.sql;
 	   ```
