@@ -46,7 +46,8 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 	
 	          ```
 1. Deploy rdap.war to tomcat
-   * unzip rdap.war to $TOMCAT_HOME/webapps/, This step will create folder 'rdap' in $TOMCAT_HOME/webapps/
+   * create folder 'rdap' in dir $TOMCAT_HOME/webapps/
+   * unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
 		
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
 	
