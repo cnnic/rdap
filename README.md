@@ -71,3 +71,5 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 			(change '8080' to real tomcat HTTP port if it's not 8080)
 		```
 	It's ok if response contains 'rdapConformance'. 
+
+Any questions please [create issue](https://github.com/cnnic/rdap/issues/new) with details.
