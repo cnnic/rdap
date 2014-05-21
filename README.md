@@ -7,18 +7,18 @@
    * Download sql init file [rdap.sql](https://raw.githubusercontent.com/cnnic/rdap/develop/rdap-webapp/build/rdap.sql)
    * Login into Mysql with mysql client, and add user, and init database schema: 
       * Login mysql server use mysql client,this step will prompt password, and password for 'root' should be inputed, default password is null. Commands:
-	   ```
-		[in Linux, open a shell and execute command:]
-	   	mysql -h127.0.0.1 -uroot -p	# mysql must be in system  'PATH' variable	
-		[in Windows, open command prompt window and execute command:]
-		mysql.exe -h127.0.0.1 -uroot -p		# mysql.exe must be in system 'PATH' variable
-	   ```
+		   ```
+			[in Linux, open a shell and execute command:]
+		   		mysql -h127.0.0.1 -uroot -p	# mysql must be in system  'PATH' variable	
+			[in Windows, open command prompt window and execute command:]
+				mysql.exe -h127.0.0.1 -uroot -p		# mysql.exe must be in system 'PATH' variable
+		   ```
       * Add user, and init database schema: 
-	   ```
-	   	GRANT ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic'	#'whois' and 'cnnic' are username and password used to login
-	   	FLUSH PRIVILEGES;
-	   	source rdap.sql;
-	   ```
+		   ```
+		   	GRANT ALL PRIVILEGES ON *.* TO 'whois'@'%' IDENTIFIED BY 'cnnic'	#'whois' and 'cnnic' are username and password used to login
+		   	FLUSH PRIVILEGES;
+		   	source rdap.sql;
+		   ```
 
 1. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).
 Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
