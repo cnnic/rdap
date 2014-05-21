@@ -9,9 +9,9 @@
       * Login mysql server use mysql client,this step will prompt password, and password for 'root' should be inputed, default password is null. Commands:
 	   ```
 		[in Linux, open a shell and execute command:]
-	   	mysql -h127.0.0.1 -uroot -p	# mysql must be in system  'PATH' variable	
+	   		mysql -h127.0.0.1 -uroot -p	# mysql must be in system  'PATH' variable	
 		[in Windows, open command prompt window and execute command:]
-		mysql.exe -h127.0.0.1 -uroot -p		# mysql.exe must be in system 'PATH' variable
+			mysql.exe -h127.0.0.1 -uroot -p		# mysql.exe must be in system 'PATH' variable
 	   ```
       * Add user, and init database schema: 
 	   ```
