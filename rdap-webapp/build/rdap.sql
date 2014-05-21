@@ -23,11 +23,6 @@ CREATE TABLE `RDAP_AUTNUM` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='The Autonomous System Number (autnum) object class models Autonomous System Number registrations found in RIRs and represents the expected response to an "/autnum" query as defined by [I-D.ietf-weirds-rdap-query].  There is no equivalent object class for DNRs.  The high level structure of the autnum object class consists of information about the network registration and entities related to the autnum registration (e.g. registrant information, contacts, etc.), and is similar to the IP Network entity object class., reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-41"> Autonomous System Number (autnum)</a>';
 
 #
-# Data for table "RDAP_AUTNUM"
-#
-
-
-#
 # Source for table "RDAP_AUTNUM_REDIRECT"
 #
 
@@ -39,11 +34,6 @@ CREATE TABLE `RDAP_AUTNUM_REDIRECT` (
   `REDIRECT_URL` varchar(4096) NOT NULL,
   PRIMARY KEY (`AS_REDIRECT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='rdap_autnum_redirect is modelled on old table, which is to be modified by bootstraps';
-
-#
-# Data for table "RDAP_AUTNUM_REDIRECT"
-#
-
 
 #
 # Source for table "RDAP_AUTNUM_STATUS"
@@ -60,11 +50,6 @@ CREATE TABLE `RDAP_AUTNUM_STATUS` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='state of an autnum, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-52">Status</a>';
 
 #
-# Data for table "RDAP_AUTNUM_STATUS"
-#
-
-
-#
 # Source for table "RDAP_CONFORMANCE"
 #
 
@@ -74,11 +59,6 @@ CREATE TABLE `RDAP_CONFORMANCE` (
   `RDAP_CONFORMANCE` varchar(2048) NOT NULL,
   PRIMARY KEY (`CONFORMANCE_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Rdap conformance providing a hint as to the specifications used in the construction of the response. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-8">RDAP Conformance</a>';
-
-#
-# Data for table "RDAP_CONFORMANCE"
-#
-
 
 #
 # Source for table "RDAP_DOMAIN"
@@ -100,11 +80,6 @@ CREATE TABLE `RDAP_DOMAIN` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='The domain object class represents a DNS name and point of delegation.  For RIRs these delegation points are in the reverse DNS tree, whereas for DNRs these delegation points are in the forward DNS tree. In both cases, the high level structure of the domain object class consists of information about the domain registration, nameserver information related to the domain name, and entities related to the domain name (e.g. registrant information, contacts, etc.). Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-25">Domain</a>';
 
 #
-# Data for table "RDAP_DOMAIN"
-#
-
-
-#
 # Source for table "RDAP_DOMAIN_REDIRECT"
 #
 
@@ -115,11 +90,6 @@ CREATE TABLE `RDAP_DOMAIN_REDIRECT` (
   `RDAP_DOMAIN_REDIRECT_ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`RDAP_DOMAIN_REDIRECT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='rdap_domain_redirect is modelled on old table, which is to be modified by bootstraps';
-
-#
-# Data for table "RDAP_DOMAIN_REDIRECT"
-#
-
 
 #
 # Source for table "RDAP_DOMAIN_STATUS"
@@ -136,11 +106,6 @@ CREATE TABLE `RDAP_DOMAIN_STATUS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='state of domain, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-52">Status</a>';
 
 #
-# Data for table "RDAP_DOMAIN_STATUS"
-#
-
-
-#
 # Source for table "RDAP_DSDATA"
 #
 
@@ -153,11 +118,6 @@ CREATE TABLE `RDAP_DSDATA` (
   `DIGEST_TYPE` int(3) NOT NULL,
   PRIMARY KEY (`DSDATA_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ds data for domain DNSSEC, DNSSEC provides data integrity for DNS through digital signing of resource records.  To enable DNSSEC, the zone is signed by one or more private keys and the signatures stored as RRSIG records.  To complete the chain of trust in the DNS zone hierarchy, a digest of each DNSKEY record (which contains the public key) must be loaded into the parent zone, stored as Delegation Signer (DS) records and signed by the parent''s private key (RRSIG DS record), "Resource Records for the DNS Security Extensions" [RFC4034]. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-25">Domain</a>';
-
-#
-# Data for table "RDAP_DSDATA"
-#
-
 
 #
 # Source for table "RDAP_ENTITY"
@@ -180,11 +140,6 @@ CREATE TABLE `RDAP_ENTITY` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='The entity object class represents the information of organizations, corporations, governments, non-profits, clubs, individual persons, and informal groups of people.  All of these representations are so similar that it is best to represent them in JSON [RFC4627] with one construct, the entity object class, to aid in the re-use of code by implementers. The entity object is served by both RIRs and DNRs. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-15">Entity</a>';
 
 #
-# Data for table "RDAP_ENTITY"
-#
-
-
-#
 # Source for table "RDAP_ENTITY_STATUS"
 #
 
@@ -199,11 +154,6 @@ CREATE TABLE `RDAP_ENTITY_STATUS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='state of entity, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-52">Status</a>';
 
 #
-# Data for table "RDAP_ENTITY_STATUS"
-#
-
-
-#
 # Source for table "RDAP_ERRORMESSAGE"
 #
 
@@ -212,17 +162,11 @@ CREATE TABLE `RDAP_ERRORMESSAGE` (
   `ERROR_ID` int(10) NOT NULL AUTO_INCREMENT,
   `ERROR_CODE` int(10) NOT NULL,
   `TITLE` varchar(100) DEFAULT NULL,
-  `DESCRIPTION` varchar(1024) DEFAULT NULL,
+  `DESCRIPTION` varchar(1024) NOT NULL,
   `LANG` varchar(42) DEFAULT NULL,
   PRIMARY KEY (`ERROR_ID`),
   UNIQUE KEY `UK_ERROR_CODE` (`ERROR_CODE`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='Some non-answer responses may return entity bodies with information that could be more descriptive. The basic structure of that response is an object class containing an error code number (corresponding to the HTTP response code) followed by a string named "title" followed by an array of strings named "description". Reference to <a href=" http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-44">Error Response Body</a>';
-
-#
-# Data for table "RDAP_ERRORMESSAGE"
-#
-
-INSERT INTO `RDAP_ERRORMESSAGE` VALUES (1,400,'BAD REQUEST','BAD REQUEST DESC','cn'),(2,404,'NOT FOUND','NOT FOUND',NULL),(3,500,'INTERNAL SERVER ERROR','INTERNAL SERVER ERROR',NULL),(4,405,'METHOD NOT ALLOWED','METHOD NOT ALLOWED',NULL),(5,415,'UNSUPPORTED MEDIA TYPE','UNSUPPORTED MEDIA TYPE',NULL);
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Some non-answer responses may return entity bodies with information that could be more descriptive. The basic structure of that response is an object class containing an error code number (corresponding to the HTTP response code) followed by a string named "title" followed by an array of strings named "description". Reference to <a href=" http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-44">Error Response Body</a>';
 
 #
 # Source for table "RDAP_EVENT"
@@ -237,11 +181,6 @@ CREATE TABLE `RDAP_EVENT` (
   PRIMARY KEY (`EVENT_ID`),
   KEY `IDX_EVENT_ACTOR` (`EVENT_ACTOR`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='Events that have occurred on an instance of an object class, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-11">Event</a>';
-
-#
-# Data for table "RDAP_EVENT"
-#
-
 
 #
 # Source for table "RDAP_IP"
@@ -268,11 +207,6 @@ CREATE TABLE `RDAP_IP` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=' The IP Network object class models IP network registrations found in RIRs and is the expected response for the "/ip" query as defined by [I-D.ietf-weirds-rdap-query].  There is no equivalent object class for DNRs.  The high level structure of the IP network object class consists of information about the network registration and entities related to the IP network (e.g. registrant information, contacts, etc...). Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-37">IP Network Object Class </a>';
 
 #
-# Data for table "RDAP_IP"
-#
-
-
-#
 # Source for table "RDAP_IP_REDIRECT"
 #
 
@@ -286,11 +220,6 @@ CREATE TABLE `RDAP_IP_REDIRECT` (
   `REDIRECT_URL` varchar(4096) NOT NULL,
   PRIMARY KEY (`RDAP_IP_REDIRECT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='rdap_ip_redirect is modelled on old table, which is to be modified by bootstraps';
-
-#
-# Data for table "RDAP_IP_REDIRECT"
-#
-
 
 #
 # Source for table "RDAP_IP_STATUS"
@@ -307,11 +236,6 @@ CREATE TABLE `RDAP_IP_STATUS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='state of IP Network object, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-52">Status</a>';
 
 #
-# Data for table "RDAP_IP_STATUS"
-#
-
-
-#
 # Source for table "RDAP_KEYDATA"
 #
 
@@ -324,11 +248,6 @@ CREATE TABLE `RDAP_KEYDATA` (
   `ALGORITHM` int(3) NOT NULL,
   PRIMARY KEY (`KEYDATA_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Key data for domain DNSSEC, DNSSEC provides data integrity for DNS through digital signing of resource records.  To enable DNSSEC, the zone is signed by one or more private keys and the signatures stored as RRSIG records.  To complete the chain of trust in the DNS zone hierarchy, a digest of each DNSKEY record (which contains the public key) must be loaded into the parent zone, stored as Delegation Signer (DS) records and signed by the parent''s private key (RRSIG DS record), "Resource Records for the DNS Security Extensions" [RFC4034]. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-25">Domain</a>';
-
-#
-# Data for table "RDAP_KEYDATA"
-#
-
 
 #
 # Source for table "RDAP_LINK"
@@ -346,11 +265,6 @@ CREATE TABLE `RDAP_LINK` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT=' The "links" array is found in data structures to signify links to other resources on the Internet.  The relationship of these links is defined by the IANA registry described by [RFC5988]. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-8"> Links </a>';
 
 #
-# Data for table "RDAP_LINK"
-#
-
-
-#
 # Source for table "RDAP_LINK_HREFLANG"
 #
 
@@ -365,11 +279,6 @@ CREATE TABLE `RDAP_LINK_HREFLANG` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='link href''s lang, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-8"> Links </a>';
 
 #
-# Data for table "RDAP_LINK_HREFLANG"
-#
-
-
-#
 # Source for table "RDAP_LINK_TITLE"
 #
 
@@ -382,11 +291,6 @@ CREATE TABLE `RDAP_LINK_TITLE` (
   KEY `IDX_LINK_TITLE_LINK_ID` (`LINK_ID`) USING BTREE,
   CONSTRAINT `FK_RDAP_LINK_TITLE_LINK_ID` FOREIGN KEY (`LINK_ID`) REFERENCES `RDAP_LINK` (`LINK_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='link titles, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-8"> Links </a>';
-
-#
-# Data for table "RDAP_LINK_TITLE"
-#
-
 
 #
 # Source for table "RDAP_NAMESERVER"
@@ -407,11 +311,6 @@ CREATE TABLE `RDAP_NAMESERVER` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=' The nameserver object class represents information regarding DNS name servers used in both forward and reverse DNS.  RIRs and some DNRs register or expose nameserver information as an attribute of a domain name, while other DNRs model nameservers as "first class objects". The nameserver object class accommodates both models and degrees of variation in between. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#section-6.2">Nameserver</a>';
 
 #
-# Data for table "RDAP_NAMESERVER"
-#
-
-
-#
 # Source for table "RDAP_NAMESERVER_IP"
 #
 
@@ -429,11 +328,6 @@ CREATE TABLE `RDAP_NAMESERVER_IP` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='nameserver ip, NOT RDAP IP object, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#section-6.2">Nameserver</a>';
 
 #
-# Data for table "RDAP_NAMESERVER_IP"
-#
-
-
-#
 # Source for table "RDAP_NAMESERVER_STATUS"
 #
 
@@ -448,11 +342,6 @@ CREATE TABLE `RDAP_NAMESERVER_STATUS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='nameserver status , reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-52">Status</a>';
 
 #
-# Data for table "RDAP_NAMESERVER_STATUS"
-#
-
-
-#
 # Source for table "RDAP_NOTICE"
 #
 
@@ -463,11 +352,6 @@ CREATE TABLE `RDAP_NOTICE` (
   `TITLE` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`NOTICE_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='The "notices", "help" and "remarks" data structures take the same form.  The "notices" structure denotes information about the service providing RDAP information, whereas the "remarks" structure denotes information about the object class, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-9">Notices And Remarks</a>';
-
-#
-# Data for table "RDAP_NOTICE"
-#
-
 
 #
 # Source for table "RDAP_NOTICE_DESCRIPTION"
@@ -484,11 +368,6 @@ CREATE TABLE `RDAP_NOTICE_DESCRIPTION` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='Description for notice\r\nemark for registration objecthelp, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-9">Notices And Remarks</a>';
 
 #
-# Data for table "RDAP_NOTICE_DESCRIPTION"
-#
-
-
-#
 # Source for table "RDAP_PUBLICID"
 #
 
@@ -499,11 +378,6 @@ CREATE TABLE `RDAP_PUBLICID` (
   `TYPE` varchar(256) NOT NULL,
   PRIMARY KEY (`PUBLIC_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='The publicid maps a public identifier to a registration object, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-13">Public IDs</a>';
-
-#
-# Data for table "RDAP_PUBLICID"
-#
-
 
 #
 # Source for table "RDAP_SECUREDNS"
@@ -522,11 +396,6 @@ CREATE TABLE `RDAP_SECUREDNS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='SecureDNS member to represent secure DNS information about domain names.  DNSSEC provides data integrity for DNS through digital signing of resource records.  To enable DNSSEC, the zone is signed by one or more private keys and the signatures stored as RRSIG records.  To complete the chain of trust in the DNS zone hierarchy, a digest of each DNSKEY record (which contains the public key) must be loaded into the parent zone, stored as Delegation Signer (DS) records and signed by the parent''s private key (RRSIG DS record), "Resource Records for the DNS Security Extensions" [RFC4034]. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-76">Secure DNS</a>';
 
 #
-# Data for table "RDAP_SECUREDNS"
-#
-
-
-#
 # Source for table "RDAP_VARIANT"
 #
 
@@ -538,11 +407,6 @@ CREATE TABLE `RDAP_VARIANT` (
   `IDNTABLE` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`VARIANT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=' Internationalized Domain Names (IDNs) are denoted in this specification by the separation of DNS names in LDH form and Unicode form.  Representation of IDNs in registries is described by the "variants" object, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-26">Variants</a>';
-
-#
-# Data for table "RDAP_VARIANT"
-#
-
 
 #
 # Source for table "RDAP_VCARD_ADR"
@@ -565,11 +429,6 @@ CREATE TABLE `RDAP_VCARD_ADR` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=' The entity object class uses jCard [I-D.ietf-jcardcal-jcard] to represent contact information, including postal addresses. jCard has the ability to represent multiple language preferences, multiple email address and phone numbers, and multiple postal addresses in both a structured and unstructured format. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-15">Entity</a>';
 
 #
-# Data for table "RDAP_VCARD_ADR"
-#
-
-
-#
 # Source for table "RDAP_VCARD_TEL"
 #
 
@@ -584,11 +443,6 @@ CREATE TABLE `RDAP_VCARD_TEL` (
   KEY `IDX_TEL_ENTITY_ID` (`ENTITY_ID`) USING BTREE,
   CONSTRAINT `FK_RDAP_ENTITY_TEL_ENTITY_ID` FOREIGN KEY (`ENTITY_ID`) REFERENCES `RDAP_ENTITY` (`ENTITY_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=' The entity object class uses jCard [I-D.ietf-jcardcal-jcard] to represent contact information, including postal addresses. jCard has the ability to represent multiple language preferences, multiple email address and phone numbers, and multiple postal addresses in both a structured and unstructured format, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-15">Entity</a>';
-
-#
-# Data for table "RDAP_VCARD_TEL"
-#
-
 
 #
 # Source for table "REL_DOMAIN_NAMESERVER"
@@ -607,11 +461,6 @@ CREATE TABLE `REL_DOMAIN_NAMESERVER` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='define relationship between a <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-25">Domain</a> and its <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#section-6.2">Nameserver</a>';
 
 #
-# Data for table "REL_DOMAIN_NAMESERVER"
-#
-
-
-#
 # Source for table "REL_DOMAIN_NETWORK"
 #
 
@@ -626,11 +475,6 @@ CREATE TABLE `REL_DOMAIN_NETWORK` (
   CONSTRAINT `FK_REL_DOMAIN_NETWORK_DOMAIN_ID` FOREIGN KEY (`DOMAIN_ID`) REFERENCES `RDAP_DOMAIN` (`DOMAIN_ID`),
   CONSTRAINT `FK_REL_DOMAIN_NETWORK_NETWORK_ID` FOREIGN KEY (`NETWORK_ID`) REFERENCES `RDAP_IP` (`IP_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='define relationship between a <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-25">Domain</a> and its <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-37">Network</a>';
-
-#
-# Data for table "REL_DOMAIN_NETWORK"
-#
-
 
 #
 # Source for table "REL_DOMAIN_VARIANT"
@@ -650,11 +494,6 @@ CREATE TABLE `REL_DOMAIN_VARIANT` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='define relationship between <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06##section-6.3">domain</a> and its <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-26">variants</a> ';
 
 #
-# Data for table "REL_DOMAIN_VARIANT"
-#
-
-
-#
 # Source for table "REL_ENTITY_REGISTRATION"
 #
 
@@ -670,11 +509,6 @@ CREATE TABLE `REL_ENTITY_REGISTRATION` (
   KEY `IDX_REL_ENTITY_REL_ID` (`REL_ID`,`REL_OBJECT_TYPE`) USING BTREE,
   CONSTRAINT `FK_REL_ENTITY_REGISTRATION_ENTITY_ID` FOREIGN KEY (`ENTITY_ID`) REFERENCES `RDAP_ENTITY` (`ENTITY_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='define relationship between an <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-15">Entity</a> and the registration object(Entity, Domain, IP network, Autnum and Nameserver)';
-
-#
-# Data for table "REL_ENTITY_REGISTRATION"
-#
-
 
 #
 # Source for table "REL_EVENT_REGISTRATION"
@@ -693,11 +527,6 @@ CREATE TABLE `REL_EVENT_REGISTRATION` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT=' define relationship between <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-11">Event</a> and the  registration object(Entity, Domain, IP network, Autnum and Nameserver)';
 
 #
-# Data for table "REL_EVENT_REGISTRATION"
-#
-
-
-#
 # Source for table "REL_LINK_OBJECT"
 #
 
@@ -712,11 +541,6 @@ CREATE TABLE `REL_LINK_OBJECT` (
   KEY `IDX_REL_LINK_REL_ID` (`REL_ID`,`REL_OBJECT_TYPE`) USING BTREE,
   CONSTRAINT `FK_REL_LINK_OBJECT_LINK_ID` FOREIGN KEY (`LINK_ID`) REFERENCES `RDAP_LINK` (`LINK_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT=' define relationship between <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-8">Link</a> and regsitration object(Entity, Domain, IP network, Autnum, Nameserver, Remark, Notice .etc)';
-
-#
-# Data for table "REL_LINK_OBJECT"
-#
-
 
 #
 # Source for table "REL_NOTICE_REGISTRATION"
@@ -735,11 +559,6 @@ CREATE TABLE `REL_NOTICE_REGISTRATION` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT=' define relationship between <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-9">Notice</a> and registration object(Entity, Domain, IP network, Autnum and Nameserver)';
 
 #
-# Data for table "REL_NOTICE_REGISTRATION"
-#
-
-
-#
 # Source for table "REL_PUBLICID_REGISTRATION"
 #
 
@@ -754,11 +573,6 @@ CREATE TABLE `REL_PUBLICID_REGISTRATION` (
   KEY `IDX_REL_PUBLICID_REL_ID` (`REL_ID`,`REL_OBJECT_TYPE`) USING BTREE,
   CONSTRAINT `FK_REL_PUBLICID_REGISTRATION_PUBLIC_ID` FOREIGN KEY (`PUBLIC_ID`) REFERENCES `RDAP_PUBLICID` (`PUBLIC_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=' define relationship between <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-13">Public ID</a> and some registration object(Entity, Domain, IP network, Autnum and Nameserver)';
-
-#
-# Data for table "REL_PUBLICID_REGISTRATION"
-#
-
 
 #
 # Source for table "REL_SECUREDNS_DSKEY"
@@ -776,6 +590,211 @@ CREATE TABLE `REL_SECUREDNS_DSKEY` (
   CONSTRAINT `FK_REL_SECUREDNS_DSKEY_SECUREDNS_ID` FOREIGN KEY (`SECUREDNS_ID`) REFERENCES `RDAP_SECUREDNS` (`SECUREDNS_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=' define relationship between securedns and dsdata or keydata. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#appendix-D">DNSSEC</a>';
 
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
 #
-# Data for table "REL_SECUREDNS_DSKEY"
+# Data for table "rdap_autnum"
+#
+
+INSERT INTO `RDAP_AUTNUM` (`AS_ID`,`HANDLE`,`START_AUTNUM`,`END_AUTNUM`,`NAME`,`TYPE`,`COUNTRY`,`LANG`,`PORT43`) VALUES (1,'as-200-1',65536,65536,NULL,'DIRECT ALLOCATION',NULL,'en',NULL),(2,'as-200-2',1,1,'as-200-2:data:1~1','DIRECT ALLOCATION','CN','en','cnnic.cn'),(3,'as-200-3',4269852,4269852,'as-200-3:4269852','DIRECT ALLOCATION','AU','en','cnnic.cn'),(4,'as-200-4',101,1000,'as-200-4:<happy test>:101~1000','DIRECT ALLOCATION','CN','en',NULL),(5,'as-200-5',200,500,'as-200-5:love test:200~500','DIRECT ALLOCATION','FR','en',NULL),(6,'as-200-6',200,300,NULL,'DIRECT ALLOCATION',NULL,'',NULL),(7,'as-200-7',2100,2100,'as-200-7:data:2100~2101','DIRECT ALLOCATION','CN','en','cnnic.cn'),(8,'as-200-8',0,0,'as-200-8:0','DIRECT ALLOCATION','US','','cnnic.cn'),(9,'as-200-9',2,2,'as-200-9:data:2-2,test_lang',NULL,NULL,'',NULL),(10,'as-200-10',20,30,'as-200-10:20-30','DIRECT ALLOCATION','AU','en','sina.cn'),(11,'as-200-11',31,100,'as-200-11:31-100',NULL,NULL,'',NULL),(12,'as-200-12',1001,2000,'as-200-12:duplicate_data：1001-2000，sanf',NULL,NULL,' ',NULL),(13,'as-200-13',1001,2000,'as-200-13:duplicate_data：1001-2000，cnnic','DIRECT ALLOCATION','CN','','cnnic.cn'),(14,'as-200-14',65537,65537,'as-200-14:65537','DIRECT ALLOCATION','US',NULL,'testorg.cn'),(15,'as-200-15',100000000,100000000,'as-200-15:100000000','DIRECT ALLOCATION','CN','en',NULL),(16,'as-200-16',4294967295,4294967295,'as-200-16:4294967295','DIRECT ALLOCATION','CN',NULL,NULL),(17,'as-200-17',80010,82000,'as-200-17:80010-82000','DIRECT ALLOCATION','CN','en','cnnic.cn'),(18,'as-200-18',80000,90000,'as-200-18:80000-90000','DIRECT ALLOCATION',NULL,NULL,NULL),(19,'as-200-19',67000,68000,'as-200-19:67000-68000',NULL,NULL,NULL,NULL),(20,'as-200-20',68001,69000,'as-200-20:68001-69000','DIRECT ALLOCATION','CA','en',NULL),(21,'as-200-21',95000,100000,'as-200-21:95000-100000-cnnic','DIRECT ALLOCATION','CN','en','sina.cn'),(22,'as-200-22',95000,100000,'as-200-22:95000-100000-sanf','DIRECT ALLOCATION','CN',NULL,NULL);
+
+#
+# Data for table "rdap_autnum_redirect"
+#
+
+
+#
+# Data for table "rdap_autnum_status"
+#
+
+INSERT INTO `RDAP_AUTNUM_STATUS` (`AS_STATUS_ID`,`AS_ID`,`STATUS`) VALUES (1,2,'validated'),(4,1,'proxy'),(5,7,'delete prohibited'),(6,8,'private'),(7,7,'validated'),(8,7,'renew prohibited'),(9,7,'update prohibited'),(10,7,'transfer prohibited'),(11,8,'proxy'),(12,7,'proxy'),(13,7,'private'),(14,7,'redacted'),(15,7,'obscured'),(16,7,'associated'),(17,7,'active'),(18,7,'inactive'),(19,7,'locked'),(20,7,'pending create'),(21,7,'pending renew'),(22,7,'pending transfer'),(23,7,'pending update'),(24,7,'pending delete'),(25,7,'pending delete'),(26,10,'pending create'),(27,10,'pending create'),(28,16,'validated'),(29,16,'private');
+
+#
+# Data for table "rdap_conformance"
+#
+
+INSERT INTO `RDAP_CONFORMANCE` (`CONFORMANCE_ID`,`RDAP_CONFORMANCE`) VALUES (1,'rdap_level_0');
+
+#
+# Data for table "rdap_domain"
+#
+
+
+#
+# Data for table "rdap_domain_redirect"
+#
+
+
+#
+# Data for table "rdap_domain_status"
+#
+
+
+#
+# Data for table "rdap_dsdata"
+#
+
+
+#
+# Data for table "rdap_entity"
+#
+
+
+#
+# Data for table "rdap_entity_status"
+#
+
+
+#
+# Data for table "rdap_errormessage"
+#
+
+INSERT INTO `RDAP_ERRORMESSAGE` (`ERROR_ID`,`ERROR_CODE`,`TITLE`,`DESCRIPTION`,`LANG`) VALUES (1,400,'BAD REQUEST','BAD REQUEST DESC','en'),(2,404,'NOT FOUND','NOT FOUND','en'),(3,500,'INTERNAL SERVER ERROR','INTERNAL SERVER ERROR','en'),(4,405,'METHOD NOT ALLOWED','METHOD NOT ALLOWED','en'),(5,415,'UNSUPPORTED MEDIA TYPE','UNSUPPORTED MEDIA TYPE','en');
+
+#
+# Data for table "rdap_event"
+#
+
+INSERT INTO `RDAP_EVENT` (`EVENT_ID`,`EVENT_ACTION`,`EVENT_ACTOR`,`EVENT_DATE`) VALUES (1,'registration','jiashuo','2014-05-19 16:18:41'),(2,'last changed','jiashuo','2014-05-19 16:18:59'),(4,'last changed','zhangqian','2014-05-19 16:19:44'),(5,'unlocked','','2014-05-19 16:20:05'),(6,'registration','jiashuo','2014-05-19 16:47:03'),(7,'last changed','zhangqian','2014-05-19 17:42:01'),(8,'unlocked',NULL,'2014-05-19 17:49:14');
+
+#
+# Data for table "rdap_ip"
+#
+
+
+#
+# Data for table "rdap_ip_redirect"
+#
+
+
+#
+# Data for table "rdap_ip_status"
+#
+
+
+#
+# Data for table "rdap_keydata"
+#
+
+
+#
+# Data for table "rdap_link"
+#
+
+INSERT INTO `RDAP_LINK` (`LINK_ID`,`VALUE`,`REL`,`HREF`,`MEDIA`,`TYPE`) VALUES (1,'http://rdap.cnnic.cn/links1','self','http://rdap.cnnic.cn/links1/href1','screen','application/rdap+json'),(3,'http://sina.com.cn','up','http://sina.com.cn','screen','application/rdap+json'),(4,'http://cnnic.cn','up','http://cnnic.cn','screen','application/rdap+json'),(5,'http://rdap.cnnic.cn/links2','self','http://rdap.cnnic.cn/links2/href','screen','application/rdap+json'),(6,'http://baidu.com','up','http://baidu.com','screen','application/rdap+json'),(7,'http://rdap.cnnic.cn/links3','related','http://rdap.cnnic.cn/links3/href','screen','application/rdap+json'),(8,'http://rdap.cnnic.cn/links4','self','http://rdap.cnnic.cn/links4/href','screen','application/rdap+json'),(9,'http://rdap.cnnic.cn/links4','self','http://rdap.cnnic.cn/links4/href','screen','application/rdap+json');
+
+#
+# Data for table "rdap_link_hreflang"
+#
+
+INSERT INTO `RDAP_LINK_HREFLANG` (`HREFLANG_ID`,`LINK_ID`,`HREFLANG`) VALUES (1,3,'en'),(2,4,'en'),(3,6,'en'),(4,1,'en'),(5,1,'en'),(7,5,'en'),(8,7,'en'),(9,3,'en');
+
+#
+# Data for table "rdap_link_title"
+#
+
+INSERT INTO `RDAP_LINK_TITLE` (`TITLE_ID`,`LINK_ID`,`TITLE`) VALUES (1,1,'the first links title'),(4,5,'the title of links2'),(5,7,'the title for links3'),(6,3,'title_zq_1'),(7,4,'title_zq_2'),(8,6,'title_zq_3');
+
+#
+# Data for table "rdap_nameserver"
+#
+
+
+#
+# Data for table "rdap_nameserver_ip"
+#
+
+
+#
+# Data for table "rdap_nameserver_status"
+#
+
+
+#
+# Data for table "rdap_notice"
+#
+
+INSERT INTO `RDAP_NOTICE` (`NOTICE_ID`,`TYPE`,`TITLE`) VALUES (1,'notice','the notices for response'),(3,'remark','the remarks for as-200 test'),(4,'remark','as-200 test-remarks'),(5,'remark','as-200_zq-remark1'),(6,'remark','as-200_zq-remark2'),(7,'remark',''),(8,'remark','as-200-zq-remark3'),(9,'remark','as-200-zq-remark4');
+
+#
+# Data for table "rdap_notice_description"
+#
+
+INSERT INTO `RDAP_NOTICE_DESCRIPTION` (`NOTICE_DESC_ID`,`NOTICE_ID`,`DESCRIPTION`) VALUES (1,1,'Service subject to The Registry of the CNNIC.'),(2,1,'Copyright (c) 2020 CNNIC'),(5,5,'remarks_description1'),(6,3,'RESTFULwhois_remark1'),(7,3,'RESTFULwhois_remark2'),(8,6,'remarks_description2'),(9,4,'RESTFULwhois_remark_xx'),(10,7,'remarks only have description');
+
+#
+# Data for table "rdap_publicid"
+#
+
+
+#
+# Data for table "rdap_securedns"
+#
+
+
+#
+# Data for table "rdap_variant"
+#
+
+
+#
+# Data for table "rdap_vcard_adr"
+#
+
+
+#
+# Data for table "rdap_vcard_tel"
+#
+
+
+#
+# Data for table "rel_domain_nameserver"
+#
+
+
+#
+# Data for table "rel_domain_network"
+#
+
+
+#
+# Data for table "rel_domain_variant"
+#
+
+
+#
+# Data for table "rel_entity_registration"
+#
+
+
+#
+# Data for table "rel_event_registration"
+#
+
+INSERT INTO `REL_EVENT_REGISTRATION` (`REL_EVENT_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`EVENT_ID`) VALUES (1,2,'autnum',1),(2,2,'autnum',2),(4,3,'autnum',4),(5,3,'autnum',5),(6,7,'autnum',6),(7,10,'autnum',7),(8,2,'autnum',8);
+
+#
+# Data for table "rel_link_object"
+#
+
+INSERT INTO `REL_LINK_OBJECT` (`REL_LINK_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`LINK_ID`) VALUES (1,3,'autnum',3),(2,3,'autnum',4),(3,3,'autnum',6),(4,2,'autnum',1),(6,3,'remark',5),(7,4,'remark',7),(9,2,'autnum',8),(10,2,'autnum',9),(11,1,'notice',1),(13,5,'remark',1);
+
+#
+# Data for table "rel_notice_registration"
+#
+
+INSERT INTO `REL_NOTICE_REGISTRATION` (`REL_NOTICE_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`NOTICE_ID`) VALUES (1,2,'autnum',3),(2,2,'autnum',4),(3,3,'autnum',5),(4,3,'autnum',6),(5,7,'autnum',3),(6,9,'autnum',7),(7,10,'autnum',8),(8,10,'autnum',9);
+
+#
+# Data for table "rel_publicid_registration"
+#
+
+
+#
+# Data for table "rel_securedns_dskey"
 #
