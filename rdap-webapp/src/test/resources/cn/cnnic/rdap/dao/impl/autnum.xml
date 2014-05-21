@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_AUTNUM AS_ID="1" HANDLE="handle1" START_AUTNUM="1"
+		END_AUTNUM="10" NAME="name1" TYPE="alocated" COUNTRY="zh" LANG="cn"
+		PORT43="port43" />
+	<RDAP_AUTNUM_STATUS AS_STATUS_ID="1" AS_ID="1" STATUS="validated"/>
+</dataset>
