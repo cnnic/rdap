@@ -29,22 +29,17 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  make a dir used to download source code and build, which is called 'WORK_DIR'
       *  [Download source zip file](https://github.com/cnnic/rdap/archive/develop.zip), unzip it to $WORK_DIR
-      *  execute commands:
-      	*  cd project dir:
-      	
-	          ```
-			cd $WORK_DIR		# $WORK_DIR must be real dir
-			cd rdap-develop/rdap-develop/rdap-webapp
-	          ```
-         *  build project:
-	          ```
+      *  build project:
+		```
 			[in Linux, open a shell and execute command:]
-			mvn package -Dmaven.test.skip=true	# mvn must in system variable
+				cd $WORK_DIR/rdap-develop/rdap-develop/rdap-webapp		# $WORK_DIR must be real dir
+				mvn package -Dmaven.test.skip=true	# mvn must in system variable
 			[in Windows7 or Windows8, open command prompt window and execute command:]
-			mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
+				cd $WORK_DIR/rdap-develop/rdap-develop/rdap-webapp		# $WORK_DIR must be real dir
+				mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
 			(target/rdap.war  is the build war file)
 	
-	          ```
+		```
 1. Deploy rdap.war to tomcat
    * create folder 'rdap' in dir $TOMCAT_HOME/webapps/
    * unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
@@ -60,11 +55,11 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
    * Start up tomcat
 	   
 		```
-			cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
-			[in Linux:]
+			[in Linux, open a shell and execute command:]
+				cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
 				bin/startup.sh
-			[in Windows:]
-				cd bin
+			[in Windows, open command prompt window and execute command:]
+				cd $TOMCAT_HOME/bin		#$TOMCAT_HOME must be replaced by real dir
 				startup.bat
 		```
 
