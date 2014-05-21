@@ -17,7 +17,7 @@
 	   ```
       * Add user, and init database schema: 
 	   ```
-	   	GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USERNAME'@'%' IDENTIFIED BY PASSWORD '$MYSQL_PASSWORD';	# '$MYSQL_USERNAME' and '$MYSQL_PASSWORD' must be replaced by custom username and password, and they will be used in following steps
+	   	GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USERNAME'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';	# '$MYSQL_USERNAME' and '$MYSQL_PASSWORD' must be replaced by custom username and password, and they will be used in following steps
 	   	FLUSH PRIVILEGES;
 	   	source rdap.sql;
 	   ```
