@@ -9,9 +9,11 @@
       * Login mysql server use mysql client,this step will prompt password, and password for 'root' should be inputed, default password is null. Commands:
 	   ```
 		[in Linux, open a shell and execute command:]
-	   		mysql -h127.0.0.1 -uroot -p		# mysql must be in system  'PATH' variable	
+			cd $MYSQL_HOME		# $MYSQL_HOME must be replaced by real Mysql home dir
+	   		mysql -h127.0.0.1 -uroot -p
 		[in Windows, open command prompt window and execute command:]
-			mysql.exe -h127.0.0.1 -uroot -p		# mysql.exe must be in system 'PATH' variable
+			cd $MYSQL_HOME		# $MYSQL_HOME must be replaced by real Mysql home dir
+			mysql.exe -h127.0.0.1 -uroot -p	
 	   ```
       * Add user, and init database schema: 
 	   ```
@@ -32,10 +34,10 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
       *  build project:
 		```
 			[in Linux, open a shell and execute command:]
-				cd $WORK_DIR/rdap-develop/rdap-develop/rdap-webapp		# $WORK_DIR must be real dir
+				cd $WORK_DIR/rdap-develop/rdap-develop/rdap-webapp		# $WORK_DIR must be replaced by real dir
 				mvn package -Dmaven.test.skip=true	# mvn must in system variable
 			[in Windows7 or Windows8, open command prompt window and execute command:]
-				cd $WORK_DIR/rdap-develop/rdap-develop/rdap-webapp		# $WORK_DIR must be real dir
+				cd $WORK_DIR/rdap-develop/rdap-develop/rdap-webapp		# $WORK_DIR must be replaced by real dir
 				mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
 			(target/rdap.war  is the build war file)
 	
