@@ -6,7 +6,7 @@
      (Skip this step if Mysql5 or higer version already installed)
    * Download sql init file [rdap.sql](https://raw.githubusercontent.com/cnnic/rdap/develop/rdap-webapp/build/rdap.sql)
    * Login into Mysql with mysql client, and add user, and init database schema: 
-      * Login mysql client,this step will prompt password, and password for 'root' should be inputed, default password is null:
+      * Login mysql server use mysql client,this step will prompt password, and password for 'root' should be inputed, default password is null. Commands:
 	   ```
 		[in Linux:]
 	   	mysql -h127.0.0.1 -uroot -p	# mysql must be in system  'PATH' variable	
