@@ -34,6 +34,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -44,6 +49,68 @@ import org.junit.Test;
  */
 @SuppressWarnings("rawtypes")
 public class DomainUtilTest {
+
+    private static final List<String> validArpaDomain = new ArrayList<String>();
+    private static final List<String> inValidArpaDomain = new ArrayList<String>();
+
+    @BeforeClass
+    public static void initValidArpaDomain() {
+        validArpaDomain
+                .add("b.a.9.8.7.6.5.0.4.0.0.0.3.0.0.0.2.0.0.0.1.0.0.0.0.0.0.0.1.2.3.4.ip6.arpa.");
+        validArpaDomain
+                .add("B.A.9.8.7.6.5.0.4.0.0.0.3.0.0.0.2.0.0.0.1.0.0.0.0.0.0.0.1.2.3.4.ip6.arpa.");
+        validArpaDomain
+                .add("0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa.");
+        validArpaDomain
+                .add("b.a.9.8.7.6.5.0.4.0.0.0.3.0.0.0.2.0.0.0.1.0.0.0.0.0.0.0.1.2.3.4.IP6.ARPA.");
+        validArpaDomain.add("0.in-addr.arpa");
+        validArpaDomain.add("0.IN-ADDR.ARPA");
+        validArpaDomain.add("0.in-addr.arpa.");
+        validArpaDomain.add("0.1.in-addr.arpa");
+        validArpaDomain.add("1.0.1.in-addr.arpa");
+        validArpaDomain.add("1.1.0.1.in-addr.arpa");
+        validArpaDomain.add("0.1.0.1.in-addr.arpa");
+        validArpaDomain.add("0.0.0.1.in-addr.arpa");
+        validArpaDomain.add("255.0.0.1.in-addr.arpa");
+        validArpaDomain.add("255.255.255.255.in-addr.arpa");
+    }
+
+    @BeforeClass
+    public static void initInValidArpaDomain() {
+        inValidArpaDomain.add(".in-addr.arpa");
+        inValidArpaDomain.add("256.255.255.255.in-addr.arpa");
+        inValidArpaDomain.add("in-addr.arpa");
+        inValidArpaDomain.add("-addr.arpa");
+        inValidArpaDomain.add(".arpa");
+        inValidArpaDomain.add("cnnic.arpa");
+        inValidArpaDomain.add("cnnic.cn.arpa");
+        inValidArpaDomain.add("");
+        inValidArpaDomain.add("256.255.255.255.in-addr.arpa");
+        inValidArpaDomain.add("1.ip6.arpa");
+        inValidArpaDomain.add("0.ip6.arpa");
+        inValidArpaDomain.add(".ip6.arpa");
+    }
+
+    /**
+     * test isArpaTldAndLabelIsValid.
+     * 
+     */
+    @Test
+    public void testIsArpaTldAndLabelIsValid() {
+        for (String domain : validArpaDomain) {
+            assertTrue(DomainUtil.isArpaTldAndLabelIsValid(domain));
+        }
+        for (String domain : inValidArpaDomain) {
+            assertFalse(DomainUtil.isArpaTldAndLabelIsValid(domain));
+        }
+        // not validate these domain, return true.
+        assertTrue(DomainUtil.isArpaTldAndLabelIsValid("arpa."));
+        assertTrue(DomainUtil.isArpaTldAndLabelIsValid("arpa"));
+        assertTrue(DomainUtil.isArpaTldAndLabelIsValid("cnnic.cn"));
+        assertTrue(DomainUtil.isArpaTldAndLabelIsValid(" cnnic.cn"));
+        assertTrue(DomainUtil.isArpaTldAndLabelIsValid("."));
+        assertTrue(DomainUtil.isArpaTldAndLabelIsValid("cnnic.cn"));
+    }
 
     /**
      * test getLowerCaseByLabel.
@@ -83,6 +150,14 @@ public class DomainUtilTest {
      */
     @Test
     public void testValidateDomainNameIsValidIdna() {
+        // arpa domain.
+        for (String domain : validArpaDomain) {
+            assertTrue(DomainUtil.validateDomainNameIsValidIdna(domain));
+        }
+        for (String domain : inValidArpaDomain) {
+            assertFalse(DomainUtil.validateDomainNameIsValidIdna(domain));
+        }
+        // other domain.
         assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.cn"));
         assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.cn."));
         assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.com.cn"));

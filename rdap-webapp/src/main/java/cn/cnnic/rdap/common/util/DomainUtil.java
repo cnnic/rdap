@@ -74,10 +74,96 @@ public final class DomainUtil {
      * min domain length,without last '.'.
      */
     public static final int MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT = 3;
+
+    /**
+     * arpa domain suffix.
+     */
+    private static final String ARPA_SUFFIX = ".arpa";
+    /**
+     * ipv4 arpa domain suffix.
+     */
+    private static final String IPV4_ARPA_SUFFIX = "in-addr.arpa";
+    /**
+     * ipv6 arpa domain suffix.
+     */
+    private static final String IPV6_ARPA_SUFFIX = "ip6.arpa";
     /**
      * max ASCII code.
      */
     public static final int MAX_ASCII_CODE = 0x7F;
+
+    /**
+     * check if domainName is valid arpa domain.
+     * 
+     * @param domainName
+     *            domain name.
+     * @return true if domain not endwith '.arpa', or endwith '.arpa' and label
+     *         is valid; return false if domain end with '.arpa' and label is
+     *         invalid.
+     */
+    public static boolean isArpaTldAndLabelIsValid(String domainName) {
+        String domainWithoutLastPoint = deleteLastPoint(domainName);
+        if (StringUtils.isBlank(domainWithoutLastPoint)) {
+            return false;
+        }
+        if (!domainWithoutLastPoint.endsWith(ARPA_SUFFIX)) {
+            return true;
+        }
+        domainWithoutLastPoint = StringUtils.lowerCase(domainWithoutLastPoint);
+        if (isIpV4ArpaTldAndLabelIsValid(domainWithoutLastPoint)
+                || isIpV6ArpaTldAndLabelIsValid(domainWithoutLastPoint)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * check if domainName is valid ip v4 arpa domain.
+     * 
+     * @param domainName
+     *            domain name.
+     * @return true if is, false if not.
+     */
+    private static boolean isIpV4ArpaTldAndLabelIsValid(String domainName) {
+        if (StringUtils.isBlank(domainName)) {
+            return false;
+        }
+        if (!domainName.endsWith(IPV4_ARPA_SUFFIX)) {
+            return false;
+        }
+        domainName = StringUtils.removeEndIgnoreCase(domainName,
+                IPV4_ARPA_SUFFIX);
+        String ipV4ArpaReg = "^((1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.){1,4}$";
+        if (domainName.matches(ipV4ArpaReg)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * check if domainName is valid ip v6 arpa domain.
+     * 
+     * @param domainName
+     *            domain name.
+     * @return true if is, false if not.
+     */
+    private static boolean isIpV6ArpaTldAndLabelIsValid(String domainName) {
+        if (StringUtils.isBlank(domainName)) {
+            return false;
+        }
+        if (!domainName.endsWith(IPV6_ARPA_SUFFIX)) {
+            return false;
+        }
+        domainName = StringUtils.removeEndIgnoreCase(domainName,
+                IPV6_ARPA_SUFFIX);
+        // match
+        // b.a.9.8.7.6.5.0.4.0.0.0.3.0.0.0.2.0.0.0.1.0.0.0.0.0.0.0.1.2.3.4.
+        String ipV6ArpaReg = "^([\\d|a|b|c|d|e|f]\\.){32}$";
+        if (domainName.matches(ipV6ArpaReg)) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * validate domain puny name is valid idna.
@@ -88,6 +174,9 @@ public final class DomainUtil {
      */
     public static boolean validateDomainNameIsValidIdna(String domainName) {
         if (StringUtils.isBlank(domainName) || !domainName.contains(".")) {
+            return false;
+        }
+        if (!isArpaTldAndLabelIsValid(domainName)) {
             return false;
         }
         if (!domainName.startsWith(ACE_PREFIX) && isLdh(domainName)) {
@@ -234,8 +323,7 @@ public final class DomainUtil {
             return false;
         }
         if (domainWithoutLastDot.length() < MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT
-                || domainWithoutLastDot.length() 
-                > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
+                || domainWithoutLastDot.length() > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
             return false;
         }
         return true;

@@ -35,11 +35,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -146,6 +148,9 @@ public class RdapControllerDomainTest extends BaseTest {
     private void commonQueryExistDomain(String queryDomainName,
             String expectedLdhName, String expectedUnicodeName)
             throws Exception {
+        ResultActions r = mockMvc.perform(get(
+                "/.well-known/rdap/domain/" + queryDomainName).accept(
+                MediaType.parseMediaType("application/json")));
         mockMvc.perform(
                 get("/.well-known/rdap/domain/" + queryDomainName).accept(
                         MediaType.parseMediaType("application/json")))
@@ -155,7 +160,40 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.handle").value("1"))
                 .andExpect(jsonPath("$.ldhName").value(expectedLdhName))
                 .andExpect(jsonPath("$.unicodeName").value(expectedUnicodeName))
-                .andExpect(jsonPath("$.port43").value("port43"));
+                .andExpect(jsonPath("$.port43").value("port43"))
+                .andExpect(jsonPath("$.secureDNS").exists())
+                .andExpect(jsonPath("$.status").isArray())
+                .andExpect(
+                        jsonPath("$.status").value(
+                                CoreMatchers.hasItems("validated",
+                                        "update prohibited")))
+                // remarks.
+                .andExpect(jsonPath("$.remarks").isArray())
+                .andExpect(jsonPath("$.remarks[0]").exists())
+                .andExpect(jsonPath("$.remarks[0].title").exists())
+                .andExpect(jsonPath("$.remarks[0].description").exists())
+                .andExpect(jsonPath("$.remarks[0].description").isArray())
+                .andExpect(
+                        jsonPath("$.remarks[0].description").value(
+                                CoreMatchers.hasItems("description1",
+                                        "description2")))
+                .andExpect(jsonPath("$.remarks[0].links").exists())
+                .andExpect(jsonPath("$.remarks[0].links").isArray())
+                .andExpect(jsonPath("$.remarks[0].links[0]").exists())
+                .andExpect(jsonPath("$.remarks[0].links[0].value").exists())
+                .andExpect(jsonPath("$.remarks[0].links[0].rel").exists())
+                .andExpect(jsonPath("$.remarks[0].links[0].href").exists())
+                .andExpect(jsonPath("$.remarks[0].links[0].type").exists())
+                .andExpect(
+                        jsonPath("$.remarks[0].links[0].type").value(
+                                "application/json"))
+                // links.
+                .andExpect(
+                        jsonPath("$.links[0].hreflang").value(
+                                CoreMatchers.hasItems("en", "zh")))
+                .andExpect(jsonPath("$.links[0].title").exists())
+
+        ;
     }
 
     /**

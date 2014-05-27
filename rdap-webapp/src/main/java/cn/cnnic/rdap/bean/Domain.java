@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
@@ -73,6 +74,7 @@ public class Domain extends BaseModel {
     /**
      * secureDNS.
      */
+    @JsonProperty("secureDNS")
     private SecureDns secureDns;
     /**
      * entities.
