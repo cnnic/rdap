@@ -44,6 +44,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.common.util.RestResponseUtil;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -91,7 +92,9 @@ public class RdapControllerDomainTest extends BaseTest {
      * @throws Exception
      */
     @Test
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
     public void testQueryNonExistDomain() throws Exception {
+        RestResponseUtil.initErrorMessages();
         commonQueryNonExistDomain("1cnnic.cn");
         commonQueryNonExistDomain("cnnic.com.cn");
         commonQueryNonExistDomain("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
@@ -105,7 +108,9 @@ public class RdapControllerDomainTest extends BaseTest {
      * @throws Exception
      */
     @Test
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
     public void testQueryInvalidDomain() throws Exception {
+        RestResponseUtil.initErrorMessages();
         commonQueryInvalidDomain("123");
         commonQueryInvalidDomain("c nnic.cn");
         commonQueryInvalidDomain("cnnic");
@@ -191,7 +196,7 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))
-                .andExpect(jsonPath("$.description").value("BAD REQUEST DESC"));
+                .andExpect(jsonPath("$.description").value("BAD REQUEST"));
 
     }
 }

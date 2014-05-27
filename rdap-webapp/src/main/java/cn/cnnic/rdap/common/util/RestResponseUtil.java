@@ -73,7 +73,7 @@ public class RestResponseUtil {
     /**
      * init ErrorMessages list
      */
-    private static void initErrorMessages() {
+    public static void initErrorMessages() {
         errorMessageMap = errorMessageService.getAllErrorMessageMap();
     }
 
