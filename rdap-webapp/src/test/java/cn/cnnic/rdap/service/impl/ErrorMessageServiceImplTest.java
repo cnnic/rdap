@@ -31,6 +31,8 @@
 package cn.cnnic.rdap.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
@@ -53,21 +55,21 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
  */
 @SuppressWarnings("rawtypes")
 public class ErrorMessageServiceImplTest extends BaseTest {
-	@Autowired
-	private QueryParser queryParser;
-	@Autowired
-	private ErrorMessageService errorMessageService;
+    @Autowired
+    private QueryParser queryParser;
+    @Autowired
+    private ErrorMessageService errorMessageService;
 
-	/**
-	 * test query exist autnum
-	 */
-	@Test
-	// @DatabaseTearDown("teardown.xml")
-	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
-	public void testGetAllErrorMessageMap() {
-		Map<Long, ErrorMessage> errorMessageMap = errorMessageService
-				.getAllErrorMessageMap();
-		Assert.notNull(errorMessageMap);
-		assertEquals(3, errorMessageMap.size());
-	}
+    /**
+     * test query exist autnum
+     */
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    public void testGetAllErrorMessageMap() {
+        Map<Long, ErrorMessage> errorMessageMap = errorMessageService
+                .getAllErrorMessageMap();
+        assertNotNull(errorMessageMap);
+        assertTrue(errorMessageMap.size() > 0);
+    }
 }

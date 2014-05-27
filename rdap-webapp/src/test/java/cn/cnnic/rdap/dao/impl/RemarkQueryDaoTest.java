@@ -56,68 +56,67 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
  */
 @SuppressWarnings("rawtypes")
 public class RemarkQueryDaoTest extends BaseTest {
-	@Autowired
-	private QueryParser queryParser;
-	@Autowired
-	private RemarkQueryDaoImpl remarkQueryDao;
+    @Autowired
+    private QueryParser queryParser;
+    @Autowired
+    private RemarkQueryDaoImpl remarkQueryDao;
 
-	/**
-	 * test query exist event
-	 */
-	@Test
-	// @DatabaseTearDown("teardown.xml")
-	@DatabaseSetup(type = DatabaseOperation.REFRESH, value = "remark.xml")
-	public void testQueryExistRemark() {
-		Long autnumId = 1L;
-		List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(autnumId,
-				ModelType.AUTNUM);
-		assertNotNull(remarks);
-		assertTrue(remarks.size() > 0);
-		Remark remark = remarks.get(0);
-		assertNotNull(remark);
-		assertEquals("Terms of Use", remark.getTitle());
-		assertThat(remark.getDescription(),
-				CoreMatchers.hasItems("description1", "description2"));
-		List<Link> links = remark.getLinks();
-		assertNotNull(links);
-		assertEquals(1, links.size());
-		Link link = links.get(0);
-		assertNotNull(link);
-		assertEquals("http://example.com/context_uri", link.getValue());
-	}
+    /**
+     * test query exist event
+     */
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "remark.xml")
+    public void testQueryExistRemark() {
+        Long autnumId = 1L;
+        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(autnumId,
+                ModelType.AUTNUM);
+        assertNotNull(remarks);
+        assertTrue(remarks.size() > 0);
+        Remark remark = remarks.get(0);
+        assertNotNull(remark);
+        assertEquals("Terms of Use", remark.getTitle());
+        assertThat(remark.getDescription(),
+                CoreMatchers.hasItems("description1", "description2"));
+        List<Link> links = remark.getLinks();
+        assertNotNull(links);
+        assertTrue(links.size() >= 1);
+        Link link = links.get(0);
+        assertNotNull(link);
+        assertEquals("http://example.com/context_uri", link.getValue());
+    }
 
-	/**
-	 * test query exist event, without inner links
-	 */
-	@Test
-	// @DatabaseTearDown("teardown.xml")
-	@DatabaseSetup(type = DatabaseOperation.REFRESH, value = "remark.xml")
-	public void testQueryRemarkWithoutLinksAndDesc() {
-		Long autnumId = 2L;
-		List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(autnumId,
-				ModelType.AUTNUM);
-		assertNotNull(remarks);
-		assertTrue(remarks.size() > 0);
-		Remark remark = remarks.get(0);
-		assertNotNull(remark);
-		assertEquals("Terms of Use", remark.getTitle());
-		assertNotNull(remark.getDescription());
-		assertEquals(0, remark.getDescription().size());
-		assertNotNull(remark.getLinks());
-		assertEquals(0, remark.getLinks().size());
-	}
+    /**
+     * test query exist event, without inner links
+     */
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "remark.xml")
+    public void testQueryRemarkWithoutLinksAndDesc() {
+        Long autnumId = 2L;
+        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(autnumId,
+                ModelType.AUTNUM);
+        assertNotNull(remarks);
+        assertTrue(remarks.size() > 0);
+        Remark remark = remarks.get(0);
+        assertNotNull(remark);
+        assertEquals("Terms of Use", remark.getTitle());
+        assertNull(remark.getDescription());
+        assertNotNull(remark.getLinks());
+        assertEquals(0, remark.getLinks().size());
+    }
 
-	/**
-	 * test query non exist remark
-	 */
-	@Test
-	// @DatabaseTearDown("teardown.xml")
-	@DatabaseSetup(type = DatabaseOperation.REFRESH, value = "remark.xml")
-	public void testQueryNonExistRemark() {
-		Long autnumId = 1000L;
-		List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(autnumId,
-				ModelType.AUTNUM);
-		assertNotNull(remarks);
-		assertEquals(0, remarks.size());
-	}
+    /**
+     * test query non exist remark
+     */
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "remark.xml")
+    public void testQueryNonExistRemark() {
+        Long autnumId = 1000L;
+        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(autnumId,
+                ModelType.AUTNUM);
+        assertNotNull(remarks);
+        assertEquals(0, remarks.size());
+    }
 }
