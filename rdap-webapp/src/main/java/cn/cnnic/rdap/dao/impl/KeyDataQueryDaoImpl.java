@@ -35,125 +35,121 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
-import cn.cnnic.rdap.bean.BaseNotice.NoticeType;
+import cn.cnnic.rdap.bean.Event;
+import cn.cnnic.rdap.bean.KeyData;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.Notice;
-import cn.cnnic.rdap.dao.NoticeDao;
+import cn.cnnic.rdap.bean.SecureDns.SecureDNSRType;
+import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * notice query DAO
+ * keyData query DAO.
  * 
  * @author jiashuo
  * 
  */
 @Repository
-public class NoticeDaoImpl implements NoticeDao {
-    /**
-     * JDBC template simplifies the use of JDBC and helps to avoid common
-     * errors.
-     */
+public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
     @Autowired
-    protected JdbcTemplate jdbcTemplate;
+    @Qualifier("eventQueryDaoImpl")
+    private QueryDao<Event> eventQueryDao;
     @Autowired
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
 
     @Override
-    public List<Notice> getAllNotices() {
-        List<Notice> notices = queryWithoutInnerObjects();
-        queryAndSetInnerObjects(notices);
-        return notices;
+    public List<KeyData> queryAsInnerObjects(Long outerObjectId,
+            ModelType outerModelType) {
+        List<KeyData> keyDataList = queryWithoutInnerObjects(outerObjectId);
+        queryAndSetInnerObjects(keyDataList);
+        return keyDataList;
     }
 
     /**
-     * query inner objects, and set them to notices
+     * query inner objects, and set them to keyData.
      * 
-     * @param notices
-     *            notice list
+     * @param keyDataList
+     *            keyData list.
      */
-    private void queryAndSetInnerObjects(List<Notice> notices) {
-        if (null == notices || notices.size() == 0) {
+    private void queryAndSetInnerObjects(List<KeyData> keyDataList) {
+        if (null == keyDataList || keyDataList.size() == 0) {
             return;
         }
-        for (Notice notice : notices) {
-            queryAndSetInnerObjects(notice);
+        for (KeyData keyData : keyDataList) {
+            queryAndSetInnerObjects(keyData);
         }
     }
 
     /**
-     * query inner objects, and set them to notice
+     * query inner objects, and set them to keyData.
      * 
-     * @param notice
-     *            notice after set inner objects
+     * @param keyData
+     *            keyData.
      */
-    private void queryAndSetInnerObjects(Notice notice) {
-        if (null == notice) {
+    private void queryAndSetInnerObjects(KeyData keyData) {
+        if (null == keyData) {
             return;
         }
-        List<Link> links = linkQueryDao.queryAsInnerObjects(notice.getId(),
-                ModelType.NOTICE);
-        notice.setLinks(links);
+        List<Event> events = eventQueryDao.queryAsInnerObjects(keyData.getId(),
+                ModelType.KEYDATA);
+        keyData.setEvents(events);
+        List<Link> links = linkQueryDao.queryAsInnerObjects(keyData.getId(),
+                ModelType.KEYDATA);
+        keyData.setLinks(links);
     }
 
     /**
-     * query notice, without inner objects
+     * query keyData, without inner objects.
      * 
-     * @return notice list
+     * @return keyData list.
      */
-    private List<Notice> queryWithoutInnerObjects() {
-        final String sql = "select notice.*, description.description  from RDAP_NOTICE notice "
-                + " left outer join RDAP_NOTICE_DESCRIPTION description "
-                + " on notice.NOTICE_ID = description.NOTICE_ID "
-                + " where notice.TYPE=?";
-        List<Notice> result = jdbcTemplate.query(
+    private List<KeyData> queryWithoutInnerObjects(final Long outerObjectId) {
+        final String sql = "select * from REL_SECUREDNS_DSKEY rel,RDAP_KEYDATA keyData "
+                + " where rel.REL_ID = keyData.KEYDATA_ID "
+                + " and rel.SECUREDNS_ID=? and rel.REL_DSKEY_TYPE=? ";
+        List<KeyData> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
-                        ps.setString(1, NoticeType.Notice.getName());
+                        ps.setLong(1, outerObjectId);
+                        ps.setString(2, SecureDNSRType.KeyData.getName());
                         return ps;
                     }
-                }, new NoticeResultSetExtractor());
+                }, new KeyDataResultSetExtractor());
         return result;
     }
 
     /**
-     * notice ResultSetExtractor, extract data from ResultSet
+     * keyData ResultSetExtractor, extract data from ResultSet.
      * 
      * @author jiashuo
      * 
      */
-    class NoticeResultSetExtractor implements ResultSetExtractor<List<Notice>> {
+    class KeyDataResultSetExtractor implements
+            ResultSetExtractor<List<KeyData>> {
         @Override
-        public List<Notice> extractData(ResultSet rs) throws SQLException,
+        public List<KeyData> extractData(ResultSet rs) throws SQLException,
                 DataAccessException {
-            List<Notice> result = new ArrayList<Notice>();
-            Map<Long, Notice> noticeMapById = new HashMap<Long, Notice>();
+            List<KeyData> result = new ArrayList<KeyData>();
             while (rs.next()) {
-                Long noticeId = rs.getLong("NOTICE_ID");
-                Notice notice = noticeMapById.get(noticeId);
-                if (null == notice) {
-                    notice = new Notice();
-                    notice.setId(noticeId);
-                    notice.setTitle(rs.getString("TITLE"));
-                    noticeMapById.put(noticeId, notice);
-                    result.add(notice);
-                }
-                notice.addDescription(rs.getString("DESCRIPTION"));
+                KeyData keyData = new KeyData();
+                keyData.setId(rs.getLong("KEYDATA_ID"));
+                keyData.setAlgorithm(rs.getInt("ALGORITHM"));
+                keyData.setPublicKey(rs.getString("PUBLIC_KEY"));
+                keyData.setFlags(rs.getInt("FLAGS"));
+                keyData.setProtocol(rs.getInt("PROTOCOL"));
+                result.add(keyData);
             }
             return result;
         }

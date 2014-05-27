@@ -103,7 +103,7 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
 			return;
 		}
 		List<Link> links = linkQueryDao.queryAsInnerObjects(remark.getId(),
-				ModelType.Remark);
+				ModelType.REMARK);
 		remark.setLinks(links);
 	}
 

@@ -75,7 +75,7 @@ public class Autnum extends BaseModel {
     /**
      * status
      */
-    private List<String> status = new ArrayList<String>();
+    private List<String> status;
     /**
      * sub entities
      */

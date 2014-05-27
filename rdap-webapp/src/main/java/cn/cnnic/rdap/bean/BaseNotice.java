@@ -71,7 +71,7 @@ public abstract class BaseNotice extends BaseModel {
     /**
      * description
      */
-    private List<String> description = new ArrayList<String>();
+    private List<String> description;
     /**
      * links
      */

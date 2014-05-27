@@ -28,65 +28,60 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.service.impl;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.dao.NoticeDao;
-import cn.cnnic.rdap.service.RdapConformanceService;
+package cn.cnnic.rdap.bean;
 
 /**
- * decorate response.
+ * relation between domain and variant.
  * 
  * @author jiashuo
  * 
  */
-@Service
-public class ResponseDecorator {
-    /**
-     * rdapConformanceService.
-     */
-    @Autowired
-    private RdapConformanceService rdapConformanceService;
-    /**
-     * noticeDao.
-     */
-    @Autowired
-    private NoticeDao noticeDao;
+public class RelDomainVariant {
 
     /**
-     * decorate response: add properties to response.
-     * 
-     * @param model
-     *            response
+     * variant id.
      */
-    public void decorateResponse(BaseModel model) {
-        addRdapConformance(model);
-        addNotices(model);
+    private Long variantId;
+    /**
+     * variant type.
+     */
+    private String variantType;
+
+    /**
+     * get variant id.
+     * 
+     * @return variant id.
+     */
+    public Long getVariantId() {
+        return variantId;
     }
 
     /**
-     * add notices to model.
+     * set variant id.
      * 
-     * @param model
-     *            model.
+     * @param variantId
+     *            variant id.
      */
-    private void addNotices(BaseModel model) {
-        if (null == model) {
-            return;
-        }
-        model.setNotices(noticeDao.getAllNotices());
+    public void setVariantId(Long variantId) {
+        this.variantId = variantId;
     }
 
     /**
-     * add rdapConformance to model.
+     * get variantType.
      * 
-     * @param model
-     *            model.
+     * @return variantType.
      */
-    private void addRdapConformance(BaseModel model) {
-        rdapConformanceService.setRdapConformance(model);
+    public String getVariantType() {
+        return variantType;
+    }
+
+    /**
+     * set variantType.
+     * 
+     * @param variantType
+     *            variantType.
+     */
+    public void setVariantType(String variantType) {
+        this.variantType = variantType;
     }
 }

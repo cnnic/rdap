@@ -32,7 +32,9 @@ package cn.cnnic.rdap.controller.support;
 
 import org.springframework.stereotype.Component;
 
+import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.common.util.DomainUtil;
 
 /**
  * 
@@ -41,7 +43,29 @@ import cn.cnnic.rdap.bean.QueryParam;
  */
 @Component
 public class QueryParser {
-	public QueryParam parseQueryParam(String q) {
-		return new QueryParam(q);
-	}
+    /**
+     * generate QueryParam.
+     * 
+     * @param q
+     *            query string.
+     * @return QueryParam.
+     */
+    public QueryParam parseQueryParam(String q) {
+        return new QueryParam(q);
+    }
+
+    /**
+     * generate DomainQueryParam.
+     * 
+     * @param domainName
+     *            domain name.
+     * @param punyDomainName
+     *            domain puny name.
+     * @return QueryParam.
+     */
+    public QueryParam parseDomainQueryParam(String domainName,
+            String punyDomainName) {
+        String punyName = DomainUtil.geneDomainPunyName(domainName);
+        return new DomainQueryParam(domainName, punyName);
+    }
 }

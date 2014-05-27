@@ -37,15 +37,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.common.util.AutnumValidator;
+import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.QueryService;
@@ -57,10 +59,11 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * @author jiashuo
  * 
  */
-@RestController
+@Controller
 @RequestMapping("/{dot}well-known/rdap")
 public class RdapController {
-    private static Logger logger = LoggerFactory.getLogger(RdapController.class);
+    private static Logger logger = LoggerFactory
+            .getLogger(RdapController.class);
     /**
      * query service
      */
@@ -76,7 +79,7 @@ public class RdapController {
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
             HttpServletRequest request, HttpServletResponse response) {
-        logger.info("query autnum:"+autnum);
+        logger.info("query autnum:" + autnum);
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
@@ -90,19 +93,38 @@ public class RdapController {
     }
 
     /**
-     * query domain by domain name
+     * query domain by domain name.
      * 
      * @param domainName
-     *            domain name
+     *            domain name.
      * @param response
-     *            servlet response
-     * @return JSON formated result,with HTTP code
+     *            HttpServletResponse.
+     * @return JSON formated result,with HTTP code.
      */
-    @RequestMapping(value = "/domain/{domainName}")
-    public ResponseEntity<Domain> queryDomain(@PathVariable String domainName,
-            HttpServletResponse response) {
-        Domain domain = queryService.queryDomain(new QueryParam(domainName));
-        return RestResponseUtil.createResponse200(domain);
+    @RequestMapping(value = { "/domain/{domainName}" }, method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity queryDomain(@PathVariable String domainName,
+            HttpServletRequest request, HttpServletResponse response) {
+        String decodeDomain = DomainUtil.decodeAndTrim(domainName);
+        String punyDomainName = decodeDomain;
+        try {
+            // long lable exception
+            punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
+        } catch (Exception e) {
+            return RestResponseUtil.createResponse400();
+        }
+        if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
+            return RestResponseUtil.createResponse400();
+        }
+        decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
+        decodeDomain = DomainUtil.getLowerCaseByLabel(decodeDomain);
+        Domain domain = queryService.queryDomain(queryParser
+                .parseDomainQueryParam(decodeDomain, punyDomainName));
+        if (null != domain) {
+            responseDecorator.decorateResponse(domain);
+            return RestResponseUtil.createResponse200(domain);
+        }
+        return RestResponseUtil.createResponse404();
     }
 
     /**

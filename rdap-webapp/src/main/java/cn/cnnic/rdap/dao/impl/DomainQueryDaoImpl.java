@@ -34,15 +34,32 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.DomainQueryParam;
+import cn.cnnic.rdap.bean.Event;
+import cn.cnnic.rdap.bean.Link;
+import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.Remark;
+import cn.cnnic.rdap.bean.SecureDns;
+import cn.cnnic.rdap.bean.Variants;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
+import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * domain query DAO
@@ -52,34 +69,126 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
  */
 @Repository
 public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
+    @Autowired
+    @Qualifier("variantsQueryDaoImpl")
+    private QueryDao<Variants> variantsQueryDao;
+    @Autowired
+    @Qualifier("secureDnsQueryDaoImpl")
+    private QueryDao<SecureDns> secureDnsQueryDao;
+    @Autowired
+    private QueryDao<PublicId> publicIdQueryDao;
+    @Autowired
+    @Qualifier("remarkQueryDaoImpl")
+    private QueryDao<Remark> remarkQueryDao;
+    @Autowired
+    @Qualifier("linkQueryDaoImpl")
+    private QueryDao<Link> linkQueryDao;
+    @Autowired
+    @Qualifier("eventQueryDaoImpl")
+    private QueryDao<Event> eventQueryDao;
 
-	/**
-	 * query domain by domain name.
-	 */
-	@Override
-	public Domain query(QueryParam queryParam) {
-		final String domainName = queryParam.getQ();
-		final String sql = "select * from RDAP_DOMAIN where LDH_NAME= ? limit 1";
-		List<Domain> result = jdbcTemplate.query(
-				new PreparedStatementCreator() {
-					public PreparedStatement createPreparedStatement(
-							Connection connection) throws SQLException {
-						PreparedStatement ps = connection.prepareStatement(sql);
-						ps.setString(1, domainName);
-						return ps;
-					}
-				}, new RowMapper<Domain>() {
-					public Domain mapRow(ResultSet rs, int rowNum)
-							throws SQLException {
-						Domain domain = new Domain();
-						domain.setLdhName(rs.getString("LDH_NAME"));
-						domain.setHandle(rs.getString("HANDLE"));
-						return domain;
-					}
-				});
-		if (null == result || result.size() == 0) {
-			return null;
-		}
-		return result.get(0);
-	}
+    /**
+     * query domain by domain name.
+     */
+    @Override
+    public Domain query(QueryParam queryParam) {
+        Domain domain = queryWithoutInnerObjects(queryParam);
+        queryAndSetInnerObjects(domain);
+        return domain;
+    }
+
+    /**
+     * query inner objects of domain,and set fill them to domain.
+     * 
+     * @param domain
+     *            inner objects will be filled.
+     */
+    private void queryAndSetInnerObjects(Domain domain) {
+        if (null == domain) {
+            return;
+        }
+        Long domainId = domain.getId();
+        List<Variants> varients = variantsQueryDao.queryAsInnerObjects(
+                domainId, ModelType.DOMAIN);
+        domain.setVarients(varients);
+        List<SecureDns> secureDnsList = secureDnsQueryDao.queryAsInnerObjects(
+                domainId, ModelType.DOMAIN);
+        if (null != secureDnsList && secureDnsList.size() > 0) {
+            domain.setSecureDns(secureDnsList.get(0));
+        }
+        List<PublicId> publicIds = publicIdQueryDao.queryAsInnerObjects(
+                domainId, ModelType.DOMAIN);
+        domain.setPublicIds(publicIds);
+        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(domainId,
+                ModelType.DOMAIN);
+        domain.setRemarks(remarks);
+        List<Link> links = linkQueryDao.queryAsInnerObjects(domainId,
+                ModelType.DOMAIN);
+        domain.setLinks(links);
+        List<Event> events = eventQueryDao.queryAsInnerObjects(domainId,
+                ModelType.DOMAIN);
+        domain.setEvents(events);
+    }
+
+    /**
+     * query domain, without inner objects.
+     * 
+     * @param queryParam
+     *            query parameter
+     * @return autnum
+     */
+    private Domain queryWithoutInnerObjects(QueryParam queryParam) {
+        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
+        final String domainName = domainQueryParam.getQ();
+        final String punyName = domainQueryParam.getPunyName();
+        final String sql = "select * from RDAP_DOMAIN domain "
+                + " left outer join RDAP_DOMAIN_STATUS status on domain.DOMAIN_ID = status.DOMAIN_ID "
+                + " where LDH_NAME= ? or UNICODE_NAME= ?";
+        List<Domain> result = jdbcTemplate.query(
+                new PreparedStatementCreator() {
+                    public PreparedStatement createPreparedStatement(
+                            Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps.setString(1, punyName);
+                        ps.setString(2, domainName);
+                        return ps;
+                    }
+                }, new DomainResultSetExtractor());
+        if (null == result || result.size() == 0) {
+            return null;
+        }
+        return result.get(0);
+    }
+
+    /**
+     * domain ResultSetExtractor, extract data from ResultSet
+     * 
+     * @author jiashuo
+     * 
+     */
+    class DomainResultSetExtractor implements ResultSetExtractor<List<Domain>> {
+        @Override
+        public List<Domain> extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            List<Domain> result = new ArrayList<Domain>();
+            Map<Long, Domain> domainMapById = new HashMap<Long, Domain>();
+            while (rs.next()) {
+                Long domainId = rs.getLong("DOMAIN_ID");
+                Domain domain = domainMapById.get(domainId);
+                if (null == domain) {
+                    domain = new Domain();
+                    domain.setId(domainId);
+                    domain.setHandle(rs.getString("HANDLE"));
+                    domain.setLdhName(rs.getString("LDH_NAME"));
+                    domain.setUnicodeName(rs.getString("UNICODE_NAME"));
+                    domain.setPort43(rs.getString("PORT43"));
+                    domain.setLang(rs.getString("LANG"));
+                    result.add(domain);
+                    domainMapById.put(domainId, domain);
+                }
+                domain.addStatus(rs.getString("STATUS"));
+            }
+            return result;
+        }
+    }
 }

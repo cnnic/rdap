@@ -43,97 +43,97 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Link extends BaseModel {
 
-	private String value;
-	private String rel;// TODO:enum accroding to rfc5988
-	private String href;
-	private List<String> hreflang = new ArrayList<String>();
-	private List<String> title = new ArrayList<String>();
-	private String media;
-	private String type;
+    private String value;
+    private String rel;// TODO:enum accroding to rfc5988
+    private String href;
+    private List<String> hreflang;
+    private List<String> title;
+    private String media;
+    private String type;
 
-	/**
-	 * add a hreflang
-	 * 
-	 * @param hreflangStr
-	 */
-	public void addHreflang(String hreflangStr) {
-		if (StringUtils.isBlank(hreflangStr)) {
-			return;
-		}
-		if (null == this.hreflang) {
-			this.hreflang = new ArrayList<String>();
-		}
-		this.hreflang.add(hreflangStr);
-	}
+    /**
+     * add a hreflang
+     * 
+     * @param hreflangStr
+     */
+    public void addHreflang(String hreflangStr) {
+        if (StringUtils.isBlank(hreflangStr)) {
+            return;
+        }
+        if (null == this.hreflang) {
+            this.hreflang = new ArrayList<String>();
+        }
+        this.hreflang.add(hreflangStr);
+    }
 
-	/**
-	 * add a title
-	 * 
-	 * @param titleStr
-	 */
-	public void addTitle(String titleStr) {
-		if (StringUtils.isBlank(titleStr)) {
-			return;
-		}
-		if (null == this.title) {
-			this.title = new ArrayList<String>();
-		}
-		this.title.add(titleStr);
-	}
+    /**
+     * add a title
+     * 
+     * @param titleStr
+     */
+    public void addTitle(String titleStr) {
+        if (StringUtils.isBlank(titleStr)) {
+            return;
+        }
+        if (null == this.title) {
+            this.title = new ArrayList<String>();
+        }
+        this.title.add(titleStr);
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	public String getRel() {
-		return rel;
-	}
+    public String getRel() {
+        return rel;
+    }
 
-	public void setRel(String rel) {
-		this.rel = rel;
-	}
+    public void setRel(String rel) {
+        this.rel = rel;
+    }
 
-	public String getHref() {
-		return href;
-	}
+    public String getHref() {
+        return href;
+    }
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public void setHref(String href) {
+        this.href = href;
+    }
 
-	public List<String> getHreflang() {
-		return hreflang;
-	}
+    public List<String> getHreflang() {
+        return hreflang;
+    }
 
-	public void setHreflang(List<String> hreflang) {
-		this.hreflang = hreflang;
-	}
+    public void setHreflang(List<String> hreflang) {
+        this.hreflang = hreflang;
+    }
 
-	public List<String> getTitle() {
-		return title;
-	}
+    public List<String> getTitle() {
+        return title;
+    }
 
-	public void setTitle(List<String> title) {
-		this.title = title;
-	}
+    public void setTitle(List<String> title) {
+        this.title = title;
+    }
 
-	public String getMedia() {
-		return media;
-	}
+    public String getMedia() {
+        return media;
+    }
 
-	public void setMedia(String media) {
-		this.media = media;
-	}
+    public void setMedia(String media) {
+        this.media = media;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 }

@@ -28,59 +28,64 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.dao.impl;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.PublicId;
+import cn.cnnic.rdap.dao.QueryDao;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * maps a public identifier to an object class.
+ * Test for link DAO
  * 
  * @author jiashuo
  * 
  */
-public class PublicId extends BaseModel {
-    /**
-     * denoting the type of public identifier.
-     */
-    private String type;
-    /**
-     * a public identifier of the type denoted by 'type'.
-     */
-    private String identifier;
+@SuppressWarnings("rawtypes")
+public class PublicIdQueryDaoTest extends BaseTest {
+    @Autowired
+    private QueryDao<PublicId> publicIdQueryDao;
 
     /**
-     * get type.
-     * 
-     * @return type.
+     * test query exist event
      */
-    public String getType() {
-        return type;
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("publicId.xml")
+    public void testQueryExistLink() {
+        Long domainId = 1L;
+        List<PublicId> publicIdsList = publicIdQueryDao.queryAsInnerObjects(
+                domainId, ModelType.DOMAIN);
+        assertNotNull(publicIdsList);
+        assertEquals(publicIdsList.size(), 1);
+        PublicId publicId = publicIdsList.get(0);
+        assertNotNull(publicId);
+        assertEquals("identifier", publicId.getIdentifier());
+        assertEquals("type", publicId.getType());
     }
 
     /**
-     * set type.
-     * 
-     * @param type
-     *            type.
+     * test query non exist event
      */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * get identifier.
-     * 
-     * @return identifier.
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    /**
-     * set identifier.
-     * 
-     * @param identifier
-     *            identifier.
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("publicId.xml")
+    public void testQueryNonExistEvent() {
+        Long nonExistDomainId = 10000L;
+        List<PublicId> publicIdsList = publicIdQueryDao.queryAsInnerObjects(
+                nonExistDomainId, ModelType.DOMAIN);
+        assertNotNull(publicIdsList);
+        assertEquals(publicIdsList.size(), 0);
     }
 }

@@ -28,59 +28,39 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.common.util;
+
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
- * maps a public identifier to an object class.
+ * Test for IpUtil.
  * 
  * @author jiashuo
  * 
  */
-public class PublicId extends BaseModel {
+@SuppressWarnings("rawtypes")
+public class IpUtilTest {
     /**
-     * denoting the type of public identifier.
-     */
-    private String type;
-    /**
-     * a public identifier of the type denoted by 'type'.
-     */
-    private String identifier;
-
-    /**
-     * get type.
+     * test longToIpV6.
      * 
-     * @return type.
      */
-    public String getType() {
-        return type;
+    @Test
+    public void testIpV6ToString() {
+        assertEquals("0:0:0:0:2001:6a8:0:1",
+                IpUtil.longToIpV6(0, 2306131802814676993L));
+        assertEquals("2001:db8:85a3:0:2001:6a8:0:2",
+                IpUtil.longToIpV6(2306139570357600256L, 2306131802814676994L));
     }
 
     /**
-     * set type.
+     * test longToIpV4.
      * 
-     * @param type
-     *            type.
      */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * get identifier.
-     * 
-     * @return identifier.
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    /**
-     * set identifier.
-     * 
-     * @param identifier
-     *            identifier.
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    @Test
+    public void testLongToIpV4() {
+        assertEquals("1.0.0.0", IpUtil.longToIpV4(16777216));
+        assertEquals("1.255.255.255", IpUtil.longToIpV4(33554431));
     }
 }

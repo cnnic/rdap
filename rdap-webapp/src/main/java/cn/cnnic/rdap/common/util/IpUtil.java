@@ -28,65 +28,56 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package cn.cnnic.rdap.service.impl;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.dao.NoticeDao;
-import cn.cnnic.rdap.service.RdapConformanceService;
+package cn.cnnic.rdap.common.util;
 
 /**
- * decorate response.
+ * ip util.
  * 
  * @author jiashuo
  * 
  */
-@Service
-public class ResponseDecorator {
+public class IpUtil {
     /**
-     * rdapConformanceService.
-     */
-    @Autowired
-    private RdapConformanceService rdapConformanceService;
-    /**
-     * noticeDao.
-     */
-    @Autowired
-    private NoticeDao noticeDao;
-
-    /**
-     * decorate response: add properties to response.
+     * convert ipV4 Long format to String.
      * 
-     * @param model
-     *            response
+     * @param longIp
+     *            ipV4 long value.
+     * @return ipv4 string.
      */
-    public void decorateResponse(BaseModel model) {
-        addRdapConformance(model);
-        addNotices(model);
+    public static String longToIpV4(long longIp) {
+        return String.format("%d.%d.%d.%d", longIp >>> 24,
+                (longIp & 0x00ffffff) >>> 16, (longIp & 0x0000ffff) >>> 8,
+                longIp & 0x000000ff);
     }
 
     /**
-     * add notices to model.
+     * convert ipV6 Long format to String.
      * 
-     * @param model
-     *            model.
+     * @param highBits
+     *            high 64 bits long vlaue.
+     * @param lowBits
+     *            low 64 bits long vlaue.
+     * @return ipv6 string.
      */
-    private void addNotices(BaseModel model) {
-        if (null == model) {
-            return;
+    public static String longToIpV6(long highBits, long lowBits) {
+        short[] shorts = new short[8];
+        String[] strings = new String[shorts.length];
+        for (int i = 0; i < 8; i++) {
+            if (i >= 0 && i < 4)
+                strings[i] = String
+                        .format("%x",
+                                (short) (((highBits << i * 16) >>> 16 * (8 - 1)) & 0xFFFF));
+            else
+                strings[i] = String
+                        .format("%x",
+                                (short) (((lowBits << i * 16) >>> 16 * (8 - 1)) & 0xFFFF));
         }
-        model.setNotices(noticeDao.getAllNotices());
-    }
-
-    /**
-     * add rdapConformance to model.
-     * 
-     * @param model
-     *            model.
-     */
-    private void addRdapConformance(BaseModel model) {
-        rdapConformanceService.setRdapConformance(model);
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < strings.length; i++) {
+            result.append(strings[i]);
+            if (i < strings.length - 1)
+                result.append(":");
+        }
+        return result.toString();
     }
 }

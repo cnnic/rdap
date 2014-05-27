@@ -99,7 +99,7 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
             return;
         }
         List<Link> links = linkQueryDao.queryAsInnerObjects(event.getId(),
-                ModelType.Event);
+                ModelType.EVENT);
         event.setLinks(links);
     }
 

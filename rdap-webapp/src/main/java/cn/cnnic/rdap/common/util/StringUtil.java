@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StringUtil {
     private static Logger logger = LoggerFactory.getLogger(StringUtil.class);
-    private static final String CHAR_SET_UTF8 = "UTF-8";
+    public static final String CHAR_SET_UTF8 = "UTF-8";
 
     /**
      * encoded url with UTF-8 encoding. This will escape protocol(eg:'http://')

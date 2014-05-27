@@ -31,56 +31,47 @@
 package cn.cnnic.rdap.bean;
 
 /**
- * maps a public identifier to an object class.
+ * base query parameter bean
  * 
  * @author jiashuo
  * 
  */
-public class PublicId extends BaseModel {
-    /**
-     * denoting the type of public identifier.
-     */
-    private String type;
-    /**
-     * a public identifier of the type denoted by 'type'.
-     */
-    private String identifier;
+public class DomainQueryParam extends QueryParam {
 
     /**
-     * get type.
+     * constructor.
      * 
-     * @return type.
+     * @param q
+     *            query string.
+     * @param punyName
+     *            domain puny name.
      */
-    public String getType() {
-        return type;
+    public DomainQueryParam(String q, String punyName) {
+        super(q);
+        this.punyName = punyName;
     }
 
     /**
-     * set type.
-     * 
-     * @param type
-     *            type.
+     * domain puny name.
      */
-    public void setType(String type) {
-        this.type = type;
+    private String punyName;
+
+    /**
+     * get punyName.
+     * 
+     * @return punyName.
+     */
+    public String getPunyName() {
+        return punyName;
     }
 
     /**
-     * get identifier.
+     * set punyName.
      * 
-     * @return identifier.
+     * @param punyName
+     *            punyName.
      */
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    /**
-     * set identifier.
-     * 
-     * @param identifier
-     *            identifier.
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setPunyName(String punyName) {
+        this.punyName = punyName;
     }
 }

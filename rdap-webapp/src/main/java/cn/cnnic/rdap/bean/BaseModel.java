@@ -55,6 +55,10 @@ public class BaseModel {
      * identity of object.
      */
     private Long id;
+    /**
+     * handle of model.
+     */
+    private String handle;
 
     /**
      * language identifier, as described by [RFC5646].
@@ -110,5 +114,24 @@ public class BaseModel {
 
     public void setNotices(List<Notice> notices) {
         this.notices = notices;
+    }
+
+    /**
+     * get handle.
+     * 
+     * @return handle.
+     */
+    public String getHandle() {
+        return handle;
+    }
+
+    /**
+     * set handle.
+     * 
+     * @param handle
+     *            handle.
+     */
+    public void setHandle(String handle) {
+        this.handle = handle;
     }
 }
