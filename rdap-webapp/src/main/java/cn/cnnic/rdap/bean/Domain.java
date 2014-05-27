@@ -53,11 +53,13 @@ public class Domain extends BaseModel {
      */
     private String handle;
     /**
-     * describing a domain name in LDH form.
+     * Textual representations of DNS names where the labels of the domain are
+     * all "letters, digits, hyphen" labels as described by [RFC5890].
      */
     private String ldhName;
     /**
-     * domain name with U-labels.
+     * Textual representations of DNS names where one or more of the labels are
+     * U-labels as described by [RFC5890].
      */
     private String unicodeName;
 
@@ -150,7 +152,7 @@ public class Domain extends BaseModel {
     }
 
     /**
-     * // * set domain name in LDH format.
+     * set domain name in LDH format.
      * 
      * @param ldhName
      *            LHD formated domain name

@@ -107,7 +107,10 @@ public class Network extends BaseModel {
      */
     public enum IpVersion {
         /**
-         * ip version.
+         * The representation of IPv4 addresses in this document uses the
+         * dotted-decimal notation described in [RFC1166]. The representation of
+         * IPv6 addresses in this document follow the forms outlined in
+         * [RFC5952].
          */
         V4("v4"), V6("v6");
         /**
@@ -167,7 +170,8 @@ public class Network extends BaseModel {
     /**
      * add a status string to status list.
      * 
-     * @param statusStr status.
+     * @param statusStr
+     *            status.
      */
     public void addStatus(String statusStr) {
         if (StringUtils.isBlank(statusStr)) {
@@ -409,6 +413,7 @@ public class Network extends BaseModel {
 
     /**
      * get parentHandle.
+     * 
      * @return parentHandle.
      */
     public String getParentHandle() {
@@ -417,7 +422,9 @@ public class Network extends BaseModel {
 
     /**
      * set parentHandle.
-     * @param parentHandle parentHandle.
+     * 
+     * @param parentHandle
+     *            parentHandle.
      */
     public void setParentHandle(String parentHandle) {
         this.parentHandle = parentHandle;

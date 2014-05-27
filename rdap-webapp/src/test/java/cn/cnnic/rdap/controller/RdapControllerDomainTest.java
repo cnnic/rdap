@@ -92,7 +92,6 @@ public class RdapControllerDomainTest extends BaseTest {
      */
     @Test
     public void testQueryNonExistDomain() throws Exception {
-        commonQueryNonExistDomain("cnnic.");
         commonQueryNonExistDomain("1cnnic.cn");
         commonQueryNonExistDomain("cnnic.com.cn");
         commonQueryNonExistDomain("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
@@ -110,6 +109,7 @@ public class RdapControllerDomainTest extends BaseTest {
         commonQueryInvalidDomain("123");
         commonQueryInvalidDomain("c nnic.cn");
         commonQueryInvalidDomain("cnnic");
+        commonQueryInvalidDomain("cnnic.");
         commonQueryInvalidDomain("");
         commonQueryInvalidDomain(" ");
         commonQueryInvalidDomain(".");

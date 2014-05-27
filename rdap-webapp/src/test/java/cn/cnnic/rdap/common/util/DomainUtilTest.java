@@ -85,9 +85,9 @@ public class DomainUtilTest {
     public void testValidateDomainNameIsValidIdna() {
         assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.cn"));
         assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.cn."));
-        assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic."));
         assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.com.cn"));
         assertTrue(DomainUtil.validateDomainNameIsValidIdna("1cnnic.cn"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("cnnic."));
         assertFalse(DomainUtil.validateDomainNameIsValidIdna(" cnnic.cn"));
         assertFalse(DomainUtil.validateDomainNameIsValidIdna("123"));
         assertFalse(DomainUtil.validateDomainNameIsValidIdna("c nnic.cn"));

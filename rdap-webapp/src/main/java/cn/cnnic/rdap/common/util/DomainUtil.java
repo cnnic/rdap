@@ -94,6 +94,9 @@ public final class DomainUtil {
             return true;
         }
         domainName = deleteLastPoint(domainName);
+        if (StringUtils.isBlank(domainName) || !domainName.contains(".")) {
+            return false;
+        }
         if (!validateDomainLength(domainName)) {
             return false;
         }
@@ -207,13 +210,13 @@ public final class DomainUtil {
         if (domain.indexOf("--") == XN_PREFIX.length()) { // '--' can't at 2th
             return false;
         }
-        String domainWithoutLastPoin = deleteLastPoint(domain);
-        if (!validateDomainLength(domainWithoutLastPoin)) {
+        String domainWithoutLastPoint = deleteLastPoint(domain);
+        if (!validateDomainLength(domainWithoutLastPoint)) {
             return false;
         }
         String ldhReg = "^(?!-)(?!.*?-$)([0-9a-zA-Z][0-9a-zA-Z-]{0,62}\\.)+"
                 + "([0-9a-zA-Z][0-9a-zA-Z-]{0,62})?$";
-        if (domain.matches(ldhReg)) {
+        if (domainWithoutLastPoint.matches(ldhReg)) {
             return true;
         }
         return false;

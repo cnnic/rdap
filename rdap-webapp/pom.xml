@@ -183,9 +183,7 @@
 						<include>**/*Test.java</include>
 					</includes>
 					<excludes>
-						<exclude>**/BaseControllerTest.java</exclude>
 						<exclude>**/BaseTest.java</exclude>
-						<exclude>**/TestUtils.java</exclude>
 					</excludes>
 
 				</configuration>

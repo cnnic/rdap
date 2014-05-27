@@ -56,7 +56,8 @@ public class BaseModel {
      */
     private Long id;
     /**
-     * handle of model.
+     * DNRs and RIRs have registry-unique identifiers that may be used to
+     * specifically reference an object instance.
      */
     private String handle;
 
