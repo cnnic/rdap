@@ -31,7 +31,7 @@
 package cn.cnnic.rdap.bean;
 
 /**
- * base query parameter bean
+ * base query parameter bean.
  * 
  * @author jiashuo
  * 

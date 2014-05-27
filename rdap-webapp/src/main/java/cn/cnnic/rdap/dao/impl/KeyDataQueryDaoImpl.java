@@ -60,9 +60,15 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
+    /**
+     * event dao.
+     */
     @Autowired
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
+    /**
+     * link dao.
+     */
     @Autowired
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
@@ -110,12 +116,12 @@ public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
 
     /**
      * query keyData, without inner objects.
-     * 
+     * @param outerObjectId outerObjectId.
      * @return keyData list.
      */
     private List<KeyData> queryWithoutInnerObjects(final Long outerObjectId) {
-        final String sql = "select * from REL_SECUREDNS_DSKEY rel,RDAP_KEYDATA keyData "
-                + " where rel.REL_ID = keyData.KEYDATA_ID "
+        final String sql = "select * from REL_SECUREDNS_DSKEY rel,RDAP_KEYDATA"
+                + " keyData where rel.REL_ID = keyData.KEYDATA_ID "
                 + " and rel.SECUREDNS_ID=? and rel.REL_DSKEY_TYPE=? ";
         List<KeyData> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {

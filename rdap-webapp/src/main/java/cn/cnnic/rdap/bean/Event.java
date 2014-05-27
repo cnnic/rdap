@@ -37,21 +37,22 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * event represents events that have occurred on an instance of an object class
+ * .
  * 
  * @author jiashuo
  * 
  */
 public class Event extends BaseModel {
     /**
-     * a string denoting the reason for the event
+     * a string denoting the reason for the event.
      */
     private String eventAction;
     /**
-     * an optional identifier denoting the actor responsible for the event
+     * an optional identifier denoting the actor responsible for the event.
      */
     private String eventActor;
     /**
-     * the time and date the event occurred,UTC
+     * the time and date the event occurred,UTC.
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Timestamp eventDate;

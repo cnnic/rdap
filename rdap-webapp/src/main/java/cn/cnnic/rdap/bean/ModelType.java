@@ -37,6 +37,9 @@ package cn.cnnic.rdap.bean;
  * 
  */
 public enum ModelType {
+    /**
+     * model type.
+     */
     DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
             "autnum"), HELP("help"), IP("ip"), EVENT("event"), LINK("link"), PUBLICID(
             "publicId"), REMARK("remark"), NOTICE("notice"), SECUREDNS(

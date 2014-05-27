@@ -155,6 +155,7 @@
 	<properties>
 		<dependency.spring.version>4.0.0.RELEASE</dependency.spring.version>
 		<mysql.client.version>5.1.6</mysql.client.version>
+		<maven.test.jvmargs>-Xmx1024m -Xms128m</maven.test.jvmargs>
 	</properties>
 	<build>
 		<finalName>rdap</finalName>
@@ -173,6 +174,22 @@
 		        <artifactId>maven-javadoc-plugin</artifactId>
 		        <version>2.9.1</version>
 		      </plugin>
+		      <plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<configuration>
+					<argLine>${maven.test.jvmargs}</argLine>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/BaseControllerTest.java</exclude>
+						<exclude>**/BaseTest.java</exclude>
+						<exclude>**/TestUtils.java</exclude>
+					</excludes>
+
+				</configuration>
+			</plugin>
     </plugins>
 	</build>
 </project>

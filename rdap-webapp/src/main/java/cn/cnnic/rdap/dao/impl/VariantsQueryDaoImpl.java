@@ -49,7 +49,7 @@ import cn.cnnic.rdap.bean.Variants;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * remark query DAO
+ * variant query DAO.
  * 
  * @author jiashuo
  * 
@@ -57,9 +57,6 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 @Repository
 public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
 
-    /**
-     * query Variants as inner objects.
-     */
     @Override
     public List<Variants> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
@@ -118,11 +115,12 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
      * 
      * @param outerObjectId
      *            object id of outer object.
-     * @return variant list
+     * @return variant list.
      */
     private List<Variant> queryWithoutInnerObjects(final Long outerObjectId) {
-        final String sql = "select * from REL_DOMAIN_VARIANT rel, RDAP_VARIANT variant "
-                + " where rel.DOMAIN_ID=? and rel.VARIANT_ID=variant.VARIANT_ID ";
+        final String sql = "select * from REL_DOMAIN_VARIANT rel, RDAP_VARIANT "
+                + " variant where rel.DOMAIN_ID=? and rel.VARIANT_ID"
+                + "=variant.VARIANT_ID ";
         List<Variant> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
@@ -167,11 +165,13 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
     }
 
     /**
-     * find
+     * find variant from list.
      * 
      * @param variantId
+     *            variantId.
      * @param variantList
-     * @return
+     *            variantList.
+     * @return variant if exist,null if not.
      */
     private Variant findVariantFromList(Long variantId,
             List<Variant> variantList) {

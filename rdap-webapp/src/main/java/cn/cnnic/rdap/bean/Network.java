@@ -77,7 +77,7 @@ public class Network extends BaseModel {
     /**
      * an array of strings indicating the state of the IP network.
      */
-    List<String> status;
+    private List<String> status;
     /**
      * entities.
      */
@@ -106,6 +106,9 @@ public class Network extends BaseModel {
      * 
      */
     public enum IpVersion {
+        /**
+         * ip version.
+         */
         V4("v4"), V6("v6");
         /**
          * a string signifying the IP protocol version of the network: "v4"
@@ -162,9 +165,9 @@ public class Network extends BaseModel {
     }
 
     /**
-     * add a status string to status list
+     * add a status string to status list.
      * 
-     * @param statusStr
+     * @param statusStr status.
      */
     public void addStatus(String statusStr) {
         if (StringUtils.isBlank(statusStr)) {
@@ -404,10 +407,18 @@ public class Network extends BaseModel {
         this.country = country;
     }
 
+    /**
+     * get parentHandle.
+     * @return parentHandle.
+     */
     public String getParentHandle() {
         return parentHandle;
     }
 
+    /**
+     * set parentHandle.
+     * @param parentHandle parentHandle.
+     */
     public void setParentHandle(String parentHandle) {
         this.parentHandle = parentHandle;
     }

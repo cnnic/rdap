@@ -84,6 +84,27 @@ public class DomainUtilTest {
     @Test
     public void testValidateDomainNameIsValidIdna() {
         assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.cn"));
+        assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.cn."));
+        assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic."));
+        assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.com.cn"));
+        assertTrue(DomainUtil.validateDomainNameIsValidIdna("1cnnic.cn"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna(" cnnic.cn"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("123"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("c nnic.cn"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("cnnic"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna(""));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna(" "));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna(null));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("."));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("a."));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna(".a"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("Σ.cn"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("@.cn"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("a@.cn"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("@a.cn"));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna("xn--55qx5d.中国"));
+        assertFalse(DomainUtil
+                .validateDomainNameIsValidIdna("xn--55qx5d.中国.cn"));
         assertTrue(DomainUtil
                 .validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg"));
         assertTrue(DomainUtil
@@ -108,7 +129,6 @@ public class DomainUtilTest {
                         .decodeAndTrim("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CE%A3%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF.bnnhg")));
         assertFalse(DomainUtil
                 .validateDomainNameIsValidIdna("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna(""));
     }
 
     /**

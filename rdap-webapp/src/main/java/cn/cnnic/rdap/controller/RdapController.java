@@ -42,7 +42,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
@@ -62,24 +61,42 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
 @Controller
 @RequestMapping("/{dot}well-known/rdap")
 public class RdapController {
-    private static Logger logger = LoggerFactory
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
             .getLogger(RdapController.class);
     /**
-     * query service
+     * query service.
      */
     @Autowired
     private QueryService queryService;
-
+    /**
+     * query parser.
+     */
     @Autowired
     private QueryParser queryParser;
-
+    /**
+     * responseDecorator.
+     */
     @Autowired
     private ResponseDecorator responseDecorator;
 
+    /**
+     * query autnum.
+     * 
+     * @param autnum
+     *            an AS Plain autonomous system number [RFC5396].
+     * @param request
+     *            HttpServletRequest.
+     * @param response
+     *            HttpServletResponse
+     * @return JSON formated result,with HTTP code.
+     */
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
             HttpServletRequest request, HttpServletResponse response) {
-        logger.info("query autnum:" + autnum);
+        LOGGER.info("query autnum:" + autnum);
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
@@ -96,15 +113,16 @@ public class RdapController {
      * query domain by domain name.
      * 
      * @param domainName
-     *            domain name.
-     * @param response
-     *            HttpServletResponse.
+     *            is a fully-qualified (relative to the root) domain name
+     *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
+     *            RIRs) or a fully-qualified domain name in a zone administered
+     *            by the server operator (for DNRs).
      * @return JSON formated result,with HTTP code.
      */
-    @RequestMapping(value = { "/domain/{domainName}" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/domain/{domainName}" }, 
+            method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryDomain(@PathVariable String domainName,
-            HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity queryDomain(@PathVariable String domainName) {
         String decodeDomain = DomainUtil.decodeAndTrim(domainName);
         String punyDomainName = decodeDomain;
         try {
@@ -129,10 +147,11 @@ public class RdapController {
 
     /**
      * other invalid query uri will response 400 error.
+     * 
+     * @return JSON formated result,with HTTP code.
      */
     @RequestMapping(value = "/**")
-    public ResponseEntity error400(HttpServletRequest request,
-            HttpServletResponse response) {
+    public ResponseEntity error400() {
         return RestResponseUtil.createResponse400();
     }
 }

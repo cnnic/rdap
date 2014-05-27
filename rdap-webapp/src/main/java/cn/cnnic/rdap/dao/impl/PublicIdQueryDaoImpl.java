@@ -53,9 +53,6 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 @Repository
 public class PublicIdQueryDaoImpl extends AbstractQueryDao<PublicId> {
 
-    /**
-     * query PublicId as inner objects.
-     */
     @Override
     public List<PublicId> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
@@ -69,11 +66,14 @@ public class PublicIdQueryDaoImpl extends AbstractQueryDao<PublicId> {
      * 
      * @param outerObjectId
      *            object id of outer object.
+     * @param outerModelType
+     *            model type.
      * @return variant list
      */
     private List<PublicId> queryWithoutInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        final String sql = "select * from REL_PUBLICID_REGISTRATION rel, RDAP_PUBLICID publicId "
+        final String sql = "select * from REL_PUBLICID_REGISTRATION rel,"
+                + " RDAP_PUBLICID publicId "
                 + " where rel.PUBLIC_ID=publicId.PUBLIC_ID "
                 + " and rel.REL_ID=? and rel.REL_OBJECT_TYPE=? ";
         List<PublicId> result = jdbcTemplate.query(

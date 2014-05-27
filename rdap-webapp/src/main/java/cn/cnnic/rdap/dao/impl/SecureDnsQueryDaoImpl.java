@@ -52,7 +52,7 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * remark query DAO
+ * secureDns query DAO.
  * 
  * @author jiashuo
  * 
@@ -72,9 +72,6 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     @Qualifier("dsDataQueryDaoImpl")
     private QueryDao<DsData> dsDataQueryDao;
 
-    /**
-     * query Variants as inner objects.
-     */
     @Override
     public List<SecureDns> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
@@ -87,6 +84,7 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
      * query and set inner objects for SecureDNS list.
      * 
      * @param secureDnsList
+     *            secureDnsList.
      */
     private void queryAndSetInnerObjects(List<SecureDns> secureDnsList) {
         if (null == secureDnsList || secureDnsList.size() == 0) {
@@ -101,6 +99,7 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
      * query and set inner objects for SecureDNS.
      * 
      * @param secureDns
+     *            secureDns.
      */
     private void queryAndSetInnerObjects(SecureDns secureDns) {
         if (null == secureDns) {
@@ -123,7 +122,8 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
      * @return SecureDNS list
      */
     private List<SecureDns> queryWithoutInnerObjects(final Long outerObjectId) {
-        final String sql = "select * from RDAP_SECUREDNS where DOMAIN_ID=? limit 1 ";
+        final String sql = "select * from RDAP_SECUREDNS where "
+                + " DOMAIN_ID=? limit 1 ";
         List<SecureDns> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(

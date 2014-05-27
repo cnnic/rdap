@@ -45,7 +45,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @JsonPropertyOrder({ "rdapConformance", "handle", "ldhName", "unicodeName",
         "variants", "nameServers", "secureDNS", "entities", "status",
-        "publicIds", "remarks", "links", "port43", "events", "network", "lang" })
+        "publicIds", "remarks", "links", "port43", "events", "network", "lang"
+        })
 public class Domain extends BaseModel {
     /**
      * representing a registry unique identifier of the domain object instance.
@@ -105,9 +106,10 @@ public class Domain extends BaseModel {
     private List<Network> network;
 
     /**
-     * add a status string to status list
+     * add a status string to status list.
      * 
      * @param statusStr
+     *            statusStr.
      */
     public void addStatus(String statusStr) {
         if (StringUtils.isBlank(statusStr)) {

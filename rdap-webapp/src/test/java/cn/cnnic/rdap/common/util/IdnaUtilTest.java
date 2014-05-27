@@ -28,34 +28,43 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.service;
+package cn.cnnic.rdap.common.util;
 
-import cn.cnnic.rdap.bean.Autnum;
-import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.QueryParam;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 /**
- * query service interface.
+ * Test for IpUtil.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryService {
+@SuppressWarnings("rawtypes")
+public class IdnaUtilTest {
     /**
-     * query domain by domain name.
+     * test isValidIdn.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return domain object.
      */
-    Domain queryDomain(QueryParam queryParam);
-
-    /**
-     * query autnm.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return autnum autnum.
-     */
-    Autnum queryAutnum(QueryParam queryParam);
+    @Test
+    public void testIsValidIdn() {
+        assertTrue(IdnaUtil.isValidIdn("cnnic.cn"));
+        assertTrue(IdnaUtil.isValidIdn("cnnic"));
+        assertTrue(IdnaUtil.isValidIdn("cnnic.com.cn"));
+        assertTrue(IdnaUtil.isValidIdn("123"));
+        assertTrue(IdnaUtil.isValidIdn("1cnnic.cn"));
+        assertFalse(IdnaUtil.isValidIdn(""));
+        assertFalse(IdnaUtil.isValidIdn(" "));
+        assertFalse(IdnaUtil.isValidIdn(null));
+        assertFalse(IdnaUtil.isValidIdn("."));
+        assertFalse(IdnaUtil.isValidIdn("Σ.cn"));
+        assertFalse(IdnaUtil.isValidIdn("@.cn"));
+        assertFalse(IdnaUtil.isValidIdn("a@.cn"));
+        assertFalse(IdnaUtil.isValidIdn("@a.cn"));
+        assertFalse(IdnaUtil.isValidIdn("cnnic."));
+        assertFalse(IdnaUtil.isValidIdn("cnnic.cn."));
+        assertFalse(IdnaUtil.isValidIdn("xn--55qx5d.中国"));
+        assertFalse(IdnaUtil.isValidIdn("xn--55qx5d.中国.cn"));
+    }
 }

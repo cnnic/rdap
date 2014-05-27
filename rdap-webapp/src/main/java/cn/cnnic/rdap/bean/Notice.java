@@ -31,7 +31,7 @@
 package cn.cnnic.rdap.bean;
 
 /**
- * denotes information about the service providing RDAP information
+ * denotes information about the service providing RDAP information.
  * 
  * @author jiashuo
  * 

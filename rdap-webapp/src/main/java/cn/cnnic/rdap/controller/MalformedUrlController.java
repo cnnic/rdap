@@ -30,9 +30,6 @@
  */
 package cn.cnnic.rdap.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,11 +48,12 @@ public class MalformedUrlController {
 
     /**
      * handle malformed url.
+     * 
+     * @return JSON formated result,with HTTP code.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = "/**", method = RequestMethod.GET)
-    public ResponseEntity execute(HttpServletRequest request,
-            HttpServletResponse response) {
+    public ResponseEntity execute() {
         return RestResponseUtil.createResponse400();
     }
 }

@@ -44,10 +44,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.Event;
@@ -62,34 +60,49 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * domain query DAO
+ * domain query DAO.
  * 
  * @author jiashuo
  * 
  */
 @Repository
 public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
+    /**
+     * variant dao.
+     */
     @Autowired
     @Qualifier("variantsQueryDaoImpl")
     private QueryDao<Variants> variantsQueryDao;
+    /**
+     * secureDns dao.
+     */
     @Autowired
     @Qualifier("secureDnsQueryDaoImpl")
     private QueryDao<SecureDns> secureDnsQueryDao;
+    /**
+     * publicId dao.
+     */
     @Autowired
     private QueryDao<PublicId> publicIdQueryDao;
+    /**
+     * remark dao.
+     */
     @Autowired
     @Qualifier("remarkQueryDaoImpl")
     private QueryDao<Remark> remarkQueryDao;
+    /**
+     * link dao.
+     */
     @Autowired
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
+    /**
+     * event dao.
+     */
     @Autowired
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
 
-    /**
-     * query domain by domain name.
-     */
     @Override
     public Domain query(QueryParam queryParam) {
         Domain domain = queryWithoutInnerObjects(queryParam);
@@ -142,7 +155,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         final String domainName = domainQueryParam.getQ();
         final String punyName = domainQueryParam.getPunyName();
         final String sql = "select * from RDAP_DOMAIN domain "
-                + " left outer join RDAP_DOMAIN_STATUS status on domain.DOMAIN_ID = status.DOMAIN_ID "
+                + " left outer join RDAP_DOMAIN_STATUS status "
+                + " on domain.DOMAIN_ID = status.DOMAIN_ID "
                 + " where LDH_NAME= ? or UNICODE_NAME= ?";
         List<Domain> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
@@ -161,7 +175,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * domain ResultSetExtractor, extract data from ResultSet
+     * domain ResultSetExtractor, extract data from ResultSet.
      * 
      * @author jiashuo
      * 

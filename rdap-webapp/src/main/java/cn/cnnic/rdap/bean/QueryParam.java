@@ -31,33 +31,44 @@
 package cn.cnnic.rdap.bean;
 
 /**
- * base query parameter bean
+ * base query parameter bean.
  * 
  * @author jiashuo
  * 
  */
 public class QueryParam {
-	/**
-	 * primitive query parameter
-	 */
-	private String q;
+    /**
+     * primitive query parameter.
+     */
+    private String q;
 
-	public String getQ() {
-		return q;
-	}
+    /**
+     * get q.
+     * 
+     * @return q.
+     */
+    public String getQ() {
+        return q;
+    }
 
-	public void setQ(String q) {
-		this.q = q;
-	}
+    /**
+     * set q.
+     * 
+     * @param q
+     *            q.
+     */
+    public void setQ(String q) {
+        this.q = q;
+    }
 
-	/**
-	 * default construction
-	 * 
-	 * @param q
-	 *            query parameter
-	 */
-	public QueryParam(String q) {
-		super();
-		this.q = q;
-	}
+    /**
+     * default construction.
+     * 
+     * @param q
+     *            query parameter.
+     */
+    public QueryParam(String q) {
+        super();
+        this.q = q;
+    }
 }
