@@ -44,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "handle", "ldhName", "unicodeName",
+@JsonPropertyOrder({ "rdapConformance","notices", "handle", "ldhName", "unicodeName",
         "variants", "nameServers", "secureDNS", "entities", "status",
         "publicIds", "remarks", "links", "port43", "events", "network", "lang"
         })

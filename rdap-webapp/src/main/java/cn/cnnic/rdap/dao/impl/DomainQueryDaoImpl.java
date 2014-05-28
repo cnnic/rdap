@@ -51,12 +51,15 @@ import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.Network;
+import cn.cnnic.rdap.bean.Notice;
 import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.bean.SecureDns;
 import cn.cnnic.rdap.bean.Variants;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
+import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
@@ -67,6 +70,13 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
+    /**
+     * notice dao.
+     */
+    @Autowired
+    @Qualifier("noticeDaoImpl")
+    private NoticeDao noticeDao;
+
     /**
      * variant dao.
      */
@@ -102,6 +112,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     @Autowired
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
+    /**
+     * network dao.
+     */
+    @Autowired
+    private QueryDao<Network> networkQueryDao;
 
     @Override
     public Domain query(QueryParam queryParam) {
@@ -121,6 +136,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return;
         }
         Long domainId = domain.getId();
+        List<Notice> notices = noticeDao.getAllNotices();
+        domain.setNotices(notices);
         List<Variants> varients = variantsQueryDao.queryAsInnerObjects(
                 domainId, ModelType.DOMAIN);
         domain.setVarients(varients);
@@ -141,6 +158,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Event> events = eventQueryDao.queryAsInnerObjects(domainId,
                 ModelType.DOMAIN);
         domain.setEvents(events);
+        List<Network> networks = networkQueryDao.queryAsInnerObjects(domainId,
+                ModelType.DOMAIN);
+        domain.setNetwork(networks);
     }
 
     /**
