@@ -42,7 +42,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author jiashuo
  * 
  */
-@JsonIgnoreProperties(value = { "relations", "idnTable" })
+@JsonIgnoreProperties(value = { "id", "objectType", "handle", "lang",
+        "relations", "idnTable", "sortedRelationStringList" })
 public class Variant extends BaseModel {
     /**
      * relation type.

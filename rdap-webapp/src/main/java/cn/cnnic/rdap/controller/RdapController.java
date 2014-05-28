@@ -33,6 +33,7 @@ package cn.cnnic.rdap.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,11 +120,11 @@ public class RdapController {
      *            by the server operator (for DNRs).
      * @return JSON formated result,with HTTP code.
      */
-    @RequestMapping(value = { "/domain/{domainName}" }, 
-            method = RequestMethod.GET)
+    @RequestMapping(value = { "/domain/{domainName}" }, method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryDomain(@PathVariable String domainName) {
-        String decodeDomain = DomainUtil.decodeAndTrim(domainName);
+        String decodeDomain = DomainUtil
+                .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
         String punyDomainName = decodeDomain;
         try {
             // long lable exception
@@ -135,7 +136,7 @@ public class RdapController {
             return RestResponseUtil.createResponse400();
         }
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
-        decodeDomain = DomainUtil.getLowerCaseByLabel(decodeDomain);
+        decodeDomain = StringUtils.lowerCase(decodeDomain);
         Domain domain = queryService.queryDomain(queryParser
                 .parseDomainQueryParam(decodeDomain, punyDomainName));
         if (null != domain) {

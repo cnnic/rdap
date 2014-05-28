@@ -122,7 +122,8 @@ public final class DomainUtil {
      * 
      * @param domainName
      *            domain name.
-     * @return true if is, false if not.
+     * @return true if domain is ipv4 arpa and label is valid; return false if
+     *         not.
      */
     private static boolean isIpV4ArpaTldAndLabelIsValid(String domainName) {
         if (StringUtils.isBlank(domainName)) {
@@ -145,7 +146,8 @@ public final class DomainUtil {
      * 
      * @param domainName
      *            domain name.
-     * @return true if is, false if not.
+     * @return true if domain is ipv6 arpa and label is valid; return false if
+     *         not.
      */
     private static boolean isIpV6ArpaTldAndLabelIsValid(String domainName) {
         if (StringUtils.isBlank(domainName)) {
@@ -169,7 +171,7 @@ public final class DomainUtil {
      * validate domain puny name is valid idna.
      * 
      * @param domainName
-     *            domain name.
+     *            domain name,ASCII char MUST in lower case.
      * @return true if is valid idna,false if not.
      */
     public static boolean validateDomainNameIsValidIdna(String domainName) {
@@ -179,7 +181,7 @@ public final class DomainUtil {
         if (!isArpaTldAndLabelIsValid(domainName)) {
             return false;
         }
-        if (!domainName.startsWith(ACE_PREFIX) && isLdh(domainName)) {
+        if (isLdh(domainName)) {
             return true;
         }
         domainName = deleteLastPoint(domainName);
@@ -250,19 +252,31 @@ public final class DomainUtil {
     }
 
     /**
-     * decode and trim string.
+     * decode and trim string,and replace ASCII char to lower case.
      * 
      * @param str
      *            string.
-     * @return str after decode and trim.
+     * @return str.
      */
-    public static String decodeAndTrim(String str) {
+    public static String decodeAndTrimAndReplaceAsciiToLowercase(String str) {
         if (StringUtils.isBlank(str)) {
             return StringUtils.trim(str);
         }
         str = urlDecode(str);
         str = StringUtils.trim(str);
-        return str;
+        // replace all ASCII char to lower case.
+        StringBuffer asciiLowerCasedSb = new StringBuffer();
+        for (int i = 0; i < str.length(); i++) {
+            int c = str.charAt(i);
+            char charVal = str.charAt(i);
+            if (c <= MAX_ASCII_CODE) {
+                asciiLowerCasedSb.append(StringUtils.lowerCase(String
+                        .valueOf(charVal)));
+            } else {
+                asciiLowerCasedSb.append(String.valueOf(charVal));
+            }
+        }
+        return asciiLowerCasedSb.toString();
     }
 
     /**
@@ -294,9 +308,6 @@ public final class DomainUtil {
      */
     private static boolean isLdh(String domain) {
         if (StringUtils.isBlank(domain)) {
-            return false;
-        }
-        if (domain.indexOf("--") == XN_PREFIX.length()) { // '--' can't at 2th
             return false;
         }
         String domainWithoutLastPoint = deleteLastPoint(domain);
