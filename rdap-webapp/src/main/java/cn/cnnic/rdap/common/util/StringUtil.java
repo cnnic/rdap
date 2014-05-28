@@ -60,13 +60,13 @@ public final class StringUtil {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(StringUtil.class);
     /**
-     * UTF8 ncoding.
+     * UTF8 encoding.
      */
     public static final String CHAR_SET_UTF8 = "UTF-8";
     /**
-     * iso8859 ncoding.
+     * iso8859-1 encoding.
      */
-    public static final String CHAR_SET_ISO8859 = "iso8859-1";
+    public static final String CHAR_SET_ISO8859 = "ISO8859-1";
 
     /**
      * encoded url with UTF-8 encoding. This will escape protocol(eg:'http://')
