@@ -31,6 +31,7 @@
 package cn.cnnic.rdap.dao;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -144,5 +145,25 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
             LOGGER.error("error timestamp format.");
             return null;
         }
+    }
+    /**
+     * get integer from ResultSet.rs.getInt()will return 0 for null value.
+     * 
+     * @param rs
+     *            ResultSet.
+     * @param columnName
+     *            column name.
+     * @return integer if value is not blank, null if blank.
+     * @throws SQLException
+     *             SQLException
+     */
+    protected Integer getIntegerFromRs(ResultSet rs, String columnName)
+            throws SQLException {
+        String str = rs.getString(columnName);
+        Integer intVal = null;
+        if (StringUtils.isNotBlank(str)) {
+            intVal = Integer.valueOf(str);
+        }
+        return intVal;
     }
 }

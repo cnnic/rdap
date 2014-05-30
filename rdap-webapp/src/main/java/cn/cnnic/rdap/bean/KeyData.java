@@ -43,12 +43,12 @@ public class KeyData extends BaseModel {
      * an integer representing the flags field value in the DNSKEY record
      * [RFC4034] in presentation format.
      */
-    private Integer flags;
+    private Integer flags = null;
     /**
      * an integer representation of the protocol field value of the DNSKEY
      * record [RFC4034] in presentation format.
      */
-    private Integer protocol;
+    private Integer protocol = null;
     /**
      * a string representation of the public key in the DNSKEY record [RFC4034]
      * in presentation format.
@@ -58,7 +58,7 @@ public class KeyData extends BaseModel {
      * an integer as specified by the algorithm field of a DNSKEY record as
      * specified by RFC 4034 [RFC4034] in presentation format.
      */
-    private Integer algorithm;
+    private Integer algorithm = null;
     /**
      * events.
      */

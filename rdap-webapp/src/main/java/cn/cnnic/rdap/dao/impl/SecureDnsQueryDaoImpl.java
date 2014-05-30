@@ -37,6 +37,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -154,10 +155,12 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
                 secureDns.setZoneSigned(rs.getBoolean("ZONE_SIGNED"));
                 secureDns.setDelegationSigned(rs
                         .getBoolean("DELEGATION_SIGNED"));
-                secureDns.setMaxSigLife(rs.getInt("MAX_SIGLIFE"));
+                Integer maxSigLifeIntVale = getIntegerFromRs(rs, "MAX_SIGLIFE");
+                secureDns.setMaxSigLife(maxSigLifeIntVale);
                 result.add(secureDns);
             }
             return result;
         }
+
     }
 }

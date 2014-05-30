@@ -86,7 +86,7 @@ public class SecureDns extends BaseModel {
      * representing the signature life time in seconds to be used when creating
      * the RRSIG DS record in the parent zone [RFC5910].
      */
-    private Integer maxSigLife;
+    private Integer maxSigLife = null;
     /**
      * dsData.
      */

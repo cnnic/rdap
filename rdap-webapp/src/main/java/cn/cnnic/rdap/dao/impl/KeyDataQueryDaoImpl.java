@@ -151,10 +151,10 @@ public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
             while (rs.next()) {
                 KeyData keyData = new KeyData();
                 keyData.setId(rs.getLong("KEYDATA_ID"));
-                keyData.setAlgorithm(rs.getInt("ALGORITHM"));
+                keyData.setAlgorithm(getIntegerFromRs(rs, "ALGORITHM"));
                 keyData.setPublicKey(rs.getString("PUBLIC_KEY"));
-                keyData.setFlags(rs.getInt("FLAGS"));
-                keyData.setProtocol(rs.getInt("PROTOCOL"));
+                keyData.setFlags(getIntegerFromRs(rs, "FLAGS"));
+                keyData.setProtocol(getIntegerFromRs(rs, "PROTOCOL"));
                 result.add(keyData);
             }
             return result;

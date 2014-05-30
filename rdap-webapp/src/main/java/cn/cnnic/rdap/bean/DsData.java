@@ -43,12 +43,12 @@ public class DsData extends BaseModel {
      * an integer as specified by the key tag field of a DNS DS record as
      * specified by RFC 4034 RFC 4034 [RFC4034] in presentation format.
      */
-    private Integer keyTag;
+    private Integer keyTag = null;
     /**
      * an integer as specified by the algorithm field of a DNS DS record as
      * specified by RFC 4034 in presentation format.
      */
-    private Integer algorithm;
+    private Integer algorithm = null;
     /**
      * a string as specified by the digest field of a DNS DS record as specified
      * by RFC 4034 in presentation format.
@@ -58,7 +58,7 @@ public class DsData extends BaseModel {
      * an integer as specified by the digest type field of a DNS DS record as
      * specified by RFC 4034 in presentation format.
      */
-    private Integer digestType;
+    private Integer digestType = null;
     /**
      * events.
      */

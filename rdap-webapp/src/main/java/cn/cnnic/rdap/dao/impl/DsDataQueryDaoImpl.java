@@ -151,10 +151,10 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
             while (rs.next()) {
                 DsData dsData = new DsData();
                 dsData.setId(rs.getLong("DSDATA_ID"));
-                dsData.setAlgorithm(rs.getInt("ALGORITHM"));
+                dsData.setAlgorithm(getIntegerFromRs(rs, "ALGORITHM"));
                 dsData.setDigest(rs.getString("DIGEST"));
-                dsData.setDigestType(rs.getInt("DIGEST_TYPE"));
-                dsData.setKeyTag(rs.getInt("KEY_TAG"));
+                dsData.setDigestType(getIntegerFromRs(rs, "DIGEST_TYPE"));
+                dsData.setKeyTag(getIntegerFromRs(rs, "KEY_TAG"));
                 result.add(dsData);
             }
             return result;
