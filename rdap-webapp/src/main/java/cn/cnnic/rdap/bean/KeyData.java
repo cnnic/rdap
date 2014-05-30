@@ -43,12 +43,12 @@ public class KeyData extends BaseModel {
      * an integer representing the flags field value in the DNSKEY record
      * [RFC4034] in presentation format.
      */
-    private int flags;
+    private Integer flags;
     /**
      * an integer representation of the protocol field value of the DNSKEY
      * record [RFC4034] in presentation format.
      */
-    private int protocol;
+    private Integer protocol;
     /**
      * a string representation of the public key in the DNSKEY record [RFC4034]
      * in presentation format.
@@ -58,7 +58,7 @@ public class KeyData extends BaseModel {
      * an integer as specified by the algorithm field of a DNSKEY record as
      * specified by RFC 4034 [RFC4034] in presentation format.
      */
-    private int algorithm;
+    private Integer algorithm;
     /**
      * events.
      */
@@ -73,7 +73,7 @@ public class KeyData extends BaseModel {
      * 
      * @return flags.
      */
-    public int getFlags() {
+    public Integer getFlags() {
         return flags;
     }
 
@@ -83,7 +83,7 @@ public class KeyData extends BaseModel {
      * @param flags
      *            flags.
      */
-    public void setFlags(int flags) {
+    public void setFlags(Integer flags) {
         this.flags = flags;
     }
 
@@ -92,7 +92,7 @@ public class KeyData extends BaseModel {
      * 
      * @return protocol.
      */
-    public int getProtocol() {
+    public Integer getProtocol() {
         return protocol;
     }
 
@@ -102,7 +102,7 @@ public class KeyData extends BaseModel {
      * @param protocol
      *            protocol.
      */
-    public void setProtocol(int protocol) {
+    public void setProtocol(Integer protocol) {
         this.protocol = protocol;
     }
 
@@ -130,7 +130,7 @@ public class KeyData extends BaseModel {
      * 
      * @return algorithm.
      */
-    public int getAlgorithm() {
+    public Integer getAlgorithm() {
         return algorithm;
     }
 
@@ -140,7 +140,7 @@ public class KeyData extends BaseModel {
      * @param algorithm
      *            algorithm.
      */
-    public void setAlgorithm(int algorithm) {
+    public void setAlgorithm(Integer algorithm) {
         this.algorithm = algorithm;
     }
 

@@ -72,11 +72,11 @@ public class DsDataQueryDaoTest extends BaseTest {
         assertEquals(dsDataList.size(), 1);
         DsData dsData = dsDataList.get(0);
         assertNotNull(dsData);
-        assertEquals(dsData.getAlgorithm(), 1);
+        assertEquals(dsData.getAlgorithm().intValue(), 1);
         assertEquals(dsData.getDigest(),
                 "D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A");
         assertEquals(dsData.getDigestType(), 1);
-        assertEquals(dsData.getKeyTag(), 1);
+        assertEquals(dsData.getKeyTag().intValue(), 1);
         // link
         List<Link> links = dsData.getLinks();
         assertNotNull(links);

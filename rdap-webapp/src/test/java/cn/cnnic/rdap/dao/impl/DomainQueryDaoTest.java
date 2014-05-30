@@ -155,7 +155,7 @@ public class DomainQueryDaoTest extends BaseTest {
         SecureDns secureDns = domain.getSecureDns();
         assertNotNull(secureDns);
         assertNotNull(secureDns);
-        assertEquals(1, secureDns.getMaxSigLife());
+        assertEquals(1, secureDns.getMaxSigLife().intValue());
         assertEquals(true, secureDns.isDelegationSigned());
         assertEquals(true, secureDns.isZoneSigned());
         // dsData
@@ -164,24 +164,24 @@ public class DomainQueryDaoTest extends BaseTest {
         assertEquals(1, dsDataList.size());
         DsData dsData = dsDataList.get(0);
         assertNotNull(dsData);
-        assertEquals(1, dsData.getAlgorithm());
+        assertEquals(1, dsData.getAlgorithm().intValue());
         assertEquals(
                 "D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A",
                 dsData.getDigest());
         assertEquals(1, dsData.getDigestType());
-        assertEquals(1, dsData.getKeyTag());
+        assertEquals(1, dsData.getKeyTag().intValue());
         // keyData
         List<KeyData> keyDataList = secureDns.getKeyData();
         assertNotNull(keyDataList);
         assertEquals(1, keyDataList.size());
         KeyData keyData = keyDataList.get(0);
         assertNotNull(keyData);
-        assertEquals(1, keyData.getAlgorithm());
+        assertEquals(1, keyData.getAlgorithm().intValue());
         assertEquals(
                 "D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A",
                 keyData.getPublicKey());
-        assertEquals(1, keyData.getProtocol());
-        assertEquals(1, keyData.getFlags());
+        assertEquals(1, keyData.getProtocol().intValue());
+        assertEquals(1, keyData.getFlags().intValue());
     }
 
     /**

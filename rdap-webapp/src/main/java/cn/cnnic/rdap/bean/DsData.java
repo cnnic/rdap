@@ -43,12 +43,12 @@ public class DsData extends BaseModel {
      * an integer as specified by the key tag field of a DNS DS record as
      * specified by RFC 4034 RFC 4034 [RFC4034] in presentation format.
      */
-    private int keyTag;
+    private Integer keyTag;
     /**
      * an integer as specified by the algorithm field of a DNS DS record as
      * specified by RFC 4034 in presentation format.
      */
-    private int algorithm;
+    private Integer algorithm;
     /**
      * a string as specified by the digest field of a DNS DS record as specified
      * by RFC 4034 in presentation format.
@@ -58,7 +58,7 @@ public class DsData extends BaseModel {
      * an integer as specified by the digest type field of a DNS DS record as
      * specified by RFC 4034 in presentation format.
      */
-    private int digestType;
+    private Integer digestType;
     /**
      * events.
      */
@@ -73,7 +73,7 @@ public class DsData extends BaseModel {
      * 
      * @return keyTag.
      */
-    public int getKeyTag() {
+    public Integer getKeyTag() {
         return keyTag;
     }
 
@@ -83,7 +83,7 @@ public class DsData extends BaseModel {
      * @param keyTag
      *            keyTag.
      */
-    public void setKeyTag(int keyTag) {
+    public void setKeyTag(Integer keyTag) {
         this.keyTag = keyTag;
     }
 
@@ -92,7 +92,7 @@ public class DsData extends BaseModel {
      * 
      * @return algorithm.
      */
-    public int getAlgorithm() {
+    public Integer getAlgorithm() {
         return algorithm;
     }
 
@@ -102,7 +102,7 @@ public class DsData extends BaseModel {
      * @param algorithm
      *            algorithm.
      */
-    public void setAlgorithm(int algorithm) {
+    public void setAlgorithm(Integer algorithm) {
         this.algorithm = algorithm;
     }
 

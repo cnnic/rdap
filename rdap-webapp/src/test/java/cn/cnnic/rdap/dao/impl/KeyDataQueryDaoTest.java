@@ -72,11 +72,11 @@ public class KeyDataQueryDaoTest extends BaseTest {
         assertEquals(keyDataList.size(), 1);
         KeyData keyData = keyDataList.get(0);
         assertNotNull(keyData);
-        assertEquals(keyData.getAlgorithm(), 1);
+        assertEquals(keyData.getAlgorithm().intValue(), 1);
         assertEquals(keyData.getPublicKey(),
                 "D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A");
-        assertEquals(keyData.getProtocol(), 1);
-        assertEquals(keyData.getFlags(), 1);
+        assertEquals(keyData.getProtocol().intValue(), 1);
+        assertEquals(keyData.getFlags().intValue(), 1);
         // link
         List<Link> links = keyData.getLinks();
         assertNotNull(links);
