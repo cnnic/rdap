@@ -72,6 +72,28 @@ public class BaseModel {
     private List<Notice> notices;
 
     /**
+     * find object from list by id.
+     * 
+     * @param baseModelObjects
+     *            ModelObject list.
+     * @param id
+     *            id.
+     * @return model object if find, null if not.
+     */
+    public static BaseModel findObjectFromListById(
+            List<? extends BaseModel> baseModelObjects, Long id) {
+        if (null == id || null == baseModelObjects) {
+            return null;
+        }
+        for (BaseModel modelObject : baseModelObjects) {
+            if (id.equals(modelObject.getId())) {
+                return modelObject;
+            }
+        }
+        return null;
+    }
+
+    /**
      * get model type, value is simple name of class.
      * 
      * @return simple name of class

@@ -76,6 +76,11 @@ public final class DomainUtil {
     public static final int MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT = 3;
 
     /**
+     * max domain label.
+     */
+    private static final int MAX_DOMAIN_LABEL = 126;
+
+    /**
      * arpa domain suffix.
      */
     private static final String ARPA_SUFFIX = ".arpa";
@@ -181,16 +186,33 @@ public final class DomainUtil {
         if (!isArpaTldAndLabelIsValid(domainName)) {
             return false;
         }
-        if (isLdh(domainName)) {
-            return true;
+        String punyDomainName = domainName;
+        try {
+            // long lable exception
+            punyDomainName = geneDomainPunyName(domainName);
+        } catch (Exception e) {
+            LOGGER.error("generate puny name error:" + e.getMessage());
+            return false;
+        }
+        String domainWithoutLastPoint = deleteLastPoint(punyDomainName);
+        String[] splits = StringUtils.split(domainWithoutLastPoint, ".");
+        if (splits.length > MAX_DOMAIN_LABEL) {
+            return false;
+        }
+        if (domainName.equals(punyDomainName)) {//all ASCII lable
+            if (isLdh(domainName)) {
+                return true;
+            }else{
+                return false;
+            }
         }
         domainName = deleteLastPoint(domainName);
         if (StringUtils.isBlank(domainName) || !domainName.contains(".")) {
             return false;
         }
-        if (!validateDomainLength(domainName)) {
-            return false;
-        }
+        // if (!validateDomainLength(domainName)) {
+        // return false;
+        // }
         return IdnaUtil.isValidIdn(domainName);
     }
 
@@ -314,8 +336,16 @@ public final class DomainUtil {
         if (!validateDomainLength(domainWithoutLastPoint)) {
             return false;
         }
+        String[] splits = StringUtils.split(domainWithoutLastPoint, ".");
+        String hyphen = "-";
+        for (String split : splits) {
+            if (StringUtils.startsWith(split, hyphen)
+                    || StringUtils.endsWith(split, hyphen)) {
+                return false;
+            }
+        }
         String ldhReg = "^(?!-)(?!.*?-$)([0-9a-zA-Z][0-9a-zA-Z-]{0,62}\\.)+"
-                + "([0-9a-zA-Z][0-9a-zA-Z-]{0,62})?$";
+                + "[0-9a-zA-Z][0-9a-zA-Z-]{0,62}$";
         if (domainWithoutLastPoint.matches(ldhReg)) {
             return true;
         }

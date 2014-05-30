@@ -28,58 +28,47 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.bean;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import org.junit.Test;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * test for BaseModel.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
-    /**
-     * query model object.
-     * 
-     * @param queryParam
-     *            query parameter.
-     * @return object, using base class BaseObject.
-     */
-    T query(QueryParam queryParam);
+public class BaseModelTest {
 
     /**
-     * * query model list, as nested models of other Model.
-     * 
-     * @param outerModelId
-     *            id of outer object
-     * @param outerModelType
-     *            model type of outer object
-     * @return object list.
+     * test findObjectFromListById.
      */
-    List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
-
-    /**
-     * search model list.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return object list.
-     */
-    List<T> search(QueryParam queryParam);
-
-    /**
-     * get search count.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return queryParam.
-     */
-    Long searchCount(QueryParam queryParam);
-
+    @Test
+    public void testFindObjectFromListById() {
+        List<Domain> domains = new ArrayList<Domain>();
+        Domain domain = new Domain();
+        domain.setId(1L);
+        domains.add(domain);
+        domain = new Domain();
+        domain.setId(2L);
+        domains.add(domain);
+        BaseModel object = BaseModel.findObjectFromListById(domains, 1L);
+        assertNotNull(object);
+        object = BaseModel.findObjectFromListById(domains, 2L);
+        assertNotNull(object);
+        object = BaseModel.findObjectFromListById(domains, 3L);
+        assertNull(object);
+        object = BaseModel.findObjectFromListById(domains, null);
+        assertNull(object);
+        object = BaseModel.findObjectFromListById(null, 1L);
+        assertNull(object);
+        object = BaseModel.findObjectFromListById(null, null);
+        assertNull(object);
+    }
 }

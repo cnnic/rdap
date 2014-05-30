@@ -12,8 +12,6 @@
            				   http://www.springframework.org/schema/aop 
            				   http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<context:property-placeholder location="classpath:jdbc.properties" />
-
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass">

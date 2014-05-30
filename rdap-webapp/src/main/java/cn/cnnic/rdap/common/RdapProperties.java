@@ -28,58 +28,38 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.dao;
-
-import java.util.List;
-
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+package cn.cnnic.rdap.common;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * static properties,load from property file,by spring.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
-    /**
-     * query model object.
-     * 
-     * @param queryParam
-     *            query parameter.
-     * @return object, using base class BaseObject.
-     */
-    T query(QueryParam queryParam);
+public class RdapProperties {
 
     /**
-     * * query model list, as nested models of other Model.
-     * 
-     * @param outerModelId
-     *            id of outer object
-     * @param outerModelType
-     *            model type of outer object
-     * @return object list.
+     * max size for search.
      */
-    List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
+    private static Long maxsizeSearch;
 
     /**
-     * search model list.
+     * get maxsizeSearch.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return object list.
+     * @return maxsizeSearch
      */
-    List<T> search(QueryParam queryParam);
+    public static Long getMaxsizeSearch() {
+        return maxsizeSearch;
+    }
 
     /**
-     * get search count.
+     * set maxsizeSearch.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return queryParam.
+     * @param maxsizeSearch
+     *            maxsizeSearch.
      */
-    Long searchCount(QueryParam queryParam);
+    public void setMaxsizeSearch(Long maxsizeSearch) {
+        RdapProperties.maxsizeSearch = maxsizeSearch;
+    }
 
 }

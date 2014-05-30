@@ -28,58 +28,24 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.service;
 
-import java.util.List;
-
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.DomainSearch;
 import cn.cnnic.rdap.bean.QueryParam;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * search service interface.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+public interface SearchService {
     /**
-     * query model object.
-     * 
-     * @param queryParam
-     *            query parameter.
-     * @return object, using base class BaseObject.
-     */
-    T query(QueryParam queryParam);
-
-    /**
-     * * query model list, as nested models of other Model.
-     * 
-     * @param outerModelId
-     *            id of outer object
-     * @param outerModelType
-     *            model type of outer object
-     * @return object list.
-     */
-    List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
-
-    /**
-     * search model list.
+     * search domain by domain name.
      * 
      * @param queryParam
      *            queryParam.
-     * @return object list.
+     * @return domain list.
      */
-    List<T> search(QueryParam queryParam);
-
-    /**
-     * get search count.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return queryParam.
-     */
-    Long searchCount(QueryParam queryParam);
-
+    DomainSearch searchDomain(QueryParam queryParam);
 }

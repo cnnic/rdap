@@ -44,10 +44,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({ "rdapConformance","notices", "handle", "ldhName", "unicodeName",
-        "variants", "nameServers", "secureDNS", "entities", "status",
-        "publicIds", "remarks", "links", "port43", "events", "network", "lang"
-        })
+@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "ldhName",
+        "unicodeName", "variants", "nameServers", "secureDNS", "entities",
+        "status", "publicIds", "remarks", "links", "port43", "events",
+        "network", "lang" })
 public class Domain extends BaseModel {
     /**
      * representing a registry unique identifier of the domain object instance.

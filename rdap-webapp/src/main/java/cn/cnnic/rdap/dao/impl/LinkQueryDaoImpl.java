@@ -72,7 +72,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
             final ModelType outerModelType) {
         List<Link> linksWithHreflang = queryLinkWithHreflang(outerObjectId,
                 outerModelType);
-        List<Long> linksIds = getLinksIds(linksWithHreflang);
+        List<Long> linksIds = getModelIds(linksWithHreflang);
         List<LinkTitle> linksTitle = queryLinksTitle(linksIds);
         List<Link> result = setTitleToLinks(linksWithHreflang, linksTitle);
         return result;
@@ -135,24 +135,6 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
             }
         }
         return null;
-    }
-
-    /**
-     * get all link id from link list
-     * 
-     * @param links
-     *            link list
-     * @return link id list
-     */
-    private List<Long> getLinksIds(List<Link> links) {
-        List<Long> result = new ArrayList<Long>();
-        if (null == links) {
-            return result;
-        }
-        for (Link link : links) {
-            result.add(link.getId());
-        }
-        return result;
     }
 
     /**

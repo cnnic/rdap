@@ -120,4 +120,14 @@ public class RestResponseUtilTest extends BaseTest {
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    /**
+     * test create ResponseEntity with HTTP code 422
+     */
+    @Test
+    public void testCreateResponse422() {
+        ResponseEntity result = RestResponseUtil.createResponse422();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 }

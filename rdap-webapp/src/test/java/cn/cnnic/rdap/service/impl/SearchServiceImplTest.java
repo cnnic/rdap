@@ -28,58 +28,44 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.service.impl;
 
-import java.util.List;
+import static org.junit.Assert.assertNotNull;
 
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.DomainSearch;
+import cn.cnnic.rdap.controller.support.QueryParser;
+import cn.cnnic.rdap.service.SearchService;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * Test for SearchService.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
-    /**
-     * query model object.
-     * 
-     * @param queryParam
-     *            query parameter.
-     * @return object, using base class BaseObject.
-     */
-    T query(QueryParam queryParam);
+@SuppressWarnings("rawtypes")
+public class SearchServiceImplTest extends BaseTest {
+    @Autowired
+    private QueryParser queryParser;
+    @Autowired
+    private SearchService searchService;
 
     /**
-     * * query model list, as nested models of other Model.
-     * 
-     * @param outerModelId
-     *            id of outer object
-     * @param outerModelType
-     *            model type of outer object
-     * @return object list.
+     * test search domain.
      */
-    List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
-
-    /**
-     * search model list.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return object list.
-     */
-    List<T> search(QueryParam queryParam);
-
-    /**
-     * get search count.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return queryParam.
-     */
-    Long searchCount(QueryParam queryParam);
-
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
+    public void testQueryDomain() {
+        String domainName = "cnnic*";
+        DomainSearch domainSearch = searchService.searchDomain(queryParser
+                .parseDomainQueryParam(domainName, domainName));
+        assertNotNull(domainSearch);
+    }
 }

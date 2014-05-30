@@ -106,9 +106,8 @@ public class DomainQueryDaoTest extends BaseTest {
         assertNotNull(event);
         assertEquals(event.getEventAction(), "action1");
         assertEquals(event.getEventActor(), "jiashuo");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        assertEquals(dateFormat.format(event.getEventDate()),
-                "2014-01-01 00:01:01");
+        // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        assertEquals(event.getEventDate(), "2014-01-01T00:01:01Z");
         // links
         List<Link> domainLinks = domain.getLinks();
         assertNotNull(domainLinks);
@@ -184,12 +183,12 @@ public class DomainQueryDaoTest extends BaseTest {
         assertEquals(1, keyData.getProtocol());
         assertEquals(1, keyData.getFlags());
     }
-    
+
     /**
      * test query exist domain.
      */
     @Test
-//    @DatabaseTearDown("teardown.xml")
+    // @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("domain.xml")
     public void testQueryExistUnicodeDomain() {
         String unicodeName = "清华大学.中国";

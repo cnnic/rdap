@@ -34,6 +34,8 @@ package cn.cnnic.rdap.common.util;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -46,6 +48,10 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public final class StringUtil {
+    /**
+     * search wildcard.
+     */
+    public static final String ASTERISK = "*";
 
     /**
      * default constructor.
@@ -91,5 +97,19 @@ public final class StringUtil {
             LOGGER.error(e.getMessage());
         }
         return result;
+    }
+
+    /**
+     * get normalization format string.
+     * 
+     * @param str
+     *            :string.
+     * @return string.
+     */
+    public static String getNormalization(String str) {
+        if (StringUtils.isBlank(str)) {
+            return str;
+        }
+        return Normalizer.normalize(str, Form.NFKC);
     }
 }

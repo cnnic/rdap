@@ -42,15 +42,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.DomainSearch;
 import cn.cnnic.rdap.common.util.AutnumValidator;
 import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
+import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.QueryService;
+import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
 /**
@@ -72,6 +76,11 @@ public class RdapController {
      */
     @Autowired
     private QueryService queryService;
+    /**
+     * search service.
+     */
+    @Autowired
+    private SearchService searchService;
     /**
      * query parser.
      */
@@ -142,6 +151,46 @@ public class RdapController {
         if (null != domain) {
             responseDecorator.decorateResponse(domain);
             return RestResponseUtil.createResponse200(domain);
+        }
+        return RestResponseUtil.createResponse404();
+    }
+
+    /**
+     * query domain by domain name.
+     * 
+     * @param domainName
+     *            is a fully-qualified (relative to the root) domain name
+     *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
+     *            RIRs) or a fully-qualified domain name in a zone administered
+     *            by the server operator (for DNRs).
+     * @return JSON formated result,with HTTP code.
+     */
+    @RequestMapping(value = "/domains", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity searchDomain(
+            @RequestParam(required = false) String name,
+            HttpServletRequest request, HttpServletResponse response) {
+        String decodeDomain = DomainUtil
+                .decodeAndTrimAndReplaceAsciiToLowercase(name);
+        name = StringUtil.getNormalization(name);
+        if (StringUtil.ASTERISK.equals(name)
+                || name.startsWith(StringUtil.ASTERISK)) {
+            return RestResponseUtil.createResponse422();
+        }
+        String punyDomainName = decodeDomain;
+        try {
+            // long lable exception
+            punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
+        } catch (Exception e) {
+            return RestResponseUtil.createResponse400();
+        }
+        decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
+        decodeDomain = StringUtils.lowerCase(decodeDomain);
+        DomainSearch domainSearch = searchService.searchDomain(queryParser
+                .parseDomainQueryParam(decodeDomain, punyDomainName));
+        if (null != domainSearch) {
+            responseDecorator.decorateResponse(domainSearch);
+            return RestResponseUtil.createResponse200(domainSearch);
         }
         return RestResponseUtil.createResponse404();
     }

@@ -31,6 +31,7 @@
 package cn.cnnic.rdap.common.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -47,6 +48,17 @@ import cn.cnnic.rdap.BaseTest;
  */
 @SuppressWarnings("rawtypes")
 public class StringUtilTest extends BaseTest {
+
+    /**
+     * test getNormalization.
+     * 
+     */
+    @Test
+    public void testGetNormalization() throws UnsupportedEncodingException {
+        assertTrue(!"a".equals("ａ"));
+        assertEquals(StringUtil.getNormalization("a"),
+                StringUtil.getNormalization("ａ"));
+    }
 
     /**
      * test encoded URL.
@@ -77,7 +89,7 @@ public class StringUtilTest extends BaseTest {
         String result = StringUtil.urlEncode(decodedURL);
         assertEquals(expectURL, result);
     }
-    
+
     /**
      * test decoded URL.
      * 

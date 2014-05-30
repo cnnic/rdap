@@ -169,6 +169,17 @@ public class RestResponseUtil {
     }
 
     /**
+     * create response with HTTP status code 422
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static ResponseEntity<ErrorMessage> createResponse422() {
+        return createCommonErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    /**
      * create error response
      * 
      * @param errorStatus

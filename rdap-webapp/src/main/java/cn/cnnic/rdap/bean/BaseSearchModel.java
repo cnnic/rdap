@@ -28,58 +28,40 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.dao;
+package cn.cnnic.rdap.bean;
 
-import java.util.List;
-
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.QueryParam;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * base search class.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
+@JsonIgnoreProperties(value = { "id", "handle", "lang", "objectType" })
+public abstract class BaseSearchModel extends BaseModel {
     /**
-     * query model object.
-     * 
-     * @param queryParam
-     *            query parameter.
-     * @return object, using base class BaseObject.
+     * 'resultsTruncated' used where a single object has been returned and data
+     * in that object has been truncated.
      */
-    T query(QueryParam queryParam);
+    private Boolean resultsTruncated = null;
 
     /**
-     * * query model list, as nested models of other Model.
+     * get resultsTruncated.
      * 
-     * @param outerModelId
-     *            id of outer object
-     * @param outerModelType
-     *            model type of outer object
-     * @return object list.
+     * @return resultsTruncated.
      */
-    List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
+    public Boolean getResultsTruncated() {
+        return resultsTruncated;
+    }
 
     /**
-     * search model list.
+     * set resultsTruncated.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return object list.
+     * @param resultsTruncated
+     *            resultsTruncated.
      */
-    List<T> search(QueryParam queryParam);
-
-    /**
-     * get search count.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return queryParam.
-     */
-    Long searchCount(QueryParam queryParam);
-
+    public void setResultsTruncated(Boolean resultsTruncated) {
+        this.resultsTruncated = resultsTruncated;
+    }
 }

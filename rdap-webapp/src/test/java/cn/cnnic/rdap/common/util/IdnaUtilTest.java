@@ -54,6 +54,14 @@ public class IdnaUtilTest {
         assertTrue(IdnaUtil.isValidIdn("cnnic.com.cn"));
         assertTrue(IdnaUtil.isValidIdn("123"));
         assertTrue(IdnaUtil.isValidIdn("1cnnic.cn"));
+        assertTrue(IdnaUtil
+                .isValidIdn("63aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.cn"));
+        assertTrue(IdnaUtil
+                .isValidIdn("253aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        assertFalse(IdnaUtil
+                .isValidIdn("254aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        assertFalse(IdnaUtil
+                .isValidIdn("64aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.cn"));
         assertFalse(IdnaUtil.isValidIdn(""));
         assertFalse(IdnaUtil.isValidIdn(" "));
         assertFalse(IdnaUtil.isValidIdn(null));
@@ -63,6 +71,12 @@ public class IdnaUtilTest {
         assertFalse(IdnaUtil.isValidIdn("a@.cn"));
         assertFalse(IdnaUtil.isValidIdn("@a.cn"));
         assertFalse(IdnaUtil.isValidIdn("cnnic."));
+        assertFalse(IdnaUtil.isValidIdn("cnnic-.cn"));
+        assertFalse(IdnaUtil.isValidIdn("-cnnic.cn"));
+        assertFalse(IdnaUtil.isValidIdn("boss.-cnnic.cn"));
+        assertFalse(IdnaUtil.isValidIdn("boss.cnnic-.cn"));
+        assertFalse(IdnaUtil.isValidIdn("boss.cnnic.-cn"));
+        assertFalse(IdnaUtil.isValidIdn("boss.cnnic.cn-"));
         assertFalse(IdnaUtil.isValidIdn("cnnic.cn."));
         assertFalse(IdnaUtil.isValidIdn("xn--55qx5d.中国"));
         assertFalse(IdnaUtil.isValidIdn("xn--55qx5d.中国.cn"));

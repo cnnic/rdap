@@ -154,67 +154,75 @@ public class DomainUtilTest {
     public void testValidateDomainNameIsValidIdna() {
         // arpa domain.
         for (String domain : validArpaDomain) {
-            assertTrue(DomainUtil.validateDomainNameIsValidIdna(domain));
+            assertTrue(validateDomainNameIsValidIdna(domain));
         }
         for (String domain : inValidArpaDomain) {
-            assertFalse(DomainUtil.validateDomainNameIsValidIdna(domain));
+            assertFalse(validateDomainNameIsValidIdna(domain));
         }
         // other domain.
-        assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.cn"));
-        assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.cn."));
-        assertTrue(DomainUtil.validateDomainNameIsValidIdna("cnnic.com.cn"));
-        assertTrue(DomainUtil.validateDomainNameIsValidIdna("1cnnic.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("我cnnic-.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("-我cnnic.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("cnnic."));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna(" cnnic.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("123"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("c nnic.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("cnnic"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna(""));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna(" "));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna(null));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("."));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("a."));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna(".a"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("Σ.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("@.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("a@.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("@a.cn"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("xn--55qx5d.中国"));
+        assertTrue(validateDomainNameIsValidIdna("cnnic.cn"));
+        assertTrue(validateDomainNameIsValidIdna("cnnic.cn."));
+        assertTrue(validateDomainNameIsValidIdna("cnnic.com.cn"));
+        assertTrue(validateDomainNameIsValidIdna("1cnnic.cn"));
+        assertTrue(validateDomainNameIsValidIdna(" cnnic.cn"));
+        assertFalse(validateDomainNameIsValidIdna("我cnnic-.cn"));
+        assertFalse(validateDomainNameIsValidIdna("-我cnnic.cn"));
+        assertFalse(validateDomainNameIsValidIdna("cnnic-.cn"));
+        assertFalse(validateDomainNameIsValidIdna("-cnnic.cn"));
+        assertFalse(validateDomainNameIsValidIdna("boss.-cnnic.cn"));
+        assertFalse(validateDomainNameIsValidIdna("boss.cnnic-.cn"));
+        assertFalse(validateDomainNameIsValidIdna("boss.cnnic.-cn"));
+        assertFalse(validateDomainNameIsValidIdna("boss.cnnic.cn-"));
+        assertFalse(validateDomainNameIsValidIdna("cnnic."));
+        assertFalse(validateDomainNameIsValidIdna("123"));
+        assertFalse(validateDomainNameIsValidIdna("c nnic.cn"));
+        assertFalse(validateDomainNameIsValidIdna("cnnic"));
+        assertFalse(validateDomainNameIsValidIdna(""));
+        assertFalse(validateDomainNameIsValidIdna(" "));
+        assertFalse(validateDomainNameIsValidIdna(null));
+        assertFalse(validateDomainNameIsValidIdna("."));
+        assertFalse(validateDomainNameIsValidIdna("a."));
+        assertFalse(validateDomainNameIsValidIdna(".a"));
+        assertFalse(validateDomainNameIsValidIdna("Σ.cn"));
+        assertFalse(validateDomainNameIsValidIdna("@.cn"));
+        assertFalse(validateDomainNameIsValidIdna("a@.cn"));
+        assertFalse(validateDomainNameIsValidIdna("@a.cn"));
+        assertFalse(validateDomainNameIsValidIdna("xn--55qx5d.中国"));
         assertFalse(DomainUtil
                 .validateDomainNameIsValidIdna("xn--55qx5d.中国.cn"));
 
-        assertTrue(DomainUtil.validateDomainNameIsValidIdna(DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase("中国.CN")));
-        assertTrue(DomainUtil.validateDomainNameIsValidIdna("xn--55QX5D.CN"));
-        assertTrue(DomainUtil.validateDomainNameIsValidIdna("xn--55qx5d.cn"));
-        assertTrue(DomainUtil
-                .validateDomainNameIsValidIdna("xn--notBase64Code.cn"));
-        assertTrue(DomainUtil
-                .validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg"));
-        assertTrue(DomainUtil
-                .validateDomainNameIsValidIdna(DomainUtil
-                        .decodeAndTrimAndReplaceAsciiToLowercase("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CF%83%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF.bnnhg")));
-        assertTrue(DomainUtil
-                .validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg"));
-        assertTrue(DomainUtil
-                .validateDomainNameIsValidIdna("σειράτάξησυπουργείωνσύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna(DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase("xn--caf%C3%A9s.com")));
-        assertFalse(DomainUtil.validateDomainNameIsValidIdna("xn--cafés.com"));
-        assertFalse(DomainUtil
-                .validateDomainNameIsValidIdna(DomainUtil
-                        .decodeAndTrimAndReplaceAsciiToLowercase("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CF%83%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CE%BF.bnnhg")));
-        assertFalse(DomainUtil
-                .validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaaahjsgk5chhdiq0cclcgddbb8o9hoa.bnnhg"));
-        assertFalse(DomainUtil
-                .validateDomainNameIsValidIdna("σειράτάξησυπουργείωνσύνθεσηυπουργικούσυμβουλίουουουοο.bnnhg"));
-        assertFalse(DomainUtil
-                .validateDomainNameIsValidIdna(DomainUtil
-                        .decodeAndTrimAndReplaceAsciiToLowercase("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CE%A3%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF.bnnhg")));
-        assertFalse(DomainUtil
-                .validateDomainNameIsValidIdna("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("中国.CN"));
+        assertTrue(validateDomainNameIsValidIdna("xn--55QX5D.CN"));
+        assertTrue(validateDomainNameIsValidIdna("xn--55qx5d.cn"));
+        // 254,127 lable
+        assertFalse(validateDomainNameIsValidIdna("a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a."));
+        // 254,126 lable
+        assertTrue(validateDomainNameIsValidIdna("a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.aaa."));
+        assertTrue(validateDomainNameIsValidIdna("xn--notBase64Code.cn"));
+        assertTrue(validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CF%83%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("σειράτάξησυπουργείωνσύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("xn--caf%C3%A9s.com"));
+        assertFalse(validateDomainNameIsValidIdna("xn--cafés.com"));
+        assertFalse(validateDomainNameIsValidIdna("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CF%83%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CE%BF.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaaahjsgk5chhdiq0cclcgddbb8o9hoa.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("σειράτάξησυπουργείωνσύνθεσηυπουργικούσυμβουλίουουουοο.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CE%A3%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
+    }
+
+    /**
+     * validate domain.
+     * 
+     * @param domainName
+     *            domain name.
+     * @return boolean.
+     */
+    private boolean validateDomainNameIsValidIdna(String domainName) {
+        String decodeDomain = DomainUtil
+                .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
+        return DomainUtil.validateDomainNameIsValidIdna(decodeDomain);
     }
 
     /**

@@ -29,7 +29,8 @@
  * DAMAGE.
  */
 /**
- * model package.
+ * model test.
  * @author jiashuo
+ *
  */
 package cn.cnnic.rdap.bean;
