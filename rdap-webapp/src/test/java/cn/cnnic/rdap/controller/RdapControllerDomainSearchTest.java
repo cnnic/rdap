@@ -250,12 +250,12 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "*").accept(
                         MediaType.parseMediaType("application/json")))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.errorCode").value(422))
                 .andExpect(jsonPath("$.lang").value("en"))
-                .andExpect(jsonPath("$.title").value("BAD REQUEST"))
-                .andExpect(jsonPath("$.description").value("BAD REQUEST"));
+                .andExpect(jsonPath("$.title").value("UNPROCESSABLE ENTITY"))
+                .andExpect(jsonPath("$.description").value("UNPROCESSABLE ENTITY"));
 
     }
 }
