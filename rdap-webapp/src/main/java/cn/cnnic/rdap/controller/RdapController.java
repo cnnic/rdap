@@ -132,10 +132,11 @@ public class RdapController {
     @RequestMapping(value = { "/domain/{domainName}" }, method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryDomain(@PathVariable String domainName) {
-        String decodeDomain = DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
+        String decodeDomain = domainName;
         String punyDomainName = decodeDomain;
         try {
+            decodeDomain = DomainUtil
+                    .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
             // long lable exception
             punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
         } catch (Exception e) {

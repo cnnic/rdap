@@ -86,7 +86,7 @@ public class SecureDns extends BaseModel {
      * representing the signature life time in seconds to be used when creating
      * the RRSIG DS record in the parent zone [RFC5910].
      */
-    private int maxSigLife;
+    private Integer maxSigLife = null;
     /**
      * dsData.
      */
@@ -139,7 +139,7 @@ public class SecureDns extends BaseModel {
      * 
      * @return maxSigLife.
      */
-    public int getMaxSigLife() {
+    public Integer getMaxSigLife() {
         return maxSigLife;
     }
 
@@ -149,7 +149,7 @@ public class SecureDns extends BaseModel {
      * @param maxSigLife
      *            maxSigLife.
      */
-    public void setMaxSigLife(int maxSigLife) {
+    public void setMaxSigLife(Integer maxSigLife) {
         this.maxSigLife = maxSigLife;
     }
 
