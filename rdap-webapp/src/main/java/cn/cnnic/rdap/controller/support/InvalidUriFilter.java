@@ -108,6 +108,9 @@ public class InvalidUriFilter implements Filter {
                     && decodeUri.endsWith("/")) {
                 writeError400Response(response);
                 return;
+            } else if (uriWithoutPrefixSlash.endsWith("/.")) {
+                writeError400Response(response);
+                return;
             }
         }
         chain.doFilter(request, response);
