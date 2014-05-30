@@ -172,6 +172,9 @@ public class RdapController {
             HttpServletRequest request, HttpServletResponse response) {
         String decodeDomain = DomainUtil
                 .decodeAndTrimAndReplaceAsciiToLowercase(name);
+        if(StringUtils.isBlank(decodeDomain)){
+            return RestResponseUtil.createResponse400();
+        }
         name = StringUtil.getNormalization(name);
         if (StringUtil.ASTERISK.equals(name)
                 || name.startsWith(StringUtil.ASTERISK)) {
