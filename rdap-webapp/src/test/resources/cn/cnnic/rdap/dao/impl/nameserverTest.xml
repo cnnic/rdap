@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- ASCII ns -->
+	<RDAP_NAMESERVER NAMESERVER_ID='11' HANDLE='h1' LDH_NAME='ns.abc'
+		UNICODE_NAME='ns.abc' PORT43='port43' LANG='en' />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="1" NAMESERVER_ID="11"
+		STATUS="validated" />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="2" NAMESERVER_ID="11"
+		STATUS="update prohibited" />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="3" NAMESERVER_ID="12"
+		STATUS="update prohibited" />
+	<!-- ipAddress -->
+	<RDAP_NAMESERVER_IP NAMESERVER_IP_ID='11' NAMESERVER_ID='11' IP_HIGH='16777216'
+		IP_LOW='33554431' VERSION='v6' />
+	<RDAP_NAMESERVER_IP NAMESERVER_IP_ID='12' NAMESERVER_ID='11' IP_HIGH='0' IP_LOW='0' VERSION='v6' />
+	<!-- events -->
+	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="weijunkai"
+		EVENT_DATE="2014-01-01 00:01:01" />
+	<REL_EVENT_REGISTRATION REL_EVENT_ID="1" REL_ID="11"
+		REL_OBJECT_TYPE="nameserver" EVENT_ID="1" />
+	<!-- links -->
+	<RDAP_LINK LINK_ID="1" VALUE="http://nameserverlink" REL="self"
+		HREF="http://nameserverlink" MEDIA="screen" TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="11"
+		REL_OBJECT_TYPE="nameserver" LINK_ID="1" />
+	<RDAP_LINK_HREFLANG LINK_ID="1" HREFLANG="en"/>
+	<RDAP_LINK_HREFLANG LINK_ID="1" HREFLANG="zh"/>
+	<RDAP_LINK_TITLE LINK_ID="1" TITLE="Title1 of Link1"/>
+	<RDAP_LINK_TITLE LINK_ID="1" TITLE="Title2 of Link1"/>
+	<!-- remarks -->
+	<RDAP_NOTICE NOTICE_ID="1" TITLE="Terms of Use" TYPE="remark" />
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="1"
+		REL_ID="11" REL_OBJECT_TYPE="nameserver" NOTICE_ID="1" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="1"
+		NOTICE_ID="1" DESCRIPTION="description1" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="2"
+		NOTICE_ID="1" DESCRIPTION="description2" />
+	<RDAP_LINK LINK_ID="102" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="102" REL_ID="1"
+		REL_OBJECT_TYPE="remark" LINK_ID="102" />
+
+	<!-- Unicode ns -->
+	<RDAP_NAMESERVER NAMESERVER_ID='12' HANDLE='h2' LDH_NAME='ns.xn--xkry9kk1bz66a.xn--fiqs8s'
+		UNICODE_NAME='ns.清华大学.中国' PORT43='port43' LANG='zh' />
+</dataset>

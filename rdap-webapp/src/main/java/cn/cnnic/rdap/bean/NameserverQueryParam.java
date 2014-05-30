@@ -28,44 +28,50 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.service;
-
-import cn.cnnic.rdap.bean.Autnum;
-import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.bean.QueryParam;
+package cn.cnnic.rdap.bean;
 
 /**
- * query service interface.
+ * base query parameter bean.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-public interface QueryService {
-    /**
-     * query domain by domain name.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return domain object.
-     */
-    Domain queryDomain(QueryParam queryParam);
+public class NameserverQueryParam extends QueryParam {
 
     /**
-     * query autnm.
+     * constructor.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return autnum autnum.
+     * @param q
+     *            for query string.
+     * @param punyName
+     *            nameserver puny name.
      */
-    Autnum queryAutnum(QueryParam queryParam);
-    
+    public NameserverQueryParam(String q, String punyName) {
+        super(q);
+        this.punyName = punyName;
+    }
+
     /**
-     * query nameserver.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Nameserver for the result.
+     * nameserver puny name.
      */
-    Nameserver queryNameserver(QueryParam queryParam);
+    private String punyName;
+
+    /**
+     * get punyName.
+     * 
+     * @return punyName.
+     */
+    public String getPunyName() {
+        return punyName;
+    }
+
+    /**
+     * set punyName.
+     * 
+     * @param punyName
+     *            punyName.
+     */
+    public void setPunyName(String punyName) {
+        this.punyName = punyName;
+    }
 }
