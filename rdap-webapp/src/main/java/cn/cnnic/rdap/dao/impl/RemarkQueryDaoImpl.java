@@ -54,114 +54,116 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * remark query DAO
+ * remark query DAO.
  * 
  * @author jiashuo
  * 
  */
 @Repository
 public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
-	@Autowired
-	@Qualifier("linkQueryDaoImpl")
-	private QueryDao<Link> linkQueryDao;
+    /**
+     * link dao.
+     */
+    @Autowired
+    @Qualifier("linkQueryDaoImpl")
+    private QueryDao<Link> linkQueryDao;
 
-	/**
-	 * query remarks as inner objects
-	 */
-	@Override
-	public List<Remark> queryAsInnerObjects(final Long outerObjectId,
-			final ModelType outerModelType) {
-		List<Remark> remarks = queryWithoutInnerObjects(outerObjectId,
-				outerModelType);
-		queryAndSetInnerObjects(remarks);
-		return remarks;
-	}
+    @Override
+    public List<Remark> queryAsInnerObjects(final Long outerObjectId,
+            final ModelType outerModelType) {
+        List<Remark> remarks = queryWithoutInnerObjects(outerObjectId,
+                outerModelType);
+        queryAndSetInnerObjects(remarks);
+        return remarks;
+    }
 
-	/**
-	 * query inner objects, and set them to remarks
-	 * 
-	 * @param remarks
-	 *            remark list
-	 */
-	private void queryAndSetInnerObjects(List<Remark> remarks) {
-		if (null == remarks || remarks.size() == 0) {
-			return;
-		}
-		for (Remark remark : remarks) {
-			queryAndSetInnerObjects(remark);
-		}
-	}
+    /**
+     * query inner objects, and set them to remarks.
+     * 
+     * @param remarks
+     *            remark list.
+     */
+    private void queryAndSetInnerObjects(List<Remark> remarks) {
+        if (null == remarks || remarks.size() == 0) {
+            return;
+        }
+        for (Remark remark : remarks) {
+            queryAndSetInnerObjects(remark);
+        }
+    }
 
-	/**
-	 * query inner objects, and set them to remark
-	 * 
-	 * @param remark
-	 *            remark after set inner objects
-	 */
-	private void queryAndSetInnerObjects(Remark remark) {
-		if (null == remark) {
-			return;
-		}
-		List<Link> links = linkQueryDao.queryAsInnerObjects(remark.getId(),
-				ModelType.Remark);
-		remark.setLinks(links);
-	}
+    /**
+     * query inner objects, and set them to remark.
+     * 
+     * @param remark
+     *            remark after set inner objects.
+     */
+    private void queryAndSetInnerObjects(Remark remark) {
+        if (null == remark) {
+            return;
+        }
+        List<Link> links = linkQueryDao.queryAsInnerObjects(remark.getId(),
+                ModelType.REMARK);
+        remark.setLinks(links);
+    }
 
-	/**
-	 * query remark, without inner objects
-	 * 
-	 * @param outerObjectId
-	 *            object id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return remark list
-	 */
-	private List<Remark> queryWithoutInnerObjects(final Long outerObjectId,
-			final ModelType outerModelType) {
-		final String sql = "select notice.*, description.description  from RDAP_NOTICE notice"
-				+ " inner join REL_NOTICE_REGISTRATION rel "
-				+ " on (rel.NOTICE_ID = notice.NOTICE_ID and rel.REL_ID = ? and rel.REL_OBJECT_TYPE = ? and notice.TYPE=?) "
-				+ " left outer join RDAP_NOTICE_DESCRIPTION description "
-				+ " on notice.NOTICE_ID = description.NOTICE_ID";
-		List<Remark> result = jdbcTemplate.query(
-				new PreparedStatementCreator() {
-					public PreparedStatement createPreparedStatement(
-							Connection connection) throws SQLException {
-						PreparedStatement ps = connection.prepareStatement(sql);
-						ps.setLong(1, outerObjectId);
-						ps.setString(2, outerModelType.getName());
-						ps.setString(3, NoticeType.REMARK.getName());
-						return ps;
-					}
-				}, new RemarkResultSetExtractor());
-		return result;
-	}
+    /**
+     * query remark, without inner objects.
+     * 
+     * @param outerObjectId
+     *            object id of outer object.
+     * @param outerModelType
+     *            model type of outer object.
+     * @return remark list.
+     */
+    private List<Remark> queryWithoutInnerObjects(final Long outerObjectId,
+            final ModelType outerModelType) {
+        final String sql = "select notice.*, description.description "
+                + " from RDAP_NOTICE notice"
+                + " inner join REL_NOTICE_REGISTRATION rel "
+                + " on (rel.NOTICE_ID = notice.NOTICE_ID and rel.REL_ID = ? "
+                + " and rel.REL_OBJECT_TYPE = ? and notice.TYPE=?) "
+                + " left outer join RDAP_NOTICE_DESCRIPTION description "
+                + " on notice.NOTICE_ID = description.NOTICE_ID";
+        List<Remark> result = jdbcTemplate.query(
+                new PreparedStatementCreator() {
+                    public PreparedStatement createPreparedStatement(
+                            Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps.setLong(1, outerObjectId);
+                        ps.setString(2, outerModelType.getName());
+                        ps.setString(3, NoticeType.REMARK.getName());
+                        return ps;
+                    }
+                }, new RemarkResultSetExtractor());
+        return result;
+    }
 
-	/**
-	 * remark ResultSetExtractor, extract data from ResultSet
-	 * 
-	 * @author jiashuo
-	 * 
-	 */
-	class RemarkResultSetExtractor implements ResultSetExtractor<List<Remark>> {
-		@Override
-		public List<Remark> extractData(ResultSet rs) throws SQLException,
-				DataAccessException {
-			List<Remark> result = new ArrayList<Remark>();
-			Map<Long, Remark> remarkMapById = new HashMap<Long, Remark>();
-			while (rs.next()) {
-				Long remarkId = rs.getLong("NOTICE_ID");
-				Remark remark = remarkMapById.get(remarkId);
-				if (null == remark) {
-					remark = new Remark();
-					remark.setId(remarkId);
-					remark.setTitle(rs.getString("TITLE"));
-					remarkMapById.put(remarkId, remark);
-					result.add(remark);
-				}
-				remark.addDescription(rs.getString("DESCRIPTION"));
-			}
-			return result;
-		}
-	}
+    /**
+     * remark ResultSetExtractor, extract data from ResultSet.
+     * 
+     * @author jiashuo
+     * 
+     */
+    class RemarkResultSetExtractor implements ResultSetExtractor<List<Remark>> {
+        @Override
+        public List<Remark> extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            List<Remark> result = new ArrayList<Remark>();
+            Map<Long, Remark> remarkMapById = new HashMap<Long, Remark>();
+            while (rs.next()) {
+                Long remarkId = rs.getLong("NOTICE_ID");
+                Remark remark = remarkMapById.get(remarkId);
+                if (null == remark) {
+                    remark = new Remark();
+                    remark.setId(remarkId);
+                    remark.setTitle(rs.getString("TITLE"));
+                    remarkMapById.put(remarkId, remark);
+                    result.add(remark);
+                }
+                remark.addDescription(rs.getString("DESCRIPTION"));
+            }
+            return result;
+        }
+    }
 }

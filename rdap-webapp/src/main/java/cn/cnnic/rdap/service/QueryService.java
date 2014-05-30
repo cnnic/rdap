@@ -35,25 +35,27 @@ import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.QueryParam;
 
 /**
- * query service interface
+ * query service interface.
  * 
  * @author jiashuo
  * 
  */
 public interface QueryService {
-	/**
-	 * query domain by domain name
-	 * 
-	 * @param queryParam
-	 * @return domain object
-	 */
-	public Domain queryDomain(QueryParam queryParam);
+    /**
+     * query domain by domain name.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return domain object.
+     */
+    Domain queryDomain(QueryParam queryParam);
 
-	/**
-	 * query autnm
-	 * 
-	 * @param queryParam
-	 * @return autnum
-	 */
-	public Autnum queryAutnum(QueryParam queryParam);
+    /**
+     * query autnm.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return autnum autnum.
+     */
+    Autnum queryAutnum(QueryParam queryParam);
 }

@@ -31,52 +31,55 @@
 package cn.cnnic.rdap.bean;
 
 /**
- * query and search type
+ * query and search type.
  * 
  * @author jiashuo
  * 
  */
 public enum QueryType {
-	DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-			"autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"), SEARCHENTITY(
-			"searchEntity"), SEARCHNAMESERVER("searchNameserver");
-	/**
-	 * name of query type
-	 */
-	private String name;
+    /**
+     * query type.
+     */
+    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
+            "autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"),
+            SEARCHENTITY("searchEntity"), SEARCHNAMESERVER("searchNameserver");
+    /**
+     * name of query type
+     */
+    private String name;
 
-	/**
-	 * default construction
-	 * 
-	 * @param name
-	 *            query type name
-	 */
-	private QueryType(String name) {
-		this.name = name;
-	}
+    /**
+     * default construction
+     * 
+     * @param name
+     *            query type name
+     */
+    private QueryType(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * get query type be name
-	 * 
-	 * @param name
-	 *            :query type name
-	 * @return query type if name is valid, null if not
-	 */
-	public static QueryType getQueryType(String name) {
-		QueryType[] queryTypes = QueryType.values();
-		for (QueryType joinType : queryTypes) {
-			if (joinType.getName().equals(name)) {
-				return joinType;
-			}
-		}
-		return null;
-	}
+    /**
+     * get query type be name
+     * 
+     * @param name
+     *            :query type name
+     * @return query type if name is valid, null if not
+     */
+    public static QueryType getQueryType(String name) {
+        QueryType[] queryTypes = QueryType.values();
+        for (QueryType joinType : queryTypes) {
+            if (joinType.getName().equals(name)) {
+                return joinType;
+            }
+        }
+        return null;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 }

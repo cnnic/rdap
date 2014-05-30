@@ -30,7 +30,9 @@
  */
 package cn.cnnic.rdap.service.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
@@ -46,6 +48,7 @@ import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.QueryService;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
  * Test for QueryServiceImpl
@@ -55,37 +58,41 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
  */
 @SuppressWarnings("rawtypes")
 public class QueryServiceImplTest extends BaseTest {
-	@Autowired
-	private QueryParser queryParser;
-	@Autowired
-	private QueryService queryService;
+    @Autowired
+    private QueryParser queryParser;
+    @Autowired
+    private QueryService queryService;
 
-	/**
-	 * test query exist autnum
-	 */
-	@Test
-	// @DatabaseTearDown("teardown.xml")
-	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
-	public void testQueryAutnum() {
-		String autnumStr = "1";
-		Autnum autnum = queryService.queryAutnum(queryParser
-				.parseQueryParam(autnumStr));
-		Assert.notNull(autnum);
-		assertEquals(autnum.getId(), Long.valueOf(autnumStr));
-		assertEquals(autnum.getCountry(), "zh");
-		assertEquals(autnum.getEndAutnum().longValue(), 10L);
-		assertEquals(autnum.getLang(), "cn");
-		assertEquals(autnum.getName(), "name1");
-		List<String> statusList = autnum.getStatus();
-		assertThat(statusList, CoreMatchers.hasItems("validated"));
-	}
+    /**
+     * test query exist autnum
+     */
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+    public void testQueryAutnum() {
+        String autnumStr = "1";
+        Autnum autnum = queryService.queryAutnum(queryParser
+                .parseQueryParam(autnumStr));
+        Assert.notNull(autnum);
+        assertEquals(autnum.getId(), Long.valueOf(autnumStr));
+        assertEquals(autnum.getCountry(), "zh");
+        assertEquals(autnum.getEndAutnum().longValue(), 10L);
+        assertEquals(autnum.getLang(), "cn");
+        assertEquals(autnum.getName(), "name1");
+        List<String> statusList = autnum.getStatus();
+        assertThat(statusList, CoreMatchers.hasItems("validated"));
+    }
 
-	@Test
-	public void testQueryDomain() {
-		// TODO:add validation
-		String domainName = "cnnic.cn";
-		Domain domain = queryService.queryDomain(queryParser
-				.parseQueryParam(domainName));
-		assertNull(domain);
-	}
+    /**
+     * test query domain.
+     */
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain.xml")
+    public void testQueryDomain() {
+        String domainName = "cnnic.cn";
+        Domain domain = queryService.queryDomain(queryParser
+                .parseDomainQueryParam(domainName, domainName));
+        assertNotNull(domain);
+    }
 }

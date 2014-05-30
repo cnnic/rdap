@@ -99,7 +99,7 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
             return;
         }
         List<Link> links = linkQueryDao.queryAsInnerObjects(event.getId(),
-                ModelType.Event);
+                ModelType.EVENT);
         event.setLinks(links);
     }
 
@@ -145,7 +145,7 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
                 event.setId(rs.getLong("EVENT_ID"));
                 event.setEventAction(rs.getString("EVENT_ACTION"));
                 event.setEventActor(rs.getString("EVENT_ACTOR"));
-                event.setEventDate(rs.getTimestamp("EVENT_DATE"));
+                event.setEventDate(extractTimestampFromRs(rs, "EVENT_DATE"));
                 result.add(event);
             }
             return result;

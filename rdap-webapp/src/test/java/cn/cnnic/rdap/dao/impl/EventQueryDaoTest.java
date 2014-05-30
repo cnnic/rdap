@@ -57,43 +57,42 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class EventQueryDaoTest extends BaseTest {
-	@Autowired
-	private QueryParser queryParser;
-	@Autowired
-	private QueryDao<Event> eventQueryDao;
+    @Autowired
+    private QueryParser queryParser;
+    @Autowired
+    private QueryDao<Event> eventQueryDao;
 
-	/**
-	 * test query exist event
-	 */
-	@Test
-//	@DatabaseTearDown("teardown.xml")
-	@DatabaseSetup("event.xml")
-	public void testQueryExistEvent() {
-		Long autnumId = 1L;
-		List<Event> events = eventQueryDao.queryAsInnerObjects(autnumId,
-				ModelType.AUTNUM);
-		Assert.notNull(events);
-		assertEquals(events.size(), 1);
-		Event event = events.get(0);
-		Assert.notNull(event);
-		assertEquals(event.getEventAction(), "action1");
-		assertEquals(event.getEventActor(), "jiashuo");
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		assertEquals(dateFormat.format(event.getEventDate()),
-				"2014-01-01 00:01:01");
-	}
+    /**
+     * test query exist event
+     */
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("event.xml")
+    public void testQueryExistEvent() {
+        Long autnumId = 1L;
+        List<Event> events = eventQueryDao.queryAsInnerObjects(autnumId,
+                ModelType.AUTNUM);
+        Assert.notNull(events);
+        assertEquals(events.size(), 1);
+        Event event = events.get(0);
+        Assert.notNull(event);
+        assertEquals(event.getEventAction(), "action1");
+        assertEquals(event.getEventActor(), "jiashuo");
+        // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        assertEquals(event.getEventDate(), "2014-01-01T00:01:01Z");
+    }
 
-	/**
-	 * test query non exist event
-	 */
-	@Test
-//	@DatabaseTearDown("teardown.xml")
-	@DatabaseSetup("event.xml")
-	public void testQueryNonExistEvent() {
-		Long nonExistAutnumId = 10000L;
-		List<Event> events = eventQueryDao.queryAsInnerObjects(
-				nonExistAutnumId, ModelType.AUTNUM);
-		Assert.notNull(events);
-		assertEquals(events.size(), 0);
-	}
+    /**
+     * test query non exist event
+     */
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("event.xml")
+    public void testQueryNonExistEvent() {
+        Long nonExistAutnumId = 10000L;
+        List<Event> events = eventQueryDao.queryAsInnerObjects(
+                nonExistAutnumId, ModelType.AUTNUM);
+        Assert.notNull(events);
+        assertEquals(events.size(), 0);
+    }
 }

@@ -57,6 +57,10 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
  */
 public class HttpRequestFilter implements Filter {
     private static final String VALID_CONTENT_TYPE = "application/rdap+json";
+    private static final List<String> allowMethods = new ArrayList<String>();
+    static {
+        allowMethods.add("GET");
+    }
 
     @Override
     public void doFilter(ServletRequest arg0, ServletResponse arg1,
@@ -108,8 +112,6 @@ public class HttpRequestFilter implements Filter {
      */
     private boolean httpMethodIsValid(HttpServletRequest request) {
         String method = request.getMethod();
-        List<String> allowMethods = new ArrayList<String>();
-        allowMethods.add("GET");
         boolean httpMethodIsValid = allowMethods.contains(method);
         return httpMethodIsValid;
     }

@@ -44,24 +44,42 @@ import cn.cnnic.rdap.bean.QueryParam;
  * 
  */
 public interface QueryDao<T extends BaseModel> {
-	/**
-	 * query model object
-	 * 
-	 * @param queryParam
-	 *            query parameter
-	 * @return query result, using base class BaseObject
-	 */
-	public T query(QueryParam queryParam);
+    /**
+     * query model object.
+     * 
+     * @param queryParam
+     *            query parameter.
+     * @return object, using base class BaseObject.
+     */
+    T query(QueryParam queryParam);
 
-	/**
-	 * * query Model list, as nested models of other Model
-	 * 
-	 * @param outerModelId
-	 *            id of outer object
-	 * @param outerModelType
-	 *            model type of outer object
-	 * @return model list
-	 */
-	public List<T> queryAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType);
+    /**
+     * * query model list, as nested models of other Model.
+     * 
+     * @param outerModelId
+     *            id of outer object
+     * @param outerModelType
+     *            model type of outer object
+     * @return object list.
+     */
+    List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
+
+    /**
+     * search model list.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return object list.
+     */
+    List<T> search(QueryParam queryParam);
+
+    /**
+     * get search count.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return queryParam.
+     */
+    Long searchCount(QueryParam queryParam);
+
 }

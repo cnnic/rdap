@@ -105,7 +105,7 @@ public class NoticeDaoImpl implements NoticeDao {
             return;
         }
         List<Link> links = linkQueryDao.queryAsInnerObjects(notice.getId(),
-                ModelType.Notice);
+                ModelType.NOTICE);
         notice.setLinks(links);
     }
 

@@ -30,31 +30,28 @@
  */
 package cn.cnnic.rdap.bean;
 
-import java.sql.Timestamp;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * event represents events that have occurred on an instance of an object class
+ * .
  * 
  * @author jiashuo
  * 
  */
 public class Event extends BaseModel {
     /**
-     * a string denoting the reason for the event
+     * a string denoting the reason for the event.
      */
     private String eventAction;
     /**
-     * an optional identifier denoting the actor responsible for the event
+     * an optional identifier denoting the actor responsible for the event.
      */
     private String eventActor;
     /**
-     * the time and date the event occurred,UTC
+     * the time and date the event occurred,UTC.
      */
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private Timestamp eventDate;
+    private String eventDate;
 
     /**
      * links
@@ -77,11 +74,23 @@ public class Event extends BaseModel {
         this.eventActor = eventActor;
     }
 
-    public Timestamp getEventDate() {
+    /**
+     * get eventDate.
+     * 
+     * @return eventDate.
+     */
+    public String getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(Timestamp eventDate) {
+    /**
+     * set eventDate.
+     * 
+     * @param eventDate
+     *            eventDate.
+     * 
+     */
+    public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
 

@@ -15,6 +15,13 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
+			<groupId>verisign</groupId>
+			<artifactId>verisign</artifactId>
+			<version>4.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/vrsnIdna-4.1.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>c3p0</groupId>
 			<artifactId>c3p0</artifactId>
 			<version>0.9.1.2</version>
@@ -108,6 +115,12 @@
 		</dependency>
 		<!-- test -->
 		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<version>1.2.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -148,6 +161,7 @@
 	<properties>
 		<dependency.spring.version>4.0.0.RELEASE</dependency.spring.version>
 		<mysql.client.version>5.1.6</mysql.client.version>
+		<maven.test.jvmargs>-Xmx1024m -Xms128m</maven.test.jvmargs>
 	</properties>
 	<build>
 		<finalName>rdap</finalName>
@@ -166,6 +180,20 @@
 		        <artifactId>maven-javadoc-plugin</artifactId>
 		        <version>2.9.1</version>
 		      </plugin>
+		      <plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<configuration>
+					<argLine>${maven.test.jvmargs}</argLine>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/BaseTest.java</exclude>
+					</excludes>
+
+				</configuration>
+			</plugin>
     </plugins>
 	</build>
 </project>

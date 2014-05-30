@@ -55,6 +55,11 @@ public class BaseModel {
      * identity of object.
      */
     private Long id;
+    /**
+     * DNRs and RIRs have registry-unique identifiers that may be used to
+     * specifically reference an object instance.
+     */
+    private String handle;
 
     /**
      * language identifier, as described by [RFC5646].
@@ -65,6 +70,28 @@ public class BaseModel {
      * notice.
      */
     private List<Notice> notices;
+
+    /**
+     * find object from list by id.
+     * 
+     * @param baseModelObjects
+     *            ModelObject list.
+     * @param id
+     *            id.
+     * @return model object if find, null if not.
+     */
+    public static BaseModel findObjectFromListById(
+            List<? extends BaseModel> baseModelObjects, Long id) {
+        if (null == id || null == baseModelObjects) {
+            return null;
+        }
+        for (BaseModel modelObject : baseModelObjects) {
+            if (id.equals(modelObject.getId())) {
+                return modelObject;
+            }
+        }
+        return null;
+    }
 
     /**
      * get model type, value is simple name of class.
@@ -110,5 +137,24 @@ public class BaseModel {
 
     public void setNotices(List<Notice> notices) {
         this.notices = notices;
+    }
+
+    /**
+     * get handle.
+     * 
+     * @return handle.
+     */
+    public String getHandle() {
+        return handle;
+    }
+
+    /**
+     * set handle.
+     * 
+     * @param handle
+     *            handle.
+     */
+    public void setHandle(String handle) {
+        this.handle = handle;
     }
 }

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- first domain -->
+	<RDAP_DOMAIN DOMAIN_ID='1' HANDLE='1' LDH_NAME='cnnic.cn'
+		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN_STATUS DOMAIN_STATUS_ID="1" DOMAIN_ID="1"
+		STATUS="validated" />
+	<RDAP_DOMAIN_STATUS DOMAIN_STATUS_ID="2" DOMAIN_ID="1"
+		STATUS="update prohibited" />
+	<!-- network -->
+	<RDAP_IP IP_ID='1' HANDLE='h1' STARTLOWADDRESS='16777216'
+		ENDLOWADDRESS='33554431' STARTHIGHADDRESS='0' ENDHIGHADDRESS='0'
+		COUNTRY='US' VERSION='v4' NAME='APNIC-1' TYPE='Allocated to APNIC'
+		PARENT_HANDLE='h2' LANG='zh' PORT43='port43' />
+	<RDAP_IP_STATUS IP_STATUS_ID="3" IP_ID="1" STATUS="validated" />
+	<RDAP_IP_STATUS IP_STATUS_ID="4" IP_ID="1"
+		STATUS="update prohibited" />
+	<REL_DOMAIN_NETWORK DOMAIN_ID='1' NETWORK_ID='1' />
+
+	<!-- events -->
+	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="jiashuo"
+		EVENT_DATE="2014-01-01 00:01:01" />
+	<REL_EVENT_REGISTRATION REL_EVENT_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="domain" EVENT_ID="1" />
+	<!-- links -->
+	<RDAP_LINK LINK_ID="1" VALUE="http://domainlink" REL="self"
+		HREF="http://domainlink" MEDIA="screen" TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="domain" LINK_ID="1" />
+	<RDAP_LINK_HREFLANG LINK_ID="1" HREFLANG="en" />
+	<RDAP_LINK_HREFLANG LINK_ID="1" HREFLANG="zh" />
+	<RDAP_LINK_TITLE LINK_ID="1" TITLE="Title1 of Link1" />
+	<RDAP_LINK_TITLE LINK_ID="1" TITLE="Title2 of Link1" />
+	<!-- publicId -->
+	<RDAP_PUBLICID PUBLIC_ID='1' IDENTIFIER='identifier'
+		TYPE='type' />
+	<REL_PUBLICID_REGISTRATION REL_ID='1'
+		REL_OBJECT_TYPE='domain' PUBLIC_ID='1' />
+	<!-- variant -->
+	<RDAP_VARIANT VARIANT_ID='1' LDH_NAME='variant1'
+		UNICODE_NAME='unicodeName1' IDNTABLE='idntable1' />
+	<REL_DOMAIN_VARIANT DOMAIN_ID='1' VARIANT_TYPE='registered'
+		VARIANT_ID='1' />
+	<!-- remarks -->
+	<RDAP_NOTICE NOTICE_ID="1" TITLE="Terms of Use" TYPE="remark" />
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="1"
+		REL_ID="1" REL_OBJECT_TYPE="domain" NOTICE_ID="1" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="1"
+		NOTICE_ID="1" DESCRIPTION="description1" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="2"
+		NOTICE_ID="1" DESCRIPTION="description2" />
+	<RDAP_LINK LINK_ID="102" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="102" REL_ID="1"
+		REL_OBJECT_TYPE="remark" LINK_ID="102" />
+	<!-- secureDns -->
+	<RDAP_SECUREDNS SECUREDNS_ID='1' ZONE_SIGNED='1'
+		DELEGATION_SIGNED='1' MAX_SIGLIFE='1' DOMAIN_ID='1' />
+	<!-- dsData -->
+	<RDAP_DSDATA DSDATA_ID='1' KEY_TAG='1' ALGORITHM='1'
+		DIGEST='D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A'
+		DIGEST_TYPE='1' />
+	<REL_SECUREDNS_DSKEY REL_SECUREDNS_ID='1'
+		SECUREDNS_ID='1' REL_DSKEY_TYPE='dsData' REL_ID='1' />
+	<!-- keyData -->
+	<RDAP_KEYDATA KEYDATA_ID='1' FLAGS='1' ALGORITHM='1'
+		PUBLIC_KEY='D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A'
+		PROTOCOL='1' />
+	<REL_SECUREDNS_DSKEY REL_SECUREDNS_ID='2'
+		SECUREDNS_ID='1' REL_DSKEY_TYPE='keyData' REL_ID='1' />
+
+
+	<!-- second domain -->
+	<RDAP_DOMAIN DOMAIN_ID='2' HANDLE='2' LDH_NAME='cnnic2.cn'
+		UNICODE_NAME='cnnic2.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN_STATUS DOMAIN_STATUS_ID="3" DOMAIN_ID="2"
+		STATUS="validated" />
+	<RDAP_DOMAIN_STATUS DOMAIN_STATUS_ID="4" DOMAIN_ID="2"
+		STATUS="update prohibited" />
+	<!-- network -->
+	<REL_DOMAIN_NETWORK DOMAIN_ID='2' NETWORK_ID='1' />
+	<!-- events -->
+	<REL_EVENT_REGISTRATION REL_EVENT_ID="2" REL_ID="2"
+		REL_OBJECT_TYPE="domain" EVENT_ID="1" />
+	<!-- links -->
+	<REL_LINK_OBJECT REL_LINK_ID="2" REL_ID="2"
+		REL_OBJECT_TYPE="domain" LINK_ID="1" />
+	<!-- publicId -->
+	<REL_PUBLICID_REGISTRATION REL_ID='2'
+		REL_OBJECT_TYPE='domain' PUBLIC_ID='1' />
+	<!-- variant -->
+	<REL_DOMAIN_VARIANT DOMAIN_ID='2' VARIANT_TYPE='registered'
+		VARIANT_ID='1' />
+	<!-- remarks -->
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="2"
+		REL_ID="2" REL_OBJECT_TYPE="domain" NOTICE_ID="1" />
+	<!-- secureDns -->
+	<RDAP_SECUREDNS SECUREDNS_ID='2' ZONE_SIGNED='1'
+		DELEGATION_SIGNED='1' MAX_SIGLIFE='1' DOMAIN_ID='2' />
+	<REL_SECUREDNS_DSKEY REL_SECUREDNS_ID='3'
+		SECUREDNS_ID='2' REL_DSKEY_TYPE='dsData' REL_ID='1' />
+	<!-- keyData -->
+	<REL_SECUREDNS_DSKEY REL_SECUREDNS_ID='4'
+		SECUREDNS_ID='2' REL_DSKEY_TYPE='keyData' REL_ID='1' />
+		
+	<!-- test for truncated domains: more than 5 domains for 'truncated*' -->
+	<RDAP_DOMAIN DOMAIN_ID='11' HANDLE='11' LDH_NAME='truncated1.cn'
+		UNICODE_NAME='truncated1.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='12' HANDLE='12' LDH_NAME='truncated2.cn'
+		UNICODE_NAME='truncated2.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='13' HANDLE='13' LDH_NAME='truncated3.cn'
+		UNICODE_NAME='truncated3.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='14' HANDLE='14' LDH_NAME='truncated4.cn'
+		UNICODE_NAME='truncated4.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='15' HANDLE='15' LDH_NAME='truncated5.cn'
+		UNICODE_NAME='truncated5.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='16' HANDLE='16' LDH_NAME='truncated6.cn'
+		UNICODE_NAME='truncated6.cn' PORT43='port43' LANG='zh' />
+</dataset>

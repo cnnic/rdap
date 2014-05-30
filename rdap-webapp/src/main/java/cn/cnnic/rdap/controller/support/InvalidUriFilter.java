@@ -45,9 +45,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.WebUtils;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
+import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
  * filter invalid uri which spring can't catch
@@ -70,6 +72,7 @@ public class InvalidUriFilter implements Filter {
             FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) arg0;
         HttpServletResponse response = (HttpServletResponse) arg1;
+        decodeServletPathForSpringUrlMapping(request);
         String path = request.getRequestURI();
         if (StringUtils.isBlank(path)) {
             writeError400Response(response);
@@ -108,6 +111,25 @@ public class InvalidUriFilter implements Filter {
             }
         }
         chain.doFilter(request, response);
+    }
+
+    /**
+     * decode servletPath with UTF-8 for spring url mapping.
+     * 
+     * @param request
+     *            HttpServletRequest.
+     */
+    private void decodeServletPathForSpringUrlMapping(HttpServletRequest request)
+            throws UnsupportedEncodingException {
+        request.setCharacterEncoding(StringUtil.CHAR_SET_UTF8);
+        String servletPath = request.getServletPath();
+        if (StringUtils.isNotBlank(servletPath)) {
+            String decodedPath = new String(
+                    servletPath.getBytes(StringUtil.CHAR_SET_ISO8859),
+                    StringUtil.CHAR_SET_UTF8);
+            request.setAttribute(WebUtils.INCLUDE_SERVLET_PATH_ATTRIBUTE,
+                    decodedPath);
+        }
     }
 
     private void writeError400Response(HttpServletResponse response)

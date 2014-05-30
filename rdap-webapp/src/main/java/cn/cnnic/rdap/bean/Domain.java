@@ -30,47 +30,345 @@
  */
 package cn.cnnic.rdap.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
- * represents a DNS name and point of delegation
+ * represents a DNS name and point of delegation.
  * 
  * @author jiashuo
  * 
  */
+@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "ldhName",
+        "unicodeName", "variants", "nameServers", "secureDNS", "entities",
+        "status", "publicIds", "remarks", "links", "port43", "events",
+        "network", "lang" })
 public class Domain extends BaseModel {
-	/**
-	 * handle of domain
-	 */
-	private String handle;
-	/**
-	 * domain name of LDH format
-	 */
-	private String ldhName;
-	/**
-	 * domain name of unicode format
-	 */
-	private String unicodeName;
+    /**
+     * representing a registry unique identifier of the domain object instance.
+     */
+    private String handle;
+    /**
+     * Textual representations of DNS names where the labels of the domain are
+     * all "letters, digits, hyphen" labels as described by [RFC5890].
+     */
+    private String ldhName;
+    /**
+     * Textual representations of DNS names where one or more of the labels are
+     * U-labels as described by [RFC5890].
+     */
+    private String unicodeName;
 
-	public String getHandle() {
-		return handle;
-	}
+    /**
+     * list of varients.
+     */
+    private List<Variants> varients;
 
-	public void setHandle(String handle) {
-		this.handle = handle;
-	}
+    // private List<Nameserver> nameServers;
 
-	public String getLdhName() {
-		return ldhName;
-	}
+    /**
+     * secureDNS.
+     */
+    @JsonProperty("secureDNS")
+    private SecureDns secureDns;
+    /**
+     * entities.
+     */
+    private List<Entity> entities;
+    /**
+     * status.
+     */
+    private List<String> status;
+    /**
+     * publicId.
+     */
+    private List<PublicId> publicIds;
+    /**
+     * remarks.
+     */
+    private List<Remark> remarks;
+    /**
+     * links.
+     */
+    private List<Link> links;
+    /**
+     * port43.
+     */
+    private String port43;
+    /**
+     * events.
+     */
+    private List<Event> events;
+    /**
+     * represents the IP network for which a reverse DNS domain is referenced.
+     */
+    private List<Network> network;
 
-	public void setLdhName(String ldhName) {
-		this.ldhName = ldhName;
-	}
+    /**
+     * add a status string to status list.
+     * 
+     * @param statusStr
+     *            statusStr.
+     */
+    public void addStatus(String statusStr) {
+        if (StringUtils.isBlank(statusStr)) {
+            return;
+        }
+        if (null == this.status) {
+            this.status = new ArrayList<String>();
+        }
+        this.status.add(statusStr);
+    }
 
-	public String getUnicodeName() {
-		return unicodeName;
-	}
+    /**
+     * get handle.
+     * 
+     * @return handle
+     */
+    public String getHandle() {
+        return handle;
+    }
 
-	public void setUnicodeName(String unicodeName) {
-		this.unicodeName = unicodeName;
-	}
+    /**
+     * set handle.
+     * 
+     * @param handle
+     *            handle of domain
+     */
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
+    /**
+     * get ldhName.
+     * 
+     * @return domain name in LDH format
+     */
+    public String getLdhName() {
+        return ldhName;
+    }
+
+    /**
+     * set domain name in LDH format.
+     * 
+     * @param ldhName
+     *            LHD formated domain name
+     */
+    public void setLdhName(String ldhName) {
+        this.ldhName = ldhName;
+    }
+
+    /**
+     * get domain name in unicode format.
+     * 
+     * @return domain name in unicode format
+     */
+    public String getUnicodeName() {
+        return unicodeName;
+    }
+
+    /**
+     * set domain name in unicode format.
+     * 
+     * @param unicodeName
+     *            domain name in unicode format
+     */
+    public void setUnicodeName(String unicodeName) {
+        this.unicodeName = unicodeName;
+    }
+
+    /**
+     * get varients.
+     * 
+     * @return varients.
+     */
+    public List<Variants> getVarients() {
+        return varients;
+    }
+
+    /**
+     * set varients.
+     * 
+     * @param varients
+     *            varients.
+     */
+    public void setVarients(List<Variants> varients) {
+        this.varients = varients;
+    }
+
+    /**
+     * get secureDNS.
+     * 
+     * @return secureDNS.
+     */
+    public SecureDns getSecureDns() {
+        return secureDns;
+    }
+
+    /**
+     * set secureDNS.
+     * 
+     * @param secureDns
+     *            secureDNS.
+     */
+    public void setSecureDns(SecureDns secureDns) {
+        this.secureDns = secureDns;
+    }
+
+    /**
+     * get entities.
+     * 
+     * @return entities.
+     */
+    public List<Entity> getEntities() {
+        return entities;
+    }
+
+    /**
+     * set entities.
+     * 
+     * @param entities
+     *            entities.
+     */
+    public void setEntities(List<Entity> entities) {
+        this.entities = entities;
+    }
+
+    /**
+     * get status.
+     * 
+     * @return status.
+     */
+    public List<String> getStatus() {
+        return status;
+    }
+
+    /**
+     * set status.
+     * 
+     * @param status
+     *            status.
+     */
+    public void setStatus(List<String> status) {
+        this.status = status;
+    }
+
+    /**
+     * get publicIds.
+     * 
+     * @return publicIds.
+     */
+    public List<PublicId> getPublicIds() {
+        return publicIds;
+    }
+
+    /**
+     * set publicIds.
+     * 
+     * @param publicIds
+     *            publicIds.
+     */
+    public void setPublicIds(List<PublicId> publicIds) {
+        this.publicIds = publicIds;
+    }
+
+    /**
+     * get remarks.
+     * 
+     * @return remarks.
+     */
+    public List<Remark> getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * set remarks.
+     * 
+     * @param remarks
+     *            remarks.
+     */
+    public void setRemarks(List<Remark> remarks) {
+        this.remarks = remarks;
+    }
+
+    /**
+     * get links.
+     * 
+     * @return links.
+     */
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    /**
+     * set links.
+     * 
+     * @param links
+     *            links.
+     */
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
+    /**
+     * get port43.
+     * 
+     * @return port43.
+     */
+    public String getPort43() {
+        return port43;
+    }
+
+    /**
+     * set port43.
+     * 
+     * @param port43
+     *            port43.
+     */
+    public void setPort43(String port43) {
+        this.port43 = port43;
+    }
+
+    /**
+     * get events.
+     * 
+     * @return events.
+     */
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    /**
+     * set events.
+     * 
+     * @param events
+     *            events.
+     */
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    /**
+     * get network.
+     * 
+     * @return network.
+     */
+    public List<Network> getNetwork() {
+        return network;
+    }
+
+    /**
+     * set network.
+     * 
+     * @param network
+     *            network.
+     */
+    public void setNetwork(List<Network> network) {
+        this.network = network;
+    }
 }

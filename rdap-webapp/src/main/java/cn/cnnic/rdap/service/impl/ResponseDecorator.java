@@ -71,7 +71,7 @@ public class ResponseDecorator {
      * add notices to model.
      * 
      * @param model
-     *            response
+     *            model.
      */
     private void addNotices(BaseModel model) {
         if (null == model) {
@@ -84,7 +84,7 @@ public class ResponseDecorator {
      * add rdapConformance to model.
      * 
      * @param model
-     *            response
+     *            model.
      */
     private void addRdapConformance(BaseModel model) {
         rdapConformanceService.setRdapConformance(model);

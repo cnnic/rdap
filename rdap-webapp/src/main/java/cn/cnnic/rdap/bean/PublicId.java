@@ -31,10 +31,56 @@
 package cn.cnnic.rdap.bean;
 
 /**
- * maps a public identifier to an object class
+ * maps a public identifier to an object class.
  * 
  * @author jiashuo
  * 
  */
 public class PublicId extends BaseModel {
+    /**
+     * denoting the type of public identifier.
+     */
+    private String type;
+    /**
+     * a public identifier of the type denoted by 'type'.
+     */
+    private String identifier;
+
+    /**
+     * get type.
+     * 
+     * @return type.
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * set type.
+     * 
+     * @param type
+     *            type.
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * get identifier.
+     * 
+     * @return identifier.
+     */
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    /**
+     * set identifier.
+     * 
+     * @param identifier
+     *            identifier.
+     */
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 }
