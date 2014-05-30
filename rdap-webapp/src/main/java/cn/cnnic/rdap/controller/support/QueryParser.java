@@ -33,6 +33,7 @@ package cn.cnnic.rdap.controller.support;
 import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.DomainQueryParam;
+import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.common.util.DomainUtil;
 
@@ -67,5 +68,20 @@ public class QueryParser {
             String punyDomainName) {
         String punyName = DomainUtil.geneDomainPunyName(domainName);
         return new DomainQueryParam(domainName, punyName);
+    }
+    
+    /**
+     * generate NameserverQueryParam.
+     * 
+     * @param nsName
+     *            nameserver name.
+     * @param punyNSName
+     *            nameserver puny name.
+     * @return QueryParam.
+     */
+    public QueryParam parseNameserverQueryParam(String nsName,
+            String punyNSName) {
+        String punyName = DomainUtil.geneDomainPunyName(nsName);
+        return new NameserverQueryParam(nsName, punyName);
     }
 }

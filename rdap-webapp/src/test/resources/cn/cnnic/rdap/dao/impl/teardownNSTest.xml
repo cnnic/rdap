@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_DSDATA />
+	<RDAP_KEYDATA />
+	<REL_PUBLICID_REGISTRATION />
+	<RDAP_IP_STATUS />
+
+	<!-- <RDAP_IP /> <RDAP_SECUREDNS /> -->
+</dataset>
