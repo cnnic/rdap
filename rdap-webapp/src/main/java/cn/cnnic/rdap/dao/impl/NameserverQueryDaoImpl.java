@@ -89,6 +89,53 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     @Autowired
     private QueryDao<IPAddress> ipAddressQueryDao;
 
+    /**
+     * query inner objects of nameserver,and set object value to them.
+     * 
+     * @param outerObjectId
+     *            id from domain.
+     * 
+     * @param outerModelType
+     *            type of the object
+     * 
+     * @return result for List<Nameserver>
+     */
+    private List<Nameserver> queryNameserverWithDomainID(
+            final Long outerObjectId, ModelType outerModelType) {
+        final String sql = "select * from RDAP_NAMESERVER ns inner join "
+                + "REL_DOMAIN_NAMESERVER rel on (ns.NAMESERVER_ID = "
+                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ?) left outer "
+                + "join RDAP_NAMESERVER_STATUS status on ns.NAMESERVER_ID "
+                + "=status.NAMESERVER_ID";
+
+        List<Nameserver> result = jdbcTemplate.query(
+                new PreparedStatementCreator() {
+                    public PreparedStatement createPreparedStatement(
+                            Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps.setLong(1, outerObjectId);
+                        return ps;
+                    }
+                }, new NSResultSetExtractor());
+        if (null == result || result.size() == 0) {
+            return null;
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Nameserver> queryAsInnerObjects(Long outerObjectId,
+            ModelType outerModelType) {
+        List<Nameserver> listNameserver = queryNameserverWithDomainID(
+                outerObjectId, outerModelType);
+        final int sizeNameserver = listNameserver.size();
+        for (int i = 0; i < sizeNameserver; ++i) {
+            queryAndSetInnerObjects(listNameserver.get(i));
+        }
+        return listNameserver;
+    }
+
     @Override
     public Nameserver query(QueryParam queryParam) {
         Nameserver ns = queryWithoutInnerObjects(queryParam);
@@ -153,6 +200,38 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             return null;
         }
         return result.get(0);
+    }
+
+    /**
+     * nameserver NSResultInnerExtractor, extract data from ResultSet.
+     * 
+     * @author weijunkai
+     * 
+     */
+    class NSResultInnerExtractor implements
+            ResultSetExtractor<List<Nameserver>> {
+        @Override
+        public List<Nameserver> extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            List<Nameserver> result = new ArrayList<Nameserver>();
+            Map<Long, Nameserver> nsMapById = new HashMap<Long, Nameserver>();
+            while (rs.next()) {
+                Long nsId = rs.getLong("NAMESERVER_ID");
+                Nameserver ns = nsMapById.get(nsId);
+                if (null == ns) {
+                    ns = new Nameserver();
+                    ns.setId(nsId);
+                    ns.setHandle(rs.getString("HANDLE"));
+                    ns.setLdhName(rs.getString("LDH_NAME"));
+                    ns.setUnicodeName(rs.getString("UNICODE_NAME"));
+                    ns.setPort43(rs.getString("PORT43"));
+                    ns.setLang(rs.getString("LANG"));
+                    result.add(ns);
+                    nsMapById.put(nsId, ns);
+                }
+            }
+            return result;
+        }
     }
 
     /**

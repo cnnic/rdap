@@ -62,6 +62,7 @@ import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.bean.SecureDns;
 import cn.cnnic.rdap.bean.Variants;
+import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.NoticeDao;
@@ -88,6 +89,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     @Autowired
     @Qualifier("variantsQueryDaoImpl")
     private QueryDao<Variants> variantsQueryDao;
+    /**
+     * nameserver dao.
+     */
+    @Autowired
+    @Qualifier("nameserverQueryDaoImpl")
+    private QueryDao<Nameserver> nameserverQueryDao;
     /**
      * secureDns dao.
      */
@@ -237,6 +244,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Variants> varients = variantsQueryDao.queryAsInnerObjects(
                 domainId, ModelType.DOMAIN);
         domain.setVarients(varients);
+        List<Nameserver> nameServers = nameserverQueryDao.queryAsInnerObjects(
+                domainId, ModelType.DOMAIN);
+        domain.setNameServers(nameServers);
         List<SecureDns> secureDnsList = secureDnsQueryDao.queryAsInnerObjects(
                 domainId, ModelType.DOMAIN);
         if (null != secureDnsList && secureDnsList.size() > 0) {

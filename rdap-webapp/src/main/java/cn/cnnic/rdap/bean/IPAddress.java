@@ -59,7 +59,7 @@ public class IPAddress extends BaseModel {
     /**
      * an identifier assigned to the ipAddress.
      */
-    private String ipID;
+    private String ipId;
 
     /**
      * ip version:v4,v6.
@@ -194,7 +194,7 @@ public class IPAddress extends BaseModel {
      * @return ID.
      */
     public String getID() {
-        return ipID;
+        return ipId;
     }
 
     /**
@@ -204,6 +204,6 @@ public class IPAddress extends BaseModel {
      *            for nameserver.
      */
     public void setID(String id) {
-        this.ipID = id;
+        this.ipId = id;
     }
 }
