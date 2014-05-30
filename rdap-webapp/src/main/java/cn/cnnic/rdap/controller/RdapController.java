@@ -56,7 +56,6 @@ import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
-import cn.cnnic.rdap.bean.Nameserver;
 
 /**
  * controller for query and search.All methods return message in JSON format.
@@ -208,41 +207,5 @@ public class RdapController {
     @RequestMapping(value = "/**")
     public ResponseEntity error400() {
         return RestResponseUtil.createResponse400();
-    }
-    
-    /**
-     * query nameserver by nameserver name.
-     * 
-     * @param nameserverName
-     *            represents information regarding DNS name servers used in both
-     *            forward and reverse DNS. RIRs and some DNRs register or expose
-     *            nameserver information as an attribute of a domain name, while
-     *            other DNRs model nameservers as "first class objects".
-     * @return JSON formatted result,with HTTP code.
-     */
-    @RequestMapping(value = { "/nameserver/{nameserverName}" }, method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity queryNameserver(@PathVariable String nameserverName) {
-        String decodeNS = DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase(nameserverName);
-        String punyNSName = decodeNS;
-        try {
-            // long lable exception
-            punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
-        } catch (Exception e) {
-            return RestResponseUtil.createResponse400();
-        }
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
-            return RestResponseUtil.createResponse400();
-        }
-        decodeNS = DomainUtil.deleteLastPoint(decodeNS);
-        decodeNS = DomainUtil.getLowerCaseByLabel(decodeNS);
-        Nameserver ns = queryService.queryNameserver(queryParser
-                .parseNameserverQueryParam(decodeNS, punyNSName));
-        if (null != ns) {
-            responseDecorator.decorateResponse(ns);
-            return RestResponseUtil.createResponse200(ns);
-        }
-        return RestResponseUtil.createResponse404();
     }
 }
