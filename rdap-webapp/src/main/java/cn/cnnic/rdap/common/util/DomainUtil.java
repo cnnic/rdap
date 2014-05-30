@@ -194,21 +194,15 @@ public final class DomainUtil {
             LOGGER.error("generate puny name error:" + e.getMessage());
             return false;
         }
-        String punyWithoutLastPoint = deleteLastPoint(punyDomainName);
-        if (!validateDomainLength(punyWithoutLastPoint)) {
-            return false;
-        }
-        String domainNameWithoutLastPoint = deleteLastPoint(domainName);
-        String[] splits = StringUtils.split(punyWithoutLastPoint, ".");
+        String domainWithoutLastPoint = deleteLastPoint(punyDomainName);
+        String[] splits = StringUtils.split(domainWithoutLastPoint, ".");
         if (splits.length > MAX_DOMAIN_LABEL) {
             return false;
         }
-        if (domainName.equals(punyDomainName)
-                || domainNameWithoutLastPoint.equals(punyWithoutLastPoint)) {
-            // all ASCII lable
+        if (domainName.equals(punyDomainName)) {//all ASCII lable
             if (isLdh(domainName)) {
                 return true;
-            } else {
+            }else{
                 return false;
             }
         }
