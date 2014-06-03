@@ -30,18 +30,23 @@
  */
 package cn.cnnic.rdap.service.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.DomainSearch;
+import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.SearchService;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
  * Test for SearchService.
@@ -60,12 +65,47 @@ public class SearchServiceImplTest extends BaseTest {
      * test search domain.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
+    // @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH,
+            value = "classpath:cn/cnnic/rdap/dao/impl/domain-search-page.xml")
     public void testQueryDomain() {
-        String domainName = "cnnic*";
+        String domainName = "truncated*.cn";
+        RdapProperties prop = new RdapProperties();
+        // resultsTruncated = true, batch<max
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
+        ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
         DomainSearch domainSearch = searchService.searchDomain(queryParser
                 .parseDomainQueryParam(domainName, domainName));
         assertNotNull(domainSearch);
+        assertNotNull(domainSearch.getDomainSearchResults());
+        assertEquals(5L, domainSearch.getDomainSearchResults().size());
+        assertTrue(domainSearch.getResultsTruncated());
+        // resultsTruncated = true, batch=max
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
+        ReflectionTestUtils.setField(prop, "batchsizeSearch", 5L);
+        domainSearch = searchService.searchDomain(queryParser
+                .parseDomainQueryParam(domainName, domainName));
+        assertNotNull(domainSearch);
+        assertNotNull(domainSearch.getDomainSearchResults());
+        assertEquals(5L, domainSearch.getDomainSearchResults().size());
+        assertTrue(domainSearch.getResultsTruncated());
+        // resultsTruncated = true, batch>max
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
+        ReflectionTestUtils.setField(prop, "batchsizeSearch", 6L);
+        domainSearch = searchService.searchDomain(queryParser
+                .parseDomainQueryParam(domainName, domainName));
+        assertNotNull(domainSearch);
+        assertNotNull(domainSearch.getDomainSearchResults());
+        assertEquals(5L, domainSearch.getDomainSearchResults().size());
+        assertTrue(domainSearch.getResultsTruncated());
+        // no resultsTruncated
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 6L);
+        ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
+        domainSearch = searchService.searchDomain(queryParser
+                .parseDomainQueryParam(domainName, domainName));
+        assertNotNull(domainSearch);
+        assertNotNull(domainSearch.getDomainSearchResults());
+        assertEquals(6L, domainSearch.getDomainSearchResults().size());
+        assertNull(domainSearch.getResultsTruncated());
     }
 }

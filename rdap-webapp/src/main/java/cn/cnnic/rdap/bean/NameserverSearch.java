@@ -30,57 +30,36 @@
  */
 package cn.cnnic.rdap.bean;
 
+import java.util.List;
+
 /**
- * represents user identity.
+ * nameserver search model.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-public class Principal {
+public class NameserverSearch extends BaseSearchModel {
     /**
-     * anonymous user id.
+     * domain list.
      */
-    private static final Long USER_ID_ANONYMOUS = 0L;
-    /**
-     * identity, user id.
-     */
-    private Long id ;
-    
-    /**
-     * get anonymous principal.
-     */
-    public static Principal getAnonymousPrincipal(){
-        return new Principal(USER_ID_ANONYMOUS);
-    }
+    private List<Nameserver> nsSearchResults;
 
     /**
-     * constructor.
+     * get nameserverSearchResults.
      * 
-     * @param id
-     *            id.
+     * @return nameserverSearchResults.
      */
-    public Principal(Long id) {
-        super();
-        this.id = id;
+    public List<Nameserver> getNsSearchResults() {
+        return nsSearchResults;
     }
 
     /**
-     * get id.
+     * set nameserverSearchResults.
      * 
-     * @return id.
+     * @param nameserverSearchResults
+     *            nameserverSearchResults.
      */
-    public Long getId() {
-        return id;
+    public void setNsSearchResults(List<Nameserver> nsSearchResults) {
+        this.nsSearchResults = nsSearchResults;
     }
-
-    /**
-     * set id.
-     * 
-     * @param id
-     *            id.
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 }
