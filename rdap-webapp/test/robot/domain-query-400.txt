@@ -1,0 +1,206 @@
+*** Settings ***
+Resource          variables.txt
+Library           Collections
+Library           RequestsLibrary
+Library           UrlEncode
+Test Setup      	Create Session	rdap     ${HOST}
+*** Testcases ***     uri
+Return 400-domain-query,qc:1.2.3.1.1d400-ipv4
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/256.in-addr.arpa
+Return 400-domain-query,qc:1.2.3.1.2d400-ipv4
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/1.2.3.4.5.in-addr.arpa
+Return 400-domain-query,qc:1.2.3.1.3d400-ipv4
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/.1.in-addr.arpa
+	/.well-known/rdap/domain/1..5.in-addr.arpa
+	/.well-known/rdap/domain/1.2-5.in-addr.arpa
+	/.well-known/rdap/domain/1.-25.in-addr.arpa
+	/.well-known/rdap/domain/1.25-.in-addr.arpa
+	/.well-known/rdap/domain/1.-25-.in-addr.arpa
+Return 400-domain-query,qc:1.2.3.1.4d400-ipv4
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/1.a.in-addr.arpa
+	/.well-known/rdap/domain/1.ºÃin-addr.arpa
+	/.well-known/rdap/domain/1.1.1.1\\8.in-addr.arpa
+	/.well-known/rdap/domain/1.xn--5us.in-addr.arpa
+	/.well-known/rdap/domain/1::1.in-addr.arpa
+	/.well-known/rdap/domain/1.#.1.in-addr.arpa
+	/.well-known/rdap/domain/1.*.1.in-addr.arpa
+	/.well-known/rdap/domain/1.<>.1.in-addr.arpa
+	/.well-known/rdap/domain/1. .1.in-addr.arpa
+Return 400-domain-query,qc:1.2.3.2.1d400-ipv6
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.10.1.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.g.ip6.arpa
+Return 400-domain-query,qc:1.2.3.2.2d400-ipv6
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.1.ip6.arpa
+	/.well-known/rdap/domain/1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.1.ip6.arpa
+Return 400-domain-query,qc:1.2.3.2.3d400-ipv6
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/3.4.5.6.7.8.9.0.a.b.c.d.e.f.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.1.ip6.arpa
+	/.well-known/rdap/domain/.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.5.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1..5.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2-5.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.-25.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.25-.ip6.arpa
+Return 400-domain-query,qc:1.2.3.2.4d400-ipv6
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.-25-.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.好.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.1.1\8.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.xn--5us.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1::1.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.#.1.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.*.1.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.<>.1.ip6.arpa
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1. .1.ip6.arpa
+Return 400-domain-query,qc:1.2.3.2.5d400-ipv6
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1. .1.ip6.arpa
+#	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.b.1.ip6.int
+Return 400-domain-query,qc:1.2.3.2.6d400-ipv6
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/\[ xab12/16].ip6.arpa
+Return 400-domain-query,qc:1.2.3.3.1d400-LDH
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/abcd123456789012345678901234567890123456789012345678901234567890.cn
+	/.well-known/rdap/domain/xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa1.bnnhg
+Return 400-domain-query,qc:1.2.3.3.2d400-LDH
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouoo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabal1.cn
+#	/.well-known/rdap/domain/xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.jaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa1.bnnhg.
+	/.well-known/rdap/domain/1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.n
+	/.well-known/rdap/domain/1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.n.
+Return 400-domain-query,qc:1.2.3.3.3d400-LDH
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/cnnic。cn
+	/.well-known/rdap/domain/.cnnic.cn
+	/.well-known/rdap/domain/ww..he.cn
+	/.well-known/rdap/domain/-cnnic.cn
+	/.well-known/rdap/domain/cnnic-.cn
+	/.well-known/rdap/domain/-cnnic-.cn
+	/.well-known/rdap/domain/ab.-.cn
+Return 400-domain-query,qc:1.2.3.3.4d400-LDH
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/cnnic%.cn
+	/.well-known/rdap/domain/cnnic*.cn
+	/.well-known/rdap/domain/cnni+c.cn
+	/.well-known/rdap/domain/cn<n>ic.cn
+	/.well-known/rdap/domain/ cnnic.cn
+	/.well-known/rdap/domain/cnnic. .cn
+	/.well-known/rdap/domain/^cnnic.cn
+	/.well-known/rdap/domain/cnnic,.cn
+	/.well-known/rdap/domain/cnnic:cn
+	/.well-known/rdap/domain/cnnic_cn
+	/.well-known/rdap/domain/cnnic;cn
+
+Return 400-domain-query,qc:1.2.3.4.1d400-U-label
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/就是很长的信息你能说怎么办就没有办法法法.cn
+#Return 400-domain-query,qc:1.2.3.4.2d400-U-label
+#	[Template]		Return 400-domain-query
+#	/.well-known/rdap/domain/就是很长的信息你能说怎么办就没有办法.就是很长的信息你能说怎么办就没有办法.就是很长的信息你能说怎么办就没有办法.就是很长的信息你能说怎么办就没有办法.edu.cn	
+#	/.well-known/rdap/domain/就是很长的信息你能说怎么办就没有办法.就是很长的信息你能说怎么办就没有办法.就是很长的信息你能说怎么办就没有办法.就是很长的信息你能说怎么办就没有办法.就是很长的信息你能说怎么办就没有办法.cn
+Return 400-domain-query,qc:1.2.3.4.3d400-U-label
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/12--11中国.中国
+	/.well-known/rdap/domain/xn--5us中国.中国
+Return 400-domain-query,qc:1.2.3.4.4d400-U-label
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/xn--5us.%E4%B8%AD%E5%9B%BD
+	/.well-known/rdap/domain/xn--5us.中国
+	/.well-known/rdap/domain/xn--5us.qqéa.cn
+Return 400-domain-query,qc:1.2.3.4.5d400-U-label
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/.好.中国
+	/.well-known/rdap/domain/12..好.中国
+	/.well-known/rdap/domain/-好.中国
+	/.well-known/rdap/domain/好-.中国
+	/.well-known/rdap/domain/-好-.中国
+	/.well-known/rdap/domain/好.-.中国
+Return 400-domain-query,qc:1.2.3.4.6d400-U-label
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/123*〳.中国
+	/.well-known/rdap/domain/123*Ā.中国
+	/.well-known/rdap/domain/123*Ƽ.中国
+Return 400-domain-query,qc:1.2.3.4.7d400-U-label
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/123*஝.中国
+	/.well-known/rdap/domain/123*઱.中国
+	/.well-known/rdap/domain/123*㿿.中国
+Return 400-domain-query,qc:1.2.3.4.8d400-U-label
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/%E%B8%AD%E5%9B%BD%E4%BA%92%E8%81%94%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E4%B8%AD%E5%BF%83.cn
+	/.well-known/rdap/domain/%C81%851%C81%815%C81%851%C81%851.com
+	
+Return 400-domain-query,qc:1.2.3.5.1d400-Request command structure errors
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/unkown/cnnic.cn
+	/.well-known/rdap/cnnic.cn
+Return 400-domain-query,qc:1.2.3.5.2d400-Request command structure errors
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain
+	/.well-known/rdap/domain/
+	/.well-known/rdap/domain//
+Return 400-domain-query,qc:1.2.3.5.3d400-Request command structure errors
+	[Template]		Return 400-domain-query	
+	/.well-known/rdap/domain/cnnic.cn/
+	/.well-known/rdap/domain/cnnic.cn/1.1.1.1
+#	/.well-known/rdap/domain/cnnic.cnx\x08
+	/.well-known/rdap/domain/cnnic.cn\x00
+Return 400-domain-query,qc:1.2.3.5.4d400-Request command structure errors
+	[Template]		Return 400-domain-query	
+	/.well-known/RDAP/domain/cnnic.cn
+	/.well-known/rdap/DOMAIN/cnnic.cn
+Return 400-domain-query,qc:1.2.3.7.1d400-Request parameters no domain 
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/221.1.1.1/12
+	/.well-known/rdap/domain/ba11::1:2:1234
+	/.well-known/rdap/domain/ba11::1:2:1234/12
+Return 400-domain-query,qc:1.2.3.7.2d400-Request parameters no domain 
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/CID-40A|A
+	/.well-known/rdap/domain/Bobby%20Joe
+Return 400-domain-query,qc:1.2.3.7.3d400-Request parameters no domain 
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain/123
+Return 400-domain-query,qc:1.2.3.7.4d400-Request parameters no domain 
+	[Template]		Return 400-domain-query
+	/.well-known/rdap/domain//[::]
+	/.well-known/rdap/domain/?
+	/.well-known/rdap/domain/%
+	/.well-known/rdap/domain/*
+	/.well-known/rdap/domain/^
+	/.well-known/rdap/domain/'
+	/.well-known/rdap/domain/&
+	/.well-known/rdap/domain/<>
+Return 400-domain-query,qc:1.2.3.8.d400-root and Top-level domain selelct
+	[Template]		Return 400-domain-query
+#	/.well-known/rdap/domain/.
+	/.well-known/rdap/domain/cn.
+	/.well-known/rdap/domain/arpa
+	
+*** Keywords ***
+Return 400-domain-query
+    [Arguments]    ${uri}
+    ${encodeUri}		Encode Url		${uri}
+    ${headers}          Create Dictionary       Accept  application/rdap+json
+    ${resp}=            Get             rdap    ${encodeUri}          headers=${headers}
+    Should Be Equal As Strings      ${resp.status_code}        400
+    Log To Console 	\n-----step by step-----
+
+
+*** Testcases ***     uri	
+Return 400-domain-query,qc:1.2.3.2.07.d400-steps1-ipv6
+	[Template]		Return 200-domain
+	/.well-known/rdap/domain/0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.1.d.a.c.a.0.ip6.arpa
+*** Keywords ***
+Return 200-domain
+    [Arguments]    ${uri}
+    ${encodeUri}		Encode Url		${uri}
+    ${headers}          Create Dictionary       Accept  application/rdap+json
+    ${resp}=            Get             rdap    ${encodeUri}          headers=${headers}
+    Should Be Equal As Strings      ${resp.status_code}        200

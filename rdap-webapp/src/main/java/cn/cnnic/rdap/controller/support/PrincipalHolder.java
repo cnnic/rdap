@@ -38,12 +38,20 @@ import cn.cnnic.rdap.bean.Principal;
  * @author jiashuo
  * 
  */
-public class PrincipalHolder {
+public final class PrincipalHolder {
+
+    /**
+     * default constructor.
+     */
+    private PrincipalHolder() {
+        super();
+    }
+
     /**
      * thread local principal.
      */
-    private static final ThreadLocal<Principal> principal = 
-            new ThreadLocal<Principal>();
+    private static final ThreadLocal<Principal> PRINCIPAL
+        = new ThreadLocal<Principal>();
 
     /**
      * set principal.
@@ -52,14 +60,14 @@ public class PrincipalHolder {
      *            principal.
      */
     public static void setPrincipal(Principal auth) {
-        principal.set(auth);
+        PRINCIPAL.set(auth);
     }
 
     /**
      * remove principal.
      */
     public static void remove() {
-        principal.remove();
+        PRINCIPAL.remove();
     }
 
     /**
@@ -68,10 +76,10 @@ public class PrincipalHolder {
      * @return principal.
      */
     public static Principal getPrincipal() {
-        if(null == principal.get()){
+        if (null == PRINCIPAL.get()) {
             return Principal.getAnonymousPrincipal();
         }
-        return principal.get();
+        return PRINCIPAL.get();
     }
 
 }

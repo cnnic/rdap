@@ -53,6 +53,7 @@ import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
+import cn.cnnic.rdap.service.AccessControlManager;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
@@ -93,6 +94,12 @@ public class RdapController {
      */
     @Autowired
     private ResponseDecorator responseDecorator;
+    
+    /**
+     * access control manager.
+     */
+    @Autowired
+    private AccessControlManager accessControlManager;
 
     /**
      * query autnum.
@@ -115,6 +122,9 @@ public class RdapController {
         Autnum result = queryService.queryAutnum(queryParser
                 .parseQueryParam(autnum));
         if (null != result) {
+            if (! accessControlManager.hasPermission(result)){
+                return RestResponseUtil.createResponse403();
+            }
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
@@ -153,6 +163,9 @@ public class RdapController {
         Domain domain = queryService.queryDomain(queryParser
                 .parseDomainQueryParam(decodeDomain, punyDomainName));
         if (null != domain) {
+            if (! accessControlManager.hasPermission(domain)){
+                return RestResponseUtil.createResponse403();
+            }
             responseDecorator.decorateResponse(domain);
             return RestResponseUtil.createResponse200(domain);
         }
@@ -248,6 +261,9 @@ public class RdapController {
         Nameserver ns = queryService.queryNameserver(queryParser
                 .parseNameserverQueryParam(decodeNS, punyNSName));
         if (null != ns) {
+            if (! accessControlManager.hasPermission(ns)){
+                return RestResponseUtil.createResponse403();
+            }
             responseDecorator.decorateResponse(ns);
             return RestResponseUtil.createResponse200(ns);
         }
