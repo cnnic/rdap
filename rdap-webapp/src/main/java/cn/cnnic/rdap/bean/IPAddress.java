@@ -31,6 +31,8 @@
 package cn.cnnic.rdap.bean;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -53,81 +55,9 @@ public class IPAddress extends BaseModel {
     private List<String> ipAddressV6;
 
     /**
-     * @see IpVersion.
+     * an flag identify if the ipAddress existed.
      */
-    private IpVersion ipVersion;
-    /**
-     * an identifier assigned to the ipAddress.
-     */
-    private String ipId;
-
-    /**
-     * ip version:v4,v6.
-     * 
-     * @author jiashuo
-     * 
-     */
-    public enum IpVersion {
-        /**
-         * The representation of IPv4 addresses in this document uses the
-         * dotted-decimal notation described in [RFC1166]. The representation of
-         * IPv6 addresses in this document follow the forms outlined in
-         * [RFC5952].
-         */
-        V4("v4"), V6("v6");
-        /**
-         * a string signifying the IP protocol version of the network: "v4"
-         * signifying an IPv4 network, "v6" signifying an IPv6 network.
-         */
-        private String name;
-
-        /**
-         * check ip version string is ipv4.
-         * 
-         * @param ipVersionStr
-         *            ip version string.
-         * @return true if is, false if not.
-         */
-        public static boolean isV4(String ipVersionStr) {
-            if (V4.getName().equals(ipVersionStr)) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * check ip version string is ipv6.
-         * 
-         * @param ipVersionStr
-         *            ip version string.
-         * @return true if is, false if not.
-         */
-        public static boolean isV6(String ipVersionStr) {
-            if (V6.getName().equals(ipVersionStr)) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * default constructor.
-         * 
-         * @param name
-         *            ip version name.
-         */
-        private IpVersion(String name) {
-            this.name = name;
-        }
-
-        /**
-         * get name.
-         * 
-         * @return name.
-         */
-        public String getName() {
-            return name;
-        }
-    }
+    private boolean ipExisted;
 
     /**
      * get ip Address.
@@ -170,40 +100,21 @@ public class IPAddress extends BaseModel {
     }
 
     /**
-     * get ipVersion.
+     * get ipExisted.
      * 
-     * @return ipVersion.
+     * @return ipExisted.
      */
-    public IpVersion getIpVersion() {
-        return ipVersion;
+    public boolean getIpExisted() {
+        return ipExisted;
     }
 
     /**
-     * set ipVersion.
+     * set ipExisted.
      * 
-     * @param ipVersion
-     *            ipVersion.
-     */
-    public void setIpVersion(IpVersion ipVersion) {
-        this.ipVersion = ipVersion;
-    }
-
-    /**
-     * get ID.
-     * 
-     * @return ID.
-     */
-    public String getID() {
-        return ipId;
-    }
-
-    /**
-     * set id.
-     * 
-     * @param id
+     * @param ipExisted
      *            for nameserver.
      */
-    public void setID(String id) {
-        this.ipId = id;
+    public void setIpExisted(boolean ipExisted) {
+        this.ipExisted = ipExisted;
     }
 }
