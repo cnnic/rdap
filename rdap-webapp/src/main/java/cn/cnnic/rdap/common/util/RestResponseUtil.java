@@ -117,6 +117,17 @@ public class RestResponseUtil {
     public static ResponseEntity<ErrorMessage> createResponse400() {
         return createCommonErrorResponse(HttpStatus.BAD_REQUEST);
     }
+    
+    /**
+     * create response with HTTP status code 403.
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static ResponseEntity<ErrorMessage> createResponse403() {
+        return createCommonErrorResponse(HttpStatus.FORBIDDEN);
+    }
 
     /**
      * create response with HTTP status code 405

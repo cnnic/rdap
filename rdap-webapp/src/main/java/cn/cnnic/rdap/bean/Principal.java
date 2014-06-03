@@ -38,9 +38,20 @@ package cn.cnnic.rdap.bean;
  */
 public class Principal {
     /**
+     * anonymous user id.
+     */
+    private static final Long USER_ID_ANONYMOUS = 0L;
+    /**
      * identity, user id.
      */
-    private Long id;
+    private Long id ;
+    
+    /**
+     * get anonymous principal.
+     */
+    public static Principal getAnonymousPrincipal(){
+        return new Principal(USER_ID_ANONYMOUS);
+    }
 
     /**
      * constructor.

@@ -28,44 +28,31 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap;
+package cn.cnnic.rdap.bean;
 
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import cn.cnnic.rdap.bean.Principal;
+import org.junit.Test;
+
 import cn.cnnic.rdap.controller.support.PrincipalHolder;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-
 /**
- * base class for all test classes.Test can rollback after test complete.
+ * test for PrincipalHolder.
  * 
  * @author jiashuo
  * 
  */
+public class PrincipalHolderTest {
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(locations = {
-        "/spring/spring-applicationContext-test.xml",
-        "/spring/spring-servlet.xml" })
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class })
-@Transactional
-public abstract class BaseTest {
     /**
-     * set principal.
+     * test PageBean.
      */
-    @BeforeClass
-    public static void setPrincipal() {
-        PrincipalHolder.setPrincipal(Principal.getAnonymousPrincipal());
+    @Test
+    public void testPrincipalHolder() {
+        Principal anonymousPrincipal = Principal.getAnonymousPrincipal();
+        PrincipalHolder.setPrincipal(anonymousPrincipal);
+        assertNotNull(PrincipalHolder.getPrincipal());
+        assertEquals(0L, PrincipalHolder.getPrincipal().getId().longValue());
     }
-
 }
