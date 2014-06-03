@@ -195,10 +195,10 @@ public class RdapController {
         decodeDomain = StringUtils.lowerCase(decodeDomain);
         DomainSearch domainSearch = searchService.searchDomain(queryParser
                 .parseDomainQueryParam(decodeDomain, punyDomainName));
-        if (domainSearch.getHasNoAuthForAllObjects()) {
-            return RestResponseUtil.createResponse403();
-        }
         if (null != domainSearch) {
+            if (domainSearch.getHasNoAuthForAllObjects()) {
+                return RestResponseUtil.createResponse403();
+            }
             responseDecorator.decorateResponse(domainSearch);
             return RestResponseUtil.createResponse200(domainSearch);
         }
