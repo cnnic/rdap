@@ -84,6 +84,7 @@ public class SearchServiceImpl implements SearchService {
         page.setMaxRecords(RdapProperties.getBatchsizeSearch().intValue());
         page.setRecordsCount(totalCount.intValue());
         queryParam.setPageBean(page);
+        boolean gotEnoughResults = false;
         do {
             List<Domain> domains = domainDao.search(queryParam);
             for (Domain domain : domains) {
@@ -94,9 +95,14 @@ public class SearchServiceImpl implements SearchService {
                 if (accessControlManager.hasPermission(domain)) {
                     totalAuthedDomainSize++;
                 }
+                if (authedDomains.size() == RdapProperties.getMaxsizeSearch()
+                        && totalAuthedDomainSize > authedDomains.size()) {
+                    gotEnoughResults = true;
+                    break;
+                }
             }
             page.incrementCurrentPage();
-        } while (page.isNotLastPage()
+        } while (page.isNotLastPage() && !gotEnoughResults
         // && authedDomains.size() < RdapProperties.getMaxsizeSearch()
         );
         DomainSearch domainSearch = new DomainSearch();
