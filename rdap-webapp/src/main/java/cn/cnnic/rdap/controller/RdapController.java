@@ -130,7 +130,8 @@ public class RdapController {
      *            by the server operator (for DNRs).
      * @return JSON formated result,with HTTP code.
      */
-    @RequestMapping(value = { "/domain/{domainName}" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/domain/{domainName}" },
+            method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryDomain(@PathVariable String domainName) {
         String decodeDomain = domainName;
@@ -172,22 +173,23 @@ public class RdapController {
     public ResponseEntity searchDomain(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
-        String decodeDomain = DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase(name);
-        if(StringUtils.isBlank(decodeDomain)){
-            return RestResponseUtil.createResponse400();
-        }
-        name = StringUtil.getNormalization(name);
-        if (StringUtil.ASTERISK.equals(name)
-                || name.startsWith(StringUtil.ASTERISK)) {
-            return RestResponseUtil.createResponse422();
-        }
+        String decodeDomain = name;
         String punyDomainName = decodeDomain;
         try {
+            decodeDomain = DomainUtil
+                    .decodeAndTrimAndReplaceAsciiToLowercase(name);
             // long lable exception
             punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
+        }
+        if (StringUtils.isBlank(decodeDomain)) {
+            return RestResponseUtil.createResponse400();
+        }
+        decodeDomain = StringUtil.getNormalization(decodeDomain);
+        if (StringUtil.ASTERISK.equals(decodeDomain)
+                || decodeDomain.startsWith(StringUtil.ASTERISK)) {
+            return RestResponseUtil.createResponse422();
         }
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
@@ -209,7 +211,7 @@ public class RdapController {
     public ResponseEntity error400() {
         return RestResponseUtil.createResponse400();
     }
-    
+
     /**
      * query nameserver by nameserver name.
      * 
@@ -220,7 +222,8 @@ public class RdapController {
      *            other DNRs model nameservers as "first class objects".
      * @return JSON formatted result,with HTTP code.
      */
-    @RequestMapping(value = { "/nameserver/{nameserverName}" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/nameserver/{nameserverName}" },
+            method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryNameserver(@PathVariable String nameserverName) {
         String decodeNS = DomainUtil

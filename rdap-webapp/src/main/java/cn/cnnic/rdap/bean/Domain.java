@@ -108,6 +108,11 @@ public class Domain extends BaseModel {
      * represents the IP network for which a reverse DNS domain is referenced.
      */
     private List<Network> network;
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.DOMAIN;
+    }
 
     /**
      * add a status string to status list.
