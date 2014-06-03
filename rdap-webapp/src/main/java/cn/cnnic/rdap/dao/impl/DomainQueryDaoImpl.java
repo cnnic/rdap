@@ -55,15 +55,15 @@ import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelStatus;
 import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.Notice;
+import cn.cnnic.rdap.bean.PageBean;
 import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.bean.SecureDns;
 import cn.cnnic.rdap.bean.Variants;
-import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
@@ -404,7 +404,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      *            query parameter.
      * @return domain list.
      */
-    private List<Domain> searchWithoutInnerObjects(QueryParam queryParam) {
+    private List<Domain> searchWithoutInnerObjects(final QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         final String domainName = domainQueryParam.getQ();
         final String punyName = domainQueryParam.getPunyName();
@@ -412,7 +412,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 .generateLikeClause(domainName);
         final String punyNameLikeClause = super.generateLikeClause(punyName);
         final String sql = "select * from RDAP_DOMAIN domain "
-                + " where LDH_NAME like ? or UNICODE_NAME like ? order by domain.LDH_NAME limit ? ";
+                + " where LDH_NAME like ? or UNICODE_NAME like ? order by domain.LDH_NAME limit ?,? ";
+        final PageBean page = queryParam.getPageBean();
+        int startPage = page.getCurrentPage() - 1;
+        startPage = startPage >= 0 ? startPage : 0;
+        final long startRow = startPage * page.getMaxRecords();
         List<Domain> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
@@ -420,7 +424,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setString(1, punyNameLikeClause);
                         ps.setString(2, domainNameLikeClause);
-                        ps.setLong(3, RdapProperties.getMaxsizeSearch());
+                        ps.setLong(3, startRow);
+                        ps.setLong(4, page.getMaxRecords());
                         return ps;
                     }
                 }, new DomainResultSetExtractor());

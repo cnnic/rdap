@@ -79,6 +79,16 @@ public class RestResponseUtilTest extends BaseTest {
     }
 
     /**
+     * test create ResponseEntity with HTTP code 403.
+     */
+    @Test
+    public void testCreateResponse403() {
+        ResponseEntity result = RestResponseUtil.createResponse403();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
+    }
+
+    /**
      * test create ResponseEntity with HTTP code 404
      */
     @Test
