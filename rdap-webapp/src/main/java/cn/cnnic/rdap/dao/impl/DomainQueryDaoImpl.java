@@ -292,19 +292,17 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     private Domain queryWithoutInnerObjects(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
-        final String domainName = domainQueryParam.getQ();
         final String punyName = domainQueryParam.getPunyName();
         final String sql = "select * from RDAP_DOMAIN domain "
                 + " left outer join RDAP_DOMAIN_STATUS status "
                 + " on domain.DOMAIN_ID = status.DOMAIN_ID "
-                + " where LDH_NAME= ? or UNICODE_NAME= ?";
+                + " where LDH_NAME= ?  ";
         List<Domain> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setString(1, punyName);
-                        ps.setString(2, domainName);
                         return ps;
                     }
                 }, new DomainWithStatusResultSetExtractor());
