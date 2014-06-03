@@ -61,6 +61,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @Autowired
     private DomainQueryDaoImpl domainDao;
+
     /**
      * nameserver dao.
      */
@@ -118,16 +119,52 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public NameserverSearch searchNameserver(QueryParam queryParam) {
-        Long totalCount = domainDao.searchCount(queryParam);
+        Long totalCount = nameserverDao.searchCount(queryParam);
         if (totalCount == 0) {
             return null;
         }
+        
+        List<Nameserver> authedNameservers = new ArrayList<Nameserver>();
+        Long totalAuthedNsSize = 0L;
+        PageBean page = new PageBean();
+        page.setMaxRecords(RdapProperties.getBatchsizeSearch().intValue());
+        page.setRecordsCount(totalCount.intValue());
+        queryParam.setPageBean(page);
+        boolean gotEnoughResults = false;
+        do {
+            List<Nameserver> nameservers = nameserverDao.search(queryParam);
+            for (Nameserver nameserver : nameservers) {
+                if (authedNameservers.size() < RdapProperties.getMaxsizeSearch()
+                        && accessControlManager.hasPermission(nameserver)) {
+                    authedNameservers.add(nameserver);
+                }
+                if (accessControlManager.hasPermission(nameserver)) {
+                    totalAuthedNsSize++;
+                }
+                if (authedNameservers.size() == RdapProperties.getMaxsizeSearch()
+                        && totalAuthedNsSize > authedNameservers.size()) {
+                    gotEnoughResults = true;
+                    break;
+                }
+            }
+            page.incrementCurrentPage();
+        } while (page.isNotLastPage() && !gotEnoughResults
+        );
+        
         NameserverSearch nsSearch = new NameserverSearch();
-        if (totalCount > RdapProperties.getMaxsizeSearch()) {
+//        if (totalCount > RdapProperties.getMaxsizeSearch()) {
+//            nsSearch.setResultsTruncated(true);
+//        }
+//        List<Nameserver> listNS = nameserverDao.search(queryParam);  
+//        nsSearch.setNameserverSearchResults(listNS);
+        if (totalAuthedNsSize > authedNameservers.size()) {
             nsSearch.setResultsTruncated(true);
         }
-        List<Nameserver> listNS = nameserverDao.search(queryParam);
-        nsSearch.setNsSearchResults(listNS);
+        if (authedNameservers.size() == 0) {
+            nsSearch.setHasNoAuthForAllObjects(true);
+        }
+        nsSearch.setNameserverSearchResults(authedNameservers);
+        
         return nsSearch;
     }
 }

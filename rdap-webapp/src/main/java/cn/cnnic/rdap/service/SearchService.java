@@ -50,11 +50,11 @@ public interface SearchService {
      */
     DomainSearch searchDomain(QueryParam queryParam);
     /**
-     * search domain by domain name.
+     * search nameserver by name.
      * 
      * @param queryParam
      *            queryParam.
-     * @return domain list.
+     * @return NameserverSearch.
      */
     NameserverSearch searchNameserver(QueryParam queryParam);
 }

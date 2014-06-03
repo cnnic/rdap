@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
@@ -89,6 +90,11 @@ public class Nameserver extends BaseModel {
      * events.
      */
     private List<Event> events;
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.NAMESERVER;
+    }
 
     /**
      * add a status string to status list.

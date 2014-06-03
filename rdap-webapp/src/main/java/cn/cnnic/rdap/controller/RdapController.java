@@ -57,6 +57,7 @@ import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 import cn.cnnic.rdap.bean.Nameserver;
+import cn.cnnic.rdap.bean.NameserverSearch;
 
 /**
  * controller for query and search.All methods return message in JSON format.
@@ -243,12 +244,63 @@ public class RdapController {
             return RestResponseUtil.createResponse400();
         }
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
-        decodeNS = DomainUtil.getLowerCaseByLabel(decodeNS);
+        decodeNS = StringUtils.lowerCase(decodeNS);
         Nameserver ns = queryService.queryNameserver(queryParser
                 .parseNameserverQueryParam(decodeNS, punyNSName));
         if (null != ns) {
             responseDecorator.decorateResponse(ns);
             return RestResponseUtil.createResponse200(ns);
+        }
+        return RestResponseUtil.createResponse404();
+    }
+
+    /**
+     * search nameserver by name.
+     * 
+     * @param name
+     *            is a fully-qualified (relative to the root) domain name
+     *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
+     *            RIRs) or a fully-qualified domain name in a zone administered
+     *            by the server operator (for DNRs).
+     * @param request
+     *            HttpServletRequest
+     * @param response
+     *            HttpServletResponse
+     * @return JSON formated result,with HTTP code.
+     */
+    @RequestMapping(value = "/nameservers", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity searchNameserver(
+            @RequestParam(required = false) String name,
+            HttpServletRequest request, HttpServletResponse response) {
+        String decodeNameserver = name;
+        String punyNameserver = decodeNameserver;
+        try {
+            decodeNameserver = DomainUtil
+                    .decodeAndTrimAndReplaceAsciiToLowercase(name);
+            // long lable exception
+            punyNameserver = DomainUtil.geneDomainPunyName(decodeNameserver);
+        } catch (Exception e) {
+            return RestResponseUtil.createResponse400();
+        }
+        if (StringUtils.isBlank(decodeNameserver)) {
+            return RestResponseUtil.createResponse400();
+        }
+        decodeNameserver = StringUtil.getNormalization(decodeNameserver);
+        if (StringUtil.ASTERISK.equals(decodeNameserver)
+                || decodeNameserver.startsWith(StringUtil.ASTERISK)) {
+            return RestResponseUtil.createResponse422();
+        }
+        decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
+        decodeNameserver = StringUtils.lowerCase(decodeNameserver);
+        NameserverSearch nsSearch = searchService.searchNameserver(queryParser
+                .parseNameserverQueryParam(decodeNameserver, punyNameserver));
+        if (null != nsSearch) {
+            if (nsSearch.getHasNoAuthForAllObjects()) {
+                return RestResponseUtil.createResponse403();
+            }
+            responseDecorator.decorateResponse(nsSearch);
+            return RestResponseUtil.createResponse200(nsSearch);
         }
         return RestResponseUtil.createResponse404();
     }

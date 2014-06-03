@@ -45,7 +45,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * 
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonIgnoreProperties(value = { "id", "objectType", "ipExisted" })
+@JsonIgnoreProperties(value = { "id", "objectType" })
 public class BaseModel {
     /**
      * specifications used in the construction of the response

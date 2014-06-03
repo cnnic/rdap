@@ -144,12 +144,17 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
                     realAddress = IpUtil.longToIpV6(
                             Long.parseLong(highAddress),
                             Long.parseLong(lowAddress));
-                    ipV6.add(realAddress);
+                    if (realAddress != "") {
+                        ipV6.add(realAddress);
+                    }
                 }
             } else if (IpVersion.isV4(ipVersionStr)) {
                 if (lowAddress != null) {
                     realAddress = IpUtil.longToIpV4(Long.parseLong(lowAddress));
-                    ipV4.add(realAddress);
+                    if (realAddress != "") {
+                        ipV4.add(realAddress);
+                    }
+
                 }
             }
         }
