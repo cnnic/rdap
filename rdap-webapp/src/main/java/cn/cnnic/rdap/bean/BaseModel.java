@@ -98,8 +98,9 @@ public class BaseModel {
      * 
      * @return simple name of class
      */
-    public String getObjectType() {
-        return getClass().getSimpleName().toLowerCase();
+    public ModelType getObjectType() {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
     }
 
     /**
