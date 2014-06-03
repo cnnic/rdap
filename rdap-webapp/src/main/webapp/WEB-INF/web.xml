@@ -30,6 +30,14 @@
 		<filter-name>InvalidUriFilter</filter-name>
 		<url-pattern>/.well-known/rdap/*</url-pattern>
 	</filter-mapping>
+	<filter>
+		<filter-name>AuthenticationFilter</filter-name>
+		<filter-class>cn.cnnic.rdap.controller.support.AuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	<servlet>
 		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
 		<servlet-class>
