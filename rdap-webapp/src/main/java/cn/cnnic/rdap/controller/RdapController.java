@@ -197,6 +197,9 @@ public class RdapController {
         DomainSearch domainSearch = searchService.searchDomain(queryParser
                 .parseDomainQueryParam(decodeDomain, punyDomainName));
         if (null != domainSearch) {
+            if (domainSearch.getHasNoAuthForAllObjects()) {
+                return RestResponseUtil.createResponse403();
+            }
             responseDecorator.decorateResponse(domainSearch);
             return RestResponseUtil.createResponse200(domainSearch);
         }
@@ -293,6 +296,9 @@ public class RdapController {
         NameserverSearch nsSearch = searchService.searchNameserver(queryParser
                 .parseNameserverQueryParam(decodeNameserver, punyNameserver));
         if (null != nsSearch) {
+            if (nsSearch.getHasNoAuthForAllObjects()) {
+                return RestResponseUtil.createResponse403();
+            }
             responseDecorator.decorateResponse(nsSearch);
             return RestResponseUtil.createResponse200(nsSearch);
         }

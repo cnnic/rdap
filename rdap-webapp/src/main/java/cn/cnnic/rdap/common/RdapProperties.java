@@ -42,6 +42,10 @@ public class RdapProperties {
      * max size for search.
      */
     private static Long maxsizeSearch;
+    /**
+     * batch size for search.
+     */
+    private static Long batchsizeSearch;
 
     /**
      * get maxsizeSearch.
@@ -62,4 +66,20 @@ public class RdapProperties {
         RdapProperties.maxsizeSearch = maxsizeSearch;
     }
 
+    /**
+     * get batchsizeSearch.
+     * @return batchsizeSearch.
+     */
+    public static Long getBatchsizeSearch() {
+        return batchsizeSearch;
+    }
+
+    /**
+     * set batchsizeSearch.
+     * @param batchsizeSearch batchsizeSearch.
+     */
+    public void setBatchsizeSearch(Long batchsizeSearch) {
+        RdapProperties.batchsizeSearch = batchsizeSearch;
+    }
+    
 }

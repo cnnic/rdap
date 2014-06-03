@@ -49,7 +49,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.ModelStatus;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
@@ -60,10 +59,11 @@ import cn.cnnic.rdap.bean.IPAddress;
 import cn.cnnic.rdap.bean.Notice;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
-import cn.cnnic.rdap.common.RdapProperties;
+
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
+import cn.cnnic.rdap.bean.PageBean;
 
 /**
  * nameserver query DAO.
@@ -333,7 +333,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      *            query parameter.
      * @return nameserver list.
      */
-    private List<Nameserver> searchWithoutInnerObjects(QueryParam queryParam) {
+    private List<Nameserver> searchWithoutInnerObjects(final QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
         final String nsName = nsQueryParam.getQ();
         final String punyName = nsQueryParam.getPunyName();
@@ -341,7 +341,11 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         final String punyNameLikeClause = super.generateLikeClause(punyName);
         final String sql = "select * from RDAP_NAMESERVER ns "
                 + " where LDH_NAME like ? or UNICODE_NAME like ?"
-                + " order by ns.LDH_NAME limit ? ";
+                + " order by ns.LDH_NAME limit ?,? ";
+        final PageBean page = queryParam.getPageBean();
+        int startPage = page.getCurrentPage() - 1;
+        startPage = startPage >= 0 ? startPage : 0;
+        final long startRow = startPage * page.getMaxRecords();
         List<Nameserver> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
@@ -349,7 +353,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setString(1, punyNameLikeClause);
                         ps.setString(2, nsNameLikeClause);
-                        ps.setLong(3, RdapProperties.getMaxsizeSearch());
+                        ps.setLong(3, startRow);
+                        ps.setLong(4, page.getMaxRecords());
                         return ps;
                     }
                 }, new NameserverResultSetExtractor());

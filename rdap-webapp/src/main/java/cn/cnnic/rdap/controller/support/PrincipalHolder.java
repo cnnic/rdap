@@ -68,6 +68,9 @@ public class PrincipalHolder {
      * @return principal.
      */
     public static Principal getPrincipal() {
+        if(null == principal.get()){
+            return Principal.getAnonymousPrincipal();
+        }
         return principal.get();
     }
 

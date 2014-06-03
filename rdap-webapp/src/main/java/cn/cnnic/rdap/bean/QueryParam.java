@@ -43,6 +43,11 @@ public class QueryParam {
     private String q;
 
     /**
+     * page for search.
+     */
+    private PageBean pageBean;
+
+    /**
      * get q.
      * 
      * @return q.
@@ -71,4 +76,24 @@ public class QueryParam {
         super();
         this.q = q;
     }
+
+    /**
+     * get pageBean.
+     * 
+     * @return pageBean.
+     */
+    public PageBean getPageBean() {
+        return pageBean;
+    }
+
+    /**
+     * set pageBean.
+     * 
+     * @param pageBean
+     *            pageBean.
+     */
+    public void setPageBean(PageBean pageBean) {
+        this.pageBean = pageBean;
+    }
+
 }
