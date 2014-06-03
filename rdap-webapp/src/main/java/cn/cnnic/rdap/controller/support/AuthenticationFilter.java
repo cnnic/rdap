@@ -21,10 +21,6 @@ import cn.cnnic.rdap.bean.Principal;
  * 
  */
 public class AuthenticationFilter implements Filter {
-    /**
-     * anonymous user id.
-     */
-    private static final Long USER_ID_ANONYMOUS = 0L;
 
     @Override
     public void destroy() {
@@ -39,12 +35,15 @@ public class AuthenticationFilter implements Filter {
         // session.
         // especially, userId set 0 for anonymous user.
         HttpSession session = request.getSession();
-        Long userId = USER_ID_ANONYMOUS;
+        Principal principal = Principal.getAnonymousPrincipal();
         if (null != session) {
-            userId = (Long) session.getAttribute("SESSION_ATTR_USER_ID");
+            Object userId = session.getAttribute("SESSION_ATTR_USER_ID");
             // TODO: SESSION_ATTR_USER_ID change to constant.
-            PrincipalHolder.setPrincipal(new Principal(userId));
+            if(null != userId){
+                principal = new Principal((Long)userId);
+            }
         }
+        PrincipalHolder.setPrincipal(principal);
         chain.doFilter(request, response);
         PrincipalHolder.remove();
     }

@@ -38,13 +38,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author jiashuo
  * 
  */
-@JsonIgnoreProperties(value = { "id", "handle", "lang", "objectType" })
+@JsonIgnoreProperties(value = { "hasNoAuthForAllObjects", "id", "handle",
+        "lang", "objectType" })
 public abstract class BaseSearchModel extends BaseModel {
     /**
      * 'resultsTruncated' used where a single object has been returned and data
      * in that object has been truncated.
      */
     private Boolean resultsTruncated = null;
+
+    /**
+     * has no access to all objects, and should return HTTP 403 code.
+     */
+    private Boolean hasNoAuthForAllObjects = null;
 
     /**
      * get resultsTruncated.
@@ -64,4 +70,24 @@ public abstract class BaseSearchModel extends BaseModel {
     public void setResultsTruncated(Boolean resultsTruncated) {
         this.resultsTruncated = resultsTruncated;
     }
+
+    /**
+     * get hasNoAuthForAllObjects.
+     * 
+     * @return hasNoAuthForAllObjects.
+     */
+    public Boolean getHasNoAuthForAllObjects() {
+        return hasNoAuthForAllObjects;
+    }
+
+    /**
+     * set hasNoAuthForAllObjects.
+     * 
+     * @param hasNoAuthForAllObjects
+     *            hasNoAuthForAllObjects.
+     */
+    public void setHasNoAuthForAllObjects(Boolean hasNoAuthForAllObjects) {
+        this.hasNoAuthForAllObjects = hasNoAuthForAllObjects;
+    }
+
 }
