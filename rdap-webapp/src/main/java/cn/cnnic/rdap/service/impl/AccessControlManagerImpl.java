@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 import cn.cnnic.rdap.bean.BaseModel;
 import cn.cnnic.rdap.bean.Principal;
 import cn.cnnic.rdap.bean.SecureObject;
+import cn.cnnic.rdap.controller.support.PrincipalHolder;
 import cn.cnnic.rdap.dao.AclDao;
 import cn.cnnic.rdap.service.AccessControlManager;
 
@@ -55,8 +56,7 @@ public class AccessControlManagerImpl implements AccessControlManager {
 
     @Override
     public boolean hasPermission(BaseModel object) {
-        // TODO: get user from session.
-        Principal principal = new Principal(1L);
+        Principal principal = PrincipalHolder.getPrincipal();
         SecureObject secureObject = new SecureObject(object.getId(), object
                 .getObjectType().getName());
         return aclDao.hasEntry(principal, secureObject);
