@@ -129,6 +129,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             ModelType outerModelType) {
         List<Nameserver> listNameserver = queryNameserverWithDomainID(
                 outerObjectId, outerModelType);
+        if (listNameserver == null)
+            return null;
         final int sizeNameserver = listNameserver.size();
         for (int i = 0; i < sizeNameserver; ++i) {
             queryAndSetInnerObjects(listNameserver.get(i));
