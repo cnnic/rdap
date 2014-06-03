@@ -40,17 +40,17 @@ import java.util.List;
  */
 public class NameserverSearch extends BaseSearchModel {
     /**
-     * domain list.
+     * nameserver list.
      */
-    private List<Nameserver> nsSearchResults;
+    private List<Nameserver> nameserverSearchResults;
 
     /**
      * get nameserverSearchResults.
      * 
      * @return nameserverSearchResults.
      */
-    public List<Nameserver> getNsSearchResults() {
-        return nsSearchResults;
+    public List<Nameserver> getNameserverSearchResults() {
+        return nameserverSearchResults;
     }
 
     /**
@@ -59,7 +59,7 @@ public class NameserverSearch extends BaseSearchModel {
      * @param nameserverSearchResults
      *            nameserverSearchResults.
      */
-    public void setNsSearchResults(List<Nameserver> nsSearchResults) {
-        this.nsSearchResults = nsSearchResults;
+    public void setNameserverSearchResults(List<Nameserver> nameserverSearchResults) {
+        this.nameserverSearchResults = nameserverSearchResults;
     }
 }

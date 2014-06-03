@@ -306,20 +306,20 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
 
     @Override
     public Long searchCount(QueryParam queryParam) {
-        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
-        final String domainName = domainQueryParam.getQ();
-        final String punyName = domainQueryParam.getPunyName();
-        final String domainNameLikeClause = super
-                .generateLikeClause(domainName);
+        NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
+        final String nameserver = nsQueryParam.getQ();
+        final String punyName = nsQueryParam.getPunyName();
+        final String nameserverLikeClause = super
+                .generateLikeClause(nameserver);
         final String punyNameLikeClause = super.generateLikeClause(punyName);
-        final String sql = "select count(1) as COUNT from RDAP_DOMAIN domain "
+        final String sql = "select count(1) as COUNT from RDAP_NAMESERVER "
                 + " where LDH_NAME like ? or UNICODE_NAME like ? ";
         Long domainCount = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql);
                 ps.setString(1, punyNameLikeClause);
-                ps.setString(2, domainNameLikeClause);
+                ps.setString(2, nameserverLikeClause);
                 return ps;
             }
         }, new CountResultSetExtractor());
@@ -334,7 +334,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * @return nameserver list.
      */
     private List<Nameserver> searchWithoutInnerObjects(QueryParam queryParam) {
-        DomainQueryParam nsQueryParam = (DomainQueryParam) queryParam;
+        NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
         final String nsName = nsQueryParam.getQ();
         final String punyName = nsQueryParam.getPunyName();
         final String nsNameLikeClause = super.generateLikeClause(nsName);
@@ -467,8 +467,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     private void queryAndSetNameserverStatus(List<Nameserver> listNameserver) {
         List<Long> nameserverIds = getModelIds(listNameserver);
-        List<ModelStatus> nameserverStatusList = 
-                queryNameserverStatus(nameserverIds);
+        List<ModelStatus> nameserverStatusList = queryNameserverStatus(nameserverIds);
         for (ModelStatus status : nameserverStatusList) {
             BaseModel obj = BaseModel.findObjectFromListById(listNameserver,
                     status.getId());
@@ -501,7 +500,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
                     @Override
                     public ModelStatus mapRow(ResultSet rs, int rowNum)
                             throws SQLException {
-                        return new ModelStatus(rs.getLong("DOMAIN_ID"), rs
+                        return new ModelStatus(rs.getLong("NAMESERVER_ID"), rs
                                 .getString("STATUS"));
                     }
 

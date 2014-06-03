@@ -55,7 +55,7 @@ import cn.cnnic.rdap.service.SearchService;
 public class SearchServiceImpl implements SearchService {
     @Autowired
     private DomainQueryDaoImpl domainDao;
-    
+
     @Autowired
     private NameserverQueryDaoImpl nameserverDao;
 
@@ -73,10 +73,10 @@ public class SearchServiceImpl implements SearchService {
         domainSearch.setDomainSearchResults(domans);
         return domainSearch;
     }
-    
+
     @Override
     public NameserverSearch searchNameserver(QueryParam queryParam) {
-        Long totalCount = domainDao.searchCount(queryParam);
+        Long totalCount = nameserverDao.searchCount(queryParam);
         if (totalCount == 0) {
             return null;
         }
@@ -85,7 +85,7 @@ public class SearchServiceImpl implements SearchService {
             nsSearch.setResultsTruncated(true);
         }
         List<Nameserver> listNS = nameserverDao.search(queryParam);
-        nsSearch.setNsSearchResults(listNS);
+        nsSearch.setNameserverSearchResults(listNS);
         return nsSearch;
     }
 }
