@@ -50,7 +50,7 @@ public abstract class BaseSearchModel extends BaseModel {
     /**
      * has no access to all objects, and should return HTTP 403 code.
      */
-    private Boolean hasNoAuthForAllObjects = null;
+    private Boolean hasNoAuthForAllObjects = false;
 
     /**
      * get resultsTruncated.
