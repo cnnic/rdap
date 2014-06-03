@@ -43,7 +43,7 @@ import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.IPAddress;
-import cn.cnnic.rdap.bean.IPAddress.IpVersion;
+import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.common.util.IpUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
@@ -56,17 +56,12 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 @Repository
 public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
 
-    /**
-     * strZero for the ipAddress getID compare.
-     */
-    private final String strZero = "0000";
-
     @Override
     public List<IPAddress> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
         List<IPAddress> listIPAddress = new ArrayList<IPAddress>();
         IPAddress objIPAddress = queryWithoutInnerObjects(outerObjectId);
-        if (strZero != objIPAddress.getID()) {
+        if (objIPAddress.getIpExisted()) {
             listIPAddress.add(objIPAddress);
         }
         return listIPAddress;
@@ -80,10 +75,8 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
      * @return IPAddress.
      */
     private IPAddress queryWithoutInnerObjects(final Long outerObjectId) {
-        final String sql = "select * from RDAP_NAMESERVER ns "
-                + " left outer join RDAP_NAMESERVER_IP nsIP "
-                + " on ns.NAMESERVER_ID = nsIP.NAMESERVER_ID "
-                + " where ns.NAMESERVER_ID = ?";
+        final String sql = "select * from RDAP_NAMESERVER_IP nsIP "
+                + " where nsIP.NAMESERVER_ID = ?";
         IPAddress result = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
@@ -115,12 +108,14 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
             }
             if (ipV4.size() > 0) {
                 result.setAddressV4(ipV4);
+                result.setIpExisted(true);
             }
             if (ipV6.size() > 0) {
                 result.setAddressV6(ipV6);
+                result.setIpExisted(true);
             }
             if (ipV4.size() <= 0 && ipV6.size() <= 0) {
-                result.setID(strZero);
+                result.setIpExisted(false);
             }
             return result;
         }

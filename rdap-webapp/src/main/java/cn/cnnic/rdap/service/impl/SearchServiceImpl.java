@@ -37,9 +37,12 @@ import org.springframework.stereotype.Service;
 
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainSearch;
+import cn.cnnic.rdap.bean.Nameserver;
+import cn.cnnic.rdap.bean.NameserverSearch;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.dao.impl.DomainQueryDaoImpl;
+import cn.cnnic.rdap.dao.impl.NameserverQueryDaoImpl;
 import cn.cnnic.rdap.service.SearchService;
 
 /**
@@ -52,6 +55,9 @@ import cn.cnnic.rdap.service.SearchService;
 public class SearchServiceImpl implements SearchService {
     @Autowired
     private DomainQueryDaoImpl domainDao;
+    
+    @Autowired
+    private NameserverQueryDaoImpl nameserverDao;
 
     @Override
     public DomainSearch searchDomain(QueryParam queryParam) {
@@ -66,5 +72,20 @@ public class SearchServiceImpl implements SearchService {
         List<Domain> domans = domainDao.search(queryParam);
         domainSearch.setDomainSearchResults(domans);
         return domainSearch;
+    }
+    
+    @Override
+    public NameserverSearch searchNameserver(QueryParam queryParam) {
+        Long totalCount = domainDao.searchCount(queryParam);
+        if (totalCount == 0) {
+            return null;
+        }
+        NameserverSearch nsSearch = new NameserverSearch();
+        if (totalCount > RdapProperties.getMaxsizeSearch()) {
+            nsSearch.setResultsTruncated(true);
+        }
+        List<Nameserver> listNS = nameserverDao.search(queryParam);
+        nsSearch.setNsSearchResults(listNS);
+        return nsSearch;
     }
 }
