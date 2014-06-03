@@ -226,10 +226,11 @@ public class RdapController {
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryNameserver(@PathVariable String nameserverName) {
-        String decodeNS = DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase(nameserverName);
+        String decodeNS = nameserverName;
         String punyNSName = decodeNS;
         try {
+            decodeNS = DomainUtil
+                    .decodeAndTrimAndReplaceAsciiToLowercase(nameserverName);
             // long lable exception
             punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
         } catch (Exception e) {

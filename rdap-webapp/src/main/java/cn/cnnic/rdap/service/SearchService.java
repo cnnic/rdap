@@ -31,6 +31,7 @@
 package cn.cnnic.rdap.service;
 
 import cn.cnnic.rdap.bean.DomainSearch;
+import cn.cnnic.rdap.bean.NameserverSearch;
 import cn.cnnic.rdap.bean.QueryParam;
 
 /**
@@ -48,4 +49,12 @@ public interface SearchService {
      * @return domain list.
      */
     DomainSearch searchDomain(QueryParam queryParam);
+    /**
+     * search domain by domain name.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return domain list.
+     */
+    NameserverSearch searchNameserver(QueryParam queryParam);
 }

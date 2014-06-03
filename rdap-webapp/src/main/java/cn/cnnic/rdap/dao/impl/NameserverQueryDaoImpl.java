@@ -39,22 +39,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import cn.cnnic.rdap.bean.BaseModel;
+import cn.cnnic.rdap.bean.DomainQueryParam;
+import cn.cnnic.rdap.bean.ModelStatus;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.IPAddress;
+import cn.cnnic.rdap.bean.Notice;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
+import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
+import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
@@ -65,6 +73,12 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
+    /**
+     * notice dao.
+     */
+    @Autowired
+    @Qualifier("noticeDaoImpl")
+    private NoticeDao noticeDao;
     /**
      * remark dao.
      */
@@ -129,8 +143,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             ModelType outerModelType) {
         List<Nameserver> listNameserver = queryNameserverWithDomainID(
                 outerObjectId, outerModelType);
-        if (listNameserver == null)
+        if (listNameserver == null) {
             return null;
+        }
         final int sizeNameserver = listNameserver.size();
         for (int i = 0; i < sizeNameserver; ++i) {
             queryAndSetInnerObjects(listNameserver.get(i));
@@ -140,9 +155,24 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
 
     @Override
     public Nameserver query(QueryParam queryParam) {
-        Nameserver ns = queryWithoutInnerObjects(queryParam);
-        queryAndSetInnerObjects(ns);
-        return ns;
+        Nameserver nameserver = queryWithoutInnerObjects(queryParam);
+        queryAndSetInnerObjectsWithoutNotice(nameserver);
+        queryAndSetInnerNotice(nameserver);
+        return nameserver;
+    }
+
+    /**
+     * query notice,and set to nameserver.
+     * 
+     * @param nameserver
+     *            nameserver object.
+     */
+    private void queryAndSetInnerNotice(Nameserver nameserver) {
+        if (null == nameserver) {
+            return;
+        }
+        List<Notice> notices = noticeDao.getAllNotices();
+        nameserver.setNotices(notices);
     }
 
     /**
@@ -182,19 +212,17 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     private Nameserver queryWithoutInnerObjects(QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
-        final String nsName = nsQueryParam.getQ();
         final String punyName = nsQueryParam.getPunyName();
         final String sql = "select * from RDAP_NAMESERVER ns "
                 + " left outer join RDAP_NAMESERVER_STATUS status "
                 + " on ns.NAMESERVER_ID = status.NAMESERVER_ID "
-                + " where LDH_NAME= ? or UNICODE_NAME= ?";
+                + " where LDH_NAME= ?";
         List<Nameserver> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setString(1, punyName);
-                        ps.setString(2, nsName);
                         return ps;
                     }
                 }, new NSResultSetExtractor());
@@ -267,4 +295,218 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             return result;
         }
     }
+
+    @Override
+    public List<Nameserver> search(QueryParam queryParam) {
+        List<Nameserver> listNS = searchWithoutInnerObjects(queryParam);
+        queryAndSetNameserverStatus(listNS);
+        queryAndSetInnerObjectsWithoutNotice(listNS);
+        return listNS;
+    }
+
+    @Override
+    public Long searchCount(QueryParam queryParam) {
+        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
+        final String domainName = domainQueryParam.getQ();
+        final String punyName = domainQueryParam.getPunyName();
+        final String domainNameLikeClause = super
+                .generateLikeClause(domainName);
+        final String punyNameLikeClause = super.generateLikeClause(punyName);
+        final String sql = "select count(1) as COUNT from RDAP_DOMAIN domain "
+                + " where LDH_NAME like ? or UNICODE_NAME like ? ";
+        Long domainCount = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setString(1, punyNameLikeClause);
+                ps.setString(2, domainNameLikeClause);
+                return ps;
+            }
+        }, new CountResultSetExtractor());
+        return domainCount;
+    }
+
+    /**
+     * search nameserver, without inner objects.
+     * 
+     * @param queryParam
+     *            query parameter.
+     * @return nameserver list.
+     */
+    private List<Nameserver> searchWithoutInnerObjects(QueryParam queryParam) {
+        DomainQueryParam nsQueryParam = (DomainQueryParam) queryParam;
+        final String nsName = nsQueryParam.getQ();
+        final String punyName = nsQueryParam.getPunyName();
+        final String nsNameLikeClause = super.generateLikeClause(nsName);
+        final String punyNameLikeClause = super.generateLikeClause(punyName);
+        final String sql = "select * from RDAP_NAMESERVER ns "
+                + " where LDH_NAME like ? or UNICODE_NAME like ?"
+                + " order by ns.LDH_NAME limit ? ";
+        List<Nameserver> result = jdbcTemplate.query(
+                new PreparedStatementCreator() {
+                    public PreparedStatement createPreparedStatement(
+                            Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps.setString(1, punyNameLikeClause);
+                        ps.setString(2, nsNameLikeClause);
+                        ps.setLong(3, RdapProperties.getMaxsizeSearch());
+                        return ps;
+                    }
+                }, new NameserverResultSetExtractor());
+        return result;
+    }
+
+    /**
+     * nameserver ResultSetExtractor, extract data from ResultSet.
+     * 
+     * @author weijunkai
+     * 
+     */
+    class NameserverResultSetExtractor implements
+            ResultSetExtractor<List<Nameserver>> {
+        @Override
+        public List<Nameserver> extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            List<Nameserver> result = new ArrayList<Nameserver>();
+            while (rs.next()) {
+                Nameserver ns = new Nameserver();
+                extractorNameserverFromRs(rs, ns);
+                result.add(ns);
+            }
+            return result;
+        }
+    }
+
+    /**
+     * extract nameserver from ResultSet.
+     * 
+     * @param rs
+     *            ResultSet.
+     * @param nameserver
+     *            nameserver object.
+     * @throws SQLException
+     *             SQLException.
+     */
+    private void extractorNameserverFromRs(ResultSet rs, Nameserver nameserver)
+            throws SQLException {
+        nameserver.setId(rs.getLong("NAMESERVER_ID"));
+        nameserver.setHandle(rs.getString("HANDLE"));
+        nameserver.setLdhName(rs.getString("LDH_NAME"));
+        nameserver.setUnicodeName(rs.getString("UNICODE_NAME"));
+        nameserver.setPort43(rs.getString("PORT43"));
+        nameserver.setLang(rs.getString("LANG"));
+    }
+
+    /**
+     * 
+     * @author weijunkai
+     * 
+     */
+    class CountResultSetExtractor implements ResultSetExtractor<Long> {
+        @Override
+        public Long extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            Long result = 0L;
+            if (rs.next()) {
+                result = rs.getLong("COUNT");
+            }
+            return result;
+        }
+    }
+
+    /**
+     * query inner objects of nameserver,and set fill them to nameserver.
+     * 
+     * @param nameservers
+     *            nameservers list.
+     */
+    private void queryAndSetInnerObjectsWithoutNotice(
+            List<Nameserver> nameservers) {
+        if (null == nameservers) {
+            return;
+        }
+        for (Nameserver nameserver : nameservers) {
+            queryAndSetInnerObjectsWithoutNotice(nameserver);
+        }
+    }
+
+    /**
+     * query inner objects of nameserver,and set fill them to nameserver.
+     * 
+     * @param nameserver
+     *            inner objects will be filled.
+     */
+    private void queryAndSetInnerObjectsWithoutNotice(Nameserver nameserver) {
+        if (null == nameserver) {
+            return;
+        }
+        Long nsId = nameserver.getId();
+
+        List<IPAddress> listIPAddress = ipAddressQueryDao.queryAsInnerObjects(
+                nsId, ModelType.NAMESERVER);
+        if (listIPAddress.size() > 0) {
+            IPAddress objIPAddress = listIPAddress.get(0);
+            nameserver.setIpAddresses(objIPAddress);
+        }
+        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(nsId,
+                ModelType.NAMESERVER);
+        nameserver.setRemarks(remarks);
+        List<Link> links = linkQueryDao.queryAsInnerObjects(nsId,
+                ModelType.NAMESERVER);
+        nameserver.setLinks(links);
+        List<Event> events = eventQueryDao.queryAsInnerObjects(nsId,
+                ModelType.NAMESERVER);
+        nameserver.setEvents(events);
+    }
+
+    /**
+     * query and set nameserver status.
+     * 
+     * @param listNameserver
+     *            nameserver list.
+     */
+    private void queryAndSetNameserverStatus(List<Nameserver> listNameserver) {
+        List<Long> nameserverIds = getModelIds(listNameserver);
+        List<ModelStatus> nameserverStatusList = 
+                queryNameserverStatus(nameserverIds);
+        for (ModelStatus status : nameserverStatusList) {
+            BaseModel obj = BaseModel.findObjectFromListById(listNameserver,
+                    status.getId());
+            if (null == obj) {
+                continue;
+            }
+            Nameserver nameserver = (Nameserver) obj;
+            nameserver.addStatus(status.getStatus());
+        }
+    }
+
+    /**
+     * query nameserver status.
+     * 
+     * @param nameserverIds
+     *            nameserver id list.
+     * @return nameserver status list.
+     */
+    private List<ModelStatus> queryNameserverStatus(List<Long> nameserverIds) {
+        if (null == nameserverIds || nameserverIds.size() == 0) {
+            return new ArrayList<ModelStatus>();
+        }
+        final String nameserverIdsJoinedByComma = StringUtils.join(
+                nameserverIds, ",");
+        final String sqlTpl = "select * from RDAP_NAMESERVER_STATUS"
+                + " where NAMESERVER_ID in (%s)";
+        final String sql = String.format(sqlTpl, nameserverIdsJoinedByComma);
+        List<ModelStatus> result = jdbcTemplate.query(sql,
+                new RowMapper<ModelStatus>() {
+                    @Override
+                    public ModelStatus mapRow(ResultSet rs, int rowNum)
+                            throws SQLException {
+                        return new ModelStatus(rs.getLong("DOMAIN_ID"), rs
+                                .getString("STATUS"));
+                    }
+
+                });
+        return result;
+    }
+
 }
