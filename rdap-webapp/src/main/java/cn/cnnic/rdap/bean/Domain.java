@@ -69,7 +69,10 @@ public class Domain extends BaseModel {
      */
     private List<Variants> varients;
 
-    // private List<Nameserver> nameServers;
+    /**
+     * list of nameServers.
+     */
+    private List<Nameserver> nameServers;
 
     /**
      * secureDNS.
@@ -204,6 +207,25 @@ public class Domain extends BaseModel {
      */
     public void setVarients(List<Variants> varients) {
         this.varients = varients;
+    }
+
+    /**
+     * get nameServers.
+     * 
+     * @return nameServers.
+     */
+    public List<Nameserver> getnameServers() {
+        return nameServers;
+    }
+
+    /**
+     * set nameServers.
+     * 
+     * @param nameServers
+     *            nameServers.
+     */
+    public void setNameServers(List<Nameserver> nameServers) {
+        this.nameServers = nameServers;
     }
 
     /**

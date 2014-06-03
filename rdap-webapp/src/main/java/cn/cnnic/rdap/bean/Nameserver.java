@@ -34,19 +34,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * represents information regarding nameserver used in both forward and
- * reverse DNS.
+ * represents information regarding nameserver used in both forward and reverse
+ * DNS.
  * 
  * @author weijunkai
  * 
  */
 @JsonPropertyOrder({ "rdapConformance", "handle", "ldhName", "unicodeName",
-        "ipAddresses", "entities", "status", "remarks", "links", "port43",
+        "status", "ipAddresses", "entities", "remarks", "links", "port43",
         "events", "lang" })
 public class Nameserver extends BaseModel {
     /**
@@ -91,6 +89,7 @@ public class Nameserver extends BaseModel {
      * events.
      */
     private List<Event> events;
+
     /**
      * add a status string to status list.
      * 
