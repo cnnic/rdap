@@ -32,8 +32,8 @@ package cn.cnnic.rdap.bean;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * IPAddress registrations found in RIRs and is the expected response for the
@@ -57,6 +57,7 @@ public class IPAddress extends BaseModel {
     /**
      * an flag identify if the ipAddress existed.
      */
+    @JsonIgnore
     private boolean ipExisted;
 
     /**
