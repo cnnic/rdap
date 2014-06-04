@@ -66,8 +66,7 @@ public class QueryParser {
      */
     public QueryParam parseDomainQueryParam(String domainName,
             String punyDomainName) {
-        String punyName = DomainUtil.geneDomainPunyName(domainName);
-        return new DomainQueryParam(domainName, punyName);
+        return new DomainQueryParam(domainName, punyDomainName);
     }
     
     /**
@@ -81,7 +80,6 @@ public class QueryParser {
      */
     public QueryParam parseNameserverQueryParam(String nsName,
             String punyNSName) {
-        String punyName = DomainUtil.geneDomainPunyName(nsName);
-        return new NameserverQueryParam(nsName, punyName);
+        return new NameserverQueryParam(nsName, punyNSName);
     }
 }
