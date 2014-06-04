@@ -27,7 +27,7 @@ public class IdentityCheckServiceImpl implements IdentityCheckService{
             user.setUserType(User.UserType.Anonymous);
             return user;
         }
-        if(MD5Encryption.encryption(userPwd).equals(user.getUserPwd())){
+        if(MD5Encryption.encryption(userPwd).equalsIgnoreCase(user.getUserPwd())){
             user.setUserType(User.UserType.Cerfications);   
         }else{
             user.setUserType(User.UserType.Anonymous);
