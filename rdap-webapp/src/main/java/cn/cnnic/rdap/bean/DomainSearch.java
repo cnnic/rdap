@@ -38,7 +38,7 @@ import java.util.List;
  * @author jiashuo
  * 
  */
-public class DomainSearch extends BaseSearchModel {
+public class DomainSearch extends BaseSearchModel<Domain> {
     /**
      * domain list.
      */
