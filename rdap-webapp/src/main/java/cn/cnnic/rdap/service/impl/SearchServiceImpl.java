@@ -91,7 +91,7 @@ public class SearchServiceImpl implements SearchService {
             return null;
         }
         List<T> authedObjects = new ArrayList<T>();
-        Long totalAuthedDomainSize = 0L;
+        Long totalAuthedObjectSize = 0L;
         PageBean page = new PageBean();
         page.setMaxRecords(RdapProperties.getBatchsizeSearch().intValue());
         page.setRecordsCount(totalCount.intValue());
@@ -105,10 +105,10 @@ public class SearchServiceImpl implements SearchService {
                     authedObjects.add(object);
                 }
                 if (accessControlManager.hasPermission(object)) {
-                    totalAuthedDomainSize++;
+                    totalAuthedObjectSize++;
                 }
                 if (authedObjects.size() == RdapProperties.getMaxsizeSearch()
-                        && totalAuthedDomainSize > authedObjects.size()) {
+                        && totalAuthedObjectSize > authedObjects.size()) {
                     gotEnoughResults = true;
                     break;
                 }
@@ -118,7 +118,7 @@ public class SearchServiceImpl implements SearchService {
         // && authedDomains.size() < RdapProperties.getMaxsizeSearch()
         );
         BaseSearchModel<T> searchResult = new BaseSearchModel<T>();
-        if (totalAuthedDomainSize > authedObjects.size()) {
+        if (totalAuthedObjectSize > authedObjects.size()) {
             searchResult.setResultsTruncated(true);
         }
         if (authedObjects.size() == 0) {
@@ -139,56 +139,17 @@ public class SearchServiceImpl implements SearchService {
         domainSearch.setDomainSearchResults(searchResult.getSearchResults());
         return domainSearch;
     }
-
+    
     @Override
     public NameserverSearch searchNameserver(QueryParam queryParam) {
-        Long totalCount = nameserverDao.searchCount(queryParam);
-        if (totalCount == 0) {
+        BaseSearchModel<Nameserver> searchResult = this.search(queryParam, nameserverDao);
+        if(null == searchResult){
             return null;
         }
-
-        List<Nameserver> authedNameservers = new ArrayList<Nameserver>();
-        Long totalAuthedNsSize = 0L;
-        PageBean page = new PageBean();
-        page.setMaxRecords(RdapProperties.getBatchsizeSearch().intValue());
-        page.setRecordsCount(totalCount.intValue());
-        queryParam.setPageBean(page);
-        boolean gotEnoughResults = false;
-        do {
-            List<Nameserver> nameservers = nameserverDao.search(queryParam);
-            for (Nameserver nameserver : nameservers) {
-                if (authedNameservers.size() < RdapProperties
-                        .getMaxsizeSearch()
-                        && accessControlManager.hasPermission(nameserver)) {
-                    authedNameservers.add(nameserver);
-                }
-                if (accessControlManager.hasPermission(nameserver)) {
-                    totalAuthedNsSize++;
-                }
-                if (authedNameservers.size() == RdapProperties
-                        .getMaxsizeSearch()
-                        && totalAuthedNsSize > authedNameservers.size()) {
-                    gotEnoughResults = true;
-                    break;
-                }
-            }
-            page.incrementCurrentPage();
-        } while (page.isNotLastPage() && !gotEnoughResults);
-
-        NameserverSearch nsSearch = new NameserverSearch();
-        // if (totalCount > RdapProperties.getMaxsizeSearch()) {
-        // nsSearch.setResultsTruncated(true);
-        // }
-        // List<Nameserver> listNS = nameserverDao.search(queryParam);
-        // nsSearch.setNameserverSearchResults(listNS);
-        if (totalAuthedNsSize > authedNameservers.size()) {
-            nsSearch.setResultsTruncated(true);
-        }
-        if (authedNameservers.size() == 0) {
-            nsSearch.setHasNoAuthForAllObjects(true);
-        }
-        nsSearch.setNameserverSearchResults(authedNameservers);
-
-        return nsSearch;
+        NameserverSearch nameserverSearch = new NameserverSearch();
+        BeanUtils.copyProperties(searchResult, nameserverSearch);
+        nameserverSearch.setNameserverSearchResults(searchResult.getSearchResults());
+        return nameserverSearch;
+    
     }
 }

@@ -62,5 +62,9 @@ public class IpUtilTest {
     public void testLongToIpV4() {
         assertEquals("1.0.0.0", IpUtil.longToIpV4(16777216));
         assertEquals("1.255.255.255", IpUtil.longToIpV4(33554431));
+        long num = (0xffffffffffL);
+        assertEquals("255.255.255.255", IpUtil.longToIpV4(num));
+        num = (0x80ffffffL);
+        assertEquals("128.255.255.255", IpUtil.longToIpV4(num));
     }
 }
