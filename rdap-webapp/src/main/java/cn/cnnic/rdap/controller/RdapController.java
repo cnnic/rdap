@@ -192,8 +192,7 @@ public class RdapController {
         try {
             decodeDomain = DomainUtil
                     .decodeAndTrimAndReplaceAsciiToLowercase(name);
-            // long lable exception
-            punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
+            punyDomainName = decodeDomain;
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
@@ -248,8 +247,7 @@ public class RdapController {
         try {
             decodeNS = DomainUtil
                     .decodeAndTrimAndReplaceAsciiToLowercase(nameserverName);
-            // long lable exception
-            punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
+            punyNSName = decodeNS;
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
