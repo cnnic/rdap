@@ -54,6 +54,10 @@ public final class IpUtil {
      * @return ipv4 string.
      */
     public static String longToIpV4(long longIp) {
+        final long numBeyond = 0xffffffffL;
+        if( longIp>numBeyond ) {
+            return "";
+        }
         final int threeByteSize = 24;
         final int threeByteMask = 0x00ffffff;
         final int twoByteSize = 16;

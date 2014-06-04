@@ -140,21 +140,22 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
             String realAddress = "";
 
             if (IpVersion.isV6(ipVersionStr)) {
-                if (highAddress != null && lowAddress != null) {
+                if (highAddress != null && lowAddress != null
+                        && IpVersion.isIpValid(highAddress, false)
+                        && IpVersion.isIpValid(lowAddress, false)) {
                     realAddress = IpUtil.longToIpV6(
-                            Long.parseLong(highAddress),
-                            Long.parseLong(lowAddress));
-                    if (realAddress != "") {
+                            Long.parseUnsignedLong(highAddress),
+                            Long.parseUnsignedLong(lowAddress));
+                    if (!realAddress.isEmpty()) {
                         ipV6.add(realAddress);
                     }
                 }
             } else if (IpVersion.isV4(ipVersionStr)) {
                 if (lowAddress != null) {
-                    realAddress = IpUtil.longToIpV4(Long.parseLong(lowAddress));
-                    if (realAddress != "") {
+                    realAddress = IpUtil.longToIpV4(Long.parseUnsignedLong(lowAddress));
+                    if (!realAddress.isEmpty()) {
                         ipV4.add(realAddress);
                     }
-
                 }
             }
         }
