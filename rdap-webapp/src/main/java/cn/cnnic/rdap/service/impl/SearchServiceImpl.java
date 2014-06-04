@@ -98,13 +98,13 @@ public class SearchServiceImpl implements SearchService {
         queryParam.setPageBean(page);
         boolean gotEnoughResults = false;
         do {
-            List<T> domains = queryDao.search(queryParam);
-            for (T domain : domains) {
+            List<T> objects = queryDao.search(queryParam);
+            for (T object : objects) {
                 if (authedObjects.size() < RdapProperties.getMaxsizeSearch()
-                        && accessControlManager.hasPermission(domain)) {
-                    authedObjects.add(domain);
+                        && accessControlManager.hasPermission(object)) {
+                    authedObjects.add(object);
                 }
-                if (accessControlManager.hasPermission(domain)) {
+                if (accessControlManager.hasPermission(object)) {
                     totalAuthedDomainSize++;
                 }
                 if (authedObjects.size() == RdapProperties.getMaxsizeSearch()
