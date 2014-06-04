@@ -118,6 +118,17 @@ public class RestResponseUtil {
         return createCommonErrorResponse(HttpStatus.BAD_REQUEST);
     }
     
+        /**
+     * create response with HTTP status code 401
+     * 
+     * @param response
+     *            model object
+     * @return ResponseEntity
+     */
+    public static ResponseEntity<ErrorMessage> createResponse401() {
+        return createCommonErrorResponse(HttpStatus.UNAUTHORIZED);
+    }
+    
     /**
      * create response with HTTP status code 403.
      * 
