@@ -54,22 +54,13 @@ public final class IpUtil {
      * @return ipv4 string.
      */
     public static String longToIpV4(long longIp) {
-        /**
-         * shift right position,for the regular ipv4
-         */
-        final long posShift = 32;
-        long tmp = longIp;
-        tmp >>>= posShift;
-        if (tmp > 0) {
-            return "";
-        }
         final int threeByteSize = 24;
         final int threeByteMask = 0x00ffffff;
         final int twoByteSize = 16;
         final int twoByteMask = 0x0000ffff;
         final int oneByteSize = 8;
         final int oneByteMask = 0x000000ff;
-        return String.format("%d.%d.%d.%d", longIp >>> threeByteSize,
+        return String.format("%d.%d.%d.%d", (longIp >>> threeByteSize) & oneByteMask,
                 (longIp & threeByteMask) >>> twoByteSize,
                 (longIp & twoByteMask) >>> oneByteSize, longIp & oneByteMask);
     }
