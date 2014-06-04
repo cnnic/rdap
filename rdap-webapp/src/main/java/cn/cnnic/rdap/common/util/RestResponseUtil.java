@@ -127,7 +127,6 @@ public class RestResponseUtil {
      */
     public static ResponseEntity<ErrorMessage> createResponse401() {
         return createCommonErrorResponse(HttpStatus.UNAUTHORIZED);
-        
     }
     
     /**
