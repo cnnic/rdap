@@ -33,9 +33,12 @@ package cn.cnnic.rdap.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.cnnic.rdap.bean.BaseModel;
+import cn.cnnic.rdap.bean.BaseSearchModel;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainSearch;
 import cn.cnnic.rdap.bean.Nameserver;
@@ -43,8 +46,7 @@ import cn.cnnic.rdap.bean.NameserverSearch;
 import cn.cnnic.rdap.bean.PageBean;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.common.RdapProperties;
-import cn.cnnic.rdap.dao.impl.DomainQueryDaoImpl;
-import cn.cnnic.rdap.dao.impl.NameserverQueryDaoImpl;
+import cn.cnnic.rdap.dao.QueryDao;
 import cn.cnnic.rdap.service.AccessControlManager;
 import cn.cnnic.rdap.service.SearchService;
 
@@ -60,26 +62,35 @@ public class SearchServiceImpl implements SearchService {
      * domain dao.
      */
     @Autowired
-    private DomainQueryDaoImpl domainDao;
+    private QueryDao<Domain> domainDao;
 
     /**
      * nameserver dao.
      */
     @Autowired
-    private NameserverQueryDaoImpl nameserverDao;
+    private QueryDao<Nameserver> nameserverDao;
     /**
      * access control manager.
      */
     @Autowired
     private AccessControlManager accessControlManager;
 
-    @Override
-    public DomainSearch searchDomain(QueryParam queryParam) {
-        Long totalCount = domainDao.searchCount(queryParam);
+    /**
+     * common search.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @param queryDao
+     *            queryDao.
+     * @return BaseSearchModel.
+     */
+    private <T extends BaseModel> BaseSearchModel<T> search(
+            QueryParam queryParam, QueryDao<T> queryDao) {
+        Long totalCount = queryDao.searchCount(queryParam);
         if (totalCount == 0) {
             return null;
         }
-        List<Domain> authedDomains = new ArrayList<Domain>();
+        List<T> authedObjects = new ArrayList<T>();
         Long totalAuthedDomainSize = 0L;
         PageBean page = new PageBean();
         page.setMaxRecords(RdapProperties.getBatchsizeSearch().intValue());
@@ -87,17 +98,17 @@ public class SearchServiceImpl implements SearchService {
         queryParam.setPageBean(page);
         boolean gotEnoughResults = false;
         do {
-            List<Domain> domains = domainDao.search(queryParam);
-            for (Domain domain : domains) {
-                if (authedDomains.size() < RdapProperties.getMaxsizeSearch()
-                        && accessControlManager.hasPermission(domain)) {
-                    authedDomains.add(domain);
+            List<T> objects = queryDao.search(queryParam);
+            for (T object : objects) {
+                if (authedObjects.size() < RdapProperties.getMaxsizeSearch()
+                        && accessControlManager.hasPermission(object)) {
+                    authedObjects.add(object);
                 }
-                if (accessControlManager.hasPermission(domain)) {
+                if (accessControlManager.hasPermission(object)) {
                     totalAuthedDomainSize++;
                 }
-                if (authedDomains.size() == RdapProperties.getMaxsizeSearch()
-                        && totalAuthedDomainSize > authedDomains.size()) {
+                if (authedObjects.size() == RdapProperties.getMaxsizeSearch()
+                        && totalAuthedDomainSize > authedObjects.size()) {
                     gotEnoughResults = true;
                     break;
                 }
@@ -106,14 +117,26 @@ public class SearchServiceImpl implements SearchService {
         } while (page.isNotLastPage() && !gotEnoughResults
         // && authedDomains.size() < RdapProperties.getMaxsizeSearch()
         );
+        BaseSearchModel<T> searchResult = new BaseSearchModel<T>();
+        if (totalAuthedDomainSize > authedObjects.size()) {
+            searchResult.setResultsTruncated(true);
+        }
+        if (authedObjects.size() == 0) {
+            searchResult.setHasNoAuthForAllObjects(true);
+        }
+        searchResult.setSearchResults(authedObjects);
+        return searchResult;
+    }
+
+    @Override
+    public DomainSearch searchDomain(QueryParam queryParam) {
+        BaseSearchModel<Domain> searchResult = this.search(queryParam, domainDao);
+        if(null == searchResult){
+            return null;
+        }
         DomainSearch domainSearch = new DomainSearch();
-        if (totalAuthedDomainSize > authedDomains.size()) {
-            domainSearch.setResultsTruncated(true);
-        }
-        if (authedDomains.size() == 0) {
-            domainSearch.setHasNoAuthForAllObjects(true);
-        }
-        domainSearch.setDomainSearchResults(authedDomains);
+        BeanUtils.copyProperties(searchResult, domainSearch);
+        domainSearch.setDomainSearchResults(searchResult.getSearchResults());
         return domainSearch;
     }
 
@@ -123,7 +146,7 @@ public class SearchServiceImpl implements SearchService {
         if (totalCount == 0) {
             return null;
         }
-        
+
         List<Nameserver> authedNameservers = new ArrayList<Nameserver>();
         Long totalAuthedNsSize = 0L;
         PageBean page = new PageBean();
@@ -134,29 +157,30 @@ public class SearchServiceImpl implements SearchService {
         do {
             List<Nameserver> nameservers = nameserverDao.search(queryParam);
             for (Nameserver nameserver : nameservers) {
-                if (authedNameservers.size() < RdapProperties.getMaxsizeSearch()
+                if (authedNameservers.size() < RdapProperties
+                        .getMaxsizeSearch()
                         && accessControlManager.hasPermission(nameserver)) {
                     authedNameservers.add(nameserver);
                 }
                 if (accessControlManager.hasPermission(nameserver)) {
                     totalAuthedNsSize++;
                 }
-                if (authedNameservers.size() == RdapProperties.getMaxsizeSearch()
+                if (authedNameservers.size() == RdapProperties
+                        .getMaxsizeSearch()
                         && totalAuthedNsSize > authedNameservers.size()) {
                     gotEnoughResults = true;
                     break;
                 }
             }
             page.incrementCurrentPage();
-        } while (page.isNotLastPage() && !gotEnoughResults
-        );
-        
+        } while (page.isNotLastPage() && !gotEnoughResults);
+
         NameserverSearch nsSearch = new NameserverSearch();
-//        if (totalCount > RdapProperties.getMaxsizeSearch()) {
-//            nsSearch.setResultsTruncated(true);
-//        }
-//        List<Nameserver> listNS = nameserverDao.search(queryParam);  
-//        nsSearch.setNameserverSearchResults(listNS);
+        // if (totalCount > RdapProperties.getMaxsizeSearch()) {
+        // nsSearch.setResultsTruncated(true);
+        // }
+        // List<Nameserver> listNS = nameserverDao.search(queryParam);
+        // nsSearch.setNameserverSearchResults(listNS);
         if (totalAuthedNsSize > authedNameservers.size()) {
             nsSearch.setResultsTruncated(true);
         }
@@ -164,7 +188,7 @@ public class SearchServiceImpl implements SearchService {
             nsSearch.setHasNoAuthForAllObjects(true);
         }
         nsSearch.setNameserverSearchResults(authedNameservers);
-        
+
         return nsSearch;
     }
 }

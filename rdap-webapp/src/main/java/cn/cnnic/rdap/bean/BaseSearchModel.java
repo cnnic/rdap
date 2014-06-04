@@ -30,6 +30,8 @@
  */
 package cn.cnnic.rdap.bean;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -38,9 +40,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author jiashuo
  * 
  */
-@JsonIgnoreProperties(value = { "hasNoAuthForAllObjects", "id", "handle",
+@JsonIgnoreProperties(value = { "searchResults","hasNoAuthForAllObjects", "id", "handle",
         "lang", "objectType" })
-public abstract class BaseSearchModel extends BaseModel {
+public class BaseSearchModel<T extends BaseModel> extends BaseModel {
+    /**
+     * search results.
+     */
+    private List<T> searchResults;
+    
     /**
      * 'resultsTruncated' used where a single object has been returned and data
      * in that object has been truncated.
@@ -90,4 +97,20 @@ public abstract class BaseSearchModel extends BaseModel {
         this.hasNoAuthForAllObjects = hasNoAuthForAllObjects;
     }
 
+    /**
+     * get searchResults.
+     * @return searchResults.
+     */
+    public List<T> getSearchResults() {
+        return searchResults;
+    }
+
+    /**
+     * set searchResults.
+     * @param searchResults searchResults.
+     */
+    public void setSearchResults(List<T> searchResults) {
+        this.searchResults = searchResults;
+    }
+    
 }
