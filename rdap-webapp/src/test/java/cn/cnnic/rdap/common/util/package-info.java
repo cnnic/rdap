@@ -28,42 +28,8 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.service.impl;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.Principal;
-import cn.cnnic.rdap.bean.SecureObject;
-import cn.cnnic.rdap.controller.support.PrincipalHolder;
-import cn.cnnic.rdap.dao.AclDao;
-import cn.cnnic.rdap.service.AccessControlManager;
-
 /**
- * AccessControlManager implementation.
- * 
+ * util test package.
  * @author jiashuo
- * 
  */
-@Service
-public class AccessControlManagerImpl implements AccessControlManager {
-    /**
-     * acl dao.
-     */
-    @Autowired
-    private AclDao aclDao;
-
-    @Override
-    public boolean hasPermission(BaseModel object) {
-        Assert.notNull(object);
-        Assert.notNull(object.getId());
-        Assert.notNull(object.getObjectType());
-        Principal principal = PrincipalHolder.getPrincipal();
-        SecureObject secureObject = new SecureObject(object.getId(), object
-                .getObjectType().getName());
-        return aclDao.hasEntry(principal, secureObject);
-    }
-
-}
+package cn.cnnic.rdap.common.util;
