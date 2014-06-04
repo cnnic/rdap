@@ -86,7 +86,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserver-search.xml")
     public void testSearchExistNameserver() throws Exception {
-        String nsName = "ns.cnnic.cn";
+        String nsNameCn = "ns.cnnic.cn";
         RdapProperties prop = new RdapProperties();
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
@@ -104,20 +104,18 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                                 Matchers.hasItem(Matchers.hasKey("handle"))))
                 .andExpect(
                         jsonPath("$.nameserverSearchResults",
-                                Matchers.hasItem(Matchers.hasValue("ns.cnnic.cn"))))
+                                Matchers.hasItem(Matchers.hasValue("ns.cnnic1.cn"))))
                 .andExpect(
                         jsonPath("$.nameserverSearchResults", Matchers
                                 .hasItem(Matchers.hasValue("ns.cnnic2.cn"))))
                 .andExpect(
                         jsonPath("$.nameserverSearchResults[0].lang").value("en"))
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].handle").value("1"))
+                        jsonPath("$.nameserverSearchResults[0].handle").exists())
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].ldhName").value(
-                                nsName))
+                        jsonPath("$.nameserverSearchResults[0].ldhName").exists())
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].unicodeName").value(
-                                nsName))
+                        jsonPath("$.nameserverSearchResults[0].unicodeName").exists())
                 .andExpect(
                         jsonPath("$.nameserverSearchResults[0].port43").value(
                                 "port43"))
