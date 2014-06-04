@@ -54,7 +54,13 @@ public final class IpUtil {
      * @return ipv4 string.
      */
     public static String longToIpV4(long longIp) {
-        if (longIp > 0xffffffff) {
+        /**
+         * shift right position,for the regular ipv4
+         */
+        final long posShift = 32;
+        long tmp = longIp;
+        tmp >>>= posShift;
+        if (tmp > 0) {
             return "";
         }
         final int threeByteSize = 24;
@@ -78,10 +84,6 @@ public final class IpUtil {
      * @return ipv6 string.
      */
     public static String longToIpV6(long highBits, long lowBits) {
-        final long numBeyond = 2 ^ 64 - 1;
-        if (highBits > numBeyond || lowBits > numBeyond) {
-            return "";
-        }
         final int oneByteSize = 8;
         final int v6MaxSegment = 8;
         final int twoByteSize = 16;
