@@ -31,6 +31,8 @@
 
 package cn.cnnic.rdap.common.util;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * ip util.
  * 
@@ -55,7 +57,7 @@ public final class IpUtil {
      */
     public static String longToIpV4(long longIp) {
         final long numBeyond = 0xffffffffL;
-        if( longIp>numBeyond ) {
+        if (longIp > numBeyond) {
             return "";
         }
         final int threeByteSize = 24;
@@ -64,8 +66,8 @@ public final class IpUtil {
         final int twoByteMask = 0x0000ffff;
         final int oneByteSize = 8;
         final int oneByteMask = 0x000000ff;
-        return String.format("%d.%d.%d.%d", (longIp >>> threeByteSize) & oneByteMask,
-                (longIp & threeByteMask) >>> twoByteSize,
+        return String.format("%d.%d.%d.%d", (longIp >>> threeByteSize)
+                & oneByteMask, (longIp & threeByteMask) >>> twoByteSize,
                 (longIp & twoByteMask) >>> oneByteSize, longIp & oneByteMask);
     }
 
@@ -105,7 +107,7 @@ public final class IpUtil {
         }
         return result.toString();
     }
-    
+
     /**
      * check if ip string is valid.
      * 
@@ -117,6 +119,9 @@ public final class IpUtil {
      * @return true if valid, false if not.
      */
     public static boolean isIpValid(String ipStr, boolean isV4) {
+        if (StringUtils.isBlank(ipStr)) {
+            return false;
+        }
         /**
          * ipLimitV6 2^64.
          */
