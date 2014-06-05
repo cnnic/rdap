@@ -141,18 +141,18 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
 
             if (IpVersion.isV6(ipVersionStr)) {
                 if (highAddress != null && lowAddress != null
-                        && IpVersion.isIpValid(highAddress, false)
-                        && IpVersion.isIpValid(lowAddress, false)) {
+                        && IpUtil.isIpValid(highAddress, false)
+                        && IpUtil.isIpValid(lowAddress, false)) {
                     realAddress = IpUtil.longToIpV6(
-                            Long.parseUnsignedLong(highAddress),
-                            Long.parseUnsignedLong(lowAddress));
+                            Long.parseLong(highAddress),
+                            Long.parseLong(lowAddress));
                     if (!realAddress.isEmpty()) {
                         ipV6.add(realAddress);
                     }
                 }
             } else if (IpVersion.isV4(ipVersionStr)) {
                 if (lowAddress != null) {
-                    realAddress = IpUtil.longToIpV4(Long.parseUnsignedLong(lowAddress));
+                    realAddress = IpUtil.longToIpV4(Long.parseLong(lowAddress));
                     if (!realAddress.isEmpty()) {
                         ipV4.add(realAddress);
                     }

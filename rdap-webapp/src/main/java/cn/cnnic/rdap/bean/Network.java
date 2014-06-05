@@ -146,38 +146,6 @@ public class Network extends BaseModel {
             }
             return false;
         }
-
-        /**
-         * check if ip string is valid.
-         * 
-         * @param ipStr
-         *            ip string.
-         * @param isV4
-         *            if the ip type is V4
-         * 
-         * @return true if valid, false if not.
-         */
-        public static boolean isIpValid(String ipStr, boolean isV4) {
-            /**
-             * ipLimitV6 2^64.
-             */
-            final String ipLimitV6 = "18446744073709551616";
-            /**
-             * ipLimitV4 2^32.
-             */
-            final String ipLimitV4 = "4294967296";
-            if (isV4) {
-                if (ipStr.compareTo(ipLimitV4) < 0) {
-                    return true;
-                }
-            } else {
-                if (ipStr.compareTo(ipLimitV6) < 0) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         /**
          * default constructor.
          * 
