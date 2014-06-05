@@ -49,6 +49,7 @@ import org.springframework.web.context.WebApplicationContext;
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -82,7 +83,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
     public void testSearchExistDomain() throws Exception {
         String domainName = "cnnic.cn";
         mockMvc.perform(
@@ -193,7 +194,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
     public void testSearchTruncatedDomain() throws Exception {
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "truncated*").accept(
@@ -218,7 +219,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
     public void testSearchNonExistDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
