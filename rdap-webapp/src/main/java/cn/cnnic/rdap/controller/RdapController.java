@@ -188,7 +188,6 @@ public class RdapController {
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
         String decodeDomain = name;
-        String punyDomainName = decodeDomain;
         try {
             decodeDomain = DomainUtil.iso8859Decode(name);
             decodeDomain = DomainUtil
@@ -207,7 +206,7 @@ public class RdapController {
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
         DomainSearch domainSearch = searchService.searchDomain(queryParser
-                .parseDomainQueryParam(decodeDomain, punyDomainName));
+                .parseDomainQueryParam(decodeDomain, decodeDomain));
         if (null != domainSearch) {
             if (domainSearch.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
@@ -289,7 +288,6 @@ public class RdapController {
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
         String decodeNameserver = name;
-        String punyNameserver = decodeNameserver;
         try {
             decodeNameserver = DomainUtil.iso8859Decode(name);
             decodeNameserver = DomainUtil
@@ -308,7 +306,7 @@ public class RdapController {
         decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
         decodeNameserver = StringUtils.lowerCase(decodeNameserver);
         NameserverSearch nsSearch = searchService.searchNameserver(queryParser
-                .parseNameserverQueryParam(decodeNameserver, punyNameserver));
+                .parseNameserverQueryParam(decodeNameserver, decodeNameserver));
         if (null != nsSearch) {
             if (nsSearch.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
