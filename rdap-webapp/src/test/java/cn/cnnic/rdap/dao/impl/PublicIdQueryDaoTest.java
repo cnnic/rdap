@@ -32,6 +32,7 @@ package cn.cnnic.rdap.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.dao.QueryDao;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -62,13 +64,13 @@ public class PublicIdQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("publicId.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "publicId.xml")
     public void testQueryExistLink() {
         Long domainId = 1L;
         List<PublicId> publicIdsList = publicIdQueryDao.queryAsInnerObjects(
                 domainId, ModelType.DOMAIN);
         assertNotNull(publicIdsList);
-        assertEquals(publicIdsList.size(), 1);
+        assertTrue(publicIdsList.size()>= 1);
         PublicId publicId = publicIdsList.get(0);
         assertNotNull(publicId);
         assertEquals("identifier", publicId.getIdentifier());
@@ -80,7 +82,7 @@ public class PublicIdQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("publicId.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "publicId.xml")
     public void testQueryNonExistEvent() {
         Long nonExistDomainId = 10000L;
         List<PublicId> publicIdsList = publicIdQueryDao.queryAsInnerObjects(

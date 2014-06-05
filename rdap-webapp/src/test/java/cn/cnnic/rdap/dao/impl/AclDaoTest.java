@@ -59,12 +59,12 @@ public class AclDaoTest extends BaseTest {
     private AclDao aclDao;
 
     /**
-     * test for exist entry.
+     * test for exist entry - domain.
      */
     @Test
     // @DatabaseTearDown("teardown.xml")
     @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "acl.xml")
-    public void testHasEntry() {
+    public void testHasEntryDomain() {
         Principal principal = new Principal(1L);
         SecureObject secureObject = new SecureObject(1L,
                 ModelType.DOMAIN.getName());
@@ -80,6 +80,33 @@ public class AclDaoTest extends BaseTest {
         Principal principal = new Principal(2L);
         SecureObject secureObject = new SecureObject(2L,
                 ModelType.DOMAIN.getName());
+        assertTrue(aclDao.hasEntry(principal, secureObject));
+    }
+    
+
+    /**
+     * test for exist entry - nameserver.
+     */
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "acl.xml")
+    public void testHasEntryNameserver() {
+        Principal principal = new Principal(1L);
+        SecureObject secureObject = new SecureObject(1L,
+                ModelType.NAMESERVER.getName());
+        assertTrue(aclDao.hasEntry(principal, secureObject));
+    }
+    
+    /**
+     * test for exist entry - autnum.
+     */
+    @Test
+    // @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "acl.xml")
+    public void testHasEntryAutnum() {
+        Principal principal = new Principal(1L);
+        SecureObject secureObject = new SecureObject(1L,
+                ModelType.AUTNUM.getName());
         assertTrue(aclDao.hasEntry(principal, secureObject));
     }
 
