@@ -14,15 +14,13 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
 
+import sun.misc.BASE64Decoder;
+import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.bean.Principal;
 import cn.cnnic.rdap.bean.User;
-import cn.cnnic.rdap.service.IdentityCheckService;
-import cn.cnnic.rdap.service.impl.IdentityCheckServiceImpl;
-import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
-
-import sun.misc.BASE64Decoder;
-
+import cn.cnnic.rdap.common.util.ServiceBeanUtil;
+import cn.cnnic.rdap.service.IdentityCheckService;
 
 /**
  * authentication filter, set user id to session after logined.
@@ -31,8 +29,6 @@ import sun.misc.BASE64Decoder;
  * 
  */
 public class AuthenticationFilter implements Filter {
-    
-    private IdentityCheckService idcService;
 
     @Override
     public void destroy() {
@@ -43,36 +39,41 @@ public class AuthenticationFilter implements Filter {
             FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) arg0;
         HttpServletResponse response = (HttpServletResponse) arg1;
-        
-        String tempPass= null;
-        tempPass=request.getHeader("authorization");
-        
-        if(tempPass!=null){
-            
-            tempPass= tempPass.substring(6,tempPass.length()); 
-            String tempPassdeCode=""; 
+
+        String tempPass = null;
+        tempPass = request.getHeader("authorization");
+
+        if (tempPass != null) {
+
+            tempPass = tempPass.substring(6, tempPass.length());
+            String tempPassdeCode = "";
             BASE64Decoder decoder = new BASE64Decoder();
-            
+
             try {
                 byte[] b = decoder.decodeBuffer(tempPass);
-                tempPassdeCode= new String(b); 
-                } catch (Exception e) {
-                return ;
-            }
-            
-            String userReqId="";
-            String userReqPwd="";
-            userReqId = tempPassdeCode.substring(0,tempPassdeCode.indexOf(":")); 
-            userReqPwd = tempPassdeCode.substring(tempPassdeCode.indexOf(":")+1); 
-            User user=null;
-            user =idcService.IdentityCheckService(userReqId, userReqPwd);
-            if(user.getUserType().equals(User.UserType.Anonymous)){
-                writeError401Response(response);
-                chain.doFilter(request, response);
+                tempPassdeCode = new String(b);
+            } catch (Exception e) {
                 return;
             }
-            else{
-                request.getSession().setAttribute("SESSION_ATTR_USER_ID", user.getUserId());
+
+            String userReqId = "";
+            String userReqPwd = "";
+            userReqId =
+                    tempPassdeCode.substring(0, tempPassdeCode.indexOf(":"));
+            userReqPwd =
+                    tempPassdeCode.substring(tempPassdeCode.indexOf(":") + 1);
+            User user = null;
+            IdentityCheckService idcService =
+                    ServiceBeanUtil.getIdentityCheckService();
+            user = idcService.IdentityCheckService(userReqId, userReqPwd);
+            if (null == user) {
+                request.getSession().removeAttribute("SESSION_ATTR_USER_ID");
+                writeError401Response(response);
+                // chain.doFilter(request, response);
+                return;
+            } else {
+                request.getSession().setAttribute("SESSION_ATTR_USER_ID",
+                        user.getUserId());
             }
         }
 
@@ -80,13 +81,12 @@ public class AuthenticationFilter implements Filter {
         // session.
         // especially, userId set 0 for anonymous user.
         HttpSession session = request.getSession();
-        
+
         Principal principal = Principal.getAnonymousPrincipal();
         if (null != session) {
             Object userId = session.getAttribute("SESSION_ATTR_USER_ID");
-            // TODO: SESSION_ATTR_USER_ID change to constant.
-            if(null != userId){
-                principal = new Principal((Long)userId);
+            if (null != userId) {
+                principal = new Principal((Long) userId);
             }
         }
         PrincipalHolder.setPrincipal(principal);
@@ -96,13 +96,12 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-        idcService = new IdentityCheckServiceImpl();
     }
-    
-     private void writeError401Response(HttpServletResponse response)
+
+    private void writeError401Response(HttpServletResponse response)
             throws IOException {
-        ResponseEntity<ErrorMessage> responseEntity = RestResponseUtil
-                .createResponse401();
+        ResponseEntity<ErrorMessage> responseEntity =
+                RestResponseUtil.createResponse401();
         FilterHelper.writeResponse(responseEntity, response);
     }
 }
