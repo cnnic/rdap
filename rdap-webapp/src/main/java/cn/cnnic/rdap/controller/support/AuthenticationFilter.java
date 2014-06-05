@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.http.ResponseEntity;
 
 import sun.misc.BASE64Decoder;
@@ -44,9 +45,13 @@ public class AuthenticationFilter implements Filter {
         tempPass = request.getHeader("authorization");
 
         Principal principal = Principal.getAnonymousPrincipal();
-        if (tempPass != null) {
-
-            tempPass = tempPass.substring(6, tempPass.length());
+        if (StringUtils.isNotBlank(tempPass)) {
+            String AUTH_BASIC_PREFIX = "Basic ";
+            if(!StringUtils.startsWith(tempPass,AUTH_BASIC_PREFIX)){
+                writeError401Response(response);
+                return;
+            }
+            tempPass = tempPass.substring(AUTH_BASIC_PREFIX.length(), tempPass.length());
             String tempPassdeCode = "";
             BASE64Decoder decoder = new BASE64Decoder();
 
@@ -54,15 +59,19 @@ public class AuthenticationFilter implements Filter {
                 byte[] b = decoder.decodeBuffer(tempPass);
                 tempPassdeCode = new String(b);
             } catch (Exception e) {
+                writeError401Response(response);
                 return;
             }
 
             String userReqId = "";
             String userReqPwd = "";
-            userReqId =
-                    tempPassdeCode.substring(0, tempPassdeCode.indexOf(":"));
-            userReqPwd =
-                    tempPassdeCode.substring(tempPassdeCode.indexOf(":") + 1);
+            int indexOfSeparator = tempPassdeCode.indexOf(":");
+            if (-1 == indexOfSeparator) {
+                writeError401Response(response);
+                return;
+            }
+            userReqId = tempPassdeCode.substring(0, indexOfSeparator);
+            userReqPwd = tempPassdeCode.substring(indexOfSeparator + 1);
             User user = null;
             IdentityCheckService idcService =
                     ServiceBeanUtil.getIdentityCheckService();

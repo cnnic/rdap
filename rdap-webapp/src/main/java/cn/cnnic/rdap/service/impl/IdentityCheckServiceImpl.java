@@ -30,6 +30,9 @@ public class IdentityCheckServiceImpl implements IdentityCheckService {
             return null;
         }
         User user = idcDao.checkUserId(userId);
+        if(null == user){
+            return null;
+        }
         if (MD5Encryption.encryption(userPwd).equalsIgnoreCase(
                 user.getUserPwd())) {
             user.setUserType(User.UserType.Cerfications);
