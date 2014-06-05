@@ -105,4 +105,37 @@ public final class IpUtil {
         }
         return result.toString();
     }
+    
+    /**
+     * check if ip string is valid.
+     * 
+     * @param ipStr
+     *            ip string.
+     * @param isV4
+     *            if the ip type is V4
+     * 
+     * @return true if valid, false if not.
+     */
+    public static boolean isIpValid(String ipStr, boolean isV4) {
+        /**
+         * ipLimitV6 2^64.
+         */
+        final String ipLimitV6 = "18446744073709551616";
+        /**
+         * ipLimitV4 2^32.
+         */
+        final String ipLimitV4 = "4294967296";
+
+        String ipLimit = isV4 ? ipLimitV4 : ipLimitV6;
+        if (ipStr.length() == ipLimit.length()) {
+            if (ipStr.compareTo(ipLimit) < 0) {
+                return true;
+            }
+        } else {
+            if (ipStr.length() < ipLimit.length()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
