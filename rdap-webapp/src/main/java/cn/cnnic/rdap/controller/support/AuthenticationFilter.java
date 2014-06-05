@@ -43,6 +43,7 @@ public class AuthenticationFilter implements Filter {
         String tempPass = null;
         tempPass = request.getHeader("authorization");
 
+        Principal principal = Principal.getAnonymousPrincipal();
         if (tempPass != null) {
 
             tempPass = tempPass.substring(6, tempPass.length());
@@ -72,21 +73,7 @@ public class AuthenticationFilter implements Filter {
                 // chain.doFilter(request, response);
                 return;
             } else {
-                request.getSession().setAttribute("SESSION_ATTR_USER_ID",
-                        user.getUserId());
-            }
-        }
-
-        // TODO:authentication if header has auth info,and set userId to
-        // session.
-        // especially, userId set 0 for anonymous user.
-        HttpSession session = request.getSession();
-
-        Principal principal = Principal.getAnonymousPrincipal();
-        if (null != session) {
-            Object userId = session.getAttribute("SESSION_ATTR_USER_ID");
-            if (null != userId) {
-                principal = new Principal((Long) userId);
+                principal = new Principal(user.getUserId());
             }
         }
         PrincipalHolder.setPrincipal(principal);
