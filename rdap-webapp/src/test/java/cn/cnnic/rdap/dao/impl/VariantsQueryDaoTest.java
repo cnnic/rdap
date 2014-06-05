@@ -44,6 +44,7 @@ import cn.cnnic.rdap.bean.Variant;
 import cn.cnnic.rdap.bean.Variants;
 import cn.cnnic.rdap.dao.QueryDao;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -63,7 +64,7 @@ public class VariantsQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("variants.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "variants.xml")
     public void testQueryExistLink() {
         Long domainId = 1L;
         List<Variants> variantsList = variantsQueryDao.queryAsInnerObjects(

@@ -44,6 +44,7 @@ import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.dao.QueryDao;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -63,7 +64,7 @@ public class DsDataQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("dsData.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "dsData.xml")
     public void testQueryExistLink() {
         Long secureDnsId = 1L;
         List<DsData> dsDataList = dsDataQueryDaoImpl.queryAsInnerObjects(
@@ -91,7 +92,7 @@ public class DsDataQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("dsData.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "dsData.xml")
     public void testQueryNonExistEvent() {
         Long nonExistSecureDnsId = 10000L;
         List<DsData> dsDataList = dsDataQueryDaoImpl.queryAsInnerObjects(
