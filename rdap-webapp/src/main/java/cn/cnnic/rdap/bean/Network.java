@@ -167,12 +167,32 @@ public class Network extends BaseModel {
              */
             final String ipLimitV4 = "4294967296";
             if (isV4) {
-                if (ipStr.compareTo(ipLimitV4) < 0) {
-                    return true;
+                if (ipStr.length() == ipLimitV4.length()) {
+                    if (ipStr.compareTo(ipLimitV4) < 0) {
+                        return true;
+                    }
+                } else {
+                    if (ipStr.length() < ipLimitV4.length()) {
+                        return true;
+                    } else {
+                        if (ipStr.length() > ipLimitV4.length()) {
+                            return false;
+                        }
+                    }
                 }
             } else {
-                if (ipStr.compareTo(ipLimitV6) < 0) {
-                    return true;
+                if (ipStr.length() == ipLimitV6.length()) {
+                    if (ipStr.compareTo(ipLimitV6) < 0) {
+                        return true;
+                    }
+                } else {
+                    if (ipStr.length() < ipLimitV6.length()) {
+                        return true;
+                    } else {
+                        if (ipStr.length() > ipLimitV6.length()) {
+                            return false;
+                        }
+                    }
                 }
             }
             return false;
