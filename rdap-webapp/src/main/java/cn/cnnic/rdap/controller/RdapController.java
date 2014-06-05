@@ -187,6 +187,7 @@ public class RdapController {
     public ResponseEntity searchDomain(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
+        name = queryParser.getParameter(request,"name");
         String decodeDomain = name;
         try {
             decodeDomain = DomainUtil.iso8859Decode(name);
@@ -287,6 +288,7 @@ public class RdapController {
     public ResponseEntity searchNameserver(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
+        name = queryParser.getParameter(request,"name");
         String decodeNameserver = name;
         try {
             decodeNameserver = DomainUtil.iso8859Decode(name);
