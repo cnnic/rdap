@@ -45,6 +45,7 @@ import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.IPAddress;
 import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.common.util.IpUtil;
+import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
@@ -144,15 +145,15 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
                         && IpUtil.isIpValid(highAddress, false)
                         && IpUtil.isIpValid(lowAddress, false)) {
                     realAddress = IpUtil.longToIpV6(
-                            Long.parseLong(highAddress),
-                            Long.parseLong(lowAddress));
+                            StringUtil.parseUnsignedLong(highAddress),
+                            StringUtil.parseUnsignedLong(lowAddress));
                     if (!realAddress.isEmpty()) {
                         ipV6.add(realAddress);
                     }
                 }
             } else if (IpVersion.isV4(ipVersionStr)) {
                 if (lowAddress != null) {
-                    realAddress = IpUtil.longToIpV4(Long.parseLong(lowAddress));
+                    realAddress = IpUtil.longToIpV4(StringUtil.parseUnsignedLong(lowAddress));
                     if (!realAddress.isEmpty()) {
                         ipV4.add(realAddress);
                     }

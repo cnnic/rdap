@@ -282,11 +282,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
                 if (null == ns) {
                     ns = new Nameserver();
                     ns.setId(nsId);
-                    ns.setHandle(rs.getString("HANDLE"));
-                    ns.setLdhName(rs.getString("LDH_NAME"));
-                    ns.setUnicodeName(rs.getString("UNICODE_NAME"));
-                    ns.setPort43(rs.getString("PORT43"));
-                    ns.setLang(rs.getString("LANG"));
+                    extractNameserverFromRs(rs, ns);
                     result.add(ns);
                     nsMapById.put(nsId, ns);
                 }
@@ -375,7 +371,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             List<Nameserver> result = new ArrayList<Nameserver>();
             while (rs.next()) {
                 Nameserver ns = new Nameserver();
-                extractorNameserverFromRs(rs, ns);
+                extractNameserverFromRs(rs, ns);
                 result.add(ns);
             }
             return result;
@@ -392,7 +388,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * @throws SQLException
      *             SQLException.
      */
-    private void extractorNameserverFromRs(ResultSet rs, Nameserver nameserver)
+    private void extractNameserverFromRs(ResultSet rs, Nameserver nameserver)
             throws SQLException {
         nameserver.setId(rs.getLong("NAMESERVER_ID"));
         nameserver.setHandle(rs.getString("HANDLE"));
