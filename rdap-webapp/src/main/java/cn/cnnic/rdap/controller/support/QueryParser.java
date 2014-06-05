@@ -30,6 +30,8 @@
  */
 package cn.cnnic.rdap.controller.support;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.DomainQueryParam;
@@ -68,7 +70,7 @@ public class QueryParser {
             String punyDomainName) {
         return new DomainQueryParam(domainName, punyDomainName);
     }
-    
+
     /**
      * generate NameserverQueryParam.
      * 
@@ -78,8 +80,24 @@ public class QueryParser {
      *            nameserver puny name.
      * @return QueryParam.
      */
-    public QueryParam parseNameserverQueryParam(String nsName,
-            String punyNSName) {
+    public QueryParam parseNameserverQueryParam(String nsName, String punyNSName) {
         return new NameserverQueryParam(nsName, punyNSName);
+    }
+
+    /**
+     * get parameter from request,get first if has more than one value.
+     * 
+     * @param request
+     *            request.
+     * @param name
+     *            parameter name.
+     * @return parameter value.
+     */
+    public String getParameter(HttpServletRequest request, String name) {
+        String[] values = request.getParameterValues(name);
+        if (null == values || values.length < 1) {
+            return null;
+        }
+        return values[0];
     }
 }

@@ -32,9 +32,11 @@ package cn.cnnic.rdap.common.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.QueryParam;
@@ -48,17 +50,55 @@ import cn.cnnic.rdap.controller.support.QueryParser;
  */
 @SuppressWarnings("rawtypes")
 public class QueryParserTest extends BaseTest {
-	@Autowired
-	private QueryParser queryParser;
+    @Autowired
+    private QueryParser queryParser;
 
-	/**
-	 * test valid autnum of one number
-	 */
-	@Test
-	public void testParseQ() {
-		String q = "3";
-		QueryParam queryParam = queryParser.parseQueryParam(q);
-		assertNotNull(queryParam);
-		assertEquals(q, queryParam.getQ());
-	}
+    /**
+     * test valid autnum of one number
+     */
+    @Test
+    public void testParseQ() {
+        String q = "3";
+        QueryParam queryParam = queryParser.parseQueryParam(q);
+        assertNotNull(queryParam);
+        assertEquals(q, queryParam.getQ());
+    }
+
+    /**
+     * test valid autnum of one number
+     */
+    @Test
+    public void testGetParameter() {
+        String paramName = "name";
+        String paramValue1 = "v1";
+        String paramValue2 = "v2";
+        String paramValue3 = "v3";
+        /**
+         * one param
+         */
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addParameter(paramName, paramValue1);
+        assertEquals(paramValue1, queryParser.getParameter(request, paramName));
+        /**
+         * two params
+         */
+        request = new MockHttpServletRequest();
+        request.addParameter(paramName, paramValue1);
+        request.addParameter(paramName, paramValue2);
+        assertEquals(paramValue1, queryParser.getParameter(request, paramName));
+        /**
+         * three params
+         */
+        request = new MockHttpServletRequest();
+        request.addParameter(paramName, paramValue1);
+        request.addParameter(paramName, paramValue2);
+        request.addParameter(paramName, paramValue3);
+        assertEquals(paramValue1, queryParser.getParameter(request, paramName));
+        /**
+         * none param
+         */
+        request = new MockHttpServletRequest();
+        assertNull(queryParser.getParameter(request, paramName));
+    }
+
 }
