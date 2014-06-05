@@ -31,6 +31,8 @@
 
 package cn.cnnic.rdap.common.util;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * ip util.
  * 
@@ -117,7 +119,7 @@ public final class IpUtil {
      * @return true if valid, false if not.
      */
     public static boolean isIpValid(String ipStr, boolean isV4) {
-        if (ipStr == null) {
+        if (StringUtils.isBlank(ipStr)) {
             return false;
         }
         /**

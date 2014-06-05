@@ -37,6 +37,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -141,8 +142,9 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
             String realAddress = "";
 
             if (IpVersion.isV6(ipVersionStr)) {
-                if (lowAddress != null && IpUtil.isIpValid(lowAddress, false)) {
-                    if (highAddress == null) {
+                if (!StringUtils.isBlank(lowAddress)
+                        && IpUtil.isIpValid(lowAddress, false)) {
+                    if (StringUtils.isBlank(highAddress)) {
                         highAddress = "0";
                     }
                     if (IpUtil.isIpValid(highAddress, false)) {
@@ -158,7 +160,7 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
                 if (lowAddress != null) {
                     realAddress = IpUtil.longToIpV4(StringUtil
                             .parseUnsignedLong(lowAddress));
-                    if (!realAddress.isEmpty()) {
+                    if (!StringUtils.isBlank(realAddress)) {
                         ipV4.add(realAddress);
                     }
                 }
