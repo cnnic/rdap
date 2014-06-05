@@ -44,9 +44,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author weijunkai
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "handle", "ldhName", "unicodeName",
-        "status", "ipAddresses", "entities", "remarks", "links", "port43",
-        "events", "lang" })
+@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "ldhName",
+        "unicodeName", "status", "ipAddresses", "entities", "remarks", "links",
+        "port43", "events", "lang" })
 public class Nameserver extends BaseModel {
     /**
      * representing a registry unique identifier of the domain object instance.
@@ -90,7 +90,7 @@ public class Nameserver extends BaseModel {
      * events.
      */
     private List<Event> events;
-    
+
     @Override
     public ModelType getObjectType() {
         return ModelType.NAMESERVER;

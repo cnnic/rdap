@@ -127,54 +127,54 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                                         "update prohibited")))
                 // remarks.
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].remarks").isArray())
+                        jsonPath("$.notices").isArray())
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].remarks[0]")
+                        jsonPath("$.notices[0]")
                                 .exists())
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].remarks[0].title")
-                                .exists())
-                .andExpect(
-                        jsonPath(
-                                "$.nameserverSearchResults[0].remarks[0].description")
+                        jsonPath("$.notices[0].title")
                                 .exists())
                 .andExpect(
                         jsonPath(
-                                "$.nameserverSearchResults[0].remarks[0].description")
+                                "$.notices[0].description")
+                                .exists())
+                .andExpect(
+                        jsonPath(
+                                "$.notices[0].description")
                                 .isArray())
                 .andExpect(
                         jsonPath(
-                                "$.nameserverSearchResults[0].remarks[0].description")
+                                "$.notices[0].description")
                                 .value(CoreMatchers.hasItems("description1",
                                         "description2")))
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].remarks[0].links")
+                        jsonPath("$.notices[0].links")
                                 .exists())
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].remarks[0].links")
+                        jsonPath("$.notices[0].links")
                                 .isArray())
                 .andExpect(
-                        jsonPath("$.nameserverSearchResults[0].remarks[0].links[0]")
+                        jsonPath("$.notices[0].links[0]")
                                 .exists())
                 .andExpect(
                         jsonPath(
-                                "$.nameserverSearchResults[0].remarks[0].links[0].value")
+                                "$.notices[0].links[0].value")
                                 .exists())
                 .andExpect(
                         jsonPath(
-                                "$.nameserverSearchResults[0].remarks[0].links[0].rel")
+                                "$.notices[0].links[0].rel")
                                 .exists())
                 .andExpect(
                         jsonPath(
-                                "$.nameserverSearchResults[0].remarks[0].links[0].href")
+                                "$.notices[0].links[0].href")
                                 .exists())
                 .andExpect(
                         jsonPath(
-                                "$.nameserverSearchResults[0].remarks[0].links[0].type")
+                                "$.notices[0].links[0].type")
                                 .exists())
                 .andExpect(
                         jsonPath(
-                                "$.nameserverSearchResults[0].remarks[0].links[0].type")
+                                "$.notices[0].links[0].type")
                                 .value("application/json"))
                 // links.
                 .andExpect(
@@ -213,52 +213,5 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 .andExpect(
                         jsonPath("$.nameserverSearchResults",
                                 Matchers.hasItem(Matchers.hasKey("handle"))));
-    }
-
-    /**
-     * test search no existed nameserver.
-     * 
-     * @throws Exception
-     */
-    @Test
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
-    public void testSearchNonExistNameserver() throws Exception {
-        RestResponseUtil.initErrorMessages();
-        mockMvc.perform(
-                get(SEARCH_URI + "nonexist*").accept(
-                        MediaType.parseMediaType("application/json")))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(
-                        jsonPath("$.rdapConformance").value(
-                                CoreMatchers.hasItem("rdap_level_0")))
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.errorCode").value(404))
-                .andExpect(jsonPath("$.lang").value("en"))
-                .andExpect(jsonPath("$.title").value("NOT FOUND"))
-                .andExpect(jsonPath("$.description").value("NOT FOUND"))
-                .andExpect(jsonPath("$.resultsTruncated").doesNotExist())
-                .andExpect(jsonPath("$.nameserverSearchResults").doesNotExist());
-    }
-
-    /**
-     * test search invalid nameserver.
-     * 
-     * @throws Exception
-     */
-    @Test
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
-    public void testSearchInvalidNameserver() throws Exception {
-        RestResponseUtil.initErrorMessages();
-        mockMvc.perform(
-                get(SEARCH_URI + "*").accept(
-                        MediaType.parseMediaType("application/json")))
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.errorCode").value(422))
-                .andExpect(jsonPath("$.lang").value("en"))
-                .andExpect(jsonPath("$.title").value("UNPROCESSABLE ENTITY"))
-                .andExpect(jsonPath("$.description").value("UNPROCESSABLE ENTITY"));
-
     }
 }
