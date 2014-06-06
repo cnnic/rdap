@@ -30,7 +30,6 @@
  */
 package cn.cnnic.rdap.service.impl;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -38,7 +37,6 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.ErrorMessage;
@@ -46,9 +44,10 @@ import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.ErrorMessageService;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for QueryServiceImpl
+ * Test for QueryServiceImpl.
  * 
  * @author jiashuo
  * 
@@ -64,7 +63,7 @@ public class ErrorMessageServiceImplTest extends BaseTest {
      * test query exist autnum
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
     public void testGetAllErrorMessageMap() {
         Map<Long, ErrorMessage> errorMessageMap = errorMessageService
@@ -72,4 +71,5 @@ public class ErrorMessageServiceImplTest extends BaseTest {
         assertNotNull(errorMessageMap);
         assertTrue(errorMessageMap.size() > 0);
     }
+    
 }
