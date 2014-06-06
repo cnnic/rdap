@@ -32,7 +32,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  make a dir used to download source code and build, which is called 'WORK_DIR'
-      *  [Download source zip file](https://github.com/cnnic/rdap/archive/develop.zip), unzip it to $WORK_DIR
+      *  [Download source zip file](https://github.com/cnnic/rdap/archive/master.zip), unzip it to $WORK_DIR
       *  build project:
 		```
 			[in Linux, open a shell and execute command:]
