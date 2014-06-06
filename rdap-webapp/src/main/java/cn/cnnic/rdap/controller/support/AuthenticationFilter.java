@@ -47,9 +47,7 @@ public class AuthenticationFilter implements Filter {
         Principal principal = Principal.getAnonymousPrincipal();
         if (StringUtils.isNotBlank(tempPass)) {
             String AUTH_BASIC_PREFIX = "Basic ";
-            String tempPassStart= tempPass.substring(0,AUTH_BASIC_PREFIX.length()-1);
-            //if(!StringUtils.startsWith(tempPass,AUTH_BASIC_PREFIX)){
-            if(!tempPassStart.equalsIgnoreCase(AUTH_BASIC_PREFIX)){
+            if(!StringUtils.startsWith(tempPass,AUTH_BASIC_PREFIX)){
                 writeError401Response(response);
                 return;
             }
