@@ -75,8 +75,14 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 @Transactional
 public abstract class BaseTest {
 
+    /**
+     * dataSource.
+     */
     private static DataSource dataSource;
 
+    /**
+     * connection.
+     */
     private static IDatabaseConnection connection;
 
     /**
@@ -93,6 +99,12 @@ public abstract class BaseTest {
         setAnonymousPrincipal();
     }
 
+    /**
+     * init connection.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
     public static void initDbunitConnection() throws Exception {
         connection =
                 new DatabaseConnection(
@@ -171,11 +183,20 @@ public abstract class BaseTest {
 
     /**
      * set userId to principal.
+     * 
+     * @param userId
+     *            userId.
      */
     protected void setUserIdToPrincipal(Long userId) {
         PrincipalHolder.setPrincipal(new Principal(userId));
     }
 
+    /**
+     * set dataSource.
+     * 
+     * @param dataSource
+     *            dataSource.
+     */
     @Autowired
     public void setDataSource(DataSource dataSource) {
         BaseTest.dataSource = dataSource;
