@@ -44,28 +44,33 @@ import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.dao.ErrorMessageDao;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for event DAO
+ * Test for errorMessage DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class ErrorMessageDaoTest extends BaseTest {
+    /**
+     * errorMessageDao.
+     */
     @Autowired
     @Qualifier("errorMessageDaoImpl")
     private ErrorMessageDao errorMessageDao;
 
     /**
-     * test query exist event
+     * test query exist.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("errorMessage.xml")
-    public void testQueryExistEvent() {
+    public void testQueryExist() {
         List<ErrorMessage> errorMsgs = errorMessageDao.getAllErrorMessages();
         Assert.notNull(errorMsgs);
         assertTrue(errorMsgs.size() > 0);
     }
+
 }

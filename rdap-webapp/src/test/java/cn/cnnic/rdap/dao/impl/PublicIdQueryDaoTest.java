@@ -44,33 +44,36 @@ import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.dao.QueryDao;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for link DAO
+ * Test for PublicId DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class PublicIdQueryDaoTest extends BaseTest {
+    /**
+     * publicIdQueryDao.
+     */
     @Autowired
     private QueryDao<PublicId> publicIdQueryDao;
 
     /**
-     * test query exist event
+     * test query exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "publicId.xml")
-    public void testQueryExistLink() {
+    @DatabaseSetup(value = "publicId.xml")
+    public void testQueryExist() {
         Long domainId = 1L;
-        List<PublicId> publicIdsList = publicIdQueryDao.queryAsInnerObjects(
-                domainId, ModelType.DOMAIN);
+        List<PublicId> publicIdsList =
+                publicIdQueryDao
+                        .queryAsInnerObjects(domainId, ModelType.DOMAIN);
         assertNotNull(publicIdsList);
-        assertTrue(publicIdsList.size()>= 1);
+        assertTrue(publicIdsList.size() >= 1);
         PublicId publicId = publicIdsList.get(0);
         assertNotNull(publicId);
         assertEquals("identifier", publicId.getIdentifier());
@@ -78,16 +81,18 @@ public class PublicIdQueryDaoTest extends BaseTest {
     }
 
     /**
-     * test query non exist event
+     * test query non exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "publicId.xml")
-    public void testQueryNonExistEvent() {
-        Long nonExistDomainId = 10000L;
-        List<PublicId> publicIdsList = publicIdQueryDao.queryAsInnerObjects(
-                nonExistDomainId, ModelType.DOMAIN);
+    @DatabaseSetup(value = "publicId.xml")
+    public void testQueryNonExist() {
+        final Long nonExistDomainId = 10000L;
+        List<PublicId> publicIdsList =
+                publicIdQueryDao.queryAsInnerObjects(nonExistDomainId,
+                        ModelType.DOMAIN);
         assertNotNull(publicIdsList);
         assertEquals(publicIdsList.size(), 0);
     }
+
 }

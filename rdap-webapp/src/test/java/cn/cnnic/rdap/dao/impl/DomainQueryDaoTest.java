@@ -36,9 +36,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.net.IDN;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -57,7 +54,6 @@ import cn.cnnic.rdap.bean.SecureDns;
 import cn.cnnic.rdap.bean.Variant;
 import cn.cnnic.rdap.bean.Variants;
 import cn.cnnic.rdap.common.util.DomainUtil;
-import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.dao.QueryDao;
 
@@ -65,15 +61,21 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for domain DAO
+ * Test for domain DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class DomainQueryDaoTest extends BaseTest {
+    /**
+     * queryParser.
+     */
     @Autowired
     private QueryParser queryParser;
+    /**
+     * domainQueryDao.
+     */
     @Autowired
     private QueryDao<Domain> domainQueryDao;
 
@@ -81,13 +83,14 @@ public class DomainQueryDaoTest extends BaseTest {
      * test query exist domain.
      */
     @Test
-//    @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("domain.xml")
     public void testQueryExistDomain() {
         String domainName = "cnnic.cn";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
-        Domain domain = domainQueryDao.query(queryParser.parseDomainQueryParam(
-                domainName, punyDomainName));
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        domainName, punyDomainName));
         assertNotNull(domain);
         assertEquals("1", domain.getHandle());
         assertEquals(domainName, domain.getLdhName());
@@ -193,8 +196,9 @@ public class DomainQueryDaoTest extends BaseTest {
     public void testQueryExistUnicodeDomain() {
         String unicodeName = "清华大学.中国";
         String punyDomainName = DomainUtil.geneDomainPunyName(unicodeName);
-        Domain domain = domainQueryDao.query(queryParser.parseDomainQueryParam(
-                unicodeName, punyDomainName));
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        unicodeName, punyDomainName));
         assertNotNull(domain);
         assertEquals("2", domain.getHandle());
         assertEquals(punyDomainName, domain.getLdhName());
@@ -215,8 +219,10 @@ public class DomainQueryDaoTest extends BaseTest {
     public void testQueryNotExistDomain() {
         String domainName = "cnnic";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
-        Domain domain = domainQueryDao.query(queryParser.parseDomainQueryParam(
-                domainName, punyDomainName));
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        domainName, punyDomainName));
         assertNull(domain);
     }
+
 }

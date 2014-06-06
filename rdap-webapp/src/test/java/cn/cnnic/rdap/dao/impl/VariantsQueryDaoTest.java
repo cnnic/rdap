@@ -44,31 +44,34 @@ import cn.cnnic.rdap.bean.Variant;
 import cn.cnnic.rdap.bean.Variants;
 import cn.cnnic.rdap.dao.QueryDao;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for link DAO
+ * Test for Variants DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class VariantsQueryDaoTest extends BaseTest {
+    /**
+     * variantsQueryDao
+     */
     @Autowired
     private QueryDao<Variants> variantsQueryDao;
 
     /**
-     * test query exist event
+     * test query exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "variants.xml")
-    public void testQueryExistLink() {
+    @DatabaseSetup(value = "variants.xml")
+    public void testQueryExist() {
         Long domainId = 1L;
-        List<Variants> variantsList = variantsQueryDao.queryAsInnerObjects(
-                domainId, ModelType.DOMAIN);
+        List<Variants> variantsList =
+                variantsQueryDao
+                        .queryAsInnerObjects(domainId, ModelType.DOMAIN);
         assertNotNull(variantsList);
         assertEquals(variantsList.size(), 1);
         Variants variants = variantsList.get(0);
@@ -83,15 +86,16 @@ public class VariantsQueryDaoTest extends BaseTest {
     }
 
     /**
-     * test query non exist event
+     * test query non exist.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("event.xml")
-    public void testQueryNonExistEvent() {
+    public void testQueryNonExist() {
         Long nonExistAutnumId = 10000L;
-        List<Variants> variants = variantsQueryDao.queryAsInnerObjects(
-                nonExistAutnumId, ModelType.AUTNUM);
+        List<Variants> variants =
+                variantsQueryDao.queryAsInnerObjects(nonExistAutnumId,
+                        ModelType.AUTNUM);
         assertNotNull(variants);
         assertEquals(variants.size(), 0);
     }

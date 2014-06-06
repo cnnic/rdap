@@ -49,47 +49,54 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for autnum DAO
+ * Test for autnum DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class AutnumQueryDaoTest extends BaseTest {
-	@Autowired
-	private QueryParser queryParser;
-	@Autowired
-	private QueryDao<Autnum> autnumQueryDao;
+    /**
+     * queryParser.
+     */
+    @Autowired
+    private QueryParser queryParser;
+    /**
+     * autnumQueryDao.
+     */
+    @Autowired
+    private QueryDao<Autnum> autnumQueryDao;
 
-	/**
-	 * test query exist autnum
-	 */
-	@Test
-//	@DatabaseTearDown("teardown.xml")
-	@DatabaseSetup("autnum.xml")
-	public void testQueryExistAutnum() {
-		String autnumStr = "1";
-		Autnum autnum = autnumQueryDao.query(queryParser
-				.parseQueryParam(autnumStr));
-		Assert.notNull(autnum);
-		assertEquals(autnum.getId(), Long.valueOf(autnumStr));
-		assertEquals(autnum.getCountry(), "zh");
-		assertEquals(autnum.getEndAutnum().longValue(), 10L);
-		assertEquals(autnum.getLang(), "cn");
-		assertEquals(autnum.getName(), "name1");
-		List<String> statusList = autnum.getStatus();
-		assertThat(statusList, CoreMatchers.hasItems("validated"));
-	}
+    /**
+     * test query exist autnum.
+     */
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("autnum.xml")
+    public void testQueryExistAutnum() {
+        String autnumStr = "1";
+        Autnum autnum =
+                autnumQueryDao.query(queryParser.parseQueryParam(autnumStr));
+        Assert.notNull(autnum);
+        assertEquals(autnum.getId(), Long.valueOf(autnumStr));
+        assertEquals(autnum.getCountry(), "zh");
+        assertEquals(autnum.getEndAutnum().longValue(), 10L);
+        assertEquals(autnum.getLang(), "cn");
+        assertEquals(autnum.getName(), "name1");
+        List<String> statusList = autnum.getStatus();
+        assertThat(statusList, CoreMatchers.hasItems("validated"));
+    }
 
-	/**
-	 * test query non exist autnum
-	 */
-	@Test
-	@DatabaseTearDown("teardown.xml")
-	public void testQueryNonExistAutnum() {
-		String nonExistAutnumStr = "1000";
-		Autnum autnum = autnumQueryDao.query(queryParser
-				.parseQueryParam(nonExistAutnumStr));
-		Assert.isNull(autnum);
-	}
+    /**
+     * test query non exist autnum.
+     */
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    public void testQueryNonExistAutnum() {
+        String nonExistAutnumStr = "1000";
+        Autnum autnum =
+                autnumQueryDao.query(queryParser
+                        .parseQueryParam(nonExistAutnumStr));
+        Assert.isNull(autnum);
+    }
 }
