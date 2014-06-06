@@ -6,35 +6,38 @@
 
 package cn.cnnic.rdap.service.impl;
 
-import cn.cnnic.rdap.service.IdentityCheckService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import cn.cnnic.rdap.bean.User;
-import cn.cnnic.rdap.dao.IdentityCheckDao;
-import cn.cnnic.rdap.dao.impl.IdentityCheckDaoImpl;
 import cn.cnnic.rdap.common.util.MD5Encryption;
+import cn.cnnic.rdap.dao.IdentityCheckDao;
+import cn.cnnic.rdap.service.IdentityCheckService;
 
 /**
- *
+ * 
  * @author wang
  */
-public class IdentityCheckServiceImpl implements IdentityCheckService{
+@Service("identityCheckService")
+public class IdentityCheckServiceImpl implements IdentityCheckService {
+    @Autowired
     private IdentityCheckDao idcDao;
-    private User user;
+
     @Override
-    public  User IdentityCheckService(String userId,String userPwd){
-        user = idcDao.checkUserId(userId);
-        if(userPwd.isEmpty())
-        {
-            user.setUserType(User.UserType.Anonymous);
+    public User IdentityCheckService(String userId, String userPwd) {
+        if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(userPwd)) {
+            return null;
+        }
+        User user = idcDao.checkUserId(userId);
+        if(null == user){
+            return null;
+        }
+        if (MD5Encryption.encryption(userPwd).equalsIgnoreCase(
+                user.getUserPwd())) {
+            user.setUserType(User.UserType.Cerfications);
             return user;
         }
-        if(MD5Encryption.encryption(userPwd).equalsIgnoreCase(user.getUserPwd())){
-            user.setUserType(User.UserType.Cerfications);   
-        }else{
-            user.setUserType(User.UserType.Anonymous);
-        }
-        return user;
+        return null;
     }
-    public void IdentityCheckServiceImpl(){
-        idcDao = new IdentityCheckDaoImpl();
-    } 
 }
