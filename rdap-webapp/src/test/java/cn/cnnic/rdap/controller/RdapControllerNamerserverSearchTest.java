@@ -51,6 +51,7 @@ import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -213,5 +214,70 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 .andExpect(
                         jsonPath("$.nameserverSearchResults",
                                 Matchers.hasItem(Matchers.hasKey("handle"))));
+    }
+    
+    /**
+     * test search not existed nameserver 404.
+     * 
+     * @throws Exception
+     */
+    @Test
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    public void testSearchNonExistNameserver() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        mockMvc.perform(
+                get(SEARCH_URI + "nonexist*").accept(
+                        MediaType.parseMediaType("application/json")))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(
+                        jsonPath("$.rdapConformance").value(
+                                CoreMatchers.hasItem("rdap_level_0")))
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.errorCode").value(404))
+                .andExpect(jsonPath("$.lang").value("en"))
+                .andExpect(jsonPath("$.title").value("NOT FOUND"))
+                .andExpect(jsonPath("$.description").value("NOT FOUND"))
+                .andExpect(jsonPath("$.resultsTruncated").doesNotExist())
+                .andExpect(jsonPath("$.nameserverSearchResults").doesNotExist());
+    }
+
+    /**
+     * test search nameserver 422.
+     * 
+     * @throws Exception
+     */
+    @Test
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    public void testSearchInvalidNameserver() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        mockMvc.perform(
+                get(SEARCH_URI + "*").accept(
+                        MediaType.parseMediaType("application/json")))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.errorCode").value(422))
+                .andExpect(jsonPath("$.lang").value("en"))
+                .andExpect(jsonPath("$.title").value("UNPROCESSABLE ENTITY"))
+                .andExpect(jsonPath("$.description").value("UNPROCESSABLE ENTITY"));
+    }
+    /**
+     * test search nameserver 400.
+     * 
+     * @throws Exception
+     */
+    @Test
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    public void testSearchIllegalNameserver() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        mockMvc.perform(
+                get(SEARCH_URI +"").accept(
+                        MediaType.parseMediaType("application/json")))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.lang").value("en"))
+                .andExpect(jsonPath("$.title").value("BAD REQUEST"))
+                .andExpect(jsonPath("$.description").value("BAD REQUEST"));
     }
 }
