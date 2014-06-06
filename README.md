@@ -6,7 +6,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 1. Install Mysql and init database.
    * [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version.  
      (Skip this step if Mysql5 or higer version already installed)
-   * Download sql init file [rdap.sql](https://raw.githubusercontent.com/cnnic/rdap/develop/rdap-webapp/build/rdap.sql)
+   * Download sql init file [rdap.sql](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.sql)
    * Login into Mysql with mysql client, and add user, and init database schema: 
       * Login mysql server use mysql client,this step will prompt password, and password for 'root' should be inputed, default password is null. Commands:
 	   ```
@@ -28,7 +28,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
 
 1. Get war file 'rdap.war'. There are two methods to get war file
-   * Get [war file](https://github.com/cnnic/rdap/raw/develop/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version is not supported, and must build from source)
+   * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version is not supported, and must build from source)
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  make a dir used to download source code and build, which is called 'WORK_DIR'
