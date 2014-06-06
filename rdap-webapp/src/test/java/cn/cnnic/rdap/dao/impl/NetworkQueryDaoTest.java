@@ -35,8 +35,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -53,7 +51,6 @@ import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.dao.QueryDao;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -65,8 +62,14 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class NetworkQueryDaoTest extends BaseTest {
+    /**
+     * queryParser.
+     */
     @Autowired
     private QueryParser queryParser;
+    /**
+     * networkQueryDao.
+     */
     @Autowired
     private QueryDao<Network> networkQueryDao;
 
@@ -75,7 +78,7 @@ public class NetworkQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "networkV4.xml")
+    @DatabaseSetup(value = "networkV4.xml")
     public void testQueryExistV4Network() {
         Long domainId = 1L;
         List<Network> networks =
@@ -136,7 +139,7 @@ public class NetworkQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "networkV6.xml")
+    @DatabaseSetup(value = "networkV6.xml")
     public void testQueryExistV6Network() {
         Long domainId = 1L;
         List<Network> networks =
@@ -193,13 +196,13 @@ public class NetworkQueryDaoTest extends BaseTest {
     }
 
     /**
-     * test query ont exist network.
+     * test query non exist network.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "networkV6.xml")
+    @DatabaseSetup(value = "networkV6.xml")
     public void testQueryNotExistNetwork() {
-        Long nonExistDomainId = 1000L;
+        final Long nonExistDomainId = 1000L;
         List<Network> networks =
                 networkQueryDao.queryAsInnerObjects(nonExistDomainId,
                         ModelType.DOMAIN);

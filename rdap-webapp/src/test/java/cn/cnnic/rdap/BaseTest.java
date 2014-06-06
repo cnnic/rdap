@@ -30,8 +30,22 @@
  */
 package cn.cnnic.rdap;
 
-import org.junit.BeforeClass;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.URL;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -60,12 +74,132 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
         DbUnitTestExecutionListener.class })
 @Transactional
 public abstract class BaseTest {
+
     /**
-     * set principal.
+     * dataSource.
      */
-    @BeforeClass
-    public static void setPrincipal() {
+    private static DataSource dataSource;
+
+    /**
+     * connection.
+     */
+    private static IDatabaseConnection connection;
+
+    /**
+     * BeforeClass.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
+    @PostConstruct
+    public static void beforeClass() throws Exception {
+        initDbunitConnection();
+        clearAllTable();
+        initCommonData();
+        setAnonymousPrincipal();
+    }
+
+    /**
+     * init connection.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
+    public static void initDbunitConnection() throws Exception {
+        connection =
+                new DatabaseConnection(
+                        DataSourceUtils.getConnection(dataSource));
+    }
+
+    /**
+     * get dataset.
+     * 
+     * @return dataset.
+     * @throws Exception
+     *             Exception.
+     */
+    protected static IDataSet getDeleteAllTableRowsDataSet() throws Exception {
+        String dataSetFilePath = "cn/cnnic/rdap/dao/impl/teardown.xml";
+        return getDataSet(dataSetFilePath);
+    }
+
+    /**
+     * get init data dataset.
+     * 
+     * @return dataset.
+     * @throws Exception
+     *             Exception.
+     */
+    protected static IDataSet getInitDataSet() throws Exception {
+        String dataSetFilePath = "cn/cnnic/rdap/dao/impl/initData.xml";
+        return getDataSet(dataSetFilePath);
+    }
+
+    /**
+     * get dataSet by file path.
+     * 
+     * @param dataSetFilePath
+     *            file path,relative to classpath.
+     * @return IDataSet.
+     * @throws DataSetException
+     *             DataSetException.
+     * @throws FileNotFoundException
+     *             FileNotFoundException.
+     */
+    private static IDataSet getDataSet(String dataSetFilePath)
+            throws DataSetException, FileNotFoundException {
+        URL url = BaseTest.class.getClassLoader().getResource(dataSetFilePath);
+        FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+        return builder.build(new FileInputStream(url.getPath()));
+    }
+
+    /**
+     * clear all table.
+     * 
+     * @throws Exception
+     *             exception.
+     */
+    protected static void clearAllTable() throws Exception {
+        DatabaseOperation.DELETE_ALL.execute(connection,
+                getDeleteAllTableRowsDataSet());
+    }
+
+    /**
+     * init common data,such errorMessage, rdap_conformance, etc.
+     * 
+     * @throws Exception
+     *             exception.
+     */
+    protected static void initCommonData() throws Exception {
+        DatabaseOperation.REFRESH.execute(connection, getInitDataSet());
+    }
+
+    /**
+     * set anonymous as principal.
+     */
+    private static void setAnonymousPrincipal() {
         PrincipalHolder.setPrincipal(Principal.getAnonymousPrincipal());
+    }
+
+    /**
+     * set userId to principal.
+     * 
+     * @param userId
+     *            userId.
+     */
+    protected void setUserIdToPrincipal(Long userId) {
+        PrincipalHolder.setPrincipal(new Principal(userId));
+    }
+
+    /**
+     * set dataSource.
+     * 
+     * @param dataSource
+     *            dataSource.
+     */
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        BaseTest.dataSource = dataSource;
     }
 
 }

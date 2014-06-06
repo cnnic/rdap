@@ -48,6 +48,7 @@ import cn.cnnic.rdap.service.SearchService;
 
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
  * Test for SearchService.
@@ -66,7 +67,7 @@ public class SearchServiceImplTest extends BaseTest {
      * test search domain.
      */
     @Test
-    // @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup(type = DatabaseOperation.REFRESH,
             value = "classpath:cn/cnnic/rdap/dao/impl/domain-search-page.xml")
     public void testQueryDomain() {
@@ -114,7 +115,7 @@ public class SearchServiceImplTest extends BaseTest {
      * test search nameserver.
      */
     @Test
-    // @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup(type = DatabaseOperation.REFRESH,
             value = "classpath:cn/cnnic/rdap/dao/impl/nameserver-search-page.xml")
     public void testSearchNameserver() {
@@ -157,4 +158,5 @@ public class SearchServiceImplTest extends BaseTest {
         assertEquals(6L, nsSearch.getNameserverSearchResults().size());
         assertNull(nsSearch.getResultsTruncated());
     }
+    
 }

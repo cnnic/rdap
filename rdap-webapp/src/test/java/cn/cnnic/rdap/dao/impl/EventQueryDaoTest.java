@@ -32,8 +32,6 @@ package cn.cnnic.rdap.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.junit.Test;
@@ -43,35 +41,35 @@ import org.springframework.util.Assert;
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.dao.QueryDao;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for event DAO
+ * Test for event DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class EventQueryDaoTest extends BaseTest {
-    @Autowired
-    private QueryParser queryParser;
+    /**
+     * eventQueryDao.
+     */
     @Autowired
     private QueryDao<Event> eventQueryDao;
 
     /**
-     * test query exist event
+     * test query exist event.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("event.xml")
     public void testQueryExistEvent() {
         Long autnumId = 1L;
-        List<Event> events = eventQueryDao.queryAsInnerObjects(autnumId,
-                ModelType.AUTNUM);
+        List<Event> events =
+                eventQueryDao.queryAsInnerObjects(autnumId, ModelType.AUTNUM);
         Assert.notNull(events);
         assertEquals(events.size(), 1);
         Event event = events.get(0);
@@ -83,15 +81,16 @@ public class EventQueryDaoTest extends BaseTest {
     }
 
     /**
-     * test query non exist event
+     * test query non exist event.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("event.xml")
     public void testQueryNonExistEvent() {
-        Long nonExistAutnumId = 10000L;
-        List<Event> events = eventQueryDao.queryAsInnerObjects(
-                nonExistAutnumId, ModelType.AUTNUM);
+        final Long nonExistAutnumId = 10000L;
+        List<Event> events =
+                eventQueryDao.queryAsInnerObjects(nonExistAutnumId,
+                        ModelType.AUTNUM);
         Assert.notNull(events);
         assertEquals(events.size(), 0);
     }

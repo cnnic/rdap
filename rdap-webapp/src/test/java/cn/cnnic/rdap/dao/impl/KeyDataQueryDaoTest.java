@@ -45,33 +45,36 @@ import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.dao.QueryDao;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for link DAO
+ * Test for KeyData DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class KeyDataQueryDaoTest extends BaseTest {
+    /**
+     * keyDataQueryDaoImpl.
+     */
     @Autowired
     private QueryDao<KeyData> keyDataQueryDaoImpl;
 
     /**
-     * test query exist event
+     * test query exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "keyData.xml")
-    public void testQueryExistLink() {
+    @DatabaseSetup(value = "keyData.xml")
+    public void testQueryExist() {
         Long secureDnsId = 1L;
-        List<KeyData> keyDataList = keyDataQueryDaoImpl.queryAsInnerObjects(
-                secureDnsId, ModelType.SECUREDNS);
+        List<KeyData> keyDataList =
+                keyDataQueryDaoImpl.queryAsInnerObjects(secureDnsId,
+                        ModelType.SECUREDNS);
         assertNotNull(keyDataList);
-        assertTrue(keyDataList.size()>= 1);
+        assertTrue(keyDataList.size() >= 1);
         KeyData keyData = keyDataList.get(0);
         assertNotNull(keyData);
         assertEquals(keyData.getAlgorithm().intValue(), 1);
@@ -89,16 +92,18 @@ public class KeyDataQueryDaoTest extends BaseTest {
     }
 
     /**
-     * test query non exist event
+     * test query non exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "keyData.xml")
-    public void testQueryNonExistEvent() {
-        Long nonExistSecureDnsId = 10000L;
-        List<KeyData> keyDataList = keyDataQueryDaoImpl.queryAsInnerObjects(
-                nonExistSecureDnsId, ModelType.SECUREDNS);
+    @DatabaseSetup(value = "keyData.xml")
+    public void testQueryNonExist() {
+        final Long nonExistSecureDnsId = 10000L;
+        List<KeyData> keyDataList =
+                keyDataQueryDaoImpl.queryAsInnerObjects(nonExistSecureDnsId,
+                        ModelType.SECUREDNS);
         assertNotNull(keyDataList);
         assertEquals(keyDataList.size(), 0);
     }
+
 }

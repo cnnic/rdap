@@ -44,31 +44,34 @@ import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.dao.QueryDao;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for link DAO
+ * Test for dsData DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class DsDataQueryDaoTest extends BaseTest {
+    /**
+     * dsDataQueryDaoImpl.
+     */
     @Autowired
     private QueryDao<DsData> dsDataQueryDaoImpl;
 
     /**
-     * test query exist event
+     * test query exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "dsData.xml")
-    public void testQueryExistLink() {
+    @DatabaseSetup(value = "dsData.xml")
+    public void testQueryExist() {
         Long secureDnsId = 1L;
-        List<DsData> dsDataList = dsDataQueryDaoImpl.queryAsInnerObjects(
-                secureDnsId, ModelType.SECUREDNS);
+        List<DsData> dsDataList =
+                dsDataQueryDaoImpl.queryAsInnerObjects(secureDnsId,
+                        ModelType.SECUREDNS);
         assertNotNull(dsDataList);
         assertEquals(dsDataList.size(), 1);
         DsData dsData = dsDataList.get(0);
@@ -88,15 +91,16 @@ public class DsDataQueryDaoTest extends BaseTest {
     }
 
     /**
-     * test query non exist event
+     * test query non exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "dsData.xml")
-    public void testQueryNonExistEvent() {
-        Long nonExistSecureDnsId = 10000L;
-        List<DsData> dsDataList = dsDataQueryDaoImpl.queryAsInnerObjects(
-                nonExistSecureDnsId, ModelType.SECUREDNS);
+    @DatabaseSetup(value = "dsData.xml")
+    public void testQueryNonExist() {
+        final Long nonExistSecureDnsId = 10000L;
+        List<DsData> dsDataList =
+                dsDataQueryDaoImpl.queryAsInnerObjects(nonExistSecureDnsId,
+                        ModelType.SECUREDNS);
         assertNotNull(dsDataList);
         assertEquals(dsDataList.size(), 0);
     }
