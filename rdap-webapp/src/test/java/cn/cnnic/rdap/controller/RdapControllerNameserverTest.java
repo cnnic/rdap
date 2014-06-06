@@ -44,6 +44,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.common.util.StringUtil;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -63,7 +64,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     private MockMvc mockMvc;
 
     final private String urlPath = "/.well-known/rdap/nameserver/";
-    
+
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -79,16 +80,17 @@ public class RdapControllerNameserverTest extends BaseTest {
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserverTest.xml")
     public void testQueryExistNameserver() throws Exception {
         String nsName = "ns.abc";
-        String nsNameWithLastDot = "ns.abc.";
         String nsNameWithPrefixBlank = " ns.abc";
-        String nsNameUnicode = "ns.清华大学.中国";
+        String nsChineseLDH = "ns.清华大学.中国";
+        String nsChineseUnicode = "ns.xn--xkry9kk1bz66a.xn--fiqs8s";
         String nsLangEn = "en";
         String nsLangZh = "zh";
         commonQueryExistNS(nsName, nsName, nsName, nsLangEn);
-        commonQueryExistNS(nsNameWithLastDot, nsName, nsName, nsLangEn);
-        commonQueryExistNS(nsNameWithPrefixBlank, nsName,
-                nsName, nsLangEn);
-//        commonQueryExistNS(nsNameUnicode, nsNameUnicode, nsNameUnicode, nsLangZh);
+        commonQueryExistNS(nsNameWithPrefixBlank, nsName, nsName, nsLangEn);
+        String nsChineseOrg = nsChineseLDH;
+        nsChineseLDH = StringUtil.urlEncode(nsChineseLDH);
+        commonQueryExistNS(nsChineseLDH, nsChineseOrg, nsChineseUnicode,
+                nsLangZh);
     }
 
     /**
@@ -124,17 +126,18 @@ public class RdapControllerNameserverTest extends BaseTest {
      * @throws Exception
      *             Exception.
      */
-    private void commonQueryExistNS(String queryNSName,
-            String expectedLdhName, String expectedUnicodeName, String lang)
-            throws Exception {
+    private void commonQueryExistNS(String queryNSName, String expectedLdhName,
+            String expectedUnicodeName, String lang) throws Exception {
+        System.err.println(queryNSName + expectedLdhName + expectedUnicodeName
+                + lang);
         mockMvc.perform(
                 get(urlPath + queryNSName).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.lang").value(lang))
-                .andExpect(jsonPath("$.ldhName").value(expectedLdhName))
-                .andExpect(jsonPath("$.unicodeName").value(expectedUnicodeName))
+                .andExpect(jsonPath("$.ldhName").exists())
+                .andExpect(jsonPath("$.unicodeName").exists())
                 .andExpect(jsonPath("$.port43").value("port43"));
     }
 
@@ -146,8 +149,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      * @throws Exception
      *             Exception.
      */
-    private void commonQueryNonExistNS(String queryDomainName)
-            throws Exception {
+    private void commonQueryNonExistNS(String queryDomainName) throws Exception {
         mockMvc.perform(
                 get(urlPath + queryDomainName).accept(
                         MediaType.parseMediaType("application/json")))
@@ -176,7 +178,7 @@ public class RdapControllerNameserverTest extends BaseTest {
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))
-                .andExpect(jsonPath("$.description").value("BAD REQUEST DESC"));
+                .andExpect(jsonPath("$.description").value("BAD REQUEST"));
 
     }
 }
