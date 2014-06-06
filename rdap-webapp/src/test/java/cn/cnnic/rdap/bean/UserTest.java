@@ -29,49 +29,31 @@
  * DAMAGE.
  */
 
-package cn.cnnic.rdap.common.util;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+package cn.cnnic.rdap.bean;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 /**
- *
+ *test User
  * @author wang
  */
-public class MD5Encryption {
+public class UserTest {
+    
+    @Test  
+   public void testUser() {  
     /**
-     * 32bit MD5 encrypt function
-     * 
-     * @param plainText
-     *            plainText String.
-     * @return reMd5 string.
-     */
-    public  static String Encryption(String plainText) {
-        String reMd5 = new String();
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(plainText.getBytes());
-            byte byteMd[] = md.digest();
-            int i;
-            StringBuffer buf = new StringBuffer("");
-            for (int offset = 0; offset < byteMd.length; offset++) {
-                i = byteMd[offset];
-                if (i < 0)
-                    i += 256;
-                if (i < 16)
-                    buf.append("0");
-                buf.append(Integer.toHexString(i));
-            }
- 
-            reMd5 = buf.toString();
- 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return reMd5;
-    } 
-
-    /**
-     * default constructor.
-     */    
-    public MD5Encryption(){};
+     * test testUser.
+     */       
+       User  use = new User();
+       use.setUserId(12345678911L);
+       use.setUserPwd("098F6BCD4621D373CADE4E832627B4F6");
+       use.setUserType(User.UserType.Anonymous);
+       assertEquals(12345678911L,use.getUserId());
+       assertEquals("098F6BCD4621D373CADE4E832627B4F6",use.getUserPwd());
+       assertEquals(User.UserType.Anonymous,use.getUserType());
+   } 
 }
