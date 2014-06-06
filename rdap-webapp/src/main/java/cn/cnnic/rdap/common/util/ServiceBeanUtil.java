@@ -28,76 +28,32 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.controller.support;
+package cn.cnnic.rdap.common.util;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cn.cnnic.rdap.bean.DomainQueryParam;
-import cn.cnnic.rdap.bean.NameserverQueryParam;
-import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.common.util.DomainUtil;
+import cn.cnnic.rdap.service.IdentityCheckService;
 
 /**
+ * RestResponseUtil is used to create ResponseEntity.
  * 
  * @author jiashuo
  * 
  */
 @Component
-public class QueryParser {
-    /**
-     * generate QueryParam.
-     * 
-     * @param q
-     *            query string.
-     * @return QueryParam.
-     */
-    public QueryParam parseQueryParam(String q) {
-        return new QueryParam(q);
+public class ServiceBeanUtil {
+
+    private static IdentityCheckService identityCheckService;
+
+    public static IdentityCheckService getIdentityCheckService() {
+        return identityCheckService;
     }
 
-    /**
-     * generate DomainQueryParam.
-     * 
-     * @param domainName
-     *            domain name.
-     * @param punyDomainName
-     *            domain puny name.
-     * @return QueryParam.
-     */
-    public QueryParam parseDomainQueryParam(String domainName,
-            String punyDomainName) {
-        return new DomainQueryParam(domainName, punyDomainName);
+    @Autowired
+    public void setIdentityCheckService(
+            IdentityCheckService identityCheckService) {
+        ServiceBeanUtil.identityCheckService = identityCheckService;
     }
 
-    /**
-     * generate NameserverQueryParam.
-     * 
-     * @param nsName
-     *            nameserver name.
-     * @param punyNSName
-     *            nameserver puny name.
-     * @return QueryParam.
-     */
-    public QueryParam parseNameserverQueryParam(String nsName, String punyNSName) {
-        return new NameserverQueryParam(nsName, punyNSName);
-    }
-
-    /**
-     * get parameter from request,get first if has more than one value.
-     * 
-     * @param request
-     *            request.
-     * @param name
-     *            parameter name.
-     * @return parameter value.
-     */
-    public String getParameter(HttpServletRequest request, String name) {
-        String[] values = request.getParameterValues(name);
-        if (null == values || values.length < 1) {
-            return null;
-        }
-        return values[0];
-    }
 }

@@ -37,6 +37,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -45,6 +46,7 @@ import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.IPAddress;
 import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.common.util.IpUtil;
+import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
@@ -140,21 +142,27 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
             String realAddress = "";
 
             if (IpVersion.isV6(ipVersionStr)) {
-                if (highAddress != null && lowAddress != null) {
-                    realAddress = IpUtil.longToIpV6(
-                            Long.parseLong(highAddress),
-                            Long.parseLong(lowAddress));
-                    if (realAddress != "") {
+                if (!StringUtils.isBlank(lowAddress)
+                        && IpUtil.isIpValid(lowAddress, false)) {
+                    if (StringUtils.isBlank(highAddress)) {
+                        highAddress = "0";
+                    }
+                    if (IpUtil.isIpValid(highAddress, false)) {
+                        realAddress = IpUtil.longToIpV6(
+                                StringUtil.parseUnsignedLong(highAddress),
+                                StringUtil.parseUnsignedLong(lowAddress));
+                    }
+                    if (!realAddress.isEmpty()) {
                         ipV6.add(realAddress);
                     }
                 }
             } else if (IpVersion.isV4(ipVersionStr)) {
                 if (lowAddress != null) {
-                    realAddress = IpUtil.longToIpV4(Long.parseLong(lowAddress));
-                    if (realAddress != "") {
+                    realAddress = IpUtil.longToIpV4(StringUtil
+                            .parseUnsignedLong(lowAddress));
+                    if (!StringUtils.isBlank(realAddress)) {
                         ipV4.add(realAddress);
                     }
-
                 }
             }
         }

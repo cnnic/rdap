@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 	<RDAP_IDENTITY_ROLE ROLE_ID='1' ROLE_NAME='role1' />
-	<RDAP_IDENTITY_ACL ID='1' OBJECT_TYPE='nameserver'
+	<RDAP_IDENTITY_ACL ID='1' OBJECT_TYPE='nameServer'
 		OBJECT_ID='12' ROLE_ID='1' />
 
 	<RDAP_NAMESERVER NAMESERVER_ID='11' HANDLE='11' LDH_NAME='ns.truncated1.cn'

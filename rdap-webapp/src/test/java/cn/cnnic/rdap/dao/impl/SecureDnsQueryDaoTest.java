@@ -45,6 +45,7 @@ import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.SecureDns;
 import cn.cnnic.rdap.dao.QueryDao;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -64,7 +65,7 @@ public class SecureDnsQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("secureDns.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "secureDns.xml")
     public void testQueryExistLink() {
         Long domainId = 1L;
         List<SecureDns> secureDnsList = secureDnsQueryDao.queryAsInnerObjects(
@@ -107,7 +108,7 @@ public class SecureDnsQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("secureDns.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "secureDns.xml")
     public void testQueryNonExistEvent() {
         Long nonExistDomainId = 10000L;
         List<SecureDns> secureDnsList = secureDnsQueryDao.queryAsInnerObjects(

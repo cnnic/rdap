@@ -68,8 +68,9 @@ public class StringUtilTest extends BaseTest {
     @Test
     public void testEncodedURL() throws UnsupportedEncodingException {
         String qEncode = URLEncoder.encode("中文。中国", "UTF-8");
-        String expectURL = "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value="
-                + qEncode;
+        String expectURL =
+                "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value="
+                        + qEncode;
         String encodedURL = expectURL;
         String result = StringUtil.urlEncode(encodedURL);
         assertEquals(expectURL, result);
@@ -83,9 +84,11 @@ public class StringUtilTest extends BaseTest {
     @Test
     public void testDecodedURL() throws UnsupportedEncodingException {
         String qEncode = URLEncoder.encode("中文。中国", "UTF-8");
-        String expectURL = "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value="
-                + qEncode;
-        String decodedURL = "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value=中文。中国";
+        String expectURL =
+                "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value="
+                        + qEncode;
+        String decodedURL =
+                "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value=中文。中国";
         String result = StringUtil.urlEncode(decodedURL);
         assertEquals(expectURL, result);
     }
@@ -99,10 +102,24 @@ public class StringUtilTest extends BaseTest {
     public void testDecodedURLForIDN() throws UnsupportedEncodingException {
         String decodedURL = "http://网络中心.中国/链接1\\a?a=b#c=d";
         String encodeURL = URLEncoder.encode(decodedURL, "UTF-8");
-        String expectURL = "http://%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%BF%83.%E4%B8%AD%E5%9B%BD/%E9%93%BE%E6%8E%A51%5Ca?a=b#c=d";
+        String expectURL =
+                "http://%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%BF%83.%E4%B8%AD%E5%9B%BD/%E9%93%BE%E6%8E%A51%5Ca?a=b#c=d";
         String result = StringUtil.urlEncode(decodedURL);
         assertEquals(expectURL, result);
         result = StringUtil.urlEncode(encodeURL);
         assertEquals(expectURL, result);
+    }
+
+    /**
+     * test parseUnsignedLong.
+     */
+    @Test
+    public void testParseUnsignedLong() {
+        assertEquals(123L,
+                StringUtil.parseUnsignedLong("123"));
+        assertEquals(1844674407370955161L,
+                StringUtil.parseUnsignedLong("1844674407370955161"));
+        assertEquals(-1L, StringUtil.parseUnsignedLong("18446744073709551615"));
+        assertEquals(-4L, StringUtil.parseUnsignedLong("18446744073709551612"));
     }
 }

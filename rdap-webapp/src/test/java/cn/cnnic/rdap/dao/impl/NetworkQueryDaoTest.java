@@ -53,6 +53,7 @@ import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.dao.QueryDao;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -74,11 +75,11 @@ public class NetworkQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("networkV4.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "networkV4.xml")
     public void testQueryExistV4Network() {
         Long domainId = 1L;
-        List<Network> networks = networkQueryDao.queryAsInnerObjects(domainId,
-                ModelType.DOMAIN);
+        List<Network> networks =
+                networkQueryDao.queryAsInnerObjects(domainId, ModelType.DOMAIN);
         assertNotNull(networks);
         assertEquals(1, networks.size());
         Network network = networks.get(0);
@@ -104,9 +105,7 @@ public class NetworkQueryDaoTest extends BaseTest {
         assertNotNull(event);
         assertEquals(event.getEventAction(), "action1");
         assertEquals(event.getEventActor(), "jiashuo");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        assertEquals(dateFormat.format(event.getEventDate()),
-                "2014-01-01 00:01:01");
+        assertEquals(event.getEventDate(), "2014-01-01T00:01:01Z");
         // links
         List<Link> networkLinks = network.getLinks();
         assertNotNull(networkLinks);
@@ -137,11 +136,11 @@ public class NetworkQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("networkV6.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "networkV6.xml")
     public void testQueryExistV6Network() {
         Long domainId = 1L;
-        List<Network> networks = networkQueryDao.queryAsInnerObjects(domainId,
-                ModelType.DOMAIN);
+        List<Network> networks =
+                networkQueryDao.queryAsInnerObjects(domainId, ModelType.DOMAIN);
         assertNotNull(networks);
         assertEquals(1, networks.size());
         Network network = networks.get(0);
@@ -167,9 +166,7 @@ public class NetworkQueryDaoTest extends BaseTest {
         assertNotNull(event);
         assertEquals(event.getEventAction(), "action1");
         assertEquals(event.getEventActor(), "jiashuo");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        assertEquals(dateFormat.format(event.getEventDate()),
-                "2014-01-01 00:01:01");
+        assertEquals(event.getEventDate(), "2014-01-01T00:01:01Z");
         // links
         List<Link> networkLinks = network.getLinks();
         assertNotNull(networkLinks);
@@ -200,11 +197,12 @@ public class NetworkQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("networkV6.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "networkV6.xml")
     public void testQueryNotExistNetwork() {
         Long nonExistDomainId = 1000L;
-        List<Network> networks = networkQueryDao.queryAsInnerObjects(
-                nonExistDomainId, ModelType.DOMAIN);
+        List<Network> networks =
+                networkQueryDao.queryAsInnerObjects(nonExistDomainId,
+                        ModelType.DOMAIN);
         assertNotNull(networks);
         assertTrue(networks.size() == 0);
     }

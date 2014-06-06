@@ -45,6 +45,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
 
+import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 /**
@@ -73,7 +74,7 @@ public class RdapControllerAutnumTest extends BaseTest {
      */
     @Test
     // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnumWithRdapAndJson() throws Exception {
         String autnumStr = "1";
         mockMvc.perform(
@@ -93,7 +94,7 @@ public class RdapControllerAutnumTest extends BaseTest {
      */
     @Test
     // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnum() throws Exception {
         String autnumStr = "1";
         mockMvc.perform(

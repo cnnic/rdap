@@ -146,7 +146,6 @@ public class Network extends BaseModel {
             }
             return false;
         }
-
         /**
          * default constructor.
          * 
