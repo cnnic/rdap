@@ -43,6 +43,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -51,9 +52,11 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.cnnic.rdap.bean.Principal;
+import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.controller.support.PrincipalHolder;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
@@ -76,6 +79,11 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 public abstract class BaseTest {
 
     /**
+     * defaultMaxSizeSearch.
+     */
+    private static Long defaultMaxSizeSearch = null;
+
+    /**
      * dataSource.
      */
     private static DataSource dataSource;
@@ -86,17 +94,46 @@ public abstract class BaseTest {
     private static IDatabaseConnection connection;
 
     /**
-     * BeforeClass.
+     * or use BeforeClass.
      * 
      * @throws Exception
      *             Exception.
      */
     @PostConstruct
-    public static void beforeClass() throws Exception {
+    public static void postConstruct() throws Exception {
         initDbunitConnection();
         clearAllTable();
         initCommonData();
         setAnonymousPrincipal();
+        initDefaultMaxSizeSearch();
+    }
+
+    /**
+     * init defaultMaxSizeSearch,from prop file.
+     */
+    private static void initDefaultMaxSizeSearch() {
+        if (null == BaseTest.defaultMaxSizeSearch) {
+            BaseTest.defaultMaxSizeSearch = RdapProperties.getMaxsizeSearch();
+        }
+    }
+
+    /**
+     * Before.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
+    @Before
+    public void before() throws Exception {
+        resetDefaultMaxSizeSearch();
+    }
+
+    /**
+     * set default max size search.
+     */
+    private void resetDefaultMaxSizeSearch() {
+        ReflectionTestUtils.setField(new RdapProperties(), "maxsizeSearch",
+                BaseTest.defaultMaxSizeSearch);
     }
 
     /**
