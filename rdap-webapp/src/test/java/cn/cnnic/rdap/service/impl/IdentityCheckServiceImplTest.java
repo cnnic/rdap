@@ -51,11 +51,10 @@ public class IdentityCheckServiceImplTest extends BaseTest {
         * test for IdentityCheckService.
         */
         @Test
-        @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/identity.xml")
+        @DatabaseSetup("identity.xml")
         public void TestIdentityService(){
-            User use = idecService.IdentityCheckService("1", "pwd");
+            User use = idecService.IdentityCheckService("20", "pwd");
             assertNotNull(use);
             assertEquals(User.UserType.Cerfications,use.getUserType());    
-        };
-    
+        };  
 }

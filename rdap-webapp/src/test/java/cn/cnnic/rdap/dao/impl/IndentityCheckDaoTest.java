@@ -51,9 +51,9 @@ public class IndentityCheckDaoTest  extends BaseTest{
         * test for IdentityCheckDao.
         */
         @Test
-        @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/identity.xml")
+        @DatabaseSetup("identity.xml")
         public void testIdentityCheckDao(){
-            User use=idcDao.checkUserId("1");
+            User use=idcDao.checkUserId("20");
             assertNotNull(use);   
         }
     
