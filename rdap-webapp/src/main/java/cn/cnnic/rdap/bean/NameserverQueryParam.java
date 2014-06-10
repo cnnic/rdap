@@ -57,6 +57,11 @@ public class NameserverQueryParam extends QueryParam {
     private String punyName;
 
     /**
+     * isSearchByIp for ipSearch.
+     */
+    private boolean isSearchByIp = false;
+
+    /**
      * get punyName.
      * 
      * @return punyName.
@@ -73,5 +78,23 @@ public class NameserverQueryParam extends QueryParam {
      */
     public void setPunyName(String punyName) {
         this.punyName = punyName;
+    }
+
+    /**
+     * getIsSearchByIp .
+     * 
+     */
+    public boolean getIsSearchByIp() {
+        return isSearchByIp;
+    }
+
+    /**
+     * setIsSearchByIp .
+     * 
+     * @param isSearchByIp
+     *            boolean.
+     */
+    public void setIsSearchByIp(boolean isSearchByIp) {
+        this.isSearchByIp = isSearchByIp;
     }
 }
