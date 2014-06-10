@@ -46,7 +46,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.util.StringUtils;
 
 import cn.cnnic.rdap.common.util.StringUtil;
@@ -95,8 +94,6 @@ public class InitContext implements ApplicationContextAware {
      * @throws DataAccessException
      *             if there is an error executing a statement and
      *             continueOnError was {@code false}
-     * @see JdbcTestUtils#executeSqlScript(JdbcTemplate, EncodedResource,
-     *      boolean)
      * @see #setSqlScriptEncoding
      */
     public void
