@@ -41,8 +41,8 @@ import cn.cnnic.rdap.bean.Principal;
 import cn.cnnic.rdap.bean.SecureObject;
 import cn.cnnic.rdap.dao.AclDao;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
  * Test for acl dao.
@@ -62,51 +62,51 @@ public class AclDaoTest extends BaseTest {
      * test for exist entry - domain.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "acl.xml")
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(value = "acl.xml")
     public void testHasEntryDomain() {
         Principal principal = new Principal(1L);
-        SecureObject secureObject = new SecureObject(1L,
-                ModelType.DOMAIN.getName());
+        SecureObject secureObject =
+                new SecureObject(1L, ModelType.DOMAIN.getName());
         assertTrue(aclDao.hasEntry(principal, secureObject));
     }
+
     /**
      * test for hasEntry for non-exist entry.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "acl.xml")
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(value = "acl.xml")
     public void testHasEntryForNonExistEntry() {
         Principal principal = new Principal(2L);
-        SecureObject secureObject = new SecureObject(2L,
-                ModelType.DOMAIN.getName());
+        SecureObject secureObject =
+                new SecureObject(2L, ModelType.DOMAIN.getName());
         assertTrue(aclDao.hasEntry(principal, secureObject));
     }
-    
 
     /**
      * test for exist entry - nameserver.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "acl.xml")
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(value = "acl.xml")
     public void testHasEntryNameserver() {
         Principal principal = new Principal(1L);
-        SecureObject secureObject = new SecureObject(1L,
-                ModelType.NAMESERVER.getName());
+        SecureObject secureObject =
+                new SecureObject(1L, ModelType.NAMESERVER.getName());
         assertTrue(aclDao.hasEntry(principal, secureObject));
     }
-    
+
     /**
      * test for exist entry - autnum.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "acl.xml")
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(value = "acl.xml")
     public void testHasEntryAutnum() {
         Principal principal = new Principal(1L);
-        SecureObject secureObject = new SecureObject(1L,
-                ModelType.AUTNUM.getName());
+        SecureObject secureObject =
+                new SecureObject(1L, ModelType.AUTNUM.getName());
         assertTrue(aclDao.hasEntry(principal, secureObject));
     }
 

@@ -30,27 +30,16 @@
  */
 package cn.cnnic.rdap.service.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 import cn.cnnic.rdap.BaseTest;
-import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.Principal;
-import cn.cnnic.rdap.bean.SecureObject;
 import cn.cnnic.rdap.service.AccessControlManager;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -64,26 +53,44 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 public class AccessControlManagerImplTest extends BaseTest {
     @Autowired
     private AccessControlManager accessControlManager;
+
     /**
      * test for exist entry.
      */
     @Test
-//    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/acl.xml")
     public void testHasEntry() {
         Domain domain = new Domain();
         domain.setId(1L);
+        /**
+         * anonymous user
+         */
+        assertFalse(accessControlManager.hasPermission(domain));
+        /**
+         * userId with 1
+         */
+        super.setUserIdToPrincipal(1L);
         assertTrue(accessControlManager.hasPermission(domain));
+        /**
+         * userId with 10000000
+         */
+        super.setUserIdToPrincipal(10000000L);
+        assertFalse(accessControlManager.hasPermission(domain));
     }
+
     /**
      * test for hasEntry for non-exist entry.
      */
     @Test
-//  @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-  @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/acl.xml")
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/acl.xml")
     public void testHasEntryForNonExistEntry() {
         Domain domain = new Domain();
-        domain.setId(2L);
+        /**
+         * domain with id 2000000 has non acl entry.
+         */
+        domain.setId(2000000L);
         assertTrue(accessControlManager.hasPermission(domain));
     }
 }
