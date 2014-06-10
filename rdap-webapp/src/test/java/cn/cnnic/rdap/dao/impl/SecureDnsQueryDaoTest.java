@@ -45,31 +45,34 @@ import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.SecureDns;
 import cn.cnnic.rdap.dao.QueryDao;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for link DAO
+ * Test for SecureDNS DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class SecureDnsQueryDaoTest extends BaseTest {
+    /**
+     * secureDnsQueryDao.
+     */
     @Autowired
     private QueryDao<SecureDns> secureDnsQueryDao;
 
     /**
-     * test query exist event
+     * test query exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "secureDns.xml")
-    public void testQueryExistLink() {
+    @DatabaseSetup(value = "secureDns.xml")
+    public void testQueryExist() {
         Long domainId = 1L;
-        List<SecureDns> secureDnsList = secureDnsQueryDao.queryAsInnerObjects(
-                domainId, ModelType.DOMAIN);
+        List<SecureDns> secureDnsList =
+                secureDnsQueryDao.queryAsInnerObjects(domainId,
+                        ModelType.DOMAIN);
         assertNotNull(secureDnsList);
         assertEquals(1, secureDnsList.size());
         SecureDns secureDns = secureDnsList.get(0);
@@ -104,16 +107,18 @@ public class SecureDnsQueryDaoTest extends BaseTest {
     }
 
     /**
-     * test query non exist event
+     * test query non exist.
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "secureDns.xml")
-    public void testQueryNonExistEvent() {
+    @DatabaseSetup(value = "secureDns.xml")
+    public void testQueryNonExist() {
         Long nonExistDomainId = 10000L;
-        List<SecureDns> secureDnsList = secureDnsQueryDao.queryAsInnerObjects(
-                nonExistDomainId, ModelType.DOMAIN);
+        List<SecureDns> secureDnsList =
+                secureDnsQueryDao.queryAsInnerObjects(nonExistDomainId,
+                        ModelType.DOMAIN);
         assertNotNull(secureDnsList);
         assertEquals(0, secureDnsList.size());
     }
+
 }

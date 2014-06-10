@@ -44,7 +44,7 @@ import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
- * Test for RdapConformanceServiceImpl
+ * Test for RdapConformanceServiceImpl.
  * 
  * @author jiashuo
  * 
@@ -67,4 +67,5 @@ public class RdapConformanceServiceTest extends BaseTest {
 		assertThat(autnum.getRdapConformance(),
 				CoreMatchers.hasItems("rdap_level_0"));
 	}
+	
 }

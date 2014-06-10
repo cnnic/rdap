@@ -31,67 +31,73 @@
 package cn.cnnic.rdap.dao.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+
 import java.util.List;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.dao.QueryDao;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for link DAO
+ * Test for link DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class LinkQueryDaoTest extends BaseTest {
-	@Autowired
-	private QueryParser queryParser;
-	@Autowired
-	private QueryDao<Link> linkQueryDao;
+    /**
+     * linkQueryDao.
+     */
+    @Autowired
+    private QueryDao<Link> linkQueryDao;
 
-	/**
-	 * test query exist event
-	 */
-	@Test
-	// @DatabaseTearDown("teardown.xml")
-	@DatabaseSetup("link.xml")
-	public void testQueryExistLink() {
-		Long autnumId = 1L;
-		List<Link> links = linkQueryDao.queryAsInnerObjects(autnumId,
-				ModelType.AUTNUM);
-		assertNotNull(links);
-		assertEquals(links.size(), 1);
-		Link link = links.get(0);
-		assertNotNull(link);
-		assertEquals(link.getValue(), "http://example.com/context_uri");
-		List<String> titleList = link.getTitle();
-		assertNotNull(titleList);
-		assertThat(titleList,
-				CoreMatchers.hasItems("Title1 of Link1", "Title2 of Link1"));
-		List<String> hreflangList = link.getHreflang();
-		assertThat(hreflangList, CoreMatchers.hasItems("en", "zh"));
-	}
+    /**
+     * test query exist.
+     */
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("link.xml")
+    public void testQueryExistLink() {
+        Long autnumId = 1L;
+        List<Link> links =
+                linkQueryDao.queryAsInnerObjects(autnumId, ModelType.AUTNUM);
+        assertNotNull(links);
+        assertEquals(links.size(), 1);
+        Link link = links.get(0);
+        assertNotNull(link);
+        assertEquals(link.getValue(), "http://example.com/context_uri");
+        List<String> titleList = link.getTitle();
+        assertNotNull(titleList);
+        assertThat(titleList,
+                CoreMatchers.hasItems("Title1 of Link1", "Title2 of Link1"));
+        List<String> hreflangList = link.getHreflang();
+        assertThat(hreflangList, CoreMatchers.hasItems("en", "zh"));
+    }
 
-	/**
-	 * test query non exist event
-	 */
-	@Test
-	// @DatabaseTearDown("teardown.xml")
-	@DatabaseSetup("event.xml")
-	public void testQueryNonExistEvent() {
-		Long nonExistAutnumId = 10000L;
-		List<Link> links = linkQueryDao.queryAsInnerObjects(nonExistAutnumId,
-				ModelType.AUTNUM);
-		assertNotNull(links);
-		assertEquals(links.size(), 0);
-	}
+    /**
+     * test query non exist.
+     */
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("event.xml")
+    public void testQueryNonExist() {
+        final Long nonExistAutnumId = 10000L;
+        List<Link> links =
+                linkQueryDao.queryAsInnerObjects(nonExistAutnumId,
+                        ModelType.AUTNUM);
+        assertNotNull(links);
+        assertEquals(links.size(), 0);
+    }
+
 }

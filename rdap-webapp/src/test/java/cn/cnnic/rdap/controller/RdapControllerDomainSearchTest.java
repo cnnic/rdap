@@ -83,7 +83,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
+    @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
     public void testSearchExistDomain() throws Exception {
         String domainName = "cnnic.cn";
         mockMvc.perform(
@@ -194,7 +194,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
+    @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
     public void testSearchTruncatedDomain() throws Exception {
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "truncated*").accept(

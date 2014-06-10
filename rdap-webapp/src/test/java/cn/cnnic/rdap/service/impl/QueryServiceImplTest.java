@@ -51,7 +51,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for QueryServiceImpl
+ * Test for QueryServiceImpl.
  * 
  * @author jiashuo
  * 
@@ -95,4 +95,5 @@ public class QueryServiceImplTest extends BaseTest {
                 .parseDomainQueryParam(domainName, domainName));
         assertNotNull(domain);
     }
+    
 }

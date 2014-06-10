@@ -45,26 +45,29 @@ import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.Notice;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for notice DAO
+ * Test for notice DAO.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
 public class NoticeQueryDaoTest extends BaseTest {
+    /**
+     * noticeDaoImpl.
+     */
     @Autowired
     private NoticeDaoImpl noticeDaoImpl;
 
     /**
-     * test query exist notice
+     * test query exist notice.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "notice.xml")
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup(value = "notice.xml")
     public void testGetAllNotices() {
         List<Notice> notices = noticeDaoImpl.getAllNotices();
         Long noticeId = 1L;
@@ -85,4 +88,5 @@ public class NoticeQueryDaoTest extends BaseTest {
             assertEquals("http://example.com/context_uri", link.getValue());
         }
     }
+
 }
