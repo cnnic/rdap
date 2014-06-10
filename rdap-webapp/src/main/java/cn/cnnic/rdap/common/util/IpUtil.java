@@ -31,7 +31,14 @@
 
 package cn.cnnic.rdap.common.util;
 
+import cn.cnnic.rdap.common.util.StringUtil;
+
 import org.apache.commons.lang.StringUtils;
+
+import com.googlecode.ipv6.IPv6Address;
+
+import java.math.BigDecimal;
+import java.util.regex.Pattern;
 
 /**
  * ip util.
@@ -40,6 +47,107 @@ import org.apache.commons.lang.StringUtils;
  * 
  */
 public final class IpUtil {
+
+    public static long[] IPV4Array = { 0x80000000l, // 1000 0000 0000 0000 0000
+            // 0000 0000 0000,//1
+            0xC0000000l, // 1100 0000 0000 0000 0000 0000 0000 0000,//2
+            0xE0000000l, // 1110 0000 0000 0000 0000 0000 0000 0000,//3
+            0xF0000000l, // 1111 0000 0000 0000 0000 0000 0000 0000,//4
+            0xF8000000l, // 1111 1000 0000 0000 0000 0000 0000 0000,//5
+            0xFC000000l, // 1111 1100 0000 0000 0000 0000 0000 0000,//6
+            0xFE000000l, // 1111 1110 0000 0000 0000 0000 0000 0000,//7
+            0xFF000000l, // 1111 1111 0000 0000 0000 0000 0000 0000,//8
+            0xFF800000l, // 1111 1111 1000 0000 0000 0000 0000 0000,//9
+            0xFFC00000l, // 1111 1111 1100 0000 0000 0000 0000 0000,//10
+            0xFFE00000l, // 1111 1111 1110 0000 0000 0000 0000 0000,//11
+            0xFFF00000l, // 1111 1111 1111 0000 0000 0000 0000 0000,//12
+            0xFFF80000l, // 1111 1111 1111 1000 0000 0000 0000 0000,//13
+            0xFFFC0000l, // 1111 1111 1111 1100 0000 0000 0000 0000,//14
+            0xFFFE0000l, // 1111 1111 1111 1110 0000 0000 0000 0000,//15
+            0xFFFF0000l, // 1111 1111 1111 1111 0000 0000 0000 0000,//16
+            0xFFFF8000l, // 1111 1111 1111 1111 1000 0000 0000 0000,//17
+            0xFFFFC000l, // 1111 1111 1111 1111 1100 0000 0000 0000,//18
+            0xFFFFE000l, // 1111 1111 1111 1111 1110 0000 0000 0000,//19
+            0xFFFFF000l, // 1111 1111 1111 1111 1111 0000 0000 0000,//20
+            0xFFFFF800l, // 1111 1111 1111 1111 1111 1000 0000 0000,//21
+            0xFFFFFC00l, // 1111 1111 1111 1111 1111 1100 0000 0000,//22
+            0xFFFFFE00l, // 1111 1111 1111 1111 1111 1110 0000 0000,//23
+            0xFFFFFF00l, // 1111 1111 1111 1111 1111 1111 0000 0000,//24
+            0xFFFFFF80l, // 1111 1111 1111 1111 1111 1111 1000 0000,//25
+            0xFFFFFFC0l, // 1111 1111 1111 1111 1111 1111 1100 0000,//26
+            0xFFFFFFE0l, // 1111 1111 1111 1111 1111 1111 1110 0000,//27
+            0xFFFFFFF0l, // 1111 1111 1111 1111 1111 1111 1111 0000,//28
+            0xFFFFFFF8l, // 1111 1111 1111 1111 1111 1111 1111 1000//29
+            0xFFFFFFFCl, // 1111 1111 1111 1111 1111 1111 1111 1100//30
+            0xFFFFFFFEl, // 1111 1111 1111 1111 1111 1111 1111 1110//31
+            0xFFFFFFFFl // 1111 1111 1111 1111 1111 1111 1111 1111//32
+    };
+
+    public static long[] IPV6Array = { 0x8000000000000000l, // 1
+            0xC000000000000000l, // 2
+            0xE000000000000000l, // 3
+            0xF000000000000000l, // 4
+            0xF800000000000000l, // 5
+            0xFC00000000000000l, // 6
+            0xFE00000000000000l, // 7
+            0xFF00000000000000l, // 8
+            0xFF80000000000000l, // 9
+            0xFFC0000000000000l, // 10
+            0xFFE0000000000000l, // 11
+            0xFFF0000000000000l, // 12
+            0xFFF8000000000000l, // 13
+            0xFFFC000000000000l, // 14
+            0xFFFE000000000000l, // 15
+            0xFFFF000000000000l, // 16
+            0xFFFF800000000000l, // 17
+            0xFFFFC00000000000l, // 18
+            0xFFFFE00000000000l, // 19
+            0xFFFFF00000000000l, // 20
+            0xFFFFF80000000000l, // 21
+            0xFFFFFC0000000000l, // 22
+            0xFFFFFE0000000000l, // 23
+            0xFFFFFF0000000000l, // 24
+            0xFFFFFF8000000000l, // 25
+            0xFFFFFFC000000000l, // 26
+            0xFFFFFFE000000000l, // 27
+            0xFFFFFFF000000000l, // 28
+            0xFFFFFFF800000000l, // 29
+            0xFFFFFFFC00000000l, // 30
+            0xFFFFFFFE00000000l, // 31
+            0xFFFFFFFF00000000l, // 32
+            0xFFFFFFFF80000000l, // 33
+            0xFFFFFFFFC0000000l, // 34
+            0xFFFFFFFFE0000000l, // 35
+            0xFFFFFFFFF0000000l, // 36
+            0xFFFFFFFFF8000000l, // 37
+            0xFFFFFFFFFC000000l, // 38
+            0xFFFFFFFFFE000000l, // 39
+            0xFFFFFFFFFF000000l, // 40
+            0xFFFFFFFFFF800000l, // 41
+            0xFFFFFFFFFFC00000l, // 42
+            0xFFFFFFFFFFE00000l, // 43
+            0xFFFFFFFFFFF00000l, // 44
+            0xFFFFFFFFFFF80000l, // 45
+            0xFFFFFFFFFFFC0000l, // 46
+            0xFFFFFFFFFFFE0000l, // 47
+            0xFFFFFFFFFFFF0000l, // 48
+            0xFFFFFFFFFFFF8000l, // 49
+            0xFFFFFFFFFFFFC000l, // 50
+            0xFFFFFFFFFFFFE000l, // 51
+            0xFFFFFFFFFFFFF000l, // 52
+            0xFFFFFFFFFFFFF800l, // 53
+            0xFFFFFFFFFFFFFC00l, // 54
+            0xFFFFFFFFFFFFFE00l, // 55
+            0xFFFFFFFFFFFFFF00l, // 56
+            0xFFFFFFFFFFFFFF80l, // 57
+            0xFFFFFFFFFFFFFFC0l, // 58
+            0xFFFFFFFFFFFFFFE0l, // 59
+            0xFFFFFFFFFFFFFFF0l, // 60
+            0xFFFFFFFFFFFFFFF8l, // 61
+            0xFFFFFFFFFFFFFFFCl, // 62
+            0xFFFFFFFFFFFFFFFEl, // 63
+            0xFFFFFFFFFFFFFFFFl // 64
+    };
 
     /**
      * default constructor.
@@ -109,6 +217,54 @@ public final class IpUtil {
     }
 
     /**
+     * check if IP v4 string is valid.
+     * 
+     * @param str
+     *            IP string.
+     * @return true if valid, false if not.
+     */
+    public static boolean isIpV4StrValid(String str) {
+        Pattern pattern = Pattern
+                .compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
+                        + "|[*])\\.){3}(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]|[*])$");
+        return pattern.matcher(str).matches();
+    }
+
+    public static boolean isIpV4StrWholeValid(String str) {
+        Pattern pattern = Pattern
+                .compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
+                        + ")\\.){3}(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])$");
+        return pattern.matcher(str).matches();
+    }
+
+    /**
+     * check if IP v6 string is valid.
+     * 
+     * @param str
+     *            IP string.
+     * @return true if valid, false if not.
+     */
+    public static boolean isIpV6StrValid(String str) {
+        final String regexV6 = "^([\\da-fA-F]{1,4}:){6}((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]"
+                + "\\d|[01]?\\d\\d?)$|^::([\\da-fA-F]{1,4}:){0,4}((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\"
+                + ".){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|^([\\da-fA-F]{1,4}:):([\\da-fA-F]{1,4}"
+                + ":){0,3}((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)"
+                + "$|^([\\da-fA-F]{1,4}:){2}:([\\da-fA-F]{1,4}:){0,2}((25[0-5]|2[0-4]\\d|[01]"
+                + "?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|^([\\da-fA-F]{1,4}:){3}:(["
+                + "\\da-fA-F]{1,4}:){0,1}((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2["
+                + "0-4]\\d|[01]?\\d\\d?)$|^([\\da-fA-F]{1,4}:){4}:((25[0-5]|2[0-4]\\d|[01]"
+                + "?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|^([\\da-fA-F]{1,4}:){7}"
+                + "[\\da-fA-F]{1,4}$|^:((:[\\da-fA-F]{1,4}){1,6}|:)$|^[\\da-fA-F]{1,4}:((:["
+                + "\\da-fA-F]{1,4}){1,5}|:)$|^([\\da-fA-F]{1,4}:){2}((:[\\da-fA-F]{1,4}){1,4}|"
+                + ":)$|^([\\da-fA-F]{1,4}:){3}((:[\\da-fA-F]{1,4}){1,3}|:)$|^([\\da-fA-F]{1,4}"
+                + ":){4}((:[\\da-fA-F]{1,4}){1,2}|:)$|^([\\da-fA-F]{1,4}:){5}:([\\da-fA-F]{1,4}"
+                + ")?$|^([\\da-fA-F]{1,4}:){6}:$";
+        Pattern pattern = Pattern.compile(regexV6);
+        boolean isRegular = pattern.matcher(str).matches();
+        return isRegular;
+    }
+
+    /**
      * check if ip string is valid.
      * 
      * @param ipStr
@@ -118,7 +274,7 @@ public final class IpUtil {
      * 
      * @return true if valid, false if not.
      */
-    public static boolean isIpValid(String ipStr, boolean isV4) {
+    public static boolean isIpLongValid(String ipStr, boolean isV4) {
         if (StringUtils.isBlank(ipStr)) {
             return false;
         }
@@ -142,5 +298,324 @@ public final class IpUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * parse a IPv4/v6 string to long[]
+     * 
+     * @param ipInfo
+     * @param ipLength
+     * @return long[] for a IPv4/v6 address
+     */
+    public static long[] parsingIp(String ipInfo, int ipLength) {
+        long startHighAddr = 0, endHighAddr = 0, startLowAddr = 0, endLowAddr = 0;
+        long[] ipInfoLong = ipToLong(ipInfo);
+        if (ipLength != 0) {
+            if (ipInfo.indexOf(":") != -1) {
+                if (ipLength < 65) {
+                    ipLength = ipLength - 1;
+                    startHighAddr = ipInfoLong[0] & IPV6Array[ipLength];
+                    startLowAddr = ipInfoLong[1];
+
+                    long inversion = (~IPV6Array[ipLength]) & 0xFFFFFFFFFFFFFFFFL;
+                    endHighAddr = ipInfoLong[0] | inversion;
+                    endLowAddr = startLowAddr;
+                } else {
+                    ipLength = ipLength - 65;
+                    startHighAddr = ipInfoLong[0];
+                    startLowAddr = ipInfoLong[1] & IPV6Array[ipLength];
+
+                    long inversion = (~IPV6Array[ipLength]) & 0xFFFFFFFFFFFFFFFFL;
+                    endLowAddr = ipInfoLong[0] | inversion;
+                    endHighAddr = startHighAddr;
+                }
+
+            } else {
+                ipLength = ipLength - 1;
+                startLowAddr = ipInfoLong[0] & IPV4Array[ipLength];
+                long inversion = (~IPV4Array[ipLength]) & 0xFFFF;
+                endLowAddr = ipInfoLong[0] | inversion;
+            }
+
+        } else {
+            if (ipInfo.indexOf(":") != -1) {
+                startHighAddr = ipInfoLong[0];
+                startLowAddr = ipInfoLong[1];
+            } else {
+                startLowAddr = ipInfoLong[0];
+            }
+        }
+
+        long[] iplongs = { startHighAddr, endHighAddr, startLowAddr, endLowAddr };
+        return iplongs;
+    }
+
+    /**
+     * parse two IPv4/v6 strings to long[]
+     * 
+     * @param startAddress
+     * @param endAddress
+     * @param startIpLength
+     * @param endIpLength
+     * @return long[] for a IPv4/v6 address
+     */
+    public static long[] parsingIp(String startAddress, String endAddress,
+            int startIpLength, int endIpLength) {
+        long startHighAddr = 0, endHighAddr = 0, startLowAddr = 0, endLowAddr = 0;
+        long[] ipStartInfoLong = ipToLong(startAddress);
+        long[] ipEndInfoLong = ipToLong(endAddress);
+
+        if (startIpLength != 0 && endIpLength != 0) {
+            if (startAddress.indexOf(":") != -1
+                    && endAddress.indexOf(":") != -1) {
+                if (endIpLength < 65) {
+                    startHighAddr = ipStartInfoLong[0]
+                            & IPV6Array[startIpLength];
+                    startLowAddr = ipStartInfoLong[1];
+
+                    endHighAddr = ipEndInfoLong[0] & IPV6Array[endIpLength];
+                    endLowAddr = ipEndInfoLong[1];
+                } else {
+                    startHighAddr = ipStartInfoLong[0];
+                    startLowAddr = ipStartInfoLong[1]
+                            & IPV6Array[startIpLength];
+
+                    endLowAddr = ipEndInfoLong[0] & IPV6Array[endIpLength];
+                    endHighAddr = ipEndInfoLong[1];
+                }
+
+            } else {
+                startLowAddr = ipStartInfoLong[0] & IPV4Array[startIpLength];
+                endLowAddr = ipStartInfoLong[0] & IPV4Array[endIpLength];
+            }
+
+        } else {
+            if (startAddress.indexOf(":") != -1
+                    && endAddress.indexOf(":") != -1) {
+                startHighAddr = ipStartInfoLong[0];
+                startLowAddr = ipStartInfoLong[1];
+
+                endHighAddr = ipEndInfoLong[0];
+                endLowAddr = ipEndInfoLong[1];
+            } else {
+                startHighAddr = 0;
+                startLowAddr = ipStartInfoLong[0];
+
+                endHighAddr = 0;
+                endLowAddr = ipEndInfoLong[0];
+            }
+
+        }
+        long[] iplongs = { startHighAddr, endHighAddr, startLowAddr, endLowAddr };
+        return iplongs;
+    }
+
+    /**
+     * Ip converted to type long
+     * 
+     * @param ipStr
+     * @return ipLongArr[]
+     */
+    public static long[] ipToLong(String ipStr) {
+        long[] ipLongArr = new long[2];
+        if (ipStr.indexOf(".") >= 0) {
+            String[] ip = ipStr.split("\\.");
+            ipLongArr[1] = (Long.parseLong(ip[0]) << 24)
+                    + (Long.parseLong(ip[1]) << 16)
+                    + (Long.parseLong(ip[2]) << 8) + Long.parseLong(ip[3]);
+            ipLongArr[0] = 0;
+        } else {
+            return Ipv6ToLong(ipStr);
+        }
+        return ipLongArr;
+    }
+
+    /**
+     * Ip converted to type decimal
+     * 
+     * @param ipStr
+     *            string for IP
+     * @return BigDecimal[]
+     */
+    public static BigDecimal[] ipToBigDecimal(String ipStr) {
+
+        if (ipStr.indexOf(":") >= 0) {
+            // return Ipv6ToBigDecimal(ipStr);
+            return Ipv6ToBigDecimalJar(ipStr);
+        } else {
+            return ipV4ToDecimal(ipStr);
+        }
+    }
+
+    /**
+     * string of IpV4 converted to Decimal
+     * 
+     * @param ipStr
+     *            ipV4 string
+     * @return BigDecimal[]
+     */
+    public static BigDecimal[] ipV4ToDecimal(String ipStr) {
+        BigDecimal[] ipLongArr = new BigDecimal[2];
+        String[] ip = ipStr.split("\\.");
+        // trim ':'
+        for (int i = 0; i < ip.length; ++i) {
+            ip[i] = ip[i].replaceAll(":", "");
+        }
+        ipLongArr[1] = BigDecimal.valueOf((Long.parseLong(ip[0]) << 24)
+                + (Long.parseLong(ip[1]) << 16) + (Long.parseLong(ip[2]) << 8)
+                + Long.parseLong(ip[3]));
+        ipLongArr[0] = BigDecimal.valueOf(0);
+        return ipLongArr;
+    }
+
+    /**
+     * string of IpV6 converted to long
+     * 
+     * @param longip
+     * @return long[]
+     */
+    public static long[] Ipv6ToLong(String longip) {
+        String[] strings = expandShortNotation(longip).split(":");
+        long[] longs = new long[strings.length];
+
+        long high = 0L;
+        long low = 0L;
+        for (int i = 0; i < strings.length; i++) {
+            if (i >= 0 && i < 4)
+                high |= (Long.parseLong(strings[i], 16) << ((longs.length - i - 1) * 16));
+            else
+                low |= (Long.parseLong(strings[i], 16) << ((longs.length - i - 1) * 16));
+        }
+        longs[0] = high;
+        if (longs.length > 1) {
+            longs[1] = low;
+        }
+        return longs;
+    }
+
+    /**
+     * string of IpV6 converted to Decimal
+     * 
+     * @param strIp
+     *            the IP string
+     * @return BigDecimal[]
+     */
+    public static BigDecimal[] Ipv6ToBigDecimalJar(String strIp) {
+        BigDecimal[] decimalIp = new BigDecimal[2];
+        final IPv6Address iPv6Address = IPv6Address.fromString(strIp);
+        decimalIp = Ipv6ToBigDecimal(iPv6Address.toLongString());
+
+        // not used just now
+        BigDecimal longDecimal = new BigDecimal(iPv6Address.toBigInteger());
+        BigDecimal numDivide = BigDecimal.valueOf(Math.pow(2, 64));
+        BigDecimal numMod = BigDecimal.valueOf(Math.pow(2, 64));
+
+        return decimalIp;
+    }
+
+    public static BigDecimal[] Ipv6ToBigDecimal(String strIp) {
+        final int radix = 16;
+        final int numMulti = 65536;
+        final int filedEachSeg = 4;
+        String[] strFields = expandShortNotation(strIp).split(":");
+        if (strFields.length <= 0) {
+            return null;
+        }
+        String strIpV4 = "";
+        int nV6Fields = strFields.length;
+        for (int i = 0; i < strFields.length; ++i) {
+            if (strFields[i].indexOf(".") >= 0) {
+                nV6Fields = i;
+                strIpV4 = strFields[i];
+                break;
+            }
+        }
+        BigDecimal[] decimalIp = new BigDecimal[strFields.length];
+        for (int i = 0; i < nV6Fields; i++) {
+            long numIp = Long.parseLong(strFields[i], radix);
+            BigDecimal numEachField = BigDecimal.valueOf(numIp);
+            int iFieldNum = i % filedEachSeg;
+            int iSegNum = i / filedEachSeg;
+
+            BigDecimal numShift = BigDecimal.valueOf(Math.pow(numMulti,
+                    (filedEachSeg - iFieldNum - 1)));
+            numEachField = numEachField.multiply(numShift);
+            if (0 == iFieldNum) {
+                decimalIp[iSegNum] = numEachField;
+            } else {
+                decimalIp[iSegNum] = decimalIp[iSegNum].add(numEachField);
+            }
+        }
+        if (StringUtils.isNotBlank(strIpV4)) {
+            BigDecimal[] ipV4Decimal = ipV4ToDecimal(strIpV4);
+            int indexSeg = nV6Fields / filedEachSeg;
+            decimalIp[indexSeg] = decimalIp[indexSeg].add(ipV4Decimal[0]);
+            decimalIp[indexSeg] = decimalIp[indexSeg].add(ipV4Decimal[1]);
+        }
+        return decimalIp;
+    }
+
+    /**
+     * The abbreviated IPv6 converted into a standard wording
+     * 
+     * @param strIp
+     * @return ipv6String
+     */
+    public static String expandShortNotation(String strIp) {
+        final String strDoubleColon = "::";
+        final String strSingleColon = ":";
+        int allColons = 7;
+        if (!strIp.contains(strDoubleColon)) {
+            return strIp;
+        } else if (strIp.equals(strDoubleColon)) {
+            return generateZeroes(allColons + 1);
+        } else {
+            final int numberOfColons = countOccurrences(strIp, ':');
+
+            if (strIp.indexOf(".") >= 0) {
+                allColons -= 1;
+            }
+            if (strIp.startsWith(strDoubleColon))
+                return strIp.replace(strDoubleColon,
+                        generateZeroes((allColons + 2) - numberOfColons));
+            else if (strIp.endsWith(strDoubleColon))
+                return strIp.replace(strDoubleColon, strSingleColon
+                        + generateZeroes((allColons + 2) - numberOfColons));
+            else
+                return strIp.replace(strDoubleColon, strSingleColon
+                        + generateZeroes((allColons + 2 - 1) - numberOfColons));
+        }
+    }
+
+    /**
+     * Generated IPv6 address 0
+     * 
+     * @param number
+     * @return ipv6String
+     */
+    public static String generateZeroes(int number) {
+        final StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < number; i++) {
+            builder.append("0:");
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * The record ipv6 address: Number of
+     * 
+     * @param haystack
+     * @param needle
+     * @return count
+     */
+    public static int countOccurrences(String haystack, char needle) {
+        int count = 0;
+        for (int i = 0; i < haystack.length(); i++) {
+            if (haystack.charAt(i) == needle) {
+                count++;
+            }
+        }
+        return count;
     }
 }

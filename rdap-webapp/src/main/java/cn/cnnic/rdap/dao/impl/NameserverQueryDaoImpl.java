@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.math.BigDecimal;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +60,12 @@ import cn.cnnic.rdap.bean.IPAddress;
 import cn.cnnic.rdap.bean.Notice;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
+import cn.cnnic.rdap.bean.PageBean;
 
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
-import cn.cnnic.rdap.bean.PageBean;
+import cn.cnnic.rdap.common.util.IpUtil;
 
 /**
  * nameserver query DAO.
@@ -300,26 +302,78 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         return listNS;
     }
 
+    /**
+     * @param queryParam
+     *            for QueryParam
+     * @return BigDecimal[]
+     * 
+     * @author weijunkai
+     */
+    public BigDecimal[] getBigDecimalIp(QueryParam queryParam) {
+        NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
+        final String strIp = nsQueryParam.getQ();
+        if (!IpUtil.isIpV4StrWholeValid(strIp) && !IpUtil.isIpV6StrValid(strIp)) {
+            return null;
+        }
+        BigDecimal[] arrayIp = IpUtil.ipToBigDecimal(strIp);
+        return arrayIp;
+    }
+
     @Override
     public Long searchCount(QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
-        final String nameserver = nsQueryParam.getQ();
-        final String punyName = nsQueryParam.getPunyName();
-        final String nameserverLikeClause = super
-                .generateLikeClause(nameserver);
-        final String punyNameLikeClause = super.generateLikeClause(punyName);
-        final String sql = "select count(1) as COUNT from RDAP_NAMESERVER "
-                + " where LDH_NAME like ? or UNICODE_NAME like ? ";
-        Long domainCount = jdbcTemplate.query(new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(
-                    Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ps.setString(1, punyNameLikeClause);
-                ps.setString(2, nameserverLikeClause);
-                return ps;
+        if (nsQueryParam == null) {
+            return 0L;
+        }
+        boolean isSearchByIp = nsQueryParam.getIsSearchByIp();
+        Long recordsCount = 0L;
+        if (isSearchByIp) {
+            BigDecimal[] arrayIp = getBigDecimalIp(nsQueryParam);
+            if (arrayIp == null) {
+                return 0L;
             }
-        }, new CountResultSetExtractor());
-        return domainCount;
+            BigDecimal ipTmp = new BigDecimal(0L);
+            if (arrayIp.length > 1) {
+                ipTmp = arrayIp[1];
+            }
+            final BigDecimal ipHigh = arrayIp[0];
+            final BigDecimal ipLow = ipTmp;
+            final String strHead = "select count(1) as COUNT from RDAP_NAMESERVER_IP "
+                    + " where IP_LOW = ? && ";
+            String tmpSql = "IP_HIGH = ?";
+            if (ipHigh.doubleValue() == 0.0) {
+                tmpSql = "(IP_HIGH = ? or IP_HIGH is NULL)";
+            }
+            final String sql = strHead + tmpSql;
+            recordsCount = jdbcTemplate.query(new PreparedStatementCreator() {
+                public PreparedStatement createPreparedStatement(
+                        Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql);
+                    ps.setBigDecimal(2, ipHigh);
+                    ps.setBigDecimal(1, ipLow);
+                    return ps;
+                }
+            }, new CountResultSetExtractor());
+        } else {
+            final String nameserver = nsQueryParam.getQ();
+            final String punyName = nsQueryParam.getPunyName();
+            final String nameserverLikeClause = super
+                    .generateLikeClause(nameserver);
+            final String punyNameLikeClause = super
+                    .generateLikeClause(punyName);
+            final String sql = "select count(1) as COUNT from RDAP_NAMESERVER "
+                    + " where LDH_NAME like ? or UNICODE_NAME like ? ";
+            recordsCount = jdbcTemplate.query(new PreparedStatementCreator() {
+                public PreparedStatement createPreparedStatement(
+                        Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql);
+                    ps.setString(1, punyNameLikeClause);
+                    ps.setString(2, nameserverLikeClause);
+                    return ps;
+                }
+            }, new CountResultSetExtractor());
+        }
+        return recordsCount;
     }
 
     /**
@@ -329,31 +383,63 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      *            query parameter.
      * @return nameserver list.
      */
-    private List<Nameserver> searchWithoutInnerObjects(final QueryParam queryParam) {
+    private List<Nameserver> searchWithoutInnerObjects(
+            final QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
-        final String nsName = nsQueryParam.getQ();
-        final String punyName = nsQueryParam.getPunyName();
-        final String nsNameLikeClause = super.generateLikeClause(nsName);
-        final String punyNameLikeClause = super.generateLikeClause(punyName);
-        final String sql = "select * from RDAP_NAMESERVER ns "
-                + " where LDH_NAME like ? or UNICODE_NAME like ?"
-                + " order by ns.LDH_NAME limit ?,? ";
+        boolean isSearchByIp = nsQueryParam.getIsSearchByIp();
+        List<Nameserver> result = null;
         final PageBean page = queryParam.getPageBean();
         int startPage = page.getCurrentPage() - 1;
         startPage = startPage >= 0 ? startPage : 0;
         final long startRow = startPage * page.getMaxRecords();
-        List<Nameserver> result = jdbcTemplate.query(
-                new PreparedStatementCreator() {
-                    public PreparedStatement createPreparedStatement(
-                            Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement(sql);
-                        ps.setString(1, punyNameLikeClause);
-                        ps.setString(2, nsNameLikeClause);
-                        ps.setLong(3, startRow);
-                        ps.setLong(4, page.getMaxRecords());
-                        return ps;
-                    }
-                }, new NameserverResultSetExtractor());
+        if (isSearchByIp) {
+            BigDecimal[] arrayIp = getBigDecimalIp(nsQueryParam);
+            BigDecimal ipTmp = new BigDecimal(0L);
+            if (arrayIp.length > 1) {
+                ipTmp = arrayIp[1];
+            }
+            final BigDecimal ipHigh = arrayIp[0];
+            final BigDecimal ipLow = ipTmp;
+            final String strHead = "select * from RDAP_NAMESERVER ns,RDAP_NAMESERVER_IP ip"
+                    + " where ns.NAMESERVER_ID=ip.NAMESERVER_ID and ";
+            String tmpSql = "IP_HIGH = ?";
+            if (ipHigh.doubleValue() == 0.0) {
+                tmpSql = "(IP_HIGH = ? or IP_HIGH is NULL) ";
+            }
+            final String strEnd = "and IP_LOW = ? order by ns.LDH_NAME limit ?,? ";
+            final String sql = strHead + tmpSql + strEnd;
+            result = jdbcTemplate.query(new PreparedStatementCreator() {
+                public PreparedStatement createPreparedStatement(
+                        Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql);
+                    ps.setBigDecimal(1, ipHigh);
+                    ps.setBigDecimal(2, ipLow);
+                    ps.setLong(3, startRow);
+                    ps.setLong(4, page.getMaxRecords());
+                    return ps;
+                }
+            }, new NameserverResultSetExtractor());
+        } else {
+            final String nsName = nsQueryParam.getQ();
+            final String punyName = nsQueryParam.getPunyName();
+            final String nsNameLikeClause = super.generateLikeClause(nsName);
+            final String punyNameLikeClause = super
+                    .generateLikeClause(punyName);
+            final String sql = "select * from RDAP_NAMESERVER ns "
+                    + " where LDH_NAME like ? or UNICODE_NAME like ?"
+                    + " order by ns.LDH_NAME limit ?,? ";
+            result = jdbcTemplate.query(new PreparedStatementCreator() {
+                public PreparedStatement createPreparedStatement(
+                        Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql);
+                    ps.setString(1, punyNameLikeClause);
+                    ps.setString(2, nsNameLikeClause);
+                    ps.setLong(3, startRow);
+                    ps.setLong(4, page.getMaxRecords());
+                    return ps;
+                }
+            }, new NameserverResultSetExtractor());
+        }
         return result;
     }
 
@@ -504,7 +590,6 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
                         return new ModelStatus(rs.getLong("NAMESERVER_ID"), rs
                                 .getString("STATUS"));
                     }
-
                 });
         return result;
     }

@@ -130,8 +130,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public DomainSearch searchDomain(QueryParam queryParam) {
-        BaseSearchModel<Domain> searchResult = this.search(queryParam, domainDao);
-        if(null == searchResult){
+        BaseSearchModel<Domain> searchResult = this.search(queryParam,
+                domainDao);
+        if (null == searchResult) {
             return null;
         }
         DomainSearch domainSearch = new DomainSearch();
@@ -139,17 +140,19 @@ public class SearchServiceImpl implements SearchService {
         domainSearch.setDomainSearchResults(searchResult.getSearchResults());
         return domainSearch;
     }
-    
+
     @Override
     public NameserverSearch searchNameserver(QueryParam queryParam) {
-        BaseSearchModel<Nameserver> searchResult = this.search(queryParam, nameserverDao);
-        if(null == searchResult){
+        BaseSearchModel<Nameserver> searchResult = this.search(queryParam,
+                nameserverDao);
+        if (null == searchResult) {
             return null;
         }
         NameserverSearch nameserverSearch = new NameserverSearch();
         BeanUtils.copyProperties(searchResult, nameserverSearch);
-        nameserverSearch.setNameserverSearchResults(searchResult.getSearchResults());
+        nameserverSearch.setNameserverSearchResults(searchResult
+                .getSearchResults());
         return nameserverSearch;
-    
+
     }
 }

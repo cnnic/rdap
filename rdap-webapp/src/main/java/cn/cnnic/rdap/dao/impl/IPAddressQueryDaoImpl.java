@@ -143,11 +143,11 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
 
             if (IpVersion.isV6(ipVersionStr)) {
                 if (!StringUtils.isBlank(lowAddress)
-                        && IpUtil.isIpValid(lowAddress, false)) {
+                        && IpUtil.isIpLongValid(lowAddress, false)) {
                     if (StringUtils.isBlank(highAddress)) {
                         highAddress = "0";
                     }
-                    if (IpUtil.isIpValid(highAddress, false)) {
+                    if (IpUtil.isIpLongValid(highAddress, false)) {
                         realAddress = IpUtil.longToIpV6(
                                 StringUtil.parseUnsignedLong(highAddress),
                                 StringUtil.parseUnsignedLong(lowAddress));
