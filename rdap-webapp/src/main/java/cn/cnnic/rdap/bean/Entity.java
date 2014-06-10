@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -32,135 +32,491 @@ package cn.cnnic.rdap.bean;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * represents the information of organizations, corporations, governments,
  * non-profits, clubs, individual persons, and informal groups of people.
- * 
+ *
  * @author jiashuo
- * 
+ *
  */
+@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "vcardArray",
+        "roles", "publicIds", "entities", "remarks", "links", "events",
+        "asEventActor", "status", "port43", "networks", "autnums", "lang" })
 public class Entity extends BaseModel {
-	private String handle;
-	private String vcardArray;
-	private List<String> roles;
-	private List<PublicId> publicIds;
-	/**
-	 * remarks
-	 */
-	private List<Remark> remarks;
-	/**
-	 * links
-	 */
-	private List<Link> links;
-	private List<Event> events;
-	private List<String> status;
-	private String port43;
-	private List<Network> networks;
-	private List<Autnum> autnums;
-	private List<Entity> asEventActor;
-	private List<Entity> entities;
+    /**
+     * a JSON vCard with the entity's contact information.
+     */
+    private String vcardArray;
+    /**
+     * an array of strings, each signifying the relationship an object would
+     * have with its closest containing object.
+     */
+    private List<String> roles;
+    /**
+     * an array of publicIds.
+     */
+    private List<PublicId> publicIds;
+    /**
+     * an array of entities.
+     */
+    private List<Entity> entities;
+    /**
+     * an array of remarks.
+     */
+    private List<Remark> remarks;
+    /**
+     * an array of links.
+     */
+    private List<Link> links;
+    /**
+     * an array of events.
+     */
+    private List<Event> events;
+    /**
+     * each object in the array MUST NOT have an 'eventActor' member.These
+     * objects denote that the entity is an event actor for the given events.
+     */
+    private List<Event> asEventActor;
 
-	public String getHandle() {
-		return handle;
-	}
+    /**
+     * an array of status.
+     */
+    private List<String> status;
+    /**
+     * port43.
+     */
+    private String port43;
+    /**
+     * an array of IP network objects.
+     */
+    private List<Network> networks;
+    /**
+     * an array of autnum objects.
+     */
+    private List<Autnum> autnums;
 
-	public void setHandle(String handle) {
-		this.handle = handle;
-	}
+    /**
+     * address.
+     */
+    @JsonIgnore
+    private List<EntityAddress> addresses;
+    /**
+     * telephones.
+     */
+    @JsonIgnore
+    private List<EntityTel> telephones;
+    /**
+     * kind.
+     */
+    @JsonIgnore
+    private String kind;
+    /**
+     * fn.
+     */
+    @JsonIgnore
+    private String fn;
+    /**
+     * email.
+     */
+    @JsonIgnore
+    private String email;
+    /**
+     * title.
+     */
+    @JsonIgnore
+    private String title;
+    /**
+     * org.
+     */
+    @JsonIgnore
+    private String org;
+    /**
+     * url.
+     */
+    @JsonIgnore
+    private String url;
 
-	public String getVcardArray() {
-		return vcardArray;
-	}
+    /**
+     * get vcardArray.
+     *
+     * @return vcardArray.
+     */
+    public String getVcardArray() {
+        return vcardArray;
+    }
 
-	public void setVcardArray(String vcardArray) {
-		this.vcardArray = vcardArray;
-	}
+    /**
+     * set vcardArray.
+     *
+     * @param vcardArray
+     *            vcardArray.
+     */
+    public void setVcardArray(String vcardArray) {
+        this.vcardArray = vcardArray;
+    }
 
-	public List<String> getRoles() {
-		return roles;
-	}
+    /**
+     * get roles.
+     *
+     * @return roles.
+     */
+    public List<String> getRoles() {
+        return roles;
+    }
 
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
+    /**
+     * set roles.
+     *
+     * @param roles
+     *            roles.
+     */
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
 
-	public List<PublicId> getPublicIds() {
-		return publicIds;
-	}
+    /**
+     * get publicIds.
+     *
+     * @return publicIds.
+     */
+    public List<PublicId> getPublicIds() {
+        return publicIds;
+    }
 
-	public void setPublicIds(List<PublicId> publicIds) {
-		this.publicIds = publicIds;
-	}
+    /**
+     * set publicIds.
+     *
+     * @param publicIds
+     *            publicIds.
+     */
+    public void setPublicIds(List<PublicId> publicIds) {
+        this.publicIds = publicIds;
+    }
 
-	public List<Remark> getRemarks() {
-		return remarks;
-	}
+    /**
+     * get remarks.
+     *
+     * @return remarks.
+     */
+    public List<Remark> getRemarks() {
+        return remarks;
+    }
 
-	public void setRemarks(List<Remark> remarks) {
-		this.remarks = remarks;
-	}
+    /**
+     * set remarks.
+     *
+     * @param remarks
+     *            remarks.
+     */
+    public void setRemarks(List<Remark> remarks) {
+        this.remarks = remarks;
+    }
 
-	public List<Link> getLinks() {
-		return links;
-	}
+    /**
+     * get links.
+     *
+     * @return links.
+     */
+    public List<Link> getLinks() {
+        return links;
+    }
 
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
+    /**
+     * set links.
+     *
+     * @param links
+     *            links.
+     */
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 
-	public List<Event> getEvents() {
-		return events;
-	}
+    /**
+     * get events.
+     *
+     * @return events.
+     */
+    public List<Event> getEvents() {
+        return events;
+    }
 
-	public void setEvents(List<Event> events) {
-		this.events = events;
-	}
+    /**
+     * set events.
+     *
+     * @param events
+     *            events.
+     */
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
 
-	public List<String> getStatus() {
-		return status;
-	}
+    /**
+     * get status.
+     *
+     * @return status.
+     */
+    public List<String> getStatus() {
+        return status;
+    }
 
-	public void setStatus(List<String> status) {
-		this.status = status;
-	}
+    /**
+     * set status.
+     *
+     * @param status
+     *            status.
+     */
+    public void setStatus(List<String> status) {
+        this.status = status;
+    }
 
-	public String getPort43() {
-		return port43;
-	}
+    /**
+     * get port43.
+     *
+     * @return port43.
+     */
+    public String getPort43() {
+        return port43;
+    }
 
-	public void setPort43(String port43) {
-		this.port43 = port43;
-	}
+    /**
+     * set port43.
+     *
+     * @param port43
+     *            port43.
+     */
+    public void setPort43(String port43) {
+        this.port43 = port43;
+    }
 
-	public List<Network> getNetworks() {
-		return networks;
-	}
+    /**
+     * get networks.
+     *
+     * @return networks.
+     */
+    public List<Network> getNetworks() {
+        return networks;
+    }
 
-	public void setNetworks(List<Network> networks) {
-		this.networks = networks;
-	}
+    /**
+     * set networks.
+     *
+     * @param networks
+     *            networks.
+     */
+    public void setNetworks(List<Network> networks) {
+        this.networks = networks;
+    }
 
-	public List<Autnum> getAutnums() {
-		return autnums;
-	}
+    /**
+     * get autnums.
+     *
+     * @return autnums.
+     */
+    public List<Autnum> getAutnums() {
+        return autnums;
+    }
 
-	public void setAutnums(List<Autnum> autnums) {
-		this.autnums = autnums;
-	}
+    /**
+     * set autnums.
+     *
+     * @param autnums
+     *            autnums.
+     */
+    public void setAutnums(List<Autnum> autnums) {
+        this.autnums = autnums;
+    }
 
-	public List<Entity> getAsEventActor() {
-		return asEventActor;
-	}
+    /**
+     * get asEventActor.
+     *
+     * @return asEventActor.
+     */
+    public List<Event> getAsEventActor() {
+        return asEventActor;
+    }
 
-	public void setAsEventActor(List<Entity> asEventActor) {
-		this.asEventActor = asEventActor;
-	}
+    /**
+     * set asEventActor.
+     *
+     * @param asEventActor
+     *            asEventActor.
+     */
+    public void setAsEventActor(List<Event> asEventActor) {
+        this.asEventActor = asEventActor;
+    }
 
-	public List<Entity> getEntities() {
-		return entities;
-	}
+    /**
+     * get entities.
+     *
+     * @return entities.
+     */
+    public List<Entity> getEntities() {
+        return entities;
+    }
 
-	public void setEntities(List<Entity> entities) {
-		this.entities = entities;
-	}
+    /**
+     * set entities.
+     *
+     * @param entities
+     *            entities.
+     */
+    public void setEntities(List<Entity> entities) {
+        this.entities = entities;
+    }
+
+    /**
+     * get addresses.
+     *
+     * @return addresses.
+     */
+    public List<EntityAddress> getAddresses() {
+        return addresses;
+    }
+
+    /**
+     * set addresses.
+     *
+     * @param addresses
+     *            addresses.
+     */
+    public void setAddresses(List<EntityAddress> addresses) {
+        this.addresses = addresses;
+    }
+
+    /**
+     * get kind.
+     *
+     * @return kind.
+     */
+    public String getKind() {
+        return kind;
+    }
+
+    /**
+     * set kind.
+     *
+     * @param kind
+     *            kind.
+     */
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    /**
+     * get fn.
+     *
+     * @return fn.
+     */
+    public String getFn() {
+        return fn;
+    }
+
+    /**
+     * set fn.
+     *
+     * @param fn
+     *            fn.
+     */
+    public void setFn(String fn) {
+        this.fn = fn;
+    }
+
+    /**
+     * get email.
+     *
+     * @return email.
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * set email.
+     *
+     * @param email
+     *            email.
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * get title.
+     *
+     * @return title.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * set title.
+     *
+     * @param title
+     *            title.
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * get org.
+     *
+     * @return org.
+     */
+    public String getOrg() {
+        return org;
+    }
+
+    /**
+     * set org.
+     *
+     * @param org
+     *            org.
+     */
+    public void setOrg(String org) {
+        this.org = org;
+    }
+
+    /**
+     * get url.
+     *
+     * @return url.
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * set url.
+     *
+     * @param url
+     *            url.
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * get telephones.
+     *
+     * @return telephones.
+     */
+    public List<EntityTel> getTelephones() {
+        return telephones;
+    }
+
+    /**
+     * set telephones.
+     *
+     * @param telephones
+     *            telephones.
+     */
+    public void setTelephones(List<EntityTel> telephones) {
+        this.telephones = telephones;
+    }
+
 }
