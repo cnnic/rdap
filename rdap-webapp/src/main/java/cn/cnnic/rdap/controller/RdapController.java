@@ -50,6 +50,7 @@ import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainSearch;
 import cn.cnnic.rdap.common.util.AutnumValidator;
 import cn.cnnic.rdap.common.util.DomainUtil;
+import cn.cnnic.rdap.common.util.IpUtil;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
@@ -59,6 +60,7 @@ import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverSearch;
+import cn.cnnic.rdap.bean.NameserverQueryParam;
 
 /**
  * controller for query and search.All methods return message in JSON format.
@@ -94,7 +96,7 @@ public class RdapController {
      */
     @Autowired
     private ResponseDecorator responseDecorator;
-    
+
     /**
      * access control manager.
      */
@@ -122,7 +124,7 @@ public class RdapController {
         Autnum result = queryService.queryAutnum(queryParser
                 .parseQueryParam(autnum));
         if (null != result) {
-            if (! accessControlManager.hasPermission(result)){
+            if (!accessControlManager.hasPermission(result)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
@@ -163,7 +165,7 @@ public class RdapController {
         Domain domain = queryService.queryDomain(queryParser
                 .parseDomainQueryParam(decodeDomain, punyDomainName));
         if (null != domain) {
-            if (! accessControlManager.hasPermission(domain)){
+            if (!accessControlManager.hasPermission(domain)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domain);
@@ -187,7 +189,7 @@ public class RdapController {
     public ResponseEntity searchDomain(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
-        name = queryParser.getParameter(request,"name");
+        name = queryParser.getParameter(request, "name");
         String decodeDomain = name;
         try {
             decodeDomain = DomainUtil.iso8859Decode(name);
@@ -260,7 +262,7 @@ public class RdapController {
         Nameserver ns = queryService.queryNameserver(queryParser
                 .parseNameserverQueryParam(decodeNS, punyNSName));
         if (null != ns) {
-            if (! accessControlManager.hasPermission(ns)){
+            if (!accessControlManager.hasPermission(ns)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ns);
@@ -288,27 +290,48 @@ public class RdapController {
     public ResponseEntity searchNameserver(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
-        name = queryParser.getParameter(request,"name");
+        name = queryParser.getParameter(request, "name");
         String decodeNameserver = name;
-        try {
-            decodeNameserver = DomainUtil.iso8859Decode(name);
-            decodeNameserver = DomainUtil
-                    .decodeAndTrimAndReplaceAsciiToLowercase(decodeNameserver);
-        } catch (Exception e) {
-            return RestResponseUtil.createResponse400();
+        NameserverQueryParam nsQueryParam = null;
+        // search by IP
+        if (StringUtils.isBlank(name)) {
+            name = queryParser.getParameter(request, "ip");
+            // checkIP
+            if (name == null || !IpUtil.isIpV4StrWholeValid(name)
+                    && !IpUtil.isIpV6StrValid(name)) {
+                return RestResponseUtil.createResponse400();
+            }
+            name = StringUtils.lowerCase(name);
+            nsQueryParam = (NameserverQueryParam) queryParser
+                    .parseNameserverQueryParam(name, name);
+            nsQueryParam.setIsSearchByIp(true);
+        } else {// search by name
+            try {
+                decodeNameserver = DomainUtil.iso8859Decode(name);
+                decodeNameserver = DomainUtil
+                        .decodeAndTrimAndReplaceAsciiToLowercase(decodeNameserver);
+            } catch (Exception e) {
+                return RestResponseUtil.createResponse400();
+            }
+            if (StringUtils.isBlank(decodeNameserver)) {
+                return RestResponseUtil.createResponse400();
+            }
+            decodeNameserver = StringUtil.getNormalization(decodeNameserver);
+            if (StringUtil.ASTERISK.equals(decodeNameserver)
+                    || decodeNameserver.startsWith(StringUtil.ASTERISK)) {
+                return RestResponseUtil.createResponse422();
+            }
+            decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
+            decodeNameserver = StringUtils.lowerCase(decodeNameserver);
+            nsQueryParam = (NameserverQueryParam) queryParser
+                    .parseNameserverQueryParam(decodeNameserver,
+                            decodeNameserver);
+            nsQueryParam.setIsSearchByIp(false);
         }
-        if (StringUtils.isBlank(decodeNameserver)) {
-            return RestResponseUtil.createResponse400();
-        }
-        decodeNameserver = StringUtil.getNormalization(decodeNameserver);
-        if (StringUtil.ASTERISK.equals(decodeNameserver)
-                || decodeNameserver.startsWith(StringUtil.ASTERISK)) {
-            return RestResponseUtil.createResponse422();
-        }
-        decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
-        decodeNameserver = StringUtils.lowerCase(decodeNameserver);
-        NameserverSearch nsSearch = searchService.searchNameserver(queryParser
-                .parseNameserverQueryParam(decodeNameserver, decodeNameserver));
+
+        NameserverSearch nsSearch = searchService
+                .searchNameserver(nsQueryParam);
+
         if (null != nsSearch) {
             if (nsSearch.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
