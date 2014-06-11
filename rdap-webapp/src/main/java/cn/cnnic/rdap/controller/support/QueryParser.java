@@ -37,8 +37,6 @@ import org.springframework.stereotype.Component;
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.common.util.DomainUtil;
-
 /**
  * 
  * @author jiashuo
@@ -80,7 +78,8 @@ public class QueryParser {
      *            nameserver puny name.
      * @return QueryParam.
      */
-    public QueryParam parseNameserverQueryParam(String nsName, String punyNSName) {
+    public QueryParam
+            parseNameserverQueryParam(String nsName, String punyNSName) {
         return new NameserverQueryParam(nsName, punyNSName);
     }
 
@@ -98,6 +97,33 @@ public class QueryParser {
         if (null == values || values.length < 1) {
             return null;
         }
-        return values[0];
+        String strQuery = values[0];
+        int pos = strQuery.indexOf("?");
+        if (-1 != pos) {
+            try {
+                strQuery = strQuery.substring(0, pos);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return strQuery;
+    }
+
+    /**
+     * get parameter from request,get first if has more than one param.
+     * 
+     * @param request
+     *            request.
+     * @return first char.
+     */
+    public char getFirstParameter(HttpServletRequest request) {
+        String strQuery = request.getQueryString();
+        char byteParam = 0;
+        try {
+            byteParam = strQuery.charAt(0);
+        } catch (Exception e) {
+            return 0;
+        }
+        return byteParam;
     }
 }
