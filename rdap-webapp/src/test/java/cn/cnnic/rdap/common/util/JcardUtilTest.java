@@ -30,7 +30,8 @@
  */
 package cn.cnnic.rdap.common.util;
 
-import java.io.IOException;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +39,8 @@ import org.junit.Test;
 
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.EntityAddress;
-import ezvcard.VCard;
-import ezvcard.parameter.TelephoneType;
+import cn.cnnic.rdap.bean.EntityTel;
 import ezvcard.property.Kind;
-import ezvcard.property.Telephone;
-import ezvcard.util.TelUri;
 
 /**
  * Test for Jcard util.
@@ -63,6 +61,7 @@ public class JcardUtilTest {
         entity.setKind(Kind.INDIVIDUAL);
         List<EntityAddress> addresses = new ArrayList<EntityAddress>();
         EntityAddress address = new EntityAddress();
+        addresses.add(address);
         address.setPref(1);
         address.setTypes("home");
         address.setPoBox("post office Box");
@@ -73,22 +72,17 @@ public class JcardUtilTest {
         address.setPostalCode("12345");
         address.setCountry("USA");
         entity.setAddresses(addresses);
-        System.err.println(JcardUtil.toJcardString(entity));
-    }
-
-    private static VCard createVCard() throws IOException {
-        VCard vcard = new VCard();
-        TelUri uri =
-                new TelUri.Builder("+1-800-555-9876").extension("111").build();
-        Telephone tel = new Telephone(uri);
-        tel.addType(TelephoneType.WORK);
-        TelephoneType t = TelephoneType.get("aaa");
-        tel.setPref(1); // the most preferred
-        vcard.addTelephoneNumber(tel);
-        vcard.addEmail("johndoe@hotmail.com");
-        vcard.addTitle("CEO");
-        vcard.setOrganization("org").setType("work");
-        vcard.addUrl("http://www.acme-co.com");
-        return vcard;
+        List<EntityTel> telephones = new ArrayList<EntityTel>();
+        EntityTel entityTel = new EntityTel();
+        telephones.add(entityTel);
+        entityTel.setPref(1);
+        entityTel.setTypes("home;text");
+        entityTel.setValue("+1-800-555-9876");
+        entity.setTelephones(telephones);
+        entity.setEmail("johndoe@hotmail.com");
+        entity.setTitle("CEO");
+        entity.setOrg("org");
+        entity.setUrl("http://www.acme-co.com");
+        assertNotNull(JcardUtil.toJcardString(entity));
     }
 }

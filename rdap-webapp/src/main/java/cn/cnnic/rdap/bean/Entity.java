@@ -30,7 +30,10 @@
  */
 package cn.cnnic.rdap.bean;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -138,6 +141,42 @@ public class Entity extends BaseModel {
      */
     @JsonIgnore
     private String url;
+
+    /**
+     * add a status string to status list.
+     *
+     * @param statusStr
+     *            statusStr.
+     */
+    public void addStatus(String statusStr) {
+        if (StringUtils.isBlank(statusStr)) {
+            return;
+        }
+        if (null == this.status) {
+            this.status = new ArrayList<String>();
+        }
+        if(!this.status.contains(statusStr)){
+            this.status.add(statusStr);
+        }
+    }
+
+    /**
+     * add a status string to status list.
+     *
+     * @param roleStr
+     *            statusStr.
+     */
+    public void addRole(String roleStr) {
+        if (StringUtils.isBlank(roleStr)) {
+            return;
+        }
+        if (null == this.roles) {
+            this.roles = new ArrayList<String>();
+        }
+        if(!this.roles.contains(roleStr)){
+            this.roles.add(roleStr);
+        }
+    }
 
     /**
      * get vcardArray.

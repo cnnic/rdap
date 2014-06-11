@@ -52,7 +52,7 @@ import ezvcard.util.TelUri;
  * @author jiashuo
  *
  */
-public class JcardUtil {
+public final class JcardUtil {
     /**
      * default constructor.
      */
