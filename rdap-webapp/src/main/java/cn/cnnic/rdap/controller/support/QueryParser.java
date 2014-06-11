@@ -32,11 +32,13 @@ package cn.cnnic.rdap.controller.support;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
+
 /**
  * 
  * @author jiashuo
@@ -113,17 +115,35 @@ public class QueryParser {
      * get parameter from request,get first if has more than one param.
      * 
      * @param request
-     *            request.
-     * @return first char.
+     *            HttpServletRequest.
+     * @param strParamOrg
+     *            the final String array for url params.
+     * @return first right url param.
      */
-    public char getFirstParameter(HttpServletRequest request) {
+    public String getFirstParameter(HttpServletRequest request,
+            final String[] strParamOrg) {
         String strQuery = request.getQueryString();
-        char byteParam = 0;
-        try {
-            byteParam = strQuery.charAt(0);
-        } catch (Exception e) {
-            return 0;
+        int pos = strQuery.indexOf("?");
+        if (-1 != pos) {
+            try {
+                strQuery = strQuery.substring(0, pos);
+            } catch (Exception e) {
+                return null;
+            }
         }
-        return byteParam;
+        final String strSplit = "&";
+        String[] strParam = strQuery.split(strSplit);
+        final String strEqual = "=";
+        for (int k = 0; k < strParam.length; ++k) {
+            String[] strParamName = strParam[k].split(strEqual);
+            if (strParamName != null) {
+                for (int j = 0; j < strParamOrg.length; ++j) {
+                    if (strParamName[0].compareTo(strParamOrg[j]) == 0) {
+                        return strParamName[0];
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

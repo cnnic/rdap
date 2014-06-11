@@ -121,8 +121,8 @@ public class RdapController {
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
-        Autnum result =
-                queryService.queryAutnum(queryParser.parseQueryParam(autnum));
+        Autnum result = queryService.queryAutnum(queryParser
+                .parseQueryParam(autnum));
         if (null != result) {
             if (!accessControlManager.hasPermission(result)) {
                 return RestResponseUtil.createResponse403();
@@ -150,9 +150,8 @@ public class RdapController {
         String decodeDomain = domainName;
         String punyDomainName = decodeDomain;
         try {
-            decodeDomain =
-                    DomainUtil
-                            .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
+            decodeDomain = DomainUtil
+                    .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
             // long lable exception
             punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
         } catch (Exception e) {
@@ -163,9 +162,8 @@ public class RdapController {
         }
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
-        Domain domain =
-                queryService.queryDomain(queryParser.parseDomainQueryParam(
-                        decodeDomain, punyDomainName));
+        Domain domain = queryService.queryDomain(queryParser
+                .parseDomainQueryParam(decodeDomain, punyDomainName));
         if (null != domain) {
             if (!accessControlManager.hasPermission(domain)) {
                 return RestResponseUtil.createResponse403();
@@ -195,9 +193,8 @@ public class RdapController {
         String decodeDomain = name;
         try {
             decodeDomain = DomainUtil.iso8859Decode(name);
-            decodeDomain =
-                    DomainUtil
-                            .decodeAndTrimAndReplaceAsciiToLowercase(decodeDomain);
+            decodeDomain = DomainUtil
+                    .decodeAndTrimAndReplaceAsciiToLowercase(decodeDomain);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
@@ -211,9 +208,8 @@ public class RdapController {
         }
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
-        DomainSearch domainSearch =
-                searchService.searchDomain(queryParser.parseDomainQueryParam(
-                        decodeDomain, decodeDomain));
+        DomainSearch domainSearch = searchService.searchDomain(queryParser
+                .parseDomainQueryParam(decodeDomain, decodeDomain));
         if (null != domainSearch) {
             if (domainSearch.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
@@ -251,9 +247,8 @@ public class RdapController {
         String decodeNS = nameserverName;
         String punyNSName = decodeNS;
         try {
-            decodeNS =
-                    DomainUtil
-                            .decodeAndTrimAndReplaceAsciiToLowercase(nameserverName);
+            decodeNS = DomainUtil
+                    .decodeAndTrimAndReplaceAsciiToLowercase(nameserverName);
             // long lable exception
             punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
         } catch (Exception e) {
@@ -264,9 +259,8 @@ public class RdapController {
         }
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
         decodeNS = StringUtils.lowerCase(decodeNS);
-        Nameserver ns =
-                queryService.queryNameserver(queryParser
-                        .parseNameserverQueryParam(decodeNS, punyNSName));
+        Nameserver ns = queryService.queryNameserver(queryParser
+                .parseNameserverQueryParam(decodeNS, punyNSName));
         if (null != ns) {
             if (!accessControlManager.hasPermission(ns)) {
                 return RestResponseUtil.createResponse403();
@@ -296,15 +290,15 @@ public class RdapController {
     public ResponseEntity searchNameserver(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
-        // name = queryParser.getParameter(request, "name");
         final String strIp = "ip";
         final String strName = "name";
-        final char ip = 'i';
-        final char nm = 'n';
         NameserverQueryParam nsQueryParam = null;
-        char chByte = queryParser.getFirstParameter(request);
-        switch (chByte) {
-        case ip:
+        final String[] strParamOrg = { strIp, strName };
+        String nameParam = queryParser.getFirstParameter(request, strParamOrg);
+        if (StringUtils.isBlank(nameParam)) {
+            return RestResponseUtil.createResponse400();
+        }
+        if (0 == nameParam.compareTo(strIp)) {
             // search by IP
             name = queryParser.getParameter(request, strIp);
             // checkIP
@@ -313,23 +307,17 @@ public class RdapController {
                 return RestResponseUtil.createResponse400();
             }
             name = StringUtils.lowerCase(name);
-            nsQueryParam =
-                    (NameserverQueryParam) queryParser
-                            .parseNameserverQueryParam(name, name);
+            nsQueryParam = (NameserverQueryParam) queryParser
+                    .parseNameserverQueryParam(name, name);
             nsQueryParam.setIsSearchByIp(true);
-            break;
-        case nm:
+        } else if (0 == nameParam.compareTo(strName)) {
             // search by name
             name = queryParser.getParameter(request, strName);
-            if( StringUtils.isBlank(name) ){
-                return RestResponseUtil.createResponse400();
-            }
             String decodeNameserver = name;
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
-                decodeNameserver =
-                        DomainUtil
-                                .decodeAndTrimAndReplaceAsciiToLowercase(decodeNameserver);
+                decodeNameserver = DomainUtil
+                        .decodeAndTrimAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
@@ -343,18 +331,16 @@ public class RdapController {
             }
             decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
             decodeNameserver = StringUtils.lowerCase(decodeNameserver);
-            nsQueryParam =
-                    (NameserverQueryParam) queryParser
-                            .parseNameserverQueryParam(decodeNameserver,
-                                    decodeNameserver);
+            nsQueryParam = (NameserverQueryParam) queryParser
+                    .parseNameserverQueryParam(decodeNameserver,
+                            decodeNameserver);
             nsQueryParam.setIsSearchByIp(false);
-            break;
-        default:
+        } else {
             return RestResponseUtil.createResponse400();
         }
 
-        NameserverSearch nsSearch =
-                searchService.searchNameserver(nsQueryParam);
+        NameserverSearch nsSearch = searchService
+                .searchNameserver(nsQueryParam);
 
         if (null != nsSearch) {
             if (nsSearch.getHasNoAuthForAllObjects()) {
@@ -362,6 +348,30 @@ public class RdapController {
             }
             responseDecorator.decorateResponse(nsSearch);
             return RestResponseUtil.createResponse200(nsSearch);
+        }
+        return RestResponseUtil.createResponse404();
+    }
+
+    /**
+     * query ip by ipAddress.
+     * 
+     * @param ipAddr
+     *            represents information regarding DNS name servers used in both
+     *            forward and reverse DNS. RIRs and some DNRs register or expose
+     *            nameserver information as an attribute of a domain name, while
+     *            other DNRs model nameservers as "first class objects".
+     * @return JSON formatted result,with HTTP code.
+     */
+    @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity queryIp(@PathVariable String ipAddr) {
+
+        String strIp = ipAddr;
+        String strMask = "";
+        int pos = ipAddr.indexOf("/");
+        if (-1 != pos) {
+            strIp = ipAddr.substring(0, pos);
+            strMask = ipAddr.substring(pos + 1, ipAddr.length());
         }
         return RestResponseUtil.createResponse404();
     }
