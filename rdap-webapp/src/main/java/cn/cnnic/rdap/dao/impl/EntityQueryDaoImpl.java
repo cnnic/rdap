@@ -47,6 +47,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.BaseModel;
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.Entity;
@@ -95,7 +96,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     @Autowired
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
-
+    /**
+     * autnum dao.
+     */
+    @Autowired
+    @Qualifier("autnumQueryDaoImpl")
+    private QueryDao<Autnum> autnumQueryDao;
     /**
      * network dao.
      */
@@ -105,6 +111,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     @Override
     public Entity query(QueryParam queryParam) {
         Entity entity = queryWithoutInnerObjects(queryParam);
+        if (null == entity) {
+            return entity;
+        }
         entity.setVcardArray(JcardUtil.toJcardString(entity));
         queryAndSetInnerObjects(entity);
         return entity;
@@ -215,23 +224,26 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         if (null == entity) {
             return;
         }
-        Long domainId = entity.getId();
+        Long entityId = entity.getId();
         List<PublicId> publicIds =
                 publicIdQueryDao
-                        .queryAsInnerObjects(domainId, ModelType.ENTITY);
+                        .queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setPublicIds(publicIds);
         List<Remark> remarks =
-                remarkQueryDao.queryAsInnerObjects(domainId, ModelType.ENTITY);
+                remarkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setRemarks(remarks);
         List<Link> links =
-                linkQueryDao.queryAsInnerObjects(domainId, ModelType.ENTITY);
+                linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setLinks(links);
         List<Event> events =
-                eventQueryDao.queryAsInnerObjects(domainId, ModelType.ENTITY);
+                eventQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setEvents(events);
         List<Network> networks =
-                networkQueryDao.queryAsInnerObjects(domainId, ModelType.DOMAIN);
+                networkQueryDao.queryAsInnerObjects(entityId, ModelType.IP);
         entity.setNetworks(networks);
+        List<Autnum> autnums =
+                autnumQueryDao.queryAsInnerObjects(entityId, ModelType.AUTNUM);
+        entity.setAutnums(autnums);
     }
 
     /**

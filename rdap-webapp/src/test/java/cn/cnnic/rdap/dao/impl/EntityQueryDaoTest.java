@@ -41,8 +41,10 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
@@ -146,8 +148,22 @@ public class EntityQueryDaoTest extends BaseTest {
         assertTrue(networks.size() > 0);
         Network network = networks.get(0);
         assertNotNull(network);
-        assertEquals("h1",network.getHandle());
-        assertEquals(16777216,network.getStartAddress());
+        assertEquals("h1", network.getHandle());
+        assertEquals("1.0.0.0", network.getStartAddress());
+        assertEquals("1.255.255.255", network.getEndAddress());
+        assertEquals("US", network.getCountry());
+        // autnums
+        List<Autnum> autnums = entity.getAutnums();
+        Assert.notNull(autnums);
+        assertTrue(autnums.size() > 0);
+        Autnum autnum = autnums.get(0);
+        Assert.notNull(autnum);
+        assertEquals(autnum.getCountry(), "zh");
+        assertEquals(autnum.getEndAutnum().longValue(), 10L);
+        assertEquals(autnum.getLang(), "cn");
+        assertEquals(autnum.getName(), "name1");
+        List<String> autnumStatusList = autnum.getStatus();
+        assertThat(autnumStatusList, CoreMatchers.hasItems("validated"));
     }
 
     /**
