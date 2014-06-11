@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -57,9 +57,9 @@ import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * network query DAO.
- * 
+ *
  * @author jiashuo
- * 
+ *
  */
 @Repository
 public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
@@ -85,12 +85,8 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Override
     public List<Network> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
-        List<Network> networks = queryWithoutInnerObjects(outerObjectId);
-        if (networks.size() > 1) {
-            Network network = networks.get(0);
-            networks = new ArrayList<Network>();
-            networks.add(network);
-        }
+        List<Network> networks =
+                queryWithoutInnerObjects(outerObjectId, outerModelType);
         queryAndSetInnerObjects(networks);
         return networks;
     }
@@ -98,7 +94,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     /**
      * query inner objects of network,and set fill them to network.Note: only
      * handle first one item.
-     * 
+     *
      * @param networks
      *            inner objects will be filled
      */
@@ -108,31 +104,54 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
         }
         Network network = networks.get(0);
         Long networkId = network.getId();
-        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(networkId,
-                ModelType.IP);
+        List<Remark> remarks =
+                remarkQueryDao.queryAsInnerObjects(networkId, ModelType.IP);
         network.setRemarks(remarks);
-        List<Link> links = linkQueryDao.queryAsInnerObjects(networkId,
-                ModelType.IP);
+        List<Link> links =
+                linkQueryDao.queryAsInnerObjects(networkId, ModelType.IP);
         network.setLinks(links);
-        List<Event> events = eventQueryDao.queryAsInnerObjects(networkId,
-                ModelType.IP);
+        List<Event> events =
+                eventQueryDao.queryAsInnerObjects(networkId, ModelType.IP);
         network.setEvents(events);
     }
 
     /**
      * query network, without inner objects.
-     * 
+     *
      * @param outerObjectId
      *            domainId.
+     * @param outerModelType
+     *            outerModelType.
      * @return network.
      */
-    private List<Network> queryWithoutInnerObjects(final Long outerObjectId) {
-        final String sql = "select * from RDAP_IP ip inner join "
-                + " REL_DOMAIN_NETWORK rel on ip.IP_ID = rel.NETWORK_ID "
-                + " left outer join RDAP_IP_STATUS status on ip.IP_ID = "
-                + "status.IP_ID where rel.DOMAIN_ID=? ";
-        List<Network> result = jdbcTemplate.query(
-                new PreparedStatementCreator() {
+    private List<Network> queryWithoutInnerObjects(final Long outerObjectId,
+            final ModelType outerModelType) {
+        if (ModelType.ENTITY.equals(outerModelType)) {
+            return this.queryWithoutInnerObjectsForEntity(outerObjectId);
+        }
+        throw new UnsupportedOperationException("un supported outer ModelType:"
+                + outerModelType);
+    }
+
+    /**
+     * query network, without inner objects.
+     *
+     * @param outerObjectId
+     *            entityId.
+     * @return network.
+     */
+    private List<Network> queryWithoutInnerObjectsForEntity(
+            final Long outerObjectId) {
+        final String sql =
+                "select * from RDAP_IP ip inner join "
+                        + " REL_ENTITY_REGISTRATION rel "
+                        + " on ip.IP_ID = rel.REL_ID "
+                        + " left outer join RDAP_IP_STATUS status "
+                        + " on ip.IP_ID = "
+                        + "status.IP_ID where rel.ENTITY_ID=? ";
+        List<Network> result =
+                jdbcTemplate.query(new PreparedStatementCreator() {
+                    @Override
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
@@ -145,9 +164,9 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
 
     /**
      * network ResultSetExtractor, extract data from ResultSet.
-     * 
+     *
      * @author jiashuo
-     * 
+     *
      */
     class NetworkResultSetExtractor implements
             ResultSetExtractor<List<Network>> {
@@ -179,7 +198,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
 
         /**
          * set ip version,and start/end address.
-         * 
+         *
          * @param rs
          *            ResultSet.
          * @param network
@@ -198,16 +217,16 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
             String endAddress = "";
             if (IpVersion.isV6(ipVersionStr)) {
                 network.setIpVersion(IpVersion.V6);
-                startAddress = IpUtil.longToIpV6(
-                        Long.parseLong(startHighAddress),
-                        Long.parseLong(startLowAddress));
-                endAddress = IpUtil.longToIpV6(
-                        Long.parseLong(endHighAddress),
-                        Long.parseLong(endLowAddress));
+                startAddress =
+                        IpUtil.longToIpV6(Long.parseLong(startHighAddress),
+                                Long.parseLong(startLowAddress));
+                endAddress =
+                        IpUtil.longToIpV6(Long.parseLong(endHighAddress),
+                                Long.parseLong(endLowAddress));
             } else if (IpVersion.isV4(ipVersionStr)) {
                 network.setIpVersion(IpVersion.V4);
-                startAddress = IpUtil.longToIpV4(Long
-                        .parseLong(startLowAddress));
+                startAddress =
+                        IpUtil.longToIpV4(Long.parseLong(startLowAddress));
                 endAddress = IpUtil.longToIpV4(Long.parseLong(endLowAddress));
             }
             network.setStartAddress(startAddress);

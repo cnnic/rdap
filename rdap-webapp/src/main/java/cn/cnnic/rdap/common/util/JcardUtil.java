@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,73 +30,179 @@
  */
 package cn.cnnic.rdap.common.util;
 
-import java.io.IOException;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.EntityAddress;
+import cn.cnnic.rdap.bean.EntityTel;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import ezvcard.parameter.AddressType;
+import ezvcard.parameter.TelephoneType;
 import ezvcard.property.Address;
+import ezvcard.property.Kind;
+import ezvcard.property.Telephone;
+import ezvcard.util.TelUri;
 
 /**
- * 
+ * Jcard util, see draft-ietf-jcardcal-jcard.
+ *
  * @author jiashuo
- * 
+ *
  */
-public class JcardUtil {
-	public static void main(String[] args) throws Throwable {
-		VCard vcard = createVCard();
-		System.out.println(Ezvcard.writeJson(vcard).go());
-	}
+public final class JcardUtil {
+    /**
+     * default constructor.
+     */
+    private JcardUtil() {
+        super();
+    }
 
-	private static VCard createVCard() throws IOException {
-		VCard vcard = new VCard();
-		// vcard.setKind(Kind.individual());
-		// vcard.setGender(Gender.male());
-		// vcard.addLanguage("en-US");
-		// StructuredName n = new StructuredName();
-		// n.setFamily("Doe");
-		// n.setGiven("Jonathan");
-		// n.addPrefix("Mr");
-		// vcard.setStructuredName(n);
-		// vcard.setFormattedName("Jonathan Doe");
-		// vcard.setNickname("John", "Jonny");
-		// vcard.addTitle("Widget Engineer");
-		// vcard.setOrganization("Acme Co. Ltd.", "Widget Department");
-		Address adr = new Address();
-		adr.setStreetAddress("123 Wall St.");
-		adr.setLocality("New York");
-		adr.setRegion("NY");
-		adr.setPostalCode("12345");
-		adr.setCountry("USA");
-		adr.setLabel("123 Wall St.\nNew York, NY 12345\nUSA");
-		adr.addType(AddressType.WORK);
-		vcard.addAddress(adr);
-		//
-		// adr = new Address();
-		// adr.setStreetAddress("123 Main St.");
-		// adr.setLocality("Albany");
-		// adr.setRegion("NY");
-		// adr.setPostalCode("54321");
-		// adr.setCountry("USA");
-		// adr.setLabel("123 Main St.\nAlbany, NY 54321\nUSA");
-		// adr.addType(AddressType.HOME);
-		// vcard.addAddress(adr);
-		//
-		// vcard.addTelephoneNumber("1-555-555-1234", TelephoneType.WORK);
-		// vcard.addTelephoneNumber("1-555-555-5678", TelephoneType.WORK,
-		// TelephoneType.CELL);
-		//
-		// vcard.addEmail("johndoe@hotmail.com", EmailType.HOME);
-		// vcard.addEmail("doe.john@acme.com", EmailType.WORK);
-		// vcard.addUrl("http://www.acme-co.com");
-		// vcard.setCategories("widgetphile", "biker", "vCard expert");
-		// vcard.setGeo(37.6, -95.67);
-		// java.util.TimeZone tz = java.util.TimeZone
-		// .getTimeZone("America/New_York");
-		// vcard.setTimezone(new Timezone(tz));
-		//
-		// vcard.setUid(Uid.random());
-		// vcard.setRevision(Revision.now());
-		return vcard;
-	}
+    /**
+     * parse entity to jcard string.
+     *
+     * @param entity
+     *            entity.
+     * @return jcard string.
+     */
+    public static String toJcardString(Entity entity) {
+        VCard vcard = convertToVcard(entity);
+        return Ezvcard.writeJson(vcard).prodId(false).go();
+    }
+
+    /**
+     * convert entity to vcard.
+     *
+     * @param entity
+     *            entity.
+     * @return vcard.
+     */
+    private static VCard convertToVcard(Entity entity) {
+        VCard vcard = new VCard();
+        if (null == entity) {
+            return vcard;
+        }
+        if (StringUtils.isNotBlank(entity.getKind())) {
+            vcard.setKind(new Kind(entity.getKind()));
+        }
+        if (StringUtils.isNotBlank(entity.getFn())) {
+            vcard.setFormattedName(entity.getFn());
+        }
+        addAddressToVcard(vcard, entity);
+        addTelsToVcard(vcard, entity);
+        if (StringUtils.isNotBlank(entity.getEmail())) {
+            vcard.addEmail(entity.getEmail());
+        }
+        if (StringUtils.isNotBlank(entity.getTitle())) {
+            vcard.addTitle(entity.getTitle());
+        }
+        if (StringUtils.isNotBlank(entity.getOrg())) {
+            vcard.setOrganization(entity.getOrg()); // .setType("work");
+        }
+        if (StringUtils.isNotBlank(entity.getUrl())) {
+            vcard.addUrl(entity.getUrl());
+        }
+        return vcard;
+    }
+
+    /**
+     * add telephone to vcard.
+     *
+     * @param vcard
+     *            vcard.
+     * @param entity
+     *            entity.
+     */
+    private static void addTelsToVcard(VCard vcard, Entity entity) {
+        List<EntityTel> telList = entity.getTelephones();
+        if (null == telList) {
+            return;
+        }
+        for (EntityTel tel : telList) {
+            if (StringUtils.isBlank(tel.getValue())) {
+                continue;
+            }
+            TelUri uri = new TelUri.Builder(tel.getValue()).build();
+            Telephone telephone = new Telephone(uri);
+            addTelephoneTypes(tel.getTypes(), telephone);
+            if (null != tel.getPref()) {
+                telephone.setPref(tel.getPref());
+            }
+            vcard.addTelephoneNumber(telephone);
+        }
+    }
+
+    /**
+     * add telephone types to telephone.
+     *
+     * @param types
+     *            types.
+     * @param telephone
+     *            telephone.
+     */
+    private static void addTelephoneTypes(String types, Telephone telephone) {
+        if (StringUtils.isBlank(types)) {
+            return;
+        }
+        String[] typeStrArray = StringUtils.split(types, ";");
+        if (null == typeStrArray) {
+            return;
+        }
+        for (String typeStr : typeStrArray) {
+            TelephoneType telType = TelephoneType.get(typeStr);
+            telephone.addType(telType);
+        }
+    }
+
+    /**
+     * add addresses to vcard.
+     *
+     * @param vcard
+     *            vcard.
+     * @param entity
+     *            entity.
+     */
+    private static void addAddressToVcard(VCard vcard, Entity entity) {
+        List<EntityAddress> addressList = entity.getAddresses();
+        if (null == addressList) {
+            return;
+        }
+        for (EntityAddress entityAddress : addressList) {
+            Address address = new Address();
+            address.setPoBox(entityAddress.getPoBox());
+            address.setExtendedAddress(entityAddress.getExtendedAddress());
+            address.setStreetAddress(entityAddress.getStreetAddress());
+            address.setLocality(entityAddress.getLocality());
+            address.setRegion(entityAddress.getRegion());
+            address.setPostalCode(entityAddress.getPostalCode());
+            address.setCountry(entityAddress.getCountry());
+            addAddressTypes(entityAddress.getTypes(), address);
+            vcard.addAddress(address);
+        }
+    }
+
+    /**
+     * add addressTypes to address.
+     *
+     * @param addressesStr
+     *            addressesStr,splited by ';'.
+     * @param address
+     *            address.
+     */
+    private static void addAddressTypes(String addressesStr, Address address) {
+        if (StringUtils.isBlank(addressesStr)) {
+            return;
+        }
+        String[] addressStrArray = StringUtils.split(addressesStr, ";");
+        if (null == addressStrArray) {
+            return;
+        }
+        for (String addressStr : addressStrArray) {
+            AddressType addressType = AddressType.get(addressStr);
+            address.addType(addressType);
+        }
+    }
+
 }
