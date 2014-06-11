@@ -126,11 +126,8 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      */
     private List<Network> queryWithoutInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        if (ModelType.ENTITY.equals(outerModelType)) {
-            return this.queryWithoutInnerObjectsForEntity(outerObjectId);
-        }
-        throw new UnsupportedOperationException("un supported outer ModelType:"
-                + outerModelType);
+        return this.queryWithoutInnerObjectsForEntity(outerObjectId,
+                outerModelType);
     }
 
     /**
@@ -138,17 +135,19 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      *
      * @param outerObjectId
      *            entityId.
+     * @param outerModelType
      * @return network.
      */
     private List<Network> queryWithoutInnerObjectsForEntity(
-            final Long outerObjectId) {
+            final Long outerObjectId, final ModelType outerModelType) {
         final String sql =
                 "select * from RDAP_IP ip inner join "
                         + " REL_ENTITY_REGISTRATION rel "
                         + " on ip.IP_ID = rel.REL_ID "
                         + " left outer join RDAP_IP_STATUS status "
                         + " on ip.IP_ID = "
-                        + "status.IP_ID where rel.ENTITY_ID=? ";
+                        + " status.IP_ID where rel.ENTITY_ID=? "
+                        + " and REL_OBJECT_TYPE=?";
         List<Network> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
@@ -156,6 +155,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setLong(1, outerObjectId);
+                        ps.setString(2, outerModelType.getName());
                         return ps;
                     }
                 }, new NetworkResultSetExtractor());
