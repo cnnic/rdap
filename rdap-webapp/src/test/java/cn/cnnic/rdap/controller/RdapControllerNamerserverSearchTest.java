@@ -95,6 +95,11 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         String nsIpV4 = ipHead + "0::0";
         String nsIpZero = ipHead + "::";
         String nsIpV4V6 = ipHead + "::f:f:0.15.0.15";
+        String nsBoth1 = nsNameCn + "&" + ipHead + "::f:f:0.15.0.15";
+        String nsBoth2 = ipHead + "::f:f:0.15.0.15" + "&" + nsNameCn;
+        String nsOnlyOne1 = ipHead + "::f:f:0.15.0.15" + "?" + nsNameCn;
+        String nsOnlyOne2 = nsNameCn + "?" + ipHead + "::f:f:0.15.0.15";
+        String nsComplex = "&name=ns.cnni*.cn&ip=::?name=0";
         searchByObject(nsNameCn);
         searchByObject(nsNameIpV4);
         searchByObject(nsNameIpV6Full);
@@ -102,6 +107,11 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         searchByObject(nsIpV4);
         searchByObject(nsIpZero);
         searchByObject(nsIpV4V6);
+        searchByObject(nsBoth1);
+        searchByObject(nsBoth2);
+        searchByObject(nsOnlyOne1);
+        searchByObject(nsOnlyOne2);
+        searchByObject(nsComplex);
     }
 
     private void searchByObject(String strObject) throws Exception {
@@ -292,11 +302,13 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         String nsIpWildcardEnd = ipHead + "1.*";
         String nsIpWildcardHead = ipHead + "*.*";
         String nsNameIllegal = nsHead + "";
+        String nsComplex = "&name=&ip=::?name=0";
 
         seachIllegalNS(nsIpIllegal);
         seachIllegalNS(nsNameIllegal);
         seachIllegalNS(nsIpWildcardHead);
         seachIllegalNS(nsIpWildcardEnd);
+        seachIllegalNS(nsComplex);
     }
 
     private void seachIllegalNS(String strObj) throws Exception {
