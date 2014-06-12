@@ -290,14 +290,19 @@ public class RdapController {
     public ResponseEntity searchNameserver(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
-        name = queryParser.getParameter(request, "name");
-        String decodeNameserver = name;
+        final String strIp = "ip";
+        final String strName = "name";
         NameserverQueryParam nsQueryParam = null;
-        // search by IP
-        if (StringUtils.isBlank(name)) {
-            name = queryParser.getParameter(request, "ip");
+        final String[] strParamOrg = { strIp, strName };
+        String nameParam = queryParser.getFirstParameter(request, strParamOrg);
+        if (StringUtils.isBlank(nameParam)) {
+            return RestResponseUtil.createResponse400();
+        }
+        if (0 == nameParam.compareTo(strIp)) {
+            // search by IP
+            name = queryParser.getParameter(request, strIp);
             // checkIP
-            if (name == null || !IpUtil.isIpV4StrWholeValid(name)
+            if (StringUtils.isBlank(name) || !IpUtil.isIpV4StrWholeValid(name)
                     && !IpUtil.isIpV6StrValid(name)) {
                 return RestResponseUtil.createResponse400();
             }
@@ -305,7 +310,10 @@ public class RdapController {
             nsQueryParam = (NameserverQueryParam) queryParser
                     .parseNameserverQueryParam(name, name);
             nsQueryParam.setIsSearchByIp(true);
-        } else {// search by name
+        } else if (0 == nameParam.compareTo(strName)) {
+            // search by name
+            name = queryParser.getParameter(request, strName);
+            String decodeNameserver = name;
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
                 decodeNameserver = DomainUtil
@@ -327,6 +335,8 @@ public class RdapController {
                     .parseNameserverQueryParam(decodeNameserver,
                             decodeNameserver);
             nsQueryParam.setIsSearchByIp(false);
+        } else {
+            return RestResponseUtil.createResponse400();
         }
 
         NameserverSearch nsSearch = searchService
@@ -338,6 +348,30 @@ public class RdapController {
             }
             responseDecorator.decorateResponse(nsSearch);
             return RestResponseUtil.createResponse200(nsSearch);
+        }
+        return RestResponseUtil.createResponse404();
+    }
+
+    /**
+     * query ip by ipAddress.
+     * 
+     * @param ipAddr
+     *            represents information regarding DNS name servers used in both
+     *            forward and reverse DNS. RIRs and some DNRs register or expose
+     *            nameserver information as an attribute of a domain name, while
+     *            other DNRs model nameservers as "first class objects".
+     * @return JSON formatted result,with HTTP code.
+     */
+    @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity queryIp(@PathVariable String ipAddr) {
+
+        String strIp = ipAddr;
+        String strMask = "";
+        int pos = ipAddr.indexOf("/");
+        if (-1 != pos) {
+            strIp = ipAddr.substring(0, pos);
+            strMask = ipAddr.substring(pos + 1, ipAddr.length());
         }
         return RestResponseUtil.createResponse404();
     }

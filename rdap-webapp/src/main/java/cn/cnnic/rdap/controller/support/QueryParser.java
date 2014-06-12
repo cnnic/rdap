@@ -32,12 +32,12 @@ package cn.cnnic.rdap.controller.support;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.common.util.DomainUtil;
 
 /**
  * 
@@ -80,7 +80,8 @@ public class QueryParser {
      *            nameserver puny name.
      * @return QueryParam.
      */
-    public QueryParam parseNameserverQueryParam(String nsName, String punyNSName) {
+    public QueryParam
+            parseNameserverQueryParam(String nsName, String punyNSName) {
         return new NameserverQueryParam(nsName, punyNSName);
     }
 
@@ -98,6 +99,51 @@ public class QueryParser {
         if (null == values || values.length < 1) {
             return null;
         }
-        return values[0];
+        String strQuery = values[0];
+        int pos = strQuery.indexOf("?");
+        if (-1 != pos) {
+            try {
+                strQuery = strQuery.substring(0, pos);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return strQuery;
+    }
+
+    /**
+     * get parameter from request,get first if has more than one param.
+     * 
+     * @param request
+     *            HttpServletRequest.
+     * @param strParamOrg
+     *            the final String array for url params.
+     * @return first right url param.
+     */
+    public String getFirstParameter(HttpServletRequest request,
+            final String[] strParamOrg) {
+        String strQuery = request.getQueryString();
+        int pos = strQuery.indexOf("?");
+        if (-1 != pos) {
+            try {
+                strQuery = strQuery.substring(0, pos);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        final String strSplit = "&";
+        String[] strParam = strQuery.split(strSplit);
+        final String strEqual = "=";
+        for (int k = 0; k < strParam.length; ++k) {
+            String[] strParamName = strParam[k].split(strEqual);
+            if (strParamName != null) {
+                for (int j = 0; j < strParamOrg.length; ++j) {
+                    if (strParamName[0].compareTo(strParamOrg[j]) == 0) {
+                        return strParamName[0];
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

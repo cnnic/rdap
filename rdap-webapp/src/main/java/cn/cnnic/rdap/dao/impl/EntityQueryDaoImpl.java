@@ -114,16 +114,27 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         if (null == entity) {
             return entity;
         }
-        entity.setVcardArray(JcardUtil.toJcardString(entity));
         queryAndSetInnerObjects(entity);
         return entity;
+    }
+
+    @Override
+    public List<Entity> queryAsInnerObjects(Long outerObjectId,
+            ModelType outerModelType) {
+        List<Entity> entities =
+                queryWithoutInnerObjects(outerObjectId, outerModelType);
+        if (null == entities) {
+            return entities;
+        }
+        queryAndSetInnerObjects(entities);
+        return entities;
     }
 
     @Override
     public List<Entity> search(QueryParam queryParam) {
         List<Entity> entities = searchWithoutInnerObjects(queryParam);
         queryAndSetEntityStatus(entities);
-        queryAndSetInnerObjectsWithoutNotice(entities);
+        queryAndSetInnerObjects(entities);
         return entities;
     }
 
@@ -149,6 +160,47 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             }
         }, new CountResultSetExtractor());
         return entityCount;
+    }
+
+    /**
+     * query inner objects of entity,and set fill them to entity.
+     * 
+     * @param entities
+     *            entities.
+     */
+    private void queryAndSetInnerObjects(List<Entity> entities) {
+        if (null == entities) {
+            return;
+        }
+        for (Entity entity : entities) {
+            queryAndSetInnerObjects(entity);
+        }
+    }
+
+    /**
+     * convert entity to vcard and set to entity.
+     * 
+     * @param entity
+     *            entity.
+     */
+    private void convertAndSetVcardArray(Entity entity) {
+        //
+        entity.setVcardArray(JcardUtil.toJcardString(entity));
+    }
+
+    /**
+     * convert entities to vcard and set to entity.
+     * 
+     * @param entities
+     *            entities.
+     */
+    private void convertAndSetVcardArray(List<Entity> entities) {
+        if (null == entities) {
+            return;
+        }
+        for (Entity entity : entities) {
+            convertAndSetVcardArray(entity);
+        }
     }
 
     /**
@@ -201,22 +253,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
 
     /**
      * query inner objects of entity,and set fill them to entity.
-     *
-     * @param entities
-     *            domain list.
-     */
-    private void queryAndSetInnerObjectsWithoutNotice(List<Entity> entities) {
-        if (null == entities) {
-            return;
-        }
-        for (Entity entity : entities) {
-            queryAndSetInnerObjects(entity);
-        }
-    }
-
-    /**
-     * query inner objects of entity,and set fill them to entity.
-     *
+     * 
      * @param entity
      *            inner objects will be filled.
      */
@@ -224,6 +261,8 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         if (null == entity) {
             return;
         }
+        convertAndSetVcardArray(entity);
+        queryAndSetStatus(entity);
         Long entityId = entity.getId();
         List<PublicId> publicIds =
                 publicIdQueryDao
@@ -247,8 +286,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * query entity, without inner objects.
-     *
+     * query entity, without inner objects.Role from REL_ENTITY_REGISTRATION,
+     * contain all role related to this entity.
+     * 
      * @param queryParam
      *            query parameter.
      * @return entity.
@@ -259,25 +299,55 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         }
         final String sql =
                 "select * from RDAP_ENTITY entity "
-                        + " left outer join RDAP_ENTITY_STATUS status "
-                        + " on entity.ENTITY_ID = status.ENTITY_ID "
-                        + " left outer join RDAP_ENTITY_ROLE role "
-                        + " on entity.ENTITY_ID = role.ENTITY_ID "
+                        + " left outer join REL_ENTITY_REGISTRATION rel "
+                        + " on entity.ENTITY_ID = rel.ENTITY_ID "
                         + " where entity.HANDLE= ? ";
         List<Entity> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
                     public PreparedStatement createPreparedStatement(
-                            Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement(sql);
+                            Connection conn) throws SQLException {
+                        PreparedStatement ps = conn.prepareStatement(sql);
                         ps.setString(1, queryParam.getQ());
                         return ps;
                     }
-                }, new EntityWithStatusResultSetExtractor());
+                }, new EntityWithRoleResultSetExtractor());
         if (null == result || result.size() == 0) {
             return null;
         }
         return result.get(0);
+    }
+
+    /**
+     * query entity, without inner objects,for query as inner object. contain
+     * all role related to outer model.
+     * 
+     * @param outerObjectId
+     *            outerObjectId.
+     * @param outerModelType
+     *            outerModelType.
+     * @return entity.
+     */
+    private List<Entity> queryWithoutInnerObjects(final Long outerObjectId,
+            final ModelType outerModelType) {
+        final String sql =
+                "select * from RDAP_ENTITY entity "
+                        + " inner join REL_ENTITY_REGISTRATION rel "
+                        + " on entity.ENTITY_ID = rel.ENTITY_ID "
+                        + " where entity.ENTITY_ID= ? "
+                        + " and rel.REL_OBJECT_TYPE= ? ";
+        List<Entity> result =
+                jdbcTemplate.query(new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(
+                            Connection conn) throws SQLException {
+                        PreparedStatement ps = conn.prepareStatement(sql);
+                        ps.setLong(1, outerObjectId);
+                        ps.setString(2, outerModelType.getName());
+                        return ps;
+                    }
+                }, new EntityWithRoleResultSetExtractor());
+        return result;
     }
 
     /**
@@ -328,7 +398,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      * @author jiashuo
      *
      */
-    class EntityWithStatusResultSetExtractor implements
+    class EntityWithRoleResultSetExtractor implements
             ResultSetExtractor<List<Entity>> {
         @Override
         public List<Entity> extractData(ResultSet rs) throws SQLException {
@@ -343,15 +413,77 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                     result.add(entity);
                     entityMapById.put(entityId, entity);
                 }
-                entity.addStatus(rs.getString("STATUS"));
-                entity.addRole(rs.getString("ROLE"));
+                entity.addRole(rs.getString("ENTITY_ROLE"));
             }
             return result;
         }
     }
 
     /**
-     *
+     * query and set status.
+     * 
+     * @param entity
+     *            entity.
+     */
+    private void queryAndSetStatus(Entity entity) {
+        List<Entity> models = new ArrayList<Entity>();
+        if (null == entity) {
+            return;
+        }
+        models.add(entity);
+        queryAndSetStatus(models);
+    }
+
+    /**
+     * query and set status.
+     * 
+     * @param models
+     *            model list.
+     */
+    private void queryAndSetStatus(List<Entity> models) {
+        List<Long> domainIds = getModelIds(models);
+        List<ModelStatus> statusList = queryStatus(domainIds);
+        for (ModelStatus status : statusList) {
+            BaseModel obj =
+                    BaseModel.findObjectFromListById(models, status.getId());
+            if (null == obj) {
+                continue;
+            }
+            Entity entity = (Entity) obj;
+            entity.addStatus(status.getStatus());
+        }
+    }
+
+    /**
+     * query status.
+     * 
+     * @param modelIds
+     *            model id list.
+     * @return model status list.
+     */
+    private List<ModelStatus> queryStatus(List<Long> modelIds) {
+        if (null == modelIds || modelIds.size() == 0) {
+            return new ArrayList<ModelStatus>();
+        }
+        final String modelIdsJoinedByComma = StringUtils.join(modelIds, ",");
+        final String sqlTpl =
+                "select * from RDAP_ENTITY_STATUS where ENTITY_ID in (%s)";
+        final String sql = String.format(sqlTpl, modelIdsJoinedByComma);
+        List<ModelStatus> result =
+                jdbcTemplate.query(sql, new RowMapper<ModelStatus>() {
+                    @Override
+                    public ModelStatus mapRow(ResultSet rs, int rowNum)
+                            throws SQLException {
+                        return new ModelStatus(rs.getLong("ENTITY_ID"), rs
+                                .getString("STATUS"));
+                    }
+
+                });
+        return result;
+    }
+
+    /**
+     * 
      * @author jiashuo
      *
      */
