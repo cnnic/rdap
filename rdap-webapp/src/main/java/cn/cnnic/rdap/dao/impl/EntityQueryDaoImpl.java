@@ -284,9 +284,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setLinks(links);
-        List<Event> events =
-                eventQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        entity.setEvents(events);
+        queryAndSetEvents(entity, entityId);
         List<Network> networks =
                 networkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setNetworks(networks);
@@ -294,6 +292,31 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                 autnumQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setAutnums(autnums);
         setTruncatedIfTooMuchResult(entity);
+    }
+
+    /**
+     * query and set events and asEventActor.
+     * @param entity entity.
+     * @param entityId entityId.
+     */
+    private void queryAndSetEvents(Entity entity, Long entityId) {
+        List<Event> events =
+                eventQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
+        entity.setEvents(events);
+        List<Event> eventsAsActor = new ArrayList<Event>();
+        List<Event> eventsNotAsActor = new ArrayList<Event>();
+        for(Event event:events){
+            if(entity.getHandle().equals(event.getEventActor())){
+                LOGGER.debug("asEventActor,entityId:{},eventId:{}",entityId,
+                        event.getId());
+                event.setEventActor(null);
+                eventsAsActor.add(event);
+            }else{
+                eventsNotAsActor.add(event);
+            }
+        }
+        entity.setEvents(eventsNotAsActor);
+        entity.setAsEventActor(eventsAsActor);
     }
 
     /**
