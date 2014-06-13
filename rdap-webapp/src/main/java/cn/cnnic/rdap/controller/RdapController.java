@@ -48,6 +48,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainSearch;
+import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.Nameserver;
+import cn.cnnic.rdap.bean.NameserverQueryParam;
+import cn.cnnic.rdap.bean.NameserverSearch;
 import cn.cnnic.rdap.common.util.AutnumValidator;
 import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.IpUtil;
@@ -58,9 +62,6 @@ import cn.cnnic.rdap.service.AccessControlManager;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
-import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.bean.NameserverSearch;
-import cn.cnnic.rdap.bean.NameserverQueryParam;
 
 /**
  * controller for query and search.All methods return message in JSON format.
@@ -102,6 +103,36 @@ public class RdapController {
      */
     @Autowired
     private AccessControlManager accessControlManager;
+    
+    /**
+     * query entity.
+     *
+     * @param entity
+     *            entity.
+     * @param request
+     *            HttpServletRequest.
+     * @param response
+     *            HttpServletResponse
+     * @return JSON formated result,with HTTP code.
+     */
+    @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
+    public ResponseEntity queryEntity(@PathVariable String handle,
+            HttpServletRequest request, HttpServletResponse response) {
+        LOGGER.info("query entity,handle:" + handle);
+        if (!StringUtil.isValidEntityHandle(handle)) {
+            return RestResponseUtil.createResponse400();
+        }
+        Entity result = queryService.queryEntity(queryParser
+                .parseQueryParam(handle));
+        if (null != result) {
+            if (!accessControlManager.hasPermission(result)) {
+                return RestResponseUtil.createResponse403();
+            }
+            responseDecorator.decorateResponse(result);
+            return RestResponseUtil.createResponse200(result);
+        }
+        return RestResponseUtil.createResponse404();
+    }
 
     /**
      * query autnum.

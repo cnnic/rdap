@@ -106,10 +106,13 @@ public class Nameserver extends BaseModel {
         if (StringUtils.isBlank(statusStr)) {
             return;
         }
+        statusStr = StringUtils.trim(statusStr);
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        this.status.add(statusStr);
+        if(!this.status.contains(statusStr)){
+            this.status.add(statusStr);
+        }
     }
 
     /**

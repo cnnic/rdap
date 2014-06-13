@@ -33,6 +33,8 @@ package cn.cnnic.rdap.common.util;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.EntityAddress;
@@ -45,6 +47,7 @@ import ezvcard.property.Address;
 import ezvcard.property.Kind;
 import ezvcard.property.Telephone;
 import ezvcard.util.TelUri;
+import ezvcard.util.TelUri.Builder;
 
 /**
  * Jcard util, see draft-ietf-jcardcal-jcard.
@@ -53,6 +56,13 @@ import ezvcard.util.TelUri;
  *
  */
 public final class JcardUtil {
+
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(JcardUtil.class);
+
     /**
      * default constructor.
      */
@@ -99,7 +109,7 @@ public final class JcardUtil {
             vcard.addTitle(entity.getTitle());
         }
         if (StringUtils.isNotBlank(entity.getOrg())) {
-            vcard.setOrganization(entity.getOrg()); // .setType("work");
+            vcard.setOrganization(entity.getOrg());
         }
         if (StringUtils.isNotBlank(entity.getUrl())) {
             vcard.addUrl(entity.getUrl());
@@ -121,10 +131,13 @@ public final class JcardUtil {
             return;
         }
         for (EntityTel tel : telList) {
-            if (StringUtils.isBlank(tel.getValue())) {
+            if (StringUtils.isBlank(tel.getGlobalNumber())) {
                 continue;
             }
-            TelUri uri = new TelUri.Builder(tel.getValue()).build();
+            TelUri uri = safeBuildTelUri(tel);
+            if (null == uri) {
+                continue;
+            }
             Telephone telephone = new Telephone(uri);
             addTelephoneTypes(tel.getTypes(), telephone);
             if (null != tel.getPref()) {
@@ -132,6 +145,26 @@ public final class JcardUtil {
             }
             vcard.addTelephoneNumber(telephone);
         }
+    }
+
+    /**
+     * build telephone uri.
+     *
+     * @param tel
+     *            tel.
+     * @return TelUri if tel number is valid, return null if not.
+     */
+    private static TelUri safeBuildTelUri(EntityTel tel) {
+        try {
+            Builder telBuilder = new TelUri.Builder(tel.getGlobalNumber());
+            if (StringUtils.isNotBlank(tel.getExtNumber())) {
+                telBuilder.extension(tel.getExtNumber());
+            }
+            return telBuilder.build();
+        } catch (Exception e) {
+            LOGGER.error("buildTelUri error:" + e.getMessage());
+        }
+        return null;
     }
 
     /**

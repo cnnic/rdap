@@ -30,7 +30,6 @@
  */
 package cn.cnnic.rdap.bean;
 
-
 /**
  * telephone number of entity.
  *
@@ -52,9 +51,13 @@ public class EntityTel extends BaseModel {
      */
     private String types;
     /**
-     * value.
+     * globalNumber,eg:+1-555-555-1234.
      */
-    private String value;
+    private String globalNumber;
+    /**
+     * ext number,eg:102.
+     */
+    private String extNumber;
 
     /**
      * get entityId.
@@ -114,22 +117,41 @@ public class EntityTel extends BaseModel {
     }
 
     /**
-     * get value.
+     * get globalNumber.
      *
-     * @return value.
+     * @return globalNumber.
      */
-    public String getValue() {
-        return value;
+    public String getGlobalNumber() {
+        return globalNumber;
     }
 
     /**
-     * set value.
+     * set globalNumber.
      *
-     * @param value
-     *            value.
+     * @param globalNumber
+     *            globalNumber.
      */
-    public void setValue(String value) {
-        this.value = value;
+    public void setGlobalNumber(String globalNumber) {
+        this.globalNumber = globalNumber;
+    }
+
+    /**
+     * get extNumber.
+     *
+     * @return extNumber.
+     */
+    public String getExtNumber() {
+        return extNumber;
+    }
+
+    /**
+     * set extNumber.
+     *
+     * @param extNumber
+     *            extNumber.
+     */
+    public void setExtNumber(String extNumber) {
+        this.extNumber = extNumber;
     }
 
 }
