@@ -41,16 +41,20 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.Assert;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.EntityAddress;
+import cn.cnnic.rdap.bean.EntityTel;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.bean.Remark;
+import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.dao.QueryDao;
 
@@ -59,9 +63,9 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
  * Test for entity DAO.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 @SuppressWarnings("rawtypes")
 public class EntityQueryDaoTest extends BaseTest {
@@ -99,10 +103,32 @@ public class EntityQueryDaoTest extends BaseTest {
         List<String> statusList = entity.getStatus();
         assertThat(statusList,
                 CoreMatchers.hasItems("validated", "update prohibited"));
-        // status
+        // roles
         List<String> roleList = entity.getRoles();
         assertThat(roleList,
                 CoreMatchers.hasItems("registrant", "administrative"));
+        // telephones
+        List<EntityTel> telephones = entity.getTelephones();
+        assertNotNull(telephones);
+        assertEquals(2, telephones.size());
+        EntityTel tel = telephones.get(0);
+        assertNotNull(tel);
+        assertEquals("home;voice", tel.getTypes());
+        assertEquals("+1-555-555-1234", tel.getGlobalNumber());
+        assertEquals("1234", tel.getExtNumber());
+        // addresses
+        List<EntityAddress> addresses = entity.getAddresses();
+        assertNotNull(addresses);
+        assertEquals(2,addresses.size());
+        EntityAddress address = addresses.get(0);
+        assertEquals("home;work", address.getTypes());
+        assertEquals("post office Box", address.getPoBox());
+        assertEquals("apartment addr", address.getExtendedAddress());
+        assertEquals("123 Wall St.", address.getStreetAddress());
+        assertEquals("New York", address.getLocality());
+        assertEquals("NY", address.getRegion());
+        assertEquals("12345", address.getPostalCode());
+        assertEquals("USA", address.getCountry());
         // events
         List<Event> events = entity.getEvents();
         assertNotNull(events);
@@ -164,6 +190,43 @@ public class EntityQueryDaoTest extends BaseTest {
         assertEquals(autnum.getName(), "name1");
         List<String> autnumStatusList = autnum.getStatus();
         assertThat(autnumStatusList, CoreMatchers.hasItems("validated"));
+    }
+
+    /**
+     * test query exist domain.
+     */
+    @Test
+//    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("entity.xml")
+    public void testQueryTruncated() {
+        String entityHandle = "h1";
+        RdapProperties prop = new RdapProperties();
+        // not truncated
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
+        Entity entity =
+                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+        List<Network> networks = entity.getNetworks();
+        assertNotNull(networks);
+        assertEquals(3, networks.size());
+        List<Autnum> autnums = entity.getAutnums();
+        Assert.notNull(autnums);
+        assertEquals(4, autnums.size());
+        assertNull(entity.getResultsTruncated());
+        // not truncated
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
+        entity =
+                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+        assertNull(entity.getResultsTruncated());
+        // truncated
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 3L);
+        entity =
+                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+        assertTrue(entity.getResultsTruncated());
+        // truncated
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 2L);
+        entity =
+                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+        assertTrue(entity.getResultsTruncated());
     }
 
     /**
