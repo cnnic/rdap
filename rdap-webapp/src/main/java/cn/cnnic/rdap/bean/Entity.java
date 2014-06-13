@@ -37,6 +37,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 
 /**
  * represents the information of organizations, corporations, governments,
@@ -47,11 +48,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @JsonPropertyOrder({ "rdapConformance", "notices", "handle", "vcardArray",
         "roles", "publicIds", "entities", "remarks", "links", "events",
-        "asEventActor", "status", "port43", "networks", "autnums", "lang" })
+        "asEventActor", "status", "port43", "networks","autnums"
+        , "resultsTruncated", "lang" })
 public class Entity extends BaseModel {
     /**
      * a JSON vCard with the entity's contact information.
      */
+    @JsonRawValue
     private String vcardArray;
     /**
      * an array of strings, each signifying the relationship an object would
@@ -92,6 +95,13 @@ public class Entity extends BaseModel {
      * port43.
      */
     private String port43;
+
+    /**
+     * 'resultsTruncated' used where a single object has been returned and data
+     * in that object has been truncated.
+     */
+    private Boolean resultsTruncated = null;
+
     /**
      * an array of IP network objects.
      */
@@ -142,6 +152,11 @@ public class Entity extends BaseModel {
     @JsonIgnore
     private String url;
 
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.ENTITY;
+    }
+
     /**
      * add a status string to status list.
      *
@@ -152,28 +167,30 @@ public class Entity extends BaseModel {
         if (StringUtils.isBlank(statusStr)) {
             return;
         }
+        statusStr = StringUtils.trim(statusStr);
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        if(!this.status.contains(statusStr)){
+        if (!this.status.contains(statusStr)) {
             this.status.add(statusStr);
         }
     }
 
     /**
-     * add a status string to status list.
-     *
+     * add a status string to role list.
+     * 
      * @param roleStr
-     *            statusStr.
+     *            roleStr.
      */
     public void addRole(String roleStr) {
         if (StringUtils.isBlank(roleStr)) {
             return;
         }
+        roleStr = StringUtils.trim(roleStr);
         if (null == this.roles) {
             this.roles = new ArrayList<String>();
         }
-        if(!this.roles.contains(roleStr)){
+        if (!this.roles.contains(roleStr)) {
             this.roles.add(roleStr);
         }
     }
@@ -550,12 +567,31 @@ public class Entity extends BaseModel {
 
     /**
      * set telephones.
-     *
+     * 
      * @param telephones
      *            telephones.
      */
     public void setTelephones(List<EntityTel> telephones) {
         this.telephones = telephones;
+    }
+
+    /**
+     * get resultsTruncated.
+     * 
+     * @return resultsTruncated.
+     */
+    public Boolean getResultsTruncated() {
+        return resultsTruncated;
+    }
+
+    /**
+     * set resultsTruncated.
+     * 
+     * @param resultsTruncated
+     *            resultsTruncated.
+     */
+    public void setResultsTruncated(Boolean resultsTruncated) {
+        this.resultsTruncated = resultsTruncated;
     }
 
 }

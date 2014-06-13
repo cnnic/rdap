@@ -32,6 +32,7 @@ package cn.cnnic.rdap.service;
 
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.QueryParam;
 
@@ -68,4 +69,10 @@ public interface QueryService {
      * @return Nameserver for the result.
      */
     Nameserver queryNameserver(QueryParam queryParam);
+    /**
+     * query entity.
+     * @param queryParam queryParam.
+     * @return Entity.
+     */
+    Entity queryEntity(QueryParam queryParam);
 }

@@ -77,7 +77,8 @@ public class JcardUtilTest {
         telephones.add(entityTel);
         entityTel.setPref(1);
         entityTel.setTypes("home;text");
-        entityTel.setValue("+1-800-555-9876");
+        entityTel.setGlobalNumber("+a1-800-555-9876");
+        entityTel.setExtNumber("1234");
         entity.setTelephones(telephones);
         entity.setEmail("johndoe@hotmail.com");
         entity.setTitle("CEO");

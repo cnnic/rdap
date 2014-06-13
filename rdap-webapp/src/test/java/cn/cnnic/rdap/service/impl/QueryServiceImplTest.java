@@ -44,6 +44,7 @@ import org.springframework.util.Assert;
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.QueryService;
 
@@ -63,6 +64,27 @@ public class QueryServiceImplTest extends BaseTest {
     @Autowired
     private QueryService queryService;
 
+    /**
+     * test query exist entity.
+     */
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    public void testQueryEntity() {
+        String handle = "h1";
+        Entity entity = queryService.queryEntity(queryParser
+                .parseQueryParam(handle));
+        Assert.notNull(entity);
+        assertEquals(handle, entity.getHandle());
+        assertEquals("individual", entity.getKind());
+        assertEquals("john", entity.getFn());
+        assertEquals("john@gmail.com", entity.getEmail());
+        assertEquals("CEO", entity.getTitle());
+        assertEquals("org", entity.getOrg());
+        assertEquals("http://john.com", entity.getUrl());
+        assertEquals("whois.example.net", entity.getPort43());
+    }
+    
     /**
      * test query exist autnum
      */
