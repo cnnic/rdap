@@ -210,7 +210,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * 
      * @param queryParam
      *            query parameter
-     * @return autnum
+     * @return nameserver
      */
     private Nameserver queryWithoutInnerObjects(QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
