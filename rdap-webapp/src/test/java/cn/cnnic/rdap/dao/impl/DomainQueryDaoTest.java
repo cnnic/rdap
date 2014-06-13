@@ -191,7 +191,7 @@ public class DomainQueryDaoTest extends BaseTest {
      * test query exist domain.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+     @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("domain.xml")
     public void testQueryExistUnicodeDomain() {
         String unicodeName = "清华大学.中国";
