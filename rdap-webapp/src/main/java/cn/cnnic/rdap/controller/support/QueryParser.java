@@ -38,6 +38,7 @@ import org.springframework.stereotype.Component;
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.IpQueryParam;
 
 /**
  * 
@@ -83,6 +84,22 @@ public class QueryParser {
     public QueryParam
             parseNameserverQueryParam(String nsName, String punyNSName) {
         return new NameserverQueryParam(nsName, punyNSName);
+    }
+
+    /**
+     * generate IpQueryParam.
+     * 
+     * @param ipAddr
+     *            ip Address.
+     * @param numMask
+     *            mask for ip.
+     * @return QueryParam.
+     */
+    public QueryParam parseIpQueryParam(String ipAddr, long numMask,
+            String ipVersion) {
+        IpQueryParam ipQueryParam = new IpQueryParam(ipAddr, numMask, ipVersion);
+        ipQueryParam.parseQueryIpMask();
+        return ipQueryParam;
     }
 
     /**
