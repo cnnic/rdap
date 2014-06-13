@@ -34,6 +34,7 @@ import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.Ip;
 
 /**
  * query service interface.
@@ -68,4 +69,13 @@ public interface QueryService {
      * @return Nameserver for the result.
      */
     Nameserver queryNameserver(QueryParam queryParam);
+    /**
+     * query Ip.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return Ip for the result.
+     */
+    Ip queryIp(QueryParam queryParam);
 }
+

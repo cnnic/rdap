@@ -36,10 +36,12 @@ import org.springframework.stereotype.Service;
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.Nameserver;
+import cn.cnnic.rdap.bean.Ip;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.dao.impl.AutnumQueryDaoImpl;
 import cn.cnnic.rdap.dao.impl.DomainQueryDaoImpl;
 import cn.cnnic.rdap.dao.impl.NameserverQueryDaoImpl;
+import cn.cnnic.rdap.dao.impl.IpQueryDaoImpl;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
@@ -73,6 +75,12 @@ public class QueryServiceImpl implements QueryService {
      */
     @Autowired
     private NameserverQueryDaoImpl nameserverQueryDao;
+    
+    /**
+     * ip DAO
+     */
+    @Autowired
+    private IpQueryDaoImpl ipQueryDao;
 
 	/**
 	 * query domain by domain name
@@ -91,4 +99,9 @@ public class QueryServiceImpl implements QueryService {
 	public Nameserver queryNameserver(QueryParam queryParam) {
 	    return nameserverQueryDao.query(queryParam);
 	}
+	
+	@Override
+    public Ip queryIp(QueryParam queryParam) {
+        return ipQueryDao.query(queryParam);
+    }
 }

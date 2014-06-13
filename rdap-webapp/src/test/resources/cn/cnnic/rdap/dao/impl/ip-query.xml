@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- 1 ip V6 -->
+	<RDAP_IP IP_ID='1' HANDLE='1' NAME='ip1.cn' STARTHIGHADDRESS='0' STARTLOWADDRESS='0'
+	 ENDHIGHADDRESS='18446744073709551614'	ENDLOWADDRESS='18446744073709551615' VERSION='v6'
+		TYPE='ip1.cn' PORT43='port43' LANG='en' PARENT_HANDLE='pH' />
+	<RDAP_IP_STATUS IP_STATUS_ID="11" IP_ID="1"
+		STATUS="validated" />
+	<RDAP_IP_STATUS IP_STATUS_ID="12" IP_ID="1"
+		STATUS="update prohibited" />
+		
+	<!-- 2 ip V4-->
+	<RDAP_IP IP_ID='2' HANDLE='2' NAME='ip1.cn' STARTHIGHADDRESS='0' STARTLOWADDRESS='0'
+	 ENDHIGHADDRESS='18446744073709551615'	ENDLOWADDRESS='4294967290' VERSION='v4' COUNTRY='cn'
+		TYPE='ip1.cn' PORT43='port43' LANG='en' />
+	<!-- events -->
+	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="cnnic"
+		EVENT_DATE="2014-01-01 00:01:01" />
+	<REL_EVENT_REGISTRATION REL_EVENT_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="ip" EVENT_ID="1" />
+	<!-- links -->
+	<RDAP_LINK LINK_ID="1" VALUE="http://iplink" REL="self"
+		HREF="http://iplink" MEDIA="iplink" TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="ip" LINK_ID="1" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='1' LINK_ID="1" HREFLANG="en" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='2' LINK_ID="1" HREFLANG="zh" />
+	<RDAP_LINK_TITLE TITLE_ID='1' LINK_ID="1" TITLE="Title1 of Link1" />
+	<RDAP_LINK_TITLE TITLE_ID='2' LINK_ID="1" TITLE="Title2 of Link1" />
+	<!-- notices -->
+	<RDAP_NOTICE NOTICE_ID="1" TITLE="notice" TYPE="notice" />
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="1"
+		REL_ID="1" REL_OBJECT_TYPE="ip" NOTICE_ID="1" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="1"
+		NOTICE_ID="1" DESCRIPTION="descriptionNotice" />
+	<!-- notice link -->
+	<RDAP_LINK LINK_ID="2" VALUE="http://notice.com/context_uri" REL="self" 
+	HREF="http://notice.com/context_uri" MEDIA="notice"	TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="2" REL_ID="2"
+		REL_OBJECT_TYPE="notice" LINK_ID="2" />	
+	<!-- remarks -->
+	<RDAP_NOTICE NOTICE_ID="2" TITLE="remark" TYPE="remark" />
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="2"
+		REL_ID="2" REL_OBJECT_TYPE="ip" NOTICE_ID="2" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="2"
+		NOTICE_ID="2" DESCRIPTION="descriptionRemark" />
+	<RDAP_LINK LINK_ID="21" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="21" REL_ID="21"
+		REL_OBJECT_TYPE="remark" LINK_ID="21" />
+	<!-- status -->
+	<RDAP_IP_STATUS IP_STATUS_ID="21" IP_ID="2"
+		STATUS="2" />
+	<RDAP_IP_STATUS IP_STATUS_ID="22" IP_ID="2"
+		STATUS="2" />
+
+	<!-- 4 ip -->
+	<RDAP_IP IP_ID='4' HANDLE='4' NAME='ip4.cn' TYPE='ip4cn' PORT43='port43' LANG='en' 
+	 STARTLOWADDRESS='65535' VERSION='v4' ENDLOWADDRESS='65540' />
+	<RDAP_IP_STATUS IP_STATUS_ID="41" IP_ID="4"
+		STATUS="validated" />
+	<RDAP_IP_STATUS IP_STATUS_ID="42" IP_ID="4"
+		STATUS="vilated" />
+	
+	<!-- 3 ip -->
+	<RDAP_IP IP_ID='3' HANDLE='3' NAME='ip3.cn' TYPE='ip3cn' PORT43='port43' LANG='en' 
+	 STARTHIGHADDRESS='0' STARTLOWADDRESS='0'  VERSION='v4'
+	 ENDHIGHADDRESS='18446744073709551615'	ENDLOWADDRESS='4294967296' />
+	 <RDAP_IP_STATUS IP_STATUS_ID="31" IP_ID="3"
+		STATUS="3" />
+	<RDAP_IP_STATUS IP_STATUS_ID="32" IP_ID="3"
+		STATUS="3" />
+	
+	<!-- 5 ip -->
+	<RDAP_IP IP_ID='5' HANDLE='5' NAME='ip5cn' TYPE='ip5.cn' PORT43='port43' LANG='en' 
+	 STARTHIGHADDRESS='65536' STARTLOWADDRESS='0'  VERSION='v6'
+	 ENDHIGHADDRESS='65536'	ENDLOWADDRESS='4294967296' />
+	<RDAP_IP_STATUS IP_STATUS_ID="51" IP_ID="5"
+		STATUS="prohibit" />
+	<RDAP_IP_STATUS IP_STATUS_ID="52" IP_ID="5"
+		STATUS="forbidden" />
+
+	<!-- test for ip.truncated ips: more than 5 ips for 'ip.truncated*' -->
+	<RDAP_IP IP_ID='11' HANDLE='11' NAME='ip.truncated1.cn'
+		TYPE='ip.truncated1.cn' PORT43='port43' LANG='en' />
+	<RDAP_IP IP_ID='12' HANDLE='12' NAME='ip.truncated2.cn'
+		TYPE='ip.truncated2.cn' PORT43='port43' LANG='en' />
+	<RDAP_IP IP_ID='13' HANDLE='13' NAME='ip.truncated3.cn'
+		TYPE='ip.truncated3.cn' PORT43='port43' LANG='en' />
+	<RDAP_IP IP_ID='14' HANDLE='14' NAME='ip.truncated4.cn'
+		TYPE='ip.truncated4.cn' PORT43='port43' LANG='en' />
+	<RDAP_IP IP_ID='15' HANDLE='15' NAME='ip.truncated5.cn'
+		TYPE='ip.truncated5.cn' PORT43='port43' LANG='en' />
+	<RDAP_IP IP_ID='16' HANDLE='16' NAME='ip.truncated6.cn'
+		TYPE='ip.truncated6.cn' PORT43='port43' LANG='en' />
+</dataset>
