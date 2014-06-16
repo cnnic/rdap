@@ -55,7 +55,7 @@ public class IPAddress extends BaseModel {
     private List<String> ipAddressV6;
 
     /**
-     * an flag identify if the ipAddress existed.
+     * an flag identity if the ipAddress existed.
      */
     @JsonIgnore
     private boolean ipExisted;
