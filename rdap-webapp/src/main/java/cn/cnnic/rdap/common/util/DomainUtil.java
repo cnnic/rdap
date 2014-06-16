@@ -83,15 +83,15 @@ public final class DomainUtil {
     /**
      * arpa domain suffix.
      */
-    private static final String ARPA_SUFFIX = ".arpa";
+    public static final String ARPA_SUFFIX = ".arpa";
     /**
      * ipv4 arpa domain suffix.
      */
-    private static final String IPV4_ARPA_SUFFIX = "in-addr.arpa";
+    public static final String IPV4_ARPA_SUFFIX = "in-addr.arpa";
     /**
      * ipv6 arpa domain suffix.
      */
-    private static final String IPV6_ARPA_SUFFIX = "ip6.arpa";
+    public static final String IPV6_ARPA_SUFFIX = "ip6.arpa";
     /**
      * max ASCII code.
      */
@@ -207,11 +207,7 @@ public final class DomainUtil {
         if (domainName.equals(punyDomainName)
                 || domainNameWithoutLastPoint.equals(punyWithoutLastPoint)) {
             // all ASCII lable
-            if (isLdh(domainName)) {
-                return true;
-            } else {
-                return false;
-            }
+            return isLdh(domainName);
         }
         domainName = deleteLastPoint(domainName);
         if (StringUtils.isBlank(domainName) || !domainName.contains(".")) {

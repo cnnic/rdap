@@ -110,7 +110,7 @@ public class Domain extends BaseModel {
     /**
      * represents the IP network for which a reverse DNS domain is referenced.
      */
-    private List<Network> network;
+    private Network network;
     
     @Override
     public ModelType getObjectType() {
@@ -385,7 +385,7 @@ public class Domain extends BaseModel {
      * 
      * @return network.
      */
-    public List<Network> getNetwork() {
+    public Network getNetwork() {
         return network;
     }
 
@@ -395,7 +395,24 @@ public class Domain extends BaseModel {
      * @param network
      *            network.
      */
-    public void setNetwork(List<Network> network) {
+    public void setNetwork(Network network) {
         this.network = network;
+    }
+    
+    /**
+     * get domain type .
+     * 
+     * @return domain type : ARPA or DOMAIN .
+     *            
+     */    
+    public ModelType getDomainType() {
+        if (null == this.ldhName) {
+            return ModelType.DOMAIN;
+        } else if (ldhName.endsWith("ip6.arpa")) {
+            return ModelType.ARPA;
+        } else if (ldhName.endsWith("in-addr.arpa")) {
+            return ModelType.ARPA;
+        }
+        return ModelType.DOMAIN;
     }
 }

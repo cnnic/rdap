@@ -191,7 +191,7 @@ public class DomainQueryDaoTest extends BaseTest {
      * test query exist domain.
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("domain.xml")
     public void testQueryExistUnicodeDomain() {
         String unicodeName = "清华大学.中国";
@@ -225,4 +225,48 @@ public class DomainQueryDaoTest extends BaseTest {
         assertNull(domain);
     }
 
+    /**
+     * test query exist domain.
+     */
+    @Test
+    //@DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("domain.xml")
+    public void testQueryArpa() {
+        String domainName = "2.1.0.0.in-addr.arpa";
+        
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        domainName, domainName));
+        assertNotNull(domain);
+    }
+    
+    /**
+     * test query exist domain.
+     */
+    @Test
+    //@DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("domain.xml")
+    public void testQueryArpaIpv6() {
+        String domainName = "2.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
+        
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        domainName, domainName));
+        assertNull(domain);
+    }
+    
+    /**
+     * test query not exist domain.
+     */
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("domain.xml")
+    public void testQueryNotExistArpa() {
+        String domainName = "10.in-addr.arpa";
+        
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        domainName, domainName));
+        assertNull(domain);
+    }
 }
