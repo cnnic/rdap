@@ -98,7 +98,6 @@ public class IpQueryDaoImpl extends AbstractQueryDao<Ip> {
     public Ip query(QueryParam queryParam) {
         Ip ip = queryWithoutInnerObjects(queryParam);
         queryAndSetInnerObjectsWithoutNotice(ip);
-        queryAndSetInnerNotice(ip);
         return ip;
     }
 
@@ -148,20 +147,6 @@ public class IpQueryDaoImpl extends AbstractQueryDao<Ip> {
             return null;
         }
         return result;
-    }
-
-    /**
-     * query notice,and set to ip.
-     * 
-     * @param objIp
-     *            Ip object.
-     */
-    private void queryAndSetInnerNotice(Ip objIp) {
-        if (null == objIp) {
-            return;
-        }
-        List<Notice> notices = noticeDao.getAllNotices();
-        objIp.setNotices(notices);
     }
 
     /**
@@ -231,8 +216,10 @@ public class IpQueryDaoImpl extends AbstractQueryDao<Ip> {
                 String status = statusMapById.get(statusId);
                 if (null == status) {
                     status = rs.getString("STATUS");
-                    statusMapById.put(statusId, status);
-                    result.add(status);
+                    if (!result.contains(status)) {
+                        statusMapById.put(statusId, status);
+                        result.add(status);
+                    }
                 }
             }
             return result;

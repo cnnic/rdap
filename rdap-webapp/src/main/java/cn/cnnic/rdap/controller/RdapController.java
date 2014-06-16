@@ -104,10 +104,10 @@ public class RdapController {
      */
     @Autowired
     private AccessControlManager accessControlManager;
-    
+
     /**
      * query entity.
-     *
+     * 
      * @param entity
      *            entity.
      * @param request
@@ -396,7 +396,7 @@ public class RdapController {
     @RequestMapping(value = { "/ip/{ipAddr}/{mask}" },
             method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryIpWithPlus(@PathVariable String ipAddr,
+    public ResponseEntity queryIpWithMask(@PathVariable String ipAddr,
             @PathVariable String mask) {
         ResponseEntity res = queryIpAddress(ipAddr, mask);
         return res;
@@ -441,18 +441,21 @@ public class RdapController {
         String strIpVersion = "";
         boolean isV4 = IpUtil.isIpV4StrWholeValid(strIp);
         boolean isV6 = IpUtil.isIpV6StrValid(strIp);
+        final String ipV4 = "v4";
+        final String ipV6 = "v6";
         if (!isV4 && !isV6) {
             return RestResponseUtil.createResponse400();
-        } else if (isV4) {
+        }
+        if (isV4) {
             if (numMask > maskHighV4 || numMask < maskLow) {
                 return RestResponseUtil.createResponse400();
             }
-            strIpVersion = "v4";
+            strIpVersion = ipV4;
         } else if (isV6) {
             if (numMask > maskHighV6 || numMask < maskLow) {
                 return RestResponseUtil.createResponse400();
             }
-            strIpVersion = "v6";
+            strIpVersion = ipV6;
         }
         StringUtils.lowerCase(strIp);
         // query ip
