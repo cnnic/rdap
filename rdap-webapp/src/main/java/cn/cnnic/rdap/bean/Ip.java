@@ -38,34 +38,47 @@ import org.apache.commons.lang.StringUtils;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * represents information regarding nameserver used in both forward and reverse
- * DNS.
+ * represents information regarding ip used in both forward and reverse DNS.
  * 
  * @author weijunkai
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "ldhName",
-        "unicodeName", "status", "ipAddresses", "entities", "remarks", "links",
-        "port43", "events", "lang" })
-public class Nameserver extends BaseModel {
+@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "startAddress",
+        "endAddress", "ipVersion", "name", "type", "country", "parentHandle",
+        "status", "entities", "remarks", "links", "port43", "events", "lang" })
+public class Ip extends BaseModel {
     /**
-     * representing a registry unique identifier of the nameserver object instance.
+     * representing a registry unique identifier of the ip object instance.
      */
     private String handle;
     /**
-     * Textual representations of DNS names where the labels of the nameserver are
-     * all "letters, digits, hyphen" labels as described by [RFC5890].
+     * startAddress labels as described by [//].
      */
-    private String ldhName;
+    private String startAddress;
     /**
-     * Textual representations of DNS names where one or more of the labels are
-     * U-labels as described by [RFC5890].
+     * endAddress as described by [//].
      */
-    private String unicodeName;
+    private String endAddress;
     /**
-     * represents the IPAddress for nameserver.
+     * represents the IPVersion.
      */
-    private IPAddress ipAddresses;
+    private String ipVersion;
+    /**
+     * represents the name.
+     */
+    private String name;
+    /**
+     * represents the type.
+     */
+    private String type;
+    /**
+     * represents the country.
+     */
+    private String country;
+    /**
+     * represents the parentHandle.
+     */
+    private String parentHandle;
     /**
      * entities.
      */
@@ -93,7 +106,7 @@ public class Nameserver extends BaseModel {
 
     @Override
     public ModelType getObjectType() {
-        return ModelType.NAMESERVER;
+        return ModelType.IP;
     }
 
     /**
@@ -106,13 +119,10 @@ public class Nameserver extends BaseModel {
         if (StringUtils.isBlank(statusStr)) {
             return;
         }
-        statusStr = StringUtils.trim(statusStr);
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        if(!this.status.contains(statusStr)){
-            this.status.add(statusStr);
-        }
+        this.status.add(statusStr);
     }
 
     /**
@@ -135,41 +145,41 @@ public class Nameserver extends BaseModel {
     }
 
     /**
-     * get ldhName.
+     * get start ipAddress.
      * 
-     * @return domain name in LDH format
+     * @return start address of IP
      */
-    public String getLdhName() {
-        return ldhName;
+    public String getStartAddress() {
+        return startAddress;
     }
 
     /**
-     * set domain name in LDH format.
+     * set start ipAddress.
      * 
-     * @param ldhName
-     *            LHD formated domain name
+     * @param startAddress
+     *            start address of IP
      */
-    public void setLdhName(String ldhName) {
-        this.ldhName = ldhName;
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
     }
 
     /**
-     * get domain name in unicode format.
+     * get endAddress of IP.
      * 
-     * @return domain name in unicode format
+     * @return endAddress
      */
-    public String getUnicodeName() {
-        return unicodeName;
+    public String getEndAddress() {
+        return endAddress;
     }
 
     /**
-     * set domain name in unicode format.
+     * set endAddress.
      * 
-     * @param unicodeName
-     *            domain name in unicode format
+     * @param endAddress
+     *            endAddress of IP
      */
-    public void setUnicodeName(String unicodeName) {
-        this.unicodeName = unicodeName;
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
     }
 
     /**
@@ -287,21 +297,93 @@ public class Nameserver extends BaseModel {
     }
 
     /**
-     * get IPAddress.
+     * get IPVersion.
      * 
-     * @return ipAddresses.
+     * @return ipVersion.
      */
-    public IPAddress getIpAddresses() {
-        return ipAddresses;
+    public String getIpVersion() {
+        return ipVersion;
     }
 
     /**
-     * set IPAddresses.
+     * set ipVersion.
      * 
-     * @param ipAddresses
-     *            for set.
+     * @param ipVersion
+     *            ip for set.
      */
-    public void setIpAddresses(IPAddress ipAddresses) {
-        this.ipAddresses = ipAddresses;
+    public void setIpVersion(String ipVersion) {
+        this.ipVersion = ipVersion;
+    }
+    /**
+     * get name.
+     * 
+     * @return name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * set name.
+     * 
+     * @param name
+     *            name for set.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    /**
+     * get type.
+     * 
+     * @return type.
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * set type.
+     * 
+     * @param type
+     *            type for set.
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+    /**
+     * get country.
+     * 
+     * @return country.
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * set country.
+     * 
+     * @param country
+     *            country for set.
+     */
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    /**
+     * get parentHandle.
+     * 
+     * @return parentHandle.
+     */
+    public String getParentHandle() {
+        return parentHandle;
+    }
+
+    /**
+     * set parentHandle.
+     * 
+     * @param parentHandle
+     *            parentHandle for set.
+     */
+    public void setParentHandle(String parentHandle) {
+        this.parentHandle = parentHandle;
     }
 }

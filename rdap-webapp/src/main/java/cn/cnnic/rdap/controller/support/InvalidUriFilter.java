@@ -86,15 +86,11 @@ public class InvalidUriFilter implements Filter {
         }
         try {
             decodeUri = urlDecode(uri);
-            if (decodeUri.contains(" ")) {
-                writeError400Response(response);
-                return;
-            }
         } catch (Exception e) {
             writeError400Response(response);
             return;
         }
-        if (decodeUri.contains("//") || decodeUri.contains("ip/::/")) {
+        if (decodeUri.contains("//")) {// || decodeUri.contains("ip/::/")) {
             writeError400Response(response);
             return;
         }

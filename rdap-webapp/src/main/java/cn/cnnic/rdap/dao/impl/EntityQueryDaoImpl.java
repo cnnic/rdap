@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -51,6 +53,8 @@ import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.BaseModel;
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.EntityAddress;
+import cn.cnnic.rdap.bean.EntityTel;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelStatus;
@@ -60,18 +64,25 @@ import cn.cnnic.rdap.bean.PageBean;
 import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
+import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.common.util.JcardUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * entity query DAO.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 @Repository
 public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
+
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(EntityQueryDaoImpl.class);
 
     /**
      * publicId dao.
@@ -107,6 +118,16 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      */
     @Autowired
     private QueryDao<Network> networkQueryDao;
+    /**
+     * entityTelDao.
+     */
+    @Autowired
+    private EntityTelDao entityTelDao;
+    /**
+     * entityAddressDao.
+     */
+    @Autowired
+    private EntityAddressDao entityAddressDao;
 
     @Override
     public Entity query(QueryParam queryParam) {
@@ -184,28 +205,16 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      *            entity.
      */
     private void convertAndSetVcardArray(Entity entity) {
-        //
+        List<EntityTel> telephones = entityTelDao.query(entity);
+        entity.setTelephones(telephones);
+        List<EntityAddress> addresses = entityAddressDao.query(entity);
+        entity.setAddresses(addresses);
         entity.setVcardArray(JcardUtil.toJcardString(entity));
     }
 
     /**
-     * convert entities to vcard and set to entity.
-     * 
-     * @param entities
-     *            entities.
-     */
-    private void convertAndSetVcardArray(List<Entity> entities) {
-        if (null == entities) {
-            return;
-        }
-        for (Entity entity : entities) {
-            convertAndSetVcardArray(entity);
-        }
-    }
-
-    /**
      * query and set entity status.
-     *
+     * 
      * @param entities
      *            entity list.
      */
@@ -225,7 +234,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
 
     /**
      * query entity status.
-     *
+     * 
      * @param entityIds
      *            entity id list.
      * @return entity status list.
@@ -263,6 +272,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         }
         convertAndSetVcardArray(entity);
         queryAndSetStatus(entity);
+//        queryAndSetEntities(entity);
         Long entityId = entity.getId();
         List<PublicId> publicIds =
                 publicIdQueryDao
@@ -274,20 +284,84 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setLinks(links);
+        queryAndSetEvents(entity, entityId);
+        List<Network> networks =
+                networkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
+        entity.setNetworks(networks);
+        List<Autnum> autnums =
+                autnumQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
+        entity.setAutnums(autnums);
+        setTruncatedIfTooMuchResult(entity);
+    }
+
+    /**
+     * query and set events and asEventActor.
+     * @param entity entity.
+     * @param entityId entityId.
+     */
+    private void queryAndSetEvents(Entity entity, Long entityId) {
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setEvents(events);
-        List<Network> networks =
-                networkQueryDao.queryAsInnerObjects(entityId, ModelType.IP);
-        entity.setNetworks(networks);
-        List<Autnum> autnums =
-                autnumQueryDao.queryAsInnerObjects(entityId, ModelType.AUTNUM);
-        entity.setAutnums(autnums);
+        List<Event> eventsAsActor = new ArrayList<Event>();
+        List<Event> eventsNotAsActor = new ArrayList<Event>();
+        for(Event event:events){
+            if(entity.getHandle().equals(event.getEventActor())){
+                LOGGER.debug("asEventActor,entityId:{},eventId:{}",entityId,
+                        event.getId());
+                event.setEventActor(null);
+                eventsAsActor.add(event);
+            }else{
+                eventsNotAsActor.add(event);
+            }
+        }
+        entity.setEvents(eventsNotAsActor);
+        entity.setAsEventActor(eventsAsActor);
+    }
+
+    /**
+     * query and set entities.
+     * 
+     * @param entity
+     *            entity.
+     */
+    private void queryAndSetEntities(Entity entity) {
+        List<Entity> entities =
+                queryAsInnerObjects(entity.getId(), ModelType.ENTITY);
+        entity.setEntities(entities);
+    }
+
+    /**
+     * set truncated as true if inner networks or autnums is exceed max size.
+     * 
+     * @param entity
+     *            entity.
+     */
+    private void setTruncatedIfTooMuchResult(Entity entity) {
+        List<Network> networks = entity.getNetworks();
+        List<Autnum> autnums = entity.getAutnums();
+        int maxInnerObjSize = RdapProperties.getMaxsizeSearch().intValue();
+        if (null != networks && networks.size() > maxInnerObjSize) {
+            LOGGER.debug(
+                    "networks exceed max size:{},truncated.max size is {}",
+                    networks.size(), maxInnerObjSize);
+            List<Network> truncatedNetworks =
+                    networks.subList(0, maxInnerObjSize);
+            entity.setNetworks(truncatedNetworks);
+            entity.setResultsTruncated(true);
+        }
+        if (null != autnums && autnums.size() > maxInnerObjSize) {
+            LOGGER.debug("autnums exceed max size:{},truncated.max size is {}",
+                    autnums.size(), maxInnerObjSize);
+            List<Autnum> truncatedAutnums = autnums.subList(0, maxInnerObjSize);
+            entity.setAutnums(truncatedAutnums);
+            entity.setResultsTruncated(true);
+        }
     }
 
     /**
      * query entity, without inner objects.Role from REL_ENTITY_REGISTRATION,
-     * contain all role related to this entity.
+     * contain all role related is entity.
      * 
      * @param queryParam
      *            query parameter.
@@ -319,8 +393,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * query entity, without inner objects,for query as inner object. contain
-     * all role related to outer model.
+     * query entity, without inner objects,for query as inner object.
      * 
      * @param outerObjectId
      *            outerObjectId.
@@ -330,12 +403,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      */
     private List<Entity> queryWithoutInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        final String sql =
-                "select * from RDAP_ENTITY entity "
-                        + " inner join REL_ENTITY_REGISTRATION rel "
-                        + " on entity.ENTITY_ID = rel.ENTITY_ID "
-                        + " where entity.ENTITY_ID= ? "
-                        + " and rel.REL_OBJECT_TYPE= ? ";
+        final String sql = generateSqlForQueryRelEntity(outerModelType);
         List<Entity> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
@@ -351,10 +419,41 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * entity ResultSetExtractor, extract data from ResultSet.
-     *
-     * @author jiashuo
-     *
+     * generate sql for query REL_ENTITY_REGISTRATION by REL_ID. Recode for
+     * rel.ENTITY_ID = rel.REL_ID and rel.REL_OBJECT_TYPE= 'entity' represents
+     * entity self relation,for store entity role such as 'registrar'.
+     * 
+     * @param outerModelType
+     *            outerModelType.
+     * @return sql.
+     */
+    private String generateSqlForQueryRelEntity(ModelType outerModelType) {
+        final String sqlForNotEntityRel =
+                "select * from RDAP_ENTITY entity "
+                        + " inner join REL_ENTITY_REGISTRATION rel "
+                        + " on entity.ENTITY_ID = rel.ENTITY_ID "
+                        + " where rel.REL_ID= ? "
+                        + " and rel.ENTITY_ID != rel.REL_ID "
+                        + " and rel.REL_OBJECT_TYPE= ? ";
+        final String sqlForEntityRel =
+                "select * from RDAP_ENTITY entity "
+                        + " inner join REL_ENTITY_REGISTRATION rel "
+                        + " on entity.ENTITY_ID = rel.ENTITY_ID "
+                        + " where rel.REL_ID= ? "
+                        + " and rel.ENTITY_ID != rel.REL_ID "
+                        + " and rel.REL_OBJECT_TYPE= ? ";
+        if (ModelType.ENTITY.equals(outerModelType)) {
+            return sqlForEntityRel;
+        }
+        return sqlForNotEntityRel;
+    }
+
+    /**
+     * entity ResultSetExtractor, extract data ResultSet.
+     * 
+     * 
+     * or jiashuo
+     * 
      */
     class EntityResultSetExtractor implements ResultSetExtractor<List<Entity>> {
         @Override
@@ -370,8 +469,8 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * extract entity from ResultSet.
-     *
+     * extract entity ResultSet.
+     * 
      * @param rs
      *            ResultSet.
      * @param entity

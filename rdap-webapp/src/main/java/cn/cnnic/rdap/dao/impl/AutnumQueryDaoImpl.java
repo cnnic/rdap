@@ -92,8 +92,11 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     @Override
     public List<Autnum> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
-        List<Autnum> autnums =
-                queryWithoutInnerObjects(outerObjectId, outerModelType);
+        if (!ModelType.ENTITY.equals(outerModelType)) {
+            throw new UnsupportedOperationException(
+                    "only support ENTITY modelType.");
+        }
+        List<Autnum> autnums = queryWithoutInnerObjects(outerObjectId);
         queryAndSetInnerObjects(autnums);
         return autnums;
     }
@@ -114,23 +117,21 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     }
 
     /**
-     * query autnum without inner objects.
+     * query autnum without inner objects.Only in ENTITY!
      *
      * @param outerObjectId
-     *            object id of outer object.
-     * @param outerModelType
-     *            model type of outer object.
+     *            entity id.
      * @return autnum list.
      */
-    private List<Autnum> queryWithoutInnerObjects(final Long outerObjectId,
-            final ModelType outerModelType) {
+    private List<Autnum> queryWithoutInnerObjects(final Long outerObjectId) {
         final String sql =
                 "select * from RDAP_AUTNUM autnum inner join "
                         + " REL_ENTITY_REGISTRATION rel "
                         + " on autnum.AS_ID = rel.REL_ID "
                         + " left outer join RDAP_AUTNUM_STATUS status "
                         + " on autnum.AS_ID = status.AS_ID "
-                        + " where rel.ENTITY_ID=? and REL_OBJECT_TYPE=?";
+                        + " where rel.ENTITY_ID=? and REL_OBJECT_TYPE=?"
+                        + " order by autnum.HANDLE ";
         List<Autnum> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
@@ -138,7 +139,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setLong(1, outerObjectId);
-                        ps.setString(2, outerModelType.getName());
+                        ps.setString(2, ModelType.AUTNUM.getName());
                         return ps;
                     }
                 }, new AutnumResultSetExtractor());

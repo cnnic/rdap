@@ -127,10 +127,13 @@ public class Domain extends BaseModel {
         if (StringUtils.isBlank(statusStr)) {
             return;
         }
+        statusStr = StringUtils.trim(statusStr);
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        this.status.add(statusStr);
+        if(!this.status.contains(statusStr)){
+            this.status.add(statusStr);
+        }
     }
 
     /**
@@ -138,6 +141,7 @@ public class Domain extends BaseModel {
      * 
      * @return handle
      */
+    @Override
     public String getHandle() {
         return handle;
     }
@@ -148,6 +152,7 @@ public class Domain extends BaseModel {
      * @param handle
      *            handle of domain
      */
+    @Override
     public void setHandle(String handle) {
         this.handle = handle;
     }

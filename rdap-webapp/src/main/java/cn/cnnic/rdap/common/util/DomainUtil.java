@@ -184,6 +184,9 @@ public final class DomainUtil {
         if (StringUtils.isBlank(domainName) || !domainName.contains(".")) {
             return false;
         }
+        if (domainName.contains(" ")) {
+            return false;
+        }
         if (!isArpaTldAndLabelIsValid(domainName)) {
             return false;
         }
@@ -273,11 +276,14 @@ public final class DomainUtil {
      * @return domain puny name.
      */
     public static String geneDomainPunyName(String domainName) {
+        if(StringUtils.isBlank(domainName)){
+            return domainName;
+        }
         return IDN.toASCII(domainName); // long lable exception
     }
 
     /**
-     * decode and trim string,and replace ASCII char to lower case.
+     * decode,and replace ASCII char to lower case.
      * 
      * @param str
      *            string.
@@ -285,7 +291,7 @@ public final class DomainUtil {
      */
     public static String decodeAndTrimAndReplaceAsciiToLowercase(String str) {
         if (StringUtils.isBlank(str)) {
-            return StringUtils.trim(str);
+            return str;
         }
         str = urlDecode(str);
         str = StringUtils.trim(str);

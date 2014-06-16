@@ -111,16 +111,21 @@ public class Autnum extends BaseModel {
         if (StringUtils.isBlank(statusStr)) {
             return;
         }
+        statusStr = StringUtils.trim(statusStr);
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        this.status.add(statusStr);
+        if(!this.status.contains(statusStr)){
+            this.status.add(statusStr);
+        }
     }
 
+    @Override
     public String getHandle() {
         return handle;
     }
 
+    @Override
     public void setHandle(String handle) {
         this.handle = handle;
     }
