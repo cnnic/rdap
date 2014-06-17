@@ -259,7 +259,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                 network.setId(networkId);
                 network.setHandle(rs.getString("HANDLE"));
                 setIpVersionAndStartEndAddress(rs, network);
-                network.setName(rs.getString("ARPA_NAME"));
+                network.setName(rs.getString("NAME"));
                 network.setType(rs.getString("TYPE"));
                 network.setCountry(rs.getString("COUNTRY"));
                 network.setParentHandle(rs.getString("PARENT_HANDLE"));
