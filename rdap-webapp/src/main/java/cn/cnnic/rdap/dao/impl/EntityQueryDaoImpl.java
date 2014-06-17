@@ -137,6 +137,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         }
         queryAndSetInnerObjectsWithoutEntities(entity);
         queryAndSetInnerEntities(entity);
+        queryAndSetNetworksAndAs(entity);
         return entity;
     }
 
@@ -187,6 +188,24 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         return entityCount;
     }
 
+    /**
+     * query and set network and autnum.
+     * 
+     * @param entity
+     *            entity.
+     */
+    private void queryAndSetNetworksAndAs(Entity entity) {
+        List<Network> networks =
+                networkQueryDao.queryAsInnerObjects(entity.getId(),
+                        ModelType.ENTITY);
+        entity.setNetworks(networks);
+        List<Autnum> autnums =
+                autnumQueryDao.queryAsInnerObjects(entity.getId(),
+                        ModelType.ENTITY);
+        entity.setAutnums(autnums);
+        setTruncatedIfTooMuchResult(entity);
+    }
+    
     /**
      * query inner objects of entity,and set fill them to entity.
      * 
@@ -290,13 +309,6 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                 linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setLinks(links);
         queryAndSetEvents(entity, entityId);
-        List<Network> networks =
-                networkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        entity.setNetworks(networks);
-        List<Autnum> autnums =
-                autnumQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        entity.setAutnums(autnums);
-        setTruncatedIfTooMuchResult(entity);
     }
 
     /**

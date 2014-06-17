@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -410,6 +411,7 @@ public class Domain extends BaseModel {
      * @return domain type : ARPA or DOMAIN .
      *            
      */    
+    @JsonIgnore
     public ModelType getDomainType() {
         if (null == this.ldhName) {
             return ModelType.DOMAIN;
