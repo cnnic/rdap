@@ -123,7 +123,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Autowired
     @Qualifier("networkQueryDaoImpl")
-    private NetworkQueryDaoImpl networkQueryDao;
+    private QueryDao<Network> networkQueryDao;
     
     /**
      * entityQueryDao.
@@ -377,7 +377,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 && StringUtils.isNotEmpty(domain.getLdhName())) {
             final Arpa arpa = Arpa.decodeArpa(domain.getLdhName());
             
-            Network network = networkQueryDao.queryNetworkForArpa(arpa);
+            Network network = networkQueryDao.query(arpa.toNetworkQueryParam());
             domain.setNetwork(network);
         }
     }
