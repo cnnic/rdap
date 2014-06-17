@@ -61,7 +61,7 @@ public class EntityAddress extends BaseModel {
      */
     private String extendedAddress;
     /**
-     * street
+     * street.
      */
     private String streetAddress;
     /**
@@ -77,7 +77,7 @@ public class EntityAddress extends BaseModel {
      */
     private String postalCode;
     /**
-     * country
+     * country.
      */
     private String country;
 

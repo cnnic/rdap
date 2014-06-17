@@ -30,11 +30,13 @@
  */
 package cn.cnnic.rdap.bean;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
  * telephone number of entity.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 public class EntityTel extends BaseModel {
 
@@ -59,9 +61,15 @@ public class EntityTel extends BaseModel {
      */
     private String extNumber;
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(globalNumber).append(extNumber)
+                .append(pref).toString();
+    }
+
     /**
      * get entityId.
-     *
+     * 
      * @return entityId.
      */
     public Long getEntityId() {
@@ -70,7 +78,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * set entityId.
-     *
+     * 
      * @param entityId
      *            entityId.
      */
@@ -80,7 +88,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * get pref.
-     *
+     * 
      * @return pref.
      */
     public Integer getPref() {
@@ -89,7 +97,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * set pref.
-     *
+     * 
      * @param pref
      *            pref.
      */
@@ -99,7 +107,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * get types.
-     *
+     * 
      * @return types.
      */
     public String getTypes() {
@@ -108,7 +116,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * set types.
-     *
+     * 
      * @param types
      *            types.
      */
@@ -118,7 +126,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * get globalNumber.
-     *
+     * 
      * @return globalNumber.
      */
     public String getGlobalNumber() {
@@ -127,7 +135,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * set globalNumber.
-     *
+     * 
      * @param globalNumber
      *            globalNumber.
      */
@@ -137,7 +145,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * get extNumber.
-     *
+     * 
      * @return extNumber.
      */
     public String getExtNumber() {
@@ -146,7 +154,7 @@ public class EntityTel extends BaseModel {
 
     /**
      * set extNumber.
-     *
+     * 
      * @param extNumber
      *            extNumber.
      */

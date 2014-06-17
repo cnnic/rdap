@@ -51,6 +51,7 @@ import cn.cnnic.rdap.bean.Arpa;
 import cn.cnnic.rdap.bean.BaseModel;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainQueryParam;
+import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelStatus;
@@ -58,7 +59,6 @@ import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.Network.IpVersion;
-import cn.cnnic.rdap.bean.Notice;
 import cn.cnnic.rdap.bean.PageBean;
 import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.bean.QueryParam;
@@ -66,7 +66,6 @@ import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.bean.SecureDns;
 import cn.cnnic.rdap.bean.Variants;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
-import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
@@ -77,12 +76,6 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
-    /**
-     * notice dao.
-     */
-    @Autowired
-    @Qualifier("noticeDaoImpl")
-    private NoticeDao noticeDao;
 
     /**
      * variant dao.
@@ -133,6 +126,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     private NetworkQueryDaoImpl networkQueryDao;
     
     /**
+     * entityQueryDao.
+     */
+    @Autowired
+    private QueryDao<Entity> entityQueryDao;
+    
+    /**
      * query domain (RIR or DNR).
      *
      * @param queryParam
@@ -146,8 +145,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         // RIR domain, like 1.0.0.in-addr.arpa
         if (domainQueryParam.isRirDomain()) {
             Domain domain = queryArpaWithoutInnerObjects(queryParam);
-            queryAndSetInnerObjectsWithoutNotice(domain);
-            queryAndSetInnerNotice(domain);
+            queryAndSetInnerObjects(domain);
             queryAndSetInnerNetwork(domain);
 
             return domain;
@@ -156,8 +154,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
             // LDH domain for DNR
             Domain domain = queryDomainWithoutInnerObjects(queryParam);
-            queryAndSetInnerObjectsWithoutNotice(domain);
-            queryAndSetInnerNotice(domain);
+            queryAndSetInnerObjects(domain);
             return domain;
         }
     }
@@ -316,7 +313,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return;
         }
         for (Domain domain : domains) {
-            queryAndSetInnerObjectsWithoutNotice(domain);
+            queryAndSetInnerObjects(domain);
         }
     }
 
@@ -326,7 +323,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @param domain
      *            inner objects will be filled.
      */
-    private void queryAndSetInnerObjectsWithoutNotice(Domain domain) {
+    private void queryAndSetInnerObjects(Domain domain) {
         if (null == domain) {
             return;
         }
@@ -359,7 +356,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEvents(events);
-        
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(domainId, type);
+        domain.setEntities(entities);
     }
 
     /**
@@ -383,20 +382,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         }
     }
     
-    /**
-     * query notice,and set to domain.
-     *
-     * @param domain
-     *            domain.
-     */
-    private void queryAndSetInnerNotice(Domain domain) {
-        if (null == domain) {
-            return;
-        }
-        List<Notice> notices = noticeDao.getAllNotices();
-        domain.setNotices(notices);
-    }
-
     /**
      * query domain, without inner objects.
      *

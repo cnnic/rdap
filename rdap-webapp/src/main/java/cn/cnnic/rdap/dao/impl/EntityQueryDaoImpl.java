@@ -135,19 +135,24 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         if (null == entity) {
             return entity;
         }
-        queryAndSetInnerObjects(entity);
+        queryAndSetInnerObjectsWithoutEntities(entity);
+        queryAndSetInnerEntities(entity);
+        queryAndSetNetworksAndAs(entity);
         return entity;
     }
 
     @Override
     public List<Entity> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
+        LOGGER.debug("queryAsInnerObjects,outerObjectId:{},outerModelType:{}",
+                outerObjectId, outerModelType.getName());
         List<Entity> entities =
                 queryWithoutInnerObjects(outerObjectId, outerModelType);
+        LOGGER.debug("queryAsInnerObjects,results:{}", entities);
         if (null == entities) {
             return entities;
         }
-        queryAndSetInnerObjects(entities);
+        queryAndSetInnerObjectsWithoutEntities(entities);
         return entities;
     }
 
@@ -155,7 +160,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     public List<Entity> search(QueryParam queryParam) {
         List<Entity> entities = searchWithoutInnerObjects(queryParam);
         queryAndSetEntityStatus(entities);
-        queryAndSetInnerObjects(entities);
+        queryAndSetInnerObjectsWithoutEntities(entities);
         return entities;
     }
 
@@ -184,17 +189,35 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
+     * query and set network and autnum.
+     * 
+     * @param entity
+     *            entity.
+     */
+    private void queryAndSetNetworksAndAs(Entity entity) {
+        List<Network> networks =
+                networkQueryDao.queryAsInnerObjects(entity.getId(),
+                        ModelType.ENTITY);
+        entity.setNetworks(networks);
+        List<Autnum> autnums =
+                autnumQueryDao.queryAsInnerObjects(entity.getId(),
+                        ModelType.ENTITY);
+        entity.setAutnums(autnums);
+        setTruncatedIfTooMuchResult(entity);
+    }
+    
+    /**
      * query inner objects of entity,and set fill them to entity.
      * 
      * @param entities
      *            entities.
      */
-    private void queryAndSetInnerObjects(List<Entity> entities) {
+    private void queryAndSetInnerObjectsWithoutEntities(List<Entity> entities) {
         if (null == entities) {
             return;
         }
         for (Entity entity : entities) {
-            queryAndSetInnerObjects(entity);
+            queryAndSetInnerObjectsWithoutEntities(entity);
         }
     }
 
@@ -266,13 +289,14 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      * @param entity
      *            inner objects will be filled.
      */
-    private void queryAndSetInnerObjects(Entity entity) {
+    private void queryAndSetInnerObjectsWithoutEntities(Entity entity) {
         if (null == entity) {
             return;
         }
+        LOGGER.debug("queryAndSetInnerObjectsWithoutEntities,entityHandle:{}",
+                entity.getHandle());
         convertAndSetVcardArray(entity);
         queryAndSetStatus(entity);
-//        queryAndSetEntities(entity);
         Long entityId = entity.getId();
         List<PublicId> publicIds =
                 publicIdQueryDao
@@ -285,19 +309,15 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                 linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         entity.setLinks(links);
         queryAndSetEvents(entity, entityId);
-        List<Network> networks =
-                networkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        entity.setNetworks(networks);
-        List<Autnum> autnums =
-                autnumQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        entity.setAutnums(autnums);
-        setTruncatedIfTooMuchResult(entity);
     }
 
     /**
      * query and set events and asEventActor.
-     * @param entity entity.
-     * @param entityId entityId.
+     * 
+     * @param entity
+     *            entity.
+     * @param entityId
+     *            entityId.
      */
     private void queryAndSetEvents(Entity entity, Long entityId) {
         List<Event> events =
@@ -305,13 +325,13 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setEvents(events);
         List<Event> eventsAsActor = new ArrayList<Event>();
         List<Event> eventsNotAsActor = new ArrayList<Event>();
-        for(Event event:events){
-            if(entity.getHandle().equals(event.getEventActor())){
-                LOGGER.debug("asEventActor,entityId:{},eventId:{}",entityId,
+        for (Event event : events) {
+            if (entity.getHandle().equals(event.getEventActor())) {
+                LOGGER.debug("asEventActor,entityId:{},eventId:{}", entityId,
                         event.getId());
                 event.setEventActor(null);
                 eventsAsActor.add(event);
-            }else{
+            } else {
                 eventsNotAsActor.add(event);
             }
         }
@@ -325,7 +345,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      * @param entity
      *            entity.
      */
-    private void queryAndSetEntities(Entity entity) {
+    private void queryAndSetInnerEntities(Entity entity) {
+        LOGGER.debug("queryAndSetInnerEntities,entityHandle:{}",
+                entity.getHandle());
         List<Entity> entities =
                 queryAsInnerObjects(entity.getId(), ModelType.ENTITY);
         entity.setEntities(entities);
@@ -433,7 +455,6 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                         + " inner join REL_ENTITY_REGISTRATION rel "
                         + " on entity.ENTITY_ID = rel.ENTITY_ID "
                         + " where rel.REL_ID= ? "
-                        + " and rel.ENTITY_ID != rel.REL_ID "
                         + " and rel.REL_OBJECT_TYPE= ? ";
         final String sqlForEntityRel =
                 "select * from RDAP_ENTITY entity "
@@ -493,9 +514,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
 
     /**
      * entity ResultSetExtractor, extract data from ResultSet.
-     *
+     * 
      * @author jiashuo
-     *
+     * 
      */
     class EntityWithRoleResultSetExtractor implements
             ResultSetExtractor<List<Entity>> {
@@ -540,8 +561,8 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      *            model list.
      */
     private void queryAndSetStatus(List<Entity> models) {
-        List<Long> domainIds = getModelIds(models);
-        List<ModelStatus> statusList = queryStatus(domainIds);
+        List<Long> entityIds = getModelIds(models);
+        List<ModelStatus> statusList = queryStatus(entityIds);
         for (ModelStatus status : statusList) {
             BaseModel obj =
                     BaseModel.findObjectFromListById(models, status.getId());
@@ -564,10 +585,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         if (null == modelIds || modelIds.size() == 0) {
             return new ArrayList<ModelStatus>();
         }
-        final String modelIdsJoinedByComma = StringUtils.join(modelIds, ",");
+        final String idsJoinedByComma = StringUtils.join(modelIds, ",");
         final String sqlTpl =
                 "select * from RDAP_ENTITY_STATUS where ENTITY_ID in (%s)";
-        final String sql = String.format(sqlTpl, modelIdsJoinedByComma);
+        final String sql = String.format(sqlTpl, idsJoinedByComma);
         List<ModelStatus> result =
                 jdbcTemplate.query(sql, new RowMapper<ModelStatus>() {
                     @Override
@@ -584,7 +605,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     /**
      * 
      * @author jiashuo
-     *
+     * 
      */
     class CountResultSetExtractor implements ResultSetExtractor<Long> {
         @Override
@@ -599,7 +620,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
 
     /**
      * search domain, without inner objects.
-     *
+     * 
      * @param params
      *            query parameter.
      * @return domain list.
