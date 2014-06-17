@@ -46,6 +46,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.Autnum;
+import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
@@ -56,9 +57,9 @@ import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * autnum query DAO.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 @Repository
 public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
@@ -81,12 +82,33 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
 
+    /**
+     * entityQueryDao.
+     */
+    @Autowired
+    private QueryDao<Entity> entityQueryDao;
+
     @SuppressWarnings("unchecked")
     @Override
     public Autnum query(QueryParam queryParam) {
         Autnum autnum = queryWithoutInnerObjects(queryParam);
         queryAndSetInnerObjects(autnum);
+        queryAndSetEntities(autnum);
         return autnum;
+    }
+
+    /**
+     * query and set entities.
+     * @param autnum autnum.
+     */
+    private void queryAndSetEntities(Autnum autnum) {
+        if (null == autnum) {
+            return;
+        }
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(autnum.getId(),
+                        ModelType.AUTNUM);
+        autnum.setEntities(entities);
     }
 
     @Override
@@ -103,7 +125,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
 
     /**
      * query inner objects of autnums,and set them to autnum.
-     *
+     * 
      * @param autnums
      *            autnums.
      */
@@ -118,7 +140,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
 
     /**
      * query autnum without inner objects.Only in ENTITY!
-     *
+     * 
      * @param outerObjectId
      *            entity id.
      * @return autnum list.
@@ -148,7 +170,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
 
     /**
      * query inner objects of autnum,and set them to autnum.
-     *
+     * 
      * @param autnum
      *            autnum.
      */
@@ -170,7 +192,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
 
     /**
      * query autnum, without inner objects.
-     *
+     * 
      * @param queryParam
      *            query parameter
      * @return autnum
@@ -204,9 +226,9 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
 
     /**
      * autnum ResultSetExtractor, extract data from ResultSet.
-     *
+     * 
      * @author jiashuo
-     *
+     * 
      */
     class AutnumResultSetExtractor implements ResultSetExtractor<List<Autnum>> {
         @Override

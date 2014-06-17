@@ -99,8 +99,12 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Override
     public List<Network> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
+        if (!ModelType.ENTITY.equals(outerModelType)) {
+            throw new UnsupportedOperationException(
+                    "only support ENTITY modelType.");
+        }
         List<Network> networks =
-                queryWithoutInnerObjects(outerObjectId, outerModelType);
+                queryWithoutInnerObjectsForEntity(outerObjectId);
         queryAndSetInnerObjects(networks);
         return networks;
     }
@@ -329,30 +333,14 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     }
 
     /**
-     * query network, without inner objects.
-     *
-     * @param outerObjectId
-     *            domainId.
-     * @param outerModelType
-     *            outerModelType.
-     * @return network.
-     */
-    private List<Network> queryWithoutInnerObjects(final Long outerObjectId,
-            final ModelType outerModelType) {
-        return this.queryWithoutInnerObjectsForEntity(outerObjectId,
-                outerModelType);
-    }
-
-    /**
-     * query network, without inner objects.
+     * query network, without inner objects.Only support ENTITY!
      *
      * @param outerObjectId
      *            entityId.
-     * @param outerModelType  model type of object.
      * @return network.
      */
     private List<Network> queryWithoutInnerObjectsForEntity(
-            final Long outerObjectId, final ModelType outerModelType) {
+            final Long outerObjectId) {
         final String sql =
                 "select * from RDAP_IP ip inner join "
                         + " REL_ENTITY_REGISTRATION rel "
@@ -360,7 +348,8 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                         + " left outer join RDAP_IP_STATUS status "
                         + " on ip.IP_ID = "
                         + " status.IP_ID where rel.ENTITY_ID=? "
-                        + " and REL_OBJECT_TYPE=?";
+                        + " and REL_OBJECT_TYPE=? "
+                        + " order by ip.HANDLE ";
         List<Network> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
@@ -368,7 +357,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setLong(1, outerObjectId);
-                        ps.setString(2, outerModelType.getName());
+                        ps.setString(2, ModelType.IP.getName());
                         return ps;
                     }
                 }, new NetworkResultSetExtractor());

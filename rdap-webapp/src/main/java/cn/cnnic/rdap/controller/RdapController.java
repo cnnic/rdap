@@ -107,9 +107,9 @@ public class RdapController {
 
     /**
      * query entity.
-     * 
-     * @param entity
-     *            entity.
+     *
+     * @param handle
+     *            entity handle.
      * @param request
      *            HttpServletRequest.
      * @param response
@@ -250,16 +250,6 @@ public class RdapController {
             return RestResponseUtil.createResponse200(domainSearch);
         }
         return RestResponseUtil.createResponse404();
-    }
-
-    /**
-     * other invalid query uri will response 400 error.
-     * 
-     * @return JSON formated result,with HTTP code.
-     */
-    @RequestMapping(value = "/**")
-    public ResponseEntity error400() {
-        return RestResponseUtil.createResponse400();
     }
 
     /**
@@ -469,5 +459,15 @@ public class RdapController {
             return RestResponseUtil.createResponse200(ip);
         }
         return RestResponseUtil.createResponse404();
+    }
+    
+    /**
+     * other invalid query uri will response 400 error.
+     * 
+     * @return JSON formated result,with HTTP code.
+     */
+    @RequestMapping(value = "/**")
+    public ResponseEntity error400() {
+        return RestResponseUtil.createResponse400();
     }
 }

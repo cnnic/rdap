@@ -3,5 +3,17 @@
 	<RDAP_AUTNUM AS_ID="1" HANDLE="handle1" START_AUTNUM="1"
 		END_AUTNUM="10" NAME="name1" TYPE="alocated" COUNTRY="zh" LANG="cn"
 		PORT43="port43" />
-	<RDAP_AUTNUM_STATUS AS_STATUS_ID="1" AS_ID="1" STATUS="validated"/>
+	<RDAP_AUTNUM_STATUS AS_STATUS_ID="1" AS_ID="1"
+		STATUS="validated" />
+	<!-- entities -->
+	<RDAP_ENTITY ENTITY_ID='1' HANDLE='h1' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_ENTITY ENTITY_ID='2' HANDLE='h2' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='1'
+		REL_ID='1' REL_OBJECT_TYPE='autnum' ENTITY_ID='1' ENTITY_ROLE="registrar" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='2'
+		REL_ID='1' REL_OBJECT_TYPE='autnum' ENTITY_ID='2' ENTITY_ROLE="billing" />
 </dataset>

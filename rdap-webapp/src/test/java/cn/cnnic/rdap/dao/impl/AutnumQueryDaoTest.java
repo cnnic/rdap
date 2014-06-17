@@ -42,6 +42,7 @@ import org.springframework.util.Assert;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Autnum;
+import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.dao.QueryDao;
 
@@ -85,6 +86,9 @@ public class AutnumQueryDaoTest extends BaseTest {
         assertEquals(autnum.getName(), "name1");
         List<String> statusList = autnum.getStatus();
         assertThat(statusList, CoreMatchers.hasItems("validated"));
+        // entities
+        List<Entity> entities = autnum.getEntities();
+        assertEquals(2, entities.size());
     }
 
     /**
