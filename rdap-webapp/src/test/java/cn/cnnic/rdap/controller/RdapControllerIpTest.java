@@ -103,7 +103,7 @@ public class RdapControllerIpTest extends BaseTest {
      * common query exist IP 200.
      * 
      * @param queryIPName
-     *            nameserver name.
+     *            query ip address.
      * @throws Exception
      *             Exception.
      */
@@ -139,7 +139,7 @@ public class RdapControllerIpTest extends BaseTest {
      * common query non-exist IP 404.
      * 
      * @param ipName
-     *            nameserver name.
+     *            query ip address.
      * @throws Exception
      *             Exception.
      */
@@ -176,7 +176,7 @@ public class RdapControllerIpTest extends BaseTest {
      * common query invalid IP 400.
      * 
      * @param ipName
-     *            nameserver name.
+     *            query ip address.
      * @throws Exception
      *             Exception.
      */
