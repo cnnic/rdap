@@ -32,6 +32,7 @@ package cn.cnnic.rdap.bean;
 
 import java.math.BigDecimal;
 
+import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.common.util.IpUtil;
 
 /**
@@ -40,7 +41,7 @@ import cn.cnnic.rdap.common.util.IpUtil;
  * @author weijunkai
  * 
  */
-public class IpQueryParam extends QueryParam {
+public class NetworkQueryParam extends QueryParam {
     /**
      * constructor.
      * 
@@ -51,13 +52,29 @@ public class IpQueryParam extends QueryParam {
      * @param version
      *            String for ip version.
      */
-    public IpQueryParam(String strIp, long numMask, String version) {
+    public NetworkQueryParam(String strIp, long numMask, IpVersion version) {
         super(strIp);
         this.numMask = numMask;
-        this.strIpVersion = version;
+        this.ipVersion = version;
         initAllIpZero();
     }
 
+    public NetworkQueryParam( String arpa,
+                    BigDecimal startHigh,
+                    BigDecimal   endHigh,
+                    BigDecimal startLow,
+                    BigDecimal   endLow,
+                    IpVersion version) {
+        
+        super(arpa);
+        
+        ipQueryStartHigh = startHigh;
+        ipQueryEndHigh = endHigh;
+        ipQueryStartLow = startLow;
+        ipQueryEndLow = endLow;
+        
+        ipVersion = version;
+    }
     /**
      * init all ip to 0.
      */
@@ -92,7 +109,7 @@ public class IpQueryParam extends QueryParam {
     /**
      * version for ip.
      */
-    private String strIpVersion;
+    private IpVersion ipVersion;
 
     /**
      * get numMask.
@@ -267,9 +284,9 @@ public class IpQueryParam extends QueryParam {
     public void parseQueryIpMask() {
         final long v6Bytes = 128;
         String strQuery = getQ();
-        if (strIpVersion.compareTo("v4") == 0) {
+        if (IpVersion.V4 == ipVersion) {
             parseQueryIpV4Mask(strQuery);
-        } else if (strIpVersion.compareTo("v6") == 0) {
+        } else if (IpVersion.V6 == ipVersion) {
             BigDecimal[] ipV6 = IpUtil.ipV6ToBigDecimalJar(strQuery);
             if (numMask > 0 && numMask <= v6Bytes) {
                 parseQueryIpV6Mask(strQuery, ipV6);
@@ -290,8 +307,8 @@ public class IpQueryParam extends QueryParam {
      * @param version
      *            v4 or v6
      */
-    public void setQueryIpVesion(String version) {
-        this.strIpVersion = version;
+    public void setQueryIpVesion(IpVersion version) {
+        this.ipVersion = version;
     }
 
     /**
@@ -299,7 +316,7 @@ public class IpQueryParam extends QueryParam {
      * 
      * @return string for version.
      */
-    public String getQueryIpVersion() {
-        return strIpVersion;
+    public IpVersion getQueryIpVersion() {
+        return ipVersion;
     }
 }

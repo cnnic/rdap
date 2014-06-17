@@ -37,13 +37,13 @@ import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.bean.Ip;
+import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.dao.QueryDao;
 import cn.cnnic.rdap.dao.impl.AutnumQueryDaoImpl;
 import cn.cnnic.rdap.dao.impl.DomainQueryDaoImpl;
 import cn.cnnic.rdap.dao.impl.NameserverQueryDaoImpl;
-import cn.cnnic.rdap.dao.impl.IpQueryDaoImpl;
+import cn.cnnic.rdap.dao.impl.NetworkQueryDaoImpl;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
@@ -82,7 +82,7 @@ public class QueryServiceImpl implements QueryService {
      * ip DAO
      */
     @Autowired
-    private IpQueryDaoImpl ipQueryDao;
+    private NetworkQueryDaoImpl ipQueryDao;
 
     /**
      * entityQueryDao.
@@ -114,7 +114,7 @@ public class QueryServiceImpl implements QueryService {
     }
 
 	@Override
-    public Ip queryIp(QueryParam queryParam) {
+    public Network queryIp(QueryParam queryParam) {
         return ipQueryDao.query(queryParam);
     }
 

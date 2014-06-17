@@ -36,8 +36,9 @@ import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.EntityQueryParam;
-import cn.cnnic.rdap.bean.IpQueryParam;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
+import cn.cnnic.rdap.bean.Network.IpVersion;
+import cn.cnnic.rdap.bean.NetworkQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
 
 /**
@@ -96,8 +97,8 @@ public class QueryParser {
      * @return QueryParam.
      */
     public QueryParam parseIpQueryParam(String ipAddr, long numMask,
-            String ipVersion) {
-        IpQueryParam ipQueryParam = new IpQueryParam(ipAddr, numMask, ipVersion);
+            IpVersion ipVersion) {
+        NetworkQueryParam ipQueryParam = new NetworkQueryParam(ipAddr, numMask, ipVersion);
         ipQueryParam.parseQueryIpMask();
         return ipQueryParam;
     }

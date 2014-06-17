@@ -123,7 +123,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Autowired
     @Qualifier("networkQueryDaoImpl")
-    private NetworkQueryDaoImpl networkQueryDao;
+    private QueryDao<Network> networkQueryDao;
     
     /**
      * entityQueryDao.
@@ -377,7 +377,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 && StringUtils.isNotEmpty(domain.getLdhName())) {
             final Arpa arpa = Arpa.decodeArpa(domain.getLdhName());
             
-            Network network = networkQueryDao.queryNetworkForArpa(arpa);
+            Network network = networkQueryDao.query(arpa.toNetworkQueryParam());
             domain.setNetwork(network);
         }
     }
@@ -399,7 +399,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Domain> result = null;
         
         if (IpVersion.V4 == arpa.getIpVersion()) {
-    	
+            
             // Arpa for IPv4, ignore high address
             final String sql =
                 "select *, (ENDLOWADDRESS - STARTLOWADDRESS) as low "
