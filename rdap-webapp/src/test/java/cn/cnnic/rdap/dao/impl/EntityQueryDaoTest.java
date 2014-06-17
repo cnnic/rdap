@@ -240,7 +240,7 @@ public class EntityQueryDaoTest extends BaseTest {
         // entity - entities
         List<Entity> entities =
                 entityQueryDao.queryAsInnerObjects(2L, ModelType.ENTITY);
-        assertEquals(2, entities.size());
+        assertEquals(3, entities.size());
         // domain - entities
         entities = entityQueryDao.queryAsInnerObjects(3L, ModelType.DOMAIN);
         assertEquals(3, entities.size());
@@ -253,9 +253,9 @@ public class EntityQueryDaoTest extends BaseTest {
         Entity entity = entityQueryDao.query(queryParser.parseQueryParam("h1"));
         assertNotNull(entity);
         roleList = entity.getRoles();
-        assertEquals(4, roleList.size());
+        assertEquals(3, roleList.size());
         assertThat(roleList, CoreMatchers.hasItems("registrar", "billing",
-                "registrant", "administrative"));
+                "registrant"));
     }
 
     /**

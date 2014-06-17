@@ -38,7 +38,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -47,11 +46,11 @@ import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Event;
-import cn.cnnic.rdap.bean.Network;
-import cn.cnnic.rdap.bean.NetworkQueryParam;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
+import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.Network.IpVersion;
+import cn.cnnic.rdap.bean.NetworkQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.common.util.IpUtil;
@@ -105,7 +104,74 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
         queryAndSetInnerObjects(network);
         return network;
     }
+    
+    /**
+     * query network for arpa.
+     *
+     * @param outerObjectId
+     *                    object related to network
+     * @param outerModelType
+     *                   object type related to network                     
+     * @return network list.
+     */
+    @Override
+    public List<Network> queryAsInnerObjects(Long outerObjectId,
+            ModelType outerModelType) {
+        if (!ModelType.ENTITY.equals(outerModelType)) {
+            throw new UnsupportedOperationException(
+                    "only support ENTITY modelType.");
+        }
+        List<Network> networks =
+                queryWithoutInnerObjectsForEntity(outerObjectId);
+        queryAndSetInnerObjects(networks);
+        return networks;
+    }
 
+    /**
+     * query and set inner objects.
+     * @param networks networks.
+     */
+    private void queryAndSetInnerObjects(List<Network> networks) {
+        if(null == networks){
+            return;
+        }
+        for(Network network:networks){
+            queryAndSetInnerObjects(network);
+        }
+    }
+
+    /**
+     * query network, without inner objects.Only support ENTITY!
+     *
+     * @param outerObjectId
+     *            entityId.
+     * @return network.
+     */
+    private List<Network> queryWithoutInnerObjectsForEntity(
+            final Long outerObjectId) {
+        final String sql =
+                "select * from RDAP_IP ip inner join "
+                        + " REL_ENTITY_REGISTRATION rel "
+                        + " on ip.IP_ID = rel.REL_ID "
+                        + " left outer join RDAP_IP_STATUS status "
+                        + " on ip.IP_ID = "
+                        + " status.IP_ID where rel.ENTITY_ID=? "
+                        + " and REL_OBJECT_TYPE=? "
+                        + " order by ip.HANDLE ";
+        List<Network> result =
+                jdbcTemplate.query(new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(
+                            Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps.setLong(1, outerObjectId);
+                        ps.setString(2, ModelType.IP.getName());
+                        return ps;
+                    }
+                }, new NetworkResultSetExtractor());
+        return result;
+    }
+        
     /**
      * query inner objects of ip,and fill them to ip.
      * 
