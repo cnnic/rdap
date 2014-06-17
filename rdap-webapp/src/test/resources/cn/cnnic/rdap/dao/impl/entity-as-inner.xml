@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- entity roles:include entity self relation -->
+	<RDAP_ENTITY ENTITY_ID='1' HANDLE='h1' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_ENTITY ENTITY_ID='10' HANDLE='h10' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='11'
+		REL_ID='2' REL_OBJECT_TYPE='entity' ENTITY_ID='1' ENTITY_ROLE="registrar" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='12'
+		REL_ID='2' REL_OBJECT_TYPE='entity' ENTITY_ID='1' ENTITY_ROLE="billing" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='13'
+		REL_ID='1111' REL_OBJECT_TYPE='entity' ENTITY_ID='1' ENTITY_ROLE="registrant" />
+
+	<!-- entity - entities -->
+	<RDAP_ENTITY ENTITY_ID='2' HANDLE='h2' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_ENTITY ENTITY_ID='21' HANDLE='innerEntity1' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_ENTITY ENTITY_ID='22' HANDLE='innerEntity2' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='21'
+		REL_ID='2' REL_OBJECT_TYPE='entity' ENTITY_ID='21' ENTITY_ROLE="registrant" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='22'
+		REL_ID='2' REL_OBJECT_TYPE='entity' ENTITY_ID='22' ENTITY_ROLE="administrative" />
+
+	<!-- domain - entities -->
+	<RDAP_ENTITY ENTITY_ID='3' HANDLE='3' KIND='individual' FN='john'
+		EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_DOMAIN DOMAIN_ID='3' HANDLE='3' LDH_NAME='cnnic.cn'
+		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' />
+	<RDAP_ENTITY ENTITY_ID='31' HANDLE='domainEntity1' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_ENTITY ENTITY_ID='32' HANDLE='domainEntity2' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_ENTITY ENTITY_ID='33' HANDLE='domainEntity3' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='31'
+		REL_ID='3' REL_OBJECT_TYPE='domain' ENTITY_ID='31' ENTITY_ROLE="registrant" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='32'
+		REL_ID='3' REL_OBJECT_TYPE='domain' ENTITY_ID='31' ENTITY_ROLE="administrative" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='33'
+		REL_ID='3' REL_OBJECT_TYPE='domain' ENTITY_ID='32' ENTITY_ROLE="administrative" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='34'
+		REL_ID='3' REL_OBJECT_TYPE='domain' ENTITY_ID='33' ENTITY_ROLE="technical" />
+</dataset>
