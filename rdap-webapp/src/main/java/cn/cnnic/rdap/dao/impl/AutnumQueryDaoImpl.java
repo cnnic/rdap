@@ -46,6 +46,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.Autnum;
+import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
@@ -80,6 +81,12 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     @Autowired
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
+    
+    /**
+     * entityQueryDao.
+     */
+    @Autowired
+    private QueryDao<Entity> entityQueryDao;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -166,6 +173,9 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(autnumId, ModelType.AUTNUM);
         autnum.setEvents(events);
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(autnumId, ModelType.AUTNUM);
+        autnum.setEntities(entities);
     }
 
     /**

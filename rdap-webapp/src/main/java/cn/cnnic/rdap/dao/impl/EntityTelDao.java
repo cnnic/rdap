@@ -45,27 +45,28 @@ import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.EntityTel;
+import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
  * entity telephone query DAO.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 @Repository
-public class EntityTelDao {
+public class EntityTelDao extends AbstractQueryDao<EntityTel> {
     /**
      * jdbcTemplate.
      */
     @Autowired
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     /**
      * query entity telephone.
-     *
+     * 
      * @param entity
      *            entity.
-     * @return
+     * @return EntityTel EntityTel.
      */
     public List<EntityTel> query(final Entity entity) {
         if (null == entity || null == entity.getId()) {
@@ -87,9 +88,9 @@ public class EntityTelDao {
 
     /**
      * entity address ResultSetExtractor, extract data from ResultSet.
-     *
+     * 
      * @author jiashuo
-     *
+     * 
      */
     class EntityTelResultSetExtractor implements
             ResultSetExtractor<List<EntityTel>> {
@@ -107,7 +108,7 @@ public class EntityTelDao {
 
     /**
      * extract telephone from ResultSet.
-     *
+     * 
      * @param rs
      *            ResultSet.
      * @param entityTel
@@ -122,6 +123,7 @@ public class EntityTelDao {
         entityTel.setTypes(rs.getString("TYPE"));
         entityTel.setGlobalNumber(rs.getString("GLOBAL_NUMBER"));
         entityTel.setExtNumber(rs.getString("EXT_NUMBER"));
+        entityTel.setPref(getIntegerFromRs(rs, "PREF"));
     }
 
 }

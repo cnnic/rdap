@@ -80,6 +80,7 @@ public class EntityAddressDaoTest extends BaseTest {
         assertEquals("NY", address.getRegion());
         assertEquals("12345", address.getPostalCode());
         assertEquals("USA", address.getCountry());
+        assertEquals(Integer.valueOf(1), address.getPref());
     }
 
     /**

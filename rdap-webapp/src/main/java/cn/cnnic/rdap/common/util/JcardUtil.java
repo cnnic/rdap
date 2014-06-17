@@ -51,9 +51,9 @@ import ezvcard.util.TelUri.Builder;
 
 /**
  * Jcard util, see draft-ietf-jcardcal-jcard.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 public final class JcardUtil {
 
@@ -72,7 +72,7 @@ public final class JcardUtil {
 
     /**
      * parse entity to jcard string.
-     *
+     * 
      * @param entity
      *            entity.
      * @return jcard string.
@@ -84,7 +84,7 @@ public final class JcardUtil {
 
     /**
      * convert entity to vcard.
-     *
+     * 
      * @param entity
      *            entity.
      * @return vcard.
@@ -119,7 +119,7 @@ public final class JcardUtil {
 
     /**
      * add telephone to vcard.
-     *
+     * 
      * @param vcard
      *            vcard.
      * @param entity
@@ -140,16 +140,34 @@ public final class JcardUtil {
             }
             Telephone telephone = new Telephone(uri);
             addTelephoneTypes(tel.getTypes(), telephone);
-            if (null != tel.getPref()) {
-                telephone.setPref(tel.getPref());
-            }
+            addPref(tel, telephone);
             vcard.addTelephoneNumber(telephone);
         }
     }
 
     /**
+     * add pref.
+     * 
+     * @param tel
+     *            tel.
+     * @param telephone
+     *            telephone.
+     */
+    private static void addPref(EntityTel tel, Telephone telephone) {
+        if (null == tel.getPref()) {
+            return;
+        }
+        try {
+            telephone.setPref(tel.getPref());
+        } catch (Exception e) {
+            LOGGER.error("addPref error:{}. Not set pref:{}.", e.getMessage(),
+                    tel.getPref());
+        }
+    }
+
+    /**
      * build telephone uri.
-     *
+     * 
      * @param tel
      *            tel.
      * @return TelUri if tel number is valid, return null if not.
@@ -162,14 +180,14 @@ public final class JcardUtil {
             }
             return telBuilder.build();
         } catch (Exception e) {
-            LOGGER.error("buildTelUri error:" + e.getMessage());
+            LOGGER.error("buildTelUri error:{} for tel:{}", e.getMessage(), tel);
         }
         return null;
     }
 
     /**
      * add telephone types to telephone.
-     *
+     * 
      * @param types
      *            types.
      * @param telephone
@@ -191,7 +209,7 @@ public final class JcardUtil {
 
     /**
      * add addresses to vcard.
-     *
+     * 
      * @param vcard
      *            vcard.
      * @param entity
@@ -218,7 +236,7 @@ public final class JcardUtil {
 
     /**
      * add addressTypes to address.
-     *
+     * 
      * @param addressesStr
      *            addressesStr,splited by ';'.
      * @param address

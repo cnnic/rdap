@@ -45,27 +45,28 @@ import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.EntityAddress;
+import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
  * entity address query DAO.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 @Repository
-public class EntityAddressDao {
+public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
     /**
      * jdbcTemplate.
      */
     @Autowired
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     /**
      * query entity address.
-     *
+     * 
      * @param entity
      *            entity.
-     * @return
+     * @return EntityAddress list.
      */
     public List<EntityAddress> query(final Entity entity) {
         if (null == entity || null == entity.getId()) {
@@ -87,9 +88,9 @@ public class EntityAddressDao {
 
     /**
      * entity address ResultSetExtractor, extract data from ResultSet.
-     *
+     * 
      * @author jiashuo
-     *
+     * 
      */
     class EntityAddressResultSetExtractor implements
             ResultSetExtractor<List<EntityAddress>> {
@@ -108,7 +109,7 @@ public class EntityAddressDao {
 
     /**
      * extract address from ResultSet.
-     *
+     * 
      * @param rs
      *            ResultSet.
      * @param address
@@ -129,6 +130,7 @@ public class EntityAddressDao {
         address.setPostalCode(rs.getString("POSTAL_CODE"));
         address.setCountry(rs.getString("COUNTRY"));
         address.setTypes(rs.getString("TYPE"));
+        address.setPref(getIntegerFromRs(rs, "PREF"));
     }
 
 }

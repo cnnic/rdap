@@ -51,6 +51,7 @@ import cn.cnnic.rdap.bean.EntityAddress;
 import cn.cnnic.rdap.bean.EntityTel;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
+import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.bean.Remark;
@@ -119,7 +120,7 @@ public class EntityQueryDaoTest extends BaseTest {
         // addresses
         List<EntityAddress> addresses = entity.getAddresses();
         assertNotNull(addresses);
-        assertEquals(2,addresses.size());
+        assertEquals(2, addresses.size());
         EntityAddress address = addresses.get(0);
         assertEquals("home;work", address.getTypes());
         assertEquals("post office Box", address.getPoBox());
@@ -196,7 +197,7 @@ public class EntityQueryDaoTest extends BaseTest {
      * test query exist domain.
      */
     @Test
-//    @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("entity.xml")
     public void testQueryTruncated() {
         String entityHandle = "h1";
@@ -227,6 +228,34 @@ public class EntityQueryDaoTest extends BaseTest {
         entity =
                 entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
         assertTrue(entity.getResultsTruncated());
+    }
+
+    /**
+     * test query exist domain.
+     */
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("entity-as-inner.xml")
+    public void testQueryAsInnerObjects() {
+        // entity - entities
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(2L, ModelType.ENTITY);
+        assertEquals(2, entities.size());
+        // domain - entities
+        entities = entityQueryDao.queryAsInnerObjects(3L, ModelType.DOMAIN);
+        assertEquals(3, entities.size());
+        Entity domainEntity = entities.get(0);
+        List<String> roleList = domainEntity.getRoles();
+        assertEquals(2, roleList.size());
+        assertThat(roleList,
+                CoreMatchers.hasItems("registrant", "administrative"));
+        // check roles:include all roles
+        Entity entity = entityQueryDao.query(queryParser.parseQueryParam("h1"));
+        assertNotNull(entity);
+        roleList = entity.getRoles();
+        assertEquals(4, roleList.size());
+        assertThat(roleList, CoreMatchers.hasItems("registrar", "billing",
+                "registrant", "administrative"));
     }
 
     /**
