@@ -75,6 +75,7 @@ public class EntityTelDaoTest extends BaseTest {
         assertEquals("home;voice", tel.getTypes());
         assertEquals("+1-555-555-1234", tel.getGlobalNumber());
         assertEquals("1234", tel.getExtNumber());
+        assertEquals(Integer.valueOf(1), tel.getPref());
     }
 
     /**

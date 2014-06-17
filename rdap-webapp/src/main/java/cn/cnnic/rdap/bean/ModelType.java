@@ -43,6 +43,10 @@ public enum ModelType {
     DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
             "autnum"),
     /**
+     * another domain type, only used for DB Query.
+     */    
+    ARPA("arpa"),
+    /**
      * help ip event link publicId type.
      */
     HELP("help"), IP("ip"), EVENT("event"), LINK("link"), PUBLICID("publicId"),

@@ -30,6 +30,7 @@
  */
 package cn.cnnic.rdap.dao.impl;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.math.BigDecimal;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,22 +50,22 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.BaseModel;
+import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.Event;
+import cn.cnnic.rdap.bean.IPAddress;
+import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelStatus;
+import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
-import cn.cnnic.rdap.bean.Event;
-import cn.cnnic.rdap.bean.Link;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.bean.IPAddress;
 import cn.cnnic.rdap.bean.Notice;
+import cn.cnnic.rdap.bean.PageBean;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
-import cn.cnnic.rdap.bean.PageBean;
-
+import cn.cnnic.rdap.common.util.IpUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
-import cn.cnnic.rdap.common.util.IpUtil;
 
 /**
  * nameserver query DAO.
@@ -104,6 +104,12 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     @Autowired
     private QueryDao<IPAddress> ipAddressQueryDao;
+    
+    /**
+     * entityQueryDao.
+     */
+    @Autowired
+    private QueryDao<Entity> entityQueryDao;
 
     /**
      * query inner objects of nameserver,and set object value to them.
@@ -117,10 +123,10 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * @return result for List<Nameserver>
      */
     private List<Nameserver> queryNameserverWithDomainID(
-            final Long outerObjectId, ModelType outerModelType) {
+            final Long outerObjectId, final ModelType outerModelType) {
         final String sql = "select * from RDAP_NAMESERVER ns inner join "
                 + "REL_DOMAIN_NAMESERVER rel on (ns.NAMESERVER_ID = "
-                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ?) left outer "
+                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ? and rel.DOMAIN_TYPE =? ) left outer "
                 + "join RDAP_NAMESERVER_STATUS status on ns.NAMESERVER_ID "
                 + "=status.NAMESERVER_ID";
 
@@ -130,6 +136,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setLong(1, outerObjectId);
+                        ps.setString(2, outerModelType.getName());
                         return ps;
                     }
                 }, new NSResultSetExtractor());
@@ -203,6 +210,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         List<Event> events = eventQueryDao.queryAsInnerObjects(nsID,
                 ModelType.NAMESERVER);
         ns.setEvents(events);
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
+        ns.setEntities(entities);
     }
 
     /**
@@ -243,8 +253,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     class NSResultInnerExtractor implements
             ResultSetExtractor<List<Nameserver>> {
         @Override
-        public List<Nameserver> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Nameserver> extractData(ResultSet rs) throws SQLException {
             List<Nameserver> result = new ArrayList<Nameserver>();
             Map<Long, Nameserver> nsMapById = new HashMap<Long, Nameserver>();
             while (rs.next()) {
