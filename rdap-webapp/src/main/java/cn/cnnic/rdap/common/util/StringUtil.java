@@ -86,7 +86,7 @@ public final class StringUtil {
      *            handle.
      * @return
      */
-    public static boolean isValidEntityHandle(String handle) {
+    public static boolean isValidEntityHandleOrName(String handle) {
         if (StringUtils.isBlank(handle)
                 || handle.length() > MAX_ENTITY_HANDLE_LENGTH) {
             return false;

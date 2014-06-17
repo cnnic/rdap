@@ -41,6 +41,8 @@ import cn.cnnic.rdap.bean.BaseModel;
 import cn.cnnic.rdap.bean.BaseSearchModel;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainSearch;
+import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.EntitySearch;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverSearch;
 import cn.cnnic.rdap.bean.PageBean;
@@ -74,6 +76,12 @@ public class SearchServiceImpl implements SearchService {
      */
     @Autowired
     private AccessControlManager accessControlManager;
+    
+    /**
+     * entity dao.
+     */
+    @Autowired
+    private QueryDao<Entity> entityDao;
 
     /**
      * common search.
@@ -153,6 +161,18 @@ public class SearchServiceImpl implements SearchService {
         nameserverSearch.setNameserverSearchResults(searchResult
                 .getSearchResults());
         return nameserverSearch;
-
+    }
+    
+    @Override
+    public EntitySearch searchEntity(QueryParam queryParam) {
+        BaseSearchModel<Entity> searchResult = this.search(queryParam,
+                entityDao);
+        if (null == searchResult) {
+            return null;
+        }
+        EntitySearch entitySearch = new EntitySearch();
+        BeanUtils.copyProperties(searchResult, entitySearch);
+        entitySearch.setEntitySearchResults(searchResult.getSearchResults());
+        return entitySearch;
     }
 }
