@@ -399,7 +399,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Domain> result = null;
         
         if (IpVersion.V4 == arpa.getIpVersion()) {
-    	
+            
             // Arpa for IPv4, ignore high address
             final String sql =
                 "select *, (ENDLOWADDRESS - STARTLOWADDRESS) as low "

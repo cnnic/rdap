@@ -229,7 +229,7 @@ public class DomainQueryDaoTest extends BaseTest {
      * test query exist domain.
      */
     @Test
-    //@DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("domain.xml")
     public void testQueryArpa() {
         String domainName = "2.1.0.0.in-addr.arpa";
@@ -244,15 +244,52 @@ public class DomainQueryDaoTest extends BaseTest {
      * test query exist domain.
      */
     @Test
-    //@DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("domain.xml")
-    public void testQueryArpaIpv6() {
+    public void testQueryArpaIpv6_1() {
         String domainName = "2.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
         
         Domain domain =
                 domainQueryDao.query(queryParser.parseDomainQueryParam(
                         domainName, domainName));
         assertNull(domain);
+    }
+    
+    /**
+     * test query exist domain.
+     */
+    @Test
+    //@DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("domain.xml")
+    public void testQueryArpaIpv6_2() {
+        String domainName = "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
+        
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        domainName, domainName));
+        assertNotNull(domain);
+    }
+    
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("domain.xml")
+    public void testQueryArpaIpv6_3() {
+        String domainName = "f.f.f.ip6.arpa";
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        domainName, domainName));
+        assertNotNull(domain);
+    }
+    
+    @Test
+    //@DatabaseTearDown("teardown.xml")
+    @DatabaseSetup("domain.xml")
+    public void testQueryArpaIpv6_4() {
+        String domainName = "f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.ip6.arpa";
+        Domain domain =
+                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                        domainName, domainName));
+        assertNotNull(domain);
     }
     
     /**
