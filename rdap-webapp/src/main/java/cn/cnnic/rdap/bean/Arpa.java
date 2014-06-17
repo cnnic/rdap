@@ -325,7 +325,7 @@ public class Arpa {
 
         System.arraycopy(byteStart, 0, highSecs, 0, highSecs.length);
         for (int i = 0; i < highBytes.length; i++) {
-            int hb = highSecs[i << 1] << HIGH_BYTE + highSecs[(i << 1) + 1];
+            int hb = (highSecs[i << 1] << HIGH_BYTE) + highSecs[(i << 1) + 1];
             highBytes[i] = (byte) (MASK_FF & hb);
         }
         this.startHighAddress = new BigInteger(1, highBytes);
@@ -363,7 +363,7 @@ public class Arpa {
 
         System.arraycopy(byteEnd, 0, highSecs, 0, highSecs.length);
         for (int i = 0; i < highBytes.length; i++) {
-            int hb = highSecs[i << 1] << HIGH_BYTE + highSecs[(i << 1) + 1];
+            int hb = (highSecs[i << 1] << HIGH_BYTE) + highSecs[(i << 1) + 1];
             highBytes[i] = (byte) (MASK_FF & hb);
         }
         this.endHighAddress = new BigInteger(1, highBytes);

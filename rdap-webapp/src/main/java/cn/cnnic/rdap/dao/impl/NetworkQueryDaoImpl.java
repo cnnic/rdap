@@ -208,7 +208,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
             // IP address for IPv6, include high address and low address
             final String sql = 
                     "select *, (ENDLOWADDRESS - STARTLOWADDRESS) as low, "
-                    + "(ENDHIGHADDRESS - STARTHIGHADDRESS) as high from RDAP_ARPA "
+                    + "(ENDHIGHADDRESS - STARTHIGHADDRESS) as high from RDAP_IP "
                     + "where (STARTHIGHADDRESS < ? or (STARTHIGHADDRESS=? and STARTLOWADDRESS<=?)) "
                     + " and (ENDHIGHADDRESS > ? or (ENDHIGHADDRESS = ? and ENDLOWADDRESS >= ?)) "
                     + " and version = 'v6' "
@@ -255,7 +255,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                 network.setId(networkId);
                 network.setHandle(rs.getString("HANDLE"));
                 setIpVersionAndStartEndAddress(rs, network);
-                network.setName(rs.getString("NAME"));
+                network.setName(rs.getString("ARPA_NAME"));
                 network.setType(rs.getString("TYPE"));
                 network.setCountry(rs.getString("COUNTRY"));
                 network.setParentHandle(rs.getString("PARENT_HANDLE"));
