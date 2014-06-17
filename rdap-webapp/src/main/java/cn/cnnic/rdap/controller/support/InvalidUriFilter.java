@@ -90,6 +90,10 @@ public class InvalidUriFilter implements Filter {
             writeError400Response(response);
             return;
         }
+        if (decodeUri.contains("\\")) {
+            writeError400Response(response);
+            return;
+        }
         if (decodeUri.contains("//")) {// || decodeUri.contains("ip/::/")) {
             writeError400Response(response);
             return;
