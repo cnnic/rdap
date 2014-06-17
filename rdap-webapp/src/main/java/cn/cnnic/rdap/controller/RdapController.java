@@ -107,9 +107,9 @@ public class RdapController {
 
     /**
      * query entity.
-     * 
-     * @param entity
-     *            entity.
+     *
+     * @param handle
+     *            entity handle.
      * @param request
      *            HttpServletRequest.
      * @param response

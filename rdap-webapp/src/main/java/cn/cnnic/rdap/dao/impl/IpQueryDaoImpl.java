@@ -30,6 +30,7 @@
  */
 package cn.cnnic.rdap.dao.impl;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,14 +46,14 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
-import cn.cnnic.rdap.bean.IpQueryParam;
-import cn.cnnic.rdap.bean.Notice;
-import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.bean.Ip;
+import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Event;
+import cn.cnnic.rdap.bean.Ip;
+import cn.cnnic.rdap.bean.IpQueryParam;
 import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.Network.IpVersion;
+import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.common.util.IpUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
@@ -93,11 +93,17 @@ public class IpQueryDaoImpl extends AbstractQueryDao<Ip> {
     @Autowired
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
+    
+    /**
+     * entityQueryDao.
+     */
+    @Autowired
+    private QueryDao<Entity> entityQueryDao;
 
     @Override
     public Ip query(QueryParam queryParam) {
         Ip ip = queryWithoutInnerObjects(queryParam);
-        queryAndSetInnerObjectsWithoutNotice(ip);
+        queryAndSetInnerObjects(ip);
         return ip;
     }
 
@@ -107,7 +113,7 @@ public class IpQueryDaoImpl extends AbstractQueryDao<Ip> {
      * @param ip
      *            inner objects will be filled.
      */
-    private void queryAndSetInnerObjectsWithoutNotice(Ip objIp) {
+    private void queryAndSetInnerObjects(Ip objIp) {
         if (null == objIp) {
             return;
         }
@@ -122,6 +128,9 @@ public class IpQueryDaoImpl extends AbstractQueryDao<Ip> {
         List<Event> events = eventQueryDao.queryAsInnerObjects(ipId,
                 ModelType.IP);
         objIp.setEvents(events);
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
+        objIp.setEntities(entities);
     }
 
     /**

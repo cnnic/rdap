@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -110,7 +111,7 @@ public class Domain extends BaseModel {
     /**
      * represents the IP network for which a reverse DNS domain is referenced.
      */
-    private List<Network> network;
+    private Network network;
     
     @Override
     public ModelType getObjectType() {
@@ -390,7 +391,7 @@ public class Domain extends BaseModel {
      * 
      * @return network.
      */
-    public List<Network> getNetwork() {
+    public Network getNetwork() {
         return network;
     }
 
@@ -400,7 +401,25 @@ public class Domain extends BaseModel {
      * @param network
      *            network.
      */
-    public void setNetwork(List<Network> network) {
+    public void setNetwork(Network network) {
         this.network = network;
+    }
+    
+    /**
+     * get domain type .
+     * 
+     * @return domain type : ARPA or DOMAIN .
+     *            
+     */    
+    @JsonIgnore
+    public ModelType getDomainType() {
+        if (null == this.ldhName) {
+            return ModelType.DOMAIN;
+        } else if (ldhName.endsWith("ip6.arpa")) {
+            return ModelType.ARPA;
+        } else if (ldhName.endsWith("in-addr.arpa")) {
+            return ModelType.ARPA;
+        }
+        return ModelType.DOMAIN;
     }
 }
