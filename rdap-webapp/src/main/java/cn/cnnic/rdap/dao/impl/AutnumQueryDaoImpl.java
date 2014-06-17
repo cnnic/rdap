@@ -93,11 +93,22 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     public Autnum query(QueryParam queryParam) {
         Autnum autnum = queryWithoutInnerObjects(queryParam);
         queryAndSetInnerObjects(autnum);
+        queryAndSetEntities(autnum);
+        return autnum;
+    }
+
+    /**
+     * query and set entities.
+     * @param autnum autnum.
+     */
+    private void queryAndSetEntities(Autnum autnum) {
+        if (null == autnum) {
+            return;
+        }
         List<Entity> entities =
                 entityQueryDao.queryAsInnerObjects(autnum.getId(),
                         ModelType.AUTNUM);
         autnum.setEntities(entities);
-        return autnum;
     }
 
     @Override
