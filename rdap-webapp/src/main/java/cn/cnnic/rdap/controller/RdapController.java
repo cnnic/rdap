@@ -253,16 +253,6 @@ public class RdapController {
     }
 
     /**
-     * other invalid query uri will response 400 error.
-     * 
-     * @return JSON formated result,with HTTP code.
-     */
-    @RequestMapping(value = "/**")
-    public ResponseEntity error400() {
-        return RestResponseUtil.createResponse400();
-    }
-
-    /**
      * query nameserver by nameserver name.
      * 
      * @param nameserverName
@@ -469,5 +459,15 @@ public class RdapController {
             return RestResponseUtil.createResponse200(ip);
         }
         return RestResponseUtil.createResponse404();
+    }
+    
+    /**
+     * other invalid query uri will response 400 error.
+     * 
+     * @return JSON formated result,with HTTP code.
+     */
+    @RequestMapping(value = "/**")
+    public ResponseEntity error400() {
+        return RestResponseUtil.createResponse400();
     }
 }
