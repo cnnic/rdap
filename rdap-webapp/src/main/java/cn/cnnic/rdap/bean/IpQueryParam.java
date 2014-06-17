@@ -190,8 +190,7 @@ public class IpQueryParam extends QueryParam {
     }
 
     /**
-     * parseQueryIpV4Mask.
-     *            use the numMask bits to get a ip range.
+     * parseQueryIpV4Mask. use the numMask bits to get a ip range.
      * 
      * @param strQuery
      *            query ip v4 string.
@@ -200,9 +199,12 @@ public class IpQueryParam extends QueryParam {
         final long numBase = 2;
         final long numBytes = 32;
         BigDecimal[] ipV4 = IpUtil.ipV4ToDecimal(strQuery);
-        long maskRangeBytes =  numBytes - numMask;
+        long maskRangeBytes = 0;
+        if (numMask > 0) {
+            maskRangeBytes = numBytes - numMask;
+        }
         if (maskRangeBytes > 0 && maskRangeBytes <= numBytes) {
-            //2^numMask sub 1
+            // 2^numMask sub 1
             final long maskV4High = (long) (Math.pow(numBase, maskRangeBytes) - 1L);
             final long maskV4Low = (long) Math.pow(numBase, numBytes)
                     - maskV4High - 1L;
@@ -227,14 +229,18 @@ public class IpQueryParam extends QueryParam {
      */
     private void parseQueryIpV6Mask(String strQuery, BigDecimal[] ipV6) {
         final int lowLimitShift = 64;
-        int lowShift = lowLimitShift * 2 - (int) numMask;
+        long maskRangeBytes = 0;
+        if (numMask > 0) {
+            maskRangeBytes = lowLimitShift * 2 - numMask;
+        }
+        int lowShift = (int) maskRangeBytes;
         BigDecimal powDecimalBase = BigDecimal.valueOf(2L);
         BigDecimal endSubDecimalBase = BigDecimal.valueOf(1L);
 
         ipQueryStartHigh = ipV6[0];
         ipQueryEndHigh = ipV6[0];
-        if (numMask > lowLimitShift) {
-            int highShift = (int) numMask - lowLimitShift;
+        if (maskRangeBytes > lowLimitShift) {
+            int highShift = (int) maskRangeBytes - lowLimitShift;
             // start high
             BigDecimal powDecimalhigh = powDecimalBase.pow(highShift);
             BigDecimal modDecimalHigh = ipV6[0].remainder(powDecimalhigh);
