@@ -35,53 +35,58 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
- * IP network registrations found in RIRs and is the expected response for the
- * "/ip" query as defined by [I-D.ietf-weirds-rdap-query].
+ * represents information regarding ip used in both forward and reverse DNS.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
+@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "startAddress",
+        "endAddress", "ipVersion", "name", "type", "country", "parentHandle",
+        "status", "entities", "remarks", "links", "port43", "events", "lang" })
 public class Network extends BaseModel {
     /**
-     * the starting IP address of the network.
+     * representing a registry unique identifier of the ip object instance.
+     */
+    private String handle;
+    /**
+     * startAddress labels as described by [//].
      */
     private String startAddress;
     /**
-     * the ending IP address of the network.
+     * endAddress as described by [//].
      */
     private String endAddress;
     /**
-     * @see IpVersion.
+     * represents the IPVersion.
      */
     private IpVersion ipVersion;
     /**
-     * an identifier assigned to the network registration by the registration
-     * holder.
+     * represents the name.
      */
     private String name;
     /**
-     * a string containing an RIR-specific classification of the network.
+     * represents the type.
      */
     private String type;
     /**
-     * a string containing the name of the 2 character country code of the
-     * network.
+     * represents the country.
      */
     private String country;
     /**
-     * a string containing an RIR-unique identifier of the parent network of
-     * this network registration.
+     * represents the parentHandle.
      */
     private String parentHandle;
-    /**
-     * an array of strings indicating the state of the IP network.
-     */
-    private List<String> status;
     /**
      * entities.
      */
     private List<Entity> entities;
+    /**
+     * status.
+     */
+    private List<String> status;
     /**
      * remarks.
      */
@@ -99,90 +104,82 @@ public class Network extends BaseModel {
      */
     private List<Event> events;
 
-    /**
-     * ip version:v4,v6.
-     * 
-     * @author jiashuo
-     * 
-     */
-    public enum IpVersion {
-        /**
-         * The representation of IPv4 addresses in this document uses the
-         * dotted-decimal notation described in [RFC1166]. The representation of
-         * IPv6 addresses in this document follow the forms outlined in
-         * [RFC5952].
-         */
-        V4("v4"), V6("v6");
-        /**
-         * a string signifying the IP protocol version of the network: "v4"
-         * signifying an IPv4 network, "v6" signifying an IPv6 network.
-         */
-        private String name;
-
-        /**
-         * check ip version string is ipv4.
-         * 
-         * @param ipVersionStr
-         *            ip version string.
-         * @return true if is, false if not.
-         */
-        public static boolean isV4(String ipVersionStr) {
-            if (V4.getName().equals(ipVersionStr)) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * check ip version string is ipv6.
-         * 
-         * @param ipVersionStr
-         *            ip version string.
-         * @return true if is, false if not.
-         */
-        public static boolean isV6(String ipVersionStr) {
-            if (V6.getName().equals(ipVersionStr)) {
-                return true;
-            }
-            return false;
-        }
-        /**
-         * default constructor.
-         * 
-         * @param name
-         *            ip version name.
-         */
-        private IpVersion(String name) {
-            this.name = name;
-        }
-
-        /**
-         * get name.
-         * 
-         * @return name.
-         */
-        public String getName() {
-            return name;
-        }
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.IP;
     }
 
     /**
      * add a status string to status list.
      * 
      * @param statusStr
-     *            status.
+     *            statusStr.
      */
     public void addStatus(String statusStr) {
         if (StringUtils.isBlank(statusStr)) {
             return;
         }
-        statusStr = StringUtils.trim(statusStr);
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        if(!this.status.contains(statusStr)){
-            this.status.add(statusStr);
-        }
+        this.status.add(statusStr);
+    }
+
+    /**
+     * get handle.
+     * 
+     * @return handle
+     */
+    public String getHandle() {
+        return handle;
+    }
+
+    /**
+     * set handle.
+     * 
+     * @param handle
+     *            handle of domain
+     */
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
+    /**
+     * get start ipAddress.
+     * 
+     * @return start address of IP
+     */
+    public String getStartAddress() {
+        return startAddress;
+    }
+
+    /**
+     * set start ipAddress.
+     * 
+     * @param startAddress
+     *            start address of IP
+     */
+    public void setStartAddress(String startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    /**
+     * get endAddress of IP.
+     * 
+     * @return endAddress
+     */
+    public String getEndAddress() {
+        return endAddress;
+    }
+
+    /**
+     * set endAddress.
+     * 
+     * @param endAddress
+     *            endAddress of IP
+     */
+    public void setEndAddress(String endAddress) {
+        this.endAddress = endAddress;
     }
 
     /**
@@ -300,45 +297,7 @@ public class Network extends BaseModel {
     }
 
     /**
-     * get startAddress.
-     * 
-     * @return startAddress.
-     */
-    public String getStartAddress() {
-        return startAddress;
-    }
-
-    /**
-     * set startAddress.
-     * 
-     * @param startAddress
-     *            startAddress.
-     */
-    public void setStartAddress(String startAddress) {
-        this.startAddress = startAddress;
-    }
-
-    /**
-     * get endAddress.
-     * 
-     * @return endAddress.
-     */
-    public String getEndAddress() {
-        return endAddress;
-    }
-
-    /**
-     * set endAddress.
-     * 
-     * @param endAddress
-     *            endAddress.
-     */
-    public void setEndAddress(String endAddress) {
-        this.endAddress = endAddress;
-    }
-
-    /**
-     * get ipVersion.
+     * get IPVersion.
      * 
      * @return ipVersion.
      */
@@ -350,12 +309,11 @@ public class Network extends BaseModel {
      * set ipVersion.
      * 
      * @param ipVersion
-     *            ipVersion.
+     *            ip for set.
      */
     public void setIpVersion(IpVersion ipVersion) {
         this.ipVersion = ipVersion;
     }
-
     /**
      * get name.
      * 
@@ -369,12 +327,11 @@ public class Network extends BaseModel {
      * set name.
      * 
      * @param name
-     *            name.
+     *            name for set.
      */
     public void setName(String name) {
         this.name = name;
     }
-
     /**
      * get type.
      * 
@@ -388,12 +345,11 @@ public class Network extends BaseModel {
      * set type.
      * 
      * @param type
-     *            type.
+     *            type for set.
      */
     public void setType(String type) {
         this.type = type;
     }
-
     /**
      * get country.
      * 
@@ -407,12 +363,11 @@ public class Network extends BaseModel {
      * set country.
      * 
      * @param country
-     *            country.
+     *            country for set.
      */
     public void setCountry(String country) {
         this.country = country;
     }
-
     /**
      * get parentHandle.
      * 
@@ -426,9 +381,76 @@ public class Network extends BaseModel {
      * set parentHandle.
      * 
      * @param parentHandle
-     *            parentHandle.
+     *            parentHandle for set.
      */
     public void setParentHandle(String parentHandle) {
         this.parentHandle = parentHandle;
+    }
+    
+    /**
+     * ip version:v4,v6.
+     * 
+     * @author jiashuo
+     * 
+     */
+    public enum IpVersion {
+        /**
+         * The representation of IPv4 addresses in this document uses the
+         * dotted-decimal notation described in [RFC1166]. The representation of
+         * IPv6 addresses in this document follow the forms outlined in
+         * [RFC5952].
+         */
+        V4("v4"), V6("v6");
+        /**
+         * a string signifying the IP protocol version of the network: "v4"
+         * signifying an IPv4 network, "v6" signifying an IPv6 network.
+         */
+        private String name;
+
+        /**
+         * check ip version string is ipv4.
+         * 
+         * @param ipVersionStr
+         *            ip version string.
+         * @return true if is, false if not.
+         */
+        public static boolean isV4(String ipVersionStr) {
+            if (V4.getName().equals(ipVersionStr)) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * check ip version string is ipv6.
+         * 
+         * @param ipVersionStr
+         *            ip version string.
+         * @return true if is, false if not.
+         */
+        public static boolean isV6(String ipVersionStr) {
+            if (V6.getName().equals(ipVersionStr)) {
+                return true;
+            }
+            return false;
+        }
+        /**
+         * default constructor.
+         * 
+         * @param name
+         *            ip version name.
+         */
+        private IpVersion(String name) {
+            this.name = name;
+        }
+
+        /**
+         * get name.
+         * 
+         * @return name.
+         */
+        public String getName() {
+            return name;
+        }
     }
 }

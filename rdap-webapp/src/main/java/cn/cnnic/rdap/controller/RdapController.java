@@ -49,10 +49,11 @@ import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainSearch;
 import cn.cnnic.rdap.bean.Entity;
-import cn.cnnic.rdap.bean.Ip;
+import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.NameserverSearch;
+import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.common.util.AutnumValidator;
 import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.IpUtil;
@@ -428,11 +429,10 @@ public class RdapController {
         if (StringUtils.isNotBlank(ipMask)) {
             numMask = StringUtil.parseUnsignedLong(strMask);
         }
-        String strIpVersion = "";
+        IpVersion ipVersion = IpVersion.V6;
         boolean isV4 = IpUtil.isIpV4StrWholeValid(strIp);
         boolean isV6 = IpUtil.isIpV6StrValid(strIp);
-        final String ipV4 = "v4";
-        final String ipV6 = "v6";
+
         if (!isV4 && !isV6) {
             return RestResponseUtil.createResponse400();
         }
@@ -440,17 +440,17 @@ public class RdapController {
             if (numMask > maskHighV4 || numMask < maskLow) {
                 return RestResponseUtil.createResponse400();
             }
-            strIpVersion = ipV4;
+            ipVersion = IpVersion.V4;
         } else if (isV6) {
             if (numMask > maskHighV6 || numMask < maskLow) {
                 return RestResponseUtil.createResponse400();
             }
-            strIpVersion = ipV6;
+            ipVersion = IpVersion.V6;
         }
         StringUtils.lowerCase(strIp);
         // query ip
-        Ip ip = queryService.queryIp(queryParser.parseIpQueryParam(strIp,
-                numMask, strIpVersion));
+        Network ip = queryService.queryIp(queryParser.parseIpQueryParam(strIp,
+                numMask, ipVersion));
         if (null != ip) {
             if (!accessControlManager.hasPermission(ip)) {
                 return RestResponseUtil.createResponse403();

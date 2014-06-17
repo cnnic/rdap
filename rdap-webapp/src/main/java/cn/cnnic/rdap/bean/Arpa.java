@@ -30,6 +30,7 @@
  */
 package cn.cnnic.rdap.bean;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -374,5 +375,15 @@ public class Arpa {
             lowBytes[i] = (byte) (MASK_FF & lb);
         }
         this.endLowAddress = new BigInteger(1, lowBytes);
+    }
+    
+    public NetworkQueryParam toNetworkQueryParam() {
+        
+        NetworkQueryParam param = new NetworkQueryParam(name, 
+                new BigDecimal(startHighAddress), new BigDecimal(endHighAddress), 
+                new BigDecimal(startLowAddress), new BigDecimal(endLowAddress), 
+                ipVersion);
+        
+        return param;
     }
 }
