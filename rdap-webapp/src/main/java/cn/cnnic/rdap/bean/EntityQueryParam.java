@@ -28,40 +28,68 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.service;
+package cn.cnnic.rdap.bean;
 
-import cn.cnnic.rdap.bean.DomainSearch;
-import cn.cnnic.rdap.bean.EntitySearch;
-import cn.cnnic.rdap.bean.NameserverSearch;
-import cn.cnnic.rdap.bean.QueryParam;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * search service interface.
+ * entity query parameter bean.
  * 
  * @author jiashuo
  * 
  */
-public interface SearchService {
+public class EntityQueryParam extends QueryParam {
     /**
-     * search domain by domain name.
+     * default constructor.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return domain list.
+     * @param q
+     *            query string.
      */
-    DomainSearch searchDomain(QueryParam queryParam);
+    public EntityQueryParam(String q) {
+        super(q);
+    }
+
     /**
-     * search nameserver by name.
+     * constructor.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return NameserverSearch.
+     * @param q
+     *            query string.
+     * @param searchParamName
+     *            searchParamName.
      */
-    NameserverSearch searchNameserver(QueryParam queryParam);
+    public EntityQueryParam(String q, String searchParamName) {
+        super(q);
+        this.searchParamName = searchParamName;
+    }
+
     /**
-     * search entity by handle or name.
-     * @param queryParam queryParam.
-     * @return DomainSearch.
+     * searchParamName.
      */
-    EntitySearch searchEntity(QueryParam queryParam);
+    private String searchParamName;
+
+    /**
+     * get searchParamName.
+     * 
+     * @return searchParamName.
+     */
+    public String getSearchParamName() {
+        return searchParamName;
+    }
+
+    /**
+     * set searchParamName.
+     * 
+     * @param searchParamName
+     *            searchParamName.
+     */
+    public void setSearchParamName(String searchParamName) {
+        this.searchParamName = searchParamName;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(searchParamName).append(getQ())
+                .toString();
+    }
+
 }

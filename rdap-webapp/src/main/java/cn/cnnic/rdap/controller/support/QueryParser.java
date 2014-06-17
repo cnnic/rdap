@@ -32,13 +32,13 @@ package cn.cnnic.rdap.controller.support;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.DomainQueryParam;
+import cn.cnnic.rdap.bean.EntityQueryParam;
+import cn.cnnic.rdap.bean.IpQueryParam;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.bean.IpQueryParam;
 
 /**
  * 
@@ -102,6 +102,16 @@ public class QueryParser {
         return ipQueryParam;
     }
 
+    /**
+     * generate EntityQueryParam.
+     * @param q query string.
+     * @param paramName param name.
+     * @return QueryParam.
+     */
+    public QueryParam parseEntityQueryParam(String q, String paramName) {
+        return new EntityQueryParam(q, paramName);
+    }
+    
     /**
      * get parameter from request,get first if has more than one value.
      * 

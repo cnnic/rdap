@@ -51,9 +51,9 @@ import org.springframework.stereotype.Repository;
 
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.EntityAddress;
+import cn.cnnic.rdap.bean.EntityQueryParam;
 import cn.cnnic.rdap.bean.EntityTel;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
@@ -161,27 +161,25 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         List<Entity> entities = searchWithoutInnerObjects(queryParam);
         queryAndSetEntityStatus(entities);
         queryAndSetInnerObjectsWithoutEntities(entities);
+        queryAndSetNetworksAndAs(entities);
         return entities;
     }
 
     @Override
     public Long searchCount(QueryParam queryParam) {
-        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
-        final String domainName = domainQueryParam.getQ();
-        final String punyName = domainQueryParam.getPunyName();
-        final String domainNameLikeClause =
-                super.generateLikeClause(domainName);
-        final String punyNameLikeClause = super.generateLikeClause(punyName);
+        EntityQueryParam entityQueryParam = (EntityQueryParam) queryParam;
+        final String q = entityQueryParam.getQ();
+        final String paramName = entityQueryParam.getSearchParamName();
+        final String qLikeClause = super.generateLikeClause(q);
         final String sql =
-                "select count(1) as COUNT from RDAP_DOMAIN domain "
-                        + " where LDH_NAME like ? or UNICODE_NAME like ? ";
+                "select count(1) as COUNT from RDAP_ENTITY "
+                        + " where " + paramName + " like ? ";
         Long entityCount = jdbcTemplate.query(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql);
-                ps.setString(1, punyNameLikeClause);
-                ps.setString(2, domainNameLikeClause);
+                ps.setString(1, qLikeClause);
                 return ps;
             }
         }, new CountResultSetExtractor());
@@ -206,6 +204,19 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         setTruncatedIfTooMuchResult(entity);
     }
     
+    /**
+     * query and set network and autnum.
+     * @param entities entities.
+     */
+    private void queryAndSetNetworksAndAs(List<Entity> entities) {
+        if (null == entities) {
+            return;
+        }
+        for (Entity entity : entities) {
+            queryAndSetNetworksAndAs(entity);
+        }
+    }
+
     /**
      * query inner objects of entity,and set fill them to entity.
      * 
@@ -470,26 +481,6 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * entity ResultSetExtractor, extract data ResultSet.
-     * 
-     * 
-     * or jiashuo
-     * 
-     */
-    class EntityResultSetExtractor implements ResultSetExtractor<List<Entity>> {
-        @Override
-        public List<Entity> extractData(ResultSet rs) throws SQLException {
-            List<Entity> result = new ArrayList<Entity>();
-            while (rs.next()) {
-                Entity entity = new Entity();
-                extractEntityFromRs(rs, entity);
-                result.add(entity);
-            }
-            return result;
-        }
-    }
-
-    /**
      * extract entity ResultSet.
      * 
      * @param rs
@@ -619,23 +610,23 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * search domain, without inner objects.
+     * search entity, without inner objects.
      * 
      * @param params
      *            query parameter.
-     * @return domain list.
+     * @return entity list.
      */
     private List<Entity> searchWithoutInnerObjects(final QueryParam params) {
-        DomainQueryParam domainQueryParam = (DomainQueryParam) params;
-        final String domainName = domainQueryParam.getQ();
-        final String punyName = domainQueryParam.getPunyName();
-        final String domainNameLikeClause =
-                super.generateLikeClause(domainName);
-        final String punyNameLikeClause = super.generateLikeClause(punyName);
+        EntityQueryParam entityQueryParam = (EntityQueryParam) params;
+        final String q = entityQueryParam.getQ();
+        final String paramName = entityQueryParam.getSearchParamName();
+        final String qLikeClause = super.generateLikeClause(q);
         final String sql =
-                "select * from RDAP_DOMAIN domain "
-                        + " where LDH_NAME like ? or UNICODE_NAME like ? "
-                        + " order by domain.LDH_NAME limit ?,? ";
+                "select * from RDAP_ENTITY entity "
+                        + " left outer join REL_ENTITY_REGISTRATION rel "
+                        + " on entity.ENTITY_ID = rel.ENTITY_ID "
+                        + " where " + paramName + " like ? "
+                        + " order by entity.HANDLE limit ?,? ";
         final PageBean page = params.getPageBean();
         int startPage = page.getCurrentPage() - 1;
         startPage = startPage >= 0 ? startPage : 0;
@@ -646,13 +637,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
-                        ps.setString(1, punyNameLikeClause);
-                        ps.setString(2, domainNameLikeClause);
-                        ps.setLong(3, startRow);
-                        ps.setLong(4, page.getMaxRecords());
+                        ps.setString(1, qLikeClause);
+                        ps.setLong(2, startRow);
+                        ps.setLong(3, page.getMaxRecords());
                         return ps;
                     }
-                }, new EntityResultSetExtractor());
+                }, new EntityWithRoleResultSetExtractor());
         return result;
     }
 }
