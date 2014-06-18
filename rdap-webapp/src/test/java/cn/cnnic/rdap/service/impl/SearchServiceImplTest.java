@@ -41,12 +41,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.DomainSearch;
+import cn.cnnic.rdap.bean.EntitySearch;
 import cn.cnnic.rdap.bean.NameserverSearch;
 import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.SearchService;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
@@ -68,8 +68,54 @@ public class SearchServiceImplTest extends BaseTest {
      */
     @Test
      @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH,
-            value = "classpath:cn/cnnic/rdap/dao/impl/domain-search-page.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
+    public void testSearchEntity() {
+        String entityHandle = "truncated*";
+        RdapProperties prop = new RdapProperties();
+        // resultsTruncated = true, batch<max
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
+        ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
+        EntitySearch entitySearch = searchService.searchEntity(queryParser
+                .parseDomainQueryParam(entityHandle, entityHandle));
+        assertNotNull(entitySearch);
+        assertNotNull(entitySearch.getEntitySearchResults());
+        assertEquals(4L, entitySearch.getEntitySearchResults().size());
+        assertTrue(entitySearch.getResultsTruncated());
+        // resultsTruncated = true, batch=max
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
+        ReflectionTestUtils.setField(prop, "batchsizeSearch", 5L);
+        entitySearch = searchService.searchEntity(queryParser
+                .parseDomainQueryParam(entityHandle, entityHandle));
+        assertNotNull(entitySearch);
+        assertNotNull(entitySearch.getEntitySearchResults());
+        assertEquals(4L, entitySearch.getEntitySearchResults().size());
+        assertTrue(entitySearch.getResultsTruncated());
+        // resultsTruncated = true, batch>max
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
+        ReflectionTestUtils.setField(prop, "batchsizeSearch", 6L);
+        entitySearch = searchService.searchEntity(queryParser
+                .parseDomainQueryParam(entityHandle, entityHandle));
+        assertNotNull(entitySearch);
+        assertNotNull(entitySearch.getEntitySearchResults());
+        assertEquals(4L, entitySearch.getEntitySearchResults().size());
+        assertTrue(entitySearch.getResultsTruncated());
+        // no resultsTruncated
+        ReflectionTestUtils.setField(prop, "maxsizeSearch", 6L);
+        ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
+        entitySearch = searchService.searchEntity(queryParser
+                .parseDomainQueryParam(entityHandle, entityHandle));
+        assertNotNull(entitySearch);
+        assertNotNull(entitySearch.getEntitySearchResults());
+        assertEquals(4L, entitySearch.getEntitySearchResults().size());
+        assertNull(entitySearch.getResultsTruncated());
+    }
+    
+    /**
+     * test search domain.
+     */
+    @Test
+     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-search-page.xml")
     public void testQueryDomain() {
         String domainName = "truncated*.cn";
         RdapProperties prop = new RdapProperties();
@@ -116,8 +162,7 @@ public class SearchServiceImplTest extends BaseTest {
      */
     @Test
      @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH,
-            value = "classpath:cn/cnnic/rdap/dao/impl/nameserver-search-page.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserver-search-page.xml")
     public void testSearchNameserver() {
         String nsName = "ns.truncated*.cn";
         RdapProperties prop = new RdapProperties();
