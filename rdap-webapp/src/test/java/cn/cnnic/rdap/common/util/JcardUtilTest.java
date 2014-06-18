@@ -31,10 +31,13 @@
 package cn.cnnic.rdap.common.util;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.core.IsNot;
+import org.hamcrest.core.StringContains;
 import org.junit.Test;
 
 import cn.cnnic.rdap.bean.Entity;
@@ -77,13 +80,62 @@ public class JcardUtilTest {
         telephones.add(entityTel);
         entityTel.setPref(1);
         entityTel.setTypes("home;text");
-        entityTel.setGlobalNumber("+a1-800-555-9876");
-        entityTel.setExtNumber("1234");
+        entityTel.setGlobalNumber("+9981-().");
+        entityTel.setExtNumber("998-()");
         entity.setTelephones(telephones);
         entity.setEmail("johndoe@hotmail.com");
         entity.setTitle("CEO");
         entity.setOrg("org");
         entity.setUrl("http://www.acme-co.com");
         assertNotNull(JcardUtil.toJcardString(entity));
+    }
+    
+    @Test
+    public void testTel() {
+        Entity entity = new Entity();
+        List<EntityTel> telephones = new ArrayList<EntityTel>();
+        EntityTel entityTel = new EntityTel();
+        // valid tel
+        telephones.add(entityTel);
+        entityTel.setPref(1);
+        entityTel.setTypes("home;text");
+        entityTel.setGlobalNumber("+9981-().");
+        entityTel.setExtNumber("998-()");
+        // invalid tel
+        entityTel = new EntityTel();
+        telephones.add(entityTel);
+        entityTel.setGlobalNumber("+0981+-().");
+        entityTel.setExtNumber("998-()");
+        // invalid tel
+        entityTel = new EntityTel();
+        telephones.add(entityTel);
+        entityTel.setGlobalNumber("+9981+-().");
+        entityTel.setExtNumber("+998-()");
+        // invalid tel
+        entityTel = new EntityTel();
+        telephones.add(entityTel);
+        entityTel.setGlobalNumber("a9981-().");
+        entityTel.setExtNumber("998-()");
+        // invalid tel
+        entityTel = new EntityTel();
+        telephones.add(entityTel);
+        entityTel.setGlobalNumber("@#-().");
+        entityTel.setExtNumber("998-()");
+        // invalid tel
+        entityTel = new EntityTel();
+        telephones.add(entityTel);
+        entityTel.setGlobalNumber(" +9981-().");
+        entityTel.setExtNumber("998-()");
+        entity.setTelephones(telephones);
+        String jcardString = JcardUtil.toJcardString(entity);
+        assertNotNull(jcardString);
+        assertThat(jcardString, new StringContains("+9981-().")); 
+        assertThat(jcardString, new StringContains("998-()")); 
+        assertThat(jcardString, new IsNot(new StringContains("+9981+-()."))); 
+        assertThat(jcardString, new IsNot(new StringContains("+0981+-()."))); 
+        assertThat(jcardString, new IsNot(new StringContains("+998-()"))); 
+        assertThat(jcardString, new IsNot(new StringContains("a9981-()."))); 
+        assertThat(jcardString, new IsNot(new StringContains("@#-()."))); 
+        assertThat(jcardString, new IsNot(new StringContains(" +9981-()."))); 
     }
 }

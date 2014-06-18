@@ -101,10 +101,24 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Override
     public Network query(QueryParam queryParam) {
         Network network = queryWithoutInnerObjects(queryParam);
-        queryAndSetInnerObjects(network);
+        queryAndSetInnerObjectsWithoutEntities(network);
+        queryAndSetEntities(network);
         return network;
     }
     
+    /**
+     * query and set entities.
+     * @param network network.
+     */
+    private void queryAndSetEntities(Network network) {
+        if(null == network){
+            return;
+        }
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(network.getId(), ModelType.IP);
+        network.setEntities(entities);
+    }
+
     /**
      * query network for arpa.
      *
@@ -136,7 +150,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
             return;
         }
         for(Network network:networks){
-            queryAndSetInnerObjects(network);
+            queryAndSetInnerObjectsWithoutEntities(network);
         }
     }
 
@@ -178,7 +192,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * @param ip
      *            inner objects will be filled.
      */
-    private void queryAndSetInnerObjects(Network objIp) {
+    private void queryAndSetInnerObjectsWithoutEntities(Network objIp) {
         if (null == objIp) {
             return;
         }
@@ -193,9 +207,6 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
         List<Event> events = eventQueryDao.queryAsInnerObjects(ipId,
                 ModelType.IP);
         objIp.setEvents(events);
-        List<Entity> entities =
-                entityQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
-        objIp.setEntities(entities);
     }
 
     /**

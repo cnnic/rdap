@@ -159,9 +159,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     @Override
     public List<Entity> search(QueryParam queryParam) {
         List<Entity> entities = searchWithoutInnerObjects(queryParam);
-        queryAndSetEntityStatus(entities);
         queryAndSetInnerObjectsWithoutEntities(entities);
         queryAndSetNetworksAndAs(entities);
+        queryAndSetInnerEntities(entities);
         return entities;
     }
 
@@ -184,6 +184,19 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             }
         }, new CountResultSetExtractor());
         return entityCount;
+    }
+    
+    /**
+     * query and set inner entities.
+     * @param entities entities.
+     */
+    private void queryAndSetInnerEntities(List<Entity> entities) {
+        if (null == entities) {
+            return;
+        }
+        for (Entity entity : entities) {
+            queryAndSetInnerEntities(entity);
+        }
     }
 
     /**

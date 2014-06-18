@@ -55,7 +55,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * 
  */
 @SuppressWarnings("rawtypes")
-public class RdapControllerEntityTest extends BaseTest {
+public class RdapControllerEntitySearchTest extends BaseTest {
 
     @Autowired
     private WebApplicationContext wac;
@@ -79,7 +79,7 @@ public class RdapControllerEntityTest extends BaseTest {
     public void testQueryExist() throws Exception {
         String entityHandle = "h1";
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + entityHandle).accept(
+                get("/.well-known/rdap/entities?handle=" + entityHandle).accept(
                         MediaType.parseMediaType("application/rdap+json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/rdap+json"))

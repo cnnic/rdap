@@ -80,6 +80,49 @@ public final class StringUtil {
     public static final int MAX_ENTITY_HANDLE_LENGTH = 253;
 
     /**
+     * check if str is valid search pattern.
+     * 
+     * <pre>
+     * StringUtil.checkIsValidSearchPattern(null)      = false
+     * StringUtil.checkIsValidSearchPattern("")        = false
+     * StringUtil.checkIsValidSearchPattern(" ")       = false
+     * StringUtil.checkIsValidSearchPattern("*")       = false
+     * StringUtil.checkIsValidSearchPattern("*bob")    = false
+     * StringUtil.checkIsValidSearchPattern("*bob*")   = false
+     * </pre>
+     * 
+     * @param str
+     *            str.
+     * @return true if valid,false if not.
+     */
+    public static boolean checkIsValidSearchPattern(String str) {
+        if (StringUtils.isBlank(str)) {
+            return false;
+        }
+        if (ASTERISK.equals(str) || str.startsWith(ASTERISK)) {
+            return false;
+        }
+        return containsAtMostOnce(str, ASTERISK);
+    }
+
+    /**
+     * check if str contains searchStr more than once.
+     * 
+     * @param str
+     *            str
+     * @param searchStr
+     *            searchStr.
+     * @return true if contains more than once, false if not.
+     */
+    public static boolean containsAtMostOnce(String str, String searchStr) {
+        if (StringUtils.isBlank(str) || StringUtils.isBlank(searchStr)) {
+            return false;
+        }
+        return StringUtils.indexOf(str, searchStr) == StringUtils.lastIndexOf(
+                str, searchStr);
+    }
+
+    /**
      * check is valid entity handle.
      * 
      * @param handle
