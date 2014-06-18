@@ -28,65 +28,68 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.service;
+package cn.cnnic.rdap.bean;
 
-import cn.cnnic.rdap.bean.Autnum;
-import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.Entity;
-import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.bean.QueryParam;
-import cn.cnnic.rdap.bean.Network;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * query service interface.
+ * entity query parameter bean.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryService {
+public class EntityQueryParam extends QueryParam {
     /**
-     * query domain by domain name.
+     * default constructor.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return domain object.
+     * @param q
+     *            query string.
      */
-    Domain queryDomain(QueryParam queryParam);
+    public EntityQueryParam(String q) {
+        super(q);
+    }
 
     /**
-     * query autnm.
+     * constructor.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return autnum autnum.
+     * @param q
+     *            query string.
+     * @param searchParamName
+     *            searchParamName.
      */
-    Autnum queryAutnum(QueryParam queryParam);
+    public EntityQueryParam(String q, String searchParamName) {
+        super(q);
+        this.searchParamName = searchParamName;
+    }
 
     /**
-     * query nameserver.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Nameserver for the result.
+     * searchParamName.
      */
-    Nameserver queryNameserver(QueryParam queryParam);
+    private String searchParamName;
 
     /**
-     * query entity.
+     * get searchParamName.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return Entity.
+     * @return searchParamName.
      */
-    Entity queryEntity(QueryParam queryParam);
+    public String getSearchParamName() {
+        return searchParamName;
+    }
 
     /**
-     * query Ip.
+     * set searchParamName.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return Ip for the result.
+     * @param searchParamName
+     *            searchParamName.
      */
-    Network queryIp(QueryParam queryParam);
+    public void setSearchParamName(String searchParamName) {
+        this.searchParamName = searchParamName;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(searchParamName).append(getQ())
+                .toString();
+    }
 
 }

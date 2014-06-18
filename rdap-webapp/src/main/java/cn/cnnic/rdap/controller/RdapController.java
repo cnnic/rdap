@@ -49,10 +49,13 @@ import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainSearch;
 import cn.cnnic.rdap.bean.Entity;
-import cn.cnnic.rdap.bean.Ip;
+import cn.cnnic.rdap.bean.EntitySearch;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.NameserverSearch;
+import cn.cnnic.rdap.bean.Network;
+import cn.cnnic.rdap.bean.Network.IpVersion;
+import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.common.util.AutnumValidator;
 import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.IpUtil;
@@ -120,7 +123,7 @@ public class RdapController {
     public ResponseEntity queryEntity(@PathVariable String handle,
             HttpServletRequest request, HttpServletResponse response) {
         LOGGER.info("query entity,handle:" + handle);
-        if (!StringUtil.isValidEntityHandle(handle)) {
+        if (!StringUtil.isValidEntityHandleOrName(handle)) {
             return RestResponseUtil.createResponse400();
         }
         Entity result = queryService.queryEntity(queryParser
@@ -132,6 +135,44 @@ public class RdapController {
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
+        return RestResponseUtil.createResponse404();
+    }
+    
+    /**
+     * search entity by handle or name.
+     * @param fn fn.
+     * @param handle handle.
+     * @param request request.
+     * @return ResponseEntity.
+     */
+    @RequestMapping(value = "/entities", method = RequestMethod.GET)
+    public ResponseEntity searchEntity(@RequestParam(required = false) String fn,
+            @RequestParam(required = false) String handle,
+            HttpServletRequest request){
+        LOGGER.info("search entities.fn:{},handle:{}",fn,handle);
+        final String fnParamName = "fn";
+        final String handleParamName = "handle";
+        String paramName = queryParser.getFirstParameter(request,
+                new String[]{fnParamName,handleParamName});
+        if (StringUtils.isBlank(paramName)) {
+            return RestResponseUtil.createResponse400();
+        }
+        String paramValue = queryParser.getParameter(request, paramName);
+        if (!StringUtil.isValidEntityHandleOrName(paramValue)) {
+            return RestResponseUtil.createResponse400();
+        }
+        QueryParam queryParam = queryParser
+                .parseEntityQueryParam(paramValue, paramName);
+        LOGGER.info("generate queryParam:{}",queryParam);
+        EntitySearch result = searchService.searchEntity(queryParam);
+        if (null != result) {
+            if (!accessControlManager.hasPermission(result)) {
+                return RestResponseUtil.createResponse403();
+            }
+            responseDecorator.decorateResponse(result);
+            return RestResponseUtil.createResponse200(result);
+        }
+        
         return RestResponseUtil.createResponse404();
     }
 
@@ -428,11 +469,10 @@ public class RdapController {
         if (StringUtils.isNotBlank(ipMask)) {
             numMask = StringUtil.parseUnsignedLong(strMask);
         }
-        String strIpVersion = "";
+        IpVersion ipVersion = IpVersion.V6;
         boolean isV4 = IpUtil.isIpV4StrWholeValid(strIp);
         boolean isV6 = IpUtil.isIpV6StrValid(strIp);
-        final String ipV4 = "v4";
-        final String ipV6 = "v6";
+
         if (!isV4 && !isV6) {
             return RestResponseUtil.createResponse400();
         }
@@ -440,17 +480,17 @@ public class RdapController {
             if (numMask > maskHighV4 || numMask < maskLow) {
                 return RestResponseUtil.createResponse400();
             }
-            strIpVersion = ipV4;
+            ipVersion = IpVersion.V4;
         } else if (isV6) {
             if (numMask > maskHighV6 || numMask < maskLow) {
                 return RestResponseUtil.createResponse400();
             }
-            strIpVersion = ipV6;
+            ipVersion = IpVersion.V6;
         }
         StringUtils.lowerCase(strIp);
         // query ip
-        Ip ip = queryService.queryIp(queryParser.parseIpQueryParam(strIp,
-                numMask, strIpVersion));
+        Network ip = queryService.queryIp(queryParser.parseIpQueryParam(strIp,
+                numMask, ipVersion));
         if (null != ip) {
             if (!accessControlManager.hasPermission(ip)) {
                 return RestResponseUtil.createResponse403();

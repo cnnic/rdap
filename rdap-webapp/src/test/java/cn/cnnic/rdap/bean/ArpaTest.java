@@ -15,7 +15,9 @@ public class ArpaTest {
     @Test
     public void testArpa() {
         
-        Arpa arpa = Arpa.decodeArpa("2.0.0.in-addr.arpa");
+        Arpa arpa = null;
+        
+        arpa = Arpa.decodeArpa("2.0.0.in-addr.arpa");
         
         assertNotNull(arpa);
         assertEquals(arpa.getIpVersion().getName(), "v4");
@@ -42,14 +44,14 @@ public class ArpaTest {
         assertEquals(arpa.getEndHighAddress().toString(), "0");
         assertEquals(arpa.getStartHighAddress().toString(), "0");
         
-        arpa = Arpa.decodeArpa("1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa");
+        arpa = Arpa.decodeArpa("f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.ip6.arpa");
         
         assertNotNull(arpa);
         assertEquals(arpa.getIpVersion().getName(), "v6");
         
-        assertEquals(arpa.getStartLowAddress().toString(), "0");
-        assertEquals(arpa.getStartHighAddress().toString(), "1");
-        assertEquals(arpa.getEndHighAddress().toString(), "1");
+        assertEquals(arpa.getStartLowAddress().toString(), "18446744073709551615");
+        assertEquals(arpa.getStartHighAddress().toString(), "18446744073709551615");
+        assertEquals(arpa.getEndHighAddress().toString(), "18446744073709551615");
         assertEquals(arpa.getEndLowAddress().toString(), "18446744073709551615");
                         
     }
