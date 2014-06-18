@@ -166,7 +166,7 @@ public final class DomainUtil {
                 StringUtils.removeEndIgnoreCase(domainName, IPV6_ARPA_SUFFIX);
         // match
         // b.a.9.8.7.6.5.0.4.0.0.0.3.0.0.0.2.0.0.0.1.0.0.0.0.0.0.0.1.2.3.4.
-        String ipV6ArpaReg = "^([\\d|a|b|c|d|e|f]\\.){32}$";
+        String ipV6ArpaReg = "^([\\d|a|b|c|d|e|f]\\.){1,32}$";
         if (domainName.matches(ipV6ArpaReg)) {
             return true;
         }
