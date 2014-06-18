@@ -485,7 +485,6 @@ public final class IpUtil {
     public static BigDecimal[] ipToBigDecimal(String ipStr) {
 
         if (ipStr.indexOf(":") >= 0) {
-            // return Ipv6ToBigDecimal(ipStr);
             return ipV6ToBigDecimalJar(ipStr);
         } else {
             return ipV4ToDecimal(ipStr);
