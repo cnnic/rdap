@@ -151,6 +151,9 @@ public final class StringUtil {
      *             if the string does not contain a parsable unsigned integer.
      */
     public static long parseUnsignedLong(String s) throws NumberFormatException {
+        if (StringUtils.isBlank(s)) {
+            return 0L;
+        }
         return parseUnsignedLong(s, 10);
     }
 

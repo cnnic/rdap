@@ -32,6 +32,7 @@ package cn.cnnic.rdap.controller.support;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.DomainQueryParam;
@@ -151,6 +152,9 @@ public class QueryParser {
     public String getFirstParameter(HttpServletRequest request,
             final String[] strParamOrg) {
         String strQuery = request.getQueryString();
+        if(StringUtils.isBlank(strQuery)){
+            return null;
+        }
         int pos = strQuery.indexOf("?");
         if (-1 != pos) {
             try {
