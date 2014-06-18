@@ -159,6 +159,7 @@ public class RdapController {
             return RestResponseUtil.createResponse400();
         }
         String paramValue = queryParser.getParameter(request, paramName);
+        paramValue = DomainUtil.iso8859Decode(paramValue);
         paramValue = StringUtils.trim(paramValue);
         if (!StringUtil.isValidEntityHandleOrName(paramValue)) {
             return RestResponseUtil.createResponse400();
