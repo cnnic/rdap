@@ -110,7 +110,7 @@ public class RdapController {
 
     /**
      * query entity.
-     *
+     * 
      * @param handle
      *            entity handle.
      * @param request
@@ -504,7 +504,7 @@ public class RdapController {
         }
         return RestResponseUtil.createResponse404();
     }
-    
+
     /**
      * other invalid query uri will response 400 error.
      * 
