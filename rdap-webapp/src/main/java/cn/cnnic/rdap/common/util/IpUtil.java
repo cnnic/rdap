@@ -79,7 +79,7 @@ public final class IpUtil {
             0xFFFFFFFCl, // 1111 1111 1111 1111 1111 1111 1111 1100//30
             0xFFFFFFFEl, // 1111 1111 1111 1111 1111 1111 1111 1110//31
             0xFFFFFFFFl // 1111 1111 1111 1111 1111 1111 1111 1111//32
-            };
+    };
 
     public static long[] IPV6Array = { 0x8000000000000000l, // 1
             0xC000000000000000l, // 2
@@ -145,7 +145,7 @@ public final class IpUtil {
             0xFFFFFFFFFFFFFFFCl, // 62
             0xFFFFFFFFFFFFFFFEl, // 63
             0xFFFFFFFFFFFFFFFFl // 64
-            };
+    };
 
     /**
      * default constructor.
@@ -195,14 +195,12 @@ public final class IpUtil {
         String[] strings = new String[shorts.length];
         for (int i = 0; i < v6MaxSegment; i++) {
             if (i >= 0 && i < v6MaxSegment / 2) {
-                strings[i] =
-                        String.format("%x", (short) (((highBits << i
-                                * twoByteSize) >>> twoByteSize
+                strings[i] = String.format("%x",
+                        (short) (((highBits << i * twoByteSize) >>> twoByteSize
                                 * (oneByteSize - 1)) & fourByteMask));
             } else {
-                strings[i] =
-                        String.format("%x", (short) (((lowBits << i
-                                * twoByteSize) >>> twoByteSize
+                strings[i] = String.format("%x",
+                        (short) (((lowBits << i * twoByteSize) >>> twoByteSize
                                 * (oneByteSize - 1)) & fourByteMask));
             }
         }
@@ -224,8 +222,8 @@ public final class IpUtil {
      * @return true if valid, false if not.
      */
     public static boolean isIpV4StrValid(String str) {
-        Pattern pattern =
-                Pattern.compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
+        Pattern pattern = Pattern
+                .compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
                         + "|[*])\\.){3}(\\d|[1-9]\\d|1\\d\\d|"
                         + "2[0-4]\\d|25[0-5]|[*])$");
         return pattern.matcher(str).matches();
@@ -239,10 +237,29 @@ public final class IpUtil {
      * @return true if valid, false if not.
      */
     public static boolean isIpV4StrWholeValid(String str) {
-        Pattern pattern =
-                Pattern.compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
+        Pattern pattern = Pattern
+                .compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
                         + ")\\.){3}(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])$");
         return pattern.matcher(str).matches();
+    }
+
+    /**
+     * verify if IP v6 string is valid.
+     * 
+     * @param strIp
+     *            IP string.
+     * @return true if valid, false if not.
+     */
+    public static boolean isIpV6StrValid(String strIp) {
+        try {
+            IPv6Address v6Addr = IPv6Address.fromString(strIp);
+            if (v6Addr != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -252,26 +269,28 @@ public final class IpUtil {
      *            IP string.
      * @return true if valid, false if not.
      */
-    public static boolean isIpV6StrValid(String str) {
-        final String regexV6 =
-                "^([\\da-fA-F]{1,4}:){6}((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
-                + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|^::([\\da-fA-F]{1,4}:){0,4}"
+    public static boolean isIpV6RegexValid(String strIp) {
+        final String regexV6 = "^([\\da-fA-F]{1,4}:){6}((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
+                + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
+                + "^::([\\da-fA-F]{1,4}:){0,4}"
                 + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
                 + "^([\\da-fA-F]{1,4}:):([\\da-fA-F]{1,4}:){0,3}"
                 + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
                 + "^([\\da-fA-F]{1,4}:){2}:([\\da-fA-F]{1,4}:){0,2}"
                 + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
                 + "^([\\da-fA-F]{1,4}:){3}:([\\da-fA-F]{1,4}:){0,1}"
-                + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2["
-                        + "0-4]\\d|[01]?\\d\\d?)$|^([\\da-fA-F]{1,4}:){4}:((25[0-5]|2[0-4]\\d|[01]"
-                        + "?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|^([\\da-fA-F]{1,4}:){7}"
-                        + "[\\da-fA-F]{1,4}$|^:((:[\\da-fA-F]{1,4}){1,6}|:)$|^[\\da-fA-F]{1,4}:((:["
-                        + "\\da-fA-F]{1,4}){1,5}|:)$|^([\\da-fA-F]{1,4}:){2}((:[\\da-fA-F]{1,4}){1,4}|"
-                        + ":)$|^([\\da-fA-F]{1,4}:){3}((:[\\da-fA-F]{1,4}){1,3}|:)$|^([\\da-fA-F]{1,4}"
-                        + ":){4}((:[\\da-fA-F]{1,4}){1,2}|:)$|^([\\da-fA-F]{1,4}:){5}:([\\da-fA-F]{1,4}"
-                        + ")?$|^([\\da-fA-F]{1,4}:){6}:$";
+                + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
+                + "^([\\da-fA-F]{1,4}:){4}:((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
+                + "^([\\da-fA-F]{1,4}:){7}[\\da-fA-F]{1,4}$|"
+                + "^:((:[\\da-fA-F]{1,4}){1,6}|:)$|"
+                + "^[\\da-fA-F]{1,4}:((:[\\da-fA-F]{1,4}){1,5}|:)$|"
+                + "^([\\da-fA-F]{1,4}:){2}((:[\\da-fA-F]{1,4}){1,4}|:)$|"
+                + "^([\\da-fA-F]{1,4}:){3}((:[\\da-fA-F]{1,4}){1,3}|:)$|"
+                + "^([\\da-fA-F]{1,4}:){4}((:[\\da-fA-F]{1,4}){1,2}|:)$|"
+                + "^([\\da-fA-F]{1,4}:){5}:([\\da-fA-F]{1,4})?$|"
+                + "^([\\da-fA-F]{1,4}:){6}:$";
         Pattern pattern = Pattern.compile(regexV6);
-        boolean isRegular = pattern.matcher(str).matches();
+        boolean isRegular = pattern.matcher(strIp).matches();
         return isRegular;
     }
 
@@ -333,8 +352,7 @@ public final class IpUtil {
                     startHighAddr = ipInfoLong[0] & IPV6Array[ipLength];
                     startLowAddr = ipInfoLong[1];
 
-                    long inversion =
-                            (~IPV6Array[ipLength]) & 0xFFFFFFFFFFFFFFFFL;
+                    long inversion = (~IPV6Array[ipLength]) & 0xFFFFFFFFFFFFFFFFL;
                     endHighAddr = ipInfoLong[0] | inversion;
                     endLowAddr = startLowAddr;
                 } else {
@@ -342,8 +360,7 @@ public final class IpUtil {
                     startHighAddr = ipInfoLong[0];
                     startLowAddr = ipInfoLong[1] & IPV6Array[ipLength];
 
-                    long inversion =
-                            (~IPV6Array[ipLength]) & 0xFFFFFFFFFFFFFFFFL;
+                    long inversion = (~IPV6Array[ipLength]) & 0xFFFFFFFFFFFFFFFFL;
                     endLowAddr = ipInfoLong[0] | inversion;
                     endHighAddr = startHighAddr;
                 }
@@ -364,8 +381,7 @@ public final class IpUtil {
             }
         }
 
-        long[] iplongs =
-                { startHighAddr, endHighAddr, startLowAddr, endLowAddr };
+        long[] iplongs = { startHighAddr, endHighAddr, startLowAddr, endLowAddr };
         return iplongs;
     }
 
@@ -393,16 +409,16 @@ public final class IpUtil {
             if (startAddress.indexOf(":") != -1
                     && endAddress.indexOf(":") != -1) {
                 if (endIpLength < sizeAll) {
-                    startHighAddr =
-                            ipStartInfoLong[0] & IPV6Array[startIpLength];
+                    startHighAddr = ipStartInfoLong[0]
+                            & IPV6Array[startIpLength];
                     startLowAddr = ipStartInfoLong[1];
 
                     endHighAddr = ipEndInfoLong[0] & IPV6Array[endIpLength];
                     endLowAddr = ipEndInfoLong[1];
                 } else {
                     startHighAddr = ipStartInfoLong[0];
-                    startLowAddr =
-                            ipStartInfoLong[1] & IPV6Array[startIpLength];
+                    startLowAddr = ipStartInfoLong[1]
+                            & IPV6Array[startIpLength];
 
                     endLowAddr = ipEndInfoLong[0] & IPV6Array[endIpLength];
                     endHighAddr = ipEndInfoLong[1];
@@ -430,8 +446,7 @@ public final class IpUtil {
             }
 
         }
-        long[] iplongs =
-                { startHighAddr, endHighAddr, startLowAddr, endLowAddr };
+        long[] iplongs = { startHighAddr, endHighAddr, startLowAddr, endLowAddr };
         return iplongs;
     }
 
@@ -449,11 +464,10 @@ public final class IpUtil {
         final int leftShift1 = 8;
         if (ipStr.indexOf(".") >= 0) {
             String[] ip = ipStr.split("\\.");
-            ipLongArr[1] =
-                    (Long.parseLong(ip[0]) << leftShift3)
-                            + (Long.parseLong(ip[1]) << leftShift2)
-                            + (Long.parseLong(ip[2]) << leftShift1)
-                            + Long.parseLong(ip[3]);
+            ipLongArr[1] = (Long.parseLong(ip[0]) << leftShift3)
+                    + (Long.parseLong(ip[1]) << leftShift2)
+                    + (Long.parseLong(ip[2]) << leftShift1)
+                    + Long.parseLong(ip[3]);
             ipLongArr[0] = 0;
         } else {
             return ipV6ToLong(ipStr);
@@ -495,8 +509,8 @@ public final class IpUtil {
         final int leftShift1 = 8;
         final int leftShift2 = leftShift1 * 2;
         final int leftShift3 = leftShift1 * 3;
-        ipLongArr[1] =
-                BigDecimal.valueOf((Long.parseLong(ip[0]) << leftShift3)
+        ipLongArr[1] = BigDecimal
+                .valueOf((Long.parseLong(ip[0]) << leftShift3)
                         + (Long.parseLong(ip[1]) << leftShift2)
                         + (Long.parseLong(ip[2]) << leftShift1)
                         + Long.parseLong(ip[3]));
@@ -521,13 +535,10 @@ public final class IpUtil {
         final int fieldSize = 4;
         for (int i = 0; i < strings.length; i++) {
             if (i >= 0 && i < fieldSize) {
-                high |=
-                        (Long.parseLong(strings[i], radix) << ((longs.length
-                                - i - 1) * radix));
+                high |= (Long.parseLong(strings[i], radix) << ((longs.length
+                        - i - 1) * radix));
             } else {
-                low |=
-                        (Long.parseLong(strings[i], radix) << ((longs.length
-                                - i - 1) * radix));
+                low |= (Long.parseLong(strings[i], radix) << ((longs.length - i - 1) * radix));
             }
         }
         longs[0] = high;
@@ -582,9 +593,8 @@ public final class IpUtil {
             int iFieldNum = i % filedEachSeg;
             int iSegNum = i / filedEachSeg;
 
-            BigDecimal numShift =
-                    BigDecimal.valueOf(Math.pow(numMulti, (filedEachSeg
-                            - iFieldNum - 1)));
+            BigDecimal numShift = BigDecimal.valueOf(Math.pow(numMulti,
+                    (filedEachSeg - iFieldNum - 1)));
             numEachField = numEachField.multiply(numShift);
             if (0 == iFieldNum) {
                 decimalIp[iSegNum] = numEachField;
