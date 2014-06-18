@@ -39,9 +39,9 @@ import cn.cnnic.rdap.init.InitContext;
 
 /**
  * init schema and data dao.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 public class InitDao {
     /**
@@ -74,11 +74,12 @@ public class InitDao {
     private String databaseName;
 
     /**
-     * initSchema.
+     * init schema.
      */
     public void initSchema() {
         LOGGER.info("initSchema begin...");
-        LOGGER.info("file:" + SQL_RESOURCE_SCHEMA_PATH);
+        LOGGER.info("file:{},database:{}", SQL_RESOURCE_SCHEMA_PATH,
+                databaseName);
         initContext.executeSqlScript(jdbcTemplate, SQL_RESOURCE_SCHEMA_PATH,
                 databaseName, false);
         LOGGER.info("initSchema end.");
@@ -89,20 +90,36 @@ public class InitDao {
      */
     public void initData() {
         LOGGER.info("initData begin...");
-        LOGGER.info("file:" + SQL_RESOURCE_DATA_PATH);
+        LOGGER.info("file:{},database:{}", SQL_RESOURCE_DATA_PATH, databaseName);
         initContext.executeSqlScript(jdbcTemplate, SQL_RESOURCE_DATA_PATH,
                 databaseName, false);
         LOGGER.info("initData end.");
     }
 
+    /**
+     * set databaseName.
+     * @param databaseName databaseName.
+     */
     public void setDatabaseName(String databaseName) {
         this.databaseName = databaseName;
     }
 
+    /**
+     * set jdbcTemplate.
+     * 
+     * @param jdbcTemplate
+     *            jdbcTemplate
+     */
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * set initContext.
+     * 
+     * @param initContext
+     *            initContext.
+     */
     public void setInitContext(InitContext initContext) {
         this.initContext = initContext;
     }
