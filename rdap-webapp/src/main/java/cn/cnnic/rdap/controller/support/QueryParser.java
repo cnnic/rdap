@@ -99,21 +99,25 @@ public class QueryParser {
      */
     public QueryParam parseIpQueryParam(String ipAddr, long numMask,
             IpVersion ipVersion) {
-        NetworkQueryParam ipQueryParam = new NetworkQueryParam(ipAddr, numMask, ipVersion);
+        NetworkQueryParam ipQueryParam = new NetworkQueryParam(ipAddr, numMask,
+                ipVersion);
         ipQueryParam.parseQueryIpMask();
         return ipQueryParam;
     }
 
     /**
      * generate EntityQueryParam.
-     * @param q query string.
-     * @param paramName param name.
+     * 
+     * @param q
+     *            query string.
+     * @param paramName
+     *            param name.
      * @return QueryParam.
      */
     public QueryParam parseEntityQueryParam(String q, String paramName) {
         return new EntityQueryParam(q, paramName);
     }
-    
+
     /**
      * get parameter from request,get first if has more than one value.
      * 
@@ -143,7 +147,7 @@ public class QueryParser {
     public String getFirstParameter(HttpServletRequest request,
             final String[] strParamOrg) {
         String strQuery = request.getQueryString();
-        if(StringUtils.isBlank(strQuery)){
+        if (StringUtils.isBlank(strQuery)) {
             return null;
         }
         int pos = strQuery.indexOf("?");

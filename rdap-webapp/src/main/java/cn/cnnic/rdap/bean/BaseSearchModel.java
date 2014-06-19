@@ -38,16 +38,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * base search class.
  * 
  * @author jiashuo
- * 
+ * @param <T>
+ *            for a model as a param.
  */
-@JsonIgnoreProperties(value = { "searchResults","hasNoAuthForAllObjects", "id", "handle",
-        "lang", "objectType" })
+@JsonIgnoreProperties(value = { "searchResults", "hasNoAuthForAllObjects",
+        "id", "handle", "lang", "objectType" })
 public class BaseSearchModel<T extends BaseModel> extends BaseModel {
     /**
      * search results.
      */
     private List<T> searchResults;
-    
+
     /**
      * 'resultsTruncated' used where a single object has been returned and data
      * in that object has been truncated.
@@ -99,6 +100,7 @@ public class BaseSearchModel<T extends BaseModel> extends BaseModel {
 
     /**
      * get searchResults.
+     * 
      * @return searchResults.
      */
     public List<T> getSearchResults() {
@@ -107,10 +109,12 @@ public class BaseSearchModel<T extends BaseModel> extends BaseModel {
 
     /**
      * set searchResults.
-     * @param searchResults searchResults.
+     * 
+     * @param searchResults
+     *            searchResults.
      */
     public void setSearchResults(List<T> searchResults) {
         this.searchResults = searchResults;
     }
-    
+
 }

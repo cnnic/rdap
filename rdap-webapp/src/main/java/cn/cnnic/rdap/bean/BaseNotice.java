@@ -36,51 +36,65 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * base notice class
+ * base notice class.
  * 
  * @author jiashuo
  * 
  */
 public abstract class BaseNotice extends BaseModel {
+
     /**
-     * notice type enum
+     * notice type enum.
      * 
      * @author jiashuo
      * 
      */
     public enum NoticeType {
+        /**
+         * three objects.
+         */
         Notice("notice"), REMARK("remark"), HELP("help");
         /**
-         * type name
+         * type name.
          */
         private String name;
 
+        /**
+         * 
+         * @param name
+         *            a string of type.
+         */
         private NoticeType(String name) {
             this.name = name;
         }
 
+        /**
+         * 
+         * @return a string to get.
+         */
         public String getName() {
             return name;
         }
     }
 
     /**
-     * title
+     * title.
      */
     private String title;
     /**
-     * description
+     * description.
      */
     private List<String> description;
     /**
-     * links
+     * links.
      */
     private List<Link> links;
 
     /**
-     * add a description
+     * add a description.
      * 
      * @param descriptionStr
+     *            a string to add for a description.
      */
     public void addDescription(String descriptionStr) {
         if (StringUtils.isBlank(descriptionStr)) {
@@ -92,26 +106,53 @@ public abstract class BaseNotice extends BaseModel {
         this.description.add(descriptionStr);
     }
 
+    /**
+     * 
+     * @return a string of title.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * 
+     * @param title
+     *            a string to set.
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * 
+     * @return a list string to get as a description.
+     */
     public List<String> getDescription() {
         return description;
     }
 
+    /**
+     * 
+     * @param description
+     *            a list string to set.
+     */
     public void setDescription(List<String> description) {
         this.description = description;
     }
 
+    /**
+     * 
+     * @return list of object link.
+     */
     public List<Link> getLinks() {
         return links;
     }
 
+    /**
+     * 
+     * @param links
+     *            list of object to set.
+     */
     public void setLinks(List<Link> links) {
         this.links = links;
     }
