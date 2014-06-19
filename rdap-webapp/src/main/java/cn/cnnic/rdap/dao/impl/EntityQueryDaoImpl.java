@@ -559,15 +559,15 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      */
     private void queryAndSetRoles(List<Entity> models) {
         List<Long> entityIds = getModelIds(models);
-        List<ModelStatus> statusList = queryStatus(entityIds);
-        for (ModelStatus status : statusList) {
+        List<EntityRole> roleList = queryRoles(entityIds);
+        for (EntityRole role : roleList) {
             BaseModel obj =
-                    BaseModel.findObjectFromListById(models, status.getId());
+                    BaseModel.findObjectFromListById(models, role.getId());
             if (null == obj) {
                 continue;
             }
             Entity entity = (Entity) obj;
-            entity.addStatus(status.getStatus());
+            entity.addRole(role.getRole());
         }
     }
 
