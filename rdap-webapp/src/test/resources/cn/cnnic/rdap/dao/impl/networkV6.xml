@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-	<RDAP_DOMAIN DOMAIN_ID='1' HANDLE='1' LDH_NAME='cnnic.cn'
-		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' />
+	<RDAP_ENTITY ENTITY_ID='1' HANDLE='h1' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
 	<RDAP_IP IP_ID='1' HANDLE='h1' STARTLOWADDRESS='2306131802814676993'
 		ENDLOWADDRESS='2306131802814676994' STARTHIGHADDRESS='0'
 		ENDHIGHADDRESS='2306139570357600256' COUNTRY='US' VERSION='v6' NAME='APNIC-1'
@@ -9,6 +10,8 @@
 	<RDAP_IP_STATUS IP_STATUS_ID="1" IP_ID="1" STATUS="validated" />
 	<RDAP_IP_STATUS IP_STATUS_ID="2" IP_ID="1"
 		STATUS="update prohibited" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='1'
+		REL_ID='1' REL_OBJECT_TYPE='ip' ENTITY_ID='1' ENTITY_ROLE="registrant" />
 	<!-- events -->
 	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="jiashuo"
 		EVENT_DATE="2014-01-01 00:01:01" />

@@ -30,17 +30,24 @@
  */
 package cn.cnnic.rdap.dao.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.Event;
+import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.Network;
+import cn.cnnic.rdap.bean.Network.IpVersion;
+import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.dao.QueryDao;
 
@@ -73,58 +80,58 @@ public class NetworkQueryDaoTest extends BaseTest {
     @DatabaseTearDown("teardown.xml")
     @DatabaseSetup(value = "networkV4.xml")
     public void testQueryExistV4Network() {
-        Long domainId = 1L;
+        Long entityId = 1L;
         List<Network> networks =
-                networkQueryDao.queryAsInnerObjects(domainId, ModelType.DOMAIN);
+                networkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         assertNotNull(networks);
-//        assertEquals(1, networks.size());
-//        Network network = networks.get(0);
-//        assertEquals("h1", network.getHandle());
-//        assertEquals("1.0.0.0", network.getStartAddress());
-//        assertEquals("1.255.255.255", network.getEndAddress());
-//        assertEquals(IpVersion.V4, network.getIpVersion());
-//        assertEquals("APNIC-1", network.getName());
-//        assertEquals("Allocated to APNIC", network.getType());
-//        assertEquals("US", network.getCountry());
-//        assertEquals("h2", network.getParentHandle());
-//        assertEquals("port43", network.getPort43());
-//        assertEquals("zh", network.getLang());
-//        // status
-//        List<String> statusList = network.getStatus();
-//        assertThat(statusList,
-//                CoreMatchers.hasItems("validated", "update prohibited"));
-//        // events
-//        List<Event> events = network.getEvents();
-//        assertNotNull(events);
-//        assertEquals(events.size(), 1);
-//        Event event = events.get(0);
-//        assertNotNull(event);
-//        assertEquals(event.getEventAction(), "action1");
-//        assertEquals(event.getEventActor(), "jiashuo");
-//        assertEquals(event.getEventDate(), "2014-01-01T00:01:01Z");
-//        // links
-//        List<Link> networkLinks = network.getLinks();
-//        assertNotNull(networkLinks);
-//        assertEquals(1, networkLinks.size());
-//        Link networkLink = networkLinks.get(0);
-//        assertNotNull(networkLink);
-//        assertEquals("http://networklink", networkLink.getValue());
-//        assertEquals("http://networklink", networkLink.getHref());
-//        // remarks
-//        List<Remark> remarks = network.getRemarks();
-//        assertNotNull(remarks);
-//        assertTrue(remarks.size() > 0);
-//        Remark remark = remarks.get(0);
-//        assertNotNull(remark);
-//        assertEquals("Terms of Use", remark.getTitle());
-//        assertThat(remark.getDescription(),
-//                CoreMatchers.hasItems("description1", "description2"));
-//        List<Link> links = remark.getLinks();
-//        assertNotNull(links);
-//        assertEquals(1, links.size());
-//        Link link = links.get(0);
-//        assertNotNull(link);
-//        assertEquals("http://example.com/context_uri", link.getValue());
+        assertEquals(1, networks.size());
+        Network network = networks.get(0);
+        assertEquals("h1", network.getHandle());
+        assertEquals("1.0.0.0", network.getStartAddress());
+        assertEquals("1.255.255.255", network.getEndAddress());
+        assertEquals(IpVersion.V4, network.getIpVersion());
+        assertEquals("APNIC-1", network.getName());
+        assertEquals("Allocated to APNIC", network.getType());
+        assertEquals("US", network.getCountry());
+        assertEquals("h2", network.getParentHandle());
+        assertEquals("port43", network.getPort43());
+        assertEquals("zh", network.getLang());
+        // status
+        List<String> statusList = network.getStatus();
+        assertThat(statusList,
+                CoreMatchers.hasItems("validated", "update prohibited"));
+        // events
+        List<Event> events = network.getEvents();
+        assertNotNull(events);
+        assertEquals(events.size(), 1);
+        Event event = events.get(0);
+        assertNotNull(event);
+        assertEquals(event.getEventAction(), "action1");
+        assertEquals(event.getEventActor(), "jiashuo");
+        assertEquals(event.getEventDate(), "2014-01-01T00:01:01Z");
+        // links
+        List<Link> networkLinks = network.getLinks();
+        assertNotNull(networkLinks);
+        assertEquals(1, networkLinks.size());
+        Link networkLink = networkLinks.get(0);
+        assertNotNull(networkLink);
+        assertEquals("http://networklink", networkLink.getValue());
+        assertEquals("http://networklink", networkLink.getHref());
+        // remarks
+        List<Remark> remarks = network.getRemarks();
+        assertNotNull(remarks);
+        assertTrue(remarks.size() > 0);
+        Remark remark = remarks.get(0);
+        assertNotNull(remark);
+        assertEquals("Terms of Use", remark.getTitle());
+        assertThat(remark.getDescription(),
+                CoreMatchers.hasItems("description1", "description2"));
+        List<Link> links = remark.getLinks();
+        assertNotNull(links);
+        assertEquals(1, links.size());
+        Link link = links.get(0);
+        assertNotNull(link);
+        assertEquals("http://example.com/context_uri", link.getValue());
     }
 
     /**
@@ -134,58 +141,58 @@ public class NetworkQueryDaoTest extends BaseTest {
     @DatabaseTearDown("teardown.xml")
     @DatabaseSetup(value = "networkV6.xml")
     public void testQueryExistV6Network() {
-        Long domainId = 1L;
+        Long entityId = 1L;
         List<Network> networks =
-                networkQueryDao.queryAsInnerObjects(domainId, ModelType.DOMAIN);
+                networkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         assertNotNull(networks);
-//        assertEquals(1, networks.size());
-//        Network network = networks.get(0);
-//        assertEquals("h1", network.getHandle());
-//        assertEquals("0:0:0:0:2001:6a8:0:1", network.getStartAddress());
-//        assertEquals("2001:db8:85a3:0:2001:6a8:0:2", network.getEndAddress());
-//        assertEquals(IpVersion.V6, network.getIpVersion());
-//        assertEquals("APNIC-1", network.getName());
-//        assertEquals("Allocated to APNIC", network.getType());
-//        assertEquals("US", network.getCountry());
-//        assertEquals("h2", network.getParentHandle());
-//        assertEquals("port43", network.getPort43());
-//        assertEquals("zh", network.getLang());
-//        // status
-//        List<String> statusList = network.getStatus();
-//        assertThat(statusList,
-//                CoreMatchers.hasItems("validated", "update prohibited"));
-//        // events
-//        List<Event> events = network.getEvents();
-//        assertNotNull(events);
-//        assertEquals(events.size(), 1);
-//        Event event = events.get(0);
-//        assertNotNull(event);
-//        assertEquals(event.getEventAction(), "action1");
-//        assertEquals(event.getEventActor(), "jiashuo");
-//        assertEquals(event.getEventDate(), "2014-01-01T00:01:01Z");
-//        // links
-//        List<Link> networkLinks = network.getLinks();
-//        assertNotNull(networkLinks);
-//        assertEquals(1, networkLinks.size());
-//        Link networkLink = networkLinks.get(0);
-//        assertNotNull(networkLink);
-//        assertEquals("http://networklink", networkLink.getValue());
-//        assertEquals("http://networklink", networkLink.getHref());
-//        // remarks
-//        List<Remark> remarks = network.getRemarks();
-//        assertNotNull(remarks);
-//        assertTrue(remarks.size() > 0);
-//        Remark remark = remarks.get(0);
-//        assertNotNull(remark);
-//        assertEquals("Terms of Use", remark.getTitle());
-//        assertThat(remark.getDescription(),
-//                CoreMatchers.hasItems("description1", "description2"));
-//        List<Link> links = remark.getLinks();
-//        assertNotNull(links);
-//        assertEquals(1, links.size());
-//        Link link = links.get(0);
-//        assertNotNull(link);
-//        assertEquals("http://example.com/context_uri", link.getValue());
+        assertEquals(1, networks.size());
+        Network network = networks.get(0);
+        assertEquals("h1", network.getHandle());
+        assertEquals("0:0:0:0:2001:6a8:0:1", network.getStartAddress());
+        assertEquals("2001:db8:85a3:0:2001:6a8:0:2", network.getEndAddress());
+        assertEquals(IpVersion.V6, network.getIpVersion());
+        assertEquals("APNIC-1", network.getName());
+        assertEquals("Allocated to APNIC", network.getType());
+        assertEquals("US", network.getCountry());
+        assertEquals("h2", network.getParentHandle());
+        assertEquals("port43", network.getPort43());
+        assertEquals("zh", network.getLang());
+        // status
+        List<String> statusList = network.getStatus();
+        assertThat(statusList,
+                CoreMatchers.hasItems("validated", "update prohibited"));
+        // events
+        List<Event> events = network.getEvents();
+        assertNotNull(events);
+        assertEquals(events.size(), 1);
+        Event event = events.get(0);
+        assertNotNull(event);
+        assertEquals(event.getEventAction(), "action1");
+        assertEquals(event.getEventActor(), "jiashuo");
+        assertEquals(event.getEventDate(), "2014-01-01T00:01:01Z");
+        // links
+        List<Link> networkLinks = network.getLinks();
+        assertNotNull(networkLinks);
+        assertEquals(1, networkLinks.size());
+        Link networkLink = networkLinks.get(0);
+        assertNotNull(networkLink);
+        assertEquals("http://networklink", networkLink.getValue());
+        assertEquals("http://networklink", networkLink.getHref());
+        // remarks
+        List<Remark> remarks = network.getRemarks();
+        assertNotNull(remarks);
+        assertTrue(remarks.size() > 0);
+        Remark remark = remarks.get(0);
+        assertNotNull(remark);
+        assertEquals("Terms of Use", remark.getTitle());
+        assertThat(remark.getDescription(),
+                CoreMatchers.hasItems("description1", "description2"));
+        List<Link> links = remark.getLinks();
+        assertNotNull(links);
+        assertEquals(1, links.size());
+        Link link = links.get(0);
+        assertNotNull(link);
+        assertEquals("http://example.com/context_uri", link.getValue());
     }
 
     /**
@@ -198,7 +205,7 @@ public class NetworkQueryDaoTest extends BaseTest {
         final Long nonExistDomainId = 1000L;
         List<Network> networks =
                 networkQueryDao.queryAsInnerObjects(nonExistDomainId,
-                        ModelType.DOMAIN);
+                        ModelType.ENTITY);
         assertNotNull(networks);
         assertTrue(networks.size() == 0);
     }
