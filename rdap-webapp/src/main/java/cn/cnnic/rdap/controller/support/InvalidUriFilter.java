@@ -122,8 +122,9 @@ public class InvalidUriFilter implements Filter {
      * @param request
      *            HttpServletRequest.
      */
-    private void decodeServletPathForSpringUrlMapping(HttpServletRequest request)
-            throws UnsupportedEncodingException {
+    private void
+            decodeServletPathForSpringUrlMapping(HttpServletRequest request)
+                    throws UnsupportedEncodingException {
         request.setCharacterEncoding(StringUtil.CHAR_SET_UTF8);
         String servletPath = request.getServletPath();
         if (StringUtils.isNotBlank(servletPath)) {

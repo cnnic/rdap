@@ -228,9 +228,8 @@ public class Arpa {
      * @return Arpa.
      */
     private static Arpa decodeInAddrArpa(String name) {
-        String arpa =
-                StringUtils.removeEndIgnoreCase(name, "."
-                        + DomainUtil.IPV4_ARPA_SUFFIX);
+        String arpa = StringUtils.removeEndIgnoreCase(name, "."
+                + DomainUtil.IPV4_ARPA_SUFFIX);
 
         String[] labels = arpa.split("\\.");
         byte[] ipSecs = new byte[labels.length];
@@ -254,12 +253,12 @@ public class Arpa {
      */
     private void setStartAndEndAddressForInAddr(byte[] sections) {
 
-        byte[] byteStart = { 0, 0, 0, 0 };
+        byte[] byteStart = {0, 0, 0, 0};
         System.arraycopy(sections, 0, byteStart, 0, sections.length);
         this.startLowAddress = new BigInteger(1, byteStart);
         this.startHighAddress = BigInteger.ZERO;
 
-        byte[] byteEnd = { MASK_FF, MASK_FF, MASK_FF, MASK_FF };
+        byte[] byteEnd = {MASK_FF, MASK_FF, MASK_FF, MASK_FF};
         System.arraycopy(sections, 0, byteEnd, 0, sections.length);
 
         this.endLowAddress = new BigInteger(1, byteEnd);
@@ -274,9 +273,8 @@ public class Arpa {
      * @return Arpa.
      */
     private static Arpa decodeIp6Arpa(String name) {
-        String arpa =
-                StringUtils.removeEndIgnoreCase(name, "."
-                        + DomainUtil.IPV6_ARPA_SUFFIX);
+        String arpa = StringUtils.removeEndIgnoreCase(name, "."
+                + DomainUtil.IPV6_ARPA_SUFFIX);
 
         String[] labels = arpa.split("\\.");
         byte[] ipSecs = new byte[labels.length];
@@ -304,7 +302,7 @@ public class Arpa {
 
         setEndAddressForIp6(sections);
     }
-    
+
     /**
      * decode a byte array from in-addr.arpa to an Arpa.
      * 
@@ -312,10 +310,9 @@ public class Arpa {
      *            a byte array from an arpa string.
      */
     private void setStartAddressForIp6(byte[] sections) {
-        
-        byte[] byteStart =
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+        byte[] byteStart = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         System.arraycopy(sections, 0, byteStart, 0, sections.length);
 
         byte[] highSecs = new byte[LENGTH_OF_V6_SECTIONS / 2];
@@ -338,7 +335,7 @@ public class Arpa {
         }
         this.startLowAddress = new BigInteger(1, lowBytes);
     }
-    
+
     /**
      * decode a byte array from in-addr.arpa to an Arpa.
      * 
@@ -346,20 +343,18 @@ public class Arpa {
      *            a byte array from an arpa string.
      */
     private void setEndAddressForIp6(byte[] sections) {
-        
+
         byte[] highSecs = new byte[LENGTH_OF_V6_SECTIONS / 2];
         byte[] lowSecs = new byte[LENGTH_OF_V6_SECTIONS / 2];
 
         byte[] highBytes = new byte[LENGTH_OF_V6_BYTES / 2];
         byte[] lowBytes = new byte[LENGTH_OF_V6_BYTES / 2];
-        
-        byte[] byteEnd =
-                { MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
-                        MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
-                        MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
-                        MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
-                        MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
-                        MASK_0F, MASK_0F };
+
+        byte[] byteEnd = { MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
+                MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
+                MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
+                MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
+                MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F };
         System.arraycopy(sections, 0, byteEnd, 0, sections.length);
 
         System.arraycopy(byteEnd, 0, highSecs, 0, highSecs.length);
@@ -376,14 +371,18 @@ public class Arpa {
         }
         this.endLowAddress = new BigInteger(1, lowBytes);
     }
-    
+
+    /**
+     * 
+     * @return a param for network query.
+     */
     public NetworkQueryParam toNetworkQueryParam() {
-        
-        NetworkQueryParam param = new NetworkQueryParam(name, 
-                new BigDecimal(startHighAddress), new BigDecimal(endHighAddress), 
-                new BigDecimal(startLowAddress), new BigDecimal(endLowAddress), 
+
+        NetworkQueryParam param = new NetworkQueryParam(name, new BigDecimal(
+                startHighAddress), new BigDecimal(endHighAddress),
+                new BigDecimal(startLowAddress), new BigDecimal(endLowAddress),
                 ipVersion);
-        
+
         return param;
     }
 }
