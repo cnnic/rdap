@@ -29,6 +29,7 @@
  * DAMAGE.
  */
 package cn.cnnic.rdap.controller;
+import cn.cnnic.rdap.BaseTest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -42,9 +43,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import cn.cnnic.rdap.BaseTest;
-import cn.cnnic.rdap.common.util.StringUtil;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;

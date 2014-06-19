@@ -48,7 +48,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonIgnoreProperties(value = { "id", "objectType" })
 public class BaseModel {
     /**
-     * specifications used in the construction of the response
+     * specifications used in the construction of the response.
      */
     private List<String> rdapConformance;
     /**
@@ -112,30 +112,62 @@ public class BaseModel {
         return id;
     }
 
+    /**
+     * 
+     * @param id
+     *            for a long id to set
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * 
+     * @return a list string of rdapConformance.
+     */
     public List<String> getRdapConformance() {
         return rdapConformance;
     }
 
+    /**
+     * 
+     * @param rdapConformance
+     *            for a list string of rdapConformance to set.
+     */
     public void setRdapConformance(List<String> rdapConformance) {
         this.rdapConformance = rdapConformance;
     }
 
+    /**
+     * 
+     * @return a string of language to get.
+     */
     public String getLang() {
         return lang;
     }
 
+    /**
+     * 
+     * @param lang
+     *            a string of language to set.
+     */
     public void setLang(String lang) {
         this.lang = lang;
     }
 
+    /**
+     * 
+     * @return list of notice object to get.
+     */
     public List<Notice> getNotices() {
         return notices;
     }
 
+    /**
+     * 
+     * @param notices
+     *            a list of notice to set.
+     */
     public void setNotices(List<Notice> notices) {
         this.notices = notices;
     }
