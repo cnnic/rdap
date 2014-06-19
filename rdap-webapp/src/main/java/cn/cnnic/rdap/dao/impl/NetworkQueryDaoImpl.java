@@ -40,12 +40,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
+import cn.cnnic.rdap.bean.Arpa;
+import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
@@ -69,6 +73,13 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
+    
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(NetworkQueryDaoImpl.class);
+    
     /**
      * notice dao.
      */
@@ -93,6 +104,12 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Autowired
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
+    
+    /**
+     * domainQueryDao.
+     */
+    @Autowired
+    private DomainQueryDaoImpl domainQueryDao;
 
     /**
      * entityQueryDao.
@@ -133,13 +150,42 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Override
     public List<Network> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
-        if (!ModelType.ENTITY.equals(outerModelType)) {
-            throw new UnsupportedOperationException(
-                    "only support ENTITY modelType.");
+        LOGGER.info("queryAsInnerObjects,outerObjId:{},outerModel:{}",
+                outerObjectId, outerModelType);
+        if (ModelType.ENTITY.equals(outerModelType)) {
+            List<Network> networks = queryWithoutInnerObjectsForEntity(outerObjectId);
+            queryAndSetInnerObjects(networks);
+            LOGGER.info("for entities result size:{}",networks.size());
+            return networks;
         }
-        List<Network> networks = queryWithoutInnerObjectsForEntity(outerObjectId);
-        queryAndSetInnerObjects(networks);
-        return networks;
+        if (ModelType.ARPA.equals(outerModelType)) {
+            List<Network> networks = queryWithoutInnerObjectsForArpa(outerObjectId);
+            queryAndSetInnerObjects(networks);
+            LOGGER.info("for arpa result size:{}",networks.size());
+            return networks;
+        }
+        throw new UnsupportedOperationException("only support ENTITY/ARPA model.");
+    }
+
+    /**
+     * query network for arpa domain.
+     * @param outerObjectId outerObjectId.
+     * @return network list.
+     */
+    private List<Network> queryWithoutInnerObjectsForArpa(Long outerObjectId) {
+        List<Network> result = new ArrayList<Network>();
+        Domain arpaDomain = domainQueryDao.loadArpaDomain(outerObjectId);
+        if(null == arpaDomain){
+            return result;
+        }
+        final Arpa arpa = Arpa.decodeArpa(arpaDomain.getLdhName());
+        Network network = queryWithoutInnerObjects(arpa.toNetworkQueryParam());
+        if(null == network){
+            return result;
+        }
+        queryAndSetInnerObjectsWithoutEntities(network);
+        result.add(network);
+        return result;
     }
 
     /**

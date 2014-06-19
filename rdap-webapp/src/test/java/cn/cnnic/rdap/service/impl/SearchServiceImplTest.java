@@ -76,7 +76,7 @@ public class SearchServiceImplTest extends BaseTest {
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
         EntitySearch entitySearch = searchService.searchEntity(queryParser
-                .parseDomainQueryParam(entityHandle, entityHandle));
+                .parseEntityQueryParam(entityHandle, "handle"));
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
@@ -85,7 +85,7 @@ public class SearchServiceImplTest extends BaseTest {
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 5L);
         entitySearch = searchService.searchEntity(queryParser
-                .parseDomainQueryParam(entityHandle, entityHandle));
+                .parseEntityQueryParam(entityHandle, "handle"));
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
@@ -94,7 +94,7 @@ public class SearchServiceImplTest extends BaseTest {
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 6L);
         entitySearch = searchService.searchEntity(queryParser
-                .parseDomainQueryParam(entityHandle, entityHandle));
+                .parseEntityQueryParam(entityHandle, "handle"));
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
@@ -103,10 +103,10 @@ public class SearchServiceImplTest extends BaseTest {
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 6L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
         entitySearch = searchService.searchEntity(queryParser
-                .parseDomainQueryParam(entityHandle, entityHandle));
+                .parseEntityQueryParam(entityHandle, "handle"));
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
-        assertEquals(4L, entitySearch.getEntitySearchResults().size());
+        assertEquals(5L, entitySearch.getEntitySearchResults().size());
         assertNull(entitySearch.getResultsTruncated());
     }
     

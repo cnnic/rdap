@@ -128,16 +128,7 @@ public class QueryParser {
         if (null == values || values.length < 1) {
             return null;
         }
-        String strQuery = values[0];
-        int pos = strQuery.indexOf("?");
-        if (-1 != pos) {
-            try {
-                strQuery = strQuery.substring(0, pos);
-            } catch (Exception e) {
-                return null;
-            }
-        }
-        return strQuery;
+        return values[0];
     }
 
     /**
