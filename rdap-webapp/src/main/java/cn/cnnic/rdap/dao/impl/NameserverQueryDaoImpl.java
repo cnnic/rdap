@@ -58,13 +58,11 @@ import cn.cnnic.rdap.bean.ModelStatus;
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
-import cn.cnnic.rdap.bean.Notice;
 import cn.cnnic.rdap.bean.PageBean;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Remark;
 import cn.cnnic.rdap.common.util.IpUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
-import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
@@ -75,12 +73,6 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
-    /**
-     * notice dao.
-     */
-    @Autowired
-    @Qualifier("noticeDaoImpl")
-    private NoticeDao noticeDao;
     /**
      * remark dao.
      */
@@ -165,23 +157,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     @Override
     public Nameserver query(QueryParam queryParam) {
         Nameserver nameserver = queryWithoutInnerObjects(queryParam);
-        queryAndSetInnerObjectsWithoutNotice(nameserver);
-        queryAndSetInnerNotice(nameserver);
+        queryAndSetInnerObjects(nameserver);
+        queryAndSetEntities(nameserver);
         return nameserver;
-    }
-
-    /**
-     * query notice,and set to nameserver.
-     * 
-     * @param nameserver
-     *            nameserver object.
-     */
-    private void queryAndSetInnerNotice(Nameserver nameserver) {
-        if (null == nameserver) {
-            return;
-        }
-        List<Notice> notices = noticeDao.getAllNotices();
-        nameserver.setNotices(notices);
     }
 
     /**
@@ -210,8 +188,18 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         List<Event> events = eventQueryDao.queryAsInnerObjects(nsID,
                 ModelType.NAMESERVER);
         ns.setEvents(events);
+    }
+
+    /**
+     * query and set entities.
+     * @param ns ns.
+     */
+    private void queryAndSetEntities(Nameserver ns) {
+        if(ns==null){
+            return ;
+        }
         List<Entity> entities =
-                entityQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
+                entityQueryDao.queryAsInnerObjects(ns.getId(), ModelType.NAMESERVER);
         ns.setEntities(entities);
     }
 
@@ -305,10 +293,24 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
 
     @Override
     public List<Nameserver> search(QueryParam queryParam) {
-        List<Nameserver> listNS = searchWithoutInnerObjects(queryParam);
-        queryAndSetNameserverStatus(listNS);
-        queryAndSetInnerObjectsWithoutNotice(listNS);
-        return listNS;
+        List<Nameserver> nameservers = searchWithoutInnerObjects(queryParam);
+        queryAndSetNameserverStatus(nameservers);
+        queryAndSetInnerObjects(nameservers);
+        queryAndSetEntities(nameservers);
+        return nameservers;
+    }
+
+    /**
+     * query and set entities.
+     * @param listNS ns list.
+     */
+    private void queryAndSetEntities(List<Nameserver> nameservers) {
+        if(null == nameservers){
+            return;
+        }
+        for (Nameserver nameserver : nameservers) {
+            queryAndSetEntities(nameserver);
+        }
     }
 
     /**
@@ -516,43 +518,13 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * @param nameservers
      *            nameservers list.
      */
-    private void queryAndSetInnerObjectsWithoutNotice(
-            List<Nameserver> nameservers) {
+    private void queryAndSetInnerObjects(List<Nameserver> nameservers) {
         if (null == nameservers) {
             return;
         }
         for (Nameserver nameserver : nameservers) {
-            queryAndSetInnerObjectsWithoutNotice(nameserver);
+            queryAndSetInnerObjects(nameserver);
         }
-    }
-
-    /**
-     * query inner objects of nameserver,and set fill them to nameserver.
-     * 
-     * @param nameserver
-     *            inner objects will be filled.
-     */
-    private void queryAndSetInnerObjectsWithoutNotice(Nameserver nameserver) {
-        if (null == nameserver) {
-            return;
-        }
-        Long nsId = nameserver.getId();
-
-        List<IPAddress> listIPAddress = ipAddressQueryDao.queryAsInnerObjects(
-                nsId, ModelType.NAMESERVER);
-        if (listIPAddress.size() > 0) {
-            IPAddress objIPAddress = listIPAddress.get(0);
-            nameserver.setIpAddresses(objIPAddress);
-        }
-        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(nsId,
-                ModelType.NAMESERVER);
-        nameserver.setRemarks(remarks);
-        List<Link> links = linkQueryDao.queryAsInnerObjects(nsId,
-                ModelType.NAMESERVER);
-        nameserver.setLinks(links);
-        List<Event> events = eventQueryDao.queryAsInnerObjects(nsId,
-                ModelType.NAMESERVER);
-        nameserver.setEvents(events);
     }
 
     /**
