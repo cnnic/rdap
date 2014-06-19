@@ -29,6 +29,7 @@
  * DAMAGE.
  */
 package cn.cnnic.rdap.controller;
+
 import cn.cnnic.rdap.BaseTest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -48,7 +49,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for RdapController
+ * Test for RdapController.
  * 
  * @author weijunkai
  * 
@@ -56,13 +57,25 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class RdapControllerIpTest extends BaseTest {
 
+    /**
+     * a object of wac.
+     */
     @Autowired
     private WebApplicationContext wac;
 
+    /**
+     * object mockMvc.
+     */
     private MockMvc mockMvc;
 
+    /**
+     * a url string.
+     */
     final private String urlPath = "/.well-known/rdap/ip/";
 
+    /**
+     * set up mockMvc.
+     */
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -72,6 +85,7 @@ public class RdapControllerIpTest extends BaseTest {
      * test query exist ip 200.
      * 
      * @throws Exception
+     *             throw a exception.
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
@@ -100,8 +114,10 @@ public class RdapControllerIpTest extends BaseTest {
     /**
      * common query exist IP 200.
      * 
-     * @param queryIPName
+     * @param queryIP
      *            query ip address.
+     * @param lang
+     *            a string of language
      * @throws Exception
      *             Exception.
      */
@@ -122,6 +138,7 @@ public class RdapControllerIpTest extends BaseTest {
      * test query no exist ip for 404.
      * 
      * @throws Exception
+     *             throw a exception
      */
     @Test
     public void testQueryNonExistIP() throws Exception {
@@ -136,14 +153,14 @@ public class RdapControllerIpTest extends BaseTest {
     /**
      * common query non-exist IP 404.
      * 
-     * @param ipName
+     * @param ipAddr
      *            query ip address.
      * @throws Exception
      *             Exception.
      */
-    private void commonQueryNonExistIP(String queryDomainName) throws Exception {
+    private void commonQueryNonExistIP(String ipAddr) throws Exception {
         mockMvc.perform(
-                get(urlPath + queryDomainName).accept(
+                get(urlPath + ipAddr).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
@@ -157,6 +174,7 @@ public class RdapControllerIpTest extends BaseTest {
      * test query invalid ip 400.
      * 
      * @throws Exception
+     *             throw a exception.
      */
     @Test
     public void testQueryInvalidIP() throws Exception {
