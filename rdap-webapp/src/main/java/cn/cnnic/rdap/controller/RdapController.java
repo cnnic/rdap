@@ -123,6 +123,7 @@ public class RdapController {
     public ResponseEntity queryEntity(@PathVariable String handle,
             HttpServletRequest request, HttpServletResponse response) {
         LOGGER.info("query entity,handle:" + handle);
+        handle = StringUtils.trim(handle);
         if (!StringUtil.isValidEntityHandleOrName(handle)) {
             return RestResponseUtil.createResponse400();
         }
@@ -158,21 +159,25 @@ public class RdapController {
             return RestResponseUtil.createResponse400();
         }
         String paramValue = queryParser.getParameter(request, paramName);
+        paramValue = DomainUtil.iso8859Decode(paramValue);
+        paramValue = StringUtils.trim(paramValue);
         if (!StringUtil.isValidEntityHandleOrName(paramValue)) {
             return RestResponseUtil.createResponse400();
+        }
+        if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
+            return RestResponseUtil.createResponse422();
         }
         QueryParam queryParam = queryParser
                 .parseEntityQueryParam(paramValue, paramName);
         LOGGER.info("generate queryParam:{}",queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
-            if (!accessControlManager.hasPermission(result)) {
+            if (result.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
-        
         return RestResponseUtil.createResponse404();
     }
 
@@ -248,7 +253,7 @@ public class RdapController {
     }
 
     /**
-     * query domain by domain name.
+     * search domain by domain name.
      * 
      * @param domainName
      *            is a fully-qualified (relative to the root) domain name

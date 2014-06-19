@@ -36,14 +36,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
+import cn.cnnic.rdap.bean.Arpa;
+import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
@@ -67,6 +73,13 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
+    
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(NetworkQueryDaoImpl.class);
+    
     /**
      * notice dao.
      */
@@ -91,6 +104,12 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Autowired
     @Qualifier("eventQueryDaoImpl")
     private QueryDao<Event> eventQueryDao;
+    
+    /**
+     * domainQueryDao.
+     */
+    @Autowired
+    private DomainQueryDaoImpl domainQueryDao;
 
     /**
      * entityQueryDao.
@@ -101,8 +120,22 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Override
     public Network query(QueryParam queryParam) {
         Network network = queryWithoutInnerObjects(queryParam);
-        queryAndSetInnerObjects(network);
+        queryAndSetInnerObjectsWithoutEntities(network);
+        queryAndSetEntities(network);
         return network;
+    }
+    
+    /**
+     * query and set entities.
+     * @param network network.
+     */
+    private void queryAndSetEntities(Network network) {
+        if(null == network){
+            return;
+        }
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(network.getId(), ModelType.IP);
+        network.setEntities(entities);
     }
 
     /**
@@ -117,13 +150,42 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Override
     public List<Network> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
-        if (!ModelType.ENTITY.equals(outerModelType)) {
-            throw new UnsupportedOperationException(
-                    "only support ENTITY modelType.");
+        LOGGER.info("queryAsInnerObjects,outerObjId:{},outerModel:{}",
+                outerObjectId, outerModelType);
+        if (ModelType.ENTITY.equals(outerModelType)) {
+            List<Network> networks = queryWithoutInnerObjectsForEntity(outerObjectId);
+            queryAndSetInnerObjects(networks);
+            LOGGER.info("for entities result size:{}",networks.size());
+            return networks;
         }
-        List<Network> networks = queryWithoutInnerObjectsForEntity(outerObjectId);
-        queryAndSetInnerObjects(networks);
-        return networks;
+        if (ModelType.ARPA.equals(outerModelType)) {
+            List<Network> networks = queryWithoutInnerObjectsForArpa(outerObjectId);
+            queryAndSetInnerObjects(networks);
+            LOGGER.info("for arpa result size:{}",networks.size());
+            return networks;
+        }
+        throw new UnsupportedOperationException("only support ENTITY/ARPA model.");
+    }
+
+    /**
+     * query network for arpa domain.
+     * @param outerObjectId outerObjectId.
+     * @return network list.
+     */
+    private List<Network> queryWithoutInnerObjectsForArpa(Long outerObjectId) {
+        List<Network> result = new ArrayList<Network>();
+        Domain arpaDomain = domainQueryDao.loadArpaDomain(outerObjectId);
+        if(null == arpaDomain){
+            return result;
+        }
+        final Arpa arpa = Arpa.decodeArpa(arpaDomain.getLdhName());
+        Network network = queryWithoutInnerObjects(arpa.toNetworkQueryParam());
+        if(null == network){
+            return result;
+        }
+        queryAndSetInnerObjectsWithoutEntities(network);
+        result.add(network);
+        return result;
     }
 
     /**
@@ -136,8 +198,8 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
         if (null == networks) {
             return;
         }
-        for (Network network : networks) {
-            queryAndSetInnerObjects(network);
+        for(Network network:networks){
+            queryAndSetInnerObjectsWithoutEntities(network);
         }
     }
 
@@ -166,8 +228,33 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                         ps.setString(2, ModelType.IP.getName());
                         return ps;
                     }
-                }, new NetworkResultSetExtractor());
+                }, new NetworkWithStatusResultSetExtractor());
         return result;
+    }
+    
+    /**
+     * network with status resultSet extractor.
+     * @author jiashuo
+     *
+     */
+    class NetworkWithStatusResultSetExtractor implements
+        ResultSetExtractor<List<Network>> {
+        @Override
+        public List<Network> extractData(ResultSet rs) throws SQLException {
+            List<Network> result = new ArrayList<Network>();
+            Map<Long, Network> networkMapById = new HashMap<Long, Network>();
+            while (rs.next()) {
+                Long networkId = rs.getLong("IP_ID");
+                Network network = networkMapById.get(networkId);
+                if (null == network) {
+                    network = extractNetworkFromRs(rs, networkId);
+                    result.add(network);
+                    networkMapById.put(networkId, network);
+                }
+                network.addStatus(rs.getString("STATUS"));
+            }
+            return result;
+        }
     }
 
     /**
@@ -176,7 +263,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * @param ip
      *            inner objects will be filled.
      */
-    private void queryAndSetInnerObjects(Network objIp) {
+    private void queryAndSetInnerObjectsWithoutEntities(Network objIp) {
         if (null == objIp) {
             return;
         }
@@ -191,9 +278,6 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
         List<Event> events = eventQueryDao.queryAsInnerObjects(ipId,
                 ModelType.IP);
         objIp.setEvents(events);
-        List<Entity> entities = entityQueryDao.queryAsInnerObjects(ipId,
-                ModelType.IP);
-        objIp.setEntities(entities);
     }
 
     /**
@@ -293,7 +377,70 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
             return result;
         }
     }
-
+    
+    /**
+     * extract network from ResultSet.
+     * @param rs ResultSet.
+     * @param networkId network Id.
+     * @return Network.
+     * @throws SQLException SQLException.
+     */
+    private Network extractNetworkFromRs(ResultSet rs, Long networkId)
+            throws SQLException {
+        Network network = new Network();
+        network.setId(networkId);
+        network.setHandle(rs.getString("HANDLE"));
+        setIpVersionAndStartEndAddress(rs, network);
+        network.setName(rs.getString("NAME"));
+        network.setType(rs.getString("TYPE"));
+        network.setCountry(rs.getString("COUNTRY"));
+        network.setParentHandle(rs.getString("PARENT_HANDLE"));
+        network.setLang(rs.getString("LANG"));
+        network.setPort43(rs.getString("PORT43"));
+        return network;
+    }
+    
+    /**
+     * set ip version,and start/end address.
+     * 
+     * @param rs
+     *            ResultSet.
+     * @param objIp
+     *            Ip.
+     * @throws SQLException
+     *             SQLException.
+     */
+    private void
+            setIpVersionAndStartEndAddress(ResultSet rs, Network objIp)
+                    throws SQLException {
+        String ipVersionStr = rs.getString("VERSION");
+        String startHighAddress = rs.getString("STARTHIGHADDRESS");
+        String startLowAddress = rs.getString("STARTLOWADDRESS");
+        String endHighAddress = rs.getString("ENDHIGHADDRESS");
+        String endLowAddress = rs.getString("ENDLOWADDRESS");
+        String startAddress = "";
+        String endAddress = "";
+        if (IpVersion.isV6(ipVersionStr)) {
+            objIp.setIpVersion(IpVersion.V6);
+            long longHighStart = StringUtil
+                    .parseUnsignedLong(startHighAddress);
+            long longLowStart = StringUtil
+                    .parseUnsignedLong(startLowAddress);
+            startAddress = IpUtil.longToIpV6(longHighStart, longLowStart);
+            long longHighEnd = StringUtil.parseUnsignedLong(endHighAddress);
+            long longLowEnd = StringUtil.parseUnsignedLong(endLowAddress);
+            endAddress = IpUtil.longToIpV6(longHighEnd, longLowEnd);
+        } else if (IpVersion.isV4(ipVersionStr)) {
+            objIp.setIpVersion(IpVersion.V4);
+            startAddress = IpUtil.longToIpV4(StringUtil
+                    .parseUnsignedLong(startLowAddress));
+            endAddress = IpUtil.longToIpV4(StringUtil
+                    .parseUnsignedLong(endLowAddress));
+        }
+        objIp.setStartAddress(startAddress);
+        objIp.setEndAddress(endAddress);
+    }
+    
     /**
      * IP ResultSetExtractor, extract data from ResultSet.
      * 
@@ -307,61 +454,10 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
             List<Network> result = new ArrayList<Network>();
             while (rs.next()) {
                 Long networkId = rs.getLong("IP_ID");
-
-                Network network = new Network();
-                network.setId(networkId);
-                network.setHandle(rs.getString("HANDLE"));
-                setIpVersionAndStartEndAddress(rs, network);
-                network.setName(rs.getString("NAME"));
-                network.setType(rs.getString("TYPE"));
-                network.setCountry(rs.getString("COUNTRY"));
-                network.setParentHandle(rs.getString("PARENT_HANDLE"));
-                network.setLang(rs.getString("LANG"));
-                network.setPort43(rs.getString("PORT43"));
+                Network network = extractNetworkFromRs(rs, networkId);
                 result.add(network);
             }
             return result;
-        }
-
-        /**
-         * set ip version,and start/end address.
-         * 
-         * @param rs
-         *            ResultSet.
-         * @param objIp
-         *            Ip.
-         * @throws SQLException
-         *             SQLException.
-         */
-        private void
-                setIpVersionAndStartEndAddress(ResultSet rs, Network objIp)
-                        throws SQLException {
-            String ipVersionStr = rs.getString("VERSION");
-            String startHighAddress = rs.getString("STARTHIGHADDRESS");
-            String startLowAddress = rs.getString("STARTLOWADDRESS");
-            String endHighAddress = rs.getString("ENDHIGHADDRESS");
-            String endLowAddress = rs.getString("ENDLOWADDRESS");
-            String startAddress = "";
-            String endAddress = "";
-            if (IpVersion.isV6(ipVersionStr)) {
-                objIp.setIpVersion(IpVersion.V6);
-                long longHighStart = StringUtil
-                        .parseUnsignedLong(startHighAddress);
-                long longLowStart = StringUtil
-                        .parseUnsignedLong(startLowAddress);
-                startAddress = IpUtil.longToIpV6(longHighStart, longLowStart);
-                long longHighEnd = StringUtil.parseUnsignedLong(endHighAddress);
-                long longLowEnd = StringUtil.parseUnsignedLong(endLowAddress);
-                endAddress = IpUtil.longToIpV6(longHighEnd, longLowEnd);
-            } else if (IpVersion.isV4(ipVersionStr)) {
-                objIp.setIpVersion(IpVersion.V4);
-                startAddress = IpUtil.longToIpV4(StringUtil
-                        .parseUnsignedLong(startLowAddress));
-                endAddress = IpUtil.longToIpV4(StringUtil
-                        .parseUnsignedLong(endLowAddress));
-            }
-            objIp.setStartAddress(startAddress);
-            objIp.setEndAddress(endAddress);
         }
     }
 }

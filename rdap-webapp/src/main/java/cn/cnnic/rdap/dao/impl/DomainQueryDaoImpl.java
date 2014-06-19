@@ -375,10 +375,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         ModelType type = domain.getDomainType();
         if (ModelType.ARPA == type 
                 && StringUtils.isNotEmpty(domain.getLdhName())) {
-            final Arpa arpa = Arpa.decodeArpa(domain.getLdhName());
-            
-            Network network = networkQueryDao.query(arpa.toNetworkQueryParam());
-            domain.setNetwork(network);
+            List<Network> networks = networkQueryDao.queryAsInnerObjects(domain.getId(), ModelType.ARPA);
+            if(null != networks && networks.size()>0){
+                Network network = networks.get(0);
+                domain.setNetwork(network);
+            }
         }
     }
     
@@ -602,6 +603,33 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             }
             return result;
         }
+    }
+    
+    /**
+     * load arpa domain by id.
+     * @param domainId domainId.
+     * @return Domain if exist, null if not.
+     */
+    public Domain loadArpaDomain(final Long domainId) {
+        if (null == domainId) {
+            return null;
+        }
+        List<Domain> result = null;
+        final String sql =
+                "select * from RDAP_ARPA where ARPA_ID= ? ";
+            result = jdbcTemplate.query(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(
+                        Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql);
+                    ps.setLong(1,domainId);
+                    return ps;
+                }
+            }, new ArpaResultSetExtractor());
+        if (null == result || result.size() == 0) {
+            return null;
+        }
+        return result.get(0);
     }
     
     /**

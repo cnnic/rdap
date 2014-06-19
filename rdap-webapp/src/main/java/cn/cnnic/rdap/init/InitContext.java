@@ -52,9 +52,9 @@ import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
  * init context, sql script util.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 public class InitContext implements ApplicationContextAware {
     /**
@@ -85,7 +85,7 @@ public class InitContext implements ApplicationContextAware {
      * The script will normally be loaded by classpath. There should be one
      * statement per line. Any semicolons will be removed. <b>Do not use this
      * method to execute DDL if you expect rollback.</b>
-     *
+     * 
      * @param sqlResourcePath
      *            the Spring resource path for the SQL script
      * @param continueOnError
@@ -113,7 +113,7 @@ public class InitContext implements ApplicationContextAware {
      * one statement per line. Any semicolons and line comments will be removed.
      * <p>
      * <b>Do not use this method to execute DDL if you expect rollback.</b>
-     *
+     * 
      * @param jdbcTemplate
      *            the JdbcTemplate with which to perform JDBC operations
      * @param resource
@@ -148,33 +148,27 @@ public class InitContext implements ApplicationContextAware {
                 try {
                     jdbcTemplate.update("USE `" + databaseName + "`;");
                 } catch (DataAccessException ex) {
-                    LOGGER.debug("'USE 'database' error.");
+                    LOGGER.error("'USE 'database' error.dbName:{},error:{}",
+                            databaseName, ex.getMessage());
                 }
                 try {
                     int rowsAffected = jdbcTemplate.update(statement);
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug(rowsAffected + " rows affected by SQL: "
-                                + statement);
-                    }
+                    LOGGER.info(rowsAffected + " rows affected by SQL: "
+                            + statement);
                 } catch (DataAccessException ex) {
                     if (continueOnError) {
-                        if (LOGGER.isWarnEnabled()) {
-                            LOGGER.warn(
-                                    "Failed to execute SQL script statement at line "
-                                            + lineNumber + " of resource "
-                                            + resource + ": " + statement, ex);
-                        }
+                        LOGGER.error(
+                                "Failed to execute SQL script statement at line "
+                                        + lineNumber + " of resource "
+                                        + resource + ": " + statement, ex);
                     } else {
                         throw ex;
                     }
                 }
             }
             long elapsedTime = System.currentTimeMillis() - startTime;
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info(String.format(
-                        "Executed SQL script from %s in %s ms.", resource,
-                        elapsedTime));
-            }
+            LOGGER.info(String.format("Executed SQL script from %s in %s ms.",
+                    resource, elapsedTime));
         } catch (IOException ex) {
             throw new DataAccessResourceFailureException(
                     "Failed to open SQL script from " + resource, ex);
@@ -193,7 +187,7 @@ public class InitContext implements ApplicationContextAware {
      * Read a script from the provided {@code LineNumberReader}, using "
      * {@code --}" as the comment prefix, and build a {@code String} containing
      * the lines.
-     *
+     * 
      * @param lineNumberReader
      *            the {@code LineNumberReader} containing the script to be
      *            processed
@@ -212,7 +206,7 @@ public class InitContext implements ApplicationContextAware {
      * Lines <em>beginning</em> with the comment prefix are excluded from the
      * results; however, line comments anywhere else &mdash; for example, within
      * a statement &mdash; will be included in the results.
-     *
+     * 
      * @param lineNumberReader
      *            the {@code LineNumberReader} containing the script to be
      *            processed
@@ -241,7 +235,7 @@ public class InitContext implements ApplicationContextAware {
 
     /**
      * Determine if the provided SQL script contains the specified delimiter.
-     *
+     * 
      * @param script
      *            the SQL script
      * @param delim
@@ -274,7 +268,7 @@ public class InitContext implements ApplicationContextAware {
      * text beginning with the comment prefix and extending to the end of the
      * line will be omitted from the statement. In addition, multiple adjacent
      * whitespace characters will be collapsed into a single space.
-     *
+     * 
      * @param script
      *            the SQL script
      * @param delim
@@ -297,7 +291,7 @@ public class InitContext implements ApplicationContextAware {
      * any text beginning with the comment prefix and extending to the end of
      * the line will be omitted from the statement. In addition, multiple
      * adjacent whitespace characters will be collapsed into a single space.
-     *
+     * 
      * @param script
      *            the SQL script
      * @param delim

@@ -31,6 +31,7 @@
 package cn.cnnic.rdap.common.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
@@ -48,6 +49,47 @@ import cn.cnnic.rdap.BaseTest;
  */
 @SuppressWarnings("rawtypes")
 public class StringUtilTest extends BaseTest {
+
+    /**
+     * test containsMoreThanOnce.
+     * 
+     */
+    @Test
+    public void testContainsMoreThanOnce() throws UnsupportedEncodingException {
+        assertTrue(StringUtil.containsAtMostOnce("bobabc", "o"));
+        assertTrue(StringUtil.containsAtMostOnce("bobabc", "a"));
+        assertTrue(StringUtil.containsAtMostOnce("tobabc", "t"));
+        assertTrue(StringUtil.containsAtMostOnce("bob*", "*"));
+        assertTrue(StringUtil.containsAtMostOnce("*bob", "*"));
+        assertTrue(StringUtil.containsAtMostOnce("b*ob", "*"));
+        assertTrue(StringUtil.containsAtMostOnce("*", "*"));
+        assertTrue(StringUtil.containsAtMostOnce(" * ", "*"));
+        assertFalse(StringUtil.containsAtMostOnce("*b*ob", "*"));
+        assertFalse(StringUtil.containsAtMostOnce("b**ob", "*"));
+        assertFalse(StringUtil.containsAtMostOnce("**", "*"));
+        assertFalse(StringUtil.containsAtMostOnce("**abc", "*"));
+
+    }
+
+    /**
+     * test checkIsValidSearchPattern.
+     * 
+     */
+    @Test
+    public void testCheckIsValidSearchPattern()
+            throws UnsupportedEncodingException {
+        assertTrue(StringUtil.checkIsValidSearchPattern("bob"));
+        assertTrue(StringUtil.checkIsValidSearchPattern(" bob "));
+        assertFalse(StringUtil.checkIsValidSearchPattern("*"));
+        assertFalse(StringUtil.checkIsValidSearchPattern("*abc"));
+        assertFalse(StringUtil.checkIsValidSearchPattern("*abc*"));
+        assertFalse(StringUtil.checkIsValidSearchPattern("a*b*"));
+        assertFalse(StringUtil.checkIsValidSearchPattern("a*b*c"));
+        assertFalse(StringUtil.checkIsValidSearchPattern("a*b*c*"));
+        assertFalse(StringUtil.checkIsValidSearchPattern("**"));
+        assertFalse(StringUtil.checkIsValidSearchPattern("a**"));
+        assertFalse(StringUtil.checkIsValidSearchPattern("**c"));
+    }
 
     /**
      * test getNormalization.
@@ -115,8 +157,7 @@ public class StringUtilTest extends BaseTest {
      */
     @Test
     public void testParseUnsignedLong() {
-        assertEquals(123L,
-                StringUtil.parseUnsignedLong("123"));
+        assertEquals(123L, StringUtil.parseUnsignedLong("123"));
         assertEquals(1844674407370955161L,
                 StringUtil.parseUnsignedLong("1844674407370955161"));
         assertEquals(-1L, StringUtil.parseUnsignedLong("18446744073709551615"));

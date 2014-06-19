@@ -39,9 +39,9 @@ import cn.cnnic.rdap.init.mysql.InitDao;
 
 /**
  * init database schema and import data.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 public class Init {
     /**
@@ -51,8 +51,9 @@ public class Init {
 
     /**
      * main method.
-     *
+     * 
      * @param args
+     *            args.
      */
     public static void main(String[] args) {
         LOGGER.info("init begin...");

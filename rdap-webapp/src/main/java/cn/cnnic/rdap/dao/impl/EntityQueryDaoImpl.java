@@ -54,6 +54,7 @@ import cn.cnnic.rdap.bean.BaseModel;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.EntityAddress;
 import cn.cnnic.rdap.bean.EntityQueryParam;
+import cn.cnnic.rdap.bean.EntityRole;
 import cn.cnnic.rdap.bean.EntityTel;
 import cn.cnnic.rdap.bean.Event;
 import cn.cnnic.rdap.bean.Link;
@@ -159,9 +160,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     @Override
     public List<Entity> search(QueryParam queryParam) {
         List<Entity> entities = searchWithoutInnerObjects(queryParam);
-        queryAndSetEntityStatus(entities);
         queryAndSetInnerObjectsWithoutEntities(entities);
+        queryAndSetRoles(entities);
         queryAndSetNetworksAndAs(entities);
+        queryAndSetInnerEntities(entities);
         return entities;
     }
 
@@ -184,6 +186,19 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             }
         }, new CountResultSetExtractor());
         return entityCount;
+    }
+    
+    /**
+     * query and set inner entities.
+     * @param entities entities.
+     */
+    private void queryAndSetInnerEntities(List<Entity> entities) {
+        if (null == entities) {
+            return;
+        }
+        for (Entity entity : entities) {
+            queryAndSetInnerEntities(entity);
+        }
     }
 
     /**
@@ -244,54 +259,6 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         List<EntityAddress> addresses = entityAddressDao.query(entity);
         entity.setAddresses(addresses);
         entity.setVcardArray(JcardUtil.toJcardString(entity));
-    }
-
-    /**
-     * query and set entity status.
-     * 
-     * @param entities
-     *            entity list.
-     */
-    private void queryAndSetEntityStatus(List<Entity> entities) {
-        List<Long> entityIds = getModelIds(entities);
-        List<ModelStatus> entityStatusList = queryEntityStatus(entityIds);
-        for (ModelStatus status : entityStatusList) {
-            BaseModel obj =
-                    BaseModel.findObjectFromListById(entities, status.getId());
-            if (null == obj) {
-                continue;
-            }
-            Entity entity = (Entity) obj;
-            entity.addStatus(status.getStatus());
-        }
-    }
-
-    /**
-     * query entity status.
-     * 
-     * @param entityIds
-     *            entity id list.
-     * @return entity status list.
-     */
-    private List<ModelStatus> queryEntityStatus(List<Long> entityIds) {
-        if (null == entityIds || entityIds.size() == 0) {
-            return new ArrayList<ModelStatus>();
-        }
-        final String domainsIdsJoinedByComma = StringUtils.join(entityIds, ",");
-        final String sqlTpl =
-                "select * from RDAP_DOMAIN_STATUS where DOMAIN_ID in (%s)";
-        final String sql = String.format(sqlTpl, domainsIdsJoinedByComma);
-        List<ModelStatus> result =
-                jdbcTemplate.query(sql, new RowMapper<ModelStatus>() {
-                    @Override
-                    public ModelStatus mapRow(ResultSet rs, int rowNum)
-                            throws SQLException {
-                        return new ModelStatus(rs.getLong("DOMAIN_ID"), rs
-                                .getString("STATUS"));
-                    }
-
-                });
-        return result;
     }
 
     /**
@@ -529,6 +496,25 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             return result;
         }
     }
+    
+    /**
+     * EntityResultSetExtractor.
+     * @author jiashuo
+     *
+     */
+    class EntityResultSetExtractor implements
+        ResultSetExtractor<List<Entity>> {
+        @Override
+        public List<Entity> extractData(ResultSet rs) throws SQLException {
+            List<Entity> result = new ArrayList<Entity>();
+            while (rs.next()) {
+                Entity entity = new Entity();
+                result.add(entity);
+                extractEntityFromRs(rs, entity);
+            }
+            return result;
+        }
+    }
 
     /**
      * query and set status.
@@ -564,6 +550,26 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             entity.addStatus(status.getStatus());
         }
     }
+    
+    /**
+     * query and set roles.
+     * 
+     * @param models
+     *            model list.
+     */
+    private void queryAndSetRoles(List<Entity> models) {
+        List<Long> entityIds = getModelIds(models);
+        List<EntityRole> roleList = queryRoles(entityIds);
+        for (EntityRole role : roleList) {
+            BaseModel obj =
+                    BaseModel.findObjectFromListById(models, role.getId());
+            if (null == obj) {
+                continue;
+            }
+            Entity entity = (Entity) obj;
+            entity.addRole(role.getRole());
+        }
+    }
 
     /**
      * query status.
@@ -587,6 +593,32 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                             throws SQLException {
                         return new ModelStatus(rs.getLong("ENTITY_ID"), rs
                                 .getString("STATUS"));
+                    }
+
+                });
+        return result;
+    }
+    
+    /**
+     * query roles.
+     * @param entityIds entityIds.
+     * @return role list.
+     */
+    private List<EntityRole> queryRoles(List<Long> entityIds) {
+        if (null == entityIds || entityIds.size() == 0) {
+            return new ArrayList<EntityRole>();
+        }
+        final String idsJoinedByComma = StringUtils.join(entityIds, ",");
+        final String sqlTpl =
+                "select * from REL_ENTITY_REGISTRATION where ENTITY_ID in (%s)";
+        final String sql = String.format(sqlTpl, idsJoinedByComma);
+        List<EntityRole> result =
+                jdbcTemplate.query(sql, new RowMapper<EntityRole>() {
+                    @Override
+                    public EntityRole mapRow(ResultSet rs, int rowNum)
+                            throws SQLException {
+                        return new EntityRole(rs.getLong("ENTITY_ID"), rs
+                                .getString("ENTITY_ROLE"));
                     }
 
                 });
@@ -623,8 +655,6 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         final String qLikeClause = super.generateLikeClause(q);
         final String sql =
                 "select * from RDAP_ENTITY entity "
-                        + " left outer join REL_ENTITY_REGISTRATION rel "
-                        + " on entity.ENTITY_ID = rel.ENTITY_ID "
                         + " where " + paramName + " like ? "
                         + " order by entity.HANDLE limit ?,? ";
         final PageBean page = params.getPageBean();
@@ -642,7 +672,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                         ps.setLong(3, page.getMaxRecords());
                         return ps;
                     }
-                }, new EntityWithRoleResultSetExtractor());
+                }, new EntityResultSetExtractor());
         return result;
     }
 }

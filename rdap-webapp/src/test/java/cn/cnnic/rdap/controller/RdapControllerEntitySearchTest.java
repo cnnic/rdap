@@ -35,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * 
  */
 @SuppressWarnings("rawtypes")
-public class RdapControllerEntityTest extends BaseTest {
+public class RdapControllerEntitySearchTest extends BaseTest {
 
     @Autowired
     private WebApplicationContext wac;
@@ -75,24 +77,47 @@ public class RdapControllerEntityTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
     public void testQueryExist() throws Exception {
-        String entityHandle = "h1";
+        String entityHandle = "truncated*";
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + entityHandle).accept(
-                        MediaType.parseMediaType("application/rdap+json")))
+                get("/.well-known/rdap/entities?handle=" + entityHandle)
+                        .accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/rdap+json"))
-                .andExpect(jsonPath("$.handle").value(entityHandle))
-                .andExpect(jsonPath("$.vcardArray").exists())
-                .andExpect(jsonPath("$.vcardArray[0]").value("vcard"))
-                .andExpect(jsonPath("$.vcardArray[1]").exists())
-                .andExpect(jsonPath("$.vcardArray[1][0][0]").value("version"))
-                .andExpect(jsonPath("$.vcardArray[1][0][2]").value("text"))
-                .andExpect(jsonPath("$.vcardArray[1][0][3]").value("4.0"))
-                .andExpect(jsonPath("$.vcardArray[1][1][0]").value("kind"))
+                .andExpect(content().contentType("application/json"))
                 .andExpect(
-                        jsonPath("$.vcardArray[1][1][3]").value("individual"));
+                        jsonPath("$.rdapConformance").value(
+                                CoreMatchers.hasItem("rdap_level_0")))
+                .andExpect(jsonPath("$.entitySearchResults").exists())
+                .andExpect(jsonPath("$.entitySearchResults").isArray())
+                .andExpect(
+                        jsonPath("$.entitySearchResults",
+                                Matchers.hasItem(Matchers.hasKey("handle"))))
+                .andExpect(
+                        jsonPath("$.entitySearchResults", Matchers
+                                .hasItem(Matchers.hasValue("truncated1"))))
+                .andExpect(
+                        jsonPath("$.entitySearchResults", Matchers
+                                .hasItem(Matchers.hasValue("truncated2"))))
+                .andExpect(
+                        jsonPath("$.entitySearchResults[0].vcardArray")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.entitySearchResults[0].vcardArray[1]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.entitySearchResults[0].vcardArray[1]")
+                                .isArray())
+                .andExpect(
+                        jsonPath("$.entitySearchResults[0].vcardArray[1][1]")
+                                .exists())
+                .andExpect(
+                        jsonPath("$.entitySearchResults[0].vcardArray[1][1][3]")
+                                .value("individual"))
+                .andExpect(
+                        jsonPath("$.entitySearchResults[0].port43").value(
+                                "whois.example.net"));
+
     }
 
     /**
@@ -103,12 +128,12 @@ public class RdapControllerEntityTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
     public void testQueryNonExistAutnum() throws Exception {
         String nonExistHandle = "1000000";
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + nonExistHandle).accept(
-                        MediaType.parseMediaType("application/json")))
+                get("/.well-known/rdap/entities?handle=" + nonExistHandle)
+                        .accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.errorCode").value(404));
@@ -122,12 +147,12 @@ public class RdapControllerEntityTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
     public void testQueryAutnumWithInvalidQ() throws Exception {
         String invalidHandle = "";
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + invalidHandle).accept(
-                        MediaType.parseMediaType("application/json")))
+                get("/.well-known/rdap/entities?handle=" + invalidHandle)
+                        .accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.errorCode").value(400));

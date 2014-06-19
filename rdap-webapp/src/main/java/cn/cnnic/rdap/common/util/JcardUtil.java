@@ -230,7 +230,26 @@ public final class JcardUtil {
             address.setPostalCode(entityAddress.getPostalCode());
             address.setCountry(entityAddress.getCountry());
             addAddressTypes(entityAddress.getTypes(), address);
+            setAddressPref(entityAddress, address);
             vcard.addAddress(address);
+        }
+    }
+
+    /**
+     * set address pref.
+     * @param entityAddress entityAddress.
+     * @param address address.
+     */
+    private static void setAddressPref(EntityAddress entityAddress,
+            Address address) {
+        if (null == entityAddress.getPref()) {
+            return;
+        }
+        try{
+            address.setPref(entityAddress.getPref());
+        } catch (Exception e) {
+            LOGGER.error("setAddressPref error:{}. Not set pref:{}.", e.getMessage(),
+                    entityAddress.getPref());
         }
     }
 
