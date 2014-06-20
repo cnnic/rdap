@@ -30,7 +30,6 @@
  */
 package cn.cnnic.rdap.init;
 
-import org.junit.Test;
 
 
 /**
@@ -40,7 +39,7 @@ import org.junit.Test;
  *
  */
 public class InitTest {
-    @Test
+//    @Test
     public void testMain() {
         Init.main(null);
     }
