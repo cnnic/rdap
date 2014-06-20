@@ -30,7 +30,6 @@
  */
 package cn.cnnic.rdap.init.mysql;
 
-import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -45,7 +44,7 @@ public class InitDaoTest {
     /**
      * test initSchema and initData.
      */
-    @Test
+//    @Test
     public void testInitSchemaAndData() {
         ApplicationContext ctx =
                 new ClassPathXmlApplicationContext(
