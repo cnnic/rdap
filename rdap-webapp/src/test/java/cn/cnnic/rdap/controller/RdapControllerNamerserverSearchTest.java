@@ -56,7 +56,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for RdapController
+ * Test for RdapController.
  * 
  * @author weijunkai
  * 
@@ -82,6 +82,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      * test search exist nameserver.
      * 
      * @throws Exception
+     *             throw a exception.
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
@@ -114,6 +115,13 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         searchByObject(nsComplex);
     }
 
+    /**
+     * 
+     * @param strObject
+     *            object as a parameter
+     * @throws Exception
+     *             throw a exception.
+     */
     private void searchByObject(String strObject) throws Exception {
         RdapProperties prop = new RdapProperties();
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 2L);
@@ -189,6 +197,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      * test search exist truncated nameserver.
      * 
      * @throws Exception
+     *             throw a exception.
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")

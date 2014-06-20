@@ -40,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
- * error message for HTTP response
+ * error message for HTTP response.
  * 
  * @author jiashuo
  * 
@@ -50,24 +50,24 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
         "description", "lang" })
 public class ErrorMessage extends BaseModel {
     /**
-     * identity of object
+     * identity of object.
      */
     private Long id;
     /**
-     * HTTP response code
+     * HTTP response code.
      */
     private Long errorCode;
     /**
-     * title of error
+     * title of error.
      */
     private String title;
     /**
-     * description of error
+     * description of error.
      */
     private List<String> description = new ArrayList<String>();
 
     /**
-     * get null safe ErrorMessage
+     * get null safe ErrorMessage.
      * 
      * @return ErrorMessage with null properties
      */
@@ -76,9 +76,10 @@ public class ErrorMessage extends BaseModel {
     }
 
     /**
-     * add a description string to description list
+     * add a description string to description list.
      * 
      * @param descriptionStr
+     *            string to add as a description.
      */
     public void addDescription(String descriptionStr) {
         if (StringUtils.isBlank(descriptionStr)) {
@@ -90,34 +91,78 @@ public class ErrorMessage extends BaseModel {
         this.description.add(descriptionStr);
     }
 
+    /**
+     * get id.
+     * 
+     * @return long id.
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * set id.
+     * 
+     * @param id
+     *            long to set.
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * get error code.
+     * 
+     * @return errorCode.
+     */
     public Long getErrorCode() {
         return errorCode;
     }
 
+    /**
+     * set error code.
+     * 
+     * @param errorCode
+     *            long code of error.
+     */
     public void setErrorCode(Long errorCode) {
         this.errorCode = errorCode;
     }
 
+    /**
+     * get title of object.
+     * 
+     * @return string title.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * set title of object.
+     * 
+     * @param title
+     *            string title.
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * get description of error.
+     * 
+     * @return string description.
+     */
     public List<String> getDescription() {
         return description;
     }
 
+    /**
+     * set description of object.
+     * 
+     * @param description
+     *            string to set.
+     */
     public void setDescription(List<String> description) {
         this.description = description;
     }

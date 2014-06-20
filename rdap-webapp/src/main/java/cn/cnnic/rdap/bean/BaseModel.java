@@ -113,6 +113,7 @@ public class BaseModel {
     }
 
     /**
+     * setId.
      * 
      * @param id
      *            for a long id to set
@@ -122,6 +123,7 @@ public class BaseModel {
     }
 
     /**
+     * getRdapConformance.
      * 
      * @return a list string of rdapConformance.
      */
@@ -130,6 +132,7 @@ public class BaseModel {
     }
 
     /**
+     * setRdapConformance.
      * 
      * @param rdapConformance
      *            for a list string of rdapConformance to set.
@@ -139,6 +142,7 @@ public class BaseModel {
     }
 
     /**
+     * getLang.
      * 
      * @return a string of language to get.
      */
@@ -147,6 +151,7 @@ public class BaseModel {
     }
 
     /**
+     * setLang.
      * 
      * @param lang
      *            a string of language to set.
@@ -156,6 +161,7 @@ public class BaseModel {
     }
 
     /**
+     * getNotices.
      * 
      * @return list of notice object to get.
      */
@@ -164,6 +170,7 @@ public class BaseModel {
     }
 
     /**
+     * setNotices.
      * 
      * @param notices
      *            a list of notice to set.
