@@ -91,7 +91,8 @@ public class Variants extends BaseModel {
     /**
      * add variant to variantNames.
      * 
-     * @param variant variant.
+     * @param variant
+     *            variant.
      */
     public void addVariant(Variant variant) {
         if (null == variantNames) {
