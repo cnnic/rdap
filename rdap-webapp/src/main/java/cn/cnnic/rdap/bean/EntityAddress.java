@@ -30,12 +30,11 @@
  */
 package cn.cnnic.rdap.bean;
 
-
 /**
  * Address of entity.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 public class EntityAddress extends BaseModel {
 
@@ -83,7 +82,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get entityId.
-     *
+     * 
      * @return entityId.
      */
     public Long getEntityId() {
@@ -92,7 +91,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set entityId.
-     *
+     * 
      * @param entityId
      *            entityId.
      */
@@ -102,7 +101,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get pref.
-     *
+     * 
      * @return pref.
      */
     public Integer getPref() {
@@ -111,7 +110,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set pref.
-     *
+     * 
      * @param pref
      *            pref.
      */
@@ -121,7 +120,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get types.
-     *
+     * 
      * @return types.
      */
     public String getTypes() {
@@ -130,7 +129,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set types.
-     *
+     * 
      * @param types
      *            types.
      */
@@ -140,7 +139,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get poBox.
-     *
+     * 
      * @return poBox.
      */
     public String getPoBox() {
@@ -149,7 +148,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set poBox.
-     *
+     * 
      * @param poBox
      *            poBox.
      */
@@ -159,7 +158,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get extendedAddress.
-     *
+     * 
      * @return extendedAddress.
      */
     public String getExtendedAddress() {
@@ -168,7 +167,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set extendedAddress.
-     *
+     * 
      * @param extendedAddress
      *            extendedAddress.
      */
@@ -178,7 +177,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get streetAddress.
-     *
+     * 
      * @return streetAddress.
      */
     public String getStreetAddress() {
@@ -187,7 +186,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set streetAddress.
-     *
+     * 
      * @param streetAddress
      *            streetAddress.
      */
@@ -197,7 +196,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get locality.
-     *
+     * 
      * @return locality.
      */
     public String getLocality() {
@@ -206,7 +205,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set locality.
-     *
+     * 
      * @param locality
      *            locality.
      */
@@ -216,7 +215,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get region.
-     *
+     * 
      * @return region.
      */
     public String getRegion() {
@@ -225,7 +224,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set region.
-     *
+     * 
      * @param region
      *            region.
      */
@@ -235,7 +234,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get postalCode.
-     *
+     * 
      * @return postalCode.
      */
     public String getPostalCode() {
@@ -244,7 +243,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set postalCode.
-     *
+     * 
      * @param postalCode
      *            postalCode.
      */
@@ -254,7 +253,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * get country.
-     *
+     * 
      * @return country.
      */
     public String getCountry() {
@@ -263,7 +262,7 @@ public class EntityAddress extends BaseModel {
 
     /**
      * set country.
-     *
+     * 
      * @param country
      *            country.
      */

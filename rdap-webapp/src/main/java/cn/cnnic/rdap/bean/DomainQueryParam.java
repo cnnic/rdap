@@ -74,7 +74,7 @@ public class DomainQueryParam extends QueryParam {
     public void setPunyName(String punyName) {
         this.punyName = punyName;
     }
-    
+
     /**
      * is domain from RIR, like 192.in-addr.arpa or F.0.0.ip6.arpa .
      * 
