@@ -49,12 +49,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "port43", "events", "lang" })
 public class Nameserver extends BaseModel {
     /**
-     * representing a registry unique identifier of the nameserver object instance.
+     * representing a registry unique identifier of the nameserver object
+     * instance.
      */
     private String handle;
     /**
-     * Textual representations of DNS names where the labels of the nameserver are
-     * all "letters, digits, hyphen" labels as described by [RFC5890].
+     * Textual representations of DNS names where the labels of the nameserver
+     * are all "letters, digits, hyphen" labels as described by [RFC5890].
      */
     private String ldhName;
     /**
@@ -110,7 +111,7 @@ public class Nameserver extends BaseModel {
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        if(!this.status.contains(statusStr)){
+        if (!this.status.contains(statusStr)) {
             this.status.add(statusStr);
         }
     }

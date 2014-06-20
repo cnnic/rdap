@@ -213,6 +213,14 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         searchTruncatedNS(ipHighCase);
     }
 
+    /**
+     * search truncated nameservers.
+     * 
+     * @param strObj
+     *            string of object
+     * @throws Exception
+     *             throw a exception.
+     */
     private void searchTruncatedNS(String strObj) throws Exception {
         RdapProperties prop = new RdapProperties();
         long finalSize = 2L;
@@ -241,6 +249,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      * test search not existed nameserver 404.
      * 
      * @throws Exception
+     *             throw a exception.
      */
     @Test
     @DatabaseSetup(type = DatabaseOperation.REFRESH,
@@ -257,6 +266,14 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         searchNonExistNS(nsIpV6);
     }
 
+    /**
+     * search no existed nameservers.
+     * 
+     * @param strObject
+     *            string of object.
+     * @throws Exception
+     *             throw a exception.
+     */
     private void searchNonExistNS(String strObject) throws Exception {
         mockMvc.perform(
                 get(SEARCH_URI + strObject).accept(
@@ -279,6 +296,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      * test search nameserver 422.
      * 
      * @throws Exception
+     *             throw a exception.
      */
     @Test
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
@@ -300,6 +318,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      * test search nameserver 400.
      * 
      * @throws Exception
+     *             throw a exception.
      */
     @Test
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
@@ -320,6 +339,14 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         seachIllegalNS(nsComplex);
     }
 
+    /**
+     * search illegal nameservers.
+     * 
+     * @param strObj
+     *            string of object.
+     * @throws Exception
+     *             throw a exception.
+     */
     private void seachIllegalNS(String strObj) throws Exception {
         mockMvc.perform(
                 get(SEARCH_URI + strObj).accept(
