@@ -43,6 +43,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,11 @@ public abstract class BaseTest {
     @Before
     public void before() throws Exception {
         resetDefaultMaxSizeSearch();
+    }
+    
+    @After
+    public void after() throws Exception {
+        connection.close();
     }
 
     /**
