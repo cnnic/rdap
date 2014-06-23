@@ -127,7 +127,7 @@ public final class StringUtil {
      * 
      * @param handle
      *            handle.
-     * @return
+     * @return bool
      */
     public static boolean isValidEntityHandleOrName(String handle) {
         if (StringUtils.isBlank(handle)

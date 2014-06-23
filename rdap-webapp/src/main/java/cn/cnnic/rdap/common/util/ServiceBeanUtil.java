@@ -44,12 +44,26 @@ import cn.cnnic.rdap.service.IdentityCheckService;
 @Component
 public class ServiceBeanUtil {
 
+    /**
+     * service of identity check.
+     */
     private static IdentityCheckService identityCheckService;
 
+    /**
+     * get Identity of CheckService.
+     * 
+     * @return object.
+     */
     public static IdentityCheckService getIdentityCheckService() {
         return identityCheckService;
     }
 
+    /**
+     * set Identity of CheckService.
+     * 
+     * @param identityCheckService
+     *            identity of check servcie.
+     */
     @Autowired
     public void setIdentityCheckService(
             IdentityCheckService identityCheckService) {
