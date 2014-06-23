@@ -56,29 +56,38 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
 @Component
 public class RestResponseUtil {
     /**
-     * all ErrorMessage map,must be init before call
+     * all ErrorMessage map,must be init before call.
      * getErrorMessageByErrorCode()
      */
     private static Map<Long, ErrorMessage> errorMessageMap = null;
 
+    /**
+     * error message service.
+     */
     private static ErrorMessageService errorMessageService;
 
+    /**
+     * for response object.
+     */
     private static ResponseDecorator responseDecorator;
 
+    /**
+     * init the error message.
+     */
     @PostConstruct
     private void init() {
         initErrorMessages();
     }
 
     /**
-     * init ErrorMessages list
+     * init ErrorMessages list.
      */
     public static void initErrorMessages() {
         errorMessageMap = errorMessageService.getAllErrorMessageMap();
     }
 
     /**
-     * get ErrorMessage by error code
+     * get ErrorMessage by error code.
      * 
      * @param errorCode
      *            error code
@@ -97,43 +106,39 @@ public class RestResponseUtil {
     }
 
     /**
-     * create response with HTTP status code 200
+     * create response with HTTP status code 200.
      * 
      * @param response
-     *            model object
-     * @return ResponseEntity
+     *            model T of response.
+     * @param <T>
+     *            a model
+     * @return ResponseEntity<T> ResponseEntity model.
      */
     public static <T> ResponseEntity<T> createResponse200(T response) {
         return new ResponseEntity<T>(response, HttpStatus.OK);
     }
 
     /**
-     * create response with HTTP status code 400
+     * create response with HTTP status code 400.
      * 
-     * @param response
-     *            model object
-     * @return ResponseEntity
+     * @return ResponseEntity entity of response.
      */
     public static ResponseEntity<ErrorMessage> createResponse400() {
         return createCommonErrorResponse(HttpStatus.BAD_REQUEST);
     }
-    
+
     /**
      * create response with HTTP status code 401.
      * 
-     * @param response
-     *            model object
      * @return ResponseEntity
      */
     public static ResponseEntity<ErrorMessage> createResponse401() {
         return createCommonErrorResponse(HttpStatus.UNAUTHORIZED);
     }
-    
+
     /**
      * create response with HTTP status code 403.
      * 
-     * @param response
-     *            model object
      * @return ResponseEntity
      */
     public static ResponseEntity<ErrorMessage> createResponse403() {
@@ -141,10 +146,8 @@ public class RestResponseUtil {
     }
 
     /**
-     * create response with HTTP status code 405
+     * create response with HTTP status code 405.
      * 
-     * @param response
-     *            model object
      * @return ResponseEntity
      */
     public static ResponseEntity<ErrorMessage> createResponse405() {
@@ -158,10 +161,8 @@ public class RestResponseUtil {
     }
 
     /**
-     * create response with HTTP status code 415
+     * create response with HTTP status code 415.
      * 
-     * @param response
-     *            model object
      * @return ResponseEntity
      */
     public static ResponseEntity<ErrorMessage> createResponse415() {
@@ -169,10 +170,8 @@ public class RestResponseUtil {
     }
 
     /**
-     * create response with HTTP status code 404
+     * create response with HTTP status code 404.
      * 
-     * @param response
-     *            model object
      * @return ResponseEntity
      */
     public static ResponseEntity<ErrorMessage> createResponse404() {
@@ -180,10 +179,8 @@ public class RestResponseUtil {
     }
 
     /**
-     * create response with HTTP status code 500
+     * create response with HTTP status code 500.
      * 
-     * @param response
-     *            model object
      * @return ResponseEntity
      */
     public static ResponseEntity<ErrorMessage> createResponse500() {
@@ -191,10 +188,8 @@ public class RestResponseUtil {
     }
 
     /**
-     * create response with HTTP status code 422
+     * create response with HTTP status code 422.
      * 
-     * @param response
-     *            model object
      * @return ResponseEntity
      */
     public static ResponseEntity<ErrorMessage> createResponse422() {
@@ -202,7 +197,7 @@ public class RestResponseUtil {
     }
 
     /**
-     * create error response
+     * create error response.
      * 
      * @param errorStatus
      *            HttpStatus of error message
@@ -217,11 +212,13 @@ public class RestResponseUtil {
     }
 
     /**
-     * create error response,with headers
+     * create error response,with headers.
      * 
      * @param errorStatus
      *            HttpStatus of error message
-     * @return ResponseEntity
+     * @param responseHeaders
+     *            headers of response.
+     * @return ResponseEntity entity of response.
      */
     private static ResponseEntity<ErrorMessage> createErrorResponseWithHeaders(
             HttpStatus errorStatus, HttpHeaders responseHeaders) {
@@ -232,11 +229,23 @@ public class RestResponseUtil {
                 errorStatus);
     }
 
+    /**
+     * set error message service.
+     * 
+     * @param errorMessageService
+     *            error message service to set.
+     */
     @Autowired
     public void setErrorMessageService(ErrorMessageService errorMessageService) {
         RestResponseUtil.errorMessageService = errorMessageService;
     }
 
+    /**
+     * response object.
+     * 
+     * @param responseDecorator
+     *            response object.
+     */
     @Autowired
     public void setResponseDecorator(ResponseDecorator responseDecorator) {
         RestResponseUtil.responseDecorator = responseDecorator;

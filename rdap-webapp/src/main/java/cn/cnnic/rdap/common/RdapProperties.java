@@ -68,6 +68,7 @@ public class RdapProperties {
 
     /**
      * get batchsizeSearch.
+     * 
      * @return batchsizeSearch.
      */
     public static Long getBatchsizeSearch() {
@@ -76,10 +77,12 @@ public class RdapProperties {
 
     /**
      * set batchsizeSearch.
-     * @param batchsizeSearch batchsizeSearch.
+     * 
+     * @param batchsizeSearch
+     *            batchsizeSearch.
      */
     public void setBatchsizeSearch(Long batchsizeSearch) {
         RdapProperties.batchsizeSearch = batchsizeSearch;
     }
-    
+
 }
