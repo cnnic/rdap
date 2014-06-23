@@ -30,7 +30,6 @@
  */
 package cn.cnnic.rdap.init;
 
-import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -46,7 +45,7 @@ public class InitContextTest {
     /**
      * test executeSqlScript.
      */
-    @Test
+//    @Test
     public void testExecuteSqlScript() {
 
         ApplicationContext ctx =
