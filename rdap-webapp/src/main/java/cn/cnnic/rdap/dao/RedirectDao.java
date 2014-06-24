@@ -28,81 +28,25 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.dao;
 
-import org.apache.commons.lang.StringUtils;
+import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.RedirectResponse;
 
 /**
- * base query parameter bean.
+ * redirect DAO interface.
  * 
  * @author jiashuo
  * 
  */
-public class DomainQueryParam extends QueryParam {
+public interface RedirectDao {
 
     /**
-     * constructor.
+     * query redirect.
      * 
-     * @param q
-     *            query string.
-     * @param punyName
-     *            domain puny name.
+     * @param queryParam
+     *            queryParam.
+     * @return RedirectResponse RedirectResponse.
      */
-    public DomainQueryParam(String q, String punyName) {
-        super(q);
-        this.punyName = punyName;
-    }
-
-    /**
-     * domain puny name.
-     */
-    private String punyName;
-
-    /**
-     * get punyName.
-     * 
-     * @return punyName.
-     */
-    public String getPunyName() {
-        return punyName;
-    }
-
-    /**
-     * set punyName.
-     * 
-     * @param punyName
-     *            punyName.
-     */
-    public void setPunyName(String punyName) {
-        this.punyName = punyName;
-    }
-
-    /**
-     * is domain from RIR, like 192.in-addr.arpa or F.0.0.ip6.arpa .
-     * 
-     * @return punyName is from RIR.
-     */
-    public boolean isRirDomain() {
-        if (null != getQ()) {
-            return getQ().endsWith(".in-addr.arpa")
-                    || getQ().endsWith(".ip6.arpa");
-        }
-        return false;
-    }
-
-    /**
-     * get full tld of domain puny name.
-     * 
-     * @return tld tld.
-     */
-    public String getFullPunyTld() {
-        if (StringUtils.isBlank(punyName)) {
-            return null;
-        }
-        String fullTld = StringUtils.substringAfter(punyName, ".");
-        if (StringUtils.isBlank(fullTld)) {
-            return ".";
-        }
-        return fullTld;
-    }
+    public RedirectResponse query(QueryParam queryParam);
 }

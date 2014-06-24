@@ -28,81 +28,56 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.service.impl;
 
-import org.apache.commons.lang.StringUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.RedirectResponse;
+import cn.cnnic.rdap.common.util.DomainUtil;
+import cn.cnnic.rdap.controller.support.QueryParser;
+import cn.cnnic.rdap.service.RedirectService;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * base query parameter bean.
+ * Test for RedirectServiceImpl.
  * 
  * @author jiashuo
  * 
  */
-public class DomainQueryParam extends QueryParam {
+@SuppressWarnings("rawtypes")
+public class RedirectServiceImplTest extends BaseTest {
+    /**
+     * queryParser.
+     */
+    @Autowired
+    private QueryParser queryParser;
+    /**
+     * RedirectService.
+     */
+    @Autowired
+    private RedirectService redirectService;
 
     /**
-     * constructor.
-     * 
-     * @param q
-     *            query string.
-     * @param punyName
-     *            domain puny name.
+     * test query exist entity.
      */
-    public DomainQueryParam(String q, String punyName) {
-        super(q);
-        this.punyName = punyName;
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-redirect.xml")
+    public void testQueryDomain() {
+        String domainName = "cnnic.cn";
+        String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
+        RedirectResponse redirect =
+                redirectService.queryDomain(queryParser.parseDomainQueryParam(
+                        domainName, punyDomainName));
+        assertNotNull(redirect);
+        assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
     }
 
-    /**
-     * domain puny name.
-     */
-    private String punyName;
-
-    /**
-     * get punyName.
-     * 
-     * @return punyName.
-     */
-    public String getPunyName() {
-        return punyName;
-    }
-
-    /**
-     * set punyName.
-     * 
-     * @param punyName
-     *            punyName.
-     */
-    public void setPunyName(String punyName) {
-        this.punyName = punyName;
-    }
-
-    /**
-     * is domain from RIR, like 192.in-addr.arpa or F.0.0.ip6.arpa .
-     * 
-     * @return punyName is from RIR.
-     */
-    public boolean isRirDomain() {
-        if (null != getQ()) {
-            return getQ().endsWith(".in-addr.arpa")
-                    || getQ().endsWith(".ip6.arpa");
-        }
-        return false;
-    }
-
-    /**
-     * get full tld of domain puny name.
-     * 
-     * @return tld tld.
-     */
-    public String getFullPunyTld() {
-        if (StringUtils.isBlank(punyName)) {
-            return null;
-        }
-        String fullTld = StringUtils.substringAfter(punyName, ".");
-        if (StringUtils.isBlank(fullTld)) {
-            return ".";
-        }
-        return fullTld;
-    }
 }

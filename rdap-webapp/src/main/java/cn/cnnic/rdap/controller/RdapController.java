@@ -56,6 +56,7 @@ import cn.cnnic.rdap.bean.NameserverSearch;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.RedirectResponse;
 import cn.cnnic.rdap.common.util.AutnumValidator;
 import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.IpUtil;
@@ -64,6 +65,7 @@ import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.AccessControlManager;
 import cn.cnnic.rdap.service.QueryService;
+import cn.cnnic.rdap.service.RedirectService;
 import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
@@ -107,6 +109,12 @@ public class RdapController {
      */
     @Autowired
     private AccessControlManager accessControlManager;
+    
+    /**
+     * RedirectService.
+     */
+    @Autowired
+    private RedirectService redirectService;
 
     /**
      * query entity.
@@ -240,15 +248,49 @@ public class RdapController {
         }
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
-        Domain domain = queryService.queryDomain(queryParser
-                .parseDomainQueryParam(decodeDomain, punyDomainName));
+        QueryParam queryParam = queryParser
+                .parseDomainQueryParam(decodeDomain, punyDomainName);
+        if(queryService.tldInThisRegistry(queryParam)){
+            return queryDomainInThisRegistry(queryParam);
+        }
+        return queryRedirectDomain(queryParam);
+    }
+
+    /**
+     * query redirect domain.
+     * @param queryParam queryParam.
+     * @return ResponseEntity.
+     */
+    private ResponseEntity queryRedirectDomain(QueryParam queryParam) {
+        LOGGER.info("   queryRedirectDomain:{}" , queryParam);
+        RedirectResponse redirect = redirectService.queryDomain(queryParam);
+        if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
+            LOGGER.info("   redirect domain result:{},return 301." , 
+                    redirect.getUrl());
+            return RestResponseUtil.createResponse301(redirect.getUrl());
+        }
+        LOGGER.info("   redirect domain result is null.{},return 404." , 
+                queryParam);
+        return RestResponseUtil.createResponse404();
+    }
+
+    /**
+     * query domain in this registry.
+     * @param queryParam queryParam.
+     * @return ResponseEntity.
+     */
+    private ResponseEntity queryDomainInThisRegistry(QueryParam queryParam) {
+        LOGGER.info("   queryDomainInThisRegistry:{}" , queryParam);
+        Domain domain = queryService.queryDomain(queryParam);
         if (null != domain) {
+            LOGGER.info("   domain:{}" , queryParam);
             if (!accessControlManager.hasPermission(domain)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domain);
             return RestResponseUtil.createResponse200(domain);
         }
+        LOGGER.info("   domain not found,return 404. {}" , queryParam);
         return RestResponseUtil.createResponse404();
     }
 

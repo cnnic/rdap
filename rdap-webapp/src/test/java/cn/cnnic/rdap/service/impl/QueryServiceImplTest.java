@@ -31,20 +31,24 @@
 package cn.cnnic.rdap.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.Assert;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.QueryService;
 
@@ -70,10 +74,43 @@ public class QueryServiceImplTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    public void testTldInThisRegistry() {
+        String domainName = "cnnic.cn";
+        RdapProperties prop = new RdapProperties();
+        ReflectionTestUtils.setField(prop, "inTlds", "cn");
+        ReflectionTestUtils.setField(prop, "notInTlds", "edu.cn");
+        assertTrue(queryService.tldInThisRegistry(queryParser
+                .parseDomainQueryParam(domainName, domainName)));
+        domainName = "cnnic.edu.cn";
+        assertFalse(queryService.tldInThisRegistry(queryParser
+                .parseDomainQueryParam(domainName, domainName)));
+        domainName = "cnnic.com";
+        assertFalse(queryService.tldInThisRegistry(queryParser
+                .parseDomainQueryParam(domainName, domainName)));
+        // set multi tlds
+        ReflectionTestUtils.setField(prop, "inTlds", "cn;org");
+        ReflectionTestUtils.setField(prop, "notInTlds", "com;edu.cn");
+        domainName = "cnnic.cn";
+        assertTrue(queryService.tldInThisRegistry(queryParser
+                .parseDomainQueryParam(domainName, domainName)));
+        domainName = "cnnic.edu.cn";
+        assertFalse(queryService.tldInThisRegistry(queryParser
+                .parseDomainQueryParam(domainName, domainName)));
+        domainName = "cnnic.com";
+        assertFalse(queryService.tldInThisRegistry(queryParser
+                .parseDomainQueryParam(domainName, domainName)));
+    }
+
+    /**
+     * test query exist entity.
+     */
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
     public void testQueryEntity() {
         String handle = "h1";
-        Entity entity = queryService.queryEntity(queryParser
-                .parseQueryParam(handle));
+        Entity entity =
+                queryService.queryEntity(queryParser.parseQueryParam(handle));
         Assert.notNull(entity);
         assertEquals(handle, entity.getHandle());
         assertEquals("individual", entity.getKind());
@@ -84,7 +121,7 @@ public class QueryServiceImplTest extends BaseTest {
         assertEquals("http://john.com", entity.getUrl());
         assertEquals("whois.example.net", entity.getPort43());
     }
-    
+
     /**
      * test query exist autnum
      */
@@ -93,8 +130,9 @@ public class QueryServiceImplTest extends BaseTest {
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
     public void testQueryAutnum() {
         String autnumStr = "1";
-        Autnum autnum = queryService.queryAutnum(queryParser
-                .parseQueryParam(autnumStr));
+        Autnum autnum =
+                queryService
+                        .queryAutnum(queryParser.parseQueryParam(autnumStr));
         Assert.notNull(autnum);
         assertEquals(autnum.getId(), Long.valueOf(autnumStr));
         assertEquals(autnum.getCountry(), "zh");
@@ -113,9 +151,10 @@ public class QueryServiceImplTest extends BaseTest {
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain.xml")
     public void testQueryDomain() {
         String domainName = "cnnic.cn";
-        Domain domain = queryService.queryDomain(queryParser
-                .parseDomainQueryParam(domainName, domainName));
+        Domain domain =
+                queryService.queryDomain(queryParser.parseDomainQueryParam(
+                        domainName, domainName));
         assertNotNull(domain);
     }
-    
+
 }

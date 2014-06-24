@@ -34,8 +34,8 @@ import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.Network;
+import cn.cnnic.rdap.bean.QueryParam;
 
 /**
  * query service interface.
@@ -88,5 +88,14 @@ public interface QueryService {
      * @return Ip for the result.
      */
     Network queryIp(QueryParam queryParam);
+    
+    /**
+     * check tld is in this registry.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return true if is,false if not.
+     */
+    boolean tldInThisRegistry(QueryParam queryParam);
 
 }
