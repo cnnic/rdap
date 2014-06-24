@@ -67,4 +67,96 @@ public class IpUtilTest {
         num = (0xffffffffL);
         assertEquals("255.255.255.255", IpUtil.longToIpV4(num));
     }
+
+    @Test
+    public void testIsIpV6StrValidTrue() {
+        assertEquals(true, IpUtil.isIpV6StrValid("::"));
+        assertEquals(true,
+                IpUtil.isIpV6StrValid("2001:db8:85a3:0:2001:6a8:0:2"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::1"));
+        assertEquals(true, IpUtil.isIpV6StrValid("fe80::1"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::192.168.1.1"));
+        assertEquals(true, IpUtil.isIpV6StrValid("0:0:0:0:0:0:0:0"));
+        assertEquals(
+                true,
+                IpUtil.isIpV6StrValid("ffff:FFFF:fffF:Ffff:fFFF:FFff:ffFF:FFFf"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1080::8:800:2C:4A"));
+        assertEquals(true, IpUtil.isIpV6StrValid("FEC0:0:0:0:0:0:0:1"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::FFFF:192.168.1.1"));
+        assertEquals(true, IpUtil.isIpV6StrValid("abcd:ef:111:f123::1"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1138:0:0:0:8:80:800:417A"));
+        assertEquals(true,
+                IpUtil.isIpV6StrValid("fecc:face::b00c:f001:fedc:fedd"));
+        assertEquals(true,
+                IpUtil.isIpV6StrValid("CaFe:BaBe:dEAd:BeeF:12:345:6789:abcd"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::1:a:B:C:d:e:f"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1::a:B:C:d:e:f"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1:a::B:C:d:e:f"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B::C:d:e:f"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C::d:e:f"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C:d::e:f"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C:d:e::f"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C:d:e:f::"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::2:f:E:D:6:7"));
+        assertEquals(true, IpUtil.isIpV6StrValid("2::f:E:D:6:7"));
+        assertEquals(true, IpUtil.isIpV6StrValid("2:f::E:D:6:7"));
+        assertEquals(true, IpUtil.isIpV6StrValid("2:f:E::D:6:7"));
+        assertEquals(true, IpUtil.isIpV6StrValid("2:f:E:D::6:7"));
+        assertEquals(true, IpUtil.isIpV6StrValid("2:f:E:D:6::7"));
+        assertEquals(true, IpUtil.isIpV6StrValid("2:f:E:D:6:7::"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::3:A:b:8:0"));
+        assertEquals(true, IpUtil.isIpV6StrValid("3::A:b:8:0"));
+        assertEquals(true, IpUtil.isIpV6StrValid("3:A::b:8:0"));
+        assertEquals(true, IpUtil.isIpV6StrValid("3:A:b::8:0"));
+        assertEquals(true, IpUtil.isIpV6StrValid("3:A:b:8::0"));
+        assertEquals(true, IpUtil.isIpV6StrValid("3:A:b:8:0::"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::4:5:C:d"));
+        assertEquals(true, IpUtil.isIpV6StrValid("4::5:C:d"));
+        assertEquals(true, IpUtil.isIpV6StrValid("4:5::C:d"));
+        assertEquals(true, IpUtil.isIpV6StrValid("4:5:C::d"));
+        assertEquals(true, IpUtil.isIpV6StrValid("4:5:C:d::"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::5:e:F"));
+        assertEquals(true, IpUtil.isIpV6StrValid("5::e:F"));
+        assertEquals(true, IpUtil.isIpV6StrValid("5:e::F"));
+        assertEquals(true, IpUtil.isIpV6StrValid("5:e:F::"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::6:A"));
+        assertEquals(true, IpUtil.isIpV6StrValid("6::A"));
+        assertEquals(true, IpUtil.isIpV6StrValid("6:A::"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::7"));
+        assertEquals(true, IpUtil.isIpV6StrValid("7::"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::7"));
+        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C:d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::a:B:C:d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("a::B:C:d:2:0.0.0.0"));
+        assertEquals(true, IpUtil.isIpV6StrValid("a:B::C:d:2:255.255.255.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("a:B:C::d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("a:B:C:d::2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("a:B:C:d:2::255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::B:C:d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("B::C:d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("B:C::d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("B:C:d::2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("B:C:d:2::255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::C:d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("C::d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("C:d::2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("C:d:2::255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::d:2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("d::2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("d:2::255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::2:255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("2::255.0.0.255"));
+        assertEquals(true, IpUtil.isIpV6StrValid("::255.0.0.255"));
+    }
+
+    @Test
+    public void testIsIpV6StrValidFalse() {
+        assertEquals(false, IpUtil.isIpV6StrValid("::256.0.0.255"));
+        assertEquals(false, IpUtil.isIpV6StrValid("::256.0.0.2f"));
+        assertEquals(false, IpUtil.isIpV6StrValid(":::255.0.0.2"));
+        assertEquals(false, IpUtil.isIpV6StrValid("f:E:d:c:2:1:0000:ffff:"));
+        assertEquals(false, IpUtil.isIpV6StrValid("f:E:d:c:2:1:0000:ggg"));
+        assertEquals(false, IpUtil.isIpV6StrValid("f:E:d:c:-2:1:0000:ffff:"));
+        assertEquals(false, IpUtil.isIpV6StrValid("::00000"));
+    }
 }

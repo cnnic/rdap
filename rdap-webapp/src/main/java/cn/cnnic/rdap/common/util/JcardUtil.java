@@ -237,19 +237,22 @@ public final class JcardUtil {
 
     /**
      * set address pref.
-     * @param entityAddress entityAddress.
-     * @param address address.
+     * 
+     * @param entityAddress
+     *            entityAddress.
+     * @param address
+     *            address.
      */
     private static void setAddressPref(EntityAddress entityAddress,
             Address address) {
         if (null == entityAddress.getPref()) {
             return;
         }
-        try{
+        try {
             address.setPref(entityAddress.getPref());
         } catch (Exception e) {
-            LOGGER.error("setAddressPref error:{}. Not set pref:{}.", e.getMessage(),
-                    entityAddress.getPref());
+            LOGGER.error("setAddressPref error:{}. Not set pref:{}.",
+                    e.getMessage(), entityAddress.getPref());
         }
     }
 

@@ -137,10 +137,9 @@ public final class DomainUtil {
         if (!domainName.endsWith(IPV4_ARPA_SUFFIX)) {
             return false;
         }
-        domainName =
-                StringUtils.removeEndIgnoreCase(domainName, IPV4_ARPA_SUFFIX);
-        String ipV4ArpaReg =
-                "^((1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.){1,4}$";
+        domainName = StringUtils.removeEndIgnoreCase(domainName,
+                IPV4_ARPA_SUFFIX);
+        String ipV4ArpaReg = "^((1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.){1,4}$";
         if (domainName.matches(ipV4ArpaReg)) {
             return true;
         }
@@ -162,8 +161,8 @@ public final class DomainUtil {
         if (!domainName.endsWith(IPV6_ARPA_SUFFIX)) {
             return false;
         }
-        domainName =
-                StringUtils.removeEndIgnoreCase(domainName, IPV6_ARPA_SUFFIX);
+        domainName = StringUtils.removeEndIgnoreCase(domainName,
+                IPV6_ARPA_SUFFIX);
         // match
         // b.a.9.8.7.6.5.0.4.0.0.0.3.0.0.0.2.0.0.0.1.0.0.0.0.0.0.0.1.2.3.4.
         String ipV6ArpaReg = "^([\\d|a|b|c|d|e|f]\\.){1,32}$";
@@ -276,7 +275,7 @@ public final class DomainUtil {
      * @return domain puny name.
      */
     public static String geneDomainPunyName(String domainName) {
-        if(StringUtils.isBlank(domainName)){
+        if (StringUtils.isBlank(domainName)) {
             return domainName;
         }
         return IDN.toASCII(domainName); // long lable exception
@@ -343,9 +342,8 @@ public final class DomainUtil {
         }
         String result = str;
         try {
-            result =
-                    new String(str.getBytes(StringUtil.CHAR_SET_ISO8859),
-                            StringUtil.CHAR_SET_UTF8);
+            result = new String(str.getBytes(StringUtil.CHAR_SET_ISO8859),
+                    StringUtil.CHAR_SET_UTF8);
         } catch (UnsupportedEncodingException e) {
             LOGGER.error(e.getMessage());
         }
@@ -375,9 +373,8 @@ public final class DomainUtil {
                 return false;
             }
         }
-        String ldhReg =
-                "^(?!-)(?!.*?-$)([0-9a-zA-Z][0-9a-zA-Z-]{0,62}\\.)+"
-                        + "[0-9a-zA-Z][0-9a-zA-Z-]{0,62}$";
+        String ldhReg = "^(?!-)(?!.*?-$)([0-9a-zA-Z][0-9a-zA-Z-]{0,62}\\.)+"
+                + "[0-9a-zA-Z][0-9a-zA-Z-]{0,62}$";
         if (domainWithoutLastPoint.matches(ldhReg)) {
             return true;
         }

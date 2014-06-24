@@ -36,25 +36,47 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * signify links to other resources on the Internet
+ * signify links to other resources on the Internet.
  * 
  * @author jiashuo
  * 
  */
 public class Link extends BaseModel {
 
+    /**
+     * value string.
+     */
     private String value;
-    private String rel;// TODO:enum accroding to rfc5988
+    /**
+     * relationship between two objects.
+     */
+    private String rel; // TODO:enum accroding to rfc5988
+    /**
+     * href of link.
+     */
     private String href;
+    /**
+     * href language of link.
+     */
     private List<String> hreflang;
+    /**
+     * title of link.
+     */
     private List<String> title;
+    /**
+     * media of link.
+     */
     private String media;
+    /**
+     * type of link.
+     */
     private String type;
 
     /**
-     * add a hreflang
+     * add a hreflang.
      * 
      * @param hreflangStr
+     *            string for href lang.
      */
     public void addHreflang(String hreflangStr) {
         if (StringUtils.isBlank(hreflangStr)) {
@@ -67,9 +89,10 @@ public class Link extends BaseModel {
     }
 
     /**
-     * add a title
+     * add a title.
      * 
      * @param titleStr
+     *            string of tile.
      */
     public void addTitle(String titleStr) {
         if (StringUtils.isBlank(titleStr)) {
@@ -81,58 +104,136 @@ public class Link extends BaseModel {
         this.title.add(titleStr);
     }
 
+    /**
+     * get value of link.
+     * 
+     * @return value string.
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * set value of link.
+     * 
+     * @param value
+     *            value string to set.
+     */
     public void setValue(String value) {
         this.value = value;
     }
 
+    /**
+     * get relationship of link.
+     * 
+     * @return rel string.
+     */
     public String getRel() {
         return rel;
     }
 
+    /**
+     * set relationship of link.
+     * 
+     * @param rel
+     *            relationship string to set.
+     * 
+     */
     public void setRel(String rel) {
         this.rel = rel;
     }
 
+    /**
+     * get href of link.
+     * 
+     * @return href string.
+     */
     public String getHref() {
         return href;
     }
 
+    /**
+     * set href of link.
+     * 
+     * @param href
+     *            string to set.
+     */
     public void setHref(String href) {
         this.href = href;
     }
 
+    /**
+     * get hreflang of link.
+     * 
+     * @return list string of hreflang.
+     */
     public List<String> getHreflang() {
         return hreflang;
     }
 
+    /**
+     * set href language of link.
+     * 
+     * @param hreflang
+     *            list string of hreflang to set.
+     */
     public void setHreflang(List<String> hreflang) {
         this.hreflang = hreflang;
     }
 
+    /**
+     * get title of link.
+     * 
+     * @return a list of string.
+     */
     public List<String> getTitle() {
         return title;
     }
 
+    /**
+     * set title of link.
+     * 
+     * @param title
+     *            a list string of title.
+     */
     public void setTitle(List<String> title) {
         this.title = title;
     }
 
+    /**
+     * get media of link.
+     * 
+     * @return string of media.
+     */
     public String getMedia() {
         return media;
     }
 
+    /**
+     * set media of link.
+     * 
+     * @param media
+     *            string to set.
+     */
     public void setMedia(String media) {
         this.media = media;
     }
 
+    /**
+     * get type of link.
+     * 
+     * @return type string.
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * set type of link.
+     * 
+     * @param type
+     *            type of link.
+     */
     public void setType(String type) {
         this.type = type;
     }

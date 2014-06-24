@@ -30,31 +30,30 @@
  */
 package cn.cnnic.rdap.dao.impl.redirect;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.RedirectResponse;
-import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.RedirectDao;
 
 /**
- * domain redirect DAO.
+ * autnum redirect DAO.
  * 
  * @author jiashuo
  * 
  */
 @Repository
-public class DomainRedirectDao implements RedirectDao {
+public class AutnumRedirectDao implements RedirectDao {
     /**
      * JDBC template.
      */
@@ -63,51 +62,34 @@ public class DomainRedirectDao implements RedirectDao {
 
     @Override
     public RedirectResponse query(QueryParam queryParam) {
-        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
-        String fullPunyTld = domainQueryParam.getFullPunyTld();
-        fullPunyTld = StringUtils.replace(fullPunyTld, "'", "''");
-        final String joinedTldQCond = getJoinedTldQCondition(fullPunyTld);
+        final String autnumQ = queryParam.getQ();
         final String sql =
-                "select * from RDAP_DOMAIN_REDIRECT "
-                        + " where REDIRECT_TLD in (" + joinedTldQCond + ") "
-                        + " order by char_length(REDIRECT_TLD) desc limit 1";
-        List<String> result = jdbcTemplate.query(sql, new RowMapper<String>() {
-            @Override
-            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getString("REDIRECT_URL");
-            }
+                "select *,end_autnum - start_autnum as asInterval "
+                        + " from RDAP_AUTNUM_REDIRECT "
+                        + " where START_AUTNUM <= ? and END_AUTNUM >= ?"
+                        + " order by asInterval limit 1";
+        List<String> result =
+                jdbcTemplate.query(new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(
+                            Connection conn) throws SQLException {
+                        PreparedStatement ps = conn.prepareStatement(sql);
+                        ps.setString(1, autnumQ);
+                        ps.setString(2, autnumQ);
+                        return ps;
+                    }
+                }, new RowMapper<String>() {
+                    @Override
+                    public String mapRow(ResultSet rs, int rowNum)
+                            throws SQLException {
+                        return rs.getString("REDIRECT_URL");
+                    }
 
-        });
+                });
         if (null == result || result.size() == 0) {
             return null;
         }
         return new RedirectResponse(result.get(0));
-    }
-
-    /**
-     * get joined tld query string condition: 'cn','com.cn'
-     * 
-     * @param fullTld
-     *            fullTld.
-     * @return joined query condition.
-     */
-    private String getJoinedTldQCondition(String fullTld) {
-        if (StringUtils.isBlank(fullTld)) {
-            return null;
-        }
-        List<String> tldList = new ArrayList<String>();
-        String currentTld = fullTld;
-        tldList.add(StringUtil.addQuotas(currentTld));
-        while (StringUtils.isNotBlank(currentTld)) {
-            String subTld =
-                    StringUtils.substringAfter(currentTld,
-                            StringUtil.TLD_SPLITOR);
-            if (StringUtils.isNotBlank(subTld)) {
-                tldList.add(StringUtil.addQuotas(subTld));
-            }
-            currentTld = subTld;
-        }
-        return StringUtils.join(tldList, ",");
     }
 
 }

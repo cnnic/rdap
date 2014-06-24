@@ -313,48 +313,65 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * @return Ip
      */
     private Network queryWithoutInnerObjects(QueryParam queryParam) {
+        PreparedStatementCreator pstatCreator =
+                generatePStatCreator(queryParam,"RDAP_IP");
+        List<Network> result = jdbcTemplate.query(
+                pstatCreator, new NetworkResultSetExtractor());
+        if (null == result || result.size() == 0) {
+            return null;
+        }
+        return result.get(0);
+    }
+
+    /**
+     * generate PreparedStatementCreator.
+     * @param queryParam queryParam.
+     * @return PreparedStatementCreator.
+     */
+    public static PreparedStatementCreator
+            generatePStatCreator(QueryParam queryParam,String ipTableName) {
         NetworkQueryParam ipQueryParam = (NetworkQueryParam) queryParam;
         final BigDecimal ipQueryStartLow = ipQueryParam.getIpQueryStartLow();
         final BigDecimal ipQueryEndLow = ipQueryParam.getIpQueryEndLow();
         final IpVersion ipVersion = ipQueryParam.getQueryIpVersion();
         final String sqlV6 = "select *, (ENDHIGHADDRESS-STARTHIGHADDRESS) as high,"
-                + " (ENDLOWADDRESS-STARTLOWADDRESS) as low from RDAP_IP ip where "
+                + " (ENDLOWADDRESS-STARTLOWADDRESS) as low from "
+                + ipTableName
+                + " ip where "
                 + " (STARTHIGHADDRESS<? or STARTHIGHADDRESS=? and STARTLOWADDRESS<=?)"
                 + " && (ENDHIGHADDRESS>? or ENDHIGHADDRESS=? and ENDLOWADDRESS>=?)"
                 + " && VERSION=? order by high,low limit 1";
         final BigDecimal ipQueryStartHigh = ipQueryParam.getIpQueryStartHigh();
         final BigDecimal ipQueryEndHigh = ipQueryParam.getIpQueryEndHigh();
         final String sqlV4 = "select *,(ENDLOWADDRESS-STARTLOWADDRESS) as low"
-                + " from RDAP_IP where STARTLOWADDRESS<=? && ENDLOWADDRESS>=?"
+                + " from "
+                + ipTableName
+                + " where STARTLOWADDRESS<=? && ENDLOWADDRESS>=?"
                 + " && STARTLOWADDRESS<POW(2,32) && ENDLOWADDRESS<POW(2,32) &&"
                 + " VERSION = ? order by low limit 1";
-        List<Network> result = jdbcTemplate.query(
-                new PreparedStatementCreator() {
-                    public PreparedStatement createPreparedStatement(
-                            Connection connection) throws SQLException {
-                        PreparedStatement ps = null;
-                        if (ipVersion == IpVersion.V6) {
-                            ps = connection.prepareStatement(sqlV6);
-                            ps.setBigDecimal(1, ipQueryStartHigh);
-                            ps.setBigDecimal(2, ipQueryStartHigh);
-                            ps.setBigDecimal(3, ipQueryStartLow);
-                            ps.setBigDecimal(4, ipQueryEndHigh);
-                            ps.setBigDecimal(5, ipQueryEndHigh);
-                            ps.setBigDecimal(6, ipQueryEndLow);
-                            ps.setString(7, ipVersion.getName());
-                        } else if (ipVersion == IpVersion.V4) {
-                            ps = connection.prepareStatement(sqlV4);
-                            ps.setBigDecimal(1, ipQueryStartLow);
-                            ps.setBigDecimal(2, ipQueryEndLow);
-                            ps.setString(3, ipVersion.getName());
-                        }
-                        return ps;
-                    }
-                }, new NetworkResultSetExtractor());
-        if (null == result || result.size() == 0) {
-            return null;
-        }
-        return result.get(0);
+        PreparedStatementCreator pstatCreator = new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = null;
+                if (ipVersion == IpVersion.V6) {
+                    ps = connection.prepareStatement(sqlV6);
+                    ps.setBigDecimal(1, ipQueryStartHigh);
+                    ps.setBigDecimal(2, ipQueryStartHigh);
+                    ps.setBigDecimal(3, ipQueryStartLow);
+                    ps.setBigDecimal(4, ipQueryEndHigh);
+                    ps.setBigDecimal(5, ipQueryEndHigh);
+                    ps.setBigDecimal(6, ipQueryEndLow);
+                    ps.setString(7, ipVersion.getName());
+                } else if (ipVersion == IpVersion.V4) {
+                    ps = connection.prepareStatement(sqlV4);
+                    ps.setBigDecimal(1, ipQueryStartLow);
+                    ps.setBigDecimal(2, ipQueryEndLow);
+                    ps.setString(3, ipVersion.getName());
+                }
+                return ps;
+            }
+        };
+        return pstatCreator;
     }
 
     /**
