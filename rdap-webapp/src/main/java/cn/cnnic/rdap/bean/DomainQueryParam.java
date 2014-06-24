@@ -30,6 +30,8 @@
  */
 package cn.cnnic.rdap.bean;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * base query parameter bean.
  * 
@@ -86,5 +88,21 @@ public class DomainQueryParam extends QueryParam {
                     || getQ().endsWith(".ip6.arpa");
         }
         return false;
+    }
+
+    /**
+     * get full tld of domain puny name.
+     * 
+     * @return tld tld.
+     */
+    public String getFullPunyTld() {
+        if (StringUtils.isBlank(punyName)) {
+            return null;
+        }
+        String fullTld = StringUtils.substringAfter(punyName, ".");
+        if (StringUtils.isBlank(fullTld)) {
+            return ".";
+        }
+        return fullTld;
     }
 }

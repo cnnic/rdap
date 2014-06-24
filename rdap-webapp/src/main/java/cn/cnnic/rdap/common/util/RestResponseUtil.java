@@ -200,6 +200,21 @@ public class RestResponseUtil {
     public static ResponseEntity<ErrorMessage> createResponse422() {
         return createCommonErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY);
     }
+    
+    /**
+     * create response with HTTP status code 301.
+     * 
+     * @param response
+     *            model object.
+     * @return ResponseEntity.
+     */
+    public static ResponseEntity<ErrorMessage> createResponse301(String redirectUrl) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Location",redirectUrl);
+        ResponseEntity<ErrorMessage> response = createErrorResponseWithHeaders(
+                HttpStatus.MOVED_PERMANENTLY, headers);
+        return response;
+    }
 
     /**
      * create error response

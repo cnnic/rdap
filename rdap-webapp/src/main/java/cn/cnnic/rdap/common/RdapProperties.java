@@ -30,6 +30,10 @@
  */
 package cn.cnnic.rdap.common;
 
+import java.util.List;
+
+import cn.cnnic.rdap.common.util.StringUtil;
+
 /**
  * static properties,load from property file,by spring.
  * 
@@ -46,6 +50,48 @@ public class RdapProperties {
      * batch size for search.
      */
     private static Long batchsizeSearch;
+
+    /**
+     * tlds in this registry, splited by ';'.
+     */
+    private static String inTlds;
+
+    /**
+     * tlds not in this registry, splited by ';'.
+     */
+    private static String notInTlds;
+
+    /**
+     * list for in tlds.
+     */
+    private static List<String> inTldList;
+    /**
+     * list for not in tlds.
+     */
+    private static List<String> notInTldList;
+
+    /**
+     * get in-tlds in this registry.
+     * 
+     * @return tld list.
+     */
+    public static List<String> getInTldsInThisRegistry() {
+        RdapProperties.inTldList =
+                StringUtil.parseTldsToListIfTldListIsNull(inTlds, inTldList);
+        return RdapProperties.inTldList;
+    }
+
+    /**
+     * get not-in-tlds in this registry.
+     * 
+     * @return tld list.
+     */
+    public static List<String> getNotInTldsInThisRegistry() {
+        RdapProperties.notInTldList =
+                StringUtil.parseTldsToListIfTldListIsNull(notInTlds,
+                        notInTldList);
+        return RdapProperties.notInTldList;
+    }
 
     /**
      * get maxsizeSearch.
@@ -68,6 +114,7 @@ public class RdapProperties {
 
     /**
      * get batchsizeSearch.
+     * 
      * @return batchsizeSearch.
      */
     public static Long getBatchsizeSearch() {
@@ -76,10 +123,50 @@ public class RdapProperties {
 
     /**
      * set batchsizeSearch.
-     * @param batchsizeSearch batchsizeSearch.
+     * 
+     * @param batchsizeSearch
+     *            batchsizeSearch.
      */
     public void setBatchsizeSearch(Long batchsizeSearch) {
         RdapProperties.batchsizeSearch = batchsizeSearch;
     }
-    
+
+    /**
+     * get tlds.
+     * 
+     * @return tlds.
+     */
+    public static String getInTlds() {
+        return inTlds;
+    }
+
+    /**
+     * set tlds.
+     * 
+     * @param tlds
+     *            tlds.
+     */
+    public void setInTlds(String tlds) {
+        RdapProperties.inTlds = tlds;
+    }
+
+    /**
+     * get notInTlds.
+     * 
+     * @return notInTlds.
+     */
+    public static String getNotInTlds() {
+        return notInTlds;
+    }
+
+    /**
+     * set notInTlds.
+     * 
+     * @param notInTlds
+     *            notInTlds.
+     */
+    public void setNotInTlds(String notInTlds) {
+        RdapProperties.notInTlds = notInTlds;
+    }
+
 }

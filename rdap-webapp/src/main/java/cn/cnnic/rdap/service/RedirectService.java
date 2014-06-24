@@ -30,72 +30,41 @@
  */
 package cn.cnnic.rdap.service;
 
-import cn.cnnic.rdap.bean.Autnum;
-import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.Entity;
-import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.RedirectResponse;
 
 /**
- * query service interface.
+ * redirect service interface.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryService {
+public interface RedirectService {
     /**
      * query domain by domain name.
      * 
      * @param queryParam
      *            queryParam.
-     * @return domain object.
+     * @return RedirectResponse RedirectResponse.
      */
-    Domain queryDomain(QueryParam queryParam);
+    RedirectResponse queryDomain(QueryParam queryParam);
 
     /**
      * query autnm.
      * 
      * @param queryParam
      *            queryParam.
-     * @return autnum autnum.
+     * @return RedirectResponse RedirectResponse.
      */
-    Autnum queryAutnum(QueryParam queryParam);
-
-    /**
-     * query nameserver.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Nameserver for the result.
-     */
-    Nameserver queryNameserver(QueryParam queryParam);
-
-    /**
-     * query entity.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Entity.
-     */
-    Entity queryEntity(QueryParam queryParam);
+    RedirectResponse queryAutnum(QueryParam queryParam);
 
     /**
      * query Ip.
      * 
      * @param queryParam
      *            queryParam.
-     * @return Ip for the result.
+     * @return RedirectResponse RedirectResponse.
      */
-    Network queryIp(QueryParam queryParam);
-    
-    /**
-     * check tld is in this registry.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return true if is,false if not.
-     */
-    boolean tldInThisRegistry(QueryParam queryParam);
+    RedirectResponse queryIp(QueryParam queryParam);
 
 }
