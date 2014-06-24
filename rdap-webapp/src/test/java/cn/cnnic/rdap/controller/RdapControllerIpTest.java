@@ -159,12 +159,13 @@ public class RdapControllerIpTest extends BaseTest {
      *             Exception.
      */
     private void commonQueryNonExistIP(String ipAddr) throws Exception {
+        final int numNotFound = 404;
         mockMvc.perform(
                 get(urlPath + ipAddr).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.errorCode").value(404))
+                .andExpect(jsonPath("$.errorCode").value(numNotFound))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("NOT FOUND"))
                 .andExpect(jsonPath("$.description").value("NOT FOUND"));
@@ -197,15 +198,15 @@ public class RdapControllerIpTest extends BaseTest {
      *             Exception.
      */
     private void commonQueryInvalidIP(String ipName) throws Exception {
+        final int numInvalid = 400;
         mockMvc.perform(
                 get(urlPath + ipName).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.errorCode").value(numInvalid))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))
                 .andExpect(jsonPath("$.description").value("BAD REQUEST"));
-
     }
 }

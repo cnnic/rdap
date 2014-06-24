@@ -54,22 +54,44 @@ public class Event extends BaseModel {
     private String eventDate;
 
     /**
-     * links
+     * links.
      */
     private List<Link> links;
 
+    /**
+     * get event action.
+     * 
+     * @return eventAction as a string.
+     */
     public String getEventAction() {
         return eventAction;
     }
 
+    /**
+     * set Event action.
+     * 
+     * @param eventAction
+     *            string to set.
+     */
     public void setEventAction(String eventAction) {
         this.eventAction = eventAction;
     }
 
+    /**
+     * get event actor.
+     * 
+     * @return string of eventActor.
+     */
     public String getEventActor() {
         return eventActor;
     }
 
+    /**
+     * set event actor.
+     * 
+     * @param eventActor
+     *            string to set.
+     */
     public void setEventActor(String eventActor) {
         this.eventActor = eventActor;
     }
@@ -94,10 +116,21 @@ public class Event extends BaseModel {
         this.eventDate = eventDate;
     }
 
+    /**
+     * get links.
+     * 
+     * @return list of link.
+     */
     public List<Link> getLinks() {
         return links;
     }
 
+    /**
+     * set links.
+     * 
+     * @param links
+     *            list links to set.
+     */
     public void setLinks(List<Link> links) {
         this.links = links;
     }

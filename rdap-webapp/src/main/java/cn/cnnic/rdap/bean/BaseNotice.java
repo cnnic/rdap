@@ -60,6 +60,7 @@ public abstract class BaseNotice extends BaseModel {
         private String name;
 
         /**
+         * NoticeType.
          * 
          * @param name
          *            a string of type.
@@ -69,6 +70,7 @@ public abstract class BaseNotice extends BaseModel {
         }
 
         /**
+         * getName.
          * 
          * @return a string to get.
          */
@@ -107,6 +109,7 @@ public abstract class BaseNotice extends BaseModel {
     }
 
     /**
+     * get Title of notice.
      * 
      * @return a string of title.
      */
@@ -115,6 +118,7 @@ public abstract class BaseNotice extends BaseModel {
     }
 
     /**
+     * setTitle of notice.
      * 
      * @param title
      *            a string to set.
@@ -124,6 +128,7 @@ public abstract class BaseNotice extends BaseModel {
     }
 
     /**
+     * get description of notice.
      * 
      * @return a list string to get as a description.
      */
@@ -132,6 +137,7 @@ public abstract class BaseNotice extends BaseModel {
     }
 
     /**
+     * set description of notice.
      * 
      * @param description
      *            a list string to set.
@@ -141,6 +147,7 @@ public abstract class BaseNotice extends BaseModel {
     }
 
     /**
+     * get links of object.
      * 
      * @return list of object link.
      */
@@ -149,6 +156,7 @@ public abstract class BaseNotice extends BaseModel {
     }
 
     /**
+     * set links of object.
      * 
      * @param links
      *            list of object to set.

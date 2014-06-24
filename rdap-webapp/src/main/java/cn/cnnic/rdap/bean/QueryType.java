@@ -39,17 +39,36 @@ package cn.cnnic.rdap.bean;
 public enum QueryType {
     /**
      * query type.
+     * 
+     * @param domain
+     *            a kind of type.
+     * @param entity
+     *            a kind of type.
+     * @param nameServer
+     *            a kind of type.
+     * @param autnum
+     *            a kind of type.
+     * @param help
+     *            a kind of type.
+     * @param ip
+     *            a kind of type.
+     * @param searchDomain
+     *            a kind of type.
+     * @param searchEntity
+     *            a kind of type.
+     * @param searchNameserver
+     *            a kind of type.
      */
     DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
             "autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"),
-            SEARCHENTITY("searchEntity"), SEARCHNAMESERVER("searchNameserver");
+    SEARCHENTITY("searchEntity"), SEARCHNAMESERVER("searchNameserver");
     /**
-     * name of query type
+     * name of query type.
      */
     private String name;
 
     /**
-     * default construction
+     * default construction.
      * 
      * @param name
      *            query type name
@@ -59,7 +78,7 @@ public enum QueryType {
     }
 
     /**
-     * get query type be name
+     * get query type be name.
      * 
      * @param name
      *            :query type name
@@ -75,10 +94,21 @@ public enum QueryType {
         return null;
     }
 
+    /**
+     * get name of query.
+     * 
+     * @return name string
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * set name of query.
+     * 
+     * @param name
+     *            string to set.
+     */
     public void setName(String name) {
         this.name = name;
     }

@@ -112,7 +112,7 @@ public class Domain extends BaseModel {
      * represents the IP network for which a reverse DNS domain is referenced.
      */
     private Network network;
-    
+
     @Override
     public ModelType getObjectType() {
         return ModelType.DOMAIN;
@@ -132,7 +132,7 @@ public class Domain extends BaseModel {
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        if(!this.status.contains(statusStr)){
+        if (!this.status.contains(statusStr)) {
             this.status.add(statusStr);
         }
     }
@@ -404,13 +404,13 @@ public class Domain extends BaseModel {
     public void setNetwork(Network network) {
         this.network = network;
     }
-    
+
     /**
      * get domain type .
      * 
      * @return domain type : ARPA or DOMAIN .
-     *            
-     */    
+     * 
+     */
     @JsonIgnore
     public ModelType getDomainType() {
         if (null == this.ldhName) {
