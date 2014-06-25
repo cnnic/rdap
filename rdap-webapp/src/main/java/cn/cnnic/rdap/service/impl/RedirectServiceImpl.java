@@ -54,6 +54,18 @@ public class RedirectServiceImpl implements RedirectService {
     @Autowired
     @Qualifier("domainRedirectDao")
     private RedirectDao domainRedirectDao;
+    /**
+     * autnum redirect DAO.
+     */
+    @Autowired
+    @Qualifier("autnumRedirectDao")
+    private RedirectDao autnumRedirectDao;
+    /**
+     * network redirect DAO.
+     */
+    @Autowired
+    @Qualifier("networkRedirectDao")
+    private RedirectDao networkRedirectDao;
 
     @Override
     public RedirectResponse queryDomain(QueryParam queryParam) {
@@ -62,14 +74,12 @@ public class RedirectServiceImpl implements RedirectService {
 
     @Override
     public RedirectResponse queryAutnum(QueryParam queryParam) {
-        // TODO Auto-generated method stub
-        return null;
+        return autnumRedirectDao.query(queryParam);
     }
 
     @Override
     public RedirectResponse queryIp(QueryParam queryParam) {
-        // TODO Auto-generated method stub
-        return null;
+        return networkRedirectDao.query(queryParam);
     }
 
 }

@@ -37,6 +37,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.Network.IpVersion;
+import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.RedirectResponse;
 import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
@@ -65,7 +67,7 @@ public class RedirectServiceImplTest extends BaseTest {
     private RedirectService redirectService;
 
     /**
-     * test query exist entity.
+     * test query domain.
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
@@ -76,6 +78,34 @@ public class RedirectServiceImplTest extends BaseTest {
         RedirectResponse redirect =
                 redirectService.queryDomain(queryParser.parseDomainQueryParam(
                         domainName, punyDomainName));
+        assertNotNull(redirect);
+        assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
+    }
+
+    /**
+     * test query autnum.
+     */
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    public void testQueryAutnum() {
+        String autnumStr = "1";
+        QueryParam queryParam = queryParser.parseQueryParam(autnumStr);
+        RedirectResponse redirect = redirectService.queryAutnum(queryParam);
+        assertNotNull(redirect);
+        assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
+    }
+
+    /**
+     * test query network.
+     */
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+    public void testQueryNetwork() {
+        QueryParam queryParam =
+                queryParser.parseIpQueryParam("1.0.0.0", 0, IpVersion.V4);
+        RedirectResponse redirect = redirectService.queryIp(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
     }
