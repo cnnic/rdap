@@ -217,10 +217,10 @@ public class RdapController {
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
-        LOGGER.debug("query redirect as :{}" , queryParam);
+        LOGGER.debug("query redirect autnum :{}" , queryParam);
         RedirectResponse redirect = redirectService.queryAutnum(queryParam);
         if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
-            LOGGER.info("   redirect autnum result:{},return 301." , 
+            LOGGER.info("   redirect autnum found:{},return 301." , 
                     redirect.getUrl());
             return RestResponseUtil.createResponse301(redirect.getUrl());
         }
@@ -270,14 +270,14 @@ public class RdapController {
      * @return ResponseEntity.
      */
     private ResponseEntity queryRedirectDomainOrNs(QueryParam queryParam) {
-        LOGGER.info("   queryRedirectDomain:{}" , queryParam);
+        LOGGER.info("   queryRedirectDomainOrNs:{}" , queryParam);
         RedirectResponse redirect = redirectService.queryDomain(queryParam);
         if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
-            LOGGER.info("   redirect domain result:{},return 301." , 
+            LOGGER.info("   redirect domain/ns found:{},return 301." , 
                     redirect.getUrl());
             return RestResponseUtil.createResponse301(redirect.getUrl());
         }
-        LOGGER.info("   redirect domain result is null.{},return 404." , 
+        LOGGER.info("   redirect domain/ns not found.{},return 404." , 
                 queryParam);
         return RestResponseUtil.createResponse404();
     }
@@ -291,7 +291,7 @@ public class RdapController {
         LOGGER.info("   queryDomainInThisRegistry:{}" , queryParam);
         Domain domain = queryService.queryDomain(queryParam);
         if (null != domain) {
-            LOGGER.info("   domain:{}" , queryParam);
+            LOGGER.info("   found domain:{}" , queryParam);
             if (!accessControlManager.hasPermission(domain)) {
                 return RestResponseUtil.createResponse403();
             }
@@ -391,14 +391,17 @@ public class RdapController {
      * @return ResponseEntity.
      */
     private ResponseEntity queryNsInThisRegistry(QueryParam queryParam) {
+        LOGGER.info("   queryNsInThisRegistry:{}" , queryParam);
         Nameserver ns = queryService.queryNameserver(queryParam);
         if (null != ns) {
+            LOGGER.info("   found ns:{}" , queryParam);
             if (!accessControlManager.hasPermission(ns)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ns);
             return RestResponseUtil.createResponse200(ns);
         }
+        LOGGER.info("   ns not found,return 404. {}" , queryParam);
         return RestResponseUtil.createResponse404();
     }
 
@@ -570,10 +573,11 @@ public class RdapController {
         LOGGER.debug("query redirect network :{}" , queryParam);
         RedirectResponse redirect = redirectService.queryIp(queryParam);
         if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
-            LOGGER.info("   redirect network result:{},return 301." , 
+            LOGGER.info("   redirect network found:{},return 301." , 
                     redirect.getUrl());
             return RestResponseUtil.createResponse301(redirect.getUrl());
         }
+        LOGGER.info("   redirect network not found:{}", queryParam);
         return RestResponseUtil.createResponse404();
     }
 

@@ -71,6 +71,14 @@ public class RdapProperties {
     private static List<String> notInTldList;
 
     /**
+     * clear 'in' and 'not in' tlds in memory,used for reload tlds.
+     */
+    public static void clearTldsInMemory() {
+        RdapProperties.inTldList = null;
+        RdapProperties.notInTldList = null;
+    }
+
+    /**
      * get in-tlds in this registry.
      * 
      * @return tld list.
