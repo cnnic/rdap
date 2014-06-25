@@ -56,6 +56,7 @@ import cn.cnnic.rdap.bean.NameserverSearch;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.RedirectResponse;
 import cn.cnnic.rdap.common.util.AutnumValidator;
 import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.IpUtil;
@@ -64,6 +65,7 @@ import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.AccessControlManager;
 import cn.cnnic.rdap.service.QueryService;
+import cn.cnnic.rdap.service.RedirectService;
 import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
@@ -107,6 +109,12 @@ public class RdapController {
      */
     @Autowired
     private AccessControlManager accessControlManager;
+    
+    /**
+     * RedirectService.
+     */
+    @Autowired
+    private RedirectService redirectService;
 
     /**
      * query entity.
@@ -199,14 +207,22 @@ public class RdapController {
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
-        Autnum result = queryService.queryAutnum(queryParser
-                .parseQueryParam(autnum));
+        QueryParam queryParam = queryParser
+                .parseQueryParam(autnum);
+        Autnum result = queryService.queryAutnum(queryParam);
         if (null != result) {
             if (!accessControlManager.hasPermission(result)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
+        }
+        LOGGER.debug("query redirect as :{}" , queryParam);
+        RedirectResponse redirect = redirectService.queryAutnum(queryParam);
+        if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
+            LOGGER.info("   redirect autnum result:{},return 301." , 
+                    redirect.getUrl());
+            return RestResponseUtil.createResponse301(redirect.getUrl());
         }
         return RestResponseUtil.createResponse404();
     }
@@ -240,15 +256,49 @@ public class RdapController {
         }
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
-        Domain domain = queryService.queryDomain(queryParser
-                .parseDomainQueryParam(decodeDomain, punyDomainName));
+        QueryParam queryParam = queryParser
+                .parseDomainQueryParam(decodeDomain, punyDomainName);
+        if(queryService.tldInThisRegistry(queryParam)){
+            return queryDomainInThisRegistry(queryParam);
+        }
+        return queryRedirectDomainOrNs(queryParam);
+    }
+
+    /**
+     * query redirect domain or nameserver.
+     * @param queryParam queryParam.
+     * @return ResponseEntity.
+     */
+    private ResponseEntity queryRedirectDomainOrNs(QueryParam queryParam) {
+        LOGGER.info("   queryRedirectDomain:{}" , queryParam);
+        RedirectResponse redirect = redirectService.queryDomain(queryParam);
+        if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
+            LOGGER.info("   redirect domain result:{},return 301." , 
+                    redirect.getUrl());
+            return RestResponseUtil.createResponse301(redirect.getUrl());
+        }
+        LOGGER.info("   redirect domain result is null.{},return 404." , 
+                queryParam);
+        return RestResponseUtil.createResponse404();
+    }
+
+    /**
+     * query domain in this registry.
+     * @param queryParam queryParam.
+     * @return ResponseEntity.
+     */
+    private ResponseEntity queryDomainInThisRegistry(QueryParam queryParam) {
+        LOGGER.info("   queryDomainInThisRegistry:{}" , queryParam);
+        Domain domain = queryService.queryDomain(queryParam);
         if (null != domain) {
+            LOGGER.info("   domain:{}" , queryParam);
             if (!accessControlManager.hasPermission(domain)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domain);
             return RestResponseUtil.createResponse200(domain);
         }
+        LOGGER.info("   domain not found,return 404. {}" , queryParam);
         return RestResponseUtil.createResponse404();
     }
 
@@ -327,8 +377,21 @@ public class RdapController {
         }
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
         decodeNS = StringUtils.lowerCase(decodeNS);
-        Nameserver ns = queryService.queryNameserver(queryParser
-                .parseNameserverQueryParam(decodeNS, punyNSName));
+        QueryParam queryParam = queryParser
+                .parseNameserverQueryParam(decodeNS, punyNSName);
+        if(queryService.tldInThisRegistry(queryParam)){
+            return queryNsInThisRegistry(queryParam);
+        }
+        return queryRedirectDomainOrNs(queryParam);
+    }
+
+    /**
+     * query nameserver in this registry.
+     * @param queryParam queryParam.
+     * @return ResponseEntity.
+     */
+    private ResponseEntity queryNsInThisRegistry(QueryParam queryParam) {
+        Nameserver ns = queryService.queryNameserver(queryParam);
         if (null != ns) {
             if (!accessControlManager.hasPermission(ns)) {
                 return RestResponseUtil.createResponse403();
@@ -494,14 +557,22 @@ public class RdapController {
         }
         StringUtils.lowerCase(strIp);
         // query ip
-        Network ip = queryService.queryIp(queryParser.parseIpQueryParam(strIp,
-                numMask, ipVersion));
+        QueryParam queryParam = queryParser.parseIpQueryParam(strIp,
+                numMask, ipVersion);
+        Network ip = queryService.queryIp(queryParam);
         if (null != ip) {
             if (!accessControlManager.hasPermission(ip)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ip);
             return RestResponseUtil.createResponse200(ip);
+        }
+        LOGGER.debug("query redirect network :{}" , queryParam);
+        RedirectResponse redirect = redirectService.queryIp(queryParam);
+        if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
+            LOGGER.info("   redirect network result:{},return 301." , 
+                    redirect.getUrl());
+            return RestResponseUtil.createResponse301(redirect.getUrl());
         }
         return RestResponseUtil.createResponse404();
     }

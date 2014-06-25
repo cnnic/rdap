@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_DOMAIN_REDIRECT RDAP_DOMAIN_REDIRECT_ID='1'
+		REDIRECT_TLD='cn' REDIRECT_URL='http://cnnic.cn/rdap' />
+</dataset>

@@ -32,11 +32,15 @@ package cn.cnnic.rdap.common.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import cn.cnnic.rdap.BaseTest;
@@ -49,6 +53,46 @@ import cn.cnnic.rdap.BaseTest;
  */
 @SuppressWarnings("rawtypes")
 public class StringUtilTest extends BaseTest {
+
+    /**
+     * test addQuotas.
+     */
+    @Test
+    public void testParseTldsToListIfTldListIsNull() {
+        assertThat(StringUtil.parseTldsToListIfTldListIsNull("cn", null),
+                CoreMatchers.hasItems("cn"));
+        assertThat(
+                StringUtil.parseTldsToListIfTldListIsNull("edu.cn;cn", null),
+                CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(
+                StringUtil.parseTldsToListIfTldListIsNull("cn;edu.cn", null),
+                CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(
+                StringUtil.parseTldsToListIfTldListIsNull("cn;edu.cn;", null),
+                CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(
+                StringUtil.parseTldsToListIfTldListIsNull(";cn;edu.cn;", null),
+                CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(
+                StringUtil.parseTldsToListIfTldListIsNull(";cn;edu.cn", null),
+                CoreMatchers.hasItems("cn", "edu.cn"));
+        List<String> tldList = new ArrayList<String>();
+        tldList.add("cn");
+        tldList.add("edu.cn");
+        assertThat(
+                StringUtil.parseTldsToListIfTldListIsNull("com.cn", tldList),
+                CoreMatchers.hasItems("cn", "edu.cn"));
+    }
+
+    /**
+     * test addQuotas.
+     */
+    @Test
+    public void testAddQuotas() {
+        assertEquals("'cn'", StringUtil.addQuotas("cn"));
+        assertEquals(null, StringUtil.addQuotas(""));
+        assertEquals(null, StringUtil.addQuotas(null));
+    }
 
     /**
      * test containsMoreThanOnce.

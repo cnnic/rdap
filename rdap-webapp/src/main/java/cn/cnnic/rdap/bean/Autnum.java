@@ -53,15 +53,15 @@ public class Autnum extends BaseModel {
      */
     private String handle;
     /**
-     * start number.
+     * start number of autnum.
      */
     private Long startAutnum;
     /**
-     * end number.
+     * end number of autnum.
      */
     private Long endAutnum;
     /**
-     * name.
+     * name of autnum.
      */
     private String name;
     /**
@@ -73,7 +73,7 @@ public class Autnum extends BaseModel {
      */
     private String country;
     /**
-     * status.
+     * status of autnum.
      */
     private List<String> status;
     /**
@@ -132,6 +132,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getStartAutnum.
      * 
      * @return startAutnum for long.
      */
@@ -140,6 +141,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setStartAutnum.
      * 
      * @param startAutnum
      *            the start long number of autnum.
@@ -149,6 +151,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getEndAutnum.
      * 
      * @return end number of autnum.
      */
@@ -157,6 +160,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setEndAutnum.
      * 
      * @param endAutnum
      *            for long end number of autnum.
@@ -166,6 +170,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getName.
      * 
      * @return string of name
      */
@@ -174,6 +179,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setName.
      * 
      * @param name
      *            string of name to set.
@@ -183,6 +189,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getType.
      * 
      * @return the type string.
      */
@@ -191,6 +198,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setType.
      * 
      * @param type
      *            string of type to set.
@@ -200,6 +208,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getCountry.
      * 
      * @return string of country.
      */
@@ -208,6 +217,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setCountry.
      * 
      * @param country
      *            string of country to set.
@@ -217,6 +227,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getStatus.
      * 
      * @return list string of status.
      */
@@ -234,6 +245,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getEntities.
      * 
      * @return get list of Entity object.
      */
@@ -242,6 +254,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setEntities.
      * 
      * @param entities
      *            for list of entity to set.
@@ -251,6 +264,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getRemarks.
      * 
      * @return get list of remark.
      */
@@ -259,6 +273,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setRemarks.
      * 
      * @param remarks
      *            for list of remark object to set.
@@ -268,6 +283,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getLinks.
      * 
      * @return get list of link object
      */
@@ -276,6 +292,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setLinks.
      * 
      * @param links
      *            for list of links to set.
@@ -285,6 +302,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getPort43.
      * 
      * @return get string of port43
      */
@@ -293,6 +311,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setPort43.
      * 
      * @param port43
      *            for the String to set port43
@@ -302,6 +321,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * getEvents.
      * 
      * @return list of events
      */
@@ -310,6 +330,7 @@ public class Autnum extends BaseModel {
     }
 
     /**
+     * setEvents.
      * 
      * @param events
      *            list of events to set

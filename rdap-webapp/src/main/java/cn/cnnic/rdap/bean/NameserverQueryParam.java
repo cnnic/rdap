@@ -81,8 +81,9 @@ public class NameserverQueryParam extends QueryParam {
     }
 
     /**
-     * getIsSearchByIp .
+     * getIsSearchByIp.
      * 
+     * @return bool flag.
      */
     public boolean getIsSearchByIp() {
         return isSearchByIp;

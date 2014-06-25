@@ -30,15 +30,23 @@
  */
 package cn.cnnic.rdap.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
+import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.common.RdapProperties;
+import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.QueryDao;
 import cn.cnnic.rdap.dao.impl.AutnumQueryDaoImpl;
 import cn.cnnic.rdap.dao.impl.DomainQueryDaoImpl;
@@ -116,6 +124,49 @@ public class QueryServiceImpl implements QueryService {
 	@Override
     public Network queryIp(QueryParam queryParam) {
         return ipQueryDao.query(queryParam);
+    }
+	
+    @Override
+    public boolean tldInThisRegistry(QueryParam queryParam) {
+        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
+        String fullPunyTld = domainQueryParam.getFullPunyTld();
+        List<String> allTlds = getAllTlds(fullPunyTld);
+        boolean inNotInTlds =
+                CollectionUtils.containsAny(allTlds,
+                        RdapProperties.getNotInTldsInThisRegistry());
+        if (inNotInTlds) {
+            return false;
+        }
+        boolean inThisRegTlds =
+                CollectionUtils.containsAny(allTlds,
+                        RdapProperties.getInTldsInThisRegistry());
+        return inThisRegTlds;
+    }
+
+    /**
+     * get all tlds,eg: for "edu.cn", return ["edu.cn","cn"]
+     * 
+     * @param fullTld
+     *            fullTld.
+     * @return tld list.
+     */
+    private List<String> getAllTlds(String fullTld) {
+        if (StringUtils.isBlank(fullTld)) {
+            return null;
+        }
+        List<String> tldList = new ArrayList<String>();
+        String currentTld = fullTld;
+        tldList.add(currentTld);
+        while (StringUtils.isNotBlank(currentTld)) {
+            String subTld =
+                    StringUtils.substringAfter(currentTld,
+                            StringUtil.TLD_SPLITOR);
+            if (StringUtils.isNotBlank(subTld)) {
+                tldList.add(subTld);
+            }
+            currentTld = subTld;
+        }
+        return tldList;
     }
 
 }

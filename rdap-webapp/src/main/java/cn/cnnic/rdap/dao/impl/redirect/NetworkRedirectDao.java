@@ -28,30 +28,55 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.init.mysql;
+package cn.cnnic.rdap.dao.impl.redirect;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.RedirectResponse;
+import cn.cnnic.rdap.dao.RedirectDao;
+import cn.cnnic.rdap.dao.impl.NetworkQueryDaoImpl;
 
 /**
- * test InitDao.
- *
+ * network redirect DAO.
+ * 
  * @author jiashuo
- *
+ * 
  */
-public class InitDaoTest {
-
+@Repository
+public class NetworkRedirectDao implements RedirectDao {
     /**
-     * test initSchema and initData.
+     * JDBC template.
      */
-//    @Test
-    public void testInitSchemaAndData() {
-        ApplicationContext ctx =
-                new ClassPathXmlApplicationContext(
-                        "classpath:init/spring-serviceContext-init.xml");
-        InitDao initDao = (InitDao) ctx.getBean("initDao");
-        initDao.initSchema();
-        initDao.initData();
+    @Autowired
+    protected JdbcTemplate jdbcTemplate;
+
+    @Override
+    public RedirectResponse query(QueryParam queryParam) {
+        PreparedStatementCreator pstatCreator =
+                NetworkQueryDaoImpl.generatePStatCreator(queryParam,
+                        "RDAP_IP_REDIRECT");
+        List<String> result =
+                jdbcTemplate.query(pstatCreator, new RowMapper<String>() {
+                    @Override
+                    public String mapRow(ResultSet rs, int rowNum)
+                            throws SQLException {
+                        return rs.getString("REDIRECT_URL");
+                    }
+
+                });
+        if (null == result || result.size() == 0) {
+            return null;
+        }
+        return new RedirectResponse(result.get(0));
     }
 
 }

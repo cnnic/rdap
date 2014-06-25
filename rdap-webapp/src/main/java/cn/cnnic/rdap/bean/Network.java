@@ -123,7 +123,7 @@ public class Network extends BaseModel {
         if (null == this.status) {
             this.status = new ArrayList<String>();
         }
-        if(!this.status.contains(statusStr)){
+        if (!this.status.contains(statusStr)) {
             this.status.add(statusStr);
         }
     }
@@ -317,6 +317,7 @@ public class Network extends BaseModel {
     public void setIpVersion(IpVersion ipVersion) {
         this.ipVersion = ipVersion;
     }
+
     /**
      * get name.
      * 
@@ -335,6 +336,7 @@ public class Network extends BaseModel {
     public void setName(String name) {
         this.name = name;
     }
+
     /**
      * get type.
      * 
@@ -353,6 +355,7 @@ public class Network extends BaseModel {
     public void setType(String type) {
         this.type = type;
     }
+
     /**
      * get country.
      * 
@@ -371,6 +374,7 @@ public class Network extends BaseModel {
     public void setCountry(String country) {
         this.country = country;
     }
+
     /**
      * get parentHandle.
      * 
@@ -389,7 +393,7 @@ public class Network extends BaseModel {
     public void setParentHandle(String parentHandle) {
         this.parentHandle = parentHandle;
     }
-    
+
     /**
      * ip version:v4,v6.
      * 
@@ -437,6 +441,7 @@ public class Network extends BaseModel {
             }
             return false;
         }
+
         /**
          * default constructor.
          * 

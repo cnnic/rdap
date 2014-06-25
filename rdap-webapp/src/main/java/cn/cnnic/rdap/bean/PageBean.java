@@ -241,7 +241,7 @@ public class PageBean implements java.io.Serializable {
     /**
      * get page count.
      * 
-     * @return: page count.
+     * @return page count.
      */
     public int getPageCount() {
         return pageCount;

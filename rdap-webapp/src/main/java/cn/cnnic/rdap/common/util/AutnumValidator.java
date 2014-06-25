@@ -33,44 +33,51 @@ package cn.cnnic.rdap.common.util;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * autnum validator
+ * autnum validator.
  * 
  * @author jiashuo
  * 
  */
-public class AutnumValidator {
-	/**
-	 * max autnum str length:10
-	 */
-	private static final int AUTNUM_MAX_LENGTH = 10;
-	/**
-	 * minimum autnum
-	 */
-	private static Long MIN_AS_NUM = 0L;
-	/**
-	 * maximum autnum
-	 */
-	private static Long MAX_AS_NUM = 4294967295L;
+public final class AutnumValidator {
+    /**
+     * private constructor.
+     */
+    private AutnumValidator() {
+        super();
+    }
 
-	/**
-	 * check validity of autnum
-	 * 
-	 * @param autnum
-	 *            autnum str
-	 * @return true if valid, false if not
-	 */
-	public static boolean isValidAutnum(String autnum) {
-		if (StringUtils.isBlank(autnum) || autnum.length() > AUTNUM_MAX_LENGTH) {
-			return false;
-		}
-		if (!autnum.equals(String.valueOf(MIN_AS_NUM))
-				&& !autnum.matches("^[1-9][0-9]{0,9}$")) {
-			return false;
-		}
-		Long longValue = Long.valueOf(autnum);
-		if (longValue < MIN_AS_NUM || longValue > MAX_AS_NUM) {
-			return false;
-		}
-		return true;
-	}
+    /**
+     * max autnum str length:10.
+     */
+    private static final int AUTNUM_MAX_LENGTH = 10;
+    /**
+     * minimum autnum.
+     */
+    private static final Long MIN_AS_NUM = 0L;
+    /**
+     * maximum autnum.
+     */
+    private static final Long MAX_AS_NUM = 4294967295L;
+
+    /**
+     * check validity of autnum.
+     * 
+     * @param autnum
+     *            autnum str
+     * @return true if valid, false if not
+     */
+    public static boolean isValidAutnum(String autnum) {
+        if (StringUtils.isBlank(autnum) || autnum.length() > AUTNUM_MAX_LENGTH) {
+            return false;
+        }
+        if (!autnum.equals(String.valueOf(MIN_AS_NUM))
+                && !autnum.matches("^[1-9][0-9]{0,9}$")) {
+            return false;
+        }
+        Long longValue = Long.valueOf(autnum);
+        if (longValue < MIN_AS_NUM || longValue > MAX_AS_NUM) {
+            return false;
+        }
+        return true;
+    }
 }

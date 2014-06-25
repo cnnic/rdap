@@ -44,7 +44,7 @@ public enum ModelType {
             "autnum"),
     /**
      * another domain type, only used for DB Query.
-     */    
+     */
     ARPA("arpa"),
     /**
      * help ip event link publicId type.
