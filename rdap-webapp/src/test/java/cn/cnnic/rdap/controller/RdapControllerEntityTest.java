@@ -44,6 +44,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.common.util.RestResponseUtil;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -105,6 +106,7 @@ public class RdapControllerEntityTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
     public void testQueryNonExistAutnum() throws Exception {
+        RestResponseUtil.initErrorMessages();
         String nonExistHandle = "1000000";
         mockMvc.perform(
                 get("/.well-known/rdap/entity/" + nonExistHandle).accept(
@@ -124,6 +126,7 @@ public class RdapControllerEntityTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
     public void testQueryAutnumWithInvalidQ() throws Exception {
+        RestResponseUtil.initErrorMessages();
         String invalidHandle = "";
         mockMvc.perform(
                 get("/.well-known/rdap/entity/" + invalidHandle).accept(

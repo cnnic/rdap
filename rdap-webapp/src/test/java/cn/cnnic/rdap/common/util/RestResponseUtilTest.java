@@ -150,4 +150,13 @@ public class RestResponseUtilTest extends BaseTest {
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
+    /**
+     * test create ResponseEntity with HTTP code 301.
+     */
+    @Test
+    public void testCreateResponse301() {
+        ResponseEntity result = RestResponseUtil.createResponse301("http://cnnic.cn");
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.MOVED_PERMANENTLY);
+    }
 }
