@@ -222,6 +222,56 @@ public final class DomainUtil {
     }
 
     /**
+     * validate domain search string represent a valid idna.
+     * 
+     * @param domainName
+     *            domain name,ASCII char MUST in lower case.
+     * @return true if is valid idna,false if not.
+     */
+    public static boolean validateSearchStringIsValidIdna(String searchString) {
+        
+        // searchString should not be null or empty 
+        if (StringUtils.isBlank(searchString)) {
+            return false;
+        }
+        
+        // should NOT contains 0x0020
+        if (searchString.contains(" ")) {
+            return false;
+        }
+        
+        // * is not the first char
+        if (StringUtils.stripToEmpty(searchString).startsWith("*")) {
+            return false;
+        }
+        
+        // only one * in search string
+        if ( 1 != StringUtils.countMatches(searchString, "*")) {
+            return false;
+        }
+        
+        // '*' means no char
+        String domainName = searchString.replace("*", ""); 
+        if (validateDomainNameIsValidIdna(domainName)) {
+            return true;
+        } 
+        
+        // '*' means dot
+        domainName = searchString.replace("*", "."); 
+        if (validateDomainNameIsValidIdna(domainName)) {
+            return true;
+        } 
+        
+        // '*' means a digit or an alphabet
+        domainName = searchString.replace("*", "1"); 
+        if (validateDomainNameIsValidIdna(domainName)) {
+            return true;
+        } 
+        
+        return false;
+    }
+    
+    /**
      * remove the last '.' in paramStr.
      * 
      * @param paramStr
