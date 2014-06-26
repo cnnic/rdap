@@ -50,6 +50,11 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public final class StringUtil {
+    
+    /**
+     * space.
+     */
+    public static final String SPACE = " ";
 
     /**
      * tld splitor ".".
