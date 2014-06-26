@@ -74,6 +74,8 @@ public class DomainUtilTest {
         validArpaDomain.add("0.0.0.1.in-addr.arpa");
         validArpaDomain.add("255.0.0.1.in-addr.arpa");
         validArpaDomain.add("255.255.255.255.in-addr.arpa");
+        
+        validArpaDomain.add("1.1.1.d.a.c.a.0.ip6.arpa");
     }
 
     @BeforeClass
@@ -87,8 +89,8 @@ public class DomainUtilTest {
         inValidArpaDomain.add("cnnic.cn.arpa");
         inValidArpaDomain.add("");
         inValidArpaDomain.add("256.255.255.255.in-addr.arpa");
-        inValidArpaDomain.add("1.ip6.arpa");
-        inValidArpaDomain.add("0.ip6.arpa");
+        inValidArpaDomain.add("z.ip6.arpa");
+        inValidArpaDomain.add("cn.ip6.arpa");
         inValidArpaDomain.add(".ip6.arpa");
     }
 
@@ -98,6 +100,10 @@ public class DomainUtilTest {
      */
     @Test
     public void testIsArpaTldAndLabelIsValid() {
+        
+        assertTrue(DomainUtil.isArpaTldAndLabelIsValid("1.1.1.d.a.c.a.0.ip6.arpa"));
+        
+        
         for (String domain : validArpaDomain) {
             assertTrue(DomainUtil.isArpaTldAndLabelIsValid(domain));
         }
@@ -209,6 +215,24 @@ public class DomainUtilTest {
         assertFalse(validateDomainNameIsValidIdna("σειράτάξησυπουργείωνσύνθεσηυπουργικούσυμβουλίουουουοο.bnnhg"));
         assertFalse(validateDomainNameIsValidIdna("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CE%A3%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF.bnnhg"));
         assertFalse(validateDomainNameIsValidIdna("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
+        
+        
+        assertFalse(validateDomainNameIsValidIdna("xn--.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("xn--1.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("σειράτάξησυπουργείωνσύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg"));
+        
+        assertFalse(validateDomainNameIsValidIdna("xnxnhopefullynonexisting<*"));
+        assertTrue(validateDomainNameIsValidIdna("xn--4xA.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("xn--7wA.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("σ.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("ς.bnnhg"));
+        assertTrue(validateDomainNameIsValidIdna("ß.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("Σ.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("√.com"));
+        assertFalse(validateDomainNameIsValidIdna("ÖBB.at"));
+        assertFalse(validateDomainNameIsValidIdna("Ⱥbby.com"));
+        
     }
 
     /**
@@ -224,6 +248,41 @@ public class DomainUtilTest {
         return DomainUtil.validateDomainNameIsValidIdna(decodeDomain);
     }
 
+    /**
+     * validate search domain.
+     * 
+     * @param domainName
+     *            domain name.
+     * @return boolean.
+     */
+    private boolean validateSearchStringIsValidIdna(String domainName) {
+        String decodeDomain = DomainUtil
+                .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
+        return DomainUtil.validateSearchStringIsValidIdna(decodeDomain);
+    }
+    
+    /**
+     * test validateSearchStringIsValidIdna.
+     * 
+     */
+    @Test
+    public void testValidateSearchStringIsValidIdna() {
+        
+        assertFalse(validateSearchStringIsValidIdna("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο*.bnnhg"));
+        assertFalse(validateSearchStringIsValidIdna("%CF*.bnnhg"));
+        assertFalse(validateSearchStringIsValidIdna("1**.bnnhg"));
+        assertFalse(validateSearchStringIsValidIdna("-*.bnnhg"));
+        assertFalse(validateSearchStringIsValidIdna("%CF*.bnnhg"));
+        assertFalse(validateSearchStringIsValidIdna("Σ*.bnnhg"));
+        assertFalse(validateSearchStringIsValidIdna("ύύ--*.bnnhg"));
+        
+        assertTrue(validateSearchStringIsValidIdna("xn--123*.bnnhg"));
+        assertTrue(validateSearchStringIsValidIdna("xn--*.bnnhg"));
+        assertTrue(validateSearchStringIsValidIdna("%CF%83*.bnnhg"));
+        assertTrue(validateSearchStringIsValidIdna("cn--*.bnnhg"));
+        assertTrue(validateSearchStringIsValidIdna("ύ*.bnnhg"));
+        
+    }
     /**
      * test decodeAndTrim.
      * 

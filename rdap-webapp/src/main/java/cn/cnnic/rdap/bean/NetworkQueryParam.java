@@ -32,6 +32,8 @@ package cn.cnnic.rdap.bean;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.common.util.IpUtil;
 
@@ -333,4 +335,13 @@ public class NetworkQueryParam extends QueryParam {
     public IpVersion getQueryIpVersion() {
         return ipVersion;
     }
+    
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(getQ()).append(ipVersion)
+                .append(ipQueryStartHigh).append(ipQueryEndHigh)
+                .append(ipQueryStartLow).append(ipQueryEndLow)
+                .toString();
+    }
+    
 }

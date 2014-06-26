@@ -28,88 +28,43 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.service;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.RedirectResponse;
 
 /**
- * base query parameter bean.
+ * redirect service interface.
  * 
  * @author jiashuo
  * 
  */
-public class DomainQueryParam extends QueryParam {
-
+public interface RedirectService {
     /**
-     * constructor.
+     * query domain by domain name.
      * 
-     * @param q
-     *            query string.
-     * @param punyName
-     *            domain puny name.
+     * @param queryParam
+     *            queryParam.
+     * @return RedirectResponse RedirectResponse.
      */
-    public DomainQueryParam(String q, String punyName) {
-        super(q);
-        this.punyName = punyName;
-    }
+    RedirectResponse queryDomain(QueryParam queryParam);
 
     /**
-     * domain puny name.
-     */
-    private String punyName;
-
-    /**
-     * get punyName.
+     * query autnm.
      * 
-     * @return punyName.
+     * @param queryParam
+     *            queryParam.
+     * @return RedirectResponse RedirectResponse.
      */
-    public String getPunyName() {
-        return punyName;
-    }
+    RedirectResponse queryAutnum(QueryParam queryParam);
 
     /**
-     * set punyName.
+     * query Ip.
      * 
-     * @param punyName
-     *            punyName.
+     * @param queryParam
+     *            queryParam.
+     * @return RedirectResponse RedirectResponse.
      */
-    public void setPunyName(String punyName) {
-        this.punyName = punyName;
-    }
+    RedirectResponse queryIp(QueryParam queryParam);
 
-    /**
-     * is domain from RIR, like 192.in-addr.arpa or F.0.0.ip6.arpa .
-     * 
-     * @return punyName is from RIR.
-     */
-    public boolean isRirDomain() {
-        if (null != getQ()) {
-            return getQ().endsWith(".in-addr.arpa")
-                    || getQ().endsWith(".ip6.arpa");
-        }
-        return false;
-    }
-
-    /**
-     * get full tld of domain puny name.
-     * 
-     * @return tld tld.
-     */
-    public String getFullPunyTld() {
-        if (StringUtils.isBlank(punyName)) {
-            return null;
-        }
-        String fullTld = StringUtils.substringAfter(punyName, ".");
-        if (StringUtils.isBlank(fullTld)) {
-            return ".";
-        }
-        return fullTld;
-    }
-    
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append(getQ()).append(punyName)
-                .toString();
-    }
 }

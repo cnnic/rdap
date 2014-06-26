@@ -50,13 +50,13 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for RdapController
+ * Test for RdapController autnum redirect.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
-public class RdapControllerEntityTest extends BaseTest {
+public class RdapControllerAutnumRedirectTest extends BaseTest {
 
     @Autowired
     private WebApplicationContext wac;
@@ -72,28 +72,33 @@ public class RdapControllerEntityTest extends BaseTest {
      * test query exist.
      * 
      * @throws Exception
-     *             Exception.
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
     public void testQueryExist() throws Exception {
-        String entityHandle = "h1";
+        RestResponseUtil.initErrorMessages();
+        String autnumStr = "1000";
+        commonExist(autnumStr);
+    }
+
+    /**
+     * check exist .
+     * 
+     * @param autnumStr
+     *            autnumStr.
+     * @throws Exception
+     *             Exception.
+     */
+    private void commonExist(String autnumStr) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + entityHandle).accept(
-                        MediaType.parseMediaType("application/rdap+json")))
+                get("/.well-known/rdap/autnum/" + autnumStr).accept(
+                        MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/rdap+json"))
-                .andExpect(jsonPath("$.handle").value(entityHandle))
-                .andExpect(jsonPath("$.vcardArray").exists())
-                .andExpect(jsonPath("$.vcardArray[0]").value("vcard"))
-                .andExpect(jsonPath("$.vcardArray[1]").exists())
-                .andExpect(jsonPath("$.vcardArray[1][0][0]").value("version"))
-                .andExpect(jsonPath("$.vcardArray[1][0][2]").value("text"))
-                .andExpect(jsonPath("$.vcardArray[1][0][3]").value("4.0"))
-                .andExpect(jsonPath("$.vcardArray[1][1][0]").value("kind"))
-                .andExpect(
-                        jsonPath("$.vcardArray[1][1][3]").value("individual"));
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.country").value("zh"))
+                .andExpect(jsonPath("$.lang").value("cn"))
+                .andExpect(jsonPath("$.name").value("name1"));
     }
 
     /**
@@ -104,12 +109,24 @@ public class RdapControllerEntityTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
-    public void testQueryNonExistAutnum() throws Exception {
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    public void testQueryNonExist() throws Exception {
         RestResponseUtil.initErrorMessages();
-        String nonExistHandle = "1000000";
+        String autnumStr = "100000";
+        commonNonExist(autnumStr);
+    }
+
+    /**
+     * check non exist.
+     * 
+     * @param nonExistAutnumStr
+     *            nonExistAutnumStr.
+     * @throws Exception
+     *             Exception.
+     */
+    private void commonNonExist(String nonExistAutnumStr) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + nonExistHandle).accept(
+                get("/.well-known/rdap/autnum/" + nonExistAutnumStr).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
@@ -117,23 +134,70 @@ public class RdapControllerEntityTest extends BaseTest {
     }
 
     /**
-     * test query with invalid handle.
+     * test query redirect.
      * 
      * @throws Exception
      *             Exception.
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
-    public void testQueryAutnumWithInvalidQ() throws Exception {
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    public void testQueryRedirect() throws Exception {
         RestResponseUtil.initErrorMessages();
-        String invalidHandle = "";
+        String autnumStr = "1";
+        commonRedirect(autnumStr);
+    }
+
+    /**
+     * check non redirect.
+     * 
+     * @param redirectAutnum
+     *            redirectAutnum.
+     * @throws Exception
+     *             Exception.
+     */
+    private void commonRedirect(String redirectAutnum) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + invalidHandle).accept(
+                get("/.well-known/rdap/autnum/" + redirectAutnum).accept(
+                        MediaType.parseMediaType("application/json")))
+                .andExpect(status().isMovedPermanently())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.errorCode").value(301));
+    }
+
+    /**
+     * test query invalid.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    public void testQueryInvalid() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        String autnumStr = "invalidNumber";
+        commonInvalid(autnumStr);
+    }
+
+    /**
+     * check invalid.
+     * 
+     * @param autnumStr
+     *            autnumStr.
+     * @throws Exception
+     *             Exception.
+     */
+    private void commonInvalid(String autnumStr) throws Exception {
+        mockMvc.perform(
+                get("/.well-known/rdap/autnum/" + autnumStr).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.errorCode").value(400));
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.lang").value("en"))
+                .andExpect(jsonPath("$.title").value("BAD REQUEST"))
+                .andExpect(jsonPath("$.description").value("BAD REQUEST"));
     }
 
 }
