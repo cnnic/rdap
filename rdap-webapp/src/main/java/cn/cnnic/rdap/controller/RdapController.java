@@ -63,6 +63,7 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.AccessControlManager;
+import cn.cnnic.rdap.service.PolicyControlManager;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
@@ -109,6 +110,12 @@ public class RdapController {
     private AccessControlManager accessControlManager;
 
     /**
+     * policy control manager.
+     */
+    @Autowired
+    private PolicyControlManager policyControlManager;
+
+    /**
      * query entity.
      * 
      * @param handle
@@ -133,28 +140,35 @@ public class RdapController {
             if (!accessControlManager.hasPermission(result)) {
                 return RestResponseUtil.createResponse403();
             }
+            final String strObj = "entity";
+            policyControlManager.setPolicy(result, strObj);
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();
     }
-    
+
     /**
      * search entity by handle or name.
-     * @param fn fn.
-     * @param handle handle.
-     * @param request request.
+     * 
+     * @param fn
+     *            fn.
+     * @param handle
+     *            handle.
+     * @param request
+     *            request.
      * @return ResponseEntity.
      */
     @RequestMapping(value = "/entities", method = RequestMethod.GET)
-    public ResponseEntity searchEntity(@RequestParam(required = false) String fn,
-            @RequestParam(required = false) String handle,
-            HttpServletRequest request){
-        LOGGER.info("search entities.fn:{},handle:{}",fn,handle);
+    public ResponseEntity
+            searchEntity(@RequestParam(required = false) String fn,
+                    @RequestParam(required = false) String handle,
+                    HttpServletRequest request) {
+        LOGGER.info("search entities.fn:{},handle:{}", fn, handle);
         final String fnParamName = "fn";
         final String handleParamName = "handle";
-        String paramName = queryParser.getFirstParameter(request,
-                new String[]{fnParamName,handleParamName});
+        String paramName = queryParser.getFirstParameter(request, new String[] {
+                fnParamName, handleParamName });
         if (StringUtils.isBlank(paramName)) {
             return RestResponseUtil.createResponse400();
         }
@@ -167,15 +181,17 @@ public class RdapController {
         if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
             return RestResponseUtil.createResponse422();
         }
-        QueryParam queryParam = queryParser
-                .parseEntityQueryParam(paramValue, paramName);
-        LOGGER.info("generate queryParam:{}",queryParam);
+        QueryParam queryParam = queryParser.parseEntityQueryParam(paramValue,
+                paramName);
+        LOGGER.info("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
             if (result.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
+            final String strObj = "entity";
+            policyControlManager.setPolicy(result, strObj);
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();
@@ -206,6 +222,8 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
+            final String strObj = "autnum";
+            policyControlManager.setPolicy(result, strObj);
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();
@@ -247,6 +265,8 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domain);
+            final String strObj = "domain";
+            policyControlManager.setPolicy(domain, strObj);
             return RestResponseUtil.createResponse200(domain);
         }
         return RestResponseUtil.createResponse404();
@@ -293,6 +313,8 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domainSearch);
+            final String strObj = "domain";
+            policyControlManager.setPolicy(domainSearch, strObj);
             return RestResponseUtil.createResponse200(domainSearch);
         }
         return RestResponseUtil.createResponse404();
@@ -334,6 +356,8 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ns);
+            final String strObj = "nameServer";
+            policyControlManager.setPolicy(ns, strObj);
             return RestResponseUtil.createResponse200(ns);
         }
         return RestResponseUtil.createResponse404();
@@ -415,6 +439,10 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(nsSearch);
+
+            final String strObj = "nameServer";
+            policyControlManager.setPolicy(nsSearch, strObj);
+
             return RestResponseUtil.createResponse200(nsSearch);
         }
         return RestResponseUtil.createResponse404();
@@ -501,6 +529,8 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ip);
+            final String strObj = "ip";
+            policyControlManager.setPolicy(ip, strObj);
             return RestResponseUtil.createResponse200(ip);
         }
         return RestResponseUtil.createResponse404();

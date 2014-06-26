@@ -45,6 +45,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.service.ErrorMessageService;
+import cn.cnnic.rdap.service.PolicyControlService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
 /**
@@ -72,11 +73,24 @@ public class RestResponseUtil {
     private static ResponseDecorator responseDecorator;
 
     /**
-     * init the error message.
+     * for policy service.
+     */
+    private static PolicyControlService policyService;
+
+    /**
+     * init error message and policy service.
      */
     @PostConstruct
     private void init() {
         initErrorMessages();
+        initPolicyService();
+    }
+
+    /**
+     * init policy service.
+     */
+    public static void initPolicyService() {
+        policyService.getAllPolicyFields();
     }
 
     /**
@@ -195,6 +209,21 @@ public class RestResponseUtil {
     public static ResponseEntity<ErrorMessage> createResponse422() {
         return createCommonErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY);
     }
+    
+    /**
+     * create response with HTTP status code 301.
+     * 
+     * @param response
+     *            model object.
+     * @return ResponseEntity.
+     */
+    public static ResponseEntity<ErrorMessage> createResponse301(String redirectUrl) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Location",redirectUrl);
+        ResponseEntity<ErrorMessage> response = createErrorResponseWithHeaders(
+                HttpStatus.MOVED_PERMANENTLY, headers);
+        return response;
+    }
 
     /**
      * create error response.
@@ -249,5 +278,16 @@ public class RestResponseUtil {
     @Autowired
     public void setResponseDecorator(ResponseDecorator responseDecorator) {
         RestResponseUtil.responseDecorator = responseDecorator;
+    }
+
+    /**
+     * policy service.
+     * 
+     * @param policyService
+     *            policy control service.
+     */
+    @Autowired
+    public void setPolicyService(PolicyControlService policyService) {
+        RestResponseUtil.policyService = policyService;
     }
 }
