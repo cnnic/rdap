@@ -120,7 +120,7 @@ public class DomainQueryDaoTest extends BaseTest {
         assertEquals("http://domainlink", domainLink.getValue());
         assertEquals("http://domainlink", domainLink.getHref());
         // variants
-        List<Variants> variantsList = domain.getVarients();
+        List<Variants> variantsList = domain.getVariants();
         assertNotNull(variantsList);
         assertEquals(1, variantsList.size());
         Variants variants = variantsList.get(0);
