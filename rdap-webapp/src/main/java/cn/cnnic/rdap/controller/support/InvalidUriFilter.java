@@ -98,9 +98,13 @@ public class InvalidUriFilter implements Filter {
             writeError400Response(response);
             return;
         }
+        if (containInvalidSpace(decodeUri)) {
+            writeError400Response(response);
+            return;
+        }
         if (!"/".equals(decodeUri)) {// if not /,then must begin with rdapUrl
-            String uriWithoutPrefixSlash = decodeUri.substring(1,
-                    decodeUri.length());
+            String uriWithoutPrefixSlash =
+                    decodeUri.substring(1, decodeUri.length());
             if (!uriWithoutPrefixSlash.startsWith(RDAP_URL_PREFIX)) {
                 writeError400Response(response);
                 return;
@@ -117,6 +121,28 @@ public class InvalidUriFilter implements Filter {
     }
 
     /**
+     * check if decodeUri contain invalid space.
+     * 
+     * @param decodeUri
+     *            decodeUri.
+     * @return true if contain, false if not.
+     */
+    private boolean containInvalidSpace(String decodeUri) {
+        if (StringUtils.isBlank(decodeUri)) {
+            return false;
+        }
+        if (StringUtils.startsWith(decodeUri, "/" + RDAP_URL_PREFIX
+                + "/entity/")) {
+            return false;
+        }
+        if (StringUtils.contains(decodeUri, "/ ")
+                || StringUtils.endsWith(decodeUri, StringUtil.SPACE)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * decode servletPath with UTF-8 for spring url mapping.
      * 
      * @param request
@@ -128,18 +154,26 @@ public class InvalidUriFilter implements Filter {
         request.setCharacterEncoding(StringUtil.CHAR_SET_UTF8);
         String servletPath = request.getServletPath();
         if (StringUtils.isNotBlank(servletPath)) {
-            String decodedPath = new String(
-                    servletPath.getBytes(StringUtil.CHAR_SET_ISO8859),
-                    StringUtil.CHAR_SET_UTF8);
+            String decodedPath =
+                    new String(
+                            servletPath.getBytes(StringUtil.CHAR_SET_ISO8859),
+                            StringUtil.CHAR_SET_UTF8);
             request.setAttribute(WebUtils.INCLUDE_SERVLET_PATH_ATTRIBUTE,
                     decodedPath);
         }
     }
 
+    /**
+     * write error 400 response.
+     * 
+     * @param response
+     *            response.
+     * @throws IOException.
+     */
     private void writeError400Response(HttpServletResponse response)
             throws IOException {
-        ResponseEntity<ErrorMessage> responseEntity = RestResponseUtil
-                .createResponse400();
+        ResponseEntity<ErrorMessage> responseEntity =
+                RestResponseUtil.createResponse400();
         FilterHelper.writeResponse(responseEntity, response);
     }
 
@@ -152,13 +186,14 @@ public class InvalidUriFilter implements Filter {
      * decode url with UTF-8.
      * 
      * @param str
-     * @return
-     * @throws UnsupportedEncodingException
+     *            URL.
+     * @return decoded URL.
+     * @throws UnsupportedEncodingException.
      */
     private String urlDecode(String str) throws UnsupportedEncodingException {
         if (StringUtils.isBlank(str)) {
             return str;
         }
-        return URLDecoder.decode(str, "UTF-8");
+        return URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
     }
 }

@@ -28,74 +28,25 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.service;
+package cn.cnnic.rdap.dao;
 
-import cn.cnnic.rdap.bean.Autnum;
-import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.Entity;
-import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.bean.RedirectResponse;
 
 /**
- * query service interface.
+ * redirect DAO interface.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryService {
-    /**
-     * query domain by domain name.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return domain object.
-     */
-    Domain queryDomain(QueryParam queryParam);
+public interface RedirectDao {
 
     /**
-     * query autnm.
+     * query redirect.
      * 
      * @param queryParam
      *            queryParam.
-     * @return autnum autnum.
+     * @return RedirectResponse RedirectResponse.
      */
-    Autnum queryAutnum(QueryParam queryParam);
-
-    /**
-     * query nameserver.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Nameserver for the result.
-     */
-    Nameserver queryNameserver(QueryParam queryParam);
-
-    /**
-     * query entity.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Entity.
-     */
-    Entity queryEntity(QueryParam queryParam);
-
-    /**
-     * query Ip.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Ip for the result.
-     */
-    Network queryIp(QueryParam queryParam);
-    
-    /**
-     * check tld is in this registry.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return true if is,false if not.
-     */
-    boolean tldInThisRegistry(QueryParam queryParam);
-
+    public RedirectResponse query(QueryParam queryParam);
 }

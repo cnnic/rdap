@@ -50,13 +50,15 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for RdapController
+ * Test for RdapController network redirect.
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
-public class RdapControllerEntityTest extends BaseTest {
+public class RdapControllerNetworkRedirectTest extends BaseTest {
+
+    private static final String URI_IP = "/.well-known/rdap/ip/";
 
     @Autowired
     private WebApplicationContext wac;
@@ -72,28 +74,35 @@ public class RdapControllerEntityTest extends BaseTest {
      * test query exist.
      * 
      * @throws Exception
-     *             Exception.
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
     public void testQueryExist() throws Exception {
-        String entityHandle = "h1";
+        RestResponseUtil.initErrorMessages();
+        // v4
+        String networkStr = "218.241.0.0";
+        commonExist(networkStr);
+        // v6
+        networkStr = "2014:2014:2014::";
+        commonExist(networkStr);
+    }
+
+    /**
+     * check exist .
+     * 
+     * @param networkStr
+     *            autnumStr.
+     * @throws Exception
+     *             Exception.
+     */
+    private void commonExist(String networkStr) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + entityHandle).accept(
-                        MediaType.parseMediaType("application/rdap+json")))
+                get(URI_IP + networkStr).accept(
+                        MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/rdap+json"))
-                .andExpect(jsonPath("$.handle").value(entityHandle))
-                .andExpect(jsonPath("$.vcardArray").exists())
-                .andExpect(jsonPath("$.vcardArray[0]").value("vcard"))
-                .andExpect(jsonPath("$.vcardArray[1]").exists())
-                .andExpect(jsonPath("$.vcardArray[1][0][0]").value("version"))
-                .andExpect(jsonPath("$.vcardArray[1][0][2]").value("text"))
-                .andExpect(jsonPath("$.vcardArray[1][0][3]").value("4.0"))
-                .andExpect(jsonPath("$.vcardArray[1][1][0]").value("kind"))
-                .andExpect(
-                        jsonPath("$.vcardArray[1][1][3]").value("individual"));
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.port43").value("port43"));
     }
 
     /**
@@ -104,12 +113,28 @@ public class RdapControllerEntityTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
-    public void testQueryNonExistAutnum() throws Exception {
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+    public void testQueryNonExist() throws Exception {
         RestResponseUtil.initErrorMessages();
-        String nonExistHandle = "1000000";
+        // v4
+        String networkStr = "219.241.0.0";
+        commonNonExist(networkStr);
+        // v6
+        networkStr = "2015:2014:2014::";
+        commonNonExist(networkStr);
+    }
+
+    /**
+     * check non exist.
+     * 
+     * @param networkStr
+     *            networkStr.
+     * @throws Exception
+     *             Exception.
+     */
+    private void commonNonExist(String networkStr) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + nonExistHandle).accept(
+                get(URI_IP + networkStr).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
@@ -117,23 +142,74 @@ public class RdapControllerEntityTest extends BaseTest {
     }
 
     /**
-     * test query with invalid handle.
+     * test query redirect.
      * 
      * @throws Exception
      *             Exception.
      */
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
-    public void testQueryAutnumWithInvalidQ() throws Exception {
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+    public void testQueryRedirect() throws Exception {
         RestResponseUtil.initErrorMessages();
-        String invalidHandle = "";
+        // v4
+        String networkStr = "1.0.0.0";
+        commonRedirect(networkStr);
+        // v6
+        networkStr = "0:0:0:0:2001:6a8:0:1";
+        commonRedirect(networkStr);
+    }
+
+    /**
+     * check redirect.
+     * 
+     * @param networkStr
+     *            networkStr.
+     * @throws Exception
+     *             Exception.
+     */
+    private void commonRedirect(String networkStr) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + invalidHandle).accept(
+                get(URI_IP + networkStr).accept(
+                        MediaType.parseMediaType("application/json")))
+                .andExpect(status().isMovedPermanently())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.errorCode").value(301));
+    }
+
+    /**
+     * test query invalid.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
+    @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+    public void testQueryInvalid() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        String invalidIpStr = "invalidNumber";
+        commonInvalid(invalidIpStr);
+    }
+
+    /**
+     * check invalid.
+     * 
+     * @param networkStr
+     *            networkStr.
+     * @throws Exception
+     *             Exception.
+     */
+    private void commonInvalid(String networkStr) throws Exception {
+        mockMvc.perform(
+                get(URI_IP + networkStr).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.errorCode").value(400));
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.lang").value("en"))
+                .andExpect(jsonPath("$.title").value("BAD REQUEST"))
+                .andExpect(jsonPath("$.description").value("BAD REQUEST"));
     }
 
 }

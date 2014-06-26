@@ -36,6 +36,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -48,6 +50,16 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public final class StringUtil {
+    
+    /**
+     * space.
+     */
+    public static final String SPACE = " ";
+
+    /**
+     * tld splitor ".".
+     */
+    public static final String TLD_SPLITOR = ".";
     /**
      * search wildcard.
      */
@@ -78,6 +90,48 @@ public final class StringUtil {
      * max entity handle length.
      */
     public static final int MAX_ENTITY_HANDLE_LENGTH = 253;
+
+    /**
+     * parse tlds to tldList if tldList is null.
+     * 
+     * @param tlds
+     *            ';' separated tlds, eg: cn;edu.cn
+     * @param tldList
+     *            tldList.
+     * @return
+     */
+    public static List<String> parseTldsToListIfTldListIsNull(String tlds,
+            List<String> tldList) {
+        if (null != tldList) {
+            return tldList;
+        }
+        tldList = new ArrayList<String>();
+        if (null == tlds) {
+            return tldList;
+        }
+        String[] splits = StringUtils.split(tlds, ";");
+        for (String tld : splits) {
+            tld = StringUtils.trim(tld);
+            if (StringUtils.isNotBlank(tld)) {
+                tldList.add(tld);
+            }
+        }
+        return tldList;
+    }
+
+    /**
+     * add "'" before and after str.
+     * 
+     * @param str
+     *            str.
+     * @return string.
+     */
+    public static String addQuotas(String str) {
+        if (StringUtils.isBlank(str)) {
+            return null;
+        }
+        return "'" + str + "'";
+    }
 
     /**
      * check if str is valid search pattern.

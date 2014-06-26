@@ -242,7 +242,7 @@ public class PolicyControlManagerImpl implements PolicyControlManager {
         setSecureDnsPolicy(objModel);
         // domain variant
         final String strVariants = "variants";
-        List<Variants> listVars = objModel.getVarients();
+        List<Variants> listVars = objModel.getVariants();
         if (listVars != null) {
             setListPolicy(listVars, strVariants);
             for (int iVar = 0; iVar < listVars.size(); ++iVar) {
