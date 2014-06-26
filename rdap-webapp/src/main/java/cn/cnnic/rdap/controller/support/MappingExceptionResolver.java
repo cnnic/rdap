@@ -14,7 +14,6 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
-import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
  * handle exception.
@@ -26,10 +25,11 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
     /**
      * logger.
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
+    private static Logger LOGGER = LoggerFactory
+            .getLogger(MappingExceptionResolver.class);
 
     /**
-     * handle exception
+     * handle exception.
      */
     @Override
     protected ModelAndView doResolveException(HttpServletRequest request,
@@ -46,5 +46,5 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
         }
         return new ModelAndView();
     }
-    
+
 }

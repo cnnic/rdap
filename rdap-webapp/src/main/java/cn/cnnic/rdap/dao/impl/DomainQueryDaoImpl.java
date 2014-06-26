@@ -332,7 +332,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Variants> variants =
                 variantsQueryDao
                         .queryAsInnerObjects(domainId, type);
-        domain.setVarients(variants);
+        domain.setVariants(variants);
         List<Nameserver> nameServers =
                 nameserverQueryDao.queryAsInnerObjects(domainId,
                         type);
