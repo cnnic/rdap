@@ -23,24 +23,28 @@ import cn.cnnic.rdap.common.util.StringUtil;
  * 
  */
 public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
-    private static Logger logger = LoggerFactory.getLogger(StringUtil.class);
+    /**
+     * logger.
+     */
+    private static Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
 
     /**
-     * handle redirect exception
+     * handle exception
      */
     @Override
     protected ModelAndView doResolveException(HttpServletRequest request,
             HttpServletResponse response, Object handler, Exception ex) {
+        ResponseEntity<ErrorMessage> responseEntity = null;
         if (ex instanceof InvalidMediaTypeException) {
-            try {
-                ResponseEntity<ErrorMessage> responseEntity = RestResponseUtil
-                        .createResponse415();
-                FilterHelper.writeResponse(responseEntity, response);
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-            }
-            return new ModelAndView();
+            responseEntity = RestResponseUtil.createResponse415();
         }
-        return null;
+        responseEntity = RestResponseUtil.createResponse500();
+        try {
+            FilterHelper.writeResponse(responseEntity, response);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return new ModelAndView();
     }
+    
 }
