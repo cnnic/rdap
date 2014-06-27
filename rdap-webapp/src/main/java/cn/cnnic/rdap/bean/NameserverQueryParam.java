@@ -36,7 +36,7 @@ package cn.cnnic.rdap.bean;
  * @author weijunkai
  * 
  */
-public class NameserverQueryParam extends QueryParam {
+public class NameserverQueryParam extends DomainQueryParam {
 
     /**
      * constructor.
@@ -47,8 +47,7 @@ public class NameserverQueryParam extends QueryParam {
      *            nameserver puny name.
      */
     public NameserverQueryParam(String q, String punyName) {
-        super(q);
-        this.punyName = punyName;
+        super(q, punyName);
     }
 
     /**

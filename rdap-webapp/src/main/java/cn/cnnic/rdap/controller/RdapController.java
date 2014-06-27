@@ -79,6 +79,22 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
 @RequestMapping("/{dot}well-known/rdap")
 public class RdapController {
     /**
+     * autnum query URI.
+     */
+    private static final String SERVICE_URI_AS_Q = "/autnum/";
+    /**
+     * ip query URI.
+     */
+    private static final String SERVICE_URI_IP_Q = "/ip/";
+    /**
+     * nameserver query URI.
+     */
+    private static final String SERVICE_URI_NS_Q = "/nameserver/";
+    /**
+     * domain query URI.
+     */
+    private static final String SERVICE_URI_DOMAIN_Q = "/domain/";
+    /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
@@ -219,10 +235,11 @@ public class RdapController {
         }
         LOGGER.debug("query redirect autnum :{}" , queryParam);
         RedirectResponse redirect = redirectService.queryAutnum(queryParam);
-        if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
-            LOGGER.info("   redirect autnum found:{},return 301." , 
-                    redirect.getUrl());
-            return RestResponseUtil.createResponse301(redirect.getUrl());
+        if (null != redirect && StringUtils.isNotBlank(redirect.getUrl())) {
+            String redirectUrl =
+                    StringUtil.generateEncodedRedirectURL(autnum,
+                            SERVICE_URI_AS_Q, redirect.getUrl());
+            return RestResponseUtil.createResponse301(redirectUrl);
         }
         return RestResponseUtil.createResponse404();
     }
@@ -261,7 +278,7 @@ public class RdapController {
         if(queryService.tldInThisRegistry(queryParam)){
             return queryDomainInThisRegistry(queryParam);
         }
-        return queryRedirectDomainOrNs(queryParam);
+        return queryRedirectDomainOrNs(queryParam, domainName);
     }
 
     /**
@@ -269,16 +286,21 @@ public class RdapController {
      * @param queryParam queryParam.
      * @return ResponseEntity.
      */
-    private ResponseEntity queryRedirectDomainOrNs(QueryParam queryParam) {
-        LOGGER.info("   queryRedirectDomainOrNs:{}" , queryParam);
+    private ResponseEntity queryRedirectDomainOrNs(QueryParam queryParam,
+            String paramName) {
+        LOGGER.info("   queryRedirectDomainOrNs:{}", queryParam);
         RedirectResponse redirect = redirectService.queryDomain(queryParam);
-        if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
-            LOGGER.info("   redirect domain/ns found:{},return 301." , 
-                    redirect.getUrl());
-            return RestResponseUtil.createResponse301(redirect.getUrl());
+        String servicePartUri = SERVICE_URI_DOMAIN_Q;
+        if (queryParam instanceof NameserverQueryParam) {
+            servicePartUri = SERVICE_URI_NS_Q;
         }
-        LOGGER.info("   redirect domain/ns not found.{},return 404." , 
-                queryParam);
+        if (null != redirect && StringUtils.isNotBlank(redirect.getUrl())) {
+            String redirectUrl =
+                    StringUtil.generateEncodedRedirectURL(paramName,
+                            servicePartUri, redirect.getUrl());
+            return RestResponseUtil.createResponse301(redirectUrl);
+        }
+        LOGGER.info("   redirect not found.{},return 404.", queryParam);
         return RestResponseUtil.createResponse404();
     }
 
@@ -382,7 +404,7 @@ public class RdapController {
         if(queryService.tldInThisRegistry(queryParam)){
             return queryNsInThisRegistry(queryParam);
         }
-        return queryRedirectDomainOrNs(queryParam);
+        return queryRedirectDomainOrNs(queryParam, nameserverName);
     }
 
     /**
@@ -500,8 +522,7 @@ public class RdapController {
     @ResponseBody
     public ResponseEntity queryIpWithMask(@PathVariable String ipAddr,
             @PathVariable String mask) {
-        ResponseEntity res = queryIpAddress(ipAddr, mask);
-        return res;
+        return queryIpAddress(ipAddr, mask, ipAddr + "/" + mask);
     }
 
     /**
@@ -514,20 +535,22 @@ public class RdapController {
     @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryIp(@PathVariable String ipAddr) {
-        ResponseEntity res = queryIpAddress(ipAddr, "");
-        return res;
+        return queryIpAddress(ipAddr, "", ipAddr);
     }
 
     /**
      * invoked by upper functions.
      * 
      * @param ipAddr
-     *            the query ip
+     *            the query ip.
      * @param ipMask
      *            the ip mask,can be 0.
-     * @return
+     * @param originQueryParam
+     *            originQueryParam.
+     * @return ResponseEntity ResponseEntity.
      */
-    public ResponseEntity queryIpAddress(String ipAddr, String ipMask) {
+    private ResponseEntity queryIpAddress(String ipAddr, String ipMask,
+            String originQueryParam) {
         String strIp = ipAddr;
         String strMask = ipMask;
         final long maskHighV6 = 128;
@@ -570,12 +593,13 @@ public class RdapController {
             responseDecorator.decorateResponse(ip);
             return RestResponseUtil.createResponse200(ip);
         }
-        LOGGER.debug("query redirect network :{}" , queryParam);
+        LOGGER.debug("query redirect network :{}", queryParam);
         RedirectResponse redirect = redirectService.queryIp(queryParam);
-        if(null != redirect && StringUtils.isNotBlank(redirect.getUrl())){
-            LOGGER.info("   redirect network found:{},return 301." , 
-                    redirect.getUrl());
-            return RestResponseUtil.createResponse301(redirect.getUrl());
+        if (null != redirect && StringUtils.isNotBlank(redirect.getUrl())) {
+            String redirectUrl =
+                    StringUtil.generateEncodedRedirectURL(originQueryParam,
+                            SERVICE_URI_IP_Q, redirect.getUrl());
+            return RestResponseUtil.createResponse301(redirectUrl);
         }
         LOGGER.info("   redirect network not found:{}", queryParam);
         return RestResponseUtil.createResponse404();

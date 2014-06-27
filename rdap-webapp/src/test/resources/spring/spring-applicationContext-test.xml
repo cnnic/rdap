@@ -14,6 +14,8 @@
 		<property name="batchsizeSearch" value="${batchsizeSearch}" />
 		<property name="inTlds" value="${inTlds}" />
 		<property name="notInTlds" value="${notInTlds}" />
+		<property name="minSecondsAccessIntervalAnonymous" value="${minSecondsAccessIntervalAnonymous}" />
+		<property name="minSecondsAccessIntervalAuthed" value="${minSecondsAccessIntervalAuthed}" />
 	</bean>
 	
 	<import resource="classpath:spring/spring-serviceContext.xml" />
