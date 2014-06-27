@@ -58,7 +58,7 @@ public class RateLimitFilter implements RdapFilter {
     private void writeError429Response(HttpServletResponse response)
             throws IOException {
         ResponseEntity<ErrorMessage> responseEntity =
-                RestResponseUtil.createResponse401();
+                RestResponseUtil.createResponse429();
         FilterHelper.writeResponse(responseEntity, response);
     }
 
