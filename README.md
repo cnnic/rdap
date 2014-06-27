@@ -19,7 +19,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 	   ```
       * Add user, and init database schema: 
 	   ```
-	   	GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USERNAME'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';	# '$MYSQL_USERNAME' and '$MYSQL_PASSWORD' must be replaced by custom username and password, and they will be used in following steps
+	   	GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USERNAME'@'$RDAP_IP' IDENTIFIED BY '$MYSQL_PASSWORD';	# '$MYSQL_USERNAME' and '$MYSQL_PASSWORD' must be replaced by custom username and password, and they will be used in following steps;'$RDAP_IP' must be replaced by RDAP server ip
 	   	FLUSH PRIVILEGES;
 	   	source rdap.sql;
 	   ```
