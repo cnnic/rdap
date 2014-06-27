@@ -2,12 +2,6 @@ package cn.cnnic.rdap.controller.support;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +19,7 @@ import cn.cnnic.rdap.service.impl.ConnectionControlService;
  * @author jiashuo
  * 
  */
-public class RateLimitFilter implements Filter {
+public class RateLimitFilter implements RdapFilter {
 
     /**
      * logger.
@@ -33,27 +27,24 @@ public class RateLimitFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(RateLimitFilter.class);
 
-    @Override
-    public void destroy() {
+    /**
+     * constructor.
+     */
+    public RateLimitFilter() {
+        super();
+        LOGGER.info("init RDAP filter:{}", this.getName());
     }
 
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1,
-            FilterChain chain) throws IOException, ServletException {
-        LOGGER.debug("RateLimitFilter ...");
-        HttpServletRequest request = (HttpServletRequest) arg0;
-        HttpServletResponse response = (HttpServletResponse) arg1;
+    public boolean preProcess(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
         String remoteAddr = request.getRemoteAddr();
         if (ConnectionControlService.exceedRateLimit(remoteAddr)) {
             LOGGER.info("exceedRateLimit,return 429 error.");
             this.writeError429Response(response);
+            return false;
         }
-        LOGGER.debug("not exceedRateLimit.");
-        chain.doFilter(request, response);
-    }
-
-    @Override
-    public void init(FilterConfig arg0) throws ServletException {
+        return true;
     }
 
     /**
@@ -69,6 +60,17 @@ public class RateLimitFilter implements Filter {
         ResponseEntity<ErrorMessage> responseEntity =
                 RestResponseUtil.createResponse401();
         FilterHelper.writeResponse(responseEntity, response);
+    }
+
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public boolean postProcess(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        return true;
     }
 
 }

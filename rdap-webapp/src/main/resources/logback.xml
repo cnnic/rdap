@@ -9,8 +9,12 @@
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
-	<logger name="org.springframework" additivity="true">
+	<logger name="org.springframework" additivity="false">
 		<level value="ERROR" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="cn.cnnic" additivity="false">
+		<level value="DEBUG" />
 		<appender-ref ref="STDOUT" />
 	</logger>
 </configuration> 
