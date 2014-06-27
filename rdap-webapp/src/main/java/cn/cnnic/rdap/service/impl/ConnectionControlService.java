@@ -28,68 +28,64 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.service.impl;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+
+import cn.cnnic.rdap.common.RdapProperties;
+import cn.cnnic.rdap.controller.support.PrincipalHolder;
 
 /**
- * represents user identity.
+ * connection control service.
  * 
  * @author jiashuo
  * 
  */
-public class Principal {
-    /**
-     * anonymous user id.
-     */
-    private static final Long USER_ID_ANONYMOUS = 0L;
-    /**
-     * identity, user id.
-     */
-    private Long id;
-    
-    /**
-     * check is anonymous.
-     * @return true if is, false if not.
-     */
-    public boolean isAnonymous(){
-        return USER_ID_ANONYMOUS.equals(id);
-    }
-
-    /**
-     * get anonymous principal.
-     * @return Principal object.
-     */
-    public static Principal getAnonymousPrincipal() {
-        return new Principal(USER_ID_ANONYMOUS);
-    }
+public final class ConnectionControlService {
 
     /**
      * constructor.
-     * 
-     * @param id
-     *            id.
      */
-    public Principal(Long id) {
+    private ConnectionControlService() {
         super();
-        this.id = id;
     }
 
     /**
-     * get id.
-     * 
-     * @return id.
+     * client last access time map:<ip:lastAccessTime>. It will be updated for
+     * every access.
      */
-    public Long getId() {
-        return id;
-    }
+    public static final Map<String, Long> CLIENT_IP2LAST_ACCESS_TIME_MAP =
+            Collections.synchronizedMap(new HashMap<String, Long>());
 
     /**
-     * set id.
+     * get exceed rate limit.
      * 
-     * @param id
-     *            id.
+     * @param ip
+     *            client ip.
+     * @return true if exceed rate limit,false if not.
      */
-    public void setId(Long id) {
-        this.id = id;
+    public static boolean exceedRateLimit(String ip) {
+        if (StringUtils.isBlank(ip)) {
+            return false;
+        }
+        Long lastAccessTime = CLIENT_IP2LAST_ACCESS_TIME_MAP.get(ip);
+        long currentTimeMillis = System.currentTimeMillis();
+        CLIENT_IP2LAST_ACCESS_TIME_MAP.put(ip, currentTimeMillis);
+        if (null == lastAccessTime) {
+            return false;
+        }
+        long accessTimeInterval = currentTimeMillis - lastAccessTime;
+        if (PrincipalHolder.getPrincipal().isAnonymous()) {
+            return accessTimeInterval <= RdapProperties
+                    .getMinSecondsAccessIntervalAnonymous();
+        } else {
+            return accessTimeInterval <= RdapProperties
+                    .getMinSecondsAccessIntervalAuthed();
+        }
     }
 
 }
