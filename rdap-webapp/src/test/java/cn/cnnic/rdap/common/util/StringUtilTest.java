@@ -55,6 +55,35 @@ import cn.cnnic.rdap.BaseTest;
 public class StringUtilTest extends BaseTest {
 
     /**
+     * test generateEncodedRedirectURL.
+     */
+    @Test
+    public void testGenerateEncodedRedirectURL() {
+        String result = "http://rdap.cn/domain/%E4%B8%AD%E5%9B%BD.cn";
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "/domain/", "http://rdap.cn"));
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "domain", "http://rdap.cn"));
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "/domain", "http://rdap.cn"));
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "domain/", "http://rdap.cn"));
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "/domain/", "http://rdap.cn/"));
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "domain", "http://rdap.cn/"));
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "/domain", "http://rdap.cn/"));
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "domain/", "http://rdap.cn/"));
+        // base uri with unicode
+        result =
+                "http://rdap.cn/%E4%B8%AD%E5%9B%BD/domain/%E4%B8%AD%E5%9B%BD.cn";
+        assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
+                "/domain/", "http://rdap.cn/中国/"));
+    }
+
+    /**
      * test addQuotas.
      */
     @Test

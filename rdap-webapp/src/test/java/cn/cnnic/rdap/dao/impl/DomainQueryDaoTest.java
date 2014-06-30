@@ -83,7 +83,7 @@ public class DomainQueryDaoTest extends BaseTest {
      * test query exist domain.
      */
     @Test
-    @DatabaseTearDown("teardown.xml")
+//    @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("domain.xml")
     public void testQueryExistDomain() {
         String domainName = "cnnic.cn";

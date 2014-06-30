@@ -43,6 +43,16 @@ import cn.cnnic.rdap.common.util.StringUtil;
 public class RdapProperties {
 
     /**
+     * min seconds between access interval,for Anonymous.
+     */
+    private static Long minSecondsAccessIntervalAnonymous;
+
+    /**
+     * min seconds between access interval, for authenticated user.
+     */
+    private static Long minSecondsAccessIntervalAuthed;
+
+    /**
      * max size for search.
      */
     private static Long maxsizeSearch;
@@ -84,8 +94,8 @@ public class RdapProperties {
      * @return tld list.
      */
     public static List<String> getInTldsInThisRegistry() {
-        RdapProperties.inTldList =
-                StringUtil.parseTldsToListIfTldListIsNull(inTlds, inTldList);
+        RdapProperties.inTldList = StringUtil.parseTldsToListIfTldListIsNull(
+                inTlds, inTldList);
         return RdapProperties.inTldList;
     }
 
@@ -95,9 +105,8 @@ public class RdapProperties {
      * @return tld list.
      */
     public static List<String> getNotInTldsInThisRegistry() {
-        RdapProperties.notInTldList =
-                StringUtil.parseTldsToListIfTldListIsNull(notInTlds,
-                        notInTldList);
+        RdapProperties.notInTldList = StringUtil
+                .parseTldsToListIfTldListIsNull(notInTlds, notInTldList);
         return RdapProperties.notInTldList;
     }
 
@@ -175,6 +184,46 @@ public class RdapProperties {
      */
     public void setNotInTlds(String notInTlds) {
         RdapProperties.notInTlds = notInTlds;
+    }
+
+    /**
+     * get minSecondsAccessIntervalAnonymous.
+     * 
+     * @return minSecondsAccessIntervalAnonymous.
+     */
+    public static Long getMinSecondsAccessIntervalAnonymous() {
+        return minSecondsAccessIntervalAnonymous;
+    }
+
+    /**
+     * set minSecondsAccessIntervalAnonymous.
+     * 
+     * @param minSecondsAccessIntervalAnonymous
+     *            minSecondsAccessIntervalAnonymous.
+     */
+    public void setMinSecondsAccessIntervalAnonymous(
+            Long minSecondsAccessIntervalAnonymous) {
+        RdapProperties.minSecondsAccessIntervalAnonymous = minSecondsAccessIntervalAnonymous;
+    }
+
+    /**
+     * get minSecondsAccessIntervalAuthed.
+     * 
+     * @return minSecondsAccessIntervalAuthed.
+     */
+    public static Long getMinSecondsAccessIntervalAuthed() {
+        return minSecondsAccessIntervalAuthed;
+    }
+
+    /**
+     * set minSecondsAccessIntervalAuthed.
+     * 
+     * @param minSecondsAccessIntervalAuthed
+     *            minSecondsAccessIntervalAuthed.
+     */
+    public void setMinSecondsAccessIntervalAuthed(
+            Long minSecondsAccessIntervalAuthed) {
+        RdapProperties.minSecondsAccessIntervalAuthed = minSecondsAccessIntervalAuthed;
     }
 
 }

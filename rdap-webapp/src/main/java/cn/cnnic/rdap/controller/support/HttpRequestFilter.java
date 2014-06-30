@@ -30,20 +30,15 @@
  */
 package cn.cnnic.rdap.controller.support;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
@@ -55,33 +50,54 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
  * @author jiashuo
  * 
  */
-public class HttpRequestFilter implements Filter {
+public class HttpRequestFilter implements RdapFilter {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(AuthenticationFilter.class);
+
+    /**
+     * rdap content type.
+     */
     private static final String VALID_CONTENT_TYPE = "application/rdap+json";
+    /**
+     * allow methods.
+     */
     private static final List<String> allowMethods = new ArrayList<String>();
+    /**
+     * init allow methods.
+     */
     static {
         allowMethods.add("GET");
     }
 
+    /**
+     * constructor.
+     */
+    public HttpRequestFilter() {
+        super();
+        LOGGER.info("init RDAP filter:{}", this.getName());
+    }
+
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1,
-            FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) arg0;
-        HttpServletResponse response = (HttpServletResponse) arg1;
+    public boolean preProcess(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
         boolean httpMethodIsValid = httpMethodIsValid(request);
         if (!httpMethodIsValid) {
-            ResponseEntity<ErrorMessage> responseEntity = RestResponseUtil
-                    .createResponse405();
+            ResponseEntity<ErrorMessage> responseEntity =
+                    RestResponseUtil.createResponse405();
             FilterHelper.writeResponse(responseEntity, response);
-            return;
+            return false;
         }
         boolean contentTypeIsValid = contentTypeIsValid(request);
         if (!contentTypeIsValid) {
-            ResponseEntity<ErrorMessage> responseEntity = RestResponseUtil
-                    .createResponse415();
+            ResponseEntity<ErrorMessage> responseEntity =
+                    RestResponseUtil.createResponse415();
             FilterHelper.writeResponse(responseEntity, response);
-            return;
+            return false;
         }
-        chain.doFilter(request, response);
+        return true;
     }
 
     /**
@@ -117,11 +133,14 @@ public class HttpRequestFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig arg0) throws ServletException {
+    public boolean postProcess(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        return true;
     }
 
     @Override
-    public void destroy() {
-
+    public String getName() {
+        return getClass().getSimpleName();
     }
+
 }

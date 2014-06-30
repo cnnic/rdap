@@ -34,16 +34,12 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.WebUtils;
 
@@ -52,72 +48,80 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
- * filter invalid uri which spring can't catch
+ * filter invalid uri which spring can't catch.
  * 
- * @author nic
+ * @author jiashuo
  * 
  */
-public class InvalidUriFilter implements Filter {
+public class InvalidUriFilter implements RdapFilter {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(AuthenticationFilter.class);
+
     /**
      * rdap url prefix.
      */
     private static final String RDAP_URL_PREFIX = ".well-known/rdap";
 
-    @Override
-    public void destroy() {
+    /**
+     * constructor.
+     */
+    public InvalidUriFilter() {
+        super();
+        LOGGER.info("init RDAP filter:{}", this.getName());
     }
 
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1,
-            FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) arg0;
-        HttpServletResponse response = (HttpServletResponse) arg1;
+    public boolean preProcess(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
         decodeServletPathForSpringUrlMapping(request);
         String path = request.getRequestURI();
         if (StringUtils.isBlank(path)) {
             writeError400Response(response);
-            return;
+            return false;
         }
         String decodeUri = StringUtils.EMPTY;
         String uri = path.substring(request.getContextPath().length());
         if (StringUtils.isBlank(uri)) {
             writeError400Response(response);
-            return;
+            return false;
         }
         try {
             decodeUri = urlDecode(uri);
         } catch (Exception e) {
             writeError400Response(response);
-            return;
+            return false;
         }
         if (decodeUri.contains("\\")) {
             writeError400Response(response);
-            return;
+            return false;
         }
-        if (decodeUri.contains("//")) {// || decodeUri.contains("ip/::/")) {
+        if (decodeUri.contains("//")) { // || decodeUri.contains("ip/::/")) {
             writeError400Response(response);
-            return;
+            return false;
         }
         if (containInvalidSpace(decodeUri)) {
             writeError400Response(response);
-            return;
+            return false;
         }
-        if (!"/".equals(decodeUri)) {// if not /,then must begin with rdapUrl
+        if (!"/".equals(decodeUri)) { // if not /,then must begin with rdapUrl
             String uriWithoutPrefixSlash =
                     decodeUri.substring(1, decodeUri.length());
             if (!uriWithoutPrefixSlash.startsWith(RDAP_URL_PREFIX)) {
                 writeError400Response(response);
-                return;
+                return false;
             } else if (!uriWithoutPrefixSlash.equals(RDAP_URL_PREFIX + "/")
                     && decodeUri.endsWith("/")) {
                 writeError400Response(response);
-                return;
+                return false;
             } else if (uriWithoutPrefixSlash.endsWith("/.")) {
                 writeError400Response(response);
-                return;
+                return false;
             }
         }
-        chain.doFilter(request, response);
+        return true;
     }
 
     /**
@@ -147,6 +151,8 @@ public class InvalidUriFilter implements Filter {
      * 
      * @param request
      *            HttpServletRequest.
+     * @throws UnsupportedEncodingException
+     *             UnsupportedEncodingException.
      */
     private void
             decodeServletPathForSpringUrlMapping(HttpServletRequest request)
@@ -168,7 +174,8 @@ public class InvalidUriFilter implements Filter {
      * 
      * @param response
      *            response.
-     * @throws IOException.
+     * @throws IOException
+     *             IOException.
      */
     private void writeError400Response(HttpServletResponse response)
             throws IOException {
@@ -177,18 +184,14 @@ public class InvalidUriFilter implements Filter {
         FilterHelper.writeResponse(responseEntity, response);
     }
 
-    @Override
-    public void init(FilterConfig arg0) throws ServletException {
-
-    }
-
     /**
      * decode url with UTF-8.
      * 
      * @param str
      *            URL.
      * @return decoded URL.
-     * @throws UnsupportedEncodingException.
+     * @throws UnsupportedEncodingException
+     *             UnsupportedEncodingException.
      */
     private String urlDecode(String str) throws UnsupportedEncodingException {
         if (StringUtils.isBlank(str)) {
@@ -196,4 +199,16 @@ public class InvalidUriFilter implements Filter {
         }
         return URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
     }
+
+    @Override
+    public boolean postProcess(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
 }

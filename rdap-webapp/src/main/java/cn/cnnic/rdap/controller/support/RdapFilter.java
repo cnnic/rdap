@@ -28,68 +28,53 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.controller.support;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * represents user identity.
+ * rdap filter interface.
  * 
  * @author jiashuo
  * 
  */
-public class Principal {
+public interface RdapFilter {
     /**
-     * anonymous user id.
-     */
-    private static final Long USER_ID_ANONYMOUS = 0L;
-    /**
-     * identity, user id.
-     */
-    private Long id;
-    
-    /**
-     * check is anonymous.
-     * @return true if is, false if not.
-     */
-    public boolean isAnonymous(){
-        return USER_ID_ANONYMOUS.equals(id);
-    }
-
-    /**
-     * get anonymous principal.
-     * @return Principal object.
-     */
-    public static Principal getAnonymousPrincipal() {
-        return new Principal(USER_ID_ANONYMOUS);
-    }
-
-    /**
-     * constructor.
+     * do pre process.
      * 
-     * @param id
-     *            id.
+     * @param req
+     *            request.
+     * @param res
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true if success processed,and can do service operation; false if
+     *         not.
      */
-    public Principal(Long id) {
-        super();
-        this.id = id;
-    }
+    boolean preProcess(HttpServletRequest req, HttpServletResponse res)
+            throws Exception;
 
     /**
-     * get id.
+     * do post process.
      * 
-     * @return id.
+     * @param req
+     *            request.
+     * @param res
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true if success processed,and can do service operation; false if
+     *         not.
      */
-    public Long getId() {
-        return id;
-    }
+    boolean postProcess(HttpServletRequest req, HttpServletResponse res)
+            throws Exception;
 
     /**
-     * set id.
+     * get filter name.
      * 
-     * @param id
-     *            id.
+     * @return filter name.
      */
-    public void setId(Long id) {
-        this.id = id;
-    }
+    String getName();
 
 }

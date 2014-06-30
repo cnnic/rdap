@@ -90,7 +90,7 @@ public class PolicyUtilTest extends BaseTest {
         ns.setPort43(port43);
         
         final String strObj = "nameServer";
-        HiddenColumnUtil.setListHiddenColumnNull(ns, strObj);
+        //setNull
         
         assertNotNull(ns);
         assertEquals(ns.getLdhName(), null);

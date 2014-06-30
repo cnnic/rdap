@@ -227,6 +227,28 @@ public class RestResponseUtil {
     }
 
     /**
+     * create response with HTTP status code 429.
+     * 
+     * @param response
+     *            model object.
+     * @return ResponseEntity.
+     */
+    public static ResponseEntity<ErrorMessage> createResponse429() {
+        return createCommonErrorResponse(HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    /**
+     * create response with HTTP status code 509.
+     * 
+     * @param response
+     *            model object.
+     * @return ResponseEntity.
+     */
+    public static ResponseEntity<ErrorMessage> createResponse509() {
+        return createCommonErrorResponse(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+    }
+
+    /**
      * create error response.
      * 
      * @param errorStatus
@@ -292,3 +314,4 @@ public class RestResponseUtil {
         RestResponseUtil.policyService = policyService;
     }
 }
+
