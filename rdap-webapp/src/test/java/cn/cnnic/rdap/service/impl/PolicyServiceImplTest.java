@@ -41,7 +41,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.Event;
+import cn.cnnic.rdap.bean.IPAddress;
+import cn.cnnic.rdap.bean.Link;
 import cn.cnnic.rdap.bean.Nameserver;
+import cn.cnnic.rdap.bean.Notice;
 import cn.cnnic.rdap.service.PolicyControlService;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -85,17 +89,42 @@ public class PolicyServiceImplTest extends BaseTest {
         entity.setLang(lang);
         
         List<Entity> entities = new ArrayList<Entity>();
-        entities.add(entity);
-        
+        entities.add(entity);        
         ns.setEntities(entities);
-//        ns.setEvents(events);
-//        ns.setIpAddresses(ipAddresses);
-//        ns.setLinks(links);
-//        ns.setNotices(notices);
+        
+        Event event = new Event();
+        event.setId(id);
+        event.setHandle(handle);
+        event.setLang(lang);
+        List<Event> events = new ArrayList<Event>();
+        events.add(event);
+        ns.setEvents(events);
+        
+        IPAddress ipAddr = new IPAddress();
+        ipAddr.setId(id);
+        ipAddr.setHandle(handle);
+        ipAddr.setLang(lang);
+        ns.setIpAddresses(ipAddr);
+        
+        Link link = new Link();
+        List<Link> links = new ArrayList<Link>();
+        link.setId(id);
+        link.setHandle(handle);
+        link.setLang(lang);
+        links.add(link);
+        ns.setLinks(links);
+        
+        Notice notice = new Notice();
+        List<Notice> notices = new ArrayList<Notice>();
+        notice.setId(id);
+        notice.setHandle(handle);
+        notice.setLang(lang);
+        notices.add(notice);
+        ns.setNotices(notices);
+        
         final String port43 = "port43";
         ns.setPort43(port43);
         
-        final String strObj = "nameServer";
         policyService.applyPolicy(ns);
         
         assertNotNull(ns);
@@ -136,7 +165,6 @@ public class PolicyServiceImplTest extends BaseTest {
         final String port43 = "port43";
         entity.setPort43(port43);
         
-        final String strObj = "entity";
         policyService.applyPolicy(entity);
         
         assertNotNull(ns);
@@ -144,7 +172,6 @@ public class PolicyServiceImplTest extends BaseTest {
         assertEquals(entity.getId(), null);
         assertEquals(entity.getHandle(), null);
         assertEquals(entity.getLang(), null);
-//        assertEquals(entity.getEntities(), null);
         assertEquals(entity.getPort43(),null);
     }
 }
