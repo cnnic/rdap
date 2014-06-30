@@ -41,11 +41,6 @@ import cn.cnnic.rdap.common.util.StringUtil;
  * 
  */
 public class RdapProperties {
-    
-    /**
-     * localServiceUrl.
-     */
-    private static String localServiceUrl;
 
     /**
      * min seconds between access interval,for Anonymous.
@@ -99,8 +94,8 @@ public class RdapProperties {
      * @return tld list.
      */
     public static List<String> getInTldsInThisRegistry() {
-        RdapProperties.inTldList =
-                StringUtil.parseTldsToListIfTldListIsNull(inTlds, inTldList);
+        RdapProperties.inTldList = StringUtil.parseTldsToListIfTldListIsNull(
+                inTlds, inTldList);
         return RdapProperties.inTldList;
     }
 
@@ -110,9 +105,8 @@ public class RdapProperties {
      * @return tld list.
      */
     public static List<String> getNotInTldsInThisRegistry() {
-        RdapProperties.notInTldList =
-                StringUtil.parseTldsToListIfTldListIsNull(notInTlds,
-                        notInTldList);
+        RdapProperties.notInTldList = StringUtil
+                .parseTldsToListIfTldListIsNull(notInTlds, notInTldList);
         return RdapProperties.notInTldList;
     }
 
@@ -209,8 +203,7 @@ public class RdapProperties {
      */
     public void setMinSecondsAccessIntervalAnonymous(
             Long minSecondsAccessIntervalAnonymous) {
-        RdapProperties.minSecondsAccessIntervalAnonymous =
-                minSecondsAccessIntervalAnonymous;
+        RdapProperties.minSecondsAccessIntervalAnonymous = minSecondsAccessIntervalAnonymous;
     }
 
     /**
@@ -230,24 +223,7 @@ public class RdapProperties {
      */
     public void setMinSecondsAccessIntervalAuthed(
             Long minSecondsAccessIntervalAuthed) {
-        RdapProperties.minSecondsAccessIntervalAuthed =
-                minSecondsAccessIntervalAuthed;
+        RdapProperties.minSecondsAccessIntervalAuthed = minSecondsAccessIntervalAuthed;
     }
 
-    /**
-     * get localServiceUrl.
-     * @return localServiceUrl.
-     */
-    public static String getLocalServiceUrl() {
-        return localServiceUrl;
-    }
-
-    /**
-     * set localServiceUrl.
-     * @param localServiceUrl localServiceUrl.
-     */
-    public void setLocalServiceUrl(String localServiceUrl) {
-        RdapProperties.localServiceUrl = localServiceUrl;
-    }
-    
 }
