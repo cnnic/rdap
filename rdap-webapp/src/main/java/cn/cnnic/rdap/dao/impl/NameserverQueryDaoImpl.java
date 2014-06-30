@@ -96,13 +96,12 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     @Autowired
     private QueryDao<IPAddress> ipAddressQueryDao;
-    
+
     /**
      * entityQueryDao.
      */
     @Autowired
     private QueryDao<Entity> entityQueryDao;
-
     /**
      * query inner objects of nameserver,and set object value to them.
      * 
@@ -118,9 +117,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             final Long outerObjectId, final ModelType outerModelType) {
         final String sql = "select * from RDAP_NAMESERVER ns inner join "
                 + "REL_DOMAIN_NAMESERVER rel on (ns.NAMESERVER_ID = "
-                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ? and rel.DOMAIN_TYPE =? ) left outer "
-                + "join RDAP_NAMESERVER_STATUS status on ns.NAMESERVER_ID "
-                + "=status.NAMESERVER_ID";
+                + "rel.NAMESERVER_ID and rel.DOMAIN_ID=? and rel.DOMAIN_TYPE=?)"
+                + " left outer join RDAP_NAMESERVER_STATUS status on "
+                + " ns.NAMESERVER_ID = status.NAMESERVER_ID";
 
         List<Nameserver> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
@@ -191,15 +190,17 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * query and set entities.
-     * @param ns ns.
+     * query and set nameserver.
+     * 
+     * @param ns
+     *            nameserver object.
      */
     private void queryAndSetEntities(Nameserver ns) {
-        if(ns==null){
-            return ;
+        if (ns == null) {
+            return;
         }
-        List<Entity> entities =
-                entityQueryDao.queryAsInnerObjects(ns.getId(), ModelType.NAMESERVER);
+        List<Entity> entities = entityQueryDao.queryAsInnerObjects(ns.getId(),
+                ModelType.NAMESERVER);
         ns.setEntities(entities);
     }
 
@@ -302,10 +303,12 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
 
     /**
      * query and set entities.
-     * @param listNS ns list.
+     * 
+     * @param nameservers
+     *            ns list.
      */
     private void queryAndSetEntities(List<Nameserver> nameservers) {
-        if(null == nameservers){
+        if (null == nameservers) {
             return;
         }
         for (Nameserver nameserver : nameservers) {
@@ -349,8 +352,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             }
             final BigDecimal ipHigh = arrayIp[0];
             final BigDecimal ipLow = ipTmp;
-            final String strHead = "select count(1) as COUNT from RDAP_NAMESERVER_IP "
-                    + " where IP_LOW = ? && ";
+            final String strHead = "select count(1) as COUNT "
+                    + "from RDAP_NAMESERVER_IP where IP_LOW = ? && ";
             String tmpSql = "IP_HIGH = ?";
             if (ipHigh.doubleValue() == 0.0) {
                 tmpSql = "(IP_HIGH = ? or IP_HIGH is NULL)";
@@ -411,13 +414,15 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             }
             final BigDecimal ipHigh = arrayIp[0];
             final BigDecimal ipLow = ipTmp;
-            final String strHead = "select * from RDAP_NAMESERVER ns,RDAP_NAMESERVER_IP ip"
-                    + " where ns.NAMESERVER_ID=ip.NAMESERVER_ID and ";
+            final String strHead = "select * from RDAP_NAMESERVER ns,"
+                    + " RDAP_NAMESERVER_IP ip where "
+                    + " ns.NAMESERVER_ID=ip.NAMESERVER_ID and ";
             String tmpSql = "IP_HIGH = ?";
             if (ipHigh.doubleValue() == 0.0) {
                 tmpSql = "(IP_HIGH = ? or IP_HIGH is NULL) ";
             }
-            final String strEnd = "and IP_LOW = ? order by ns.LDH_NAME limit ?,? ";
+            final String strEnd = "and IP_LOW = ? order by"
+                    + " ns.LDH_NAME limit ?,? ";
             final String sql = strHead + tmpSql + strEnd;
             result = jdbcTemplate.query(new PreparedStatementCreator() {
                 public PreparedStatement createPreparedStatement(
