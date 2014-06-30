@@ -28,73 +28,30 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.dao;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import cn.cnnic.rdap.bean.Policy;
 
 /**
- * base query parameter bean.
+ * policy DAO.
  * 
  * @author weijunkai
  * 
  */
-public class NameserverQueryParam extends DomainQueryParam {
-
+public interface PolicyDao {
     /**
-     * constructor.
+     * get all policy list.
      * 
-     * @param q
-     *            for query string.
-     * @param punyName
-     *            nameserver puny name.
      */
-    public NameserverQueryParam(String q, String punyName) {
-        super(q, punyName);
-    }
+    List<Policy> loadAllPolicyList();
 
     /**
-     * nameserver puny name.
-     */
-    private String punyName;
-
-    /**
-     * isSearchByIp for ipSearch.
-     */
-    private boolean isSearchByIp = false;
-
-    /**
-     * get punyName.
+     * get all policy map.
      * 
-     * @return punyName.
      */
-    public String getPunyName() {
-        return punyName;
-    }
-
-    /**
-     * set punyName.
-     * 
-     * @param punyName
-     *            punyName.
-     */
-    public void setPunyName(String punyName) {
-        this.punyName = punyName;
-    }
-
-    /**
-     * getIsSearchByIp.
-     * 
-     * @return bool flag.
-     */
-    public boolean getIsSearchByIp() {
-        return isSearchByIp;
-    }
-
-    /**
-     * setIsSearchByIp .
-     * 
-     * @param isSearchByIp
-     *            boolean.
-     */
-    public void setIsSearchByIp(boolean isSearchByIp) {
-        this.isSearchByIp = isSearchByIp;
-    }
+    Map<String,Set<String>> loadAllPolicyMap();
 }

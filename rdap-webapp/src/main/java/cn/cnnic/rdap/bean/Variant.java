@@ -170,4 +170,9 @@ public class Variant extends BaseModel {
     public void setIdnTable(String idnTable) {
         this.idnTable = idnTable;
     }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.VARIANT;
+    }
 }
