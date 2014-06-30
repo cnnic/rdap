@@ -240,11 +240,6 @@ public final class DomainUtil {
             return false;
         }
         
-        // * is not the first char
-        if (StringUtils.stripToEmpty(searchString).startsWith("*")) {
-            return false;
-        }
-        
         // only one * in search string
         if ( 1 != StringUtils.countMatches(searchString, "*")) {
             return false;
@@ -264,6 +259,11 @@ public final class DomainUtil {
         
         // '*' means a digit or an alphabet
         domainName = searchString.replace("*", "1"); 
+        if (validateDomainNameIsValidIdna(domainName)) {
+            return true;
+        } 
+        // '*' means '.' plus letter/digit
+        domainName = searchString.replace("*", ".1"); 
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
         } 

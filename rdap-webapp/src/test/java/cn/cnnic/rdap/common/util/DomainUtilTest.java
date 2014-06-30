@@ -267,7 +267,13 @@ public class DomainUtilTest {
      */
     @Test
     public void testValidateSearchStringIsValidIdna() {
-        
+        assertTrue(validateSearchStringIsValidIdna("cn*"));
+        assertTrue(validateSearchStringIsValidIdna("中国*"));
+        assertTrue(validateSearchStringIsValidIdna("cn.中国*"));
+        assertTrue(validateSearchStringIsValidIdna("cn中国*"));
+        assertTrue(validateSearchStringIsValidIdna("*.cn"));// this is checked for error 422
+        assertFalse(validateSearchStringIsValidIdna("*cn"));// this is checked for error 422,but also return 400
+        assertFalse(validateSearchStringIsValidIdna("*"));// this is checked for error 422
         assertFalse(validateSearchStringIsValidIdna("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο*.bnnhg"));
         assertFalse(validateSearchStringIsValidIdna("%CF*.bnnhg"));
         assertFalse(validateSearchStringIsValidIdna("1**.bnnhg"));
