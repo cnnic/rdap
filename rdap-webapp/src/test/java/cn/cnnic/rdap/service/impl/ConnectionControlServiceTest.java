@@ -45,6 +45,31 @@ import cn.cnnic.rdap.common.RdapProperties;
  * 
  */
 public class ConnectionControlServiceTest {
+
+    /**
+     * test incrementConcurrentQCountAndCheckIfExceedMax.
+     * 
+     */
+    @Test
+    public void testIncrementConcurrentQCountAndCheckIfExceedMax() {
+        RdapProperties prop = new RdapProperties();
+        ReflectionTestUtils.setField(prop, "maxConcurrentCount", 3);
+        assertFalse(ConnectionControlService
+                .incrementConcurrentQCountAndCheckIfExceedMax());
+        assertFalse(ConnectionControlService
+                .incrementConcurrentQCountAndCheckIfExceedMax());
+        assertTrue(ConnectionControlService
+                .incrementConcurrentQCountAndCheckIfExceedMax());
+        ConnectionControlService.decrementAndGetCurrentQueryCount();
+        assertTrue(ConnectionControlService
+                .incrementConcurrentQCountAndCheckIfExceedMax());
+        ConnectionControlService.decrementAndGetCurrentQueryCount();
+        ConnectionControlService.decrementAndGetCurrentQueryCount();
+        assertFalse(ConnectionControlService
+                .incrementConcurrentQCountAndCheckIfExceedMax());
+
+    }
+
     /**
      * test exceedRateLimit.
      * 

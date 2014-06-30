@@ -33,8 +33,11 @@ package cn.cnnic.rdap.service.impl;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.controller.support.PrincipalHolder;
@@ -46,6 +49,11 @@ import cn.cnnic.rdap.controller.support.PrincipalHolder;
  * 
  */
 public final class ConnectionControlService {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ConnectionControlService.class);
 
     /**
      * constructor.
@@ -60,6 +68,11 @@ public final class ConnectionControlService {
      */
     public static final Map<String, Long> CLIENT_IP2LAST_ACCESS_TIME_MAP =
             Collections.synchronizedMap(new HashMap<String, Long>());
+
+    /**
+     * concurrent query count.
+     */
+    public static final AtomicInteger CONCURRENT_Q_COUNT = new AtomicInteger(0);
 
     /**
      * get exceed rate limit.
@@ -88,4 +101,28 @@ public final class ConnectionControlService {
         }
     }
 
+    /**
+     * increment concurrent query count, and check if exceed max count.MUST call
+     * decrementAndGetCurrentQueryCount after query.
+     * 
+     * @return true if exceed, false if not.
+     */
+    public static boolean incrementConcurrentQCountAndCheckIfExceedMax() {
+        int count = CONCURRENT_Q_COUNT.getAndIncrement();
+        LOGGER.debug("current query count:{}", count);
+        if (count >= RdapProperties.getMaxConcurrentCount() - 1) {
+            LOGGER.debug("current query count exceed max count : {}.",
+                    RdapProperties.getMaxConcurrentCount());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * decrement current query count.
+     */
+    public static void decrementAndGetCurrentQueryCount() {
+        int count = CONCURRENT_Q_COUNT.decrementAndGet();
+        LOGGER.debug("current query count:{}", count);
+    }
 }
