@@ -40,6 +40,10 @@ public enum ModelType {
     /**
      * model type.
      */
+    SEARCH("search"), VARIANT("variant"),
+    /**
+     * 5 main object model.
+     */
     DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
             "autnum"),
     /**

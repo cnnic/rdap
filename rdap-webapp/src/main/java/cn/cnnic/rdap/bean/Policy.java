@@ -30,71 +30,37 @@
  */
 package cn.cnnic.rdap.bean;
 
+import java.util.Set;
+
 /**
- * base query parameter bean.
+ * denotes information about the service providing RDAP information.
  * 
  * @author weijunkai
  * 
  */
-public class NameserverQueryParam extends DomainQueryParam {
-
+public class Policy extends BaseModel {
     /**
-     * constructor.
-     * 
-     * @param q
-     *            for query string.
-     * @param punyName
-     *            nameserver puny name.
+     * title.
      */
-    public NameserverQueryParam(String q, String punyName) {
-        super(q, punyName);
+    private String modelType;
+    /**
+     * description.
+     */
+    private String hideColumn;
+    
+    public void setModelType(String modelType){
+        this.modelType = modelType;
     }
-
-    /**
-     * nameserver puny name.
-     */
-    private String punyName;
-
-    /**
-     * isSearchByIp for ipSearch.
-     */
-    private boolean isSearchByIp = false;
-
-    /**
-     * get punyName.
-     * 
-     * @return punyName.
-     */
-    public String getPunyName() {
-        return punyName;
+    
+    public String getModelType(){
+        return modelType;
     }
-
-    /**
-     * set punyName.
-     * 
-     * @param punyName
-     *            punyName.
-     */
-    public void setPunyName(String punyName) {
-        this.punyName = punyName;
+    
+    public void setHideColumn(String hideColumn){
+        this.hideColumn = hideColumn;
     }
-
-    /**
-     * getIsSearchByIp.
-     * 
-     * @return bool flag.
-     */
-    public boolean getIsSearchByIp() {
-        return isSearchByIp;
-    }
-
-    /**
-     * setIsSearchByIp .
-     * 
-     * @param isSearchByIp
-     *            boolean.
-     */
-    public void setIsSearchByIp(boolean isSearchByIp) {
-        this.isSearchByIp = isSearchByIp;
+    
+    public String getHideColumn(){
+        return hideColumn;
     }
 }
