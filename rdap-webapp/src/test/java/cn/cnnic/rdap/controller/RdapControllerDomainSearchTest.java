@@ -36,6 +36,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -48,6 +53,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
+import cn.cnnic.rdap.common.util.StringUtil;
 
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -64,7 +70,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     /**
      * domain search uri.
      */
-    private static final String DOMAIN_SEARCH_URI = "/.well-known/rdap/domains?name=";
+    private static final String DOMAIN_SEARCH_URI =
+            "/.well-known/rdap/domains?name=";
 
     @Autowired
     private WebApplicationContext wac;
@@ -77,6 +84,79 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     }
 
     /**
+     * test search 422 and 400.
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testSearchQStatus() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        List<String> q422List = new ArrayList<String>();
+        q422List.add("*");
+        q422List.add("*cn");
+        q422List.add("*.cn");
+        q422List.add("*cn*");
+        q422List.add("1**.bnnhg");
+        List<String> q400List = new ArrayList<String>();
+        q400List.add("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο*.bnnhg");
+        q400List.add("%CF*.bnnhg");
+        q400List.add("-*.bnnhg");
+        q400List.add("%CF*.bnnhg");
+        q400List.add("Σ*.bnnhg");
+        q400List.add("ύύ--*.bnnhg");
+        List<String> q200List = new ArrayList<String>();
+        q200List.add("xn--123*.bnnhg");
+        q200List.add("xn--*.bnnhg");
+        q200List.add("%CF%83*.bnnhg");
+        q200List.add("cn--*.bnnhg");
+        q200List.add("ύ*.bnnhg");
+        q200List.add("cn*");
+        q200List.add("中国*");
+        for (String q : q422List) {
+            mockMvc.perform(
+                    get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
+                            MediaType.parseMediaType("application/json")))
+                    .andExpect(status().isUnprocessableEntity())
+                    .andExpect(content().contentType("application/json"))
+                    .andExpect(jsonPath("$.errorCode").value(422));
+        }
+        for (String q : q400List) {
+            mockMvc.perform(
+                    get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
+                            MediaType.parseMediaType("application/json")))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType("application/json"))
+                    .andExpect(jsonPath("$.errorCode").value(400));
+        }
+        for (String q : q200List) {// no data, return 404 instead 200.
+            mockMvc.perform(
+                    get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
+                            MediaType.parseMediaType("application/json")))
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().contentType("application/json"))
+                    .andExpect(jsonPath("$.errorCode").value(404));
+        }
+
+    }
+
+    /**
+     * encode with 8859.
+     * 
+     * @param str
+     *            str.
+     * @return encoded str.
+     * @throws UnsupportedEncodingException
+     *             UnsupportedEncodingException.
+     */
+    private String encodeWithIso8859(String str)
+            throws UnsupportedEncodingException {
+        if (StringUtils.isBlank(str)) {
+            return str;
+        }
+        return new String(str.getBytes(), StringUtil.CHAR_SET_ISO8859);
+    }
+
+    /**
      * test query exist domain.
      * 
      * @throws Exception
@@ -84,7 +164,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
-    public void testSearchExistDomain() throws Exception {
+    public
+            void testSearchExistDomain() throws Exception {
         String domainName = "cnnic.cn";
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "cnnic*").accept(
@@ -195,7 +276,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
-    public void testSearchTruncatedDomain() throws Exception {
+    public
+            void testSearchTruncatedDomain() throws Exception {
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "truncated*").accept(
                         MediaType.parseMediaType("application/json")))
@@ -219,7 +301,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    @DatabaseSetup(type = DatabaseOperation.REFRESH,
+            value = "classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
     public void testSearchNonExistDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
@@ -256,7 +339,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.errorCode").value(422))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("UNPROCESSABLE ENTITY"))
-                .andExpect(jsonPath("$.description").value("UNPROCESSABLE ENTITY"));
+                .andExpect(
+                        jsonPath("$.description").value("UNPROCESSABLE ENTITY"));
 
     }
 }

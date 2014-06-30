@@ -242,12 +242,7 @@ public final class DomainUtil {
         // should NOT contains 0x0020
         if (searchString.contains(BLANK_IN_DOMAIN)) {
             return false;
-        }        
-        // * is not the first char
-        if (StringUtils.stripToEmpty(searchString).startsWith(
-                              StringUtil.ASTERISK)) {
-            return false;
-        }        
+        }
         // only one * in search string
         if (1 != StringUtils.countMatches(searchString, 
                                 StringUtil.ASTERISK)) {
@@ -268,7 +263,12 @@ public final class DomainUtil {
         domainName = searchString.replace(StringUtil.ASTERISK, "1"); 
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        }        
+        } 
+        // '*' means '.' plus letter/digit
+        domainName = searchString.replace("*", ".1"); 
+        if (validateDomainNameIsValidIdna(domainName)) {
+            return true;
+        } 
         return false;
     }
     

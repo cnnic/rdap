@@ -235,7 +235,7 @@ public class RdapController {
         }
         LOGGER.debug("query redirect autnum :{}" , queryParam);
         RedirectResponse redirect = redirectService.queryAutnum(queryParam);
-        if (null != redirect && StringUtils.isNotBlank(redirect.getUrl())) {
+        if (redirectService.isValidRedirect(redirect)) {
             String redirectUrl =
                     StringUtil.generateEncodedRedirectURL(autnum,
                             SERVICE_URI_AS_Q, redirect.getUrl());
@@ -352,9 +352,11 @@ public class RdapController {
             return RestResponseUtil.createResponse400();
         }
         decodeDomain = StringUtil.getNormalization(decodeDomain);
-        if (StringUtil.ASTERISK.equals(decodeDomain)
-                || decodeDomain.startsWith(StringUtil.ASTERISK)) {
+        if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
             return RestResponseUtil.createResponse422();
+        }
+        if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
+            return RestResponseUtil.createResponse400();
         }
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
@@ -481,9 +483,11 @@ public class RdapController {
                 return RestResponseUtil.createResponse400();
             }
             decodeNameserver = StringUtil.getNormalization(decodeNameserver);
-            if (StringUtil.ASTERISK.equals(decodeNameserver)
-                    || decodeNameserver.startsWith(StringUtil.ASTERISK)) {
+            if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
                 return RestResponseUtil.createResponse422();
+            }
+            if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
+                return RestResponseUtil.createResponse400();
             }
             decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
             decodeNameserver = StringUtils.lowerCase(decodeNameserver);
@@ -595,7 +599,7 @@ public class RdapController {
         }
         LOGGER.debug("query redirect network :{}", queryParam);
         RedirectResponse redirect = redirectService.queryIp(queryParam);
-        if (null != redirect && StringUtils.isNotBlank(redirect.getUrl())) {
+        if (redirectService.isValidRedirect(redirect)) {
             String redirectUrl =
                     StringUtil.generateEncodedRedirectURL(originQueryParam,
                             SERVICE_URI_IP_Q, redirect.getUrl());

@@ -51,33 +51,9 @@ public class NameserverQueryParam extends DomainQueryParam {
     }
 
     /**
-     * nameserver puny name.
-     */
-    private String punyName;
-
-    /**
      * isSearchByIp for ipSearch.
      */
     private boolean isSearchByIp = false;
-
-    /**
-     * get punyName.
-     * 
-     * @return punyName.
-     */
-    public String getPunyName() {
-        return punyName;
-    }
-
-    /**
-     * set punyName.
-     * 
-     * @param punyName
-     *            punyName.
-     */
-    public void setPunyName(String punyName) {
-        this.punyName = punyName;
-    }
 
     /**
      * getIsSearchByIp.
