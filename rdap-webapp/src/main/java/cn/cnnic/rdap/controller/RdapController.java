@@ -64,7 +64,7 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.AccessControlManager;
-import cn.cnnic.rdap.service.PolicyControlManager;
+import cn.cnnic.rdap.service.PolicyControlService;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.RedirectService;
 import cn.cnnic.rdap.service.SearchService;
@@ -118,10 +118,10 @@ public class RdapController {
     private RedirectService redirectService;
 
     /**
-     * policy control manager.
+     * policy control service.
      */
     @Autowired
-    private PolicyControlManager policyControlManager;
+    private PolicyControlService policyControlService;
 
     /**
      * query entity.
@@ -148,8 +148,7 @@ public class RdapController {
             if (!accessControlManager.hasPermission(result)) {
                 return RestResponseUtil.createResponse403();
             }
-            final String strObj = "entity";
-            policyControlManager.setPolicy(result, strObj);
+            policyControlService.applyPolicy(result);
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
@@ -198,8 +197,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
-            final String strObj = "entity";
-            policyControlManager.setPolicy(result, strObj);
+            policyControlService.applyPolicy(result);
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();
@@ -231,8 +229,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
-            final String strObj = "autnum";
-            policyControlManager.setPolicy(result, strObj);
+            policyControlService.applyPolicy(result);
             return RestResponseUtil.createResponse200(result);
         }
         LOGGER.debug("query redirect autnum :{}" , queryParam);
@@ -314,8 +311,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domain);
-            final String strObj = "domain";
-            policyControlManager.setPolicy(domain, strObj);
+            policyControlService.applyPolicy(domain);
             return RestResponseUtil.createResponse200(domain);
         }
         LOGGER.info("   domain not found,return 404. {}" , queryParam);
@@ -363,8 +359,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domainSearch);
-            final String strObj = "domain";
-            policyControlManager.setPolicy(domainSearch, strObj);
+            policyControlService.applyPolicy(domainSearch);
             return RestResponseUtil.createResponse200(domainSearch);
         }
         return RestResponseUtil.createResponse404();
@@ -421,8 +416,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ns);
-            final String strObj = "nameServer";
-            policyControlManager.setPolicy(ns, strObj);
+            policyControlService.applyPolicy(ns);
             return RestResponseUtil.createResponse200(ns);
         }
         LOGGER.info("   ns not found,return 404. {}" , queryParam);
@@ -505,9 +499,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(nsSearch);
-
-            final String strObj = "nameServer";
-            policyControlManager.setPolicy(nsSearch, strObj);
+            policyControlService.applyPolicy(nsSearch);
 
             return RestResponseUtil.createResponse200(nsSearch);
         }
@@ -596,8 +588,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ip);
-            final String strObj = "ip";
-            policyControlManager.setPolicy(ip, strObj);
+            policyControlService.applyPolicy(ip);
             return RestResponseUtil.createResponse200(ip);
         }
         LOGGER.debug("query redirect network :{}" , queryParam);

@@ -38,9 +38,24 @@ package cn.cnnic.rdap.service;
  */
 public interface PolicyControlService {
 	/**
-	 * get all policy fields.
+	 * load all policy fields from database.
 	 * 
-	 * @return ErrorMessage map,[key:ErrorMessage id,value:ErrorMessage]
+	 * @return List<Policy> bean policy list
 	 */
-	public void getAllPolicyFields();
+    public void loadAllPolicyByList();
+	
+	/**
+     * load policy by map from database.
+     * 
+     * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
+     */
+
+    public void loadAllPolicyByMap();
+	    /**
+     * apply the policy for object.
+     * 
+     * @param model
+     *            the object to set.
+     */
+    public void applyPolicy(final Object objModel);
 }

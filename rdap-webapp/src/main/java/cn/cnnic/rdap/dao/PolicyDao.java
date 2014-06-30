@@ -30,6 +30,12 @@
  */
 package cn.cnnic.rdap.dao;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import cn.cnnic.rdap.bean.Policy;
+
 /**
  * policy DAO.
  * 
@@ -41,11 +47,11 @@ public interface PolicyDao {
      * get all policy list.
      * 
      */
-    void getAllPolicyList();
+    List<Policy> loadAllPolicyList();
 
     /**
      * get all policy map.
      * 
      */
-    void getAllObjColumns();
+    Map<String,Set<String>> loadAllPolicyMap();
 }

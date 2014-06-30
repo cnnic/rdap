@@ -35,9 +35,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -47,7 +47,6 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
-import cn.cnnic.rdap.common.util.HiddenColumnUtil;
 import cn.cnnic.rdap.dao.PolicyDao;
 import cn.cnnic.rdap.bean.Policy;
 
@@ -66,25 +65,23 @@ public class HiddenColumnDao implements PolicyDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public void getAllPolicyList() {
+    public List<Policy> loadAllPolicyList() {
         List<Policy> policies = queryPolicyList();
-        HiddenColumnUtil.setListPolicy(policies);
-        return;
+        return policies;
     }
 
     @Override
-    public void getAllObjColumns() {
-        Map<String, Set<String>> mapPolicy = queryObjColumns();
-        HiddenColumnUtil.setMapPolicy(mapPolicy);
-        return;
+    public Map<String,Set<String>> loadAllPolicyMap() {
+        Map<String, Set<String>> mapPolicy = queryPolicyMap();
+        return mapPolicy;
     }
 
     /**
-     * query Hidden Columns.
+     * query Hidden Columns Map.
      * 
      * @return map of policy.
      */
-    public Map<String, Set<String>> queryObjColumns() {
+    public Map<String, Set<String>> queryPolicyMap() {
         final String sql = "select * from RDAP_POLICY";
         Map<String, Set<String>> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {

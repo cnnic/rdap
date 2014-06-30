@@ -42,7 +42,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.service.PolicyControlManager;
 import cn.cnnic.rdap.service.PolicyControlService;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -58,8 +57,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 public class PolicyServiceImplTest extends BaseTest {
     @Autowired
     private PolicyControlService policyService;
-    @Autowired
-    private PolicyControlManager policyMananger;
 
     /**
      * test policy.
@@ -68,7 +65,7 @@ public class PolicyServiceImplTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/policy.xml")
     public void testSetPolicyOneWrap() {
-        policyService.getAllPolicyFields();
+        policyService.loadAllPolicyByList();
         Nameserver ns = new Nameserver();
 
         final Long id = 1L;
@@ -99,7 +96,7 @@ public class PolicyServiceImplTest extends BaseTest {
         ns.setPort43(port43);
         
         final String strObj = "nameServer";
-        policyMananger.setPolicy(ns, strObj);
+        policyService.applyPolicy(ns);
         
         assertNotNull(ns);
         assertEquals(ns.getLdhName(), null);
@@ -113,7 +110,7 @@ public class PolicyServiceImplTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/policyTwoWrap.xml")
     public void testSetPolicyTwoWrap() {
-        policyService.getAllPolicyFields();
+        policyService.loadAllPolicyByList();
         Nameserver ns = new Nameserver();
 
         final Long id = 1L;
@@ -140,7 +137,7 @@ public class PolicyServiceImplTest extends BaseTest {
         entity.setPort43(port43);
         
         final String strObj = "entity";
-        policyMananger.setPolicy(entity, strObj);
+        policyService.applyPolicy(entity);
         
         assertNotNull(ns);
         assertNotNull(entity);
