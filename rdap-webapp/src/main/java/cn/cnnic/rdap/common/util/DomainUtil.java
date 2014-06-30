@@ -96,7 +96,11 @@ public final class DomainUtil {
      * max ASCII code.
      */
     public static final int MAX_ASCII_CODE = 0x7F;
-
+    /**
+     * 0x0020.
+     */
+    public static final String BLANK_IN_DOMAIN = " ";
+    
     /**
      * check if domainName is valid arpa domain.
      * 
@@ -139,7 +143,8 @@ public final class DomainUtil {
         }
         domainName = StringUtils.removeEndIgnoreCase(domainName,
                 IPV4_ARPA_SUFFIX);
-        String ipV4ArpaReg = "^((1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.){1,4}$";
+        String ipV4ArpaReg = 
+                "^((1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.){1,4}$";
         if (domainName.matches(ipV4ArpaReg)) {
             return true;
         }
@@ -183,7 +188,7 @@ public final class DomainUtil {
         if (StringUtils.isBlank(domainName) || !domainName.contains(".")) {
             return false;
         }
-        if (domainName.contains(" ")) {
+        if (domainName.contains(BLANK_IN_DOMAIN)) {
             return false;
         }
         if (!isArpaTldAndLabelIsValid(domainName)) {
@@ -222,52 +227,48 @@ public final class DomainUtil {
     }
 
     /**
-     * validate domain search string represent a valid idna.
+     * validate domain search string represent a valid IDNA domain.
      * 
-     * @param domainName
-     *            domain name,ASCII char MUST in lower case.
-     * @return true if is valid idna,false if not.
+     * @param searchString
+     *            domain or name server string.
+     * @return true if is valid IDNA2008 domain, false if not.
      */
     public static boolean validateSearchStringIsValidIdna(String searchString) {
         
         // searchString should not be null or empty 
         if (StringUtils.isBlank(searchString)) {
             return false;
-        }
-        
+        }        
         // should NOT contains 0x0020
-        if (searchString.contains(" ")) {
+        if (searchString.contains(BLANK_IN_DOMAIN)) {
             return false;
-        }
-        
+        }        
         // * is not the first char
-        if (StringUtils.stripToEmpty(searchString).startsWith("*")) {
+        if (StringUtils.stripToEmpty(searchString).startsWith(
+                              StringUtil.ASTERISK)) {
             return false;
-        }
-        
+        }        
         // only one * in search string
-        if ( 1 != StringUtils.countMatches(searchString, "*")) {
+        if (1 != StringUtils.countMatches(searchString, 
+                                StringUtil.ASTERISK)) {
             return false;
-        }
-        
-        // '*' means no char
-        String domainName = searchString.replace("*", ""); 
+        }        
+        // '*' is replaced with no char
+        String domainName = searchString.replace(StringUtil.ASTERISK, ""); 
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        } 
-        
-        // '*' means dot
-        domainName = searchString.replace("*", "."); 
+        }        
+        // '*' is replaced with  dot
+        domainName = searchString.replace(StringUtil.ASTERISK, 
+                                StringUtil.TLD_SPLITOR); 
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        } 
-        
-        // '*' means a digit or an alphabet
-        domainName = searchString.replace("*", "1"); 
+        }        
+        // '*' is replaced with a digit or an alphabet, like '1'
+        domainName = searchString.replace(StringUtil.ASTERISK, "1"); 
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        } 
-        
+        }        
         return false;
     }
     
@@ -443,10 +444,11 @@ public final class DomainUtil {
             return false;
         }
         if (domainWithoutLastDot.length() < MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT
-                || domainWithoutLastDot.length() > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
+        || domainWithoutLastDot.length() > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
             return false;
         }
         return true;
+        
     }
 
     /**
