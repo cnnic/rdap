@@ -235,7 +235,7 @@ public class RdapController {
         }
         LOGGER.debug("query redirect autnum :{}" , queryParam);
         RedirectResponse redirect = redirectService.queryAutnum(queryParam);
-        if (null != redirect && StringUtils.isNotBlank(redirect.getUrl())) {
+        if (redirectService.isValidRedirect(redirect)) {
             String redirectUrl =
                     StringUtil.generateEncodedRedirectURL(autnum,
                             SERVICE_URI_AS_Q, redirect.getUrl());
@@ -599,7 +599,7 @@ public class RdapController {
         }
         LOGGER.debug("query redirect network :{}", queryParam);
         RedirectResponse redirect = redirectService.queryIp(queryParam);
-        if (null != redirect && StringUtils.isNotBlank(redirect.getUrl())) {
+        if (redirectService.isValidRedirect(redirect)) {
             String redirectUrl =
                     StringUtil.generateEncodedRedirectURL(originQueryParam,
                             SERVICE_URI_IP_Q, redirect.getUrl());

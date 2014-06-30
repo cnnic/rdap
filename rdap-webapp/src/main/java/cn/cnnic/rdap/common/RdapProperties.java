@@ -41,6 +41,11 @@ import cn.cnnic.rdap.common.util.StringUtil;
  * 
  */
 public class RdapProperties {
+    
+    /**
+     * localServiceUrl.
+     */
+    private static String localServiceUrl;
 
     /**
      * min seconds between access interval,for Anonymous.
@@ -229,4 +234,20 @@ public class RdapProperties {
                 minSecondsAccessIntervalAuthed;
     }
 
+    /**
+     * get localServiceUrl.
+     * @return localServiceUrl.
+     */
+    public static String getLocalServiceUrl() {
+        return localServiceUrl;
+    }
+
+    /**
+     * set localServiceUrl.
+     * @param localServiceUrl localServiceUrl.
+     */
+    public void setLocalServiceUrl(String localServiceUrl) {
+        RdapProperties.localServiceUrl = localServiceUrl;
+    }
+    
 }

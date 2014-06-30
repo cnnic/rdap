@@ -233,8 +233,27 @@ public class DomainUtilTest {
         assertFalse(validateDomainNameIsValidIdna("ÖBB.at"));
         assertFalse(validateDomainNameIsValidIdna("Ⱥbby.com"));
         
+        assertTrue(validateDomainNameIsValidIdna("\u0205.com"));
+        
+        assertFalse(validateDomainNameIsValidIdna("cnnic%25.cn"));
+        
+        
+        assertFalse(validateDomainNameIsValidIdna("123〳.中国"));
+        assertFalse(validateDomainNameIsValidIdna("123Ā.中国"));
+        assertFalse(validateDomainNameIsValidIdna("123Ƽ.中国"));
+        assertFalse(validateDomainNameIsValidIdna("123஝஝஝஝.中国")); // \u0b9d஝
+        assertFalse(validateDomainNameIsValidIdna("123઱஝஝.中国")); // \u0ab1
+        assertFalse(validateDomainNameIsValidIdna("123�஝஝.中国")); // \ufff8
+        
+        
     }
 
+    @Test(expected=Exception.class)
+    public void testValidateDomainNameIsValidIdnaException() {
+        // SHOULD BE FALSE
+        assertFalse(validateDomainNameIsValidIdna("cnnic%.cn"));
+        
+    }
     /**
      * validate domain.
      * 
@@ -288,7 +307,122 @@ public class DomainUtilTest {
         assertTrue(validateSearchStringIsValidIdna("cn--*.bnnhg"));
         assertTrue(validateSearchStringIsValidIdna("ύ*.bnnhg"));
         
+        assertTrue(validateSearchStringIsValidIdna("cnnic*.cn"));
+        assertTrue(validateSearchStringIsValidIdna("xn--fiqa61au8b7zsevnm8ak20mc4a87e*.cn"));
+        assertTrue(validateSearchStringIsValidIdna("xn--elaaaa*.com"));
+        assertTrue(validateSearchStringIsValidIdna("xn--123123*.cn"));
+        assertTrue(validateSearchStringIsValidIdna("中国互联*.cn"));
+        assertTrue(validateSearchStringIsValidIdna("\u0205*.cn"));
+        
+        assertTrue(validateSearchStringIsValidIdna("mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo*.cn"));
+        assertTrue(validateSearchStringIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa*.bnnhg"));
+        assertTrue(validateSearchStringIsValidIdna("mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo*.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabal1.cn"));
+        assertTrue(validateSearchStringIsValidIdna("mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo*.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabal1.cn."));
+        assertTrue(validateSearchStringIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa*.xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.jaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg"));
+        assertTrue(validateSearchStringIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa*.xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.jaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg."));
+        
+        assertTrue(validateSearchStringIsValidIdna("1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.com*"));
+        assertTrue(validateSearchStringIsValidIdna("1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.com*."));
+        
+        assertTrue(validateSearchStringIsValidIdna("cnnic*.cn"));
+        assertTrue(validateSearchStringIsValidIdna("xn--fiqa61au8b7zsevnm8ak20mc4a87e.cn*."));
+        assertTrue(validateSearchStringIsValidIdna("xn--elaaaa.com.*"));
+        assertTrue(validateSearchStringIsValidIdna("xn--ELAAAA.COM*."));
+        
+        assertTrue(validateSearchStringIsValidIdna("%C8%85%C8%85%C8%85%C8%85*.com"));
+        assertTrue(validateSearchStringIsValidIdna("%E4%B8%AD%E5%9B%BD%E4%BA%92%E8%81%94%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E4%B8%AD%E5%BF%83.cn*"));
+        
+        assertTrue(validateSearchStringIsValidIdna("256.in-addr.arpa*"));
+        assertTrue(validateSearchStringIsValidIdna("1.2.3.4.5.in-addr.arpa*."));
+        
+        assertFalse(validateSearchStringIsValidIdna(".1.in-addr.arpa*"));
+        assertFalse(validateSearchStringIsValidIdna("1..5.in-addr.arpa*"));
+        assertTrue(validateSearchStringIsValidIdna("1.2-5.in-addr.arpa*"));
+        assertFalse(validateSearchStringIsValidIdna("1.-25.in-addr.arpa*"));
+        assertFalse(validateSearchStringIsValidIdna("1.-25.in-addr.arpa*.."));
+        assertFalse(validateSearchStringIsValidIdna("1.-25-.in-addr.arpa*"));
+        
+        assertFalse(validateSearchStringIsValidIdna("abcd123456789012345678901234567890123456789012345678901234567890.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa1.bnnhg*"));
+        
+        assertFalse(validateSearchStringIsValidIdna("1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.n.*"));
+        assertFalse(validateSearchStringIsValidIdna("1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.1.2.3.4.5.6.7.8.9.0.a.b.c.d.e.f.g.h.i.j.k.n*"));
+        assertFalse(validateSearchStringIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.jaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa1.bnnhg*"));
+        assertFalse(validateSearchStringIsValidIdna("mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouoo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabalookouo.mamalookhahababalookhehewhowholookhouhoumamalookaiaibabal1.cn"));
+        
+        
+        assertFalse(validateSearchStringIsValidIdna("cnnic。cn*"));
+        assertFalse(validateSearchStringIsValidIdna(".cnnic.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("ww..he.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("-cnnic-.cn*"));
+        
+        assertFalse(validateSearchStringIsValidIdna("cnnic-.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("ab.-.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("cnnic_cn*"));
+        assertFalse(validateSearchStringIsValidIdna("cnnic%2C.cn*"));
+        
+
+        assertFalse(validateSearchStringIsValidIdna("cnnic%25.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("cnnic*.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("cnni+c.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("cn<n>ic.cn*"));
+        
+        assertFalse(validateSearchStringIsValidIdna("cnnic. .cn*"));
+        assertFalse(validateSearchStringIsValidIdna("^cnnic.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("cnnic,.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("cnnic:cn*"));
+        
+        assertTrue(validateSearchStringIsValidIdna("cnnic*.cn"));
+        assertFalse(validateSearchStringIsValidIdna("cnni+c.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("cn<n>ic.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaaa4423b5n2b2s5b340b*.cn"));
+        assertFalse(validateSearchStringIsValidIdna(
+        "xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.edu.cn*"));
+        
+        assertFalse(validateSearchStringIsValidIdna("xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.xn--6iq8zxlq4ga518lea949ds8ax1at67b8mc412a4uaw57iy98ao71bi59a.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("12--11中国*.中国"));
+        assertFalse(validateSearchStringIsValidIdna("xn--5us中国*.中国"));
+        assertFalse(validateSearchStringIsValidIdna("xn--5us.%E4%B8%AD%E5%9B%BD*"));
+        
+        assertFalse(validateSearchStringIsValidIdna("xn--5us.%E4%B8%AD%E5%9B%BD*"));
+        assertFalse(validateSearchStringIsValidIdna("xn--5us.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("xn--5us*.qqéa.cn"));
+        
+        assertFalse(validateSearchStringIsValidIdna(".好.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("12..好.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("-好.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("好-.中国*"));
+        
+        assertFalse(validateSearchStringIsValidIdna("好-.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("-好-.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("好.-.中国*"));
+        
+        // DISALLOWED & UNASSIGNED
+        assertFalse(validateSearchStringIsValidIdna("123〳*.中国"));
+        assertFalse(validateSearchStringIsValidIdna("123Ā*.中国"));
+        assertFalse(validateSearchStringIsValidIdna("123Ƽ*.中国"));
+        assertFalse(validateSearchStringIsValidIdna("123஝஝஝஝*.中国")); // \u0b9d஝
+        assertFalse(validateSearchStringIsValidIdna("123઱஝஝*.中国")); // \u0ab1
+        assertFalse(validateSearchStringIsValidIdna("123�஝஝*.中国")); // \ufff8
+        
+        // wrong utf-8
+        assertFalse(validateSearchStringIsValidIdna("%C81%851%C81%815%C81%851%C81%851.com*"));
+        //assertFalse(validateSearchStringIsValidIdna("%E%B8%AD%E5%9B%BD%E4%BA%92%E8%81%94%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E4%B8%AD%E5%BF%83.cn*"));
+        assertFalse(validateSearchStringIsValidIdna("好.-.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("好.-.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("好.-.中国*"));
+        assertFalse(validateSearchStringIsValidIdna("好.-.中国*"));
+        
     }
+    
+    @Test(expected=Exception.class)
+    public void testValidateSearchStringIsValidIdnaException() {
+        // SHOULD BE FALSE
+        assertFalse(validateSearchStringIsValidIdna("cnnic%.cn*"));    
+        
+        assertFalse(validateSearchStringIsValidIdna("%E%B8%AD%E5%9B%BD%E4%BA%92%E8%81%94%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E4%B8%AD%E5%BF%83.cn*"));
+    }
+    
     /**
      * test decodeAndTrim.
      * 
