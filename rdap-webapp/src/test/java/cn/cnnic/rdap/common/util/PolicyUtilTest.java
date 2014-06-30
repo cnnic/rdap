@@ -28,80 +28,75 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.dao.impl;
+package cn.cnnic.rdap.common.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import cn.cnnic.rdap.BaseTest;
-import cn.cnnic.rdap.bean.DsData;
-import cn.cnnic.rdap.bean.Link;
-import cn.cnnic.rdap.bean.ModelType;
-import cn.cnnic.rdap.dao.QueryDao;
-
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
+import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.Nameserver;
+import cn.cnnic.rdap.controller.support.QueryParser;
+
 /**
- * Test for dsData DAO.
+ * Test for Policy.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
 @SuppressWarnings("rawtypes")
-public class DsDataQueryDaoTest extends BaseTest {
-    /**
-     * dsDataQueryDaoImpl.
-     */
+public class PolicyUtilTest extends BaseTest {
     @Autowired
-    private QueryDao<DsData> dsDataQueryDaoImpl;
+    private QueryParser queryParser;
 
     /**
-     * test query exist.
+     * test valid autnum of one number
      */
     @Test
-    @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(value = "dsData.xml")
-    public void testQueryExist() {
-        Long secureDnsId = 1L;
-        List<DsData> dsDataList =
-                dsDataQueryDaoImpl.queryAsInnerObjects(secureDnsId,
-                        ModelType.SECUREDNS);
-        assertNotNull(dsDataList);
-        assertEquals(dsDataList.size(), 1);
-        DsData dsData = dsDataList.get(0);
-        assertNotNull(dsData);
-        assertEquals(dsData.getAlgorithm().intValue(), 1);
-        assertEquals(dsData.getDigest(),
-                "D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A");
-        assertEquals(dsData.getDigestType().intValue(), 1);
-        assertEquals(dsData.getKeyTag().intValue(), 1);
-        // link
-        List<Link> links = dsData.getLinks();
-        assertNotNull(links);
-        assertEquals(1, links.size());
-        Link link = links.get(0);
-        assertNotNull(link);
-        assertEquals("http://example.com/context_uri", link.getValue());
-    }
-
-    /**
-     * test query non exist.
-     */
-    @Test
-    @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(value = "dsData.xml")
-    public void testQueryNonExist() {
-        final Long nonExistSecureDnsId = 10000L;
-        List<DsData> dsDataList =
-                dsDataQueryDaoImpl.queryAsInnerObjects(nonExistSecureDnsId,
-                        ModelType.SECUREDNS);
-        assertNotNull(dsDataList);
-        assertEquals(dsDataList.size(), 0);
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/policyUtil.xml")
+    public void testSetHiddenColumnNull() {
+        Nameserver ns = new Nameserver();
+        
+        final Long id = 1L;
+        ns.setId(id);
+        final String handle = "h1";
+        ns.setHandle(handle);
+        final String lang = "en";
+        ns.setLang(lang);
+        final String ldhName = "ldhName";
+        ns.setLdhName(ldhName);
+        
+        Entity entity = new Entity();
+        entity.setId(id);
+        entity.setHandle(handle);
+        entity.setLang(lang);
+        
+        List<Entity> entities = new ArrayList<Entity>();
+        entities.add(entity);
+        
+        ns.setEntities(entities);
+        
+        final String port43 = "port43";
+        ns.setPort43(port43);
+        
+        final String strObj = "nameServer";
+        //setNull
+        
+        assertNotNull(ns);
+        assertEquals(ns.getLdhName(), null);
+        assertEquals(ns.getId(), null);
+        assertEquals(ns.getHandle(), null);
+        assertEquals(ns.getEntities(), null);
+        assertEquals(ns.getPort43(),null);
     }
 }
