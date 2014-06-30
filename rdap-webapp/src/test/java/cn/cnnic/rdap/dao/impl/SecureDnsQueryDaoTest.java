@@ -90,7 +90,7 @@ public class SecureDnsQueryDaoTest extends BaseTest {
         assertEquals(
                 "D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A",
                 dsData.getDigest());
-        assertEquals(1, dsData.getDigestType());
+        assertEquals(1, dsData.getDigestType().intValue());
         assertEquals(1, dsData.getKeyTag().intValue());
         // keyData
         List<KeyData> keyDataList = secureDns.getKeyData();

@@ -119,7 +119,8 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      *            object list.
      * @return object id list.
      */
-    protected List<Long> getModelIds(List<? extends BaseModel> baseModelObjects) {
+    protected List<Long>
+            getModelIds(List<? extends BaseModel> baseModelObjects) {
         List<Long> result = new ArrayList<Long>();
         if (null == baseModelObjects) {
             return result;
@@ -146,6 +147,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
             return null;
         }
     }
+
     /**
      * get integer from ResultSet.rs.getInt()will return 0 for null value.
      * 

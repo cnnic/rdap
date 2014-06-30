@@ -64,6 +64,7 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.AccessControlManager;
+import cn.cnnic.rdap.service.PolicyControlService;
 import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.RedirectService;
 import cn.cnnic.rdap.service.SearchService;
@@ -133,6 +134,12 @@ public class RdapController {
     private RedirectService redirectService;
 
     /**
+     * policy control service.
+     */
+    @Autowired
+    private PolicyControlService policyControlService;
+
+    /**
      * query entity.
      * 
      * @param handle
@@ -157,28 +164,34 @@ public class RdapController {
             if (!accessControlManager.hasPermission(result)) {
                 return RestResponseUtil.createResponse403();
             }
+            policyControlService.applyPolicy(result);
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();
     }
-    
+
     /**
      * search entity by handle or name.
-     * @param fn fn.
-     * @param handle handle.
-     * @param request request.
+     * 
+     * @param fn
+     *            fn.
+     * @param handle
+     *            handle.
+     * @param request
+     *            request.
      * @return ResponseEntity.
      */
     @RequestMapping(value = "/entities", method = RequestMethod.GET)
-    public ResponseEntity searchEntity(@RequestParam(required = false) String fn,
-            @RequestParam(required = false) String handle,
-            HttpServletRequest request){
-        LOGGER.info("search entities.fn:{},handle:{}",fn,handle);
+    public ResponseEntity
+            searchEntity(@RequestParam(required = false) String fn,
+                    @RequestParam(required = false) String handle,
+                    HttpServletRequest request) {
+        LOGGER.info("search entities.fn:{},handle:{}", fn, handle);
         final String fnParamName = "fn";
         final String handleParamName = "handle";
-        String paramName = queryParser.getFirstParameter(request,
-                new String[]{fnParamName,handleParamName});
+        String paramName = queryParser.getFirstParameter(request, new String[] {
+                fnParamName, handleParamName });
         if (StringUtils.isBlank(paramName)) {
             return RestResponseUtil.createResponse400();
         }
@@ -191,15 +204,16 @@ public class RdapController {
         if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
             return RestResponseUtil.createResponse422();
         }
-        QueryParam queryParam = queryParser
-                .parseEntityQueryParam(paramValue, paramName);
-        LOGGER.info("generate queryParam:{}",queryParam);
+        QueryParam queryParam = queryParser.parseEntityQueryParam(paramValue,
+                paramName);
+        LOGGER.info("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
             if (result.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
+            policyControlService.applyPolicy(result);
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();
@@ -231,6 +245,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);
+            policyControlService.applyPolicy(result);
             return RestResponseUtil.createResponse200(result);
         }
         LOGGER.debug("query redirect autnum :{}" , queryParam);
@@ -318,6 +333,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domain);
+            policyControlService.applyPolicy(domain);
             return RestResponseUtil.createResponse200(domain);
         }
         LOGGER.info("   domain not found,return 404. {}" , queryParam);
@@ -365,6 +381,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domainSearch);
+            policyControlService.applyPolicy(domainSearch);
             return RestResponseUtil.createResponse200(domainSearch);
         }
         return RestResponseUtil.createResponse404();
@@ -421,6 +438,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ns);
+            policyControlService.applyPolicy(ns);
             return RestResponseUtil.createResponse200(ns);
         }
         LOGGER.info("   ns not found,return 404. {}" , queryParam);
@@ -503,6 +521,8 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(nsSearch);
+            policyControlService.applyPolicy(nsSearch);
+
             return RestResponseUtil.createResponse200(nsSearch);
         }
         return RestResponseUtil.createResponse404();
@@ -591,6 +611,7 @@ public class RdapController {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ip);
+            policyControlService.applyPolicy(ip);
             return RestResponseUtil.createResponse200(ip);
         }
         LOGGER.debug("query redirect network :{}", queryParam);
