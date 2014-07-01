@@ -40,7 +40,7 @@ public enum ModelType {
     /**
      * model type.
      */
-    SEARCH("search"), VARIANT("variant"),
+    SEARCH("search"), VARIANT("variant"), ERRORMESSAGE("errorMessage"),
     /**
      * 5 main object model.
      */
@@ -49,7 +49,7 @@ public enum ModelType {
     /**
      * another domain type, only used for DB Query.
      */
-    ARPA("arpa"),
+    ARPA("arpa"), Base("base"),
     /**
      * help ip event link publicId type.
      */
