@@ -41,7 +41,12 @@ import cn.cnnic.rdap.common.util.StringUtil;
  * 
  */
 public class RdapProperties {
-    
+
+    /**
+     * max concurrent count.
+     */
+    private static Integer maxConcurrentCount;
+
     /**
      * localServiceUrl.
      */
@@ -236,6 +241,7 @@ public class RdapProperties {
 
     /**
      * get localServiceUrl.
+     * 
      * @return localServiceUrl.
      */
     public static String getLocalServiceUrl() {
@@ -244,10 +250,31 @@ public class RdapProperties {
 
     /**
      * set localServiceUrl.
-     * @param localServiceUrl localServiceUrl.
+     * 
+     * @param localServiceUrl
+     *            localServiceUrl.
      */
     public void setLocalServiceUrl(String localServiceUrl) {
         RdapProperties.localServiceUrl = localServiceUrl;
     }
-    
+
+    /**
+     * get maxConcurrentCount.
+     * 
+     * @return maxConcurrentCount.
+     */
+    public static Integer getMaxConcurrentCount() {
+        return maxConcurrentCount;
+    }
+
+    /**
+     * set maxConcurrentCount.
+     * 
+     * @param maxConcurrentCount
+     *            maxConcurrentCount.
+     */
+    public void setMaxConcurrentCount(Integer maxConcurrentCount) {
+        RdapProperties.maxConcurrentCount = maxConcurrentCount;
+    }
+
 }

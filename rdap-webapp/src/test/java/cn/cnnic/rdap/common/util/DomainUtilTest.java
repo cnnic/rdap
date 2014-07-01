@@ -263,7 +263,7 @@ public class DomainUtilTest {
      */
     private boolean validateDomainNameIsValidIdna(String domainName) {
         String decodeDomain = DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
+                .decodeAndReplaceAsciiToLowercase(domainName);
         return DomainUtil.validateDomainNameIsValidIdna(decodeDomain);
     }
 
@@ -276,7 +276,7 @@ public class DomainUtilTest {
      */
     private boolean validateSearchStringIsValidIdna(String domainName) {
         String decodeDomain = DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
+                .decodeAndReplaceAsciiToLowercase(domainName);
         return DomainUtil.validateSearchStringIsValidIdna(decodeDomain);
     }
     
@@ -432,13 +432,13 @@ public class DomainUtilTest {
         assertEquals(
                 "中文.中国",
                 DomainUtil
-                        .decodeAndTrimAndReplaceAsciiToLowercase("%E4%B8%AD%E6%96%87.%E4%B8%AD%E5%9B%BD"));
+                        .decodeAndReplaceAsciiToLowercase("%E4%B8%AD%E6%96%87.%E4%B8%AD%E5%9B%BD"));
         assertEquals("中文.cn",
-                DomainUtil.decodeAndTrimAndReplaceAsciiToLowercase("中文.CN"));
+                DomainUtil.decodeAndReplaceAsciiToLowercase("中文.CN"));
         assertEquals("中文.cn",
-                DomainUtil.decodeAndTrimAndReplaceAsciiToLowercase("中文.Cn"));
+                DomainUtil.decodeAndReplaceAsciiToLowercase("中文.Cn"));
         assertEquals("中c文n.cn",
-                DomainUtil.decodeAndTrimAndReplaceAsciiToLowercase("中C文n.Cn"));
+                DomainUtil.decodeAndReplaceAsciiToLowercase("中C文n.Cn"));
     }
 
     /**
@@ -448,7 +448,7 @@ public class DomainUtilTest {
     @Test
     public void testDecodeAndTrimDecodedStr() {
         String result = DomainUtil
-                .decodeAndTrimAndReplaceAsciiToLowercase("中文.中国");
+                .decodeAndReplaceAsciiToLowercase("中文.中国");
         assertEquals("中文.中国", result);
     }
 
