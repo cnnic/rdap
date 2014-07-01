@@ -30,97 +30,37 @@
  */
 package cn.cnnic.rdap.bean;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
 
 /**
- * IPAddress registrations found in RIRs and is the expected response for the
- * "/nameserver/" query as defined by [I-D.ietf-weirds-rdap-query].
+ * denotes information about the service providing RDAP information.
  * 
  * @author weijunkai
  * 
  */
-public class IPAddress extends BaseModel {
-
+public class Policy extends BaseModel {
     /**
-     * the V4 IP address.
+     * title.
      */
-    private List<String> ipAddressV4;
-
+    private String modelType;
     /**
-     * the V6 IP address.
+     * description.
      */
-    private List<String> ipAddressV6;
-
-    /**
-     * an flag identity if the ipAddress existed.
-     */
-    @JsonIgnore
-    private boolean ipExisted;
-
-    /**
-     * get ip Address.
-     * 
-     * @return ipAddress.
-     */
-    public List<String> getAddressV4() {
-        return ipAddressV4;
-    }
-
-    /**
-     * set ip Address V4.
-     * 
-     * @param ipAddressV4
-     *            set the ipAddress V4.
-     */
-    @JsonProperty("v4")
-    public void setAddressV4(List<String> ipAddressV4) {
-        this.ipAddressV4 = ipAddressV4;
-    }
-
-    /**
-     * get lowAddress.
-     * 
-     * @return lowAddress.
-     */
-    public List<String> getAddressV6() {
-        return ipAddressV6;
-    }
-
-    /**
-     * set ipAddressV6.
-     * 
-     * @param ipAddressV6
-     *            ipAddressV6.
-     */
-    @JsonProperty("v6")
-    public void setAddressV6(List<String> ipAddressV6) {
-        this.ipAddressV6 = ipAddressV6;
-    }
-
-    /**
-     * get ipExisted.
-     * 
-     * @return ipExisted.
-     */
-    public boolean getIpExisted() {
-        return ipExisted;
-    }
-
-    /**
-     * set ipExisted.
-     * 
-     * @param ipExisted
-     *            for nameserver.
-     */
-    public void setIpExisted(boolean ipExisted) {
-        this.ipExisted = ipExisted;
+    private String hideColumn;
+    
+    public void setModelType(String modelType){
+        this.modelType = modelType;
     }
     
-    @Override
-    public ModelType getObjectType() {
-        return ModelType.IP;
+    public String getModelType(){
+        return modelType;
+    }
+    
+    public void setHideColumn(String hideColumn){
+        this.hideColumn = hideColumn;
+    }
+    
+    public String getHideColumn(){
+        return hideColumn;
     }
 }

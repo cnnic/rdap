@@ -130,7 +130,7 @@ public class DsData extends BaseModel {
      * 
      * @return digestType.
      */
-    public int getDigestType() {
+    public Integer getDigestType() {
         return digestType;
     }
 
@@ -140,7 +140,7 @@ public class DsData extends BaseModel {
      * @param digestType
      *            digestType.
      */
-    public void setDigestType(int digestType) {
+    public void setDigestType(Integer digestType) {
         this.digestType = digestType;
     }
 
@@ -180,5 +180,10 @@ public class DsData extends BaseModel {
      */
     public void setLinks(List<Link> links) {
         this.links = links;
+    }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.DSDATA;
     }
 }
