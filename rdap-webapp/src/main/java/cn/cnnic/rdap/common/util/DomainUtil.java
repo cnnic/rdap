@@ -244,7 +244,7 @@ public final class DomainUtil {
             return false;
         }
         // only one * in search string
-        if (1 != StringUtils.countMatches(searchString, 
+        if (1 < StringUtils.countMatches(searchString, 
                                 StringUtil.ASTERISK)) {
             return false;
         }        
@@ -339,12 +339,11 @@ public final class DomainUtil {
      *            string.
      * @return str.
      */
-    public static String decodeAndTrimAndReplaceAsciiToLowercase(String str) {
+    public static String decodeAndReplaceAsciiToLowercase(String str) {
         if (StringUtils.isBlank(str)) {
             return str;
         }
         str = urlDecode(str);
-        str = StringUtils.trim(str);
         // replace all ASCII char to lower case.
         StringBuffer asciiLowerCasedSb = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {

@@ -272,7 +272,7 @@ public class RdapController {
         String punyDomainName = decodeDomain;
         try {
             decodeDomain = DomainUtil
-                    .decodeAndTrimAndReplaceAsciiToLowercase(domainName);
+                    .decodeAndReplaceAsciiToLowercase(domainName);
             // long lable exception
             punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
         } catch (Exception e) {
@@ -355,7 +355,7 @@ public class RdapController {
         try {
             decodeDomain = DomainUtil.iso8859Decode(name);
             decodeDomain = DomainUtil
-                    .decodeAndTrimAndReplaceAsciiToLowercase(decodeDomain);
+                    .decodeAndReplaceAsciiToLowercase(decodeDomain);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
@@ -402,7 +402,7 @@ public class RdapController {
         String punyNSName = decodeNS;
         try {
             decodeNS = DomainUtil
-                    .decodeAndTrimAndReplaceAsciiToLowercase(nameserverName);
+                    .decodeAndReplaceAsciiToLowercase(nameserverName);
             // long lable exception
             punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
         } catch (Exception e) {
@@ -488,7 +488,7 @@ public class RdapController {
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
                 decodeNameserver = DomainUtil
-                        .decodeAndTrimAndReplaceAsciiToLowercase(decodeNameserver);
+                        .decodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
