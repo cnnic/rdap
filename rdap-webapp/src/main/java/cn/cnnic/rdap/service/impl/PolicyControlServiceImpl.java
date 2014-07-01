@@ -220,7 +220,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 					//just handle the set method
 					if (strMethodField.compareToIgnoreCase(strField) == 0
 							&& isSetMethod) {
-						setPropertyNull(objModel, strField);
+						setPropertyNull(objModel, strMethodField);
 						break;
 					}
 				}

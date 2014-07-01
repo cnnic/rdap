@@ -156,6 +156,9 @@ public class PolicyServiceImplTest extends BaseTest {
 
 		Domain domain = setDomainValue(ns);
 		applyPolicySingleWrapDomain(domain);
+
+		Entity entityWrap = setEntityValue(entities);
+		applyPolicySingleWrapEntity(entityWrap);
 	}
 
 	@Test
@@ -166,6 +169,10 @@ public class PolicyServiceImplTest extends BaseTest {
 
 		Domain domain = setDomainValue(null);
 		applyPolicyMultiWrapDomain(domain);
+
+		List<Entity> entities = setEntities();
+		Entity entityWrap = setEntityValue(entities);
+		applyPolicyMutliWrapEntity(entityWrap);
 	}
 
 	/**
@@ -180,6 +187,34 @@ public class PolicyServiceImplTest extends BaseTest {
 		assertEquals(domain.getVariants(), null);
 		assertEquals(domain.getSecureDns(), null);
 		assertEquals(domain.getPublicIds(), null);
+	}
+
+	/**
+	 * apply policy to entity with single Wrap.
+	 * 
+	 * @param entity
+	 *            object to apply policy.
+	 */
+	private void applyPolicySingleWrapEntity(Entity entity) {
+		policyService.applyPolicy(entity);
+		assertNotNull(entity);
+		assertEquals(entity.getAsEventActor(), null);
+		assertEquals(entity.getEntities(), null);
+	}
+
+	/**
+	 * apply policy to entity with multi Wrap.
+	 * 
+	 * @param entity
+	 *            object to apply policy.
+	 */
+	private void applyPolicyMutliWrapEntity(Entity entity) {
+		policyService.applyPolicy(entity);
+		List<Event> asEventActor = entity.getAsEventActor();
+		assertNotNull(entity);
+		for (Event event : asEventActor) {
+			assertEquals(event.getEventAction(), null);
+		}
 	}
 
 	/**
@@ -204,11 +239,11 @@ public class PolicyServiceImplTest extends BaseTest {
 		domain.setUnicodeName(unicode);
 		final String port43 = "port43";
 		domain.setPort43(port43);
-		//ns
+		// ns
 		List<Nameserver> nameServers = new ArrayList<Nameserver>();
 		nameServers.add(ns);
 		domain.setNameServers(nameServers);
-		//variant
+		// variant
 		List<Variants> variants = new ArrayList<Variants>();
 		Variants variantsOne = new Variants();
 		variantsOne.setId(id);
@@ -221,12 +256,12 @@ public class PolicyServiceImplTest extends BaseTest {
 		variantsOne.setVariantNames(variantNames);
 		variants.add(variantsOne);
 		domain.setVariants(variants);
-		//secDns
+		// secDns
 		SecureDns secureDns = new SecureDns();
 		secureDns.setDelegationSigned(false);
 		secureDns.setMaxSigLife(1);
 		secureDns.setZoneSigned(true);
-		//dsData
+		// dsData
 		DsData dsData = new DsData();
 		Integer algorithm = new Integer(123456);
 		dsData.setAlgorithm(algorithm);
@@ -234,7 +269,22 @@ public class PolicyServiceImplTest extends BaseTest {
 		dsDatas.add(dsData);
 		secureDns.setDsData(dsDatas);
 		domain.setSecureDns(secureDns);
-		//entity
+
+		List<Entity> entities = setEntities();
+		domain.setEntities(entities);
+
+		return domain;
+	}
+
+	private List<Entity> setEntities() {
+		// entity
+		final Long id = 1L;
+		final String handle = "h1";
+		final String lang = "en";
+		final String ldhName = "ldhName";
+		final String unicode = "unicodeName";
+		final String port43 = "port43";
+
 		Entity entity = new Entity();
 		entity.setId(id);
 		entity.setHandle(handle);
@@ -242,9 +292,22 @@ public class PolicyServiceImplTest extends BaseTest {
 		entity.setPort43(port43);
 		List<Entity> entities = new ArrayList<Entity>();
 		entities.add(entity);
-		domain.setEntities(entities);
+		return entities;
+	}
 
-		return domain;
+	private Entity setEntityValue(List<Entity> entities) {
+		// entities
+		Entity objEntity = new Entity();
+		final Long id = 1L;
+		objEntity.setId(id);
+		List<Event> asEventActor = new ArrayList<Event>();
+		Event event = new Event();
+		event.setEventAction("validate");
+		asEventActor.add(event);
+		objEntity.setAsEventActor(asEventActor);
+
+		objEntity.setEntities(entities);
+		return objEntity;
 	}
 
 	/**
