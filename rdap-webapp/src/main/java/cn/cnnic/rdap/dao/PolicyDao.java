@@ -28,88 +28,22 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.dao;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
- * model type.
+ * policy DAO.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-public enum ModelType {
-    /**
-     * model type.
-     */
-    SEARCH("search"), VARIANT("variant"),
-    /**
-     * 5 main object model.
-     */
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-            "autnum"),
-    /**
-     * another domain type, only used for DB Query.
-     */
-    ARPA("arpa"),
-    /**
-     * help ip event link publicId type.
-     */
-    HELP("help"), IP("ip"), EVENT("event"), LINK("link"), PUBLICID("publicId"),
-    /**
-     * remark notice secureDns type.
-     */
-    REMARK("remark"), NOTICE("notice"), SECUREDNS("secureDns"),
-    /**
-     * ds type.
-     */
-    DSDATA("dsData"), KEYDATA("keyData");
-    /**
-     * name of model type.
-     */
-    private String name;
+public interface PolicyDao {
 
     /**
-     * constructor.
+     * get all policy map.
      * 
-     * @param name
-     *            name.
      */
-    private ModelType(String name) {
-        this.name = name;
-    }
-
-    /**
-     * get model type be name.
-     * 
-     * @param name
-     *            name.
-     * @return model ModelType.
-     */
-    public static ModelType getModelType(String name) {
-        ModelType[] modelTypes = ModelType.values();
-        for (ModelType modelType : modelTypes) {
-            if (modelType.getName().equals(name)) {
-                return modelType;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * get type name.
-     * 
-     * @return type name.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * set type name.
-     * 
-     * @param name
-     *            type name.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+    Map<String,Set<String>> loadAllPolicyMap();
 }

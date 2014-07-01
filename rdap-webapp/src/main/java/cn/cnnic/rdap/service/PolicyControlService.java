@@ -28,64 +28,35 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.service;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
- * maps a public identifier to an object class.
+ * policy control interface
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-public class PublicId extends BaseModel {
-    /**
-     * denoting the type of public identifier.
-     */
-    private String type;
-    /**
-     * a public identifier of the type denoted by 'type'.
-     */
-    private String identifier;
+public interface PolicyControlService {
+	/**
+	 * load policy by map from database.
+	 * 
+	 * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
+	 */
+	public Map<String, Set<String>> loadPolicyFieldsByMap();
 
-    /**
-     * get type.
-     * 
-     * @return type.
-     */
-    public String getType() {
-        return type;
-    }
+	/**
+	 * set policy by map from database.
+	 */
+	public void initAllPolicyByMap();
 
-    /**
-     * set type.
-     * 
-     * @param type
-     *            type.
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * get identifier.
-     * 
-     * @return identifier.
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    /**
-     * set identifier.
-     * 
-     * @param identifier
-     *            identifier.
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-    
-    @Override
-    public ModelType getObjectType() {
-        return ModelType.PUBLICID;
-    }
+	/**
+	 * apply the policy for object.
+	 * 
+	 * @param model
+	 *            the object to set.
+	 */
+	public void applyPolicy(final Object objModel);
 }
