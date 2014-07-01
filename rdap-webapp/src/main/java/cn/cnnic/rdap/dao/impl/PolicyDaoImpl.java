@@ -55,7 +55,7 @@ import cn.cnnic.rdap.dao.PolicyDao;
  * 
  */
 @Repository
-public class HiddenColumnDao implements PolicyDao {
+public class PolicyDaoImpl implements PolicyDao {
     /**
      * jdbcTemplate.
      */

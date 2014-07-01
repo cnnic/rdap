@@ -30,6 +30,9 @@
  */
 package cn.cnnic.rdap.service;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * policy control interface
  * 
@@ -37,19 +40,23 @@ package cn.cnnic.rdap.service;
  * 
  */
 public interface PolicyControlService {
-	
 	/**
-     * load policy by map from database.
-     * 
-     * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
-     */
+	 * load policy by map from database.
+	 * 
+	 * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
+	 */
+	public Map<String, Set<String>> loadPolicyFieldsByMap();
 
-    public void loadAllPolicyByMap();
-	    /**
-     * apply the policy for object.
-     * 
-     * @param model
-     *            the object to set.
-     */
-    public void applyPolicy(final Object objModel);
+	/**
+	 * set policy by map from database.
+	 */
+	public void initAllPolicyByMap();
+
+	/**
+	 * apply the policy for object.
+	 * 
+	 * @param model
+	 *            the object to set.
+	 */
+	public void applyPolicy(final Object objModel);
 }

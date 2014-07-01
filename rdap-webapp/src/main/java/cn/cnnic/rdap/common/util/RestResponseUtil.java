@@ -90,7 +90,7 @@ public class RestResponseUtil {
      * init policy service.
      */
     public static void initPolicyService() {
-        policyService.loadAllPolicyByMap();
+        policyService.initAllPolicyByMap();
     }
     
     /**

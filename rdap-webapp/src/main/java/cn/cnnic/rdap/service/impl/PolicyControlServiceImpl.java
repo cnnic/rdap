@@ -46,7 +46,6 @@ import org.springframework.util.ReflectionUtils;
 import cn.cnnic.rdap.bean.BaseSearchModel;
 import cn.cnnic.rdap.bean.ModelType;
 import cn.cnnic.rdap.bean.BaseModel;
-import cn.cnnic.rdap.bean.PolicyFields;
 import cn.cnnic.rdap.dao.PolicyDao;
 import cn.cnnic.rdap.service.PolicyControlService;
 
@@ -64,14 +63,20 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 	 */
 	@Autowired
 	private PolicyDao policyDao;
+	
+	/**
+	 * the static map of policy.
+	 */
+	private static Map<String,Set<String>> mapPolicy = null;
 
 	@Override
-	public void loadAllPolicyByMap() {
-		PolicyFields policyFields = PolicyFields.getInstance();
-		if (policyFields == null) {
-			return;
-		}
-		policyFields.setMapObjField(policyDao.loadAllPolicyMap());
+	public Map<String,Set<String>> loadPolicyFieldsByMap() {
+		return mapPolicy;
+	}
+	
+	@Override
+	public void initAllPolicyByMap() {
+		mapPolicy = policyDao.loadAllPolicyMap();
 		return;
 	}
 
@@ -86,8 +91,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 		String strObjType = null;
 
 		ModelType modelType = ((BaseModel) objModel).getObjectType();
-		strObjType = modelType.toString();
-		strObjType = StringUtils.lowerCase(strObjType);
+		strObjType = modelType.getName();
 		return strObjType;
 	}
 
@@ -173,28 +177,12 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 		return value;
 	}
 
-	/**
-	 * get the polic fields to hide.
-	 * 
-	 * @return map of fields.
-	 */
-	private Map<String, Set<String>> getPolicyFields() {
-		PolicyFields hidCol = PolicyFields.getInstance();
-		if (hidCol == null) {
-			return null;
-		}
-		Map<String, Set<String>> mapObjFields = hidCol.getMapObjField();
-		mapObjFields = policyDao.loadAllPolicyMap();
-
-		return mapObjFields;
-	}
-
 	@Override
 	public void applyPolicy(final Object objModel) {
 		if (objModel == null) {
 			return;
 		}
-		Map<String, Set<String>> mapObjFields = getPolicyFields();
+		Map<String, Set<String>> mapObjFields = loadPolicyFieldsByMap();
 		if (null == mapObjFields) {
 			return;
 		}
