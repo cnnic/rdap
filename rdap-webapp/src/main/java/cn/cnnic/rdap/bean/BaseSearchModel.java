@@ -116,5 +116,9 @@ public class BaseSearchModel<T extends BaseModel> extends BaseModel {
     public void setSearchResults(List<T> searchResults) {
         this.searchResults = searchResults;
     }
-
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.SEARCH;
+    }
 }

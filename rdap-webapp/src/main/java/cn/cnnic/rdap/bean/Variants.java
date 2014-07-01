@@ -157,4 +157,9 @@ public class Variants extends BaseModel {
     public void setVariantNames(List<Variant> variantNames) {
         this.variantNames = variantNames;
     }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.VARIANT;
+    }
 }

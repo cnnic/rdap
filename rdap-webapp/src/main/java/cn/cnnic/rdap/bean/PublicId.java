@@ -83,4 +83,9 @@ public class PublicId extends BaseModel {
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.PUBLICID;
+    }
 }
