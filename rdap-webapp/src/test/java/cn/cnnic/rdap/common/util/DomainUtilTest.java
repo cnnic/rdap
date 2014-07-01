@@ -246,13 +246,16 @@ public class DomainUtilTest {
         assertFalse(validateDomainNameIsValidIdna("123�஝஝.中国")); // \ufff8
         
         
+        assertFalse(validateDomainNameIsValidIdna("cnnic。.cn")); // \u3002
+        assertFalse(validateDomainNameIsValidIdna("测试。．中国.cn")); // \u3002       
+        
     }
 
     @Test(expected=Exception.class)
     public void testValidateDomainNameIsValidIdnaException() {
         // SHOULD BE FALSE
         assertFalse(validateDomainNameIsValidIdna("cnnic%.cn"));
-        
+        assertFalse(validateDomainNameIsValidIdna("测试・中国.cn")); // \u30fb
     }
     /**
      * validate domain.
