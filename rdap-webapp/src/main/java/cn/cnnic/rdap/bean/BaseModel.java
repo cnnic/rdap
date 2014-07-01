@@ -47,154 +47,158 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_EMPTY)
 @JsonIgnoreProperties(value = { "id", "objectType" })
 public class BaseModel {
-    /**
-     * specifications used in the construction of the response.
-     */
-    private List<String> rdapConformance;
-    /**
-     * identity of object.
-     */
-    private Long id;
-    /**
-     * DNRs and RIRs have registry-unique identifiers that may be used to
-     * specifically reference an object instance.
-     */
-    private String handle;
+	/**
+	 * specifications used in the construction of the response.
+	 */
+	private List<String> rdapConformance;
+	/**
+	 * identity of object.
+	 */
+	private Long id;
+	/**
+	 * DNRs and RIRs have registry-unique identifiers that may be used to
+	 * specifically reference an object instance.
+	 */
+	private String handle;
 
-    /**
-     * language identifier, as described by [RFC5646].
-     */
-    private String lang;
+	/**
+	 * language identifier, as described by [RFC5646].
+	 */
+	private String lang;
 
-    /**
-     * notice.
-     */
-    private List<Notice> notices;
+	/**
+	 * notice.
+	 */
+	private List<Notice> notices;
 
-    /**
-     * find object from list by id.
-     * 
-     * @param baseModelObjects
-     *            ModelObject list.
-     * @param id
-     *            id.
-     * @return model object if find, null if not.
-     */
-    public static BaseModel findObjectFromListById(
-            List<? extends BaseModel> baseModelObjects, Long id) {
-        if (null == id || null == baseModelObjects) {
-            return null;
-        }
-        for (BaseModel modelObject : baseModelObjects) {
-            if (id.equals(modelObject.getId())) {
-                return modelObject;
-            }
-        }
-        return null;
-    }
+	/**
+	 * find object from list by id.
+	 * 
+	 * @param baseModelObjects
+	 *            ModelObject list.
+	 * @param id
+	 *            id.
+	 * @return model object if find, null if not.
+	 */
+	public static BaseModel findObjectFromListById(
+			List<? extends BaseModel> baseModelObjects, Long id) {
+		if (null == id || null == baseModelObjects) {
+			return null;
+		}
+		for (BaseModel modelObject : baseModelObjects) {
+			if (id.equals(modelObject.getId())) {
+				return modelObject;
+			}
+		}
+		return null;
+	}
 
-    /**
-     * get model type, value is simple name of class.
-     * 
-     * @return simple name of class
-     */
-    public ModelType getObjectType() {
+	/**
+	 * get model type, value is simple name of class.
+	 * 
+	 * @return simple name of class
+	 */
+	public ModelType getObjectType() {
+    	try{
+            return ModelType.Base;
+    	}catch (Exception e) {
         throw new UnsupportedOperationException(
-                "must be implemented in sub class if I'am called.");
+               "must be implemented in sub class if I'am called.");
+    	}
     }
 
-    /**
-     * get identity of object.
-     * 
-     * @return identity
-     */
-    public Long getId() {
-        return id;
-    }
+	/**
+	 * get identity of object.
+	 * 
+	 * @return identity
+	 */
+	public Long getId() {
+		return id;
+	}
 
-    /**
-     * setId.
-     * 
-     * @param id
-     *            for a long id to set
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
+	/**
+	 * setId.
+	 * 
+	 * @param id
+	 *            for a long id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    /**
-     * getRdapConformance.
-     * 
-     * @return a list string of rdapConformance.
-     */
-    public List<String> getRdapConformance() {
-        return rdapConformance;
-    }
+	/**
+	 * getRdapConformance.
+	 * 
+	 * @return a list string of rdapConformance.
+	 */
+	public List<String> getRdapConformance() {
+		return rdapConformance;
+	}
 
-    /**
-     * setRdapConformance.
-     * 
-     * @param rdapConformance
-     *            for a list string of rdapConformance to set.
-     */
-    public void setRdapConformance(List<String> rdapConformance) {
-        this.rdapConformance = rdapConformance;
-    }
+	/**
+	 * setRdapConformance.
+	 * 
+	 * @param rdapConformance
+	 *            for a list string of rdapConformance to set.
+	 */
+	public void setRdapConformance(List<String> rdapConformance) {
+		this.rdapConformance = rdapConformance;
+	}
 
-    /**
-     * getLang.
-     * 
-     * @return a string of language to get.
-     */
-    public String getLang() {
-        return lang;
-    }
+	/**
+	 * getLang.
+	 * 
+	 * @return a string of language to get.
+	 */
+	public String getLang() {
+		return lang;
+	}
 
-    /**
-     * setLang.
-     * 
-     * @param lang
-     *            a string of language to set.
-     */
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
+	/**
+	 * setLang.
+	 * 
+	 * @param lang
+	 *            a string of language to set.
+	 */
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
 
-    /**
-     * getNotices.
-     * 
-     * @return list of notice object to get.
-     */
-    public List<Notice> getNotices() {
-        return notices;
-    }
+	/**
+	 * getNotices.
+	 * 
+	 * @return list of notice object to get.
+	 */
+	public List<Notice> getNotices() {
+		return notices;
+	}
 
-    /**
-     * setNotices.
-     * 
-     * @param notices
-     *            a list of notice to set.
-     */
-    public void setNotices(List<Notice> notices) {
-        this.notices = notices;
-    }
+	/**
+	 * setNotices.
+	 * 
+	 * @param notices
+	 *            a list of notice to set.
+	 */
+	public void setNotices(List<Notice> notices) {
+		this.notices = notices;
+	}
 
-    /**
-     * get handle.
-     * 
-     * @return handle.
-     */
-    public String getHandle() {
-        return handle;
-    }
+	/**
+	 * get handle.
+	 * 
+	 * @return handle.
+	 */
+	public String getHandle() {
+		return handle;
+	}
 
-    /**
-     * set handle.
-     * 
-     * @param handle
-     *            handle.
-     */
-    public void setHandle(String handle) {
-        this.handle = handle;
-    }
+	/**
+	 * set handle.
+	 * 
+	 * @param handle
+	 *            handle.
+	 */
+	public void setHandle(String handle) {
+		this.handle = handle;
+	}
 }
