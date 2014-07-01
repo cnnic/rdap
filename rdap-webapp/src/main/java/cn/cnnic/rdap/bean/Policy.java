@@ -30,86 +30,37 @@
  */
 package cn.cnnic.rdap.bean;
 
+import java.util.Set;
+
 /**
- * model type.
+ * denotes information about the service providing RDAP information.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-public enum ModelType {
+public class Policy extends BaseModel {
     /**
-     * model type.
+     * title.
      */
-    SEARCH("search"), VARIANT("variant"),
+    private String modelType;
     /**
-     * 5 main object model.
+     * description.
      */
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-            "autnum"),
-    /**
-     * another domain type, only used for DB Query.
-     */
-    ARPA("arpa"),
-    /**
-     * help ip event link publicId type.
-     */
-    HELP("help"), IP("ip"), EVENT("event"), LINK("link"), PUBLICID("publicId"),
-    /**
-     * remark notice secureDns type.
-     */
-    REMARK("remark"), NOTICE("notice"), SECUREDNS("secureDns"),
-    /**
-     * ds type.
-     */
-    DSDATA("dsData"), KEYDATA("keyData");
-    /**
-     * name of model type.
-     */
-    private String name;
-
-    /**
-     * constructor.
-     * 
-     * @param name
-     *            name.
-     */
-    private ModelType(String name) {
-        this.name = name;
+    private String hideColumn;
+    
+    public void setModelType(String modelType){
+        this.modelType = modelType;
     }
-
-    /**
-     * get model type be name.
-     * 
-     * @param name
-     *            name.
-     * @return model ModelType.
-     */
-    public static ModelType getModelType(String name) {
-        ModelType[] modelTypes = ModelType.values();
-        for (ModelType modelType : modelTypes) {
-            if (modelType.getName().equals(name)) {
-                return modelType;
-            }
-        }
-        return null;
+    
+    public String getModelType(){
+        return modelType;
     }
-
-    /**
-     * get type name.
-     * 
-     * @return type name.
-     */
-    public String getName() {
-        return name;
+    
+    public void setHideColumn(String hideColumn){
+        this.hideColumn = hideColumn;
     }
-
-    /**
-     * set type name.
-     * 
-     * @param name
-     *            type name.
-     */
-    public void setName(String name) {
-        this.name = name;
+    
+    public String getHideColumn(){
+        return hideColumn;
     }
 }

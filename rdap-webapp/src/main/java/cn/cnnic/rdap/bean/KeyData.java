@@ -181,4 +181,9 @@ public class KeyData extends BaseModel {
     public void setLinks(List<Link> links) {
         this.links = links;
     }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.KEYDATA;
+    }
 }

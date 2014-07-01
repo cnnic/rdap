@@ -28,88 +28,28 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.bean;
+package cn.cnnic.rdap.service;
 
 /**
- * model type.
+ * policy control interface
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-public enum ModelType {
-    /**
-     * model type.
-     */
-    SEARCH("search"), VARIANT("variant"),
-    /**
-     * 5 main object model.
-     */
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-            "autnum"),
-    /**
-     * another domain type, only used for DB Query.
-     */
-    ARPA("arpa"),
-    /**
-     * help ip event link publicId type.
-     */
-    HELP("help"), IP("ip"), EVENT("event"), LINK("link"), PUBLICID("publicId"),
-    /**
-     * remark notice secureDns type.
-     */
-    REMARK("remark"), NOTICE("notice"), SECUREDNS("secureDns"),
-    /**
-     * ds type.
-     */
-    DSDATA("dsData"), KEYDATA("keyData");
-    /**
-     * name of model type.
-     */
-    private String name;
-
-    /**
-     * constructor.
+public interface PolicyControlService {
+	
+	/**
+     * load policy by map from database.
      * 
-     * @param name
-     *            name.
+     * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
      */
-    private ModelType(String name) {
-        this.name = name;
-    }
 
-    /**
-     * get model type be name.
+    public void loadAllPolicyByMap();
+	    /**
+     * apply the policy for object.
      * 
-     * @param name
-     *            name.
-     * @return model ModelType.
+     * @param model
+     *            the object to set.
      */
-    public static ModelType getModelType(String name) {
-        ModelType[] modelTypes = ModelType.values();
-        for (ModelType modelType : modelTypes) {
-            if (modelType.getName().equals(name)) {
-                return modelType;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * get type name.
-     * 
-     * @return type name.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * set type name.
-     * 
-     * @param name
-     *            type name.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void applyPolicy(final Object objModel);
 }
