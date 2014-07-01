@@ -46,6 +46,7 @@ import org.springframework.stereotype.Component;
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.service.ErrorMessageService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
+import cn.cnnic.rdap.service.PolicyControlService;
 
 /**
  * RestResponseUtil is used to create ResponseEntity.
@@ -70,15 +71,28 @@ public class RestResponseUtil {
      * for response object.
      */
     private static ResponseDecorator responseDecorator;
+    
+    /**
+     * for policy service.
+     */
+    private static PolicyControlService policyService;
 
     /**
-     * init the error message.
+     * init the error message and policy service.
      */
     @PostConstruct
     private void init() {
         initErrorMessages();
+        initPolicyService();
     }
 
+    /**
+     * init policy service.
+     */
+    public static void initPolicyService() {
+        policyService.loadAllPolicyByMap();
+    }
+    
     /**
      * init ErrorMessages list.
      */
@@ -289,5 +303,15 @@ public class RestResponseUtil {
     @Autowired
     public void setResponseDecorator(ResponseDecorator responseDecorator) {
         RestResponseUtil.responseDecorator = responseDecorator;
+    }
+    /**
+     * policy service.
+     * 
+     * @param policyService
+     *            policy control service.
+     */
+    @Autowired
+    public void setPolicyService(PolicyControlService policyService) {
+        RestResponseUtil.policyService = policyService;
     }
 }
