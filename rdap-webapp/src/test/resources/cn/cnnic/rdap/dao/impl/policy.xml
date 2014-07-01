@@ -5,4 +5,15 @@
 	<RDAP_POLICY id="3" OBJECT_TYPE="nameServer" HIDE_COLUMN="ldhName" />
 	<RDAP_POLICY id="4" OBJECT_TYPE="nameServer" HIDE_COLUMN="entities" />
 	<RDAP_POLICY id="5" OBJECT_TYPE="nameServer" HIDE_COLUMN="port43" />
+	<RDAP_POLICY id="6" OBJECT_TYPE="nameServer" HIDE_COLUMN="events" />
+	<RDAP_POLICY id="7" OBJECT_TYPE="nameServer" HIDE_COLUMN="notices" />
+	<RDAP_POLICY id="8" OBJECT_TYPE="nameServer" HIDE_COLUMN="remarks" />
+	<RDAP_POLICY id="9" OBJECT_TYPE="nameServer" HIDE_COLUMN="links" />
+	<RDAP_POLICY id="10" OBJECT_TYPE="nameServer" HIDE_COLUMN="ipAddresses" />
+	<RDAP_POLICY id="11" OBJECT_TYPE="nameServer" HIDE_COLUMN="status" />
+	<RDAP_POLICY id="12" OBJECT_TYPE="nameServer" HIDE_COLUMN="unicodeName" />
+<!-- domain-->	
+	<RDAP_POLICY id="101" OBJECT_TYPE="domain" HIDE_COLUMN="variants" />
+	<RDAP_POLICY id="102" OBJECT_TYPE="domain" HIDE_COLUMN="nameServers" />
+	<RDAP_POLICY id="103" OBJECT_TYPE="domain" HIDE_COLUMN="secureDns" />
 </dataset>

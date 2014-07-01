@@ -4,4 +4,6 @@
 	<RDAP_POLICY id="2" OBJECT_TYPE="entity" HIDE_COLUMN="handle" />
 	<RDAP_POLICY id="3" OBJECT_TYPE="entity" HIDE_COLUMN="lang" />
 	<RDAP_POLICY id="4" OBJECT_TYPE="entity" HIDE_COLUMN="port43" />
+	
+	<RDAP_POLICY id="5" OBJECT_TYPE="dsData" HIDE_COLUMN="algorithm" />
 </dataset>
