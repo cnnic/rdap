@@ -48,7 +48,7 @@ public class AuthenticationFilter implements RdapFilter {
         Principal principal = Principal.getAnonymousPrincipal();
         if (StringUtils.isNotBlank(tempPass)) {
             String AUTH_BASIC_PREFIX = "Basic ";
-            if (!StringUtils.startsWith(tempPass, AUTH_BASIC_PREFIX)) {
+            if (!StringUtils.startsWithIgnoreCase(tempPass, AUTH_BASIC_PREFIX)) {
                 writeError401Response(response);
                 return false;
             }
