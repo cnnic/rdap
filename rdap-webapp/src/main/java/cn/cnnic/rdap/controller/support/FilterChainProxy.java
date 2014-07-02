@@ -15,6 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+
+import cn.cnnic.rdap.bean.ErrorMessage;
+import cn.cnnic.rdap.common.util.RestResponseUtil;
+import cn.cnnic.rdap.service.impl.ConnectionControlService;
 
 /**
  * RDAP proxy filter.
@@ -41,7 +46,6 @@ public class FilterChainProxy implements Filter {
     static {
         LOGGER.info("init RDAP filters ...");
         filters = new ArrayList<RdapFilter>();
-        filters.add(new QueryCountLimitFilter());
         filters.add(new AuthenticationFilter());
         filters.add(new RateLimitFilter());
         filters.add(new HttpRequestFilter());
@@ -59,16 +63,28 @@ public class FilterChainProxy implements Filter {
         LOGGER.debug("begin pre filter ...");
         HttpServletRequest request = (HttpServletRequest) arg0;
         HttpServletResponse response = (HttpServletResponse) arg1;
+        if (ConnectionControlService
+                .incrementConcurrentQCountAndCheckIfExceedMax()) {
+            writeError509Response(response);
+            ConnectionControlService.decrementAndGetCurrentQueryCount();
+            return;
+        }
         boolean success = preProcess(request, response);
         LOGGER.debug("end pre filter, are all success?:{}", success);
         if (!success) {
             LOGGER.error("some pre filter fail, not process service.");
+            ConnectionControlService.decrementAndGetCurrentQueryCount();
             return;
         }
-        chain.doFilter(request, response);
+        try {
+            chain.doFilter(request, response);
+        } catch (Exception e) {
+            LOGGER.error("chain.doFilter error:{}" + e.getMessage());
+        }
         LOGGER.debug("begin post filter ...");
         success = postProcess(request, response);
         LOGGER.debug("end post filter, are all success?:{}", success);
+        ConnectionControlService.decrementAndGetCurrentQueryCount();
     }
 
     /**
@@ -125,6 +141,21 @@ public class FilterChainProxy implements Filter {
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
+    }
+
+    /**
+     * write 509 error.
+     * 
+     * @param response
+     *            response.
+     * @throws IOException
+     *             IOException.
+     */
+    private void writeError509Response(HttpServletResponse response)
+            throws IOException {
+        ResponseEntity<ErrorMessage> responseEntity =
+                RestResponseUtil.createResponse509();
+        FilterHelper.writeResponse(responseEntity, response);
     }
 
 }
