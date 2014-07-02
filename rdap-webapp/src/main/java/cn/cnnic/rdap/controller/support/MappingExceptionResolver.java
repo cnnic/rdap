@@ -38,8 +38,9 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
         LOGGER.error("error:",ex);
         if (ex instanceof InvalidMediaTypeException) {
             responseEntity = RestResponseUtil.createResponse415();
+        }else{
+            responseEntity = RestResponseUtil.createResponse500();
         }
-        responseEntity = RestResponseUtil.createResponse500();
         try {
             FilterHelper.writeResponse(responseEntity, response);
         } catch (IOException e) {
