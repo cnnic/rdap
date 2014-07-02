@@ -70,7 +70,6 @@ public class QueryCountLimitFilter implements RdapFilter {
     @Override
     public boolean postProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        ConnectionControlService.decrementAndGetCurrentQueryCount();
         return true;
     }
 
