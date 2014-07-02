@@ -28,26 +28,21 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.service;
+package cn.cnnic.rdap.dao;
 
-import cn.cnnic.rdap.bean.BaseModel;
+import java.util.List;
 
 /**
- * RDAP conformance service is used to add rdapConformance to model
+ * conformance DAO.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-public interface RdapConformanceService {
-	/**
-	 * initial rdapConformance to model
-	 */
-	public void initRdapConformance();
-	/**
-	 * set rdapConformance to model
-	 * 
-	 * @param model
-	 * 			the model to set¡£
-	 */
-	public void setRdapConformance(BaseModel model);
+public interface ConformanceDao {
+
+    /**
+     * get all conformance list.
+     * 
+     */
+    List<String> queryConformance();
 }
