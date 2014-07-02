@@ -61,6 +61,13 @@ public class ResponseDecorator {
      */
     @Autowired
     private PolicyControlService policyControlService;
+    
+    /**
+     * init rdapConformance.
+     */
+    public void initRdapConformance() {
+        rdapConformanceService.initRdapConformance();
+    }
 
     /**
      * decorate response: add properties to response.

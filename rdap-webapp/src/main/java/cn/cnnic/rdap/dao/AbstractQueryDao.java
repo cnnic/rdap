@@ -60,7 +60,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
     /**
      * logger.
      */
-    private static final Logger LOGGER = LoggerFactory
+    protected static final Logger LOGGER = LoggerFactory
             .getLogger(AbstractQueryDao.class);
     /**
      * %:used for SQL 'like' clause.

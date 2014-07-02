@@ -165,11 +165,14 @@ public class DomainUtilTest {
             assertFalse(validateDomainNameIsValidIdna(domain));
         }
         // other domain.
+        assertTrue(validateDomainNameIsValidIdna("ａ.cn"));
         assertTrue(validateDomainNameIsValidIdna("cnnic.cn"));
         assertTrue(validateDomainNameIsValidIdna("cnnic.cn."));
         assertTrue(validateDomainNameIsValidIdna("cnnic.com.cn"));
         assertTrue(validateDomainNameIsValidIdna("1cnnic.cn"));
-        assertTrue(validateDomainNameIsValidIdna(" cnnic.cn"));
+        assertFalse(validateDomainNameIsValidIdna(" cnnic.cn"));
+        assertFalse(validateDomainNameIsValidIdna(" cnnic.cn "));
+        assertFalse(validateDomainNameIsValidIdna("cnnic.cn "));
         assertFalse(validateDomainNameIsValidIdna("我cnnic-.cn"));
         assertFalse(validateDomainNameIsValidIdna("-我cnnic.cn"));
         assertFalse(validateDomainNameIsValidIdna("cnnic-.cn"));
@@ -294,8 +297,8 @@ public class DomainUtilTest {
         assertTrue(validateSearchStringIsValidIdna("cn.中国*"));
         assertTrue(validateSearchStringIsValidIdna("cn中国*"));
         assertTrue(validateSearchStringIsValidIdna("*.cn"));// this is checked for error 422
-        assertFalse(validateSearchStringIsValidIdna("*cn"));// this is checked for error 422,but also return 400
-        assertFalse(validateSearchStringIsValidIdna("*"));// this is checked for error 422
+        assertTrue(validateSearchStringIsValidIdna("*cn"));// this is checked for error 422
+        assertTrue(validateSearchStringIsValidIdna("*"));// this is checked for error 422
         assertFalse(validateSearchStringIsValidIdna("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο*.bnnhg"));
         assertFalse(validateSearchStringIsValidIdna("%CF*.bnnhg"));
         assertFalse(validateSearchStringIsValidIdna("1**.bnnhg"));
@@ -306,6 +309,7 @@ public class DomainUtilTest {
         
         assertTrue(validateSearchStringIsValidIdna("xn--123*.bnnhg"));
         assertTrue(validateSearchStringIsValidIdna("xn--*.bnnhg"));
+        assertTrue(validateSearchStringIsValidIdna("xn--*"));
         assertTrue(validateSearchStringIsValidIdna("%CF%83*.bnnhg"));
         assertTrue(validateSearchStringIsValidIdna("cn--*.bnnhg"));
         assertTrue(validateSearchStringIsValidIdna("ύ*.bnnhg"));

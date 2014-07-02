@@ -30,12 +30,13 @@
  */
 package cn.cnnic.rdap.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.cnnic.rdap.bean.BaseModel;
+import cn.cnnic.rdap.dao.ConformanceDao;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
@@ -47,13 +48,27 @@ import cn.cnnic.rdap.service.RdapConformanceService;
 @Service
 public class RdapConformanceServiceImpl implements RdapConformanceService {
 
+	/**
+	 * conformanceDao.
+	 */
+	@Autowired
+	private ConformanceDao conformanceDao;
+
+	/**
+	 * the static list of conformance.
+	 */
+	private static List<String> rdapConformance = null;
+
+	@Override
+	public void initRdapConformance() {
+		rdapConformance = conformanceDao.queryConformance();
+	}
+
 	@Override
 	public void setRdapConformance(BaseModel model) {
 		if (null == model) {
 			return;
 		}
-		List<String> rdapConformance = new ArrayList<String>();
-		rdapConformance.add("rdap_level_0");// TODO: load from database
 		model.setRdapConformance(rdapConformance);
 	}
 }

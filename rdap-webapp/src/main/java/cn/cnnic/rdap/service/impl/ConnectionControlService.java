@@ -109,8 +109,8 @@ public final class ConnectionControlService {
      */
     public static boolean incrementConcurrentQCountAndCheckIfExceedMax() {
         int count = CONCURRENT_Q_COUNT.getAndIncrement();
-        LOGGER.debug("current query count:{}", count);
-        if (count >= RdapProperties.getMaxConcurrentCount() - 1) {
+        LOGGER.debug("inc, current query count:{}", count);
+        if (count > RdapProperties.getMaxConcurrentCount() - 1) {
             LOGGER.debug("current query count exceed max count : {}.",
                     RdapProperties.getMaxConcurrentCount());
             return true;
@@ -123,6 +123,6 @@ public final class ConnectionControlService {
      */
     public static void decrementAndGetCurrentQueryCount() {
         int count = CONCURRENT_Q_COUNT.decrementAndGet();
-        LOGGER.debug("current query count:{}", count);
+        LOGGER.debug("dec, current query count:{}", count);
     }
 }

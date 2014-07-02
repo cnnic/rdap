@@ -85,8 +85,12 @@ public class RdapControllerNameserverTest extends BaseTest {
         String nsChineseUnicode = "ns.xn--xkry9kk1bz66a.xn--fiqs8s";
         String nsLangEn = "en";
         String nsLangZh = "zh";
+        String nsNameWithUpperCase = "Ns.abc";
+        String nsNameInFullWith = "ｎｓ.cn";
         commonQueryExistNS(nsName, nsName, nsName, nsLangEn);
         commonQueryExistNS(nsNameWithPrefixBlank, nsName, nsName, nsLangEn);
+        commonQueryExistNS(nsNameWithUpperCase, nsName, nsName, nsLangEn);
+        commonQueryExistNS(nsNameInFullWith, nsName, nsName, nsLangEn);
         String nsChineseOrg = nsChineseLDH;
         nsChineseLDH = StringUtil.urlEncode(nsChineseLDH);
         commonQueryExistNS(nsChineseLDH, nsChineseOrg, nsChineseUnicode,

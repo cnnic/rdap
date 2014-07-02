@@ -36,11 +36,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -53,7 +51,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
-import cn.cnnic.rdap.common.util.StringUtil;
 
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -137,23 +134,6 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                     .andExpect(jsonPath("$.errorCode").value(404));
         }
 
-    }
-
-    /**
-     * encode with 8859.
-     * 
-     * @param str
-     *            str.
-     * @return encoded str.
-     * @throws UnsupportedEncodingException
-     *             UnsupportedEncodingException.
-     */
-    private String encodeWithIso8859(String str)
-            throws UnsupportedEncodingException {
-        if (StringUtils.isBlank(str)) {
-            return str;
-        }
-        return new String(str.getBytes(), StringUtil.CHAR_SET_ISO8859);
     }
 
     /**

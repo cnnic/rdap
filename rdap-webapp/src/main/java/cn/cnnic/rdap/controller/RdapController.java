@@ -298,6 +298,8 @@ public class RdapController {
         if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
             return RestResponseUtil.createResponse400();
         }
+        decodeDomain = StringUtil.getNormalization(decodeDomain);
+        LOGGER.debug("after normalization: {}",decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
         QueryParam queryParam = queryParser
@@ -378,13 +380,13 @@ public class RdapController {
         if (StringUtils.isBlank(decodeDomain)) {
             return RestResponseUtil.createResponse400();
         }
-        decodeDomain = StringUtil.getNormalization(decodeDomain);
         if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
             return RestResponseUtil.createResponse422();
         }
         if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
             return RestResponseUtil.createResponse400();
         }
+        decodeDomain = StringUtil.getNormalization(decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
         DomainSearch domainSearch = searchService.searchDomain(queryParser
@@ -426,6 +428,8 @@ public class RdapController {
         if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
             return RestResponseUtil.createResponse400();
         }
+        decodeNS = StringUtil.getNormalization(decodeNS);
+        LOGGER.debug("after normalization: {}",decodeNS);
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
         decodeNS = StringUtils.lowerCase(decodeNS);
         QueryParam queryParam = queryParser
@@ -509,13 +513,13 @@ public class RdapController {
             if (StringUtils.isBlank(decodeNameserver)) {
                 return RestResponseUtil.createResponse400();
             }
-            decodeNameserver = StringUtil.getNormalization(decodeNameserver);
             if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
                 return RestResponseUtil.createResponse422();
             }
             if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
                 return RestResponseUtil.createResponse400();
             }
+            decodeNameserver = StringUtil.getNormalization(decodeNameserver);
             decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
             decodeNameserver = StringUtils.lowerCase(decodeNameserver);
             nsQueryParam = (NameserverQueryParam) queryParser
