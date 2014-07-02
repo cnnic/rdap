@@ -47,23 +47,19 @@ import cn.cnnic.rdap.service.RdapConformanceService;
  */
 @Service
 public class RdapConformanceServiceImpl implements RdapConformanceService {
-
 	/**
 	 * conformanceDao.
 	 */
 	@Autowired
 	private ConformanceDao conformanceDao;
-
 	/**
 	 * the static list of conformance.
 	 */
 	private static List<String> rdapConformance = null;
-
 	@Override
 	public void initRdapConformance() {
 		rdapConformance = conformanceDao.queryConformance();
 	}
-
 	@Override
 	public void setRdapConformance(BaseModel model) {
 		if (null == model) {
