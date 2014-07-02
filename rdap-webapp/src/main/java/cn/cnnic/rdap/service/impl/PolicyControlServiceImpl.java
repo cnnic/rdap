@@ -63,17 +63,17 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 	 */
 	@Autowired
 	private PolicyDao policyDao;
-	
+
 	/**
 	 * the static map of policy.
 	 */
-	private static Map<String,Set<String>> mapPolicy = null;
+	private static Map<String, Set<String>> mapPolicy = null;
 
 	@Override
-	public Map<String,Set<String>> loadPolicyFieldsByMap() {
+	public Map<String, Set<String>> loadPolicyFieldsByMap() {
 		return mapPolicy;
 	}
-	
+
 	@Override
 	public void initAllPolicyByMap() {
 		mapPolicy = policyDao.loadAllPolicyMap();
@@ -92,6 +92,9 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 
 		ModelType modelType = ((BaseModel) objModel).getObjectType();
 		strObjType = modelType.getName();
+		if (strObjType == "errorMessage") {
+			return null;
+		}
 		return strObjType;
 	}
 
@@ -106,8 +109,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 		final String strSet = "set";
 		final String strGet = "get";
 		final String strIs = "is";
-		if (!strMethod.startsWith(strSet) 
-				&& !strMethod.startsWith(strGet)
+		if (!strMethod.startsWith(strSet) && !strMethod.startsWith(strGet)
 				&& !strMethod.startsWith(strIs)) {
 			return null;
 		}
@@ -120,8 +122,8 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 		String strMethodField = strMethod.substring(posAfterSet);
 		String strFieldFirstLetter = strMethodField.substring(0, 1);
 		String strReplace = StringUtils.lowerCase(strFieldFirstLetter);
-		strMethodField = strMethodField.replaceFirst(
-				strFieldFirstLetter, strReplace);
+		strMethodField = strMethodField.replaceFirst(strFieldFirstLetter,
+				strReplace);
 
 		return strMethodField;
 	}
@@ -134,8 +136,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 	 * @param strField
 	 *            the field to set.
 	 */
-	private void setPropertyNull(final Object objModel,
-			final String strField) {
+	private void setPropertyNull(final Object objModel, final String strField) {
 		try {
 			PropertyUtils.setProperty(objModel, strField, null);
 		} catch (IllegalAccessException e) {
@@ -160,7 +161,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 	 * @return the object of inner object.
 	 */
 	private Object getPropertyValue(final Object objModel,
-			 final String strMethodField) {
+			final String strMethodField) {
 		Object value = null;
 		try {
 			value = PropertyUtils.getProperty(objModel, strMethodField);
@@ -209,7 +210,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 			boolean isSetMethod = strMethod.startsWith(strSetFirstWord);
 			boolean isGetMethod = strMethod.startsWith("g");
 			String strIsBool = mthd.getReturnType().toString();
-			//just handle the specified method except boolean method
+			// just handle the specified method except boolean method
 			if (!strIsBool.contains("Boolean") && isGetMethod) {
 				value = getPropertyValue(objModel, strMethodField);
 			}
@@ -217,7 +218,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 				Iterator<String> iter = setFields.iterator();
 				while (iter.hasNext()) {
 					String strField = iter.next();
-					//just handle the set method
+					// just handle the set method
 					if (strMethodField.compareToIgnoreCase(strField) == 0
 							&& isSetMethod) {
 						setPropertyNull(objModel, strMethodField);
