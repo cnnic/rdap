@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 	<!-- ASCII ns -->
-	<RDAP_NAMESERVER NAMESERVER_ID='11' HANDLE='h1' LDH_NAME='ns.abc'
-		UNICODE_NAME='ns.abc' PORT43='port43' LANG='en' />
+	<RDAP_NAMESERVER NAMESERVER_ID='11' HANDLE='h1' LDH_NAME='ns.cnnic.cn'
+		UNICODE_NAME='ns.cnnic.cn' PORT43='port43' LANG='en' />
 	<!-- status -->
 	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="1" NAMESERVER_ID="11"
 		STATUS="validated" />
@@ -41,8 +41,8 @@
 		REL_OBJECT_TYPE="remark" LINK_ID="102" />
 
 	<!-- Unicode ns -->
-	<RDAP_NAMESERVER NAMESERVER_ID='12' HANDLE='h2' LDH_NAME='ns.xn--xkry9kk1bz66a.xn--fiqs8s'
-		UNICODE_NAME='ns.清华大学.中国' PORT43='port43' LANG='zh' />
+	<RDAP_NAMESERVER NAMESERVER_ID='12' HANDLE='h2' LDH_NAME='ns.xn--xkry9kk1bz66a.cn'
+		UNICODE_NAME='ns.清华大学.cn' PORT43='port43' LANG='zh' />
 	<!-- status -->
 	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="3" NAMESERVER_ID="12"
 		STATUS="update prohibited" />

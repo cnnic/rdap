@@ -408,7 +408,7 @@ public class RdapController {
         QueryParam queryParam = queryParser
                 .parseNameserverQueryParam(decodeNS, punyNSName);
         if(queryService.tldInThisRegistry(queryParam)){
-            return queryNsInThisRegistry(queryParam);
+        	return queryNsInThisRegistry(queryParam);
         }
         return queryRedirectDomainOrNs(queryParam, nameserverName);
     }
