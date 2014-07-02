@@ -43,11 +43,12 @@ public interface RdapConformanceService {
 	 * initial rdapConformance to model
 	 */
 	public void initRdapConformance();
+	
 	/**
 	 * set rdapConformance to model
 	 * 
 	 * @param model
-	 * 			the model to set¡£
+	 * 			the model to setï¿½ï¿½
 	 */
 	public void setRdapConformance(BaseModel model);
 }
