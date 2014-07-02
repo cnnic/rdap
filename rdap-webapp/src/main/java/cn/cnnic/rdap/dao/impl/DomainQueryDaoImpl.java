@@ -479,6 +479,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     private Domain queryDomainWithoutInnerObjects(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         final String punyName = domainQueryParam.getPunyName();
+        LOGGER.debug("query LDH_NAME with punyName:{}",punyName);
         final String sql =
                 "select * from RDAP_DOMAIN domain "
                         + " left outer join RDAP_DOMAIN_STATUS status "

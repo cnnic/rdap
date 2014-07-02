@@ -277,6 +277,11 @@ public final class DomainUtil {
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
         } 
+        // '*' means [letter/digit][.][letter/digit]
+        domainName = searchString.replace("*", "1.1"); 
+        if (validateDomainNameIsValidIdna(domainName)) {
+            return true;
+        } 
         return false;
     }
     
@@ -352,6 +357,7 @@ public final class DomainUtil {
             return str;
         }
         str = urlDecode(str);
+        LOGGER.debug("after decode: {}",str);
         // replace all ASCII char to lower case.
         StringBuffer asciiLowerCasedSb = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {
