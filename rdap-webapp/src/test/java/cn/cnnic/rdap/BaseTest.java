@@ -32,11 +32,13 @@ package cn.cnnic.rdap;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.StringUtils;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
@@ -58,6 +60,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.cnnic.rdap.bean.Principal;
 import cn.cnnic.rdap.common.RdapProperties;
+import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.controller.support.PrincipalHolder;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
@@ -243,6 +246,23 @@ public abstract class BaseTest {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         BaseTest.dataSource = dataSource;
+    }
+    
+    /**
+     * encode with 8859.
+     * 
+     * @param str
+     *            str.
+     * @return encoded str.
+     * @throws UnsupportedEncodingException
+     *             UnsupportedEncodingException.
+     */
+    protected String encodeWithIso8859(String str)
+            throws UnsupportedEncodingException {
+        if (StringUtils.isBlank(str)) {
+            return str;
+        }
+        return new String(str.getBytes(), StringUtil.CHAR_SET_ISO8859);
     }
 
 }
