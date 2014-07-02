@@ -35,6 +35,7 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
     protected ModelAndView doResolveException(HttpServletRequest request,
             HttpServletResponse response, Object handler, Exception ex) {
         ResponseEntity<ErrorMessage> responseEntity = null;
+        LOGGER.error("error:",ex);
         if (ex instanceof InvalidMediaTypeException) {
             responseEntity = RestResponseUtil.createResponse415();
         }
