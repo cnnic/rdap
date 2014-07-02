@@ -65,8 +65,8 @@ public class FilterChainProxy implements Filter {
         HttpServletResponse response = (HttpServletResponse) arg1;
         if (ConnectionControlService
                 .incrementConcurrentQCountAndCheckIfExceedMax()) {
-            writeError509Response(response);
             ConnectionControlService.decrementAndGetCurrentQueryCount();
+            writeError509Response(response);
             return;
         }
         boolean success = preProcess(request, response);
