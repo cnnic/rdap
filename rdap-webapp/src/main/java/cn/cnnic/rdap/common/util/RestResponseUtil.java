@@ -84,6 +84,14 @@ public class RestResponseUtil {
     private void init() {
         initErrorMessages();
         initPolicyService();
+        initConformanceService();
+    }
+    
+    /**
+     * init conformance service.
+     */
+    private void initConformanceService() {
+    	responseDecorator.initRdapConformance();
     }
 
     /**
