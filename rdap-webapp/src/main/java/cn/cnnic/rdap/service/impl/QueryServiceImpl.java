@@ -42,11 +42,13 @@ import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainQueryParam;
 import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.Help;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.common.util.StringUtil;
+import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 import cn.cnnic.rdap.dao.impl.AutnumQueryDaoImpl;
 import cn.cnnic.rdap.dao.impl.DomainQueryDaoImpl;
@@ -93,6 +95,12 @@ public class QueryServiceImpl implements QueryService {
     private NetworkQueryDaoImpl ipQueryDao;
 
     /**
+     * Help DAO
+     */
+    @Autowired
+    private NoticeDao noticeDao;
+    
+    /**
      * entityQueryDao.
      */
     @Autowired
@@ -125,7 +133,13 @@ public class QueryServiceImpl implements QueryService {
     public Network queryIp(QueryParam queryParam) {
         return ipQueryDao.query(queryParam);
     }
-	
+
+    @Override
+    public Help queryHelp(QueryParam queryParam) {
+        // construct a help object and fill it in decorator
+        return new Help();
+    }
+	   
     @Override
     public boolean tldInThisRegistry(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;

@@ -74,11 +74,18 @@ public class NoticeDaoImpl implements NoticeDao {
 
     @Override
     public List<Notice> getAllNotices() {
-        List<Notice> notices = queryWithoutInnerObjects();
+        List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
         queryAndSetInnerObjects(notices);
         return notices;
     }
 
+    @Override
+    public List<Notice> getHelp() {
+        List<Notice> notices = queryWithoutInnerObjects(NoticeType.HELP);
+        queryAndSetInnerObjects(notices);
+        return notices;
+    }
+    
     /**
      * query inner objects, and set them to notices
      * 
@@ -114,7 +121,7 @@ public class NoticeDaoImpl implements NoticeDao {
      * 
      * @return notice list
      */
-    private List<Notice> queryWithoutInnerObjects() {
+    private List<Notice> queryWithoutInnerObjects(final NoticeType type) {
         final String sql = "select notice.*, description.description  from RDAP_NOTICE notice "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
                 + " on notice.NOTICE_ID = description.NOTICE_ID "
@@ -124,7 +131,7 @@ public class NoticeDaoImpl implements NoticeDao {
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
-                        ps.setString(1, NoticeType.Notice.getName());
+                        ps.setString(1, type.getName());
                         return ps;
                     }
                 }, new NoticeResultSetExtractor());

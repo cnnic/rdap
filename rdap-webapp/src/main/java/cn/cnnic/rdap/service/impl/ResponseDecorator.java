@@ -73,7 +73,6 @@ public class ResponseDecorator {
         addNotices(model);
         policyControlService.applyPolicy(model);
     }
-
     /**
      * add notices to model.
      * 
@@ -86,7 +85,29 @@ public class ResponseDecorator {
         }
         model.setNotices(noticeDao.getAllNotices());
     }
-
+    /**
+     * decorate response: add properties to help response.
+     * 
+     * @param model
+     *            response
+     */
+    public void decorateResponseForHelp(BaseModel model) {
+        addRdapConformance(model);
+        addHelp(model);
+        policyControlService.applyPolicy(model);
+    }
+    /**
+     * add help to model.
+     * 
+     * @param model
+     *            model.
+     */
+    private void addHelp(BaseModel model) {
+        if (null == model) {
+            return;
+        }
+        model.setNotices(noticeDao.getHelp());
+    }
     /**
      * add rdapConformance to model.
      * 
