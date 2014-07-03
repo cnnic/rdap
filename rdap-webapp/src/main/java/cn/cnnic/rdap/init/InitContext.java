@@ -145,12 +145,8 @@ public class InitContext implements ApplicationContextAware {
             int lineNumber = 0;
             for (String statement : statements) {
                 lineNumber++;
-                try {
-                    jdbcTemplate.update("USE `" + databaseName + "`;");
-                } catch (DataAccessException ex) {
-                    LOGGER.error("'USE 'database' error.dbName:{},error:{}",
-                            databaseName, ex.getMessage());
-                }
+                executeUseDatabaseStatement(statement, jdbcTemplate,
+                        databaseName);
                 try {
                     int rowsAffected = jdbcTemplate.update(statement);
                     LOGGER.info(rowsAffected + " rows affected by SQL: "
@@ -180,6 +176,42 @@ public class InitContext implements ApplicationContextAware {
             } catch (IOException ex) {
                 // ignore
             }
+        }
+    }
+
+    /**
+     * add 'USE dbName' statement.
+     * 
+     * @param statement
+     *            statement.
+     * @param jdbcTemplate
+     *            jdbcTemplate.
+     * @param databaseName
+     *            databaseName.
+     */
+    private static void executeUseDatabaseStatement(String statement,
+            JdbcTemplate jdbcTemplate, String databaseName) {
+        String[] notAddArrays =
+                new String[] { "CREATE DATABASE", "DROP DATABASE", "USE " };
+        if (StringUtils.isEmpty(statement)) {
+            return;
+        }
+        String statementUppercase =
+                org.apache.commons.lang.StringUtils.upperCase(statement);
+        boolean startWithNotAddSql = false;
+        for (String prefix : notAddArrays) {
+            if (statementUppercase.startsWith(prefix)) {
+                startWithNotAddSql = true;
+            }
+        }
+        if (startWithNotAddSql) {
+            return;
+        }
+        try {
+            jdbcTemplate.update("USE `" + databaseName + "`");
+        } catch (DataAccessException ex) {
+            LOGGER.error("'USE 'database' error.dbName:{},error:{}",
+                    databaseName, ex.getMessage());
         }
     }
 

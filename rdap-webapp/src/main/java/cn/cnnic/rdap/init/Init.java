@@ -30,6 +30,7 @@
  */
 package cn.cnnic.rdap.init;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -57,13 +58,44 @@ public class Init {
      */
     public static void main(String[] args) {
         LOGGER.info("init begin...");
+        LOGGER.info("args:{}", args);
+        if (null == args || args.length < 1 || StringUtils.isBlank(args[0])) {
+            LOGGER.info("args is null, end init.");
+            printUsage();
+            return;
+        }
+        String arg = args[0];
+        if (!(isInitSchemaCmd(arg) || isInitDataCmd(arg))) {
+            printUsage();
+            return;
+        }
         ApplicationContext ctx =
                 new ClassPathXmlApplicationContext(
                         "classpath:init/spring-serviceContext-init.xml");
         InitDao initDao = (InitDao) ctx.getBean("initDao");
-        initDao.initSchema();
-        initDao.initData();
+        if (isInitSchemaCmd(arg)) {
+            initDao.initSchema();
+        }
+        if (isInitDataCmd(arg)) {
+            initDao.initData();
+        }
         LOGGER.info("init successful...............");
+    }
+
+    private static void printUsage() {
+        LOGGER.info("usage:");
+        LOGGER.info("first init schema:");
+        LOGGER.info("   java cn.cnnic.rdap.init.Init schema");
+        LOGGER.info("if you are testing,you may init test data:");
+        LOGGER.info("   java cn.cnnic.rdap.init.Init data");
+    }
+
+    private static boolean isInitDataCmd(String arg) {
+        return arg.equalsIgnoreCase("data");
+    }
+
+    private static boolean isInitSchemaCmd(String arg) {
+        return arg.equalsIgnoreCase("schema");
     }
 
 }
