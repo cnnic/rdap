@@ -152,9 +152,6 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(
-                        jsonPath("$.rdapConformance").value(
-                                CoreMatchers.hasItem("rdap_level_0")))
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
                 .andExpect(
@@ -263,9 +260,6 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(
-                        jsonPath("$.rdapConformance").value(
-                                CoreMatchers.hasItem("rdap_level_0")))
                 .andExpect(jsonPath("$.resultsTruncated").value(true))
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
@@ -290,9 +284,6 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(
-                        jsonPath("$.rdapConformance").value(
-                                CoreMatchers.hasItem("rdap_level_0")))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.lang").value("en"))

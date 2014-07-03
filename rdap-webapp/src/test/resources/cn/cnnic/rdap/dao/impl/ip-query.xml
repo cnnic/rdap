@@ -80,15 +80,15 @@
 
 	<!-- test for ip.truncated ips: more than 5 ips for 'ip.truncated*' -->
 	<RDAP_IP IP_ID='11' HANDLE='11' NAME='ip.truncated1.cn' TYPE='ip.truncated1.cn'
-		PORT43='port43' LANG='en' />
+		VERSION='v4' PORT43='port43' LANG='en' />
 	<RDAP_IP IP_ID='12' HANDLE='12' NAME='ip.truncated2.cn' TYPE='ip.truncated2.cn'
-		PORT43='port43' LANG='en' />
+		VERSION='v4' PORT43='port43' LANG='en' />
 	<RDAP_IP IP_ID='13' HANDLE='13' NAME='ip.truncated3.cn' TYPE='ip.truncated3.cn'
-		PORT43='port43' LANG='en' />
+		VERSION='v4' PORT43='port43' LANG='en' />
 	<RDAP_IP IP_ID='14' HANDLE='14' NAME='ip.truncated4.cn' TYPE='ip.truncated4.cn'
-		PORT43='port43' LANG='en' />
+		VERSION='v4' PORT43='port43' LANG='en' />
 	<RDAP_IP IP_ID='15' HANDLE='15' NAME='ip.truncated5.cn' TYPE='ip.truncated5.cn'
-		PORT43='port43' LANG='en' />
+		VERSION='v4' PORT43='port43' LANG='en' />
 	<RDAP_IP IP_ID='16' HANDLE='16' NAME='ip.truncated6.cn' TYPE='ip.truncated6.cn'
-		PORT43='port43' LANG='en' />
+		VERSION='v4' PORT43='port43' LANG='en' />
 </dataset>
