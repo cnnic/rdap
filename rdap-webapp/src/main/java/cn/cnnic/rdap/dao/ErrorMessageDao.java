@@ -34,16 +34,16 @@ import java.util.List;
 import cn.cnnic.rdap.bean.ErrorMessage;
 
 /**
- * error message DAO
+ * error message DAO.
  * 
  * @author jiashuo
  * 
  */
 public interface ErrorMessageDao {
-	/**
-	 * get all error messages list
-	 * 
-	 * @return error messages list
-	 */
-	public List<ErrorMessage> getAllErrorMessages();
+    /**
+     * get all error messages list。
+     * 
+     * @return error messages list.
+     */
+    List<ErrorMessage> getAllErrorMessages();
 }

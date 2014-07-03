@@ -173,12 +173,12 @@ public class RdapController {
     @RequestMapping(value = "/entities", method = RequestMethod.GET)
     public ResponseEntity searchEntity(@RequestParam(required = false) String fn,
             @RequestParam(required = false) String handle,
-            HttpServletRequest request){
-        LOGGER.info("search entities.fn:{},handle:{}",fn,handle);
+            HttpServletRequest request) {
+        LOGGER.info("search entities.fn:{},handle:{}", fn, handle);
         final String fnParamName = "fn";
         final String handleParamName = "handle";
         String paramName = queryParser.getFirstParameter(request,
-                new String[]{fnParamName,handleParamName});
+                new String[]{fnParamName, handleParamName});
         if (StringUtils.isBlank(paramName)) {
             return RestResponseUtil.createResponse400();
         }
@@ -193,7 +193,7 @@ public class RdapController {
         }
         QueryParam queryParam = queryParser
                 .parseEntityQueryParam(paramValue, paramName);
-        LOGGER.info("generate queryParam:{}",queryParam);
+        LOGGER.info("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
             if (result.getHasNoAuthForAllObjects()) {
@@ -272,12 +272,12 @@ public class RdapController {
         if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
             return RestResponseUtil.createResponse400();
         }
-        LOGGER.debug("after normalization: {}",decodeDomain);
+        LOGGER.debug("after normalization: {}", decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
         QueryParam queryParam = queryParser
                 .parseDomainQueryParam(decodeDomain, punyDomainName);
-        if(queryService.tldInThisRegistry(queryParam)){
+        if (queryService.tldInThisRegistry(queryParam)) {
             return queryDomainInThisRegistry(queryParam);
         }
         return queryRedirectDomainOrNs(queryParam, domainName);
@@ -285,7 +285,10 @@ public class RdapController {
 
     /**
      * query redirect domain or nameserver.
-     * @param queryParam queryParam.
+     * @param queryParam
+     *          queryParam.
+     * @param paramName
+     *          name for parameter.
      * @return ResponseEntity.
      */
     private ResponseEntity queryRedirectDomainOrNs(QueryParam queryParam,
@@ -329,11 +332,15 @@ public class RdapController {
     /**
      * search domain by domain name.
      * 
-     * @param domainName
+     * @param name
      *            is a fully-qualified (relative to the root) domain name
      *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
      *            RIRs) or a fully-qualified domain name in a zone administered
      *            by the server operator (for DNRs).
+     * @param request
+     *            for http servlet request.
+     * @param response
+     *            for http response.
      * @return JSON formated result,with HTTP code.
      */
     @RequestMapping(value = "/domains", method = RequestMethod.GET)
@@ -402,13 +409,13 @@ public class RdapController {
         if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
             return RestResponseUtil.createResponse400();
         }
-        LOGGER.debug("after normalization: {}",decodeNS);
+        LOGGER.debug("after normalization: {}", decodeNS);
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
         decodeNS = StringUtils.lowerCase(decodeNS);
         QueryParam queryParam = queryParser
                 .parseNameserverQueryParam(decodeNS, punyNSName);
-        if(queryService.tldInThisRegistry(queryParam)){
-        	return queryNsInThisRegistry(queryParam);
+        if (queryService.tldInThisRegistry(queryParam)) {
+            return queryNsInThisRegistry(queryParam);
         }
         return queryRedirectDomainOrNs(queryParam, nameserverName);
     }
@@ -455,7 +462,7 @@ public class RdapController {
         final String strIp = "ip";
         final String strName = "name";
         NameserverQueryParam nsQueryParam = null;
-        final String[] strParamOrg = { strIp, strName };
+        final String[] strParamOrg = {strIp, strName};
         String nameParam = queryParser.getFirstParameter(request, strParamOrg);
         if (StringUtils.isBlank(nameParam)) {
             return RestResponseUtil.createResponse400();

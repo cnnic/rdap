@@ -35,16 +35,16 @@ import java.util.List;
 import cn.cnnic.rdap.bean.Notice;
 
 /**
- * notice DAO
+ * notice DAO.
  * 
  * @author jiashuo
  * 
  */
 public interface NoticeDao {
     /**
-     * get all notice list
+     * get all notice list.
      * 
-     * @return notice list
+     * @return notice list.
      */
-    public List<Notice> getAllNotices();
+    List<Notice> getAllNotices();
 }

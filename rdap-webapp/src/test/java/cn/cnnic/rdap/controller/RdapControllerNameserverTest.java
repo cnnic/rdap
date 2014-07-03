@@ -79,7 +79,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      * 			exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+//    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserverTest.xml")
     public void testQueryExistNameserver() throws Exception {
     	RestResponseUtil.initConformanceService();

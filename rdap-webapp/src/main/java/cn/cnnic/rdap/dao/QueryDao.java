@@ -40,6 +40,8 @@ import cn.cnnic.rdap.bean.QueryParam;
  * query dao interface. Each method return BaseObject, which can be converted to
  * model class by caller.
  * 
+ * @param <T>
+ *            derive from BaseModel.
  * @author jiashuo
  * 
  */
@@ -56,7 +58,7 @@ public interface QueryDao<T extends BaseModel> {
     /**
      * * query model list, as nested models of other Model.
      * 
-     * @param outerModelId
+     * @param outerObjectId
      *            id of outer object
      * @param outerModelType
      *            model type of outer object
