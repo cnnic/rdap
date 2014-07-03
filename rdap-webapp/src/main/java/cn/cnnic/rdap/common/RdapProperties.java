@@ -43,6 +43,26 @@ import cn.cnnic.rdap.common.util.StringUtil;
 public class RdapProperties {
 
     /**
+     * max concurrent count.
+     */
+    private static Integer maxConcurrentCount;
+
+    /**
+     * localServiceUrl.
+     */
+    private static String localServiceUrl;
+
+    /**
+     * min seconds between access interval,for Anonymous.
+     */
+    private static Long minSecondsAccessIntervalAnonymous;
+
+    /**
+     * min seconds between access interval, for authenticated user.
+     */
+    private static Long minSecondsAccessIntervalAuthed;
+
+    /**
      * max size for search.
      */
     private static Long maxsizeSearch;
@@ -69,6 +89,14 @@ public class RdapProperties {
      * list for not in tlds.
      */
     private static List<String> notInTldList;
+
+    /**
+     * clear 'in' and 'not in' tlds in memory,used for reload tlds.
+     */
+    public static void clearTldsInMemory() {
+        RdapProperties.inTldList = null;
+        RdapProperties.notInTldList = null;
+    }
 
     /**
      * get in-tlds in this registry.
@@ -167,6 +195,86 @@ public class RdapProperties {
      */
     public void setNotInTlds(String notInTlds) {
         RdapProperties.notInTlds = notInTlds;
+    }
+
+    /**
+     * get minSecondsAccessIntervalAnonymous.
+     * 
+     * @return minSecondsAccessIntervalAnonymous.
+     */
+    public static Long getMinSecondsAccessIntervalAnonymous() {
+        return minSecondsAccessIntervalAnonymous;
+    }
+
+    /**
+     * set minSecondsAccessIntervalAnonymous.
+     * 
+     * @param minSecondsAccessIntervalAnonymous
+     *            minSecondsAccessIntervalAnonymous.
+     */
+    public void setMinSecondsAccessIntervalAnonymous(
+            Long minSecondsAccessIntervalAnonymous) {
+        RdapProperties.minSecondsAccessIntervalAnonymous =
+                minSecondsAccessIntervalAnonymous;
+    }
+
+    /**
+     * get minSecondsAccessIntervalAuthed.
+     * 
+     * @return minSecondsAccessIntervalAuthed.
+     */
+    public static Long getMinSecondsAccessIntervalAuthed() {
+        return minSecondsAccessIntervalAuthed;
+    }
+
+    /**
+     * set minSecondsAccessIntervalAuthed.
+     * 
+     * @param minSecondsAccessIntervalAuthed
+     *            minSecondsAccessIntervalAuthed.
+     */
+    public void setMinSecondsAccessIntervalAuthed(
+            Long minSecondsAccessIntervalAuthed) {
+        RdapProperties.minSecondsAccessIntervalAuthed =
+                minSecondsAccessIntervalAuthed;
+    }
+
+    /**
+     * get localServiceUrl.
+     * 
+     * @return localServiceUrl.
+     */
+    public static String getLocalServiceUrl() {
+        return localServiceUrl;
+    }
+
+    /**
+     * set localServiceUrl.
+     * 
+     * @param localServiceUrl
+     *            localServiceUrl.
+     */
+    public void setLocalServiceUrl(String localServiceUrl) {
+        RdapProperties.localServiceUrl = localServiceUrl;
+    }
+
+    /**
+     * get maxConcurrentCount.
+     * 
+     * @return maxConcurrentCount.
+     */
+    public static Integer getMaxConcurrentCount() {
+        return maxConcurrentCount;
+    }
+
+    /**
+     * set maxConcurrentCount.
+     * 
+     * @param maxConcurrentCount
+     *            maxConcurrentCount.
+     */
+    public void setMaxConcurrentCount(Integer maxConcurrentCount) {
+        RdapProperties.maxConcurrentCount = maxConcurrentCount;
     }
 
 }

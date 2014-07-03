@@ -100,7 +100,7 @@ public class RedirectServiceImplTest extends BaseTest {
      * test query network.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+//    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
     public void testQueryNetwork() {
         QueryParam queryParam =

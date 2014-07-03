@@ -166,4 +166,9 @@ public class ErrorMessage extends BaseModel {
     public void setDescription(List<String> description) {
         this.description = description;
     }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.ERRORMESSAGE;
+    }
 }

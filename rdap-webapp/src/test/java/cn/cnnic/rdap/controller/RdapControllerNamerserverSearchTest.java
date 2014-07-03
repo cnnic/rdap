@@ -97,9 +97,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         String nsIpZero = ipHead + "::";
         String nsIpV4V6 = ipHead + "::f:f:0.15.0.15";
         String nsBoth1 = nsNameCn + "&" + ipHead + "::f:f:0.15.0.15";
-        String nsBoth2 = ipHead + "::f:f:0.15.0.15" + "&" + nsNameCn;
-        String nsOnlyOne1 = ipHead + "::f:f:0.15.0.15" + "?" + nsNameCn;
-        String nsOnlyOne2 = nsNameCn + "?" + ipHead + "::f:f:0.15.0.15";
+        String nsBoth2 = ipHead + "::f:f:0.15.0.15" + "&" + nsNameCn;        
         String nsComplex = "&name=ns.cnni*.cn&ip=::?name=0";
         searchByObject(nsNameCn);
         searchByObject(nsNameIpV4);
@@ -110,8 +108,6 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         searchByObject(nsIpV4V6);
         searchByObject(nsBoth1);
         searchByObject(nsBoth2);
-        searchByObject(nsOnlyOne1);
-        searchByObject(nsOnlyOne2);
         searchByObject(nsComplex);
     }
 
@@ -130,9 +126,6 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 get(SEARCH_URI + strObject).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
-                .andExpect(
-                        jsonPath("$.rdapConformance").value(
-                                CoreMatchers.hasItem("rdap_level_0")))
                 .andExpect(jsonPath("$.nameserverSearchResults").exists())
                 .andExpect(jsonPath("$.nameserverSearchResults").isArray())
                 .andExpect(
@@ -231,9 +224,6 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(
-                        jsonPath("$.rdapConformance").value(
-                                CoreMatchers.hasItem("rdap_level_0")))
                 .andExpect(jsonPath("$.resultsTruncated").value(true))
                 .andExpect(jsonPath("$.nameserverSearchResults").exists())
                 .andExpect(jsonPath("$.nameserverSearchResults").isArray())
@@ -280,10 +270,6 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(
-                        jsonPath("$.rdapConformance").value(
-                                CoreMatchers.hasItem("rdap_level_0")))
-                .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("NOT FOUND"))
@@ -325,13 +311,17 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     public void testSearchIllegalNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
         String nsHead = "name=";
+        String nsNameCn = nsHead + "ns.cnnic.cn";
         String ipHead = "ip=";
         String nsIpIllegal = ipHead + "1:?0";
         String nsIpWildcardEnd = ipHead + "1.*";
         String nsIpWildcardHead = ipHead + "*.*";
         String nsNameIllegal = nsHead + "";
-        String nsComplex = "&name=&ip=::?name=0";
-
+        String nsComplex = "&name=&ip=::?name=0";        
+        String nsOnlyOne1 = ipHead + "::f:f:0.15.0.15" + "?" + nsNameCn;
+        String nsOnlyOne2 = nsNameCn + "?" + ipHead + "::f:f:0.15.0.15";
+        seachIllegalNS(nsOnlyOne1);
+        seachIllegalNS(nsOnlyOne2);
         seachIllegalNS(nsIpIllegal);
         seachIllegalNS(nsNameIllegal);
         seachIllegalNS(nsIpWildcardHead);

@@ -47,4 +47,11 @@ public interface NoticeDao {
      * @return notice list
      */
     public List<Notice> getAllNotices();
+    
+    /**
+     * get help info, as format of notice
+     * 
+     * @return notice list
+     */
+    public List<Notice> getHelp();
 }

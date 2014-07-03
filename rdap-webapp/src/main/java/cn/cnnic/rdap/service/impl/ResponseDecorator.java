@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import cn.cnnic.rdap.bean.BaseModel;
 import cn.cnnic.rdap.dao.NoticeDao;
+import cn.cnnic.rdap.service.PolicyControlService;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
@@ -55,6 +56,18 @@ public class ResponseDecorator {
      */
     @Autowired
     private NoticeDao noticeDao;
+    /**
+     * policy control service.
+     */
+    @Autowired
+    private PolicyControlService policyControlService;
+    
+    /**
+     * init rdapConformance.
+     */
+    public void initRdapConformance() {
+        rdapConformanceService.initRdapConformance();
+    }
 
     /**
      * decorate response: add properties to response.
@@ -65,8 +78,8 @@ public class ResponseDecorator {
     public void decorateResponse(BaseModel model) {
         addRdapConformance(model);
         addNotices(model);
+        policyControlService.applyPolicy(model);
     }
-
     /**
      * add notices to model.
      * 
@@ -79,7 +92,30 @@ public class ResponseDecorator {
         }
         model.setNotices(noticeDao.getAllNotices());
     }
-
+    /**
+     * decorate response: add properties to help response.
+     * 
+     * @param model
+     *            response
+     */
+    public void decorateResponseForHelp(BaseModel model) {
+        addRdapConformance(model);
+        addHelp(model);
+        
+        //No policyControlService
+    }
+    /**
+     * add help to model.
+     * 
+     * @param model
+     *            model.
+     */
+    private void addHelp(BaseModel model) {
+        if (null == model) {
+            return;
+        }
+        model.setNotices(noticeDao.getHelp());
+    }
     /**
      * add rdapConformance to model.
      * 

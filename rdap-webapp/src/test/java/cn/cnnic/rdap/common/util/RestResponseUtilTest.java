@@ -61,8 +61,8 @@ public class RestResponseUtilTest extends BaseTest {
         String domainName = "cnnic.cn";
         Domain domain = new Domain();
         domain.setLdhName(domainName);
-        ResponseEntity<Domain> result = RestResponseUtil
-                .createResponse200(domain);
+        ResponseEntity<Domain> result =
+                RestResponseUtil.createResponse200(domain);
         Assert.notNull(result);
         assertEquals(result.getBody().getLdhName(), domainName);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
@@ -149,5 +149,37 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse422();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * test create ResponseEntity with HTTP code 301.
+     */
+    @Test
+    public void testCreateResponse301() {
+        ResponseEntity result =
+                RestResponseUtil.createResponse301("http://cnnic.cn");
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    /**
+     * test create ResponseEntity with HTTP code 429.
+     */
+    @Test
+    public void testCreateResponse429() {
+        ResponseEntity result = RestResponseUtil.createResponse429();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(), HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    /**
+     * test create ResponseEntity with HTTP code 509.
+     */
+    @Test
+    public void testCreateResponse509() {
+        ResponseEntity result = RestResponseUtil.createResponse509();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(),
+                HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
     }
 }

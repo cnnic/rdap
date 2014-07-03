@@ -39,8 +39,12 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
+
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Autnum;
+import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
@@ -58,14 +62,35 @@ public class RdapConformanceServiceTest extends BaseTest {
 	 * test query exist autnum
 	 */
 	@Test
+	@DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/rdapConformance.xml")
 	public void testSetRdapConformanceToAutnum() {
 		Autnum autnum = new Autnum();
 		Assert.notNull(autnum);
 		assertNull(autnum.getRdapConformance());
+		rdapConformanceService.initRdapConformance();
 		rdapConformanceService.setRdapConformance(autnum);
 		assertNotNull(autnum.getRdapConformance());
 		assertThat(autnum.getRdapConformance(),
-				CoreMatchers.hasItems("rdap_level_0"));
+				CoreMatchers.hasItem("rdap_level_0"));
 	}
-	
+
+	/**
+	 * test query exist domain
+	 */
+	@Test
+	@DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/rdapConformance.xml")
+	public void testSetRdapConformanceToDomain() {
+		Domain domain = new Domain();
+		Assert.notNull(domain);
+		assertNull(domain.getRdapConformance());
+		rdapConformanceService.initRdapConformance();
+		rdapConformanceService.setRdapConformance(domain);
+		assertNotNull(domain.getRdapConformance());
+		assertThat(domain.getRdapConformance(),
+				CoreMatchers.hasItems("rdap_level_0"));
+		assertThat(domain.getRdapConformance(),
+				CoreMatchers.hasItems("cnnic_level_0"));
+	}
 }

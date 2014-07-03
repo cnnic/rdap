@@ -77,11 +77,11 @@ public class SecureDns extends BaseModel {
     /**
      * boolean true if the zone has been signed, false otherwise.
      */
-    private boolean zoneSigned;
+    private Boolean zoneSigned;
     /**
      * boolean true if there are DS records in the parent, false otherwise.
      */
-    private boolean delegationSigned;
+    private Boolean delegationSigned;
     /**
      * representing the signature life time in seconds to be used when creating
      * the RRSIG DS record in the parent zone [RFC5910].
@@ -101,7 +101,7 @@ public class SecureDns extends BaseModel {
      * 
      * @return zoneSigned.
      */
-    public boolean isZoneSigned() {
+    public Boolean isZoneSigned() {
         return zoneSigned;
     }
 
@@ -111,7 +111,7 @@ public class SecureDns extends BaseModel {
      * @param zoneSigned
      *            zoneSigned.
      */
-    public void setZoneSigned(boolean zoneSigned) {
+    public void setZoneSigned(Boolean zoneSigned) {
         this.zoneSigned = zoneSigned;
     }
 
@@ -120,7 +120,7 @@ public class SecureDns extends BaseModel {
      * 
      * @return delegationSigned.
      */
-    public boolean isDelegationSigned() {
+    public Boolean isDelegationSigned() {
         return delegationSigned;
     }
 
@@ -130,7 +130,7 @@ public class SecureDns extends BaseModel {
      * @param delegationSigned
      *            delegationSigned.
      */
-    public void setDelegationSigned(boolean delegationSigned) {
+    public void setDelegationSigned(Boolean delegationSigned) {
         this.delegationSigned = delegationSigned;
     }
 
@@ -189,5 +189,10 @@ public class SecureDns extends BaseModel {
      */
     public void setKeyData(List<KeyData> keyData) {
         this.keyData = keyData;
+    }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.SECUREDNS;
     }
 }

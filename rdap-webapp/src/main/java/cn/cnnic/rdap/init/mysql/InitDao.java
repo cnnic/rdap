@@ -87,6 +87,8 @@ public class InitDao {
 
     /**
      * initData.
+     * 
+     * @param arg
      */
     public void initData() {
         LOGGER.info("initData begin...");
@@ -98,7 +100,9 @@ public class InitDao {
 
     /**
      * set databaseName.
-     * @param databaseName databaseName.
+     * 
+     * @param databaseName
+     *            databaseName.
      */
     public void setDatabaseName(String databaseName) {
         this.databaseName = databaseName;

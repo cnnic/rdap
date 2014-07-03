@@ -120,7 +120,7 @@ public class DomainQueryDaoTest extends BaseTest {
         assertEquals("http://domainlink", domainLink.getValue());
         assertEquals("http://domainlink", domainLink.getHref());
         // variants
-        List<Variants> variantsList = domain.getVarients();
+        List<Variants> variantsList = domain.getVariants();
         assertNotNull(variantsList);
         assertEquals(1, variantsList.size());
         Variants variants = variantsList.get(0);
@@ -171,7 +171,7 @@ public class DomainQueryDaoTest extends BaseTest {
         assertEquals(
                 "D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A",
                 dsData.getDigest());
-        assertEquals(1, dsData.getDigestType());
+        assertEquals(1, dsData.getDigestType().intValue());
         assertEquals(1, dsData.getKeyTag().intValue());
         // keyData
         List<KeyData> keyDataList = secureDns.getKeyData();

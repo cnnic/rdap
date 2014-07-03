@@ -44,9 +44,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.common.util.RestResponseUtil;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
  * Test for RdapController
@@ -73,9 +74,10 @@ public class RdapControllerAutnumTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnumWithRdapAndJson() throws Exception {
+        RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
         mockMvc.perform(
                 get("/.well-known/rdap/autnum/" + autnumStr).accept(
@@ -93,9 +95,10 @@ public class RdapControllerAutnumTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(type = DatabaseOperation.REFRESH, value = "classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnum() throws Exception {
+        RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
         mockMvc.perform(
                 get("/.well-known/rdap/autnum/" + autnumStr).accept(
@@ -113,8 +116,9 @@ public class RdapControllerAutnumTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     public void testQueryNonExistAutnum() throws Exception {
+        RestResponseUtil.initErrorMessages();
         String nonExistAutnumStr = "1000";
         mockMvc.perform(
                 get("/.well-known/rdap/autnum/" + nonExistAutnumStr).accept(
@@ -130,8 +134,9 @@ public class RdapControllerAutnumTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    // @DatabaseTearDown("teardown.xml")
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     public void testQueryAutnumWithInvalidQ() throws Exception {
+        RestResponseUtil.initErrorMessages();
         String invalidAutnumStr = "invalidQ";
         mockMvc.perform(
                 get("/.well-known/rdap/autnum/" + invalidAutnumStr).accept(

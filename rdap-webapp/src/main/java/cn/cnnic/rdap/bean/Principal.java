@@ -45,6 +45,14 @@ public class Principal {
      * identity, user id.
      */
     private Long id;
+    
+    /**
+     * check is anonymous.
+     * @return true if is, false if not.
+     */
+    public boolean isAnonymous(){
+        return USER_ID_ANONYMOUS.equals(id);
+    }
 
     /**
      * get anonymous principal.

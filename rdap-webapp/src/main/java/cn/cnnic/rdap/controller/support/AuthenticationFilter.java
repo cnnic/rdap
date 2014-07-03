@@ -2,17 +2,12 @@ package cn.cnnic.rdap.controller.support;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 
 import sun.misc.BASE64Decoder;
@@ -29,29 +24,37 @@ import cn.cnnic.rdap.service.IdentityCheckService;
  * @author
  * 
  */
-public class AuthenticationFilter implements Filter {
+public class AuthenticationFilter implements RdapFilter {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(AuthenticationFilter.class);
 
-    @Override
-    public void destroy() {
+    /**
+     * constructor.
+     */
+    public AuthenticationFilter() {
+        super();
+        LOGGER.info("init RDAP filter:{}", this.getName());
     }
 
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1,
-            FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) arg0;
-        HttpServletResponse response = (HttpServletResponse) arg1;
-
+    public boolean preProcess(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
         String tempPass = null;
         tempPass = request.getHeader("authorization");
 
         Principal principal = Principal.getAnonymousPrincipal();
         if (StringUtils.isNotBlank(tempPass)) {
             String AUTH_BASIC_PREFIX = "Basic ";
-            if(!StringUtils.startsWith(tempPass,AUTH_BASIC_PREFIX)){
+            if (!StringUtils.startsWithIgnoreCase(tempPass, AUTH_BASIC_PREFIX)) {
                 writeError401Response(response);
-                return;
+                return false;
             }
-            tempPass = tempPass.substring(AUTH_BASIC_PREFIX.length(), tempPass.length());
+            tempPass =
+                    tempPass.substring(AUTH_BASIC_PREFIX.length(),
+                            tempPass.length());
             String tempPassdeCode = "";
             BASE64Decoder decoder = new BASE64Decoder();
 
@@ -60,7 +63,7 @@ public class AuthenticationFilter implements Filter {
                 tempPassdeCode = new String(b);
             } catch (Exception e) {
                 writeError401Response(response);
-                return;
+                return false;
             }
 
             String userReqId = "";
@@ -68,7 +71,7 @@ public class AuthenticationFilter implements Filter {
             int indexOfSeparator = tempPassdeCode.indexOf(":");
             if (-1 == indexOfSeparator) {
                 writeError401Response(response);
-                return;
+                return false;
             }
             userReqId = tempPassdeCode.substring(0, indexOfSeparator);
             userReqPwd = tempPassdeCode.substring(indexOfSeparator + 1);
@@ -80,24 +83,39 @@ public class AuthenticationFilter implements Filter {
                 request.getSession().removeAttribute("SESSION_ATTR_USER_ID");
                 writeError401Response(response);
                 // chain.doFilter(request, response);
-                return;
+                return false;
             } else {
                 principal = new Principal(user.getUserId());
             }
         }
         PrincipalHolder.setPrincipal(principal);
-        chain.doFilter(request, response);
-        PrincipalHolder.remove();
+        return true;
     }
 
-    @Override
-    public void init(FilterConfig arg0) throws ServletException {
-    }
-
+    /**
+     * 401 error.
+     * 
+     * @param response
+     *            response.
+     * @throws IOException
+     *             IOException.
+     */
     private void writeError401Response(HttpServletResponse response)
             throws IOException {
         ResponseEntity<ErrorMessage> responseEntity =
                 RestResponseUtil.createResponse401();
         FilterHelper.writeResponse(responseEntity, response);
     }
+
+    @Override
+    public boolean postProcess(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
+
 }

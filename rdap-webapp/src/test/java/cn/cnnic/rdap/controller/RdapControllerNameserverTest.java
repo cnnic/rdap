@@ -40,17 +40,19 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import cn.cnnic.rdap.BaseTest;
+import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for RdapController
+ * Test for RdapController Nameserver.
  * 
  * @author weijunkai
  * 
@@ -71,26 +73,27 @@ public class RdapControllerNameserverTest extends BaseTest {
     }
 
     /**
-     * test query exist ns.
+     * test query exist nameserver.
      * 
      * @throws Exception
+     * 			exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardownNSTest.xml")
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserverTest.xml")
     public void testQueryExistNameserver() throws Exception {
-        String nsName = "ns.abc";
-        String nsNameWithPrefixBlank = " ns.abc";
-        String nsChineseLDH = "ns.清华大学.中国";
-        String nsChineseUnicode = "ns.xn--xkry9kk1bz66a.xn--fiqs8s";
+    	RestResponseUtil.initConformanceService();
+        String nsName = "ns.cnnic.cn";
+        String nsNameWithPrefixBlank = " ns.cnnic.cn";
+        String nsChineseLDH = "ns.清华大学.cn";
         String nsLangEn = "en";
         String nsLangZh = "zh";
-        commonQueryExistNS(nsName, nsName, nsName, nsLangEn);
-        commonQueryExistNS(nsNameWithPrefixBlank, nsName, nsName, nsLangEn);
-        String nsChineseOrg = nsChineseLDH;
+        String nsNameWithUpperCase = "Ns.cnnic.cn";
+        commonQueryExistNS(nsName, nsLangEn);
+        commonQueryExistNS(nsNameWithPrefixBlank, nsLangEn);
+        commonQueryExistNS(nsNameWithUpperCase, nsLangEn);
         nsChineseLDH = StringUtil.urlEncode(nsChineseLDH);
-        commonQueryExistNS(nsChineseLDH, nsChineseOrg, nsChineseUnicode,
-                nsLangZh);
+        commonQueryExistNS(nsChineseLDH, nsLangZh);
     }
 
     /**
@@ -113,6 +116,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      * @throws Exception
      */
     @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     public void testQueryInvalidNS() throws Exception {
         commonQueryInvalidNS("123");
         commonQueryInvalidNS("c nnic.cn");
@@ -123,16 +127,15 @@ public class RdapControllerNameserverTest extends BaseTest {
      * 
      * @param queryNSName
      *            nameserver name.
+     * @param lang
+     * 			  language of object.
      * @throws Exception
      *             Exception.
      */
-    private void commonQueryExistNS(String queryNSName, String expectedLdhName,
-            String expectedUnicodeName, String lang) throws Exception {
-        System.err.println(queryNSName + expectedLdhName + expectedUnicodeName
-                + lang);
+    private void commonQueryExistNS(String queryNSName, String lang) throws Exception {
         mockMvc.perform(
-                get(urlPath + queryNSName).accept(
-                        MediaType.parseMediaType("application/json")))
+        		MockMvcRequestBuilders.get(urlPath + StringUtil.urlEncode(queryNSName))
+        		.accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.lang").value(lang))
@@ -151,7 +154,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     private void commonQueryNonExistNS(String queryDomainName) throws Exception {
         mockMvc.perform(
-                get(urlPath + queryDomainName).accept(
+                get(urlPath + StringUtil.urlEncode(queryDomainName)).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json"))
@@ -171,7 +174,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     private void commonQueryInvalidNS(String nsName) throws Exception {
         mockMvc.perform(
-                get(urlPath + nsName).accept(
+                get(urlPath + StringUtil.urlEncode(nsName)).accept(
                         MediaType.parseMediaType("application/json")))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/json"))

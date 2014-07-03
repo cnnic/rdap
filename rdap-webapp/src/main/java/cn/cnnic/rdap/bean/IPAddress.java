@@ -118,4 +118,9 @@ public class IPAddress extends BaseModel {
     public void setIpExisted(boolean ipExisted) {
         this.ipExisted = ipExisted;
     }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.IP;
+    }
 }

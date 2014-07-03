@@ -41,6 +41,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
+import cn.cnnic.rdap.common.util.StringUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -70,7 +71,7 @@ public class FilterHelper {
                 response.setHeader(headerKey, headerValue);
             }
         }
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(StringUtil.CHAR_SET_UTF8);
         PrintWriter writer = response.getWriter();
         response.setStatus(responseEntity.getStatusCode().value());
         String jsonStr = beanToJSON(responseEntity.getBody());

@@ -33,16 +33,22 @@ package cn.cnnic.rdap.service;
 import cn.cnnic.rdap.bean.BaseModel;
 
 /**
- * RDAP conformance service is used to add rdapConformance to model
+ * RDAP conformance service is used to add rdapConformance to model.
  * 
  * @author jiashuo
  * 
  */
 public interface RdapConformanceService {
 	/**
-	 * set rdapConformance to model
+	 * initial rdapConformance to model.
+	 */
+	public void initRdapConformance();
+	
+	/**
+	 * set rdapConformance to model.
 	 * 
 	 * @param model
+	 * 			the model to set.
 	 */
 	public void setRdapConformance(BaseModel model);
 }

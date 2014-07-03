@@ -30,12 +30,16 @@
  */
 package cn.cnnic.rdap.service.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.RedirectResponse;
+import cn.cnnic.rdap.common.RdapProperties;
 import cn.cnnic.rdap.dao.RedirectDao;
 import cn.cnnic.rdap.service.RedirectService;
 
@@ -47,6 +51,11 @@ import cn.cnnic.rdap.service.RedirectService;
  */
 @Service
 public class RedirectServiceImpl implements RedirectService {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(RedirectServiceImpl.class);
 
     /**
      * domain redirect DAO.
@@ -80,6 +89,19 @@ public class RedirectServiceImpl implements RedirectService {
     @Override
     public RedirectResponse queryIp(QueryParam queryParam) {
         return networkRedirectDao.query(queryParam);
+    }
+
+    @Override
+    public boolean isValidRedirect(RedirectResponse redirect) {
+        if (null == redirect || StringUtils.isBlank(redirect.getUrl())) {
+            return false;
+        }
+        if (redirect.getUrl().contains(RdapProperties.getLocalServiceUrl())) {
+            LOGGER.info("redirect url is local RDAP:{},ignore.",
+                    redirect.getUrl());
+            return false;
+        }
+        return true;
     }
 
 }

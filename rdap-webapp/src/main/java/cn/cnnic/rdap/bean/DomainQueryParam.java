@@ -31,6 +31,7 @@
 package cn.cnnic.rdap.bean;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * base query parameter bean.
@@ -104,5 +105,11 @@ public class DomainQueryParam extends QueryParam {
             return ".";
         }
         return fullTld;
+    }
+    
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(getQ()).append(punyName)
+                .toString();
     }
 }

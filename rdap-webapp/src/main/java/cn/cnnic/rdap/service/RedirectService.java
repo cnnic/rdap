@@ -40,6 +40,14 @@ import cn.cnnic.rdap.bean.RedirectResponse;
  * 
  */
 public interface RedirectService {
+
+    /**
+     * check if redirect response is valid.
+     * 
+     * @return true if valid, false if not.
+     */
+    boolean isValidRedirect(RedirectResponse redirect);
+
     /**
      * query domain by domain name.
      * 

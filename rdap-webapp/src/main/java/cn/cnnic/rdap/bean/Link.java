@@ -237,4 +237,9 @@ public class Link extends BaseModel {
     public void setType(String type) {
         this.type = type;
     }
+    
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.LINK;
+    }
 }

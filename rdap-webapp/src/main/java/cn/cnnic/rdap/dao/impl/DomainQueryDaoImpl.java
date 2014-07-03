@@ -147,14 +147,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             Domain domain = queryArpaWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             queryAndSetInnerNetwork(domain);
-
             return domain;
-
         } else {
-
             // LDH domain for DNR
             Domain domain = queryDomainWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
+            queryAndSetVariants(domain);
             return domain;
         }
     }
@@ -314,6 +312,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         }
         for (Domain domain : domains) {
             queryAndSetInnerObjects(domain);
+            queryAndSetVariants(domain);
         }
     }
 
@@ -329,10 +328,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         }
         Long domainId = domain.getId();
         ModelType type = domain.getDomainType();
-        List<Variants> variants =
-                variantsQueryDao
-                        .queryAsInnerObjects(domainId, type);
-        domain.setVarients(variants);
         List<Nameserver> nameServers =
                 nameserverQueryDao.queryAsInnerObjects(domainId,
                         type);
@@ -359,6 +354,13 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Entity> entities =
                 entityQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEntities(entities);
+    }
+
+    private void queryAndSetVariants(Domain domain) {
+        List<Variants> variants =
+                variantsQueryDao
+                        .queryAsInnerObjects(domain.getId(), domain.getDomainType());
+        domain.setVariants(variants);
     }
 
     /**
@@ -479,6 +481,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     private Domain queryDomainWithoutInnerObjects(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         final String punyName = domainQueryParam.getPunyName();
+        LOGGER.debug("query LDH_NAME with punyName:{}",punyName);
         final String sql =
                 "select * from RDAP_DOMAIN domain "
                         + " left outer join RDAP_DOMAIN_STATUS status "

@@ -36,7 +36,7 @@ package cn.cnnic.rdap.bean;
  * @author weijunkai
  * 
  */
-public class NameserverQueryParam extends QueryParam {
+public class NameserverQueryParam extends DomainQueryParam {
 
     /**
      * constructor.
@@ -47,38 +47,13 @@ public class NameserverQueryParam extends QueryParam {
      *            nameserver puny name.
      */
     public NameserverQueryParam(String q, String punyName) {
-        super(q);
-        this.punyName = punyName;
+        super(q, punyName);
     }
-
-    /**
-     * nameserver puny name.
-     */
-    private String punyName;
 
     /**
      * isSearchByIp for ipSearch.
      */
     private boolean isSearchByIp = false;
-
-    /**
-     * get punyName.
-     * 
-     * @return punyName.
-     */
-    public String getPunyName() {
-        return punyName;
-    }
-
-    /**
-     * set punyName.
-     * 
-     * @param punyName
-     *            punyName.
-     */
-    public void setPunyName(String punyName) {
-        this.punyName = punyName;
-    }
 
     /**
      * getIsSearchByIp.

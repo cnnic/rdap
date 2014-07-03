@@ -52,6 +52,16 @@ import org.slf4j.LoggerFactory;
 public final class StringUtil {
 
     /**
+     * URL separator.
+     */
+    private static final String URL_SEPARATOR = "/";
+
+    /**
+     * space.
+     */
+    public static final String SPACE = " ";
+
+    /**
      * tld splitor ".".
      */
     public static final String TLD_SPLITOR = ".";
@@ -85,6 +95,40 @@ public final class StringUtil {
      * max entity handle length.
      */
     public static final int MAX_ENTITY_HANDLE_LENGTH = 253;
+
+    /**
+     * generate url encoded redirect URL.
+     * 
+     * @param param
+     *            query param.
+     * @param servicePartUri
+     *            servicePartUri.
+     * @param baseUrl
+     *            baseUrl.
+     * @return absolute URL.
+     */
+    public static String generateEncodedRedirectURL(String param,
+            String servicePartUri, String baseUrl) {
+        LOGGER.info("   redirect found,baseUrl:{},return 301.", baseUrl);
+        if (StringUtils.endsWith(baseUrl, URL_SEPARATOR)) {
+            baseUrl = StringUtils.removeEnd(baseUrl, URL_SEPARATOR);
+        }
+        if (StringUtils.startsWith(servicePartUri, URL_SEPARATOR)) {
+            servicePartUri =
+                    StringUtils.removeStart(servicePartUri, URL_SEPARATOR);
+        }
+        if (StringUtils.endsWith(servicePartUri, URL_SEPARATOR)) {
+            servicePartUri =
+                    StringUtils.removeEnd(servicePartUri, URL_SEPARATOR);
+        }
+
+        String absoluteUrl =
+                baseUrl + URL_SEPARATOR + servicePartUri + URL_SEPARATOR
+                        + param;
+        absoluteUrl = StringUtil.urlEncode(absoluteUrl);
+        LOGGER.info("   redirect URL:{}", absoluteUrl);
+        return absoluteUrl;
+    }
 
     /**
      * parse tlds to tldList if tldList is null.

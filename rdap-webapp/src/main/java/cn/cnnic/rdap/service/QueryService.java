@@ -33,6 +33,7 @@ package cn.cnnic.rdap.service;
 import cn.cnnic.rdap.bean.Autnum;
 import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.Entity;
+import cn.cnnic.rdap.bean.Help;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.Network;
 import cn.cnnic.rdap.bean.QueryParam;
@@ -97,5 +98,11 @@ public interface QueryService {
      * @return true if is,false if not.
      */
     boolean tldInThisRegistry(QueryParam queryParam);
-
+    
+    /**
+     * query Help.
+     * 
+     * @return  result for help.
+     */
+    Help queryHelp(QueryParam queryParam);
 }
