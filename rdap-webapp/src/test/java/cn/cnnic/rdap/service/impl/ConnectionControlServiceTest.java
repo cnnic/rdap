@@ -58,6 +58,8 @@ public class ConnectionControlServiceTest {
                 .incrementConcurrentQCountAndCheckIfExceedMax());
         assertFalse(ConnectionControlService
                 .incrementConcurrentQCountAndCheckIfExceedMax());
+        assertFalse(ConnectionControlService
+                .incrementConcurrentQCountAndCheckIfExceedMax());
         assertTrue(ConnectionControlService
                 .incrementConcurrentQCountAndCheckIfExceedMax());
         ConnectionControlService.decrementAndGetCurrentQueryCount();
