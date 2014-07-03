@@ -101,7 +101,7 @@ public class ResponseDecorator {
     public void decorateResponseForHelp(BaseModel model) {
         addRdapConformance(model);
         addHelp(model);
-        policyControlService.applyPolicy(model);
+        //policyControlService.applyPolicy(model);
     }
     /**
      * add help to model.

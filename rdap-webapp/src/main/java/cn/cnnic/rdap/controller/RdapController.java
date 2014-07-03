@@ -143,16 +143,16 @@ public class RdapController {
      * @return JSON formated result,with HTTP code.
      */
     @RequestMapping(value = "/help", method = RequestMethod.GET)
-    public ResponseEntity queryEntity( HttpServletRequest request, 
+    public ResponseEntity queryHelp( HttpServletRequest request, 
                                         HttpServletResponse response) {
         LOGGER.info("help");
 
         Help result = queryService.queryHelp(queryParser
                 .parseQueryParam("HELP"));
         if (null != result) {
-            if (!accessControlManager.hasPermission(result)) {
-                return RestResponseUtil.createResponse403();
-            }
+            //if (!accessControlManager.hasPermission(result)) {
+            //    return RestResponseUtil.createResponse403();
+            //}
             responseDecorator.decorateResponseForHelp(result);
             return RestResponseUtil.createResponse200(result);
         }
