@@ -35,16 +35,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * test InitDao.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 public class InitDaoTest {
 
     /**
      * test initSchema and initData.
      */
-//    @Test
+    // @Test
     public void testInitSchemaAndData() {
         ApplicationContext ctx =
                 new ClassPathXmlApplicationContext(
