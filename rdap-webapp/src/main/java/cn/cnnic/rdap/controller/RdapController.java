@@ -150,9 +150,7 @@ public class RdapController {
         Help result = queryService.queryHelp(queryParser
                 .parseQueryParam("HELP"));
         if (null != result) {
-            //if (!accessControlManager.hasPermission(result)) {
-            //    return RestResponseUtil.createResponse403();
-            //}
+            // No permission control
             responseDecorator.decorateResponseForHelp(result);
             return RestResponseUtil.createResponse200(result);
         }
