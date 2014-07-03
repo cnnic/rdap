@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,81 +28,30 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package cn.cnnic.rdap.service;
+package cn.cnnic.rdap.bean;
 
-import cn.cnnic.rdap.bean.Autnum;
-import cn.cnnic.rdap.bean.Domain;
-import cn.cnnic.rdap.bean.Entity;
-import cn.cnnic.rdap.bean.Help;
-import cn.cnnic.rdap.bean.Nameserver;
-import cn.cnnic.rdap.bean.Network;
-import cn.cnnic.rdap.bean.QueryParam;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * query service interface.
+ * represents the information of organizations, corporations, governments,
+ * non-profits, clubs, individual persons, and informal groups of people.
  * 
  * @author jiashuo
  * 
  */
-public interface QueryService {
-    /**
-     * query domain by domain name.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return domain object.
-     */
-    Domain queryDomain(QueryParam queryParam);
+@JsonPropertyOrder({ "rdapConformance", "notices"})
+public class Help extends BaseModel {
+ 
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.HELP;
+    }
 
-    /**
-     * query autnm.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return autnum autnum.
-     */
-    Autnum queryAutnum(QueryParam queryParam);
-
-    /**
-     * query nameserver.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Nameserver for the result.
-     */
-    Nameserver queryNameserver(QueryParam queryParam);
-
-    /**
-     * query entity.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Entity.
-     */
-    Entity queryEntity(QueryParam queryParam);
-
-    /**
-     * query Ip.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Ip for the result.
-     */
-    Network queryIp(QueryParam queryParam);
-    
-    /**
-     * check tld is in this registry.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return true if is,false if not.
-     */
-    boolean tldInThisRegistry(QueryParam queryParam);
-    
-    /**
-     * query Help.
-     * 
-     * @return  result for help.
-     */
-    Help queryHelp(QueryParam queryParam);
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("Help")
+                .toString();
+    }
 }

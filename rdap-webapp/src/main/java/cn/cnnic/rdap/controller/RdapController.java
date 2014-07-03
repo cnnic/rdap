@@ -50,6 +50,7 @@ import cn.cnnic.rdap.bean.Domain;
 import cn.cnnic.rdap.bean.DomainSearch;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.EntitySearch;
+import cn.cnnic.rdap.bean.Help;
 import cn.cnnic.rdap.bean.Nameserver;
 import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.NameserverSearch;
@@ -132,6 +133,30 @@ public class RdapController {
     @Autowired
     private RedirectService redirectService;
 
+    /**
+     * help.
+     * 
+     * @param request
+     *            HttpServletRequest.
+     * @param response
+     *            HttpServletResponse
+     * @return JSON formated result,with HTTP code.
+     */
+    @RequestMapping(value = "/help", method = RequestMethod.GET)
+    public ResponseEntity queryHelp( HttpServletRequest request, 
+                                        HttpServletResponse response) {
+        LOGGER.info("help");
+
+        Help result = queryService.queryHelp(queryParser
+                .parseQueryParam("HELP"));
+        if (null != result) {
+            // No permission control
+            responseDecorator.decorateResponseForHelp(result);
+            return RestResponseUtil.createResponse200(result);
+        }
+        return RestResponseUtil.createResponse404();
+    }
+    
     /**
      * query entity.
      * 
