@@ -36,10 +36,10 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
       *  build project:
 		```
 			[in Linux, open a shell and execute command:]
-				cd $WORK_DIR/rdap-develop/rdap-webapp		# $WORK_DIR must be replaced by real dir
+				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
 				mvn package -Dmaven.test.skip=true	# mvn must in system variable
 			[in Windows7 or Windows8, open command prompt window and execute command:]
-				cd $WORK_DIR/rdap-develop/rdap-webapp		# $WORK_DIR must be replaced by real dir
+				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
 				mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
 			(target/rdap.war  is the build war file)
 	
