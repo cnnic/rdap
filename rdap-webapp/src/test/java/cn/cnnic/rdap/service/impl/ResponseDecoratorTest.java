@@ -39,8 +39,12 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
+
 import cn.cnnic.rdap.BaseTest;
 import cn.cnnic.rdap.bean.Autnum;
+import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
  * Test for RdapConformanceServiceImpl.
@@ -52,19 +56,25 @@ import cn.cnnic.rdap.bean.Autnum;
 public class ResponseDecoratorTest extends BaseTest {
     @Autowired
     private ResponseDecorator responseDecorator;
+    
+    @Autowired
+	private RdapConformanceService rdapConformanceService;
 
     /**
      * test query exist autnum
      */
     @Test
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/rdapConformance.xml")
     public void testSetRdapConformanceToAutnum() {
         Autnum autnum = new Autnum();
         Assert.notNull(autnum);
         assertNull(autnum.getRdapConformance());
+        rdapConformanceService.initRdapConformance();
         responseDecorator.decorateResponse(autnum);
         assertNotNull(autnum.getRdapConformance());
         assertThat(autnum.getRdapConformance(),
-                CoreMatchers.hasItems("rdap_level_0"));
+                CoreMatchers.notNullValue());
     }
     
 }

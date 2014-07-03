@@ -85,9 +85,6 @@ public class RdapControllerEntitySearchTest extends BaseTest {
                         .accept(MediaType.parseMediaType("application/json")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(
-                        jsonPath("$.rdapConformance").value(
-                                CoreMatchers.hasItem("rdap_level_0")))
                 .andExpect(jsonPath("$.entitySearchResults").exists())
                 .andExpect(jsonPath("$.entitySearchResults").isArray())
                 .andExpect(

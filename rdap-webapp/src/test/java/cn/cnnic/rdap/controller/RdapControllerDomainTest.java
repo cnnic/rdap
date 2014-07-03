@@ -80,12 +80,10 @@ public class RdapControllerDomainTest extends BaseTest {
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain.xml")
     public void testQueryExistDomain() throws Exception {
         String domainName = "cnnic.cn";
-        String domainNameWithLastDot = "cnnic.cn.";
         String domainNameWithPrefixBlank = " cnnic.cn";// validate by filter
         String domainNameWithUpperCase = "Cnnic.cn";
         String domainNameInFullWith = "ｃｎｎｉｃ.cn";
         commonQueryExistDomain(domainName, domainName, domainName);
-        commonQueryExistDomain(domainNameWithLastDot, domainName, domainName);
         commonQueryExistDomain(domainNameWithPrefixBlank, domainName,
                 domainName);
         commonQueryExistDomain(domainNameWithUpperCase, domainName, domainName);
@@ -134,7 +132,6 @@ public class RdapControllerDomainTest extends BaseTest {
         commonQueryInvalidDomain("xn--55qx5d.中国.cn");
         commonQueryInvalidDomain("xn--caf%C3%A9s.com");
         commonQueryInvalidDomain("xn--cafés.com");
-//        commonQueryInvalidDomain("σειράτάξησυπουργείωνσύνθεσηυπουργικούσυμβουλίουουουο.bnnhg");
         commonQueryInvalidDomain("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CF%83%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CE%BF.bnnhg");
         commonQueryInvalidDomain("xn--hxaajaoebldbselhkqsqmapxidccaaaahjsgk5chhdiq0cclcgddbb8o9hoa.bnnhg");
         commonQueryInvalidDomain("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο.bnnhg");
