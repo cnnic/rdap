@@ -75,14 +75,14 @@ public class NoticeDaoImpl implements NoticeDao {
     @Override
     public List<Notice> getAllNotices() {
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
-        queryAndSetInnerObjects(notices);
+        queryAndSetInnerObjects(notices, NoticeType.Notice);
         return notices;
     }
 
     @Override
     public List<Notice> getHelp() {
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.HELP);
-        queryAndSetInnerObjects(notices);
+        queryAndSetInnerObjects(notices, NoticeType.HELP);
         return notices;
     }
     
@@ -92,12 +92,12 @@ public class NoticeDaoImpl implements NoticeDao {
      * @param notices
      *            notice list
      */
-    private void queryAndSetInnerObjects(List<Notice> notices) {
+    private void queryAndSetInnerObjects(List<Notice> notices, NoticeType type) {
         if (null == notices || notices.size() == 0) {
             return;
         }
         for (Notice notice : notices) {
-            queryAndSetInnerObjects(notice);
+            queryAndSetInnerObjects(notice, type);
         }
     }
 
@@ -107,13 +107,21 @@ public class NoticeDaoImpl implements NoticeDao {
      * @param notice
      *            notice after set inner objects
      */
-    private void queryAndSetInnerObjects(Notice notice) {
-        if (null == notice) {
+    private void queryAndSetInnerObjects(Notice notice, NoticeType type) {
+        if (null == notice || null == type) {
             return;
         }
-        List<Link> links = linkQueryDao.queryAsInnerObjects(notice.getId(),
+        List<Link> links = null;
+        if (NoticeType.Notice == type) {
+            links = linkQueryDao.queryAsInnerObjects(notice.getId(),
                 ModelType.NOTICE);
-        notice.setLinks(links);
+        } else if (NoticeType.HELP == type){
+            links = linkQueryDao.queryAsInnerObjects(notice.getId(),
+                ModelType.HELP);
+        }
+        if (null != links) {
+            notice.setLinks(links);
+        }
     }
 
     /**
