@@ -147,14 +147,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             Domain domain = queryArpaWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             queryAndSetInnerNetwork(domain);
-
             return domain;
-
         } else {
-
             // LDH domain for DNR
             Domain domain = queryDomainWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
+            queryAndSetVariants(domain);
             return domain;
         }
     }
@@ -314,6 +312,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         }
         for (Domain domain : domains) {
             queryAndSetInnerObjects(domain);
+            queryAndSetVariants(domain);
         }
     }
 
@@ -329,10 +328,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         }
         Long domainId = domain.getId();
         ModelType type = domain.getDomainType();
-        List<Variants> variants =
-                variantsQueryDao
-                        .queryAsInnerObjects(domainId, type);
-        domain.setVariants(variants);
         List<Nameserver> nameServers =
                 nameserverQueryDao.queryAsInnerObjects(domainId,
                         type);
@@ -359,6 +354,13 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Entity> entities =
                 entityQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEntities(entities);
+    }
+
+    private void queryAndSetVariants(Domain domain) {
+        List<Variants> variants =
+                variantsQueryDao
+                        .queryAsInnerObjects(domain.getId(), domain.getDomainType());
+        domain.setVariants(variants);
     }
 
     /**
