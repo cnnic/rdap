@@ -90,7 +90,7 @@ public class RestResponseUtil {
     /**
      * init conformance service.
      */
-    private void initConformanceService() {
+    public static void initConformanceService() {
     	responseDecorator.initRdapConformance();
     }
 
