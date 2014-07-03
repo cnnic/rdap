@@ -356,7 +356,14 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         domain.setEntities(entities);
     }
 
+    /**
+     * query and set variants.
+     * @param domain domain.
+     */
     private void queryAndSetVariants(Domain domain) {
+        if (null == domain) {
+            return;
+        }
         List<Variants> variants =
                 variantsQueryDao
                         .queryAsInnerObjects(domain.getId(), domain.getDomainType());
