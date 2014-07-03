@@ -102,7 +102,7 @@ public final class DomainUtil {
     public static final String BLANK_IN_DOMAIN = " ";
     
     /**
-     * specific \u3002\uff0e\uff61。
+     * \u3002\uff0e\uff61
      */
     public static final java.lang.String DISALLOWED_DELIMITERS = "。．｡";
     
@@ -357,7 +357,7 @@ public final class DomainUtil {
             return str;
         }
         str = urlDecode(str);
-        LOGGER.debug("after decode: {}", str);
+        LOGGER.debug("after decode: {}",str);
         // replace all ASCII char to lower case.
         StringBuffer asciiLowerCasedSb = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {

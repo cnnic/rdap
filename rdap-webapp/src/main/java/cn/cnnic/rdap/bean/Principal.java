@@ -50,7 +50,7 @@ public class Principal {
      * check is anonymous.
      * @return true if is, false if not.
      */
-    public boolean isAnonymous() {
+    public boolean isAnonymous(){
         return USER_ID_ANONYMOUS.equals(id);
     }
 

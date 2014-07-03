@@ -56,10 +56,8 @@ public class FilterHelper {
      * write response.
      * 
      * @param responseEntity
-     *          response entity to request.
      * @param response
-     *          response to request.
-     * @throws IOException exception.
+     * @throws IOException
      */
     public static void writeResponse(
             ResponseEntity<ErrorMessage> responseEntity,
@@ -84,9 +82,8 @@ public class FilterHelper {
      * convert bean to JSON format String.
      * 
      * @param object
-     *          change object to json.
-     * @return string.
-     * @throws IOException exception.
+     * @return
+     * @throws IOException
      */
     private static String beanToJSON(Object object) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

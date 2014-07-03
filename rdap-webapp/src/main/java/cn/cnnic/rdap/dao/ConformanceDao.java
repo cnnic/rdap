@@ -43,7 +43,6 @@ public interface ConformanceDao {
     /**
      * get all conformance list.
      * 
-     * @return string of comformance.
      */
     List<String> queryConformance();
 }

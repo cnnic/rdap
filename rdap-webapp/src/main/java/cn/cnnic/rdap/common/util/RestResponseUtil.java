@@ -91,7 +91,7 @@ public class RestResponseUtil {
      * init conformance service.
      */
     public static void initConformanceService() {
-        responseDecorator.initRdapConformance();
+    	responseDecorator.initRdapConformance();
     }
 
     /**
@@ -222,8 +222,8 @@ public class RestResponseUtil {
     /**
      * create response with HTTP status code 301.
      * 
-     * @param redirectUrl
-     *            redirect url.
+     * @param response
+     *            model object.
      * @return ResponseEntity.
      */
     public static ResponseEntity<ErrorMessage> createResponse301(
@@ -239,6 +239,8 @@ public class RestResponseUtil {
     /**
      * create response with HTTP status code 429.
      * 
+     * @param response
+     *            model object.
      * @return ResponseEntity.
      */
     public static ResponseEntity<ErrorMessage> createResponse429() {
@@ -248,6 +250,8 @@ public class RestResponseUtil {
     /**
      * create response with HTTP status code 509.
      * 
+     * @param response
+     *            model object.
      * @return ResponseEntity.
      */
     public static ResponseEntity<ErrorMessage> createResponse509() {

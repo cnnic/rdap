@@ -95,8 +95,6 @@ public class QueryParser {
      *            ip Address.
      * @param numMask
      *            mask for ip.
-     * @param ipVersion
-     *            v4 or v6.
      * @return QueryParam.
      */
     public QueryParam parseIpQueryParam(String ipAddr, long numMask,
