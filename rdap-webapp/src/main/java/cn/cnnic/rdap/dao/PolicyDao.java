@@ -44,6 +44,7 @@ public interface PolicyDao {
     /**
      * get all policy map.
      * 
+     * @return map of policy.
      */
-    Map<String,Set<String>> loadAllPolicyMap();
+    Map<String, Set<String>> loadAllPolicyMap();
 }

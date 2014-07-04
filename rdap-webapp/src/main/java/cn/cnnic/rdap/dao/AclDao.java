@@ -35,14 +35,14 @@ import cn.cnnic.rdap.bean.SecureObject;
 
 /**
  * Access Control List entry dao.
- * 
+ *
  * @author jiashuo
- * 
+ *
  */
 public interface AclDao {
     /**
      * check if principal has access entry to secureObject.
-     * 
+     *
      * @param principal
      *            principal.
      * @param secureObject
