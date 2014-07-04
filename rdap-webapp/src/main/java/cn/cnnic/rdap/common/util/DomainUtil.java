@@ -102,7 +102,7 @@ public final class DomainUtil {
     public static final String BLANK_IN_DOMAIN = " ";
     
     /**
-     * \u3002\uff0e\uff61
+     * \u3002\uff0e\uff61.
      */
     public static final java.lang.String DISALLOWED_DELIMITERS = "。．｡";
     
