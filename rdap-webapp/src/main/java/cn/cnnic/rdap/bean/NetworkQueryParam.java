@@ -238,7 +238,8 @@ public class NetworkQueryParam extends QueryParam {
         }
         if (maskRangeBytes > 0 && maskRangeBytes <= numBytes) {
             // 2^numMask sub 1
-            final long maskV4High = (long) (Math.pow(numBase, maskRangeBytes) - 1L);
+            final long maskV4High = 
+                    (long) (Math.pow(numBase, maskRangeBytes) - 1L);
             final long maskV4Low = (long) Math.pow(numBase, numBytes)
                     - maskV4High - 1L;
             long[] longIpV4 = IpUtil.ipToLong(strQuery);
