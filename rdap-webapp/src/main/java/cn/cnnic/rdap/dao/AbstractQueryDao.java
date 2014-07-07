@@ -121,7 +121,8 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      *            object list.
      * @return object id list.
      */
-    protected List<Long> getModelIds(List<? extends BaseModel> baseModelObjects) {
+    protected List<Long>
+    getModelIds(List<? extends BaseModel> baseModelObjects) {
         List<Long> result = new ArrayList<Long>();
         if (null == baseModelObjects) {
             return result;

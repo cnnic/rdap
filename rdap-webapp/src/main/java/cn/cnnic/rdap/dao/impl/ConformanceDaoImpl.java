@@ -53,61 +53,62 @@ import cn.cnnic.rdap.dao.ConformanceDao;
  */
 @Repository
 public class ConformanceDaoImpl implements ConformanceDao {
-	/**
-	 * jdbcTemplate.
-	 */
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+    /**
+     * jdbcTemplate.
+     */
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-	@Override
-	public List<String> queryConformance() {
-		final String sql = "select * from RDAP_CONFORMANCE order by conformance_id";
-		List<String> listConformance = jdbcTemplate.query(
-				new PreparedStatementCreator() {
-					@Override
-					public PreparedStatement createPreparedStatement(
-							Connection conn) throws SQLException {
-						PreparedStatement ps = conn.prepareStatement(sql);
-						return ps;
-					}
-				}, new conformanceResultSetExtractor());
-		return listConformance;
-	}
+    @Override
+    public List<String> queryConformance() {
+        final String sql =
+                "select * from RDAP_CONFORMANCE order by conformance_id";
+        List<String> listConformance = jdbcTemplate.query(
+                new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(
+                            Connection conn) throws SQLException {
+                        PreparedStatement ps = conn.prepareStatement(sql);
+                        return ps;
+                    }
+                }, new ConformanceResultSetExtractor());
+        return listConformance;
+    }
 
-	/**
-	 * object Columns ResultSetExtractor, extract data from ResultSet.
-	 * 
-	 * @author weijunkai
-	 * 
-	 */
-	class conformanceResultSetExtractor implements
-			ResultSetExtractor<List<String>> {
-		@Override
-		public List<String> extractData(ResultSet rs) throws SQLException {
-			List<String> result = new ArrayList<String>();
-			while (rs.next()) {
-				extractConformanceFromRs(rs, result);
-			}
-			return result;
-		}
-	}
+    /**
+     * object Columns ResultSetExtractor, extract data from ResultSet.
+     * 
+     * @author weijunkai
+     * 
+     */
+    class ConformanceResultSetExtractor implements
+            ResultSetExtractor<List<String>> {
+        @Override
+        public List<String> extractData(ResultSet rs) throws SQLException {
+            List<String> result = new ArrayList<String>();
+            while (rs.next()) {
+                extractConformanceFromRs(rs, result);
+            }
+            return result;
+        }
+    }
 
-	/**
-	 * extract conformance string from ResultSet.
-	 * 
-	 * @param rs
-	 *            ResultSet.
-	 * @param result
-	 *            conformance list.
-	 * @throws SQLException
-	 *             SQLException.
-	 */
-	private void extractConformanceFromRs(ResultSet rs, List<String> result)
-			throws SQLException {
-		String strConformance = rs.getString("RDAP_CONFORMANCE");
-		if (result.contains(strConformance)) {
-			return;
-		}
-		result.add(strConformance);
-	}
+    /**
+     * extract conformance string from ResultSet.
+     * 
+     * @param rs
+     *            ResultSet.
+     * @param result
+     *            conformance list.
+     * @throws SQLException
+     *             SQLException.
+     */
+    private void extractConformanceFromRs(ResultSet rs, List<String> result)
+            throws SQLException {
+        String strConformance = rs.getString("RDAP_CONFORMANCE");
+        if (result.contains(strConformance)) {
+            return;
+        }
+        result.add(strConformance);
+    }
 }
