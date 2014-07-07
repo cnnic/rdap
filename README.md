@@ -51,9 +51,18 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
 	
 		```
-			jdbc.url: value change to installed Mysql url in step 'Install Mysql and init database'
+			jdbc.url.hostPort: value change to installed Mysql host and port url in step 'Install Mysql and init database'
+			jdbc.url.dbName: value change to Mysql database name in step 'Install Mysql and init database'
 			jdbc.username: value change to $MYSQL_USERNAME in step 'Install Mysql and init database'
 			jdbc.password: value change to $MYSQL_PASSWORD in step 'Install Mysql and init database'
+		```
+		
+   * Edit global configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties:
+	
+		```
+			localServiceUrl: value change to local RDAP service url, This value is used in redirect service to check if redirect url is local service url, and will ignore the redirect if is local service url.
+			inTlds: value change to puny name of tlds in this registry, splited by ';'.Only in this list can query.
+			notInTlds: value change to puny name of tlds NOT in this registry, splited by ';'. Tlds  in this list can NOT be query, and will query redirect instead.
 		```
 
    * Start up tomcat
