@@ -28,10 +28,8 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-
 /**
- * init mysql.
+ * models.
  * @author jiashuo
- *
  */
 package cn.cnnic.rdap.init.mysql;
