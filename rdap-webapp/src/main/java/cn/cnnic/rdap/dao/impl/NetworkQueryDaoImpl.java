@@ -260,7 +260,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     /**
      * query inner objects of ip,and fill them to ip.
      * 
-     * @param ip
+     * @param objIp
      *            inner objects will be filled.
      */
     private void queryAndSetInnerObjectsWithoutEntities(Network objIp) {

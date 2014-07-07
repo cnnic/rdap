@@ -91,5 +91,4 @@ public class AutnumRedirectDao implements RedirectDao {
         }
         return new RedirectResponse(result.get(0));
     }
-
 }

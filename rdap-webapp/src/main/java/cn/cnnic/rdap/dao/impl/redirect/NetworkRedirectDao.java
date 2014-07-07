@@ -78,5 +78,4 @@ public class NetworkRedirectDao implements RedirectDao {
         }
         return new RedirectResponse(result.get(0));
     }
-
 }

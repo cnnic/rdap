@@ -85,7 +85,7 @@ public class DomainRedirectDao implements RedirectDao {
     }
 
     /**
-     * get joined tld query string condition: 'cn','com.cn'
+     * get joined tld query string condition: 'cn','com.cn'.
      * 
      * @param fullTld
      *            fullTld.
@@ -109,5 +109,4 @@ public class DomainRedirectDao implements RedirectDao {
         }
         return StringUtils.join(tldList, ",");
     }
-
 }

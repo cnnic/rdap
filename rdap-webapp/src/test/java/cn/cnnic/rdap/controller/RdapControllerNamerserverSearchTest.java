@@ -88,6 +88,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserver-search.xml")
     public void testSearchExistNameserver() throws Exception {
+        RestResponseUtil.initErrorMessages();
         String nsNameCn = "name=ns.cnnic*";
         String ipHead = "ip=";
         String nsNameIpV4 = ipHead + "255.255.255.255";
@@ -196,6 +197,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserver-search.xml")
     public void testSearchTruncatedNameserver() throws Exception {
+        RestResponseUtil.initErrorMessages();
         String nsHead = "name=";
         String ipHead = "ip=";
         String nsName = nsHead + "ns.truncated*";
