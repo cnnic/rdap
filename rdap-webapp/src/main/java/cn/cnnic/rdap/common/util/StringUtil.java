@@ -114,17 +114,16 @@ public final class StringUtil {
             baseUrl = StringUtils.removeEnd(baseUrl, URL_SEPARATOR);
         }
         if (StringUtils.startsWith(servicePartUri, URL_SEPARATOR)) {
-            servicePartUri =
-                    StringUtils.removeStart(servicePartUri, URL_SEPARATOR);
+            servicePartUri = StringUtils.removeStart(servicePartUri,
+                    URL_SEPARATOR);
         }
         if (StringUtils.endsWith(servicePartUri, URL_SEPARATOR)) {
-            servicePartUri =
-                    StringUtils.removeEnd(servicePartUri, URL_SEPARATOR);
+            servicePartUri = StringUtils.removeEnd(servicePartUri,
+                    URL_SEPARATOR);
         }
 
-        String absoluteUrl =
-                baseUrl + URL_SEPARATOR + servicePartUri + URL_SEPARATOR
-                        + param;
+        String absoluteUrl = baseUrl + URL_SEPARATOR + servicePartUri
+                + URL_SEPARATOR + param;
         absoluteUrl = StringUtil.urlEncode(absoluteUrl);
         LOGGER.info("   redirect URL:{}", absoluteUrl);
         return absoluteUrl;
@@ -137,7 +136,7 @@ public final class StringUtil {
      *            ';' separated tlds, eg: cn;edu.cn
      * @param tldList
      *            tldList.
-     * @return
+     * @return List<String>.
      */
     public static List<String> parseTldsToListIfTldListIsNull(String tlds,
             List<String> tldList) {
@@ -245,9 +244,8 @@ public final class StringUtil {
         String result = str;
         try {
             String decodedURL = URLDecoder.decode(str, CHAR_SET_UTF8);
-            decodedURL =
-                    decodedURL.replaceAll("\\\\",
-                            URLEncoder.encode("\\", CHAR_SET_UTF8));
+            decodedURL = decodedURL.replaceAll("\\\\",
+                    URLEncoder.encode("\\", CHAR_SET_UTF8));
             URI uri = new URI(decodedURL);
             result = uri.toASCIIString();
         } catch (Exception e) {
@@ -286,11 +284,13 @@ public final class StringUtil {
      * @throws NumberFormatException
      *             if the string does not contain a parsable unsigned integer.
      */
-    public static long parseUnsignedLong(String s) throws NumberFormatException {
+    public static long parseUnsignedLong(String s) 
+            throws NumberFormatException {
         if (StringUtils.isBlank(s)) {
             return 0L;
         }
-        return parseUnsignedLong(s, 10);
+        final int baseRadix = 10;
+        return parseUnsignedLong(s, baseRadix);
     }
 
     /**
@@ -338,6 +338,9 @@ public final class StringUtil {
      */
     private static long parseUnsignedLong(String s, int radix)
             throws NumberFormatException {
+        final int maxRadix = 13;
+        final int baseRadix = 10;
+        final int lengBaseRadix = 18;
         if (s == null) {
             throw new NumberFormatException("null");
         }
@@ -350,10 +353,11 @@ public final class StringUtil {
                         "Illegal leading minus sign "
                                 + "on unsigned string %s.", s));
             } else {
-                if (len <= 12 || // Long.MAX_VALUE in Character.MAX_RADIX is 13
-                                 // digits
-                        (radix == 10 && len <= 18)) { // Long.MAX_VALUE in base
-                                                      // 10 is 19 digits
+                if (len <= maxRadix - 1
+                // Long.MAX_VALUE in Character.
+                // MAX_RADIX is 13 digits
+                        || (radix == baseRadix && len <= lengBaseRadix)) {
+                    // Long.MAX_VALUE in base 10 length is 19 digits
                     return Long.parseLong(s, radix);
                 }
 

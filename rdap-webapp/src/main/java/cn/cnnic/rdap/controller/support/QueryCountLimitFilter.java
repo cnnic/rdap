@@ -72,5 +72,4 @@ public class QueryCountLimitFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         return true;
     }
-
 }

@@ -29,7 +29,7 @@
  * DAMAGE.
  */
 /**
- * models.
+ * common.
  * @author jiashuo
  */
 package cn.cnnic.rdap.common;

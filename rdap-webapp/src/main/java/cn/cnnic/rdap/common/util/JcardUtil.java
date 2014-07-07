@@ -180,7 +180,8 @@ public final class JcardUtil {
             }
             return telBuilder.build();
         } catch (Exception e) {
-            LOGGER.error("buildTelUri error:{} for tel:{}", e.getMessage(), tel);
+            LOGGER.error("buildTelUri error:{} for tel:{}",
+                    e.getMessage(), tel);
         }
         return null;
     }

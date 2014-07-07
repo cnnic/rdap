@@ -72,5 +72,4 @@ public class RateLimitFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         return true;
     }
-
 }
