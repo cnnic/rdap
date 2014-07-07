@@ -29,7 +29,7 @@
  * DAMAGE.
  */
 /**
- * models.
+ * init mysql.
  * @author jiashuo
  */
 package cn.cnnic.rdap.init.mysql;

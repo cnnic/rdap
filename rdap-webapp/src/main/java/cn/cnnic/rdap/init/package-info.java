@@ -29,7 +29,7 @@
  * DAMAGE.
  */
 /**
- * models.
+ * init.
  * @author jiashuo
  */
 package cn.cnnic.rdap.init;
