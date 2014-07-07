@@ -311,7 +311,7 @@ public class Arpa {
      */
     private void setStartAddressForIp6(byte[] sections) {
 
-        byte[] byteStart = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        byte[] byteStart = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         System.arraycopy(sections, 0, byteStart, 0, sections.length);
 
@@ -350,7 +350,7 @@ public class Arpa {
         byte[] highBytes = new byte[LENGTH_OF_V6_BYTES / 2];
         byte[] lowBytes = new byte[LENGTH_OF_V6_BYTES / 2];
 
-        byte[] byteEnd = { MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
+        byte[] byteEnd = {MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
                 MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
                 MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
                 MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F, MASK_0F,
@@ -373,7 +373,7 @@ public class Arpa {
     }
 
     /**
-     * 
+     * from bigDecimal to networkQueryParam.
      * @return a param for network query.
      */
     public NetworkQueryParam toNetworkQueryParam() {

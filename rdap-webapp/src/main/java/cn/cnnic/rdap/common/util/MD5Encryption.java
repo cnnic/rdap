@@ -30,6 +30,8 @@ public final class MD5Encryption {
      */
     public static String encryption(String plainText) {
         String reMd5 = new String();
+        final int numOneByteMax = 256;
+        final int numHex = 16;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(plainText.getBytes());
@@ -39,9 +41,9 @@ public final class MD5Encryption {
             for (int offset = 0; offset < b.length; offset++) {
                 i = b[offset];
                 if (i < 0) {
-                    i += 256;
+                    i += numOneByteMax;
                 }
-                if (i < 16) {
+                if (i < numHex) {
                     buf.append("0");
                 }
                 buf.append(Integer.toHexString(i));

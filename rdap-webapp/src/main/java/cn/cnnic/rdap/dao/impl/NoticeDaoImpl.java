@@ -55,7 +55,7 @@ import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * notice query DAO
+ * notice query DAO。
  * 
  * @author jiashuo
  * 

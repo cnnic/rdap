@@ -82,6 +82,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserverTest.xml")
     public void testQueryExistNameserver() throws Exception {
+        RestResponseUtil.initErrorMessages();
     	RestResponseUtil.initConformanceService();
         String nsName = "ns.cnnic.cn";
         String nsNameWithPrefixBlank = " ns.cnnic.cn";
@@ -103,6 +104,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     @Test
     public void testQueryNonExistNS() throws Exception {
+        RestResponseUtil.initErrorMessages();
         commonQueryNonExistNS("1cnnic.cn");
         commonQueryNonExistNS("cnnic.com.cn");
         commonQueryNonExistNS("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
@@ -118,6 +120,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     public void testQueryInvalidNS() throws Exception {
+        RestResponseUtil.initErrorMessages();
         commonQueryInvalidNS("123");
         commonQueryInvalidNS("c nnic.cn");
     }
