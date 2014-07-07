@@ -129,9 +129,9 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nameserverSearchResults").exists())
                 .andExpect(jsonPath("$.nameserverSearchResults").isArray())
-                .andExpect(
-                        jsonPath("$.nameserverSearchResults",
-                                Matchers.hasItem(Matchers.hasKey("handle"))))
+//                .andExpect(
+//                        jsonPath("$.nameserverSearchResults",
+//                                Matchers.hasItem(Matchers.hasKey("handle"))))
                 .andExpect(
                         jsonPath("$.nameserverSearchResults",
                                 Matchers.hasItem(Matchers.notNullValue())))
@@ -231,10 +231,10 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.nameserverSearchResults").isArray())
                 .andExpect(
                         jsonPath("$.nameserverSearchResults",
-                                hasSize((int) finalSize)))
-                .andExpect(
-                        jsonPath("$.nameserverSearchResults",
-                                Matchers.hasItem(Matchers.hasKey("handle"))));
+                                hasSize((int) finalSize)));
+//                .andExpect(
+//                        jsonPath("$.nameserverSearchResults",
+//                                Matchers.hasItem(Matchers.hasKey("handle"))));
     }
 
     /**
