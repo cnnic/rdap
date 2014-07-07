@@ -70,9 +70,9 @@ import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * domain query DAO.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 @Repository
 public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
@@ -124,16 +124,16 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     @Autowired
     @Qualifier("networkQueryDaoImpl")
     private QueryDao<Network> networkQueryDao;
-    
+
     /**
      * entityQueryDao.
      */
     @Autowired
     private QueryDao<Entity> entityQueryDao;
-    
+
     /**
      * query domain (RIR or DNR).
-     *
+     * 
      * @param queryParam
      *            QueryParam.
      * @return domain .
@@ -159,7 +159,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * search DNR domain .
-     *
+     * 
      * @param queryParam
      *            QueryParam.
      * @return domain list .
@@ -174,7 +174,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * search domain count.
-     *
+     * 
      * @param queryParam
      *            QueryParam.
      * @return domain count.
@@ -184,12 +184,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         final String domainName = domainQueryParam.getQ();
         final String punyName = domainQueryParam.getPunyName();
-        final String domainNameLikeClause =
-                super.generateLikeClause(domainName);
+        final String domainNameLikeClause = super
+                .generateLikeClause(domainName);
         final String punyNameLikeClause = super.generateLikeClause(punyName);
-        final String sql =
-                "select count(1) as COUNT from RDAP_DOMAIN domain "
-                        + " where LDH_NAME like ? or UNICODE_NAME like ? ";
+        final String sql = "select count(1) as COUNT from RDAP_DOMAIN domain "
+                + " where LDH_NAME like ? or UNICODE_NAME like ? ";
         Long domainCount = jdbcTemplate.query(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(
@@ -205,7 +204,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * query and set domain status.
-     *
+     * 
      * @param domains
      *            domain list.
      */
@@ -213,8 +212,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Long> domainIds = getModelIds(domains);
         List<ModelStatus> domainStatusList = queryDomainStatus(domainIds);
         for (ModelStatus status : domainStatusList) {
-            BaseModel obj =
-                    BaseModel.findObjectFromListById(domains, status.getId());
+            BaseModel obj = BaseModel.findObjectFromListById(domains,
+                    status.getId());
             if (null == obj) {
                 continue;
             }
@@ -225,7 +224,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * query domain status.
-     *
+     * 
      * @param domainIds
      *            domain id list.
      * @return domain status list.
@@ -235,11 +234,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return new ArrayList<ModelStatus>();
         }
         final String domainsIdsJoinedByComma = StringUtils.join(domainIds, ",");
-        final String sqlTpl =
+        final String sqlTpl = 
                 "select * from RDAP_DOMAIN_STATUS where DOMAIN_ID in (%s)";
         final String sql = String.format(sqlTpl, domainsIdsJoinedByComma);
-        List<ModelStatus> result =
-                jdbcTemplate.query(sql, new RowMapper<ModelStatus>() {
+        List<ModelStatus> result = jdbcTemplate.query(sql,
+                new RowMapper<ModelStatus>() {
                     @Override
                     public ModelStatus mapRow(ResultSet rs, int rowNum)
                             throws SQLException {
@@ -253,7 +252,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * query and set arpa status.
-     *
+     * 
      * @param domains
      *            domain list.
      */
@@ -261,8 +260,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Long> domainIds = getModelIds(domains);
         List<ModelStatus> domainStatusList = queryArpaStatus(domainIds);
         for (ModelStatus status : domainStatusList) {
-            BaseModel obj =
-                    BaseModel.findObjectFromListById(domains, status.getId());
+            BaseModel obj = BaseModel.findObjectFromListById(domains,
+                    status.getId());
             if (null == obj) {
                 continue;
             }
@@ -273,7 +272,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * query domain status.
-     *
+     * 
      * @param domainIds
      *            domain id list.
      * @return domain status list.
@@ -283,11 +282,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return new ArrayList<ModelStatus>();
         }
         final String domainsIdsJoinedByComma = StringUtils.join(domainIds, ",");
-        final String sqlTpl =
+        final String sqlTpl = 
                 "select * from RDAP_ARPA_STATUS where ARPA_ID in (%s)";
         final String sql = String.format(sqlTpl, domainsIdsJoinedByComma);
-        List<ModelStatus> result =
-                jdbcTemplate.query(sql, new RowMapper<ModelStatus>() {
+        List<ModelStatus> result = jdbcTemplate.query(sql,
+                new RowMapper<ModelStatus>() {
                     @Override
                     public ModelStatus mapRow(ResultSet rs, int rowNum)
                             throws SQLException {
@@ -299,10 +298,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         return result;
     }
 
-    
     /**
      * query inner objects of domain,and set fill them to domain.
-     *
+     * 
      * @param domains
      *            domain list.
      */
@@ -318,7 +316,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * query inner objects of domain,and set fill them to domain.
-     *
+     * 
      * @param domain
      *            inner objects will be filled.
      */
@@ -328,51 +326,47 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         }
         Long domainId = domain.getId();
         ModelType type = domain.getDomainType();
-        List<Nameserver> nameServers =
-                nameserverQueryDao.queryAsInnerObjects(domainId,
-                        type);
+        List<Nameserver> nameServers = nameserverQueryDao.queryAsInnerObjects(
+                domainId, type);
         domain.setNameServers(nameServers);
-        List<SecureDns> secureDnsList =
-                secureDnsQueryDao.queryAsInnerObjects(domainId,
-                        type);
+        List<SecureDns> secureDnsList = secureDnsQueryDao.queryAsInnerObjects(
+                domainId, type);
         if (null != secureDnsList && secureDnsList.size() > 0) {
             domain.setSecureDns(secureDnsList.get(0));
         }
-        List<PublicId> publicIds =
-                publicIdQueryDao
-                        .queryAsInnerObjects(domainId, type);
+        List<PublicId> publicIds = publicIdQueryDao.queryAsInnerObjects(
+                domainId, type);
         domain.setPublicIds(publicIds);
-        List<Remark> remarks =
-                remarkQueryDao.queryAsInnerObjects(domainId, type);
+        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(domainId,
+                type);
         domain.setRemarks(remarks);
-        List<Link> links =
-                linkQueryDao.queryAsInnerObjects(domainId, type);
+        List<Link> links = linkQueryDao.queryAsInnerObjects(domainId, type);
         domain.setLinks(links);
-        List<Event> events =
-                eventQueryDao.queryAsInnerObjects(domainId, type);
+        List<Event> events = eventQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEvents(events);
-        List<Entity> entities =
-                entityQueryDao.queryAsInnerObjects(domainId, type);
+        List<Entity> entities = entityQueryDao.queryAsInnerObjects(domainId,
+                type);
         domain.setEntities(entities);
     }
 
     /**
      * query and set variants.
-     * @param domain domain.
+     * 
+     * @param domain
+     *            domain.
      */
     private void queryAndSetVariants(Domain domain) {
         if (null == domain) {
             return;
         }
-        List<Variants> variants =
-                variantsQueryDao
-                        .queryAsInnerObjects(domain.getId(), domain.getDomainType());
+        List<Variants> variants = variantsQueryDao.
+                queryAsInnerObjects(domain.getId(), domain.getDomainType());
         domain.setVariants(variants);
     }
 
     /**
      * query networks for arpa ,then fill them to domain.
-     *
+     * 
      * @param domain
      *            networks will be filled.
      */
@@ -380,107 +374,120 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         if (null == domain) {
             return;
         }
-        
+
         ModelType type = domain.getDomainType();
-        if (ModelType.ARPA == type 
+        if (ModelType.ARPA == type
                 && StringUtils.isNotEmpty(domain.getLdhName())) {
-            List<Network> networks = networkQueryDao.queryAsInnerObjects(domain.getId(), ModelType.ARPA);
-            if(null != networks && networks.size()>0){
+            List<Network> networks = networkQueryDao.queryAsInnerObjects(
+                    domain.getId(), ModelType.ARPA);
+            if (null != networks && networks.size() > 0) {
                 Network network = networks.get(0);
                 domain.setNetwork(network);
             }
         }
     }
-    
+
     /**
      * query domain, without inner objects.
-     *
+     * 
      * @param queryParam
      *            query parameter
      * @return domain
      */
     private Domain queryArpaWithoutInnerObjects(QueryParam queryParam) {
-    
+
         final String arpaName = queryParam.getQ();
         final Arpa arpa = Arpa.decodeArpa(arpaName);
         if (null == arpa) {
             return null;
         }
         List<Domain> result = null;
-        
+
         if (IpVersion.V4 == arpa.getIpVersion()) {
-            
+
             // Arpa for IPv4, ignore high address
-            final String sql =
-                "select *, (ENDLOWADDRESS - STARTLOWADDRESS) as low "
+            final String sql = 
+                    "select *, (ENDLOWADDRESS - STARTLOWADDRESS) as low "
                     + "from RDAP_ARPA"
                     + " where STARTLOWADDRESS <= ? and ENDLOWADDRESS >= ? "
                     + " and (STARTHIGHADDRESS is null "
-                    + "                         or STARTHIGHADDRESS = '0')"
+                    + " or STARTHIGHADDRESS = '0')"
                     + " and (ENDHIGHADDRESS is null or ENDHIGHADDRESS = '0')"
-                    + " and version = 'v4' "
-                    + " order by low  limit 1  ";
+                    + " and version = 'v4' " + " order by low  limit 1  ";
             result = jdbcTemplate.query(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(
                         Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setString(1, 
-                            arpa.getStartLowAddress().toString(Arpa.RADIX_DECIMAL));
-                    ps.setString(2, 
-                            arpa.getEndLowAddress().toString(Arpa.RADIX_DECIMAL));
+                    ps.setString(
+                            1,
+                            arpa.getStartLowAddress().toString(
+                                    Arpa.RADIX_DECIMAL));
+                    ps.setString(2,
+                            arpa.getEndLowAddress()
+                                    .toString(Arpa.RADIX_DECIMAL));
                     return ps;
                 }
             }, new ArpaResultSetExtractor());
-        
-    	} else if (IpVersion.V6 == arpa.getIpVersion()) {
-    	    
+
+        } else if (IpVersion.V6 == arpa.getIpVersion()) {
+
             // Arpa for IPv6, include high address and low address
-            final String sql =
-                "select *, (ENDLOWADDRESS - STARTLOWADDRESS) as low, "
+            final String sql = 
+                    "select *, (ENDLOWADDRESS - STARTLOWADDRESS) as low, "
                     + "(ENDHIGHADDRESS - STARTHIGHADDRESS) as high "
                     + "from RDAP_ARPA "
                     + "where (STARTHIGHADDRESS < ? "
                     + "     or (STARTHIGHADDRESS=? and STARTLOWADDRESS<=?)) "
                     + " and (ENDHIGHADDRESS > ? "
                     + "     or (ENDHIGHADDRESS = ? and ENDLOWADDRESS >= ?)) "
-                    + " and version = 'v6' "
-                    + " order by high ,low  limit 1  ";
+                    + " and version = 'v6' " + " order by high ,low  limit 1  ";
             result = jdbcTemplate.query(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(
                         Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setString(1, 
-                            arpa.getStartHighAddress().toString(Arpa.RADIX_DECIMAL));
-                    ps.setString(2, 
-                            arpa.getStartHighAddress().toString(Arpa.RADIX_DECIMAL));
-                    ps.setString(3, 
-                            arpa.getStartLowAddress().toString(Arpa.RADIX_DECIMAL));
+                    ps.setString(
+                            1,
+                            arpa.getStartHighAddress().toString(
+                                    Arpa.RADIX_DECIMAL));
+                    ps.setString(
+                            2,
+                            arpa.getStartHighAddress().toString(
+                                    Arpa.RADIX_DECIMAL));
+                    ps.setString(
+                            3,
+                            arpa.getStartLowAddress().toString(
+                                    Arpa.RADIX_DECIMAL));
 
-                    ps.setString(4, 
-                            arpa.getEndHighAddress().toString(Arpa.RADIX_DECIMAL));
-                    ps.setString(5, 
-                            arpa.getEndHighAddress().toString(Arpa.RADIX_DECIMAL));
-                    ps.setString(6, 
-                            arpa.getEndLowAddress().toString(Arpa.RADIX_DECIMAL));
+                    ps.setString(
+                            4,
+                            arpa.getEndHighAddress().toString(
+                                    Arpa.RADIX_DECIMAL));
+                    ps.setString(
+                            5,
+                            arpa.getEndHighAddress().toString(
+                                    Arpa.RADIX_DECIMAL));
+                    ps.setString(6,
+                            arpa.getEndLowAddress()
+                                    .toString(Arpa.RADIX_DECIMAL));
 
                     return ps;
                 }
             }, new ArpaResultSetExtractor());
-    	}
+        }
         if (null == result || result.size() == 0) {
             return null;
         }
-        
+
         queryAndSetArpaStatus(result);
-    	return result.get(0);
-    	
+        return result.get(0);
+
     }
-    
+
     /**
      * query arpa, without inner objects.
-     *
+     * 
      * @param queryParam
      *            query parameter
      * @return domain
@@ -488,14 +495,13 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     private Domain queryDomainWithoutInnerObjects(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         final String punyName = domainQueryParam.getPunyName();
-        LOGGER.debug("query LDH_NAME with punyName:{}",punyName);
-        final String sql =
-                "select * from RDAP_DOMAIN domain "
-                        + " left outer join RDAP_DOMAIN_STATUS status "
-                        + " on domain.DOMAIN_ID = status.DOMAIN_ID "
-                        + " where LDH_NAME= ?  ";
-        List<Domain> result =
-                jdbcTemplate.query(new PreparedStatementCreator() {
+        LOGGER.debug("query LDH_NAME with punyName:{}", punyName);
+        final String sql = "select * from RDAP_DOMAIN domain "
+                + " left outer join RDAP_DOMAIN_STATUS status "
+                + " on domain.DOMAIN_ID = status.DOMAIN_ID "
+                + " where LDH_NAME= ?  ";
+        List<Domain> result = jdbcTemplate.query(
+                new PreparedStatementCreator() {
                     @Override
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
@@ -512,9 +518,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * domain ResultSetExtractor, extract data from ResultSet.
-     *
+     * 
      * @author jiashuo
-     *
+     * 
      */
     class DomainResultSetExtractor implements ResultSetExtractor<List<Domain>> {
         @Override
@@ -531,7 +537,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * extract domain from ResultSet.
-     *
+     * 
      * @param rs
      *            ResultSet.
      * @param domain
@@ -551,7 +557,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * extract arpa from ResultSet.
-     *
+     * 
      * @param rs
      *            ResultSet.
      * @param domain
@@ -567,12 +573,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         domain.setPort43(rs.getString("PORT43"));
         domain.setLang(rs.getString("LANG"));
     }
-    
+
     /**
      * domain ResultSetExtractor, extract data from ResultSet.
-     *
+     * 
      * @author jiashuo
-     *
+     * 
      */
     class DomainWithStatusResultSetExtractor implements
             ResultSetExtractor<List<Domain>> {
@@ -597,12 +603,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * arpa ResultSetExtractor, extract data from ResultSet.
-     *
+     * 
      * @author jiashuo
-     *
+     * 
      */
-    class ArpaResultSetExtractor implements
-            ResultSetExtractor<List<Domain>> {
+    class ArpaResultSetExtractor implements ResultSetExtractor<List<Domain>> {
         @Override
         public List<Domain> extractData(ResultSet rs) throws SQLException {
             List<Domain> result = new ArrayList<Domain>();
@@ -614,10 +619,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return result;
         }
     }
-    
+
     /**
      * load arpa domain by id.
-     * @param domainId domainId.
+     * 
+     * @param domainId
+     *            domainId.
      * @return Domain if exist, null if not.
      */
     public Domain loadArpaDomain(final Long domainId) {
@@ -625,27 +632,26 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return null;
         }
         List<Domain> result = null;
-        final String sql =
-                "select * from RDAP_ARPA where ARPA_ID= ? ";
-            result = jdbcTemplate.query(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(
-                        Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setLong(1,domainId);
-                    return ps;
-                }
-            }, new ArpaResultSetExtractor());
+        final String sql = "select * from RDAP_ARPA where ARPA_ID= ? ";
+        result = jdbcTemplate.query(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setLong(1, domainId);
+                return ps;
+            }
+        }, new ArpaResultSetExtractor());
         if (null == result || result.size() == 0) {
             return null;
         }
         return result.get(0);
     }
-    
+
     /**
-     *
+     * 
      * @author jiashuo
-     *
+     * 
      */
     class CountResultSetExtractor implements ResultSetExtractor<Long> {
         @Override
@@ -660,7 +666,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * search domain, without inner objects.
-     *
+     * 
      * @param params
      *            query parameter.
      * @return domain list.
@@ -669,19 +675,18 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         DomainQueryParam domainQueryParam = (DomainQueryParam) params;
         final String domainName = domainQueryParam.getQ();
         final String punyName = domainQueryParam.getPunyName();
-        final String domainNameLikeClause =
-                super.generateLikeClause(domainName);
+        final String domainNameLikeClause = super
+                .generateLikeClause(domainName);
         final String punyNameLikeClause = super.generateLikeClause(punyName);
-        final String sql =
-                "select * from RDAP_DOMAIN domain "
-                        + " where LDH_NAME like ? or UNICODE_NAME like ? "
-                        + " order by domain.LDH_NAME limit ?,? ";
+        final String sql = "select * from RDAP_DOMAIN domain "
+                + " where LDH_NAME like ? or UNICODE_NAME like ? "
+                + " order by domain.LDH_NAME limit ?,? ";
         final PageBean page = params.getPageBean();
         int startPage = page.getCurrentPage() - 1;
         startPage = startPage >= 0 ? startPage : 0;
         final long startRow = startPage * page.getMaxRecords();
-        List<Domain> result =
-                jdbcTemplate.query(new PreparedStatementCreator() {
+        List<Domain> result = jdbcTemplate.query(
+                new PreparedStatementCreator() {
                     @Override
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
