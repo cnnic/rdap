@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * conformance DAO.
  * 
- * @author weijunkai
+ * @author weijunkai.
  * 
  */
 public interface ConformanceDao {
@@ -43,6 +43,7 @@ public interface ConformanceDao {
     /**
      * get all conformance list.
      * 
+     * @return query list string.
      */
     List<String> queryConformance();
 }

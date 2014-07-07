@@ -52,6 +52,8 @@ import cn.cnnic.rdap.common.util.StringUtil;
 /**
  * abstract query DAO, base class for all query DAO.
  * 
+ * @param <T>
+ *          object derived from BaseModel.
  * @author jiashuo
  * 
  */
@@ -132,7 +134,10 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
 
     /**
      * extract timestamp value from ResultSet.
-     * 
+     * @param rs
+     *          set of query result.
+     * @param columnName
+     *          string of column name.
      * @return timestamp str value if value is valid format, null if not.
      */
     protected String extractTimestampFromRs(ResultSet rs, String columnName) {
