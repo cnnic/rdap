@@ -50,7 +50,7 @@ public class Link extends BaseModel {
     /**
      * relationship between two objects.
      */
-    private String rel; // TODO:enum accroding to rfc5988
+    private String rel;
     /**
      * href of link.
      */

@@ -48,19 +48,23 @@ public enum QueryType {
      *            a kind of type.
      * @param autnum
      *            a kind of type.
-     * @param help
-     *            a kind of type.
+     */
+    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
+    /**
+     * @param help a kind of type.
+     * 
      * @param ip
      *            a kind of type.
      * @param searchDomain
      *            a kind of type.
-     * @param searchEntity
-     *            a kind of type.
-     * @param searchNameserver
-     *            a kind of type.
      */
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-            "autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"),
+    "autnum"), HELP("help"), IP("ip"), SEARCHDOMAIN("searchDomain"),
+    /**
+    * @param searchEntity
+    *            a kind of type.
+    * @param searchNameserver
+    *            a kind of type.
+    */
     SEARCHENTITY("searchEntity"), SEARCHNAMESERVER("searchNameserver");
     /**
      * name of query type.
