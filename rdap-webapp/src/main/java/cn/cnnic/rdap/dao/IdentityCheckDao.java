@@ -13,7 +13,13 @@ import cn.cnnic.rdap.bean.User;
  * @author wang
  */
 public interface IdentityCheckDao {
-    
+    /**
+     * check the user id.
+     * @param userId
+     *      id of user to check.
+     * @return
+     *      object of user.
+     */
     User checkUserId(String userId);
     
 }
