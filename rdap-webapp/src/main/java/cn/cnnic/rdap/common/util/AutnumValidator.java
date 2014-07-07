@@ -67,7 +67,8 @@ public final class AutnumValidator {
      * @return true if valid, false if not
      */
     public static boolean isValidAutnum(String autnum) {
-        if (StringUtils.isBlank(autnum) || autnum.length() > AUTNUM_MAX_LENGTH) {
+        if (StringUtils.isBlank(autnum)
+                || autnum.length() > AUTNUM_MAX_LENGTH) {
             return false;
         }
         if (!autnum.equals(String.valueOf(MIN_AS_NUM))
