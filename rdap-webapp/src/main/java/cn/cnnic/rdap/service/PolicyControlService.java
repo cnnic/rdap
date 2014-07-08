@@ -40,23 +40,28 @@ import java.util.Set;
  * 
  */
 public interface PolicyControlService {
-	/**
-	 * load policy by map from database.
-	 * 
-	 * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
-	 */
-	public Map<String, Set<String>> loadPolicyFieldsByMap();
+    /**
+     * load policy by map from database.
+     * 
+     * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
+     */
+    public Map<String, Set<String>> loadPolicyFieldsByMap();
 
-	/**
-	 * set policy by map from database.
-	 */
-	public void initAllPolicyByMap();
+    /**
+     * set policy by map from database.
+     */
+    public void initAllPolicyByMap();
 
-	/**
-	 * apply the policy for object.
-	 * 
-	 * @param model
-	 *            the object to set.
-	 */
-	public void applyPolicy(final Object objModel);
+    /**
+     * clear all Policy.
+     */
+    public void clearPolicy();
+
+    /**
+     * apply the policy for object.
+     * 
+     * @param model
+     *            the object to set.
+     */
+    public void applyPolicy(final Object objModel);
 }
