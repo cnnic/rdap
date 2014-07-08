@@ -258,4 +258,3 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
         }
     }
 }
-
