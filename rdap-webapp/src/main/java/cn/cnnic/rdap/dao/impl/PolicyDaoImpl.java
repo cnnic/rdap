@@ -63,7 +63,7 @@ public class PolicyDaoImpl implements PolicyDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Map<String,Set<String>> loadAllPolicyMap() {
+    public Map<String, Set<String>> loadAllPolicyMap() {
         Map<String, Set<String>> mapPolicy = queryPolicyMap();
         return mapPolicy;
     }

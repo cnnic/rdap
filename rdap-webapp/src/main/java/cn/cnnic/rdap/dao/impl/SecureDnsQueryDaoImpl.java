@@ -75,7 +75,8 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     @Override
     public List<SecureDns> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        List<SecureDns> result = queryWithoutInnerObjects(outerObjectId, outerModelType);
+        List<SecureDns> result =
+                queryWithoutInnerObjects(outerObjectId, outerModelType);
         queryAndSetInnerObjects(result);
         return result;
     }
@@ -119,9 +120,12 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
      * 
      * @param outerObjectId
      *            object id of outer object.
+     * @param type
+     *            object model type
      * @return SecureDNS list
      */
-    private List<SecureDns> queryWithoutInnerObjects(final Long outerObjectId, final ModelType type) {
+    private List<SecureDns> queryWithoutInnerObjects(
+            final Long outerObjectId, final ModelType type) {
         final String sql = "select * from RDAP_SECUREDNS where "
                 + " DOMAIN_ID=? and DOMAIN_TYPE = ? ";
         List<SecureDns> result = jdbcTemplate.query(
