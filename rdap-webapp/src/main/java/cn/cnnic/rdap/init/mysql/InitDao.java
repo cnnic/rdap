@@ -92,7 +92,8 @@ public class InitDao {
      */
     public void initData() {
         LOGGER.info("initData begin...");
-        LOGGER.info("file:{},database:{}", SQL_RESOURCE_DATA_PATH, databaseName);
+        LOGGER.info("file:{},database:{}",
+                SQL_RESOURCE_DATA_PATH, databaseName);
         initContext.executeSqlScript(jdbcTemplate, SQL_RESOURCE_DATA_PATH,
                 databaseName, false);
         LOGGER.info("initData end.");
