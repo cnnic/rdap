@@ -157,7 +157,7 @@ public class InvalidUriFilter implements RdapFilter {
     private void
             decodeServletPathForSpringUrlMapping(HttpServletRequest request)
                     throws UnsupportedEncodingException {
-        request.setCharacterEncoding(StringUtil.CHAR_SET_UTF8);
+        request.setCharacterEncoding(StringUtil.CHAR_SET_ISO8859);
         String servletPath = request.getServletPath();
         if (StringUtils.isNotBlank(servletPath)) {
             String decodedPath =
