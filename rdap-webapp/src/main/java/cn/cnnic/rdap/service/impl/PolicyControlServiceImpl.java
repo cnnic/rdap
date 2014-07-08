@@ -79,6 +79,12 @@ public class PolicyControlServiceImpl implements PolicyControlService {
 		mapPolicy = policyDao.loadAllPolicyMap();
 		return;
 	}
+	
+	@Override
+	public void clearPolicy() {
+	    mapPolicy.clear();
+	    mapPolicy = null;
+	}
 
 	/**
 	 * get Model String.

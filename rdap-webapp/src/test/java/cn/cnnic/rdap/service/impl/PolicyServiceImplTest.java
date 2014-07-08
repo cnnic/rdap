@@ -159,6 +159,8 @@ public class PolicyServiceImplTest extends BaseTest {
 
 		Entity entityWrap = setEntityValue(entities);
 		applyPolicySingleWrapEntity(entityWrap);
+		
+		policyService.clearPolicy();
 	}
 
 	@Test
@@ -173,6 +175,8 @@ public class PolicyServiceImplTest extends BaseTest {
 		List<Entity> entities = setEntities();
 		Entity entityWrap = setEntityValue(entities);
 		applyPolicyMutliWrapEntity(entityWrap);
+		
+		policyService.clearPolicy();
 	}
 
 	/**
