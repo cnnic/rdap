@@ -64,12 +64,12 @@ public class HttpRequestFilter implements RdapFilter {
     /**
      * allow methods.
      */
-    private static final List<String> allowMethods = new ArrayList<String>();
+    private static final List<String> ALLOW_METHODS = new ArrayList<String>();
     /**
      * init allow methods.
      */
     static {
-        allowMethods.add("GET");
+        ALLOW_METHODS.add("GET");
     }
 
     /**
@@ -128,7 +128,7 @@ public class HttpRequestFilter implements RdapFilter {
      */
     private boolean httpMethodIsValid(HttpServletRequest request) {
         String method = request.getMethod();
-        boolean httpMethodIsValid = allowMethods.contains(method);
+        boolean httpMethodIsValid = ALLOW_METHODS.contains(method);
         return httpMethodIsValid;
     }
 

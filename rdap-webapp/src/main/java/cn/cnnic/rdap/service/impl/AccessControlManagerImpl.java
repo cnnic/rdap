@@ -82,5 +82,4 @@ public class AccessControlManagerImpl implements AccessControlManager {
                 .getObjectType().getName());
         return aclDao.hasEntry(principal, secureObject);
     }
-
 }

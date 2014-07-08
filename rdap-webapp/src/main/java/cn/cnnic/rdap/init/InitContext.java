@@ -45,7 +45,7 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+//import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.util.StringUtils;
 
 import cn.cnnic.rdap.common.util.StringUtil;
@@ -75,7 +75,7 @@ public class InitContext implements ApplicationContextAware {
      * The {@link ApplicationContext} that was injected into this test instance
      * via {@link #setApplicationContext(ApplicationContext)}.
      */
-    protected ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     /**
      * Execute the given SQL script.
@@ -86,8 +86,12 @@ public class InitContext implements ApplicationContextAware {
      * statement per line. Any semicolons will be removed. <b>Do not use this
      * method to execute DDL if you expect rollback.</b>
      * 
+     * @param jdbcTemplate
+     *            jdbc template dao
      * @param sqlResourcePath
      *            the Spring resource path for the SQL script
+     * @param databaseName
+     *            the name of database
      * @param continueOnError
      *            whether or not to continue without throwing an exception in
      *            the event of an error
@@ -119,6 +123,8 @@ public class InitContext implements ApplicationContextAware {
      * @param resource
      *            the resource (potentially associated with a specific encoding)
      *            to load the SQL script from
+     * @param databaseName
+     *            database name
      * @param continueOnError
      *            whether or not to continue without throwing an exception in
      *            the event of an error
@@ -154,9 +160,9 @@ public class InitContext implements ApplicationContextAware {
                 } catch (DataAccessException ex) {
                     if (continueOnError) {
                         LOGGER.error(
-                                "Failed to execute SQL script statement at line "
-                                        + lineNumber + " of resource "
-                                        + resource + ": " + statement, ex);
+                              "Failed to execute SQL script statement at line "
+                               + lineNumber + " of resource "
+                               + resource + ": " + statement, ex);
                     } else {
                         throw ex;
                     }
@@ -174,7 +180,7 @@ public class InitContext implements ApplicationContextAware {
                     reader.close();
                 }
             } catch (IOException ex) {
-                // ignore
+                LOGGER.error(ex.getMessage());
             }
         }
     }
@@ -192,7 +198,7 @@ public class InitContext implements ApplicationContextAware {
     private static void executeUseDatabaseStatement(String statement,
             JdbcTemplate jdbcTemplate, String databaseName) {
         String[] notAddArrays =
-                new String[] { "CREATE DATABASE", "DROP DATABASE", "USE " };
+                new String[] {"CREATE DATABASE", "DROP DATABASE", "USE "};
         if (StringUtils.isEmpty(statement)) {
             return;
         }
