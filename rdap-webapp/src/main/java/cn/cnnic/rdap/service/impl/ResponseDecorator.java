@@ -30,6 +30,8 @@
  */
 package cn.cnnic.rdap.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,11 @@ import cn.cnnic.rdap.service.RdapConformanceService;
  */
 @Service
 public class ResponseDecorator {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ResponseDecorator.class);
     /**
      * rdapConformanceService.
      */
@@ -66,7 +73,9 @@ public class ResponseDecorator {
      * init rdapConformance.
      */
     public void initRdapConformance() {
+        LOGGER.info("initRdapConformance begin.");
         rdapConformanceService.initRdapConformance();
+        LOGGER.info("initRdapConformance end.");
     }
 
     /**
@@ -76,9 +85,11 @@ public class ResponseDecorator {
      *            response
      */
     public void decorateResponse(BaseModel model) {
+        LOGGER.info("decorateResponse:" + model);
         addRdapConformance(model);
         addNotices(model);
         policyControlService.applyPolicy(model);
+        LOGGER.info("decorateResponse end");
     }
     /**
      * add notices to model.
@@ -87,10 +98,12 @@ public class ResponseDecorator {
      *            model.
      */
     private void addNotices(BaseModel model) {
+        LOGGER.info("addNotices:" + model);
         if (null == model) {
             return;
         }
         model.setNotices(noticeDao.getAllNotices());
+        LOGGER.info("addNotices end");
     }
     /**
      * decorate response: add properties to help response.
@@ -99,10 +112,11 @@ public class ResponseDecorator {
      *            response
      */
     public void decorateResponseForHelp(BaseModel model) {
+        LOGGER.info("decorateResponseForHelp:" + model);
         addRdapConformance(model);
         addHelp(model);
         
-        //No policyControlService
+        LOGGER.info("decorateResponseForHelp end");
     }
     /**
      * add help to model.
@@ -111,10 +125,12 @@ public class ResponseDecorator {
      *            model.
      */
     private void addHelp(BaseModel model) {
+        LOGGER.info("addHelp:" + model);
         if (null == model) {
             return;
         }
         model.setNotices(noticeDao.getHelp());
+        LOGGER.info("addHelp end");
     }
     /**
      * add rdapConformance to model.
@@ -123,6 +139,8 @@ public class ResponseDecorator {
      *            model.
      */
     private void addRdapConformance(BaseModel model) {
+        LOGGER.info("addRdapConformance begin.");
         rdapConformanceService.setRdapConformance(model);
+        LOGGER.info("addRdapConformance end.");
     }
 }

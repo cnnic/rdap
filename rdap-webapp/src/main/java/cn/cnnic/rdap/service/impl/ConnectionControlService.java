@@ -82,6 +82,7 @@ public final class ConnectionControlService {
      * @return true if exceed rate limit,false if not.
      */
     public static boolean exceedRateLimit(String ip) {
+        LOGGER.debug("exceedRateLimit, ip:" + ip);
         if (StringUtils.isBlank(ip)) {
             return false;
         }
@@ -93,9 +94,11 @@ public final class ConnectionControlService {
         }
         long accessTimeInterval = currentTimeMillis - lastAccessTime;
         if (PrincipalHolder.getPrincipal().isAnonymous()) {
+            LOGGER.debug("exceedRateLimit, anonymous.");
             return accessTimeInterval <= RdapProperties
                     .getMinSecondsAccessIntervalAnonymous();
         } else {
+            LOGGER.debug("exceedRateLimit.");
             return accessTimeInterval <= RdapProperties
                     .getMinSecondsAccessIntervalAuthed();
         }
@@ -108,14 +111,15 @@ public final class ConnectionControlService {
      * @return true if exceed, false if not.
      */
     public static boolean incrementConcurrentQCountAndCheckIfExceedMax() {
+        LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax.");
         if (isConcurrentCountNotLimit()) {
             return false;
         }
         int count = CONCURRENT_Q_COUNT.getAndIncrement();
-        LOGGER.debug("inc, current query count:{}", count);
+        LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax:" + count);
         if (count > RdapProperties.getMaxConcurrentCount() - 1) {
-            LOGGER.debug("current query count exceed max count : {}.",
-                    RdapProperties.getMaxConcurrentCount());
+            LOGGER.info("incrementConcurrentQCountAndCheckIfExceedMax : " 
+                    + RdapProperties.getMaxConcurrentCount());
             return true;
         }
         return false;
@@ -125,11 +129,12 @@ public final class ConnectionControlService {
      * decrement current query count.
      */
     public static void decrementAndGetCurrentQueryCount() {
+        LOGGER.debug("decrementAndGetCurrentQueryCount.");
         if (isConcurrentCountNotLimit()) {
             return;
         }
         int count = CONCURRENT_Q_COUNT.decrementAndGet();
-        LOGGER.debug("dec, current query count:{}", count);
+        LOGGER.debug("decrementAndGetCurrentQueryCount:", count);
     }
 
     /**
@@ -139,7 +144,7 @@ public final class ConnectionControlService {
      */
     private static boolean isConcurrentCountNotLimit() {
         boolean isNotLimit = 0 == RdapProperties.getMaxConcurrentCount();
-        LOGGER.debug("isConcurrentCountNotLimit :{}", isNotLimit);
+        LOGGER.info("isConcurrentCountNotLimit:", isNotLimit);
         return isNotLimit;
     }
 }
