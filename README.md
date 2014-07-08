@@ -19,7 +19,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 	   ```
       * Add user, and init database schema: 
 	   ```
-	   	GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USERNAME'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';	# '$MYSQL_USERNAME' and '$MYSQL_PASSWORD' must be replaced by custom username and password, and they will be used in following steps
+	   	GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USERNAME'@'$RDAP_IP' IDENTIFIED BY '$MYSQL_PASSWORD';	# '$MYSQL_USERNAME' and '$MYSQL_PASSWORD' must be replaced by custom username and password, and they will be used in following steps;'$RDAP_IP' must be replaced by RDAP server ip
 	   	FLUSH PRIVILEGES;
 	   	source rdap.sql;
 	   ```
@@ -28,7 +28,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
 
 1. Get war file 'rdap.war'. There are two methods to get war file
-   * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version is not supported, and must build from source)
+   * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version must build from source, see following section)
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  make a dir used to download source code and build, which is called 'WORK_DIR'
@@ -36,10 +36,10 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
       *  build project:
 		```
 			[in Linux, open a shell and execute command:]
-				cd $WORK_DIR/rdap-develop/rdap-webapp		# $WORK_DIR must be replaced by real dir
+				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
 				mvn package -Dmaven.test.skip=true	# mvn must in system variable
 			[in Windows7 or Windows8, open command prompt window and execute command:]
-				cd $WORK_DIR/rdap-develop/rdap-webapp		# $WORK_DIR must be replaced by real dir
+				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
 				mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
 			(target/rdap.war  is the build war file)
 	
@@ -51,9 +51,18 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
 	
 		```
-			jdbc.url: value change to installed Mysql url in step 'Install Mysql and init database'
+			jdbc.url.hostPort: value change to installed Mysql host and port url in step 'Install Mysql and init database'
+			jdbc.url.dbName: value change to Mysql database name in step 'Install Mysql and init database'
 			jdbc.username: value change to $MYSQL_USERNAME in step 'Install Mysql and init database'
 			jdbc.password: value change to $MYSQL_PASSWORD in step 'Install Mysql and init database'
+		```
+		
+   * Edit global configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties:
+	
+		```
+			localServiceUrl: value change to local RDAP service url, This value is used in redirect service to check if redirect url is local service url, and will ignore the redirect if is local service url.
+			inTlds: value change to puny name of tlds in this registry, splited by ';'.Only in this list can query.
+			notInTlds: value change to puny name of tlds NOT in this registry, splited by ';'. Tlds  in this list can NOT be query, and will query redirect instead.
 		```
 
    * Start up tomcat

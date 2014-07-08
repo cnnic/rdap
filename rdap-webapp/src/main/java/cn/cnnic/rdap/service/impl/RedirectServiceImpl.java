@@ -75,32 +75,62 @@ public class RedirectServiceImpl implements RedirectService {
     @Autowired
     @Qualifier("networkRedirectDao")
     private RedirectDao networkRedirectDao;
-
+    /**
+     * query domain redirect.
+     * 
+     * @param queryParam
+     *            param for domain RedirectResponse.
+     * @return redirect response.
+     */    
     @Override
     public RedirectResponse queryDomain(QueryParam queryParam) {
+        LOGGER.info("queryDomain:" + queryParam);
         return domainRedirectDao.query(queryParam);
     }
-
+    /**
+     * query AS redirect.
+     * 
+     * @param queryParam
+     *            param for AS RedirectResponse.
+     * @return redirect response.
+     */    
     @Override
     public RedirectResponse queryAutnum(QueryParam queryParam) {
+        LOGGER.info("queryAutnum:" + queryParam);
         return autnumRedirectDao.query(queryParam);
     }
-
+    /**
+     * query ip redirect.
+     * 
+     * @param queryParam
+     *            param for IP RedirectResponse.
+     * @return redirect response.
+     */    
     @Override
     public RedirectResponse queryIp(QueryParam queryParam) {
+        LOGGER.info("queryIp:" + queryParam);
         return networkRedirectDao.query(queryParam);
     }
-
+    /**
+     * is a redirect response valid.
+     * 
+     * @param redirect
+     *            param for RedirectResponse.
+     * @return boolean.
+     */    
     @Override
     public boolean isValidRedirect(RedirectResponse redirect) {
+        LOGGER.info("isValidRedirect:" + redirect);
         if (null == redirect || StringUtils.isBlank(redirect.getUrl())) {
             return false;
         }
         if (redirect.getUrl().contains(RdapProperties.getLocalServiceUrl())) {
-            LOGGER.info("redirect url is local RDAP:{},ignore.",
+            LOGGER.info("redirect url is local RDAP,ignore.",
                     redirect.getUrl());
             return false;
         }
+        LOGGER.info("redirect url can be redirected.",
+                redirect.getUrl());
         return true;
     }
 

@@ -15,6 +15,6 @@ import cn.cnnic.rdap.bean.User;
  */
 public interface IdentityCheckService {
     
-    User IdentityCheckService(final String userId,final String userPwd);
+    User identityCheckService(final String userId,final String userPwd);
     
 }
