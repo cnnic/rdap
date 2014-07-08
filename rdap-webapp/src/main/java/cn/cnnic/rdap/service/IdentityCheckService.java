@@ -8,7 +8,6 @@ package cn.cnnic.rdap.service;
 
 import cn.cnnic.rdap.bean.User;
 
-
 /**
  *
  * @author wang
@@ -23,5 +22,4 @@ public interface IdentityCheckService {
      * @return user object.
      */
     User identityCheckService(final String userId, final String userPwd);
-    
 }
