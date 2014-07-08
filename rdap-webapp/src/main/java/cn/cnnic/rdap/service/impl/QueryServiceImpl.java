@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -58,44 +60,52 @@ import cn.cnnic.rdap.service.QueryService;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
- * query service implementation
+ * query service implementation.
  * 
  * @author jiashuo
  * 
  */
 @Service
 public class QueryServiceImpl implements QueryService {
-	/**
-	 * rdap conformance service
-	 */
-	@Autowired
-	private RdapConformanceService rdapConformanceService;
-	/**
-	 * domain DAO
-	 */
-	@Autowired
-	private DomainQueryDaoImpl domainDao;
+    
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(QueryServiceImpl.class);
+    
+    /**
+     * rdap conformance service.
+     */
+    @Autowired
+    private RdapConformanceService rdapConformanceService;
 
-	/**
-	 * autnum DAO
-	 */
-	@Autowired
-	private AutnumQueryDaoImpl autnumQueryDao;
-	
-	/**
-     * nameserver DAO
+    /**
+     * domain DAO.
+     */
+    @Autowired
+    private DomainQueryDaoImpl domainDao;
+
+    /**
+     * autnum DAO.
+     */
+    @Autowired
+    private AutnumQueryDaoImpl autnumQueryDao;
+
+    /**
+     * nameserver DAO.
      */
     @Autowired
     private NameserverQueryDaoImpl nameserverQueryDao;
     
     /**
-     * ip DAO
+     * ip DAO.
      */
     @Autowired
     private NetworkQueryDaoImpl ipQueryDao;
 
     /**
-     * Help DAO
+     * Help DAO.
      */
     @Autowired
     private NoticeDao noticeDao;
@@ -106,42 +116,76 @@ public class QueryServiceImpl implements QueryService {
     @Autowired
     private QueryDao<Entity> entityQueryDao;
 
-	/**
-	 * query domain by domain name
-	 */
-	@Override
-	public Domain queryDomain(QueryParam queryParam) {
-		return domainDao.query(queryParam);
-	}
-
-	@Override
-	public Autnum queryAutnum(QueryParam queryParam) {
-		return autnumQueryDao.query(queryParam);
-	}
-
-	@Override
-	public Nameserver queryNameserver(QueryParam queryParam) {
-	    return nameserverQueryDao.query(queryParam);
-	}
-
+    /**
+     * query domain by domain queryParam.
+     * @param queryParam
+     *            queryParam.
+     * @return domain.
+     */
+    @Override
+    public Domain queryDomain(QueryParam queryParam) {
+        return domainDao.query(queryParam);
+    }
+    /**
+     * query as by as queryParam.
+     * @param queryParam
+     *            queryParam.
+     * @return as.
+     */
+    @Override
+    public Autnum queryAutnum(QueryParam queryParam) {
+        return autnumQueryDao.query(queryParam);
+    }
+    /**
+     * query name server by NS queryParam.
+     * @param queryParam
+     *            queryParam.
+     * @return name server.
+     */
+    @Override
+    public Nameserver queryNameserver(QueryParam queryParam) {
+        return nameserverQueryDao.query(queryParam);
+    }
+    /**
+     * query entity by queryParam.
+     * @param queryParam
+     *            queryParam.
+     * @return entity.
+     */
     @Override
     public Entity queryEntity(QueryParam queryParam) {
         return entityQueryDao.query(queryParam);
     }
-
-	@Override
+    /**
+     * query IP by queryParam.
+     * @param queryParam
+     *            queryParam.
+     * @return ip.
+     */
+    @Override
     public Network queryIp(QueryParam queryParam) {
         return ipQueryDao.query(queryParam);
     }
-
+    /**
+     * query help by queryParam.
+     * @param queryParam
+     *            queryParam.
+     * @return Help.
+     */
     @Override
     public Help queryHelp(QueryParam queryParam) {
         // construct a help object and fill it in decorator
         return new Help();
     }
-	   
+    /**
+     * Is query object in out Tld.
+     * @param queryParam
+     *            queryParam.
+     * @return boolean.
+     */
     @Override
     public boolean tldInThisRegistry(QueryParam queryParam) {
+        LOGGER.info("tldInThisRegistry, queryParam:" + queryParam);
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         String fullPunyTld = domainQueryParam.getFullPunyTld();
         List<String> allTlds = getAllTlds(fullPunyTld);
@@ -149,22 +193,25 @@ public class QueryServiceImpl implements QueryService {
                 CollectionUtils.containsAny(allTlds,
                         RdapProperties.getNotInTldsInThisRegistry());
         if (inNotInTlds) {
+            LOGGER.info("tldInThisRegistry, false");
             return false;
         }
         boolean inThisRegTlds =
                 CollectionUtils.containsAny(allTlds,
                         RdapProperties.getInTldsInThisRegistry());
+        LOGGER.info("tldInThisRegistry, return:" + inThisRegTlds);
         return inThisRegTlds;
     }
 
     /**
-     * get all tlds,eg: for "edu.cn", return ["edu.cn","cn"]
+     * get all tlds,eg: for "edu.cn", return ["edu.cn","cn"].
      * 
      * @param fullTld
      *            fullTld.
      * @return tld list.
      */
     private List<String> getAllTlds(String fullTld) {
+        LOGGER.info("getAllTlds, fullTld:" + fullTld);
         if (StringUtils.isBlank(fullTld)) {
             return null;
         }
@@ -180,6 +227,7 @@ public class QueryServiceImpl implements QueryService {
             }
             currentTld = subTld;
         }
+        LOGGER.info("getAllTlds, tldList:" + tldList);
         return tldList;
     }
 
