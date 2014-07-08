@@ -35,16 +35,16 @@ import java.util.Map;
 import cn.cnnic.rdap.bean.ErrorMessage;
 
 /**
- * error message interface
+ * error message interface.
  * 
  * @author jiashuo
  * 
  */
 public interface ErrorMessageService {
-	/**
-	 * get all ErrorMessage
-	 * 
-	 * @return ErrorMessage map,[key:ErrorMessage id,value:ErrorMessage]
-	 */
-	public Map<Long, ErrorMessage> getAllErrorMessageMap();
+    /**
+     * get all ErrorMessage.
+     * 
+     * @return ErrorMessage map,[key:ErrorMessage id,value:ErrorMessage]
+     */
+    Map<Long, ErrorMessage> getAllErrorMessageMap();
 }

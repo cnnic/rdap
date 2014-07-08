@@ -54,7 +54,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * @author jiashuo
  * 
  */
-@SuppressWarnings("rawtypes")
+//@SuppressWarnings("rawtypes")
 public class NoticeQueryDaoTest extends BaseTest {
     /**
      * noticeDaoImpl.

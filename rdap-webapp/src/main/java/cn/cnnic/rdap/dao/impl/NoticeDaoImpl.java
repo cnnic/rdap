@@ -67,7 +67,7 @@ public class NoticeDaoImpl implements NoticeDao {
      * errors.
      */
     @Autowired
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
     /**
      * link query database api.
      */

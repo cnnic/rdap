@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * policy control interface
+ * policy control interface.
  * 
  * @author weijunkai
  * 
@@ -45,23 +45,23 @@ public interface PolicyControlService {
      * 
      * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
      */
-    public Map<String, Set<String>> loadPolicyFieldsByMap();
+    Map<String, Set<String>> loadPolicyFieldsByMap();
 
     /**
      * set policy by map from database.
      */
-    public void initAllPolicyByMap();
+    void initAllPolicyByMap();
 
     /**
      * clear all Policy.
      */
-    public void clearPolicy();
+    void clearPolicy();
 
     /**
      * apply the policy for object.
      * 
-     * @param model
+     * @param objModel
      *            the object to set.
      */
-    public void applyPolicy(final Object objModel);
+    void applyPolicy(final Object objModel);
 }

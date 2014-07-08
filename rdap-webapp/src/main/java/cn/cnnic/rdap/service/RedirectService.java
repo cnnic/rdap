@@ -43,7 +43,8 @@ public interface RedirectService {
 
     /**
      * check if redirect response is valid.
-     * 
+     * @param redirect
+     *              for respose of redirect.
      * @return true if valid, false if not.
      */
     boolean isValidRedirect(RedirectResponse redirect);
