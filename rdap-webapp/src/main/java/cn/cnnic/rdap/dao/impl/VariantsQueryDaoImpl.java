@@ -60,7 +60,7 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
     @Override
     public List<Variants> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        if(!ModelType.DOMAIN.equals(outerModelType)){
+        if (!ModelType.DOMAIN.equals(outerModelType)) {
             return null;
         }
         List<Variant> variantList = queryWithoutInnerObjects(outerObjectId);

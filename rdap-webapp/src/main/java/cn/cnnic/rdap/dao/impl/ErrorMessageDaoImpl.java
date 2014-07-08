@@ -43,34 +43,35 @@ import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.dao.ErrorMessageDao;
 
 /**
- * error message DAO implementation
+ * error message DAO implementation.
  * 
  * @author jiashuo
  * 
  */
 @Repository
 public class ErrorMessageDaoImpl implements ErrorMessageDao {
-	@Autowired
-	protected JdbcTemplate jdbcTemplate;
+    /**
+     * jdbc dao template.
+     */
+    @Autowired
+    protected JdbcTemplate jdbcTemplate;
 
-	/**
-	 * get all erroMessage
-	 */
-	@Override
-	public List<ErrorMessage> getAllErrorMessages() {
-		final String sql = "select * from RDAP_ERRORMESSAGE";
-		List<ErrorMessage> result = jdbcTemplate.query(sql,
-				new RowMapper<ErrorMessage>() {
-					public ErrorMessage mapRow(ResultSet rs, int rowNum)
-							throws SQLException {
-						ErrorMessage errorMessage = new ErrorMessage();
-						errorMessage.setErrorCode(rs.getLong("ERROR_CODE"));
-						errorMessage.setTitle(rs.getString("TITLE"));
-						errorMessage.addDescription(rs.getString("DESCRIPTION"));
-						errorMessage.setLang(rs.getString("LANG"));
-						return errorMessage;
-					}
-				});
-		return result;
-	}
+    @Override
+    public List<ErrorMessage> getAllErrorMessages() {
+        final String sql = "select * from RDAP_ERRORMESSAGE";
+        List<ErrorMessage> result = jdbcTemplate.query(sql,
+                new RowMapper<ErrorMessage>() {
+                    public ErrorMessage mapRow(ResultSet rs, int rowNum)
+                            throws SQLException {
+                        ErrorMessage errorMessage = new ErrorMessage();
+                        errorMessage.setErrorCode(rs.getLong("ERROR_CODE"));
+                        errorMessage.setTitle(rs.getString("TITLE"));
+                        errorMessage.addDescription(
+                                rs.getString("DESCRIPTION"));
+                        errorMessage.setLang(rs.getString("LANG"));
+                        return errorMessage;
+                    }
+                });
+        return result;
+    }
 }

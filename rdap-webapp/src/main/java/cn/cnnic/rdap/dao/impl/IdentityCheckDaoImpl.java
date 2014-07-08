@@ -27,8 +27,14 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class IdentityCheckDaoImpl implements IdentityCheckDao {
+    /**
+     * jdbc dao template.
+     */
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    /**
+     * string sql to query user info.
+     */
     private final String sql =
             "select USER_ID,USER_PWD from RDAP_IDENTITY_USER where USER_NAME=?";
 

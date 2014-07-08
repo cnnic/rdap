@@ -55,7 +55,7 @@ import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * notice query DAO。
+ * notice query DAO.
  * 
  * @author jiashuo
  * 
@@ -68,6 +68,9 @@ public class NoticeDaoImpl implements NoticeDao {
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
+    /**
+     * link query database api.
+     */
     @Autowired
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
@@ -87,12 +90,15 @@ public class NoticeDaoImpl implements NoticeDao {
     }
     
     /**
-     * query inner objects, and set them to notices
+     * query inner objects, and set them to notices.
      * 
      * @param notices
      *            notice list
+     * @param type
+     *            the notice type.
      */
-    private void queryAndSetInnerObjects(List<Notice> notices, NoticeType type) {
+    private void queryAndSetInnerObjects(List<Notice> notices,
+            NoticeType type) {
         if (null == notices || notices.size() == 0) {
             return;
         }
@@ -102,10 +108,12 @@ public class NoticeDaoImpl implements NoticeDao {
     }
 
     /**
-     * query inner objects, and set them to notice
+     * query inner objects, and set them to notice.
      * 
      * @param notice
      *            notice after set inner objects
+     * @param type
+     *            the notice type.
      */
     private void queryAndSetInnerObjects(Notice notice, NoticeType type) {
         if (null == notice || null == type) {
@@ -115,7 +123,7 @@ public class NoticeDaoImpl implements NoticeDao {
         if (NoticeType.Notice == type) {
             links = linkQueryDao.queryAsInnerObjects(notice.getId(),
                 ModelType.NOTICE);
-        } else if (NoticeType.HELP == type){
+        } else if (NoticeType.HELP == type) {
             links = linkQueryDao.queryAsInnerObjects(notice.getId(),
                 ModelType.HELP);
         }
@@ -125,12 +133,13 @@ public class NoticeDaoImpl implements NoticeDao {
     }
 
     /**
-     * query notice, without inner objects
-     * 
+     * query notice, without inner objects.
+     * @param type notice type.
      * @return notice list
      */
     private List<Notice> queryWithoutInnerObjects(final NoticeType type) {
-        final String sql = "select notice.*, description.description  from RDAP_NOTICE notice "
+        final String sql = "select notice.*, description.description"
+                + " from RDAP_NOTICE notice "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
                 + " on notice.NOTICE_ID = description.NOTICE_ID "
                 + " where notice.TYPE=?";
@@ -147,7 +156,7 @@ public class NoticeDaoImpl implements NoticeDao {
     }
 
     /**
-     * notice ResultSetExtractor, extract data from ResultSet
+     * notice ResultSetExtractor, extract data from ResultSet.
      * 
      * @author jiashuo
      * 
