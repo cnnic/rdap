@@ -59,7 +59,7 @@ public class DomainRedirectDao implements RedirectDao {
      * JDBC template.
      */
     @Autowired
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public RedirectResponse query(QueryParam queryParam) {

@@ -65,7 +65,14 @@ public class RdapControllerNameserverTest extends BaseTest {
 
     private MockMvc mockMvc;
 
+    /**
+     * nameserver query url.
+     */
     final private String urlPath = "/.well-known/rdap/nameserver/";
+    /**
+     * output json.
+     */
+    final private String rdapJson = "application/json";
 
     @Before
     public void setup() {
@@ -138,9 +145,9 @@ public class RdapControllerNameserverTest extends BaseTest {
     private void commonQueryExistNS(String queryNSName, String lang) throws Exception {
         mockMvc.perform(
         		MockMvcRequestBuilders.get(urlPath + StringUtil.urlEncode(queryNSName))
-        		.accept(MediaType.parseMediaType("application/json")))
+        		.accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.lang").value(lang))
                 .andExpect(jsonPath("$.ldhName").exists())
                 .andExpect(jsonPath("$.unicodeName").exists())
@@ -158,9 +165,9 @@ public class RdapControllerNameserverTest extends BaseTest {
     private void commonQueryNonExistNS(String queryDomainName) throws Exception {
         mockMvc.perform(
                 get(urlPath + StringUtil.urlEncode(queryDomainName)).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("NOT FOUND"))
@@ -178,9 +185,9 @@ public class RdapControllerNameserverTest extends BaseTest {
     private void commonQueryInvalidNS(String nsName) throws Exception {
         mockMvc.perform(
                 get(urlPath + StringUtil.urlEncode(nsName)).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))

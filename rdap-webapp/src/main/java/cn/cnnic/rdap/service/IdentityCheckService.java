@@ -14,7 +14,14 @@ import cn.cnnic.rdap.bean.User;
  * @author wang
  */
 public interface IdentityCheckService {
-    
-    User IdentityCheckService(final String userId,final String userPwd);
+    /**
+     * identify the check service.
+     * @param userId
+     *          userId for check.
+     * @param userPwd
+     *          user password for check.
+     * @return user object.
+     */
+    User identityCheckService(final String userId, final String userPwd);
     
 }

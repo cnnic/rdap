@@ -67,6 +67,10 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      * domain search uri.
      */
     private static final String SEARCH_URI = "/.well-known/rdap/nameservers?";
+    /**
+     * output json.
+     */
+    private final String rdapJson = "application/json";
 
     @Autowired
     private WebApplicationContext wac;
@@ -125,7 +129,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 2L);
         mockMvc.perform(
                 get(SEARCH_URI + strObject).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nameserverSearchResults").exists())
                 .andExpect(jsonPath("$.nameserverSearchResults").isArray())
@@ -223,9 +227,9 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         ReflectionTestUtils.setField(prop, "batchsizeSearch", finalSize);
         mockMvc.perform(
                 get(SEARCH_URI + strObj).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.resultsTruncated").value(true))
                 .andExpect(jsonPath("$.nameserverSearchResults").exists())
                 .andExpect(jsonPath("$.nameserverSearchResults").isArray())
@@ -234,7 +238,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                                 hasSize((int) finalSize)))
                 .andExpect(
                         jsonPath("$.nameserverSearchResults",
-                                Matchers.hasItem(Matchers.hasKey("handle"))));
+                               Matchers.hasItem(Matchers.hasKey("handle"))));
     }
 
     /**
@@ -269,9 +273,9 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     private void searchNonExistNS(String strObject) throws Exception {
         mockMvc.perform(
                 get(SEARCH_URI + strObject).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("NOT FOUND"))
@@ -292,9 +296,9 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
                 get(SEARCH_URI + "name=*").accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(422))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("UNPROCESSABLE ENTITY"))
@@ -342,9 +346,9 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     private void seachIllegalNS(String strObj) throws Exception {
         mockMvc.perform(
                 get(SEARCH_URI + strObj).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))

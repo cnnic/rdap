@@ -79,7 +79,7 @@ public class AuthenticationFilter implements RdapFilter {
             User user = null;
             IdentityCheckService idcService =
                     ServiceBeanUtil.getIdentityCheckService();
-            user = idcService.IdentityCheckService(userReqId, userReqPwd);
+            user = idcService.identityCheckService(userReqId, userReqPwd);
             if (null == user) {
                 request.getSession().removeAttribute("SESSION_ATTR_USER_ID");
                 writeError401Response(response);

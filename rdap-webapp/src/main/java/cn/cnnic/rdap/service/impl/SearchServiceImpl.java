@@ -33,6 +33,8 @@ package cn.cnnic.rdap.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,6 +62,11 @@ import cn.cnnic.rdap.service.SearchService;
  */
 @Service
 public class SearchServiceImpl implements SearchService {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(SearchServiceImpl.class);
     /**
      * domain dao.
      */
@@ -90,11 +97,18 @@ public class SearchServiceImpl implements SearchService {
      *            queryParam.
      * @param queryDao
      *            queryDao.
+     * @param <T>
+     *            model in the base search.
      * @return BaseSearchModel.
      */
     private <T extends BaseModel> BaseSearchModel<T> search(
             QueryParam queryParam, QueryDao<T> queryDao) {
+        
+        LOGGER.info("search QueryParam:" + queryParam 
+                                + ",QueryDao:" + queryDao);
+        
         Long totalCount = queryDao.searchCount(queryParam);
+        LOGGER.info("search count is " + totalCount);
         if (totalCount == 0) {
             return null;
         }
@@ -133,26 +147,45 @@ public class SearchServiceImpl implements SearchService {
             searchResult.setHasNoAuthForAllObjects(true);
         }
         searchResult.setSearchResults(authedObjects);
+        
+        LOGGER.info("search result " + searchResult);
         return searchResult;
     }
-
+    /**
+     * search domain.
+     * 
+     * @param queryParam
+     *            param for domain.
+     * @return domain search result.
+     */
     @Override
     public DomainSearch searchDomain(QueryParam queryParam) {
+        LOGGER.info("searchDomain QueryParam:" + queryParam);
         BaseSearchModel<Domain> searchResult = this.search(queryParam,
                 domainDao);
+        LOGGER.info("searchDomain searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
         }
         DomainSearch domainSearch = new DomainSearch();
         BeanUtils.copyProperties(searchResult, domainSearch);
         domainSearch.setDomainSearchResults(searchResult.getSearchResults());
+        LOGGER.info("searchDomain domainSearch:" + domainSearch);
         return domainSearch;
     }
-
+    /**
+     * search domain.
+     * 
+     * @param queryParam
+     *            param for domain.
+     * @return domain search result.
+     */
     @Override
     public NameserverSearch searchNameserver(QueryParam queryParam) {
+        LOGGER.info("searchNameserver QueryParam:" + queryParam);
         BaseSearchModel<Nameserver> searchResult = this.search(queryParam,
                 nameserverDao);
+        LOGGER.info("searchNameserver searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
         }
@@ -160,19 +193,29 @@ public class SearchServiceImpl implements SearchService {
         BeanUtils.copyProperties(searchResult, nameserverSearch);
         nameserverSearch.setNameserverSearchResults(searchResult
                 .getSearchResults());
+        LOGGER.info("searchNameserver nameserverSearch:" + nameserverSearch);
         return nameserverSearch;
     }
-    
+    /**
+     * search entity.
+     * 
+     * @param queryParam
+     *            param for entity.
+     * @return entity search result.
+     */    
     @Override
     public EntitySearch searchEntity(QueryParam queryParam) {
+        LOGGER.info("searchEntity QueryParam:" + queryParam);
         BaseSearchModel<Entity> searchResult = this.search(queryParam,
                 entityDao);
+        LOGGER.info("searchEntity searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
         }
         EntitySearch entitySearch = new EntitySearch();
         BeanUtils.copyProperties(searchResult, entitySearch);
         entitySearch.setEntitySearchResults(searchResult.getSearchResults());
+        LOGGER.info("searchEntity entitySearch:" + entitySearch);
         return entitySearch;
     }
 }
