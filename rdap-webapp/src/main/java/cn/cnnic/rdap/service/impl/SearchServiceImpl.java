@@ -97,6 +97,8 @@ public class SearchServiceImpl implements SearchService {
      *            queryParam.
      * @param queryDao
      *            queryDao.
+     * @param <T>
+     *            model in the base search.
      * @return BaseSearchModel.
      */
     private <T extends BaseModel> BaseSearchModel<T> search(
