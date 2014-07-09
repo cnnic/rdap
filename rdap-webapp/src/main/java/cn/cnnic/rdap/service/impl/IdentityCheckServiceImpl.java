@@ -18,6 +18,7 @@ import cn.cnnic.rdap.dao.IdentityCheckDao;
 import cn.cnnic.rdap.service.IdentityCheckService;
 
 /**
+ * check user authorization.
  * 
  * @author wang
  */
@@ -67,3 +68,4 @@ public class IdentityCheckServiceImpl implements IdentityCheckService {
         return null;
     }
 }
+

@@ -8,18 +8,23 @@ package cn.cnnic.rdap.service;
 
 import cn.cnnic.rdap.bean.User;
 
+
 /**
- *
+ * check user authorization.
+ * 
  * @author wang
  */
 public interface IdentityCheckService {
     /**
-     * identify the check service.
+     * check user authorization by user Id and password.
+     * 
      * @param userId
-     *          userId for check.
+     *            user identity.
      * @param userPwd
-     *          user password for check.
-     * @return user object.
+     *            user password.
+     * @return user or null.
      */
-    User identityCheckService(final String userId, final String userPwd);
+    User identityCheckService(final String userId,final String userPwd);
+    
 }
+
