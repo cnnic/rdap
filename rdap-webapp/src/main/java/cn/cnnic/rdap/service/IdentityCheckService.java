@@ -27,3 +27,4 @@ public interface IdentityCheckService {
     User identityCheckService(final String userId,final String userPwd);
     
 }
+

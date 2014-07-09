@@ -47,14 +47,14 @@ public class AuthenticationFilter implements RdapFilter {
 
         Principal principal = Principal.getAnonymousPrincipal();
         if (StringUtils.isNotBlank(tempPass)) {
-            String AUTH_BASIC_PREFIX = "Basic ";
+            String authBasicPrefix = "Basic ";
             if (!StringUtils.startsWithIgnoreCase(tempPass,
-                    AUTH_BASIC_PREFIX)) {
+                    authBasicPrefix)) {
                 writeError401Response(response);
                 return false;
             }
             tempPass =
-                    tempPass.substring(AUTH_BASIC_PREFIX.length(),
+                    tempPass.substring(authBasicPrefix.length(),
                             tempPass.length());
             String tempPassdeCode = "";
             BASE64Decoder decoder = new BASE64Decoder();

@@ -45,5 +45,5 @@ public interface ErrorMessageDao {
      * 
      * @return error messages list.
      */
-    public List<ErrorMessage> getAllErrorMessages();
+    List<ErrorMessage> getAllErrorMessages();
 }

@@ -39,16 +39,16 @@ import cn.cnnic.rdap.bean.BaseModel;
  * 
  */
 public interface RdapConformanceService {
-	/**
-	 * initial rdapConformance to model.
-	 */
-	public void initRdapConformance();
-	
-	/**
-	 * set rdapConformance to model.
-	 * 
-	 * @param model
-	 * 			the model to set.
-	 */
-	public void setRdapConformance(BaseModel model);
+    /**
+     * initial rdapConformance to model.
+     */
+    void initRdapConformance();
+
+    /**
+     * set rdapConformance to model.
+     * 
+     * @param model
+     *            the model to set.
+     */
+    void setRdapConformance(BaseModel model);
 }

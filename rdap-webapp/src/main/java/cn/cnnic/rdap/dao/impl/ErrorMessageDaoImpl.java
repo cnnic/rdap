@@ -54,7 +54,7 @@ public class ErrorMessageDaoImpl implements ErrorMessageDao {
      * jdbc dao template.
      */
     @Autowired
-    protected JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public List<ErrorMessage> getAllErrorMessages() {
