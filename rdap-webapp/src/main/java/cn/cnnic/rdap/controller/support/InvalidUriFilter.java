@@ -58,7 +58,7 @@ public class InvalidUriFilter implements RdapFilter {
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(AuthenticationFilter.class);
+            .getLogger(InvalidUriFilter.class);
 
     /**
      * rdap url prefix.
@@ -72,7 +72,18 @@ public class InvalidUriFilter implements RdapFilter {
         super();
         LOGGER.info("init RDAP filter:{}", this.getName());
     }
-
+    /**
+     * do pre process url.
+     * 
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true if success processed,and can do service operation; false if
+     *         not.
+     */
     @Override
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -199,13 +210,25 @@ public class InvalidUriFilter implements RdapFilter {
         }
         return URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
     }
-
+    /**
+     * do post process.
+     * 
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true .
+     */
     @Override
     public boolean postProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         return true;
     }
-
+    /**
+     * @return this class name.
+     */
     @Override
     public String getName() {
         return getClass().getSimpleName();

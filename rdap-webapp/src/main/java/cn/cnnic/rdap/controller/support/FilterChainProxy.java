@@ -53,16 +53,32 @@ public class FilterChainProxy implements Filter {
         LOGGER.info("init RDAP filters end.");
     }
 
+    /**
+     * destructor .
+     */
     @Override
     public void destroy() {
     }
-
+    /**
+     * filter chain .
+     * 
+     * @param req
+     *            request.
+     * @param res
+     *            response.
+     * @param chain
+     *            filterchain.          
+     * @throws IOException
+     *             Exception.
+     * @throws ServletException
+     *             Exception.
+     */
     @Override
-    public void doFilter(ServletRequest arg0, ServletResponse arg1,
+    public void doFilter(ServletRequest req, ServletResponse res,
             FilterChain chain) throws IOException, ServletException {
         LOGGER.debug("begin pre filter ...");
-        HttpServletRequest request = (HttpServletRequest) arg0;
-        HttpServletResponse response = (HttpServletResponse) arg1;
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
         if (ConnectionControlService
                 .incrementConcurrentQCountAndCheckIfExceedMax()) {
             ConnectionControlService.decrementAndGetCurrentQueryCount();
@@ -138,9 +154,16 @@ public class FilterChainProxy implements Filter {
         }
         return true;
     }
-
+    /**
+     * initialize.
+     * 
+     * @param config
+     *            FilterConfig.
+     * @throws ServletException
+     *              exception.            
+     */
     @Override
-    public void init(FilterConfig arg0) throws ServletException {
+    public void init(FilterConfig config) throws ServletException {
     }
 
     /**
