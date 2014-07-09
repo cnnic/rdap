@@ -51,7 +51,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author jiashuo
  * 
  */
-public class FilterHelper {
+public final class FilterHelper {
+    /**
+     * constructor.
+     */
+    private FilterHelper() {
+        
+    }
     /**
      * write response.
      * 

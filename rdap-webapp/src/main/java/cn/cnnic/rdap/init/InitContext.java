@@ -37,7 +37,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
@@ -95,15 +94,11 @@ public class InitContext implements ApplicationContextAware {
      * @param continueOnError
      *            whether or not to continue without throwing an exception in
      *            the event of an error
-     * @throws DataAccessException
-     *             if there is an error executing a statement and
-     *             continueOnError was {@code false}
      * @see #setSqlScriptEncoding
      */
     public void
             executeSqlScript(JdbcTemplate jdbcTemplate, String sqlResourcePath,
-                    String databaseName, boolean continueOnError)
-                    throws DataAccessException {
+                    String databaseName, boolean continueOnError) {
         Resource resource =
                 this.applicationContext.getResource(sqlResourcePath);
         executeSqlScript(jdbcTemplate, new EncodedResource(resource,
@@ -128,14 +123,11 @@ public class InitContext implements ApplicationContextAware {
      * @param continueOnError
      *            whether or not to continue without throwing an exception in
      *            the event of an error
-     * @throws DataAccessException
-     *             if there is an error executing a statement and
-     *             {@code continueOnError} is {@code false}
      * @see ResourceDatabasePopulator
      */
     private static void executeSqlScript(JdbcTemplate jdbcTemplate,
             EncodedResource resource, String databaseName,
-            boolean continueOnError) throws DataAccessException {
+            boolean continueOnError) {
 
         long startTime = System.currentTimeMillis();
         List<String> statements = new LinkedList<String>();
@@ -230,6 +222,7 @@ public class InitContext implements ApplicationContextAware {
      *            the {@code LineNumberReader} containing the script to be
      *            processed
      * @return a {@code String} containing the script lines
+     * @throws IOException input output exception
      * @see #readScript(LineNumberReader, String)
      */
     public static String readScript(LineNumberReader lineNumberReader)
@@ -251,6 +244,7 @@ public class InitContext implements ApplicationContextAware {
      * @param commentPrefix
      *            the prefix that identifies comments in the SQL script &mdash;
      *            typically "--"
+     * @throws IOException input output exception
      * @return a {@code String} containing the script lines
      */
     public static String readScript(LineNumberReader lineNumberReader,
@@ -402,8 +396,7 @@ public class InitContext implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 

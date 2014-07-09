@@ -41,7 +41,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -147,8 +146,7 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
      */
     class RemarkResultSetExtractor implements ResultSetExtractor<List<Remark>> {
         @Override
-        public List<Remark> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Remark> extractData(ResultSet rs) throws SQLException {
             List<Remark> result = new ArrayList<Remark>();
             Map<Long, Remark> remarkMapById = new HashMap<Long, Remark>();
             while (rs.next()) {

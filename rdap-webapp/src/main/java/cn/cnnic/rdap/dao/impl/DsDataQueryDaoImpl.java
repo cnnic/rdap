@@ -39,7 +39,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -145,8 +144,7 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
      */
     class DsDataResultSetExtractor implements ResultSetExtractor<List<DsData>> {
         @Override
-        public List<DsData> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<DsData> extractData(ResultSet rs) throws SQLException {
             List<DsData> result = new ArrayList<DsData>();
             while (rs.next()) {
                 DsData dsData = new DsData();
