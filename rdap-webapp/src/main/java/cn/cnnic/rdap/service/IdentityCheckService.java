@@ -24,7 +24,7 @@ public interface IdentityCheckService {
      *            user password.
      * @return user or null.
      */
-    User identityCheckService(final String userId,final String userPwd);
+    User identityCheckService(final String userId, final String userPwd);
     
 }
 

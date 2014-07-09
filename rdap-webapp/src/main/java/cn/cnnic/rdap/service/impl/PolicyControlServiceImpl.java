@@ -64,7 +64,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(QueryServiceImpl.class);
+            .getLogger(PolicyControlServiceImpl.class);
 
     /**
      * PolicyDao.
@@ -102,7 +102,6 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      * @return string of object type.
      */
     private String getModelString(final Object objModel) {
-        LOGGER.info("getModelString, objModel:" + objModel);
         String strObjType = null;
 
         ModelType modelType = ((BaseModel) objModel).getObjectType();
@@ -111,7 +110,6 @@ public class PolicyControlServiceImpl implements PolicyControlService {
             LOGGER.info("getModelString, objModel is errorMessage");
             return null;
         }
-        LOGGER.info("getModelString, ObjType:" + strObjType);
         return strObjType;
     }
 
@@ -123,14 +121,12 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      * @return string of method.
      */
     private String trucateStringFromMethod(String strMethod) {
-        LOGGER.info("trucateStringFromMethod, strMethod:" + strMethod);
-
+        
         final String strSet = "set";
         final String strGet = "get";
         final String strIs = "is";
         if (!strMethod.startsWith(strSet) && !strMethod.startsWith(strGet)
                 && !strMethod.startsWith(strIs)) {
-            LOGGER.info("trucateStringFromMethod, method is NOT is/get/set");
             return null;
         }
 
@@ -145,7 +141,6 @@ public class PolicyControlServiceImpl implements PolicyControlService {
         strMethodField = strMethodField.replaceFirst(strFieldFirstLetter,
                 strReplace);
 
-        LOGGER.info("trucateStringFromMethod, method is " + strMethodField);
         return strMethodField;
     }
 
@@ -201,7 +196,6 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      */
     @Override
     public void applyPolicy(final Object objModel) {
-        LOGGER.info("applyPolicy, objModel:" + objModel);
         if (objModel == null) {
             return;
         }
@@ -268,8 +262,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      *            object to set.
      */
     private void setInnerListPolicy(final Object object) {
-        LOGGER.info("setInnerListPolicy, object:" + object);
-
+        
         List<?> listObjs = (List<?>) object;
         if (listObjs != null) {
             for (int iObj = 0; iObj < listObjs.size(); ++iObj) {
