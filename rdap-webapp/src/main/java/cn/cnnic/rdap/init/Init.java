@@ -44,7 +44,13 @@ import cn.cnnic.rdap.init.mysql.InitDao;
  * @author jiashuo
  * 
  */
-public class Init {
+public final class Init {
+    /**
+     * private constructor.
+     */
+    private Init() {
+        
+    }
     /**
      * LOGGER.
      */
@@ -82,6 +88,9 @@ public class Init {
         LOGGER.info("init successful...............");
     }
 
+    /**
+     * logger to print messages.
+     */
     private static void printUsage() {
         LOGGER.info("usage:");
         LOGGER.info("first init schema:");
@@ -90,10 +99,22 @@ public class Init {
         LOGGER.info("   java cn.cnnic.rdap.init.Init data");
     }
 
+    /**
+     * check if command is the init data.
+     * @param arg
+     *          param to check。
+     * @return if yes return true, or return false.
+     */
     private static boolean isInitDataCmd(String arg) {
         return arg.equalsIgnoreCase("data");
     }
 
+    /**
+     * check if is init schema command.
+     * @param arg
+     *          string to check.
+     * @return if yes return true, or return false.
+     */
     private static boolean isInitSchemaCmd(String arg) {
         return arg.equalsIgnoreCase("schema");
     }

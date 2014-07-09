@@ -39,7 +39,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -51,19 +50,28 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * remark query DAO
+ * remark query DAO.
  * 
  * @author jiashuo
  * 
  */
 @Repository
 public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
+    /**
+     * link object query dao.
+     */
     @Autowired
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
 
     /**
      * query event as inner objects of other object.
+     * 
+     * @param outerObjectId
+     *            id of outer object.
+     * @param outerModelType
+     *            model type of outer object.
+     * @return event list.
      */
     @Override
     public List<Event> queryAsInnerObjects(final Long outerObjectId,
@@ -78,6 +86,7 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
      * query inner objects, and set it to event.
      * 
      * @param events
+     *        the event list which will be set.
      */
     private void queryAndSetInnerObjects(List<Event> events) {
         if (null == events || events.size() == 0) {
@@ -89,7 +98,7 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
     }
 
     /**
-     * query inner objects, and set them to event
+     * query inner objects, and set them to event.
      * 
      * @param event
      *            event after set inner objects
@@ -104,7 +113,7 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
     }
 
     /**
-     * query event,without inner objects
+     * query event,without inner objects.
      * 
      * @param outerObjectId
      *            outer object id
@@ -116,7 +125,8 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
             final ModelType outerModelType) {
         final String sql = "select event.*  from RDAP_EVENT event"
                 + " inner join REL_EVENT_REGISTRATION rel "
-                + " on (rel.EVENT_ID = event.EVENT_ID and rel.REL_ID = ? and rel.REL_OBJECT_TYPE = ?) ";
+                + " on (rel.EVENT_ID = event.EVENT_ID and rel.REL_ID = ?"
+                + " and rel.REL_OBJECT_TYPE = ?) ";
         List<Event> result = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
@@ -130,15 +140,14 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
     }
 
     /**
-     * event ResultSetExtractor, extract data from ResultSet
+     * event ResultSetExtractor, extract data from ResultSet.
      * 
      * @author jiashuo
      * 
      */
     class EventResultSetExtractor implements ResultSetExtractor<List<Event>> {
         @Override
-        public List<Event> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Event> extractData(ResultSet rs) throws SQLException {
             List<Event> result = new ArrayList<Event>();
             while (rs.next()) {
                 Event event = new Event();

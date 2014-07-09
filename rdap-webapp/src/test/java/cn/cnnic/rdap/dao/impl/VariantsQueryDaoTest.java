@@ -32,6 +32,7 @@ package cn.cnnic.rdap.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -90,13 +91,16 @@ public class VariantsQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("event.xml")
     public void testQueryNonExist() {
         Long nonExistAutnumId = 10000L;
         List<Variants> variants =
                 variantsQueryDao.queryAsInnerObjects(nonExistAutnumId,
-                        ModelType.AUTNUM);
+                        ModelType.DOMAIN);
         assertNotNull(variants);
         assertEquals(variants.size(), 0);
+        variants =
+                variantsQueryDao.queryAsInnerObjects(nonExistAutnumId,
+                        ModelType.AUTNUM);
+        assertNull(variants);
     }
 }

@@ -37,7 +37,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -60,7 +59,7 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
     @Override
     public List<Variants> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        if(!ModelType.DOMAIN.equals(outerModelType)){
+        if (!ModelType.DOMAIN.equals(outerModelType)) {
             return null;
         }
         List<Variant> variantList = queryWithoutInnerObjects(outerObjectId);
@@ -145,8 +144,7 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
     class VariantsResultSetExtractor implements
             ResultSetExtractor<List<Variant>> {
         @Override
-        public List<Variant> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Variant> extractData(ResultSet rs) throws SQLException {
             List<Variant> result = new ArrayList<Variant>();
             while (rs.next()) {
                 Long variantId = rs.getLong("VARIANT_ID");

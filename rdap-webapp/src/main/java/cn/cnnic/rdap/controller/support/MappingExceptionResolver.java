@@ -25,20 +25,17 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
     /**
      * logger.
      */
-    private static Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = LoggerFactory
             .getLogger(MappingExceptionResolver.class);
 
-    /**
-     * handle exception.
-     */
     @Override
     protected ModelAndView doResolveException(HttpServletRequest request,
             HttpServletResponse response, Object handler, Exception ex) {
         ResponseEntity<ErrorMessage> responseEntity = null;
-        LOGGER.error("error:",ex);
+        LOGGER.error("error:", ex);
         if (ex instanceof InvalidMediaTypeException) {
             responseEntity = RestResponseUtil.createResponse415();
-        }else{
+        } else {
             responseEntity = RestResponseUtil.createResponse500();
         }
         try {

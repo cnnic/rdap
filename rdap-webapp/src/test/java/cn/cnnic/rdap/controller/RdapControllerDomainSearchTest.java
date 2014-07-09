@@ -176,8 +176,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                 .andExpect(
                         jsonPath("$.domainSearchResults[0].port43").value(
                                 "port43"))
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].secureDNS").exists())
+//                .andExpect(
+//                        jsonPath("$.domainSearchResults[0].secureDNS").exists())
                 .andExpect(
                         jsonPath("$.domainSearchResults[0].status").isArray())
                 .andExpect(

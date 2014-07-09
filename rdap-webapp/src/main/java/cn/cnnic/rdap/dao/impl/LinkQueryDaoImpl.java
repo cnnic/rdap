@@ -42,7 +42,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -54,19 +53,19 @@ import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * link query DAO
+ * link query DAO.
  * 
- * @author jiashuo
+ * @author jiashuo。
  * 
  */
 @Repository
 public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
+    /**
+     * logger for record log.
+     */
     private static Logger logger = LoggerFactory
             .getLogger(LinkQueryDaoImpl.class);
 
-    /**
-     * query link as inner objects of other object
-     */
     @Override
     public List<Link> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
@@ -79,7 +78,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * set title to links. This method will modify links
+     * set title to links. This method will modify links.
      * 
      * @param links
      *            link list
@@ -99,7 +98,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * set title to link. This method will modify link in links
+     * set title to link. This method will modify link.
      * 
      * @param linkTitle
      *            link title
@@ -117,13 +116,13 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * find link from link list by link id
+     * find link from link list by link id.
      * 
      * @param linkId
-     *            link id
+     *            link id。
      * @param links
      *            link list
-     * @return link if find, null if not
+     * @return link if find, null if not。
      */
     private Link findLinkFromListById(Long linkId, List<Link> links) {
         if (null == links || null == linkId) {
@@ -138,18 +137,19 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * query link's title
+     * query link's title.
      * 
      * @param linksIds
-     *            link id list
-     * @return link title list
+     *            link id list.
+     * @return link title list.
      */
     private List<LinkTitle> queryLinksTitle(List<Long> linksIds) {
         if (null == linksIds || linksIds.size() == 0) {
             return new ArrayList<LinkTitle>();
         }
         final String linksIdsJoinedByComma = StringUtils.join(linksIds, ",");
-        final String sqlTpl = "select * from RDAP_LINK_TITLE where LINK_ID in (%s)";
+        final String sqlTpl = 
+                "select * from RDAP_LINK_TITLE where LINK_ID in (%s)";
         final String sql = String.format(sqlTpl, linksIdsJoinedByComma);
         List<LinkTitle> result = jdbcTemplate.query(sql,
                 new RowMapper<LinkTitle>() {
@@ -165,19 +165,20 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * query link with hreflang
+     * query link with hreflang.
      * 
      * @param outerObjectId
-     *            object id of outer object
+     *            object id of outer object，
      * @param outerModelType
-     *            model type of outer object
-     * @return link list
+     *            model type of outer object，
+     * @return link list，
      */
     private List<Link> queryLinkWithHreflang(final Long outerObjectId,
             final ModelType outerModelType) {
         final String sql = "select link.*,hreflang.HREFLANG from RDAP_LINK link"
                 + " inner join REL_LINK_OBJECT rel "
-                + " on (rel.LINK_ID = link.LINK_ID and rel.REL_ID = ? and rel.REL_OBJECT_TYPE =?) "
+                + " on (rel.LINK_ID = link.LINK_ID and rel.REL_ID = ?"
+                + " and rel.REL_OBJECT_TYPE = ? ) "
                 + " left outer join RDAP_LINK_HREFLANG hreflang "
                 + " on link.LINK_ID = hreflang.LINK_ID";
         List<Link> result = jdbcTemplate.query(new PreparedStatementCreator() {
@@ -193,16 +194,15 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * link ResultSetExtractor, extract data from ResultSet
+     * link ResultSetExtractor extract data from ResultSet.
      * 
-     * @author jiashuo
+     * @author jiashuo。
      * 
      */
     class LinkWithHreflangResultSetExtractor implements
             ResultSetExtractor<List<Link>> {
         @Override
-        public List<Link> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Link> extractData(ResultSet rs) throws SQLException {
             List<Link> result = new ArrayList<Link>();
             Map<Long, Link> mapById = new HashMap<Long, Link>();
             while (rs.next()) {
@@ -231,6 +231,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
      * to link.
      * 
      * @param link
+     *          link to encode uri。
      */
     private void encodeUriAndSetToLink(Link link) {
         link.setHref(StringUtil.urlEncode(link.getHref()));
@@ -245,30 +246,60 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
      */
     class LinkTitle {
         /**
-         * link id
+         * link id.
          */
         private Long linkId;
         /**
-         * link title str
+         * link title string.
          */
         private String title;
 
+        /**
+         * get the link id.
+         * 
+         * @return link id.
+         */
         public Long getLinkId() {
             return linkId;
         }
 
+        /**
+         * set the link id.
+         * 
+         * @param linkId
+         *            link id will be set.
+         */
         public void setLinkId(Long linkId) {
             this.linkId = linkId;
         }
 
+        /**
+         * get title of link.
+         * 
+         * @return title string.
+         */
         public String getTitle() {
             return title;
         }
 
+        /**
+         * set title of link.
+         * 
+         * @param title
+         *            the title will be set.
+         */
         public void setTitle(String title) {
             this.title = title;
         }
 
+        /**
+         * construct the link Title.
+         * 
+         * @param linkId
+         *            linkId from construct.
+         * @param title
+         *            title from construct.
+         */
         public LinkTitle(Long linkId, String title) {
             super();
             this.linkId = linkId;

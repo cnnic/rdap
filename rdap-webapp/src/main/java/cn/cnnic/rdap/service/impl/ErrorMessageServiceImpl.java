@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,28 +44,42 @@ import cn.cnnic.rdap.dao.ErrorMessageDao;
 import cn.cnnic.rdap.service.ErrorMessageService;
 
 /**
- * error message service implementation
+ * error message service implementation.
  * 
  * @author jiashuo
  * 
  */
 @Service
 public class ErrorMessageServiceImpl implements ErrorMessageService {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ErrorMessageServiceImpl.class);
+    /**
+     * ErrorMessageDao.
+     */
+    @Autowired
+    private ErrorMessageDao errorMessageDao;
 
-	/**
-	 * ErrorMessageDao
-	 */
-	@Autowired
-	private ErrorMessageDao errorMessageDao;
-
-	@Override
-	public Map<Long, ErrorMessage> getAllErrorMessageMap() {
-		List<ErrorMessage> errorMessages = errorMessageDao
-				.getAllErrorMessages();
-		Map<Long, ErrorMessage> errorMessageMap = new HashMap<Long, ErrorMessage>();
-		for (ErrorMessage errorMessage : errorMessages) {
-			errorMessageMap.put(errorMessage.getErrorCode(), errorMessage);
-		}
-		return errorMessageMap;
-	}
+    /**
+     * getAllErrorMessageMap.
+     * 
+     * @return Map of error messages.
+     */   
+    @Override
+    public Map<Long, ErrorMessage> getAllErrorMessageMap() {
+        LOGGER.info("getAllErrorMessageMap");
+        List<ErrorMessage> errorMessages = errorMessageDao
+                .getAllErrorMessages();
+        Map<Long, ErrorMessage> errorMessageMap 
+            = new HashMap<Long, ErrorMessage>();
+        for (ErrorMessage errorMessage : errorMessages) {
+            errorMessageMap
+                .put(errorMessage.getErrorCode(), errorMessage);
+        }
+        LOGGER.info("getAllErrorMessageMap errorMessageMap:" 
+                 + errorMessageMap);
+        return errorMessageMap;
+     }
 }

@@ -39,6 +39,8 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -58,198 +60,214 @@ import cn.cnnic.rdap.service.PolicyControlService;
 @Service
 public class PolicyControlServiceImpl implements PolicyControlService {
 
-	/**
-	 * PolicyDao.
-	 */
-	@Autowired
-	private PolicyDao policyDao;
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(PolicyControlServiceImpl.class);
 
-	/**
-	 * the static map of policy.
-	 */
-	private static Map<String, Set<String>> mapPolicy = null;
+    /**
+     * PolicyDao.
+     */
+    @Autowired
+    private PolicyDao policyDao;
 
-	@Override
-	public Map<String, Set<String>> loadPolicyFieldsByMap() {
-		return mapPolicy;
-	}
+    /**
+     * the static map of policy.
+     */
+    private static Map<String, Set<String>> mapPolicy = null;
 
-	@Override
-	public void initAllPolicyByMap() {
-		mapPolicy = policyDao.loadAllPolicyMap();
-		return;
-	}
+    @Override
+    public Map<String, Set<String>> loadPolicyFieldsByMap() {
+        return mapPolicy;
+    }
 
-	/**
-	 * get Model String.
-	 * 
-	 * @param objModel
-	 *            the model of object.
-	 * @return string of object type.
-	 */
-	private String getModelString(final Object objModel) {
-		String strObjType = null;
+    @Override
+    public void initAllPolicyByMap() {
+        mapPolicy = policyDao.loadAllPolicyMap();
+        return;
+    }
 
-		ModelType modelType = ((BaseModel) objModel).getObjectType();
-		strObjType = modelType.getName();
-		if (strObjType == "errorMessage") {
-			return null;
-		}
-		return strObjType;
-	}
+    @Override
+    public void clearPolicy() {
+        mapPolicy.clear();
+        mapPolicy = null;
+    }
 
-	/**
-	 * trucate the string.
-	 * 
-	 * @param strMethod
-	 *            set the method string trucated.
-	 * @return string of method.
-	 */
-	private String trucateStringFromMethod(String strMethod) {
-		final String strSet = "set";
-		final String strGet = "get";
-		final String strIs = "is";
-		if (!strMethod.startsWith(strSet) && !strMethod.startsWith(strGet)
-				&& !strMethod.startsWith(strIs)) {
-			return null;
-		}
+    /**
+     * get Model String.
+     * 
+     * @param objModel
+     *            the model of object.
+     * @return string of object type.
+     */
+    private String getModelString(final Object objModel) {
+        String strObjType = null;
 
-		int posAfterSet = strSet.length();
-		if (strMethod.startsWith(strIs)) {
-			posAfterSet = strIs.length();
-		}
+        ModelType modelType = ((BaseModel) objModel).getObjectType();
+        strObjType = modelType.getName();
+        if (strObjType == "errorMessage") {
+            LOGGER.info("getModelString, objModel is errorMessage");
+            return null;
+        }
+        return strObjType;
+    }
 
-		String strMethodField = strMethod.substring(posAfterSet);
-		String strFieldFirstLetter = strMethodField.substring(0, 1);
-		String strReplace = StringUtils.lowerCase(strFieldFirstLetter);
-		strMethodField = strMethodField.replaceFirst(strFieldFirstLetter,
-				strReplace);
+    /**
+     * trucate the string.
+     * 
+     * @param strMethod
+     *            set the method string trucated.
+     * @return string of method.
+     */
+    private String trucateStringFromMethod(String strMethod) {
+        
+        final String strSet = "set";
+        final String strGet = "get";
+        final String strIs = "is";
+        if (!strMethod.startsWith(strSet) && !strMethod.startsWith(strGet)
+                && !strMethod.startsWith(strIs)) {
+            return null;
+        }
 
-		return strMethodField;
-	}
+        int posAfterSet = strSet.length();
+        if (strMethod.startsWith(strIs)) {
+            posAfterSet = strIs.length();
+        }
 
-	/**
-	 * set the property.
-	 * 
-	 * @param objModel
-	 *            the object to set.
-	 * @param strField
-	 *            the field to set.
-	 */
-	private void setPropertyNull(final Object objModel, final String strField) {
-		try {
-			PropertyUtils.setProperty(objModel, strField, null);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        String strMethodField = strMethod.substring(posAfterSet);
+        String strFieldFirstLetter = strMethodField.substring(0, 1);
+        String strReplace = StringUtils.lowerCase(strFieldFirstLetter);
+        strMethodField = strMethodField.replaceFirst(strFieldFirstLetter,
+                strReplace);
 
-	/**
-	 * get the baseModel property value.
-	 * 
-	 * @param objModel
-	 *            model of object.
-	 * @param strMethodField
-	 *            string of method field.
-	 * @return the object of inner object.
-	 */
-	private Object getPropertyValue(final Object objModel,
-			final String strMethodField) {
-		Object value = null;
-		try {
-			value = PropertyUtils.getProperty(objModel, strMethodField);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return value;
-	}
+        return strMethodField;
+    }
 
-	@Override
-	public void applyPolicy(final Object objModel) {
-		if (objModel == null) {
-			return;
-		}
-		Map<String, Set<String>> mapObjFields = loadPolicyFieldsByMap();
-		if (null == mapObjFields) {
-			return;
-		}
-		String strObjType = null;
-		if (objModel.getClass().getSuperclass() == BaseModel.class
-				|| objModel.getClass().getSuperclass() == BaseSearchModel.class) {
-			strObjType = getModelString(objModel);
-		}
-		if (strObjType == null) {
-			return;
-		}
-		Set<String> setFields = mapObjFields.get(strObjType);
+    /**
+     * set the property.
+     * 
+     * @param objModel
+     *            the object to set.
+     * @param strField
+     *            the field to set.
+     */
+    private void setPropertyNull(final Object objModel, final String strField) {
+        try {
+            PropertyUtils.setProperty(objModel, strField, null);
+        } catch (IllegalAccessException e) {
+            LOGGER.error("setPropertyNull ", e.getMessage());
+        } catch (InvocationTargetException e) {
+            LOGGER.error("setPropertyNull ", e.getMessage());
+        } catch (NoSuchMethodException e) {
+            LOGGER.error("setPropertyNull ", e.getMessage());
+        }
+    }
 
-		Method[] allMethods = ReflectionUtils.getUniqueDeclaredMethods(objModel
-				.getClass());
-		for (Method mthd : allMethods) {
-			String strMethod = mthd.getName();
-			String strMethodField = trucateStringFromMethod(strMethod);
-			if (strMethodField == null) {
-				continue;
-			}
-			Object value = null;
-			final String strSetFirstWord = "s";
-			boolean isSetMethod = strMethod.startsWith(strSetFirstWord);
-			boolean isGetMethod = strMethod.startsWith("g");
-			String strIsBool = mthd.getReturnType().toString();
-			// just handle the specified method except boolean method
-			if (!strIsBool.contains("Boolean") && isGetMethod) {
-				value = getPropertyValue(objModel, strMethodField);
-			}
-			if (setFields != null) {
-				Iterator<String> iter = setFields.iterator();
-				while (iter.hasNext()) {
-					String strField = iter.next();
-					// just handle the set method
-					if (strMethodField.compareToIgnoreCase(strField) == 0
-							&& isSetMethod) {
-						setPropertyNull(objModel, strMethodField);
-						break;
-					}
-				}
-			}
-			if (value == null) {
-				continue;
-			}
-			if (mthd.getReturnType() == List.class) {
-				setInnerListPolicy(value);
-			} else {
-				applyPolicy(value);
-			}
-		}
-		return;
-	}
+    /**
+     * get the baseModel property value.
+     * 
+     * @param objModel
+     *            model of object.
+     * @param strMethodField
+     *            string of method field.
+     * @return the object of inner object.
+     */
+    private Object getPropertyValue(final Object objModel,
+            final String strMethodField) {
+        Object value = null;
+        try {
+            value = PropertyUtils.getProperty(objModel, strMethodField);
+        } catch (IllegalAccessException e) {
+            LOGGER.error("getPropertyValue ", e.getMessage());
+        } catch (InvocationTargetException e) {
+            LOGGER.error("getPropertyValue ", e.getMessage());
+        } catch (NoSuchMethodException e) {
+            LOGGER.error("getPropertyValue ", e.getMessage());
+        }
+        return value;
+    }
 
-	/**
-	 * set the inner object policy.
-	 * 
-	 * @param object
-	 *            object to set.
-	 */
-	private void setInnerListPolicy(final Object object) {
-		List<?> listObjs = (List<?>) object;
-		if (listObjs != null) {
-			for (int iObj = 0; iObj < listObjs.size(); ++iObj) {
-				applyPolicy(listObjs.get(iObj));
-			}
-		}
-	}
+    /**
+     * get the baseModel property value.
+     * 
+     * @param objModel
+     *            model of object.
+     */
+    @Override
+    public void applyPolicy(final Object objModel) {
+        if (objModel == null) {
+            return;
+        }
+        Map<String, Set<String>> mapObjFields = loadPolicyFieldsByMap();
+        if (null == mapObjFields) {
+            return;
+        }
+        String strObjType = null;
+        if (objModel.getClass().getSuperclass() == BaseModel.class
+                || objModel.getClass().getSuperclass()
+                    == BaseSearchModel.class) {
+            strObjType = getModelString(objModel);
+        }
+        if (strObjType == null) {
+            return;
+        }
+        Set<String> setFields = mapObjFields.get(strObjType);
+
+        Method[] allMethods = ReflectionUtils.getUniqueDeclaredMethods(objModel
+                .getClass());
+        for (Method mthd : allMethods) {
+            String strMethod = mthd.getName();
+            String strMethodField = trucateStringFromMethod(strMethod);
+            if (strMethodField == null) {
+                continue;
+            }
+            Object value = null;
+            final String strSetFirstWord = "s";
+            boolean isSetMethod = strMethod.startsWith(strSetFirstWord);
+            boolean isGetMethod = strMethod.startsWith("g");
+            String strIsBool = mthd.getReturnType().toString();
+            // just handle the specified method except boolean ones
+            if (!strIsBool.contains("Boolean") && isGetMethod) {
+                value = getPropertyValue(objModel, strMethodField);
+            }
+            if (setFields != null) {
+                Iterator<String> iter = setFields.iterator();
+                while (iter.hasNext()) {
+                    String strField = iter.next();
+                    // just handle the set method
+                    if (strMethodField.equalsIgnoreCase(strField)
+                            && isSetMethod) {
+                        setPropertyNull(objModel, strMethodField);
+                        break;
+                    }
+                }
+            }
+            if (value == null) {
+                continue;
+            }
+            if (mthd.getReturnType() == List.class) {
+                setInnerListPolicy(value);
+            } else {
+                applyPolicy(value);
+            }
+        }
+        return;
+    }
+
+    /**
+     * set the inner object policy.
+     * 
+     * @param object
+     *            object to set.
+     */
+    private void setInnerListPolicy(final Object object) {
+        
+        List<?> listObjs = (List<?>) object;
+        if (listObjs != null) {
+            for (int iObj = 0; iObj < listObjs.size(); ++iObj) {
+                applyPolicy(listObjs.get(iObj));
+            }
+        }
+    }
 }

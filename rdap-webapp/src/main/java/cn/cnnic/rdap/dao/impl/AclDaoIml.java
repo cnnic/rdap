@@ -36,7 +36,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -109,16 +108,21 @@ public class AclDaoIml implements AclDao {
                 + " where userRole.ROLE_ID = acl.ROLE_ID "
                 + " and acl.OBJECT_TYPE = ? and acl.OBJECT_ID = ? "
                 + " and userRole.USER_ID= ? ";
-        Long count = jdbcTemplate.query(new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(
-                    Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ps.setString(1, secureObject.getType());
-                ps.setLong(2, secureObject.getId());
-                ps.setLong(3, principal.getId());
-                return ps;
-            }
-        }, new CountResultSetExtractor());
+        Long count = 0L;
+        try {
+            count = jdbcTemplate.query(new PreparedStatementCreator() {
+                public PreparedStatement createPreparedStatement(
+                        Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql);
+                    ps.setString(1, secureObject.getType());
+                    ps.setLong(2, secureObject.getId());
+                    ps.setLong(3, principal.getId());
+                    return ps;
+                }
+            }, new CountResultSetExtractor());
+        } catch (Exception e) {
+            e.getMessage();
+        }
         return count > 0;
     }
 
@@ -130,8 +134,7 @@ public class AclDaoIml implements AclDao {
      */
     class CountResultSetExtractor implements ResultSetExtractor<Long> {
         @Override
-        public Long extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public Long extractData(ResultSet rs) throws SQLException {
             Long result = 0L;
             if (rs.next()) {
                 result = rs.getLong("COUNT");
@@ -139,5 +142,4 @@ public class AclDaoIml implements AclDao {
             return result;
         }
     }
-
 }

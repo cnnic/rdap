@@ -337,7 +337,8 @@ public final class IpUtil {
                 high |= (Long.parseLong(strings[i], radix) << ((longs.length
                         - i - 1) * radix));
             } else {
-                low |= (Long.parseLong(strings[i], radix) << ((longs.length - i - 1) * radix));
+                low |= (Long.parseLong(strings[i], radix) << ((longs.length
+                        - i - 1) * radix));
             }
         }
         longs[0] = high;

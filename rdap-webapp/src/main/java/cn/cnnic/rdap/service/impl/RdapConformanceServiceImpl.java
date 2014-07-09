@@ -32,6 +32,8 @@ package cn.cnnic.rdap.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,31 +42,50 @@ import cn.cnnic.rdap.dao.ConformanceDao;
 import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
- * RdapConformanceService implementation
+ * RdapConformanceService implementation.
  * 
  * @author jiashuo
  * 
  */
 @Service
 public class RdapConformanceServiceImpl implements RdapConformanceService {
-	/**
-	 * conformanceDao.
-	 */
-	@Autowired
-	private ConformanceDao conformanceDao;
-	/**
-	 * the static list of conformance.
-	 */
-	private static List<String> rdapConformance = null;
-	@Override
-	public void initRdapConformance() {
-		rdapConformance = conformanceDao.queryConformance();
-	}
-	@Override
-	public void setRdapConformance(BaseModel model) {
-		if (null == model) {
-			return;
-		}
-		model.setRdapConformance(rdapConformance);
-	}
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(RdapConformanceServiceImpl.class);
+    
+    /**
+     * conformanceDao.
+     */
+    @Autowired
+    private ConformanceDao conformanceDao;
+
+    /**
+     * the static list of rdapConformance.
+     */
+    private static List<String> rdapConformance = null;
+    
+    /**
+     * initialize rdapConformance service.
+     */
+    @Override
+    public void initRdapConformance() {
+        LOGGER.info("initRdapConformance");
+        rdapConformance = conformanceDao.queryConformance();
+    }
+    /**
+     * set RdapConformance for model.
+     * 
+     * @param model
+     *            param for object which has rdapConformance.
+     */   
+    @Override
+    public void setRdapConformance(BaseModel model) {
+        LOGGER.info("setRdapConformance:" + model);
+        if (null == model) {
+            return;
+        }
+        model.setRdapConformance(rdapConformance);
+    }
 }

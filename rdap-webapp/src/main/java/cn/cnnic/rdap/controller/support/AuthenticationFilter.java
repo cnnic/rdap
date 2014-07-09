@@ -38,7 +38,18 @@ public class AuthenticationFilter implements RdapFilter {
         super();
         LOGGER.info("init RDAP filter:{}", this.getName());
     }
-
+    /**
+     * do pre process request authorization.
+     * 
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true if success processed,and can do service operation; false if
+     *         not.
+     */
     @Override
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -47,13 +58,14 @@ public class AuthenticationFilter implements RdapFilter {
 
         Principal principal = Principal.getAnonymousPrincipal();
         if (StringUtils.isNotBlank(tempPass)) {
-            String AUTH_BASIC_PREFIX = "Basic ";
-            if (!StringUtils.startsWithIgnoreCase(tempPass, AUTH_BASIC_PREFIX)) {
+            String authBasicPrefix = "Basic ";
+            if (!StringUtils.startsWithIgnoreCase(tempPass,
+                    authBasicPrefix)) {
                 writeError401Response(response);
                 return false;
             }
             tempPass =
-                    tempPass.substring(AUTH_BASIC_PREFIX.length(),
+                    tempPass.substring(authBasicPrefix.length(),
                             tempPass.length());
             String tempPassdeCode = "";
             BASE64Decoder decoder = new BASE64Decoder();
@@ -78,7 +90,7 @@ public class AuthenticationFilter implements RdapFilter {
             User user = null;
             IdentityCheckService idcService =
                     ServiceBeanUtil.getIdentityCheckService();
-            user = idcService.IdentityCheckService(userReqId, userReqPwd);
+            user = idcService.identityCheckService(userReqId, userReqPwd);
             if (null == user) {
                 request.getSession().removeAttribute("SESSION_ATTR_USER_ID");
                 writeError401Response(response);
@@ -106,13 +118,25 @@ public class AuthenticationFilter implements RdapFilter {
                 RestResponseUtil.createResponse401();
         FilterHelper.writeResponse(responseEntity, response);
     }
-
+    /**
+     * do post process.
+     * 
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true .
+     */
     @Override
     public boolean postProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         return true;
     }
-
+    /**
+     * @return this class name.
+     */
     @Override
     public String getName() {
         return getClass().getSimpleName();

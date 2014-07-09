@@ -29,7 +29,7 @@
  * DAMAGE.
  */
 /**
- * models.
+ * controller.
  * @author jiashuo
  */
 package cn.cnnic.rdap.controller;

@@ -48,5 +48,5 @@ public interface RedirectDao {
      *            queryParam.
      * @return RedirectResponse RedirectResponse.
      */
-    public RedirectResponse query(QueryParam queryParam);
+    RedirectResponse query(QueryParam queryParam);
 }

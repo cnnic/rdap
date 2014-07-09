@@ -51,13 +51,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author jiashuo
  * 
  */
-public class FilterHelper {
+public final class FilterHelper {
+    /**
+     * constructor.
+     */
+    private FilterHelper() {
+        
+    }
     /**
      * write response.
      * 
      * @param responseEntity
+     *            response entity for error message。
      * @param response
+     *            http servlet response。
      * @throws IOException
+     *             exception of io.
      */
     public static void writeResponse(
             ResponseEntity<ErrorMessage> responseEntity,
@@ -82,8 +91,10 @@ public class FilterHelper {
      * convert bean to JSON format String.
      * 
      * @param object
-     * @return
+     *            bean object。
+     * @return string of json.
      * @throws IOException
+     *             exception of io.
      */
     private static String beanToJSON(Object object) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

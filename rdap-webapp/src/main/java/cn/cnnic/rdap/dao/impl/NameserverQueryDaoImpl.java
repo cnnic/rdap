@@ -43,7 +43,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -118,9 +117,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             final Long outerObjectId, final ModelType outerModelType) {
         final String sql = "select * from RDAP_NAMESERVER ns inner join "
                 + "REL_DOMAIN_NAMESERVER rel on (ns.NAMESERVER_ID = "
-                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ? and rel.DOMAIN_TYPE =? ) left outer "
-                + "join RDAP_NAMESERVER_STATUS status on ns.NAMESERVER_ID "
-                + "=status.NAMESERVER_ID";
+                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ? and rel.DOMAIN_TYPE"
+                + " = ? ) left outer join RDAP_NAMESERVER_STATUS status"
+                + " on ns.NAMESERVER_ID = status.NAMESERVER_ID";
 
         List<Nameserver> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
@@ -195,11 +194,11 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * @param ns ns.
      */
     private void queryAndSetEntities(Nameserver ns) {
-        if(ns==null){
-            return ;
+        if (ns == null) {
+            return;
         }
-        List<Entity> entities =
-                entityQueryDao.queryAsInnerObjects(ns.getId(), ModelType.NAMESERVER);
+        List<Entity> entities = entityQueryDao.queryAsInnerObjects(
+                ns.getId(), ModelType.NAMESERVER);
         ns.setEntities(entities);
     }
 
@@ -271,8 +270,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     class NSResultSetExtractor implements ResultSetExtractor<List<Nameserver>> {
         @Override
-        public List<Nameserver> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Nameserver> extractData(ResultSet rs) throws SQLException {
             List<Nameserver> result = new ArrayList<Nameserver>();
             Map<Long, Nameserver> nsMapById = new HashMap<Long, Nameserver>();
             while (rs.next()) {
@@ -302,10 +300,11 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
 
     /**
      * query and set entities.
-     * @param listNS ns list.
+     * @param nameservers
+     *          nameserver list.
      */
     private void queryAndSetEntities(List<Nameserver> nameservers) {
-        if(null == nameservers){
+        if (null == nameservers) {
             return;
         }
         for (Nameserver nameserver : nameservers) {
@@ -323,7 +322,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     public BigDecimal[] getBigDecimalIp(QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
         final String strIp = nsQueryParam.getQ();
-        if (!IpUtil.isIpV4StrWholeValid(strIp) && !IpUtil.isIpV6StrValid(strIp)) {
+        if (!IpUtil.isIpV4StrWholeValid(strIp)
+                && !IpUtil.isIpV6StrValid(strIp)) {
             return null;
         }
         BigDecimal[] arrayIp = IpUtil.ipToBigDecimal(strIp);
@@ -349,7 +349,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             }
             final BigDecimal ipHigh = arrayIp[0];
             final BigDecimal ipLow = ipTmp;
-            final String strHead = "select count(1) as COUNT from RDAP_NAMESERVER_IP "
+            final String strHead =
+                    "select count(1) as COUNT from RDAP_NAMESERVER_IP "
                     + " where IP_LOW = ? && ";
             String tmpSql = "IP_HIGH = ?";
             if (ipHigh.doubleValue() == 0.0) {
@@ -411,13 +412,15 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             }
             final BigDecimal ipHigh = arrayIp[0];
             final BigDecimal ipLow = ipTmp;
-            final String strHead = "select * from RDAP_NAMESERVER ns,RDAP_NAMESERVER_IP ip"
+            final String strHead =
+                    "select * from RDAP_NAMESERVER ns,RDAP_NAMESERVER_IP ip"
                     + " where ns.NAMESERVER_ID=ip.NAMESERVER_ID and ";
             String tmpSql = "IP_HIGH = ?";
             if (ipHigh.doubleValue() == 0.0) {
                 tmpSql = "(IP_HIGH = ? or IP_HIGH is NULL) ";
             }
-            final String strEnd = "and IP_LOW = ? order by ns.LDH_NAME limit ?,? ";
+            final String strEnd = 
+                    "and IP_LOW = ? order by ns.LDH_NAME limit ?,? ";
             final String sql = strHead + tmpSql + strEnd;
             result = jdbcTemplate.query(new PreparedStatementCreator() {
                 public PreparedStatement createPreparedStatement(
@@ -463,8 +466,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     class NameserverResultSetExtractor implements
             ResultSetExtractor<List<Nameserver>> {
         @Override
-        public List<Nameserver> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Nameserver> extractData(ResultSet rs) throws SQLException {
             List<Nameserver> result = new ArrayList<Nameserver>();
             while (rs.next()) {
                 Nameserver ns = new Nameserver();
@@ -502,8 +504,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     class CountResultSetExtractor implements ResultSetExtractor<Long> {
         @Override
-        public Long extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public Long extractData(ResultSet rs) throws SQLException {
             Long result = 0L;
             if (rs.next()) {
                 result = rs.getLong("COUNT");
@@ -535,7 +536,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     private void queryAndSetNameserverStatus(List<Nameserver> listNameserver) {
         List<Long> nameserverIds = getModelIds(listNameserver);
-        List<ModelStatus> nameserverStatusList = queryNameserverStatus(nameserverIds);
+        List<ModelStatus> nameserverStatusList =
+                queryNameserverStatus(nameserverIds);
         for (ModelStatus status : nameserverStatusList) {
             BaseModel obj = BaseModel.findObjectFromListById(listNameserver,
                     status.getId());

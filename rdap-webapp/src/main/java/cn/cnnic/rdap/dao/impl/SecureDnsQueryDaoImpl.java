@@ -37,10 +37,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -76,7 +74,8 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     @Override
     public List<SecureDns> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        List<SecureDns> result = queryWithoutInnerObjects(outerObjectId, outerModelType);
+        List<SecureDns> result =
+                queryWithoutInnerObjects(outerObjectId, outerModelType);
         queryAndSetInnerObjects(result);
         return result;
     }
@@ -120,9 +119,12 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
      * 
      * @param outerObjectId
      *            object id of outer object.
+     * @param type
+     *            object model type
      * @return SecureDNS list
      */
-    private List<SecureDns> queryWithoutInnerObjects(final Long outerObjectId, final ModelType type) {
+    private List<SecureDns> queryWithoutInnerObjects(
+            final Long outerObjectId, final ModelType type) {
         final String sql = "select * from RDAP_SECUREDNS where "
                 + " DOMAIN_ID=? and DOMAIN_TYPE = ? ";
         List<SecureDns> result = jdbcTemplate.query(
@@ -147,8 +149,7 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     class VariantsResultSetExtractor implements
             ResultSetExtractor<List<SecureDns>> {
         @Override
-        public List<SecureDns> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<SecureDns> extractData(ResultSet rs) throws SQLException {
             List<SecureDns> result = new ArrayList<SecureDns>();
             while (rs.next()) {
                 SecureDns secureDns = new SecureDns();
