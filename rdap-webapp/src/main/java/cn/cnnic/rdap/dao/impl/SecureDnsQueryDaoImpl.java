@@ -39,7 +39,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -150,8 +149,7 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     class VariantsResultSetExtractor implements
             ResultSetExtractor<List<SecureDns>> {
         @Override
-        public List<SecureDns> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<SecureDns> extractData(ResultSet rs) throws SQLException {
             List<SecureDns> result = new ArrayList<SecureDns>();
             while (rs.next()) {
                 SecureDns secureDns = new SecureDns();

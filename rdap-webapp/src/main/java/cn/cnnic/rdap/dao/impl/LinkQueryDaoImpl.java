@@ -42,7 +42,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -203,8 +202,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     class LinkWithHreflangResultSetExtractor implements
             ResultSetExtractor<List<Link>> {
         @Override
-        public List<Link> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Link> extractData(ResultSet rs) throws SQLException {
             List<Link> result = new ArrayList<Link>();
             Map<Long, Link> mapById = new HashMap<Long, Link>();
             while (rs.next()) {

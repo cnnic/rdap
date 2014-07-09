@@ -44,7 +44,13 @@ import cn.cnnic.rdap.init.mysql.InitDao;
  * @author jiashuo
  * 
  */
-public class Init {
+public final class Init {
+    /**
+     * private constructor.
+     */
+    private Init() {
+        
+    }
     /**
      * LOGGER.
      */
