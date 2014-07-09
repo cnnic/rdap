@@ -34,7 +34,18 @@ public class RateLimitFilter implements RdapFilter {
         super();
         LOGGER.info("init RDAP filter:{}", this.getName());
     }
-
+    /**
+     * do pre process request address.
+     * 
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true if success processed,and can do service operation; false if
+     *         not.
+     */
     @Override
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -61,12 +72,24 @@ public class RateLimitFilter implements RdapFilter {
                 RestResponseUtil.createResponse429();
         FilterHelper.writeResponse(responseEntity, response);
     }
-
+    /**
+     * @return this class name.
+     */
     @Override
     public String getName() {
         return getClass().getSimpleName();
     }
-
+    /**
+     * do post process.
+     * 
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true .
+     */
     @Override
     public boolean postProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
