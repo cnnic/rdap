@@ -37,6 +37,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -56,14 +58,35 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 @Repository
 public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
 
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(VariantsQueryDaoImpl.class);    
+    /**
+     * query results of Variants list to an associated object.
+     *   ie. domain to variants,
+     *       use queryAsInnerObjects(domainId) to query variants
+     * @param outerObjectId
+     *            associated object id.
+     * @param outerModelType
+     *            associated object type.            
+     * @return List<Variants>
+     *            variants associated to the domain.
+     *   
+     */
     @Override
     public List<Variants> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
+        LOGGER.info("queryAsInnerObjects, outerObjectId:" + outerObjectId
+                + ", outerModelType:" + outerModelType);
         if (!ModelType.DOMAIN.equals(outerModelType)) {
+            LOGGER.info("queryAsInnerObjects, type is not DOMAIN.");
             return null;
         }
         List<Variant> variantList = queryWithoutInnerObjects(outerObjectId);
         List<Variants> result = geneVariantsList(variantList);
+        LOGGER.info("queryAsInnerObjects, result:" + result);
         return result;
     }
 
