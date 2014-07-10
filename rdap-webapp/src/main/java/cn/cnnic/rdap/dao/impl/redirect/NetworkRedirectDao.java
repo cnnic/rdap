@@ -59,6 +59,13 @@ public class NetworkRedirectDao implements RedirectDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * redirect the network.
+     * @param queryParam
+     *          the queryParam for network.
+     * @return RedirectResponse
+     *          response to select redirect network.
+     */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
         PreparedStatementCreator pstatCreator =

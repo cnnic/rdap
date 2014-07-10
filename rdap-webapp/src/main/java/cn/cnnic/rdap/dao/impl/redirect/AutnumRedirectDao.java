@@ -60,6 +60,13 @@ public class AutnumRedirectDao implements RedirectDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * redirect the autnum.
+     * @param queryParam
+     *          the queryParam for autnum.
+     * @return RedirectResponse
+     *          response of select redirect autnum.
+     */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
         final String autnumQ = queryParam.getQ();
