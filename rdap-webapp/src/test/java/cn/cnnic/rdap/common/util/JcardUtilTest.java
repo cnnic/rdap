@@ -87,7 +87,15 @@ public class JcardUtilTest {
         entity.setTitle("CEO");
         entity.setOrg("org");
         entity.setUrl("http://www.acme-co.com");
-        assertNotNull(JcardUtil.toJcardString(entity));
+        entity.setLang("zh_CN");
+        String jcardString = JcardUtil.toJcardString(entity);
+        assertNotNull(jcardString);
+        assertThat(jcardString, new StringContains("zh_CN")); 
+        // invalid lang also can work
+        entity.setLang("invalid_lang_value");
+        jcardString = JcardUtil.toJcardString(entity);
+        assertNotNull(jcardString);
+        assertThat(jcardString, new StringContains("invalid_lang_value")); 
     }
     
     @Test

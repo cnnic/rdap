@@ -148,7 +148,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
                     .parse(dateTimeStr);
             return DateFormatUtils.format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'");
         } catch (Exception e) {
-            LOGGER.error("error timestamp format.");
+            LOGGER.error("error timestamp format,error:",e);
             return null;
         }
     }

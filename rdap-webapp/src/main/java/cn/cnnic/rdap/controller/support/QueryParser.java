@@ -33,6 +33,8 @@ package cn.cnnic.rdap.controller.support;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.DomainQueryParam;
@@ -43,12 +45,20 @@ import cn.cnnic.rdap.bean.NetworkQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
 
 /**
+ * get request parameter from url.
  * 
  * @author jiashuo
  * 
  */
 @Component
 public class QueryParser {
+    
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(QueryParser.class);
+    
     /**
      * generate QueryParam.
      * 
@@ -148,18 +158,27 @@ public class QueryParser {
      */
     public String getFirstParameter(HttpServletRequest request,
             final String[] strParamOrg) {
+        
         String strQuery = request.getQueryString();
+        LOGGER.info("getFirstParameter, query:" + strQuery 
+                + ",strParamOrg:" + strParamOrg);
+        
         if (StringUtils.isBlank(strQuery)) {
             return null;
         }
+        
+        // get first '?'
         int pos = strQuery.indexOf("?");
         if (-1 != pos) {
             try {
                 strQuery = strQuery.substring(0, pos);
             } catch (Exception e) {
+                LOGGER.error("getFirstParameter" + e.getMessage());
                 return null;
             }
         }
+        
+        // get first param in strParamOrg
         final String strSplit = "&";
         String[] strParam = strQuery.split(strSplit);
         final String strEqual = "=";
@@ -167,7 +186,9 @@ public class QueryParser {
             String[] strParamName = strParam[k].split(strEqual);
             if (strParamName != null) {
                 for (int j = 0; j < strParamOrg.length; ++j) {
-                    if (strParamName[0].compareTo(strParamOrg[j]) == 0) {
+                    if (strParamName[0].equals(strParamOrg[j])) {
+                        LOGGER.info("getFirstParameter, param:" 
+                                    + strParamOrg[j]); 
                         return strParamName[0];
                     }
                 }
