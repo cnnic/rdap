@@ -2,7 +2,8 @@
 <configuration>
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{150} - %msg%n
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{150}
+				- %msg%n
 			</Pattern>
 		</encoder>
 	</appender>
@@ -17,12 +18,9 @@
 		<level value="DEBUG" />
 		<appender-ref ref="STDOUT" />
 	</logger>
-	<logger name="com.mchange" additivity="true">  
-        <level value="DEBUG" />  
-        <appender-ref ref="STDOUT" />  
-    </logger>  
-    <logger name="java.sql.PreparedStatement" additivity="true">  
-        <level value="DEBUG" />  
-        <appender-ref ref="STDOUT" />  
-    </logger>
+	<logger name="org.springframework.jdbc.core.JdbcTemplate"
+		additivity="true">
+		<level value="ERROR" />
+		<appender-ref ref="STDOUT" />
+	</logger>
 </configuration> 
