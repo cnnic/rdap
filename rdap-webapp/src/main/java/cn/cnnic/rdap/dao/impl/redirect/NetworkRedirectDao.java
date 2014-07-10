@@ -34,6 +34,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -53,6 +55,12 @@ import cn.cnnic.rdap.dao.impl.NetworkQueryDaoImpl;
  */
 @Repository
 public class NetworkRedirectDao implements RedirectDao {
+    
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(NetworkRedirectDao.class);    
     /**
      * JDBC template.
      */
@@ -68,6 +76,7 @@ public class NetworkRedirectDao implements RedirectDao {
      */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
+        LOGGER.info("query, queryParam:" + queryParam);
         PreparedStatementCreator pstatCreator =
                 NetworkQueryDaoImpl.generatePStatCreator(queryParam,
                         "RDAP_IP_REDIRECT");
@@ -81,8 +90,10 @@ public class NetworkRedirectDao implements RedirectDao {
 
                 });
         if (null == result || result.size() == 0) {
+            LOGGER.info("query, result is null");
             return null;
         }
+        LOGGER.info("query, result:" + result.get(0));
         return new RedirectResponse(result.get(0));
     }
 }
