@@ -39,6 +39,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -46,11 +48,17 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Repository;
 
 /**
+ * check user authorization.
  * 
  * @author wang
  */
 @Repository
 public class IdentityCheckDaoImpl implements IdentityCheckDao {
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(IdentityCheckDaoImpl.class);      
     /**
      * jdbc dao template.
      */

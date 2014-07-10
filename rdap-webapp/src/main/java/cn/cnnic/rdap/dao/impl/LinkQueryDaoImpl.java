@@ -60,10 +60,11 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
  */
 @Repository
 public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
+  
     /**
      * logger for record log.
      */
-    private static Logger logger = LoggerFactory
+    protected static Logger logger = LoggerFactory
             .getLogger(LinkQueryDaoImpl.class);
 
     @Override

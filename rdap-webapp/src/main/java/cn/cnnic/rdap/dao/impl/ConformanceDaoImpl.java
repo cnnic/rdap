@@ -37,6 +37,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -54,13 +56,26 @@ import cn.cnnic.rdap.dao.ConformanceDao;
 @Repository
 public class ConformanceDaoImpl implements ConformanceDao {
     /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(ConformanceDaoImpl.class);    
+    
+    /**
      * jdbcTemplate.
      */
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    
+    /**
+     * query conformances.
+     * 
+     * @return List<String>
+     *            conformance list.
+     */
     @Override
     public List<String> queryConformance() {
+        LOGGER.info("query, conformances.");
         final String sql =
                 "select * from RDAP_CONFORMANCE order by conformance_id";
         List<String> listConformance = jdbcTemplate.query(
@@ -72,6 +87,8 @@ public class ConformanceDaoImpl implements ConformanceDao {
                         return ps;
                     }
                 }, new ConformanceResultSetExtractor());
+        
+        LOGGER.info("query, Conformances:" + listConformance);
         return listConformance;
     }
 

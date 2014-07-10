@@ -78,15 +78,15 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
     @Override
     public List<Variants> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        LOGGER.info("queryAsInnerObjects, outerObjectId:" + outerObjectId
-                + ", outerModelType:" + outerModelType);
+        LOGGER.info("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}",
+                outerObjectId, outerModelType);
         if (!ModelType.DOMAIN.equals(outerModelType)) {
             LOGGER.info("queryAsInnerObjects, type is not DOMAIN.");
             return null;
         }
         List<Variant> variantList = queryWithoutInnerObjects(outerObjectId);
         List<Variants> result = geneVariantsList(variantList);
-        LOGGER.info("queryAsInnerObjects, result:" + result);
+        LOGGER.info("queryAsInnerObjects, result:{}", result);
         return result;
     }
 

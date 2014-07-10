@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -58,6 +60,12 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 @Repository
 public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
 
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(IPAddressQueryDaoImpl.class);  
+    
     @Override
     public List<IPAddress> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {

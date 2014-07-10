@@ -37,6 +37,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -58,6 +60,13 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
+    
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(SecureDnsQueryDaoImpl.class);   
+    
     /**
      * keyDataQueryDao.
      */
@@ -70,13 +79,28 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     @Autowired
     @Qualifier("dsDataQueryDaoImpl")
     private QueryDao<DsData> dsDataQueryDao;
-
+    
+    /**
+     * query results of SecureDns list to an associated object.
+     *   ie. domain to SecureDns,
+     *       use queryAsInnerObjects(domainId) to query variants
+     * @param outerObjectId
+     *            associated object id.
+     * @param outerModelType
+     *            associated object type.            
+     * @return List<SecureDns>
+     *            SecureDns associated to the object.
+     *   
+     */
     @Override
     public List<SecureDns> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
+        LOGGER.info("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
+                outerObjectId , outerModelType);
         List<SecureDns> result =
                 queryWithoutInnerObjects(outerObjectId, outerModelType);
         queryAndSetInnerObjects(result);
+        LOGGER.info("queryAsInnerObjects, result:{}", result);
         return result;
     }
 
