@@ -190,8 +190,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * query and set entities.
-     * @param ns ns.
+     * query and set entities fro nameserver.
+     * @param ns nameserver.
      */
     private void queryAndSetEntities(Nameserver ns) {
         if (ns == null) {
@@ -206,8 +206,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * query nameserver, without inner objects.
      * 
      * @param queryParam
-     *            query parameter
-     * @return nameserver
+     *            query parameter of Nameserver。
+     * @return nameserver object。
      */
     private Nameserver queryWithoutInnerObjects(QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
@@ -299,7 +299,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * query and set entities.
+     * query and set entities to nameserver.
      * @param nameservers
      *          nameserver list.
      */
@@ -313,9 +313,10 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
+     * get bigDecimal of ip from nameserver query parameter。
      * @param queryParam
-     *            for QueryParam
-     * @return BigDecimal[]
+     *            query parameter of nameserver。
+     * @return BigDecimal[] for ip。
      * 
      * @author weijunkai
      */
@@ -392,7 +393,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * search nameserver, without inner objects.
      * 
      * @param queryParam
-     *            query parameter.
+     *            query parameter of nameserver.
      * @return nameserver list.
      */
     private List<Nameserver> searchWithoutInnerObjects(
@@ -481,9 +482,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * extract nameserver from ResultSet.
      * 
      * @param rs
-     *            ResultSet.
+     *            ResultSet of sql.
      * @param nameserver
-     *            nameserver object.
+     *            nameserver object which will be extracted from.
      * @throws SQLException
      *             SQLException.
      */
@@ -498,7 +499,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * 
+     * count the number of resultSet。
      * @author weijunkai
      * 
      */

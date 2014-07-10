@@ -649,7 +649,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * 
+     * count the number of resutlset。
      * @author jiashuo
      * 
      */

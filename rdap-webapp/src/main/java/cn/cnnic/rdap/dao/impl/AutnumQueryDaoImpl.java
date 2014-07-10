@@ -139,7 +139,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     }
 
     /**
-     * query autnum without inner objects.Only in ENTITY!
+     * query autnum without inner objects.Only in ENTITY。
      * 
      * @param outerObjectId
      *            entity id.
