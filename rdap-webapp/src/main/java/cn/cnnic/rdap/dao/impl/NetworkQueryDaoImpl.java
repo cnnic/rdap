@@ -314,7 +314,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * 
      * @param queryParam
      *            query parameter
-     * @return Ip
+     * @return Ip object
      */
     private Network queryWithoutInnerObjects(QueryParam queryParam) {
         PreparedStatementCreator pstatCreator =

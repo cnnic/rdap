@@ -36,6 +36,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -55,13 +57,26 @@ import cn.cnnic.rdap.dao.RedirectDao;
 @Repository
 public class AutnumRedirectDao implements RedirectDao {
     /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(AutnumRedirectDao.class);       
+    /**
      * JDBC template.
      */
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * redirect the autnum.
+     * @param queryParam
+     *          the queryParam for autnum.
+     * @return RedirectResponse
+     *          response of select redirect autnum.
+     */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
+        LOGGER.info("query, queryParam:" + queryParam);
         final String autnumQ = queryParam.getQ();
         final String sql =
                 "select *,end_autnum - start_autnum as asInterval "
@@ -87,8 +102,10 @@ public class AutnumRedirectDao implements RedirectDao {
 
                 });
         if (null == result || result.size() == 0) {
+            LOGGER.info("query, result is null");
             return null;
         }
+        LOGGER.info("query, result:" + result.get(0));
         return new RedirectResponse(result.get(0));
     }
 }
