@@ -158,7 +158,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * search DNR domain .
+     * search DNR domain.
      * 
      * @param queryParam
      *            QueryParam.
@@ -649,7 +649,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * 
+     * count the number of resutlset.
      * @author jiashuo
      * 
      */

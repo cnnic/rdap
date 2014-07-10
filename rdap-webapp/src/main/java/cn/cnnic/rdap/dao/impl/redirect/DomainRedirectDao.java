@@ -61,6 +61,13 @@ public class DomainRedirectDao implements RedirectDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * redirect the domain.
+     * @param queryParam
+     *          parameter for domain query.
+     * @return RedirectResponse
+     *          response to select redirect domain.
+     */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
