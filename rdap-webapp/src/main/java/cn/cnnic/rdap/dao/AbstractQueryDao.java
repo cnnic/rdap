@@ -74,26 +74,69 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
-
+    /**
+     * query result of object T .
+     * 
+     * @param queryParam
+     *            query object id/name.
+     * @return T
+     *            here is an abstract method.
+     * 
+     * @throws UnsupportedOperationException.
+     *             
+     */
     @Override
     public T query(QueryParam queryParam) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-
+    /**
+     * query results of object list of T to an associated object.
+     *   ie. domain to name servers,
+     *       use queryAsInnerObjects(domainId) to query name servers
+     * @param outerObjectId
+     *            associated object id.
+     * @param outerModelType
+     *            associated object type.            
+     * @return List<T>
+     *            here is an abstract method.
+     * 
+     * @throws UnsupportedOperationException.
+     *             
+     */
     @Override
     public List<T> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-
+    /**
+     * search results, object list of T .
+     * 
+     * @param queryParam
+     *            search string.
+     * @return List<T>
+     *            here is an abstract method.
+     * 
+     * @throws UnsupportedOperationException.
+     *             
+     */
     @Override
     public List<T> search(QueryParam queryParam) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-
+    /**
+     * get count of search results.
+     * 
+     * @param queryParam
+     *            search string.
+     * @return Long
+     *            here is an abstract method.
+     * 
+     * @throws UnsupportedOperationException.
+     *             
+     */
     @Override
     public Long searchCount(QueryParam queryParam) {
         throw new UnsupportedOperationException(

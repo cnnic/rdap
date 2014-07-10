@@ -44,7 +44,15 @@ public class User extends BaseModel {
             this.userType = userType;
 
         };
-
+        /**
+         * get user type.
+         * 
+         * @return String
+         *           userType.
+         */
+        public String getUserType() {
+            return this.userType;
+        }
     };
 
     /**
