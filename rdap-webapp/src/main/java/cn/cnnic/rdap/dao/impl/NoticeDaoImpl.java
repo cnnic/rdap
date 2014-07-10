@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -62,6 +64,11 @@ import cn.cnnic.rdap.dao.QueryDao;
 @Repository
 public class NoticeDaoImpl implements NoticeDao {
     /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(NoticeDaoImpl.class);     
+    /**
      * JDBC template simplifies the use of JDBC and helps to avoid common
      * errors.
      */
@@ -73,16 +80,26 @@ public class NoticeDaoImpl implements NoticeDao {
     @Autowired
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
-
+    /**
+     * query notice list.
+     * 
+     * @return list of notice.
+     */
     @Override
     public List<Notice> getAllNotices() {
+        LOGGER.info("getAllNotices.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
         queryAndSetInnerObjects(notices, NoticeType.Notice);
         return notices;
     }
-
+    /**
+     * query help list.
+     * 
+     * @return list of help.
+     */
     @Override
     public List<Notice> getHelp() {
+        LOGGER.info("getHelp.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.HELP);
         queryAndSetInnerObjects(notices, NoticeType.HELP);
         return notices;

@@ -37,6 +37,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -59,6 +61,11 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(KeyDataQueryDaoImpl.class);  
     /**
      * event dao.
      */

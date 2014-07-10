@@ -34,6 +34,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -50,6 +52,13 @@ import cn.cnnic.rdap.dao.ErrorMessageDao;
  */
 @Repository
 public class ErrorMessageDaoImpl implements ErrorMessageDao {
+    
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(ErrorMessageDaoImpl.class);   
+    
     /**
      * jdbc dao template.
      */

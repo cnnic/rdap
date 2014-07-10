@@ -37,6 +37,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -56,6 +58,11 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 @Repository
 public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
     /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(EntityAddressDao.class);       
+    /**
      * jdbcTemplate.
      */
     @Autowired
@@ -69,6 +76,7 @@ public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
      * @return EntityAddress list.
      */
     public List<EntityAddress> query(final Entity entity) {
+        LOGGER.info("query, entity:{}", entity);
         if (null == entity || null == entity.getId()) {
             return null;
         }
@@ -83,6 +91,7 @@ public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
                         return ps;
                     }
                 }, new EntityAddressResultSetExtractor());
+        LOGGER.info("query, result:{}", result);
         return result;
     }
 

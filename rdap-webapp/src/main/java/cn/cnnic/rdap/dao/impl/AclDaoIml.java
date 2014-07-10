@@ -35,6 +35,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -54,14 +56,30 @@ import cn.cnnic.rdap.dao.AclDao;
 @Repository
 public class AclDaoIml implements AclDao {
     /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(VariantsQueryDaoImpl.class);    
+    
+    /**
      * JDBC template simplifies the use of JDBC and helps to avoid common
      * errors.
      */
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    /**
+     * has a prinicipal any acl entry for a secure object.
+     * 
+     * @param principal
+     *            principal.
+     * @param secureObject
+     *            secureObject.
+     * @return true if has entry,false if not.
+     */
     @Override
     public boolean hasEntry(Principal principal, SecureObject secureObject) {
+        LOGGER.info("hasEntry, Principal:" + principal
+                + ", SecureObject:" + secureObject);
         if (isPrincipalHasEntry(principal, secureObject)) {
             return true;
         }
