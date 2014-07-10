@@ -27,22 +27,22 @@
 			<value>${jdbc.password}</value>
 		</property>
 		<property name="minPoolSize">
-			<value>5</value>
+			<value>${jdbc.minPoolSize}</value>
 		</property>
 		<property name="maxPoolSize">
-			<value>100</value>
+			<value>${jdbc.maxPoolSize}</value>
 		</property>
 		<property name="initialPoolSize">
 			<value>5</value>
 		</property>
 		<property name="maxIdleTime">
-			<value>25000</value>
+			<value>60</value>
 		</property>
 		<property name="acquireIncrement">
 			<value>3</value>
 		</property>
 		<property name="maxStatements">
-			<value>0</value>
+			<value>100</value>
 		</property>
 		<property name="idleConnectionTestPeriod">
 			<value>600</value>

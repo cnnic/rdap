@@ -17,4 +17,12 @@
 		<level value="DEBUG" />
 		<appender-ref ref="STDOUT" />
 	</logger>
+	<logger name="com.mchange" additivity="true">  
+        <level value="DEBUG" />  
+        <appender-ref ref="STDOUT" />  
+    </logger>  
+    <logger name="java.sql.PreparedStatement" additivity="true">  
+        <level value="DEBUG" />  
+        <appender-ref ref="STDOUT" />  
+    </logger>
 </configuration> 

@@ -11,15 +11,15 @@
            				   http://www.springframework.org/schema/util/spring-util.xsd
            				   http://www.springframework.org/schema/aop 
            				   http://www.springframework.org/schema/aop/spring-aop.xsd">
-	<context:property-placeholder location="classpath:*.properties" />
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	<context:property-placeholder location="classpath:rdap.properties" />
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass">
 			<value>${jdbc.driverClassName}</value>
 		</property>
 		<property name="jdbcUrl">
-			<value>${jdbc.url.hostPort}${jdbc.url.dbName}?${jdbc.url.params}
-			</value>
+			<value>${jdbc.url.hostPort}${jdbc.url.dbName}?${jdbc.url.params}</value>
 		</property>
 		<property name="user">
 			<value>${jdbc.username}</value>
@@ -28,22 +28,22 @@
 			<value>${jdbc.password}</value>
 		</property>
 		<property name="minPoolSize">
-			<value>5</value>
+			<value>${jdbc.minPoolSize}</value>
 		</property>
 		<property name="maxPoolSize">
 			<value>100</value>
 		</property>
 		<property name="initialPoolSize">
-			<value>5</value>
+			<value>1</value>
 		</property>
 		<property name="maxIdleTime">
-			<value>25000</value>
+			<value>60</value>
 		</property>
 		<property name="acquireIncrement">
-			<value>3</value>
+			<value>1</value>
 		</property>
 		<property name="maxStatements">
-			<value>0</value>
+			<value>10</value>
 		</property>
 		<property name="idleConnectionTestPeriod">
 			<value>600</value>
@@ -75,8 +75,11 @@
 	</bean>
 	<bean id="initDao" class="cn.cnnic.rdap.init.mysql.InitDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="dataSource" ref="dataSource" />
 		<property name="initContext" ref="initContext" />
 		<property name="databaseName" value="${jdbc.url.dbName}" />
+		<property name="databaseHostAndPort" value="${jdbc.url.hostPort}" />
+		<property name="databaseUrlParams" value="${jdbc.url.params}" />
 	</bean>
 
 </beans>

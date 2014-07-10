@@ -49,8 +49,9 @@ public final class Init {
      * private constructor.
      */
     private Init() {
-        
+
     }
+
     /**
      * LOGGER.
      */
@@ -82,26 +83,56 @@ public final class Init {
             return;
         }
         String arg = args[0];
-        if (!(isInitSchemaCmd(arg) || isInitDataCmd(arg))) {
+        if (!(isInitSchemaCmd(arg) || isInitDataCmd(args))) {
             printUsage();
             return;
         }
         if (isInitSchemaCmd(arg)) {
-            ApplicationContext ctx = createSpringCtx(SPRING_CONF_CREATEDB);
-            InitDao initDao = (InitDao) ctx.getBean("initDao");
-            initDao.initSchema();
+            initSchema();
         }
-        if (isInitDataCmd(arg)) {
+        if (isInitDataCmd(args)) {
+            initData(args);
+        }
+        LOGGER.info("init end...............");
+    }
+
+    /**
+     * init data.
+     * 
+     * @param args
+     *            args.
+     */
+    private static void initData(String[] args) {
+        try {
             ApplicationContext ctx = createSpringCtx(SPRING_CONF_LOADDATA);
             InitDao initDao = (InitDao) ctx.getBean("initDao");
-            initDao.initData();
+            initDao.initData("file:" + args[1]);
+        } catch (Exception e) {
+            LOGGER.error("initData error:", e);
         }
-        LOGGER.info("init successful...............");
+    }
+
+    /**
+     * init schema.
+     */
+    private static void initSchema() {
+        try {
+            ApplicationContext ctx = createSpringCtx(SPRING_CONF_CREATEDB);
+            InitDao initDao = (InitDao) ctx.getBean("initDao");
+            initDao.createDatabase();
+            initDao.resetDataSourceUrl();
+            initDao.initSchema();
+            initDao.initBaseData();
+        } catch (Exception e) {
+            LOGGER.error("initSchema error:", e);
+        }
     }
 
     /**
      * get file in classpath.
      * 
+     * @param fileName
+     *            fileName.
      * @return file path.
      */
     private static String getClassPathFile(String fileName) {
@@ -124,21 +155,31 @@ public final class Init {
      */
     private static void printUsage() {
         LOGGER.info("usage:");
-        LOGGER.info("first init schema:");
-        LOGGER.info("   java cn.cnnic.rdap.init.Init schema");
-        LOGGER.info("if you are testing,you may init test data:");
-        LOGGER.info("   java cn.cnnic.rdap.init.Init data");
+        LOGGER.info("1.Before run this init, first configure database in "
+                + "$TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties");
+        LOGGER.info("2.First init schema:");
+        LOGGER.info("   java cn.cnnic.rdap.init.Init initschema");
+        LOGGER.info("3.If you want load test data into database, "
+                + "run following command,"
+                + " $ABS_DATAFILE_PATH MUST be replaced by "
+                + "real data file name:");
+        LOGGER.info("   java cn.cnnic.rdap.init.Init loaddata "
+                + "$ABS_DATAFILE_PATH");
     }
 
     /**
      * check if command is the init data.
      * 
-     * @param arg
-     *            param to check。
+     * @param args
+     *            param to check.
      * @return if yes return true, or return false.
      */
-    private static boolean isInitDataCmd(String arg) {
-        return arg.equalsIgnoreCase("data");
+    private static boolean isInitDataCmd(String[] args) {
+        if (null == args || args.length < 2 || StringUtils.isBlank(args[0])
+                || StringUtils.isBlank(args[1])) {
+            return false;
+        }
+        return args[0].equalsIgnoreCase("initdata");
     }
 
     /**
@@ -149,7 +190,7 @@ public final class Init {
      * @return if yes return true, or return false.
      */
     private static boolean isInitSchemaCmd(String arg) {
-        return arg.equalsIgnoreCase("schema");
+        return arg.equalsIgnoreCase("initschema");
     }
 
 }

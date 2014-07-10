@@ -51,7 +51,7 @@ public class InitDaoTest {
                         "classpath:init/spring-serviceContext-init.xml");
         InitDao initDao = (InitDao) ctx.getBean("initDao");
         initDao.initSchema();
-        initDao.initData();
+        initDao.initData("d:/init.sql");
     }
 
 }
