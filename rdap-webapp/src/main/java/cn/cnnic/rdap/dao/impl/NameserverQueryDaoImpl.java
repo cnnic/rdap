@@ -43,7 +43,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -271,8 +270,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     class NSResultSetExtractor implements ResultSetExtractor<List<Nameserver>> {
         @Override
-        public List<Nameserver> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Nameserver> extractData(ResultSet rs) throws SQLException {
             List<Nameserver> result = new ArrayList<Nameserver>();
             Map<Long, Nameserver> nsMapById = new HashMap<Long, Nameserver>();
             while (rs.next()) {
@@ -468,8 +466,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     class NameserverResultSetExtractor implements
             ResultSetExtractor<List<Nameserver>> {
         @Override
-        public List<Nameserver> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Nameserver> extractData(ResultSet rs) throws SQLException {
             List<Nameserver> result = new ArrayList<Nameserver>();
             while (rs.next()) {
                 Nameserver ns = new Nameserver();
@@ -507,8 +504,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     class CountResultSetExtractor implements ResultSetExtractor<Long> {
         @Override
-        public Long extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public Long extractData(ResultSet rs) throws SQLException {
             Long result = 0L;
             if (rs.next()) {
                 result = rs.getLong("COUNT");

@@ -7,6 +7,7 @@
 package cn.cnnic.rdap.bean;
 
 /**
+ * rdap user object.
  * 
  * @author wang
  */

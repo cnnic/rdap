@@ -41,7 +41,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -163,8 +162,7 @@ public class NoticeDaoImpl implements NoticeDao {
      */
     class NoticeResultSetExtractor implements ResultSetExtractor<List<Notice>> {
         @Override
-        public List<Notice> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Notice> extractData(ResultSet rs) throws SQLException {
             List<Notice> result = new ArrayList<Notice>();
             Map<Long, Notice> noticeMapById = new HashMap<Long, Notice>();
             while (rs.next()) {

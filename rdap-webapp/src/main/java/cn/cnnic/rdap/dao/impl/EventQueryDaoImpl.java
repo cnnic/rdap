@@ -39,7 +39,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -148,8 +147,7 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
      */
     class EventResultSetExtractor implements ResultSetExtractor<List<Event>> {
         @Override
-        public List<Event> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<Event> extractData(ResultSet rs) throws SQLException {
             List<Event> result = new ArrayList<Event>();
             while (rs.next()) {
                 Event event = new Event();

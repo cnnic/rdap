@@ -25,7 +25,7 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
     /**
      * logger.
      */
-    private static Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = LoggerFactory
             .getLogger(MappingExceptionResolver.class);
 
     @Override

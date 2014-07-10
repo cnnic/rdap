@@ -33,7 +33,7 @@ package cn.cnnic.rdap.bean;
 import java.util.List;
 
 /**
- * 
+ * maps a secure dns to an object class.
  * @author jiashuo
  * 
  */

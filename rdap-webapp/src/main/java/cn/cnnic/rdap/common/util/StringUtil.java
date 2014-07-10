@@ -281,11 +281,8 @@ public final class StringUtil {
      *            representation to be parsed
      * @return the unsigned {@code long} value represented by the decimal string
      *         argument
-     * @throws NumberFormatException
-     *             if the string does not contain a parsable unsigned integer.
      */
-    public static long parseUnsignedLong(String s) 
-            throws NumberFormatException {
+    public static long parseUnsignedLong(String s) {
         if (StringUtils.isBlank(s)) {
             return 0L;
         }
@@ -332,12 +329,8 @@ public final class StringUtil {
      *            the radix to be used while parsing {@code s}.
      * @return the unsigned {@code long} represented by the string argument in
      *         the specified radix.
-     * @throws NumberFormatException
-     *             if the {@code String} does not contain a parsable
-     *             {@code long}.
      */
-    private static long parseUnsignedLong(String s, int radix)
-            throws NumberFormatException {
+    private static long parseUnsignedLong(String s, int radix) {
         final int maxRadix = 13;
         final int baseRadix = 10;
         final int lengBaseRadix = 18;
