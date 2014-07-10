@@ -51,6 +51,17 @@ public class Init {
     private static final Logger LOGGER = LoggerFactory.getLogger(InitDao.class);
 
     /**
+     * spring create database conf file.
+     */
+    private static final String SPRING_CONF_CREATEDB =
+            "spring-serviceContext-init-createDb.xml";
+    /**
+     * spring load data into database conf file.
+     */
+    private static final String SPRING_CONF_LOADDATA =
+            "spring-serviceContext-init-loadData.xml";
+
+    /**
      * main method.
      * 
      * @param args
@@ -69,17 +80,37 @@ public class Init {
             printUsage();
             return;
         }
-        ApplicationContext ctx =
-                new ClassPathXmlApplicationContext(
-                        "classpath:init/spring-serviceContext-init.xml");
-        InitDao initDao = (InitDao) ctx.getBean("initDao");
         if (isInitSchemaCmd(arg)) {
+            ApplicationContext ctx = createSpringCtx(SPRING_CONF_CREATEDB);
+            InitDao initDao = (InitDao) ctx.getBean("initDao");
             initDao.initSchema();
         }
         if (isInitDataCmd(arg)) {
+            ApplicationContext ctx = createSpringCtx(SPRING_CONF_LOADDATA);
+            InitDao initDao = (InitDao) ctx.getBean("initDao");
             initDao.initData();
         }
         LOGGER.info("init successful...............");
+    }
+
+    /**
+     * get file in classpath.
+     * 
+     * @return file path.
+     */
+    private static String getClassPathFile(String fileName) {
+        return "classpath:init/" + fileName;
+    }
+
+    /**
+     * create spring context.
+     * 
+     * @param ctxFile
+     *            ctx file.
+     * @return ApplicationContext.
+     */
+    private static ApplicationContext createSpringCtx(String ctxFile) {
+        return new ClassPathXmlApplicationContext(getClassPathFile(ctxFile));
     }
 
     /**
@@ -95,8 +126,9 @@ public class Init {
 
     /**
      * check if command is the init data.
+     * 
      * @param arg
-     *          param to check。
+     *            param to check。
      * @return if yes return true, or return false.
      */
     private static boolean isInitDataCmd(String arg) {
@@ -105,8 +137,9 @@ public class Init {
 
     /**
      * check if is init schema command.
+     * 
      * @param arg
-     *          string to check.
+     *            string to check.
      * @return if yes return true, or return false.
      */
     private static boolean isInitSchemaCmd(String arg) {
