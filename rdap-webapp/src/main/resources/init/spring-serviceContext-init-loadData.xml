@@ -11,7 +11,8 @@
            				   http://www.springframework.org/schema/util/spring-util.xsd
            				   http://www.springframework.org/schema/aop 
            				   http://www.springframework.org/schema/aop/spring-aop.xsd">
-	
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	<context:property-placeholder location="classpath:rdap.properties" />
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass">
@@ -30,19 +31,19 @@
 			<value>${jdbc.minPoolSize}</value>
 		</property>
 		<property name="maxPoolSize">
-			<value>${jdbc.maxPoolSize}</value>
+			<value>100</value>
 		</property>
 		<property name="initialPoolSize">
-			<value>5</value>
+			<value>1</value>
 		</property>
 		<property name="maxIdleTime">
 			<value>60</value>
 		</property>
 		<property name="acquireIncrement">
-			<value>3</value>
+			<value>1</value>
 		</property>
 		<property name="maxStatements">
-			<value>100</value>
+			<value>10</value>
 		</property>
 		<property name="idleConnectionTestPeriod">
 			<value>600</value>
@@ -61,14 +62,24 @@
 		</property>
 	</bean>
 
-	<!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
-		<property name="dataSource" ref="dataSource" /> </bean> -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean
-		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+	<bean id="initContext" class="cn.cnnic.rdap.init.InitContext">
+	</bean>
+	<bean id="initDao" class="cn.cnnic.rdap.init.mysql.InitDao">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="initContext" ref="initContext" />
+		<property name="databaseName" value="${jdbc.url.dbName}" />
+		<property name="databaseHostAndPort" value="${jdbc.url.hostPort}" />
+		<property name="databaseUrlParams" value="${jdbc.url.params}" />
+	</bean>
 
 </beans>

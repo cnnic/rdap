@@ -44,6 +44,7 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 //import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.util.StringUtils;
 
@@ -56,6 +57,7 @@ import cn.cnnic.rdap.common.util.StringUtil;
  * 
  */
 public class InitContext implements ApplicationContextAware {
+
     /**
      * LOGGER.
      */
@@ -64,7 +66,7 @@ public class InitContext implements ApplicationContextAware {
     /**
      * default comment prefix.
      */
-    private static final String DEFAULT_COMMENT_PREFIX = "﻿# ";
+    private static final String DEFAULT_COMMENT_PREFIX = "#";
     /**
      * default statement separator.
      */
@@ -143,8 +145,8 @@ public class InitContext implements ApplicationContextAware {
             int lineNumber = 0;
             for (String statement : statements) {
                 lineNumber++;
-                executeUseDatabaseStatement(statement, jdbcTemplate,
-                        databaseName);
+                // executeUseDatabaseStatement(statement, jdbcTemplate,
+                // databaseName);
                 try {
                     int rowsAffected = jdbcTemplate.update(statement);
                     LOGGER.info(rowsAffected + " rows affected by SQL: "
@@ -152,9 +154,9 @@ public class InitContext implements ApplicationContextAware {
                 } catch (DataAccessException ex) {
                     if (continueOnError) {
                         LOGGER.error(
-                              "Failed to execute SQL script statement at line "
-                               + lineNumber + " of resource "
-                               + resource + ": " + statement, ex);
+                                "Failed to execute SQL script statement at line "
+                                        + lineNumber + " of resource "
+                                        + resource + ": " + statement, ex);
                     } else {
                         throw ex;
                     }
@@ -190,7 +192,7 @@ public class InitContext implements ApplicationContextAware {
     private static void executeUseDatabaseStatement(String statement,
             JdbcTemplate jdbcTemplate, String databaseName) {
         String[] notAddArrays =
-                new String[] {"CREATE DATABASE", "DROP DATABASE", "USE "};
+                new String[] { "CREATE DATABASE", "DROP DATABASE", "USE " };
         if (StringUtils.isEmpty(statement)) {
             return;
         }
@@ -222,7 +224,8 @@ public class InitContext implements ApplicationContextAware {
      *            the {@code LineNumberReader} containing the script to be
      *            processed
      * @return a {@code String} containing the script lines
-     * @throws IOException input output exception
+     * @throws IOException
+     *             input output exception
      * @see #readScript(LineNumberReader, String)
      */
     public static String readScript(LineNumberReader lineNumberReader)
@@ -244,7 +247,8 @@ public class InitContext implements ApplicationContextAware {
      * @param commentPrefix
      *            the prefix that identifies comments in the SQL script &mdash;
      *            typically "--"
-     * @throws IOException input output exception
+     * @throws IOException
+     *             input output exception
      * @return a {@code String} containing the script lines
      */
     public static String readScript(LineNumberReader lineNumberReader,
