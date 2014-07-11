@@ -41,35 +41,9 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
    There are two methods to init, if you are familiar with Mysql, you may use the first method, and if not you should use second.
    
    * (1)Use Mysql client to init
-      *  Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username.
-     
-		```
-		cd $MYSQL_HOME     #$MYSQL_HOME must be replaced by real Mysql home dir
-		[in Linux, open a shell and execute command:]
-	   		mysql -h127.0.0.1 -u$MYSQL_USERNAME  -p
-		[in Windows, open command prompt window and execute command:]
-			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
-		```
-      *  Download [rdap-db-init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-init-schema.sql) and [rdap-db-test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-test-data.sql). Execute: 
-      
-	   	```
-	   	source rdap-db-init-schema.sql;    # init database schema
-		(If you want load some test data, execute following command:)
-		source rdap-db-test-data.sql;    #insert test data
-	   	```
+
    * (2)Use init tool to init
-     
-     This step will use database info in jdbc.properties you haved configured before.
-     
-     WARN: this step will DROP database of 'jdbc.url.dbName' if it is existing, and then recreate it.
-	   
-		```
-   		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
-		CLASSPATH=.:$CLASSPATH
-		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initschema      #DROP database 'jdbc.url.dbName', and recreate it, and create table, load base data.
-	   	(If you want load some test data, execute following command:)
-		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initdata  init/mysql/test-data.sql      
-	   	```
+
 
 7. Start up tomcat
    * Start up tomcat
