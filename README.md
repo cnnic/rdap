@@ -15,7 +15,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 		[in Windows, open command prompt window and execute command:]
 			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
 	   ```
-      * [Download rdap-db-init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-init-schema.sql), [download rdap-db-test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-test-data.sql). Execute following commands to init database schema and insert test data: 
+      * Download [rdap-db-init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-init-schema.sql) and [rdap-db-test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-test-data.sql). Execute following commands : 
 	   ```
 	   	source rdap-db-init-schema.sql;    # init database schema
 		source rdap-db-test-data.sql;    #insert test data
