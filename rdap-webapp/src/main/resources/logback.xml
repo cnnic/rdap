@@ -15,11 +15,11 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 	<logger name="cn.cnnic" additivity="false">
-		<level value="DEBUG" />
+		<level value="INFO" />
 		<appender-ref ref="STDOUT" />
 	</logger>
 	<logger name="org.springframework.jdbc.core.JdbcTemplate"
-		additivity="true">
+		additivity="false">
 		<level value="ERROR" />
 		<appender-ref ref="STDOUT" />
 	</logger>
