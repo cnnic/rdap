@@ -147,7 +147,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Override
     public Domain query(QueryParam queryParam) {
-        LOGGER.info("query, queryParam:" + queryParam);
+        LOGGER.debug("query, queryParam:" + queryParam);
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
 
         // RIR domain, like 1.0.0.in-addr.arpa
@@ -155,14 +155,14 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             Domain domain = queryArpaWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             queryAndSetInnerNetwork(domain);
-            LOGGER.info("query, domain:" + domain);
+            LOGGER.debug("query, domain:" + domain);
             return domain;
         } else {
             // LDH domain for DNR
             Domain domain = queryDomainWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             queryAndSetVariants(domain);
-            LOGGER.info("query, domain:" + domain);
+            LOGGER.debug("query, domain:" + domain);
             return domain;
         }
     }
@@ -176,11 +176,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Override
     public List<Domain> search(QueryParam queryParam) {
-        LOGGER.info("search, queryParam:" + queryParam);
+        LOGGER.debug("search, queryParam:" + queryParam);
         List<Domain> domains = searchWithoutInnerObjects(queryParam);
         queryAndSetDomainStatus(domains);
         queryAndSetInnerObjectsWithoutNotice(domains);
-        LOGGER.info("search, domains:" + domains);
+        LOGGER.debug("search, domains:" + domains);
         return domains;
     }
 
@@ -193,7 +193,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Override
     public Long searchCount(QueryParam queryParam) {
-        LOGGER.info("searchCount, queryParam:" + queryParam);
+        LOGGER.debug("searchCount, queryParam:" + queryParam);
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         final String domainName = domainQueryParam.getQ();
         final String punyName = domainQueryParam.getPunyName();
@@ -212,7 +212,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 return ps;
             }
         }, new CountResultSetExtractor());
-        LOGGER.info("searchCount, domainCount:" + domainCount);
+        LOGGER.debug("searchCount, domainCount:" + domainCount);
         return domainCount;
     }
 

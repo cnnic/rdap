@@ -84,7 +84,7 @@ public class RedirectServiceImpl implements RedirectService {
      */    
     @Override
     public RedirectResponse queryDomain(QueryParam queryParam) {
-        LOGGER.info("queryDomain:" + queryParam);
+        LOGGER.debug("queryDomain:" + queryParam);
         return domainRedirectDao.query(queryParam);
     }
     /**
@@ -96,7 +96,7 @@ public class RedirectServiceImpl implements RedirectService {
      */    
     @Override
     public RedirectResponse queryAutnum(QueryParam queryParam) {
-        LOGGER.info("queryAutnum:" + queryParam);
+        LOGGER.debug("queryAutnum:" + queryParam);
         return autnumRedirectDao.query(queryParam);
     }
     /**
@@ -108,7 +108,7 @@ public class RedirectServiceImpl implements RedirectService {
      */    
     @Override
     public RedirectResponse queryIp(QueryParam queryParam) {
-        LOGGER.info("queryIp:" + queryParam);
+        LOGGER.debug("queryIp:" + queryParam);
         return networkRedirectDao.query(queryParam);
     }
     /**
@@ -120,16 +120,16 @@ public class RedirectServiceImpl implements RedirectService {
      */    
     @Override
     public boolean isValidRedirect(RedirectResponse redirect) {
-        LOGGER.info("isValidRedirect:" + redirect);
+        LOGGER.debug("isValidRedirect:" + redirect);
         if (null == redirect || StringUtils.isBlank(redirect.getUrl())) {
             return false;
         }
         if (redirect.getUrl().contains(RdapProperties.getLocalServiceUrl())) {
-            LOGGER.info("redirect url is local RDAP,ignore.",
+            LOGGER.debug("redirect url is local RDAP,ignore.",
                     redirect.getUrl());
             return false;
         }
-        LOGGER.info("redirect url can be redirected.",
+        LOGGER.debug("redirect url can be redirected.",
                 redirect.getUrl());
         return true;
     }

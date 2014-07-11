@@ -32,7 +32,7 @@ public class RateLimitFilter implements RdapFilter {
      */
     public RateLimitFilter() {
         super();
-        LOGGER.info("init RDAP filter:{}", this.getName());
+        LOGGER.debug("init RDAP filter:{}", this.getName());
     }
     /**
      * do pre process request address.
@@ -51,7 +51,7 @@ public class RateLimitFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         String remoteAddr = request.getRemoteAddr();
         if (ConnectionControlService.exceedRateLimit(remoteAddr)) {
-            LOGGER.info("exceedRateLimit,return 429 error.");
+            LOGGER.debug("exceedRateLimit,return 429 error.");
             this.writeError429Response(response);
             return false;
         }

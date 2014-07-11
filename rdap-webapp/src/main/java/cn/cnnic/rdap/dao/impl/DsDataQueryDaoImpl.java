@@ -93,11 +93,11 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
     @Override
     public List<DsData> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
-        LOGGER.info("queryAsInnerObjects,outerObjId:{},outerModel:{}",
+        LOGGER.debug("queryAsInnerObjects,outerObjId:{},outerModel:{}",
                 outerObjectId, outerModelType);
         List<DsData> dsDataList = queryWithoutInnerObjects(outerObjectId);
         queryAndSetInnerObjects(dsDataList);
-        LOGGER.info("queryAsInnerObjects,dsDataList:{}",
+        LOGGER.debug("queryAsInnerObjects,dsDataList:{}",
                 dsDataList);
         return dsDataList;
     }

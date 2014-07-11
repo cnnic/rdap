@@ -44,13 +44,13 @@ public class FilterChainProxy implements Filter {
      * init filters when class loading.
      */
     static {
-        LOGGER.info("init RDAP filters ...");
+        LOGGER.debug("init RDAP filters ...");
         filters = new ArrayList<RdapFilter>();
         filters.add(new AuthenticationFilter());
         filters.add(new RateLimitFilter());
         filters.add(new HttpRequestFilter());
         filters.add(new InvalidUriFilter());
-        LOGGER.info("init RDAP filters end.");
+        LOGGER.debug("init RDAP filters end.");
     }
 
     /**

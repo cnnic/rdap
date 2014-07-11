@@ -77,7 +77,7 @@ public class HttpRequestFilter implements RdapFilter {
      */
     public HttpRequestFilter() {
         super();
-        LOGGER.info("init RDAP filter:{}", this.getName());
+        LOGGER.debug("init RDAP filter:{}", this.getName());
     }
     /**
      * do pre process request method.

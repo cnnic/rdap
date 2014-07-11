@@ -104,11 +104,11 @@ public class SearchServiceImpl implements SearchService {
     private <T extends BaseModel> BaseSearchModel<T> search(
             QueryParam queryParam, QueryDao<T> queryDao) {
         
-        LOGGER.info("search QueryParam:" + queryParam 
+        LOGGER.debug("search QueryParam:" + queryParam 
                                 + ",QueryDao:" + queryDao);
         
         Long totalCount = queryDao.searchCount(queryParam);
-        LOGGER.info("search count is " + totalCount);
+        LOGGER.debug("search count is " + totalCount);
         if (totalCount == 0) {
             return null;
         }
@@ -148,7 +148,7 @@ public class SearchServiceImpl implements SearchService {
         }
         searchResult.setSearchResults(authedObjects);
         
-        LOGGER.info("search result " + searchResult);
+        LOGGER.debug("search result " + searchResult);
         return searchResult;
     }
     /**
@@ -160,17 +160,17 @@ public class SearchServiceImpl implements SearchService {
      */
     @Override
     public DomainSearch searchDomain(QueryParam queryParam) {
-        LOGGER.info("searchDomain QueryParam:" + queryParam);
+        LOGGER.debug("searchDomain QueryParam:" + queryParam);
         BaseSearchModel<Domain> searchResult = this.search(queryParam,
                 domainDao);
-        LOGGER.info("searchDomain searchResult:" + searchResult);
+        LOGGER.debug("searchDomain searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
         }
         DomainSearch domainSearch = new DomainSearch();
         BeanUtils.copyProperties(searchResult, domainSearch);
         domainSearch.setDomainSearchResults(searchResult.getSearchResults());
-        LOGGER.info("searchDomain domainSearch:" + domainSearch);
+        LOGGER.debug("searchDomain domainSearch:" + domainSearch);
         return domainSearch;
     }
     /**
@@ -182,10 +182,10 @@ public class SearchServiceImpl implements SearchService {
      */
     @Override
     public NameserverSearch searchNameserver(QueryParam queryParam) {
-        LOGGER.info("searchNameserver QueryParam:" + queryParam);
+        LOGGER.debug("searchNameserver QueryParam:" + queryParam);
         BaseSearchModel<Nameserver> searchResult = this.search(queryParam,
                 nameserverDao);
-        LOGGER.info("searchNameserver searchResult:" + searchResult);
+        LOGGER.debug("searchNameserver searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
         }
@@ -193,7 +193,7 @@ public class SearchServiceImpl implements SearchService {
         BeanUtils.copyProperties(searchResult, nameserverSearch);
         nameserverSearch.setNameserverSearchResults(searchResult
                 .getSearchResults());
-        LOGGER.info("searchNameserver nameserverSearch:" + nameserverSearch);
+        LOGGER.debug("searchNameserver nameserverSearch:" + nameserverSearch);
         return nameserverSearch;
     }
     /**
@@ -205,17 +205,17 @@ public class SearchServiceImpl implements SearchService {
      */    
     @Override
     public EntitySearch searchEntity(QueryParam queryParam) {
-        LOGGER.info("searchEntity QueryParam:" + queryParam);
+        LOGGER.debug("searchEntity QueryParam:" + queryParam);
         BaseSearchModel<Entity> searchResult = this.search(queryParam,
                 entityDao);
-        LOGGER.info("searchEntity searchResult:" + searchResult);
+        LOGGER.debug("searchEntity searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
         }
         EntitySearch entitySearch = new EntitySearch();
         BeanUtils.copyProperties(searchResult, entitySearch);
         entitySearch.setEntitySearchResults(searchResult.getSearchResults());
-        LOGGER.info("searchEntity entitySearch:" + entitySearch);
+        LOGGER.debug("searchEntity entitySearch:" + entitySearch);
         return entitySearch;
     }
 }

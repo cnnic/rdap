@@ -67,7 +67,7 @@ public final class IdnaUtil {
         try {
             idna = new Idna(new Punycode(), true, true);
         } catch (XcodeException e) {
-            logger.info("Idna init failed :" + e);
+            logger.error("Idna init failed :" + e);
         }
     }
 
@@ -135,7 +135,7 @@ public final class IdnaUtil {
         try {
             return isValidIdnWithException(domain);
         } catch (Exception e) {
-            logger.info("Idna validate failed :" + e);
+            logger.error("Idna validate failed :" + e);
             return false;
         }
     }

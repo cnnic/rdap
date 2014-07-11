@@ -69,7 +69,7 @@ public class ErrorMessageServiceImpl implements ErrorMessageService {
      */   
     @Override
     public Map<Long, ErrorMessage> getAllErrorMessageMap() {
-        LOGGER.info("getAllErrorMessageMap");
+        LOGGER.debug("getAllErrorMessageMap");
         List<ErrorMessage> errorMessages = errorMessageDao
                 .getAllErrorMessages();
         Map<Long, ErrorMessage> errorMessageMap 
@@ -78,7 +78,7 @@ public class ErrorMessageServiceImpl implements ErrorMessageService {
             errorMessageMap
                 .put(errorMessage.getErrorCode(), errorMessage);
         }
-        LOGGER.info("getAllErrorMessageMap errorMessageMap:" 
+        LOGGER.debug("getAllErrorMessageMap errorMessageMap:" 
                  + errorMessageMap);
         return errorMessageMap;
      }

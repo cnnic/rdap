@@ -78,7 +78,7 @@ public class AclDaoIml implements AclDao {
      */
     @Override
     public boolean hasEntry(Principal principal, SecureObject secureObject) {
-        LOGGER.info("hasEntry, Principal:" + principal
+        LOGGER.debug("hasEntry, Principal:" + principal
                 + ", SecureObject:" + secureObject);
         if (isPrincipalHasEntry(principal, secureObject)) {
             return true;
