@@ -49,12 +49,16 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 		[in Windows, open command prompt window and execute command:]
 			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
 		```
-      *  Download [rdap-db-init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-init-schema.sql) and [rdap-db-test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-test-data.sql). Execute: 
+      *  Download [init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-schema.sql) [init-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-data.sql) and [test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/test-data.sql). Execute: 
       
 	   	```
-	   	source rdap-db-init-schema.sql;    # init database schema
-		(If you want load some test data, execute following command:)
-		source rdap-db-test-data.sql;    #insert test data
+		DROP DATABASE IF EXISTS `rdap`;
+		CREATE DATABASE `rdap` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_croatian_ci */;
+	   	source init-schema.sql;    # init database schema
+		source init-data.sql;	  #init base data 
+
+		[If you want load some test data, execute following command:]
+		source test-data.sql;    #insert test data
 	   	```
    * Use init tool to init
      This step will use database info in jdbc.properties you haved configured before.
@@ -65,7 +69,7 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
    		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
 		CLASSPATH=.:$CLASSPATH
 		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initschema      #DROP database 'jdbc.url.dbName', and recreate it, and create table, load base data.
-	   	(If you want load some test data, execute following command:)
+	   	[If you want load some test data, execute following command:]
 		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initdata  init/mysql/test-data.sql      
 	   	```
 7. Start up tomcat
