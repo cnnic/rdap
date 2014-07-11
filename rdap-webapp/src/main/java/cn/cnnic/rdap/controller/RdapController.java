@@ -145,7 +145,7 @@ public class RdapController {
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ResponseEntity queryHelp(HttpServletRequest request, 
                                         HttpServletResponse response) {
-        LOGGER.info("help");
+        LOGGER.debug("help");
 
         Help result = queryService.queryHelp(queryParser
                 .parseQueryParam("HELP"));
@@ -171,7 +171,7 @@ public class RdapController {
     @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
     public ResponseEntity queryEntity(@PathVariable String handle,
             HttpServletRequest request, HttpServletResponse response) {
-        LOGGER.info("query entity,handle:" + handle);
+        LOGGER.debug("query entity,handle:" + handle);
         handle = StringUtils.trim(handle);
         if (!StringUtil.isValidEntityHandleOrName(handle)) {
             return RestResponseUtil.createResponse400();
@@ -200,7 +200,7 @@ public class RdapController {
             @RequestParam(required = false) String fn,
             @RequestParam(required = false) String handle,
             HttpServletRequest request) {
-        LOGGER.info("search entities.fn:{},handle:{}", fn, handle);
+        LOGGER.debug("search entities.fn:{},handle:{}", fn, handle);
         final String fnParamName = "fn";
         final String handleParamName = "handle";
         String paramName = queryParser.getFirstParameter(request,
@@ -219,7 +219,7 @@ public class RdapController {
         }
         QueryParam queryParam = queryParser
                 .parseEntityQueryParam(paramValue, paramName);
-        LOGGER.info("generate queryParam:{}", queryParam);
+        LOGGER.debug("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
             if (result.getHasNoAuthForAllObjects()) {
@@ -245,7 +245,7 @@ public class RdapController {
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
             HttpServletRequest request, HttpServletResponse response) {
-        LOGGER.info("query autnum:" + autnum);
+        LOGGER.debug("query autnum:" + autnum);
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
@@ -318,7 +318,7 @@ public class RdapController {
      */
     private ResponseEntity queryRedirectDomainOrNs(QueryParam queryParam,
             String paramName) {
-        LOGGER.info("   queryRedirectDomainOrNs:{}", queryParam);
+        LOGGER.debug("   queryRedirectDomainOrNs:{}", queryParam);
         RedirectResponse redirect = redirectService.queryDomain(queryParam);
         String servicePartUri = SERVICE_URI_DOMAIN_Q;
         if (queryParam instanceof NameserverQueryParam) {
@@ -330,7 +330,7 @@ public class RdapController {
                             servicePartUri, redirect.getUrl());
             return RestResponseUtil.createResponse301(redirectUrl);
         }
-        LOGGER.info("   redirect not found.{},return 404.", queryParam);
+        LOGGER.debug("   redirect not found.{},return 404.", queryParam);
         return RestResponseUtil.createResponse404();
     }
 
@@ -340,17 +340,17 @@ public class RdapController {
      * @return ResponseEntity.
      */
     private ResponseEntity queryDomainInThisRegistry(QueryParam queryParam) {
-        LOGGER.info("   queryDomainInThisRegistry:{}" , queryParam);
+        LOGGER.debug("   queryDomainInThisRegistry:{}" , queryParam);
         Domain domain = queryService.queryDomain(queryParam);
         if (null != domain) {
-            LOGGER.info("   found domain:{}" , queryParam);
+            LOGGER.debug("   found domain:{}" , queryParam);
             if (!accessControlManager.hasPermission(domain)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domain);
             return RestResponseUtil.createResponse200(domain);
         }
-        LOGGER.info("   domain not found,return 404. {}" , queryParam);
+        LOGGER.debug("   domain not found,return 404. {}" , queryParam);
         return RestResponseUtil.createResponse404();
     }
 
@@ -451,17 +451,17 @@ public class RdapController {
      * @return ResponseEntity.
      */
     private ResponseEntity queryNsInThisRegistry(QueryParam queryParam) {
-        LOGGER.info("   queryNsInThisRegistry:{}" , queryParam);
+        LOGGER.debug("   queryNsInThisRegistry:{}" , queryParam);
         Nameserver ns = queryService.queryNameserver(queryParam);
         if (null != ns) {
-            LOGGER.info("   found ns:{}" , queryParam);
+            LOGGER.debug("   found ns:{}" , queryParam);
             if (!accessControlManager.hasPermission(ns)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ns);
             return RestResponseUtil.createResponse200(ns);
         }
-        LOGGER.info("   ns not found,return 404. {}" , queryParam);
+        LOGGER.debug("   ns not found,return 404. {}" , queryParam);
         return RestResponseUtil.createResponse404();
     }
 
@@ -641,7 +641,7 @@ public class RdapController {
                             SERVICE_URI_IP_Q, redirect.getUrl());
             return RestResponseUtil.createResponse301(redirectUrl);
         }
-        LOGGER.info("   redirect network not found:{}", queryParam);
+        LOGGER.debug("   redirect network not found:{}", queryParam);
         return RestResponseUtil.createResponse404();
     }
 

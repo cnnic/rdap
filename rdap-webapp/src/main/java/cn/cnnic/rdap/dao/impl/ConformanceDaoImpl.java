@@ -75,7 +75,7 @@ public class ConformanceDaoImpl implements ConformanceDao {
      */
     @Override
     public List<String> queryConformance() {
-        LOGGER.info("query, conformances.");
+        LOGGER.debug("query, conformances.");
         final String sql =
                 "select * from RDAP_CONFORMANCE order by conformance_id";
         List<String> listConformance = jdbcTemplate.query(
@@ -88,7 +88,7 @@ public class ConformanceDaoImpl implements ConformanceDao {
                     }
                 }, new ConformanceResultSetExtractor());
         
-        LOGGER.info("query, Conformances:" + listConformance);
+        LOGGER.debug("query, Conformances:" + listConformance);
         return listConformance;
     }
 

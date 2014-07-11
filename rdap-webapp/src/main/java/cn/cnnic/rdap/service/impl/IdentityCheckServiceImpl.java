@@ -70,24 +70,24 @@ public class IdentityCheckServiceImpl implements IdentityCheckService {
      */   
     @Override
     public User identityCheckService(String userId, String userPwd) {
-        LOGGER.info("IdentityCheckService userId:" + userId 
+        LOGGER.debug("IdentityCheckService userId:" + userId 
                                 + ", userPwd:" + userPwd);  
         if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(userPwd)) {
             return null;
         }
         User user = idcDao.checkUserId(userId);
-        LOGGER.info("IdentityCheckService user:" + user);  
+        LOGGER.debug("IdentityCheckService user:" + user);  
         if (null == user) {
             return null;
         }
         if (MD5Encryption.encryption(userPwd).equalsIgnoreCase(
                 user.getUserPwd())) {
-            LOGGER.info("IdentityCheckService user " + userId 
+            LOGGER.debug("IdentityCheckService user " + userId 
                                                 + " authorized");  
             user.setUserType(User.UserType.Cerfications);
             return user;
         }
-        LOGGER.info("IdentityCheckService user " + userId 
+        LOGGER.debug("IdentityCheckService user " + userId 
                 + " unauthorized");  
         return null;
     }

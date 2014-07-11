@@ -118,7 +118,7 @@ public final class ConnectionControlService {
         int count = CONCURRENT_Q_COUNT.getAndIncrement();
         LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax:" + count);
         if (count > RdapProperties.getMaxConcurrentCount() - 1) {
-            LOGGER.info("incrementConcurrentQCountAndCheckIfExceedMax : " 
+            LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax : " 
                     + RdapProperties.getMaxConcurrentCount());
             return true;
         }
@@ -144,7 +144,7 @@ public final class ConnectionControlService {
      */
     private static boolean isConcurrentCountNotLimit() {
         boolean isNotLimit = 0 == RdapProperties.getMaxConcurrentCount();
-        LOGGER.info("isConcurrentCountNotLimit:", isNotLimit);
+        LOGGER.debug("isConcurrentCountNotLimit:", isNotLimit);
         return isNotLimit;
     }
 }

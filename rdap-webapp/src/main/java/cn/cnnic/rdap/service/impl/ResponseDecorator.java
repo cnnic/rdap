@@ -73,9 +73,9 @@ public class ResponseDecorator {
      * init rdapConformance.
      */
     public void initRdapConformance() {
-        LOGGER.info("initRdapConformance begin.");
+        LOGGER.debug("initRdapConformance begin.");
         rdapConformanceService.initRdapConformance();
-        LOGGER.info("initRdapConformance end.");
+        LOGGER.debug("initRdapConformance end.");
     }
 
     /**
@@ -85,11 +85,11 @@ public class ResponseDecorator {
      *            response
      */
     public void decorateResponse(BaseModel model) {
-        LOGGER.info("decorateResponse:" + model);
+        LOGGER.debug("decorateResponse:" + model);
         addRdapConformance(model);
         addNotices(model);
         policyControlService.applyPolicy(model);
-        LOGGER.info("decorateResponse end");
+        LOGGER.debug("decorateResponse end");
     }
     /**
      * add notices to model.
@@ -98,12 +98,12 @@ public class ResponseDecorator {
      *            model.
      */
     private void addNotices(BaseModel model) {
-        LOGGER.info("addNotices:" + model);
+        LOGGER.debug("addNotices:" + model);
         if (null == model) {
             return;
         }
         model.setNotices(noticeDao.getAllNotices());
-        LOGGER.info("addNotices end");
+        LOGGER.debug("addNotices end");
     }
     /**
      * decorate response: add properties to help response.
@@ -112,11 +112,11 @@ public class ResponseDecorator {
      *            response
      */
     public void decorateResponseForHelp(BaseModel model) {
-        LOGGER.info("decorateResponseForHelp:" + model);
+        LOGGER.debug("decorateResponseForHelp:" + model);
         addRdapConformance(model);
         addHelp(model);
         
-        LOGGER.info("decorateResponseForHelp end");
+        LOGGER.debug("decorateResponseForHelp end");
     }
     /**
      * add help to model.
@@ -125,12 +125,12 @@ public class ResponseDecorator {
      *            model.
      */
     private void addHelp(BaseModel model) {
-        LOGGER.info("addHelp:" + model);
+        LOGGER.debug("addHelp:" + model);
         if (null == model) {
             return;
         }
         model.setNotices(noticeDao.getHelp());
-        LOGGER.info("addHelp end");
+        LOGGER.debug("addHelp end");
     }
     /**
      * add rdapConformance to model.
@@ -139,8 +139,8 @@ public class ResponseDecorator {
      *            model.
      */
     private void addRdapConformance(BaseModel model) {
-        LOGGER.info("addRdapConformance begin.");
+        LOGGER.debug("addRdapConformance begin.");
         rdapConformanceService.setRdapConformance(model);
-        LOGGER.info("addRdapConformance end.");
+        LOGGER.debug("addRdapConformance end.");
     }
 }

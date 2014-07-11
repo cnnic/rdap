@@ -95,12 +95,12 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     @Override
     public List<SecureDns> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        LOGGER.info("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
+        LOGGER.debug("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
                 outerObjectId , outerModelType);
         List<SecureDns> result =
                 queryWithoutInnerObjects(outerObjectId, outerModelType);
         queryAndSetInnerObjects(result);
-        LOGGER.info("queryAsInnerObjects, result:{}", result);
+        LOGGER.debug("queryAsInnerObjects, result:{}", result);
         return result;
     }
 

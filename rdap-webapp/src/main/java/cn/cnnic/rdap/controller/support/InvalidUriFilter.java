@@ -70,7 +70,7 @@ public class InvalidUriFilter implements RdapFilter {
      */
     public InvalidUriFilter() {
         super();
-        LOGGER.info("init RDAP filter:{}", this.getName());
+        LOGGER.debug("init RDAP filter:{}", this.getName());
     }
     /**
      * do pre process url.

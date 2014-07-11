@@ -79,7 +79,7 @@ public class DomainRedirectDao implements RedirectDao {
      */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
-        LOGGER.info("query, queryParam:" + queryParam);
+        LOGGER.debug("query, queryParam:" + queryParam);
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         String fullPunyTld = domainQueryParam.getFullPunyTld();
         fullPunyTld = StringUtils.replace(fullPunyTld, "'", "''");
@@ -96,10 +96,10 @@ public class DomainRedirectDao implements RedirectDao {
 
         });
         if (null == result || result.size() == 0) {
-            LOGGER.info("query, result is null");
+            LOGGER.debug("query, result is null");
             return null;
         }
-        LOGGER.info("query, result:" + result.get(0));
+        LOGGER.debug("query, result:" + result.get(0));
         return new RedirectResponse(result.get(0));
     }
 
@@ -111,7 +111,7 @@ public class DomainRedirectDao implements RedirectDao {
      * @return joined query condition.
      */
     private String getJoinedTldQCondition(String fullTld) {
-        LOGGER.info("getJoinedTldQCondition, fullTld:" + fullTld);
+        LOGGER.debug("getJoinedTldQCondition, fullTld:" + fullTld);
         if (StringUtils.isBlank(fullTld)) {
             return null;
         }
