@@ -25,7 +25,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
 
 1. Get war file 'rdap.war'. There are two methods to get war file
-   * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version should build from source, see following section)
+   * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  make a dir used to download source code and build, which is called 'WORK_DIR'
@@ -34,7 +34,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 		```
 			[in Linux, open a shell and execute command:]
 				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
-				mvn package -Dmaven.test.skip=true	# mvn must in system variable
+				mvn package -Dmaven.test.skip=true	# mvn must in system variable. Option '-Dmaven.compiler.target' can be used for higher jdk version, such as '-Dmaven.compiler.target=1.7' for jdk 1.7
 			[in Windows7 or Windows8, open command prompt window and execute command:]
 				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
 				mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
@@ -75,7 +75,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 
    * Test if it is runing ok
 	   	```
-			curl -H Accept:application/rdap+json http://127.0.0.1:8080/rdap/.well-known/rdap/autnum/2100
+			curl -H Accept:application/rdap+json http://$RDAP_SERVER_IP:$RDAP_SERVER_PORT/rdap/.well-known/rdap/autnum/2100
 			(change '8080' to real tomcat HTTP port if it's not 8080)
 		```
 	It's ok if response contains 'rdapConformance'. 
