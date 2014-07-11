@@ -313,7 +313,7 @@ public class RdapController {
      * query redirect domain or nameserver.
      * @param queryParam queryParam.
      * @param paramName
-     *          the string param。
+     *          the string param.
      * @return ResponseEntity.
      */
     private ResponseEntity queryRedirectDomainOrNs(QueryParam queryParam,
