@@ -7,7 +7,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
    * [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version.  
      (Skip this step if Mysql5 or higer version already installed)
    * Login into Mysql with mysql client, and add user, and init database schema: 
-      * Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username, and this user must has CREATE/DROP/SELECT/INSERT database/table/index privilege. Commands:
+      * Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. Commands:
 	   ```
 		cd $MYSQL_HOME     #$MYSQL_HOME must be replaced by real Mysql home dir
 		[in Linux, open a shell and execute command:]
