@@ -6,22 +6,19 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 1. Install Mysql and init database.
    * [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version.  
      (Skip this step if Mysql5 or higer version already installed)
-   * Download sql init file [rdap.sql](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.sql)
    * Login into Mysql with mysql client, and add user, and init database schema: 
-      * Login mysql server use mysql client,this step will prompt password, and password for 'root' should be inputed, default password is null. Commands:
+      * Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username, and this user must has CREATE/DROP/SELECT/INSERT database/table/index privilege. Commands:
 	   ```
+		cd $MYSQL_HOME     #$MYSQL_HOME must be replaced by real Mysql home dir
 		[in Linux, open a shell and execute command:]
-			cd $MYSQL_HOME		# $MYSQL_HOME must be replaced by real Mysql home dir
-	   		mysql -h127.0.0.1 -uroot -p
+	   		mysql -h127.0.0.1 -u$MYSQL_USERNAME  -p
 		[in Windows, open command prompt window and execute command:]
-			cd $MYSQL_HOME		# $MYSQL_HOME must be replaced by real Mysql home dir
-			mysql.exe -h127.0.0.1 -uroot -p	
+			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
 	   ```
-      * Add user, and init database schema: 
+      * Init database schema, and load test data: 
 	   ```
-	   	GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USERNAME'@'$RDAP_IP' IDENTIFIED BY '$MYSQL_PASSWORD';	# '$MYSQL_USERNAME' and '$MYSQL_PASSWORD' must be replaced by custom username and password, and they will be used in following steps;'$RDAP_IP' must be replaced by RDAP server ip
-	   	FLUSH PRIVILEGES;
-	   	source rdap.sql;
+	   	source rdap-db-init-schema.sql; #[download sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-init-schema.sql)
+		source rdap-db-test-data.sql;#[download sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-test-data.sql)
 	   ```
 
 1. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).
