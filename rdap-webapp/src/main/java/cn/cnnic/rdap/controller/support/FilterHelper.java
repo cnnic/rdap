@@ -62,9 +62,9 @@ public final class FilterHelper {
      * write response.
      * 
      * @param responseEntity
-     *            response entity for error message。
+     *            response entity for error message.
      * @param response
-     *            http servlet response。
+     *            http servlet response.
      * @throws IOException
      *             exception of io.
      */
@@ -91,7 +91,7 @@ public final class FilterHelper {
      * convert bean to JSON format String.
      * 
      * @param object
-     *            bean object。
+     *            bean object.
      * @return string of json.
      * @throws IOException
      *             exception of io.
