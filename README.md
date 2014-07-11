@@ -64,19 +64,19 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
       
 	   	```
 	   	source rdap-db-init-schema.sql;    # init database schema
+		(If you want load some test data, execute following command:)
 		source rdap-db-test-data.sql;    #insert test data
 	   	```
    * Use init tool to init
-	   	```
+	   
+		```
    		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
 		CLASSPATH=.:$CLASSPATH
 		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initschema      #this will DROP database for 'jdbc.url.dbName', and recreate this database, and create table, load base data.
-	   	```
-		If you want load some test data, execute:
-
-	   	```
+	   	(If you want load some test data, execute following command:)
 		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initdata  init/mysql/test-data.sql      
 	   	```
+
 7. Start up tomcat
    * Start up tomcat
 	   
