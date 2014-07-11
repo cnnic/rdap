@@ -30,6 +30,8 @@
  */
 package cn.cnnic.rdap.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -50,20 +52,34 @@ import cn.cnnic.rdap.service.AccessControlManager;
 @Service
 public class AccessControlManagerImpl implements AccessControlManager {
     /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(AccessControlManagerImpl.class);
+    
+    /**
      * acl dao.
      */
     @Autowired
     private AclDao aclDao;
-
+    
+    /**
+     * Is a model permitted for querying.
+     * 
+     * @param object
+     *            param for object to be queried.
+     * @return boolean.
+     */   
     @Override
     public boolean hasPermission(BaseModel object) {
         Assert.notNull(object);
         Assert.notNull(object.getId());
         Assert.notNull(object.getObjectType());
+        
+        LOGGER.info("hasPermission:" + object);
         Principal principal = PrincipalHolder.getPrincipal();
         SecureObject secureObject = new SecureObject(object.getId(), object
                 .getObjectType().getName());
         return aclDao.hasEntry(principal, secureObject);
     }
-
 }

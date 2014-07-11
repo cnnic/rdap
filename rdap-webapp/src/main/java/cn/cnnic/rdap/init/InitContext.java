@@ -37,7 +37,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
@@ -46,6 +45,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+//import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.util.StringUtils;
 
 import cn.cnnic.rdap.common.util.StringUtil;
@@ -57,6 +57,7 @@ import cn.cnnic.rdap.common.util.StringUtil;
  * 
  */
 public class InitContext implements ApplicationContextAware {
+
     /**
      * LOGGER.
      */
@@ -65,7 +66,7 @@ public class InitContext implements ApplicationContextAware {
     /**
      * default comment prefix.
      */
-    private static final String DEFAULT_COMMENT_PREFIX = "﻿# ";
+    private static final String DEFAULT_COMMENT_PREFIX = "#";
     /**
      * default statement separator.
      */
@@ -75,7 +76,7 @@ public class InitContext implements ApplicationContextAware {
      * The {@link ApplicationContext} that was injected into this test instance
      * via {@link #setApplicationContext(ApplicationContext)}.
      */
-    protected ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     /**
      * Execute the given SQL script.
@@ -86,20 +87,20 @@ public class InitContext implements ApplicationContextAware {
      * statement per line. Any semicolons will be removed. <b>Do not use this
      * method to execute DDL if you expect rollback.</b>
      * 
+     * @param jdbcTemplate
+     *            jdbc template dao
      * @param sqlResourcePath
      *            the Spring resource path for the SQL script
+     * @param databaseName
+     *            the name of database
      * @param continueOnError
      *            whether or not to continue without throwing an exception in
      *            the event of an error
-     * @throws DataAccessException
-     *             if there is an error executing a statement and
-     *             continueOnError was {@code false}
      * @see #setSqlScriptEncoding
      */
     public void
             executeSqlScript(JdbcTemplate jdbcTemplate, String sqlResourcePath,
-                    String databaseName, boolean continueOnError)
-                    throws DataAccessException {
+                    String databaseName, boolean continueOnError) {
         Resource resource =
                 this.applicationContext.getResource(sqlResourcePath);
         executeSqlScript(jdbcTemplate, new EncodedResource(resource,
@@ -119,17 +120,16 @@ public class InitContext implements ApplicationContextAware {
      * @param resource
      *            the resource (potentially associated with a specific encoding)
      *            to load the SQL script from
+     * @param databaseName
+     *            database name
      * @param continueOnError
      *            whether or not to continue without throwing an exception in
      *            the event of an error
-     * @throws DataAccessException
-     *             if there is an error executing a statement and
-     *             {@code continueOnError} is {@code false}
      * @see ResourceDatabasePopulator
      */
     private static void executeSqlScript(JdbcTemplate jdbcTemplate,
             EncodedResource resource, String databaseName,
-            boolean continueOnError) throws DataAccessException {
+            boolean continueOnError) {
 
         long startTime = System.currentTimeMillis();
         List<String> statements = new LinkedList<String>();
@@ -145,8 +145,8 @@ public class InitContext implements ApplicationContextAware {
             int lineNumber = 0;
             for (String statement : statements) {
                 lineNumber++;
-                executeUseDatabaseStatement(statement, jdbcTemplate,
-                        databaseName);
+                // executeUseDatabaseStatement(statement, jdbcTemplate,
+                // databaseName);
                 try {
                     int rowsAffected = jdbcTemplate.update(statement);
                     LOGGER.info(rowsAffected + " rows affected by SQL: "
@@ -174,7 +174,7 @@ public class InitContext implements ApplicationContextAware {
                     reader.close();
                 }
             } catch (IOException ex) {
-                // ignore
+                LOGGER.error(ex.getMessage());
             }
         }
     }
@@ -224,6 +224,8 @@ public class InitContext implements ApplicationContextAware {
      *            the {@code LineNumberReader} containing the script to be
      *            processed
      * @return a {@code String} containing the script lines
+     * @throws IOException
+     *             input output exception
      * @see #readScript(LineNumberReader, String)
      */
     public static String readScript(LineNumberReader lineNumberReader)
@@ -245,6 +247,8 @@ public class InitContext implements ApplicationContextAware {
      * @param commentPrefix
      *            the prefix that identifies comments in the SQL script &mdash;
      *            typically "--"
+     * @throws IOException
+     *             input output exception
      * @return a {@code String} containing the script lines
      */
     public static String readScript(LineNumberReader lineNumberReader,
@@ -396,8 +400,7 @@ public class InitContext implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 

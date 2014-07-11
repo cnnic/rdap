@@ -101,7 +101,8 @@ public interface QueryService {
     
     /**
      * query Help.
-     * 
+     * @param queryParam
+     *          parameter to query.
      * @return  result for help.
      */
     Help queryHelp(QueryParam queryParam);

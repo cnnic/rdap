@@ -37,6 +37,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -53,61 +55,77 @@ import cn.cnnic.rdap.dao.ConformanceDao;
  */
 @Repository
 public class ConformanceDaoImpl implements ConformanceDao {
-	/**
-	 * jdbcTemplate.
-	 */
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(ConformanceDaoImpl.class);    
+    
+    /**
+     * jdbcTemplate.
+     */
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    
+    /**
+     * query conformances.
+     * 
+     * @return List<String>
+     *            conformance list.
+     */
+    @Override
+    public List<String> queryConformance() {
+        LOGGER.info("query, conformances.");
+        final String sql =
+                "select * from RDAP_CONFORMANCE order by conformance_id";
+        List<String> listConformance = jdbcTemplate.query(
+                new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(
+                            Connection conn) throws SQLException {
+                        PreparedStatement ps = conn.prepareStatement(sql);
+                        return ps;
+                    }
+                }, new ConformanceResultSetExtractor());
+        
+        LOGGER.info("query, Conformances:" + listConformance);
+        return listConformance;
+    }
 
-	@Override
-	public List<String> queryConformance() {
-		final String sql = "select * from RDAP_CONFORMANCE order by conformance_id";
-		List<String> listConformance = jdbcTemplate.query(
-				new PreparedStatementCreator() {
-					@Override
-					public PreparedStatement createPreparedStatement(
-							Connection conn) throws SQLException {
-						PreparedStatement ps = conn.prepareStatement(sql);
-						return ps;
-					}
-				}, new conformanceResultSetExtractor());
-		return listConformance;
-	}
+    /**
+     * object Columns ResultSetExtractor, extract data from ResultSet.
+     * 
+     * @author weijunkai
+     * 
+     */
+    class ConformanceResultSetExtractor implements
+            ResultSetExtractor<List<String>> {
+        @Override
+        public List<String> extractData(ResultSet rs) throws SQLException {
+            List<String> result = new ArrayList<String>();
+            while (rs.next()) {
+                extractConformanceFromRs(rs, result);
+            }
+            return result;
+        }
+    }
 
-	/**
-	 * object Columns ResultSetExtractor, extract data from ResultSet.
-	 * 
-	 * @author weijunkai
-	 * 
-	 */
-	class conformanceResultSetExtractor implements
-			ResultSetExtractor<List<String>> {
-		@Override
-		public List<String> extractData(ResultSet rs) throws SQLException {
-			List<String> result = new ArrayList<String>();
-			while (rs.next()) {
-				extractConformanceFromRs(rs, result);
-			}
-			return result;
-		}
-	}
-
-	/**
-	 * extract conformance string from ResultSet.
-	 * 
-	 * @param rs
-	 *            ResultSet.
-	 * @param result
-	 *            conformance list.
-	 * @throws SQLException
-	 *             SQLException.
-	 */
-	private void extractConformanceFromRs(ResultSet rs, List<String> result)
-			throws SQLException {
-		String strConformance = rs.getString("RDAP_CONFORMANCE");
-		if (result.contains(strConformance)) {
-			return;
-		}
-		result.add(strConformance);
-	}
+    /**
+     * extract conformance string from ResultSet.
+     * 
+     * @param rs
+     *            ResultSet.
+     * @param result
+     *            conformance list.
+     * @throws SQLException
+     *             SQLException.
+     */
+    private void extractConformanceFromRs(ResultSet rs, List<String> result)
+            throws SQLException {
+        String strConformance = rs.getString("RDAP_CONFORMANCE");
+        if (result.contains(strConformance)) {
+            return;
+        }
+        result.add(strConformance);
+    }
 }

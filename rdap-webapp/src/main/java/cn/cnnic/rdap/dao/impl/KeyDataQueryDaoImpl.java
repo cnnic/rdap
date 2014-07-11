@@ -37,9 +37,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -60,6 +61,11 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(KeyDataQueryDaoImpl.class);  
     /**
      * event dao.
      */
@@ -145,8 +151,7 @@ public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
     class KeyDataResultSetExtractor implements
             ResultSetExtractor<List<KeyData>> {
         @Override
-        public List<KeyData> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<KeyData> extractData(ResultSet rs) throws SQLException {
             List<KeyData> result = new ArrayList<KeyData>();
             while (rs.next()) {
                 KeyData keyData = new KeyData();

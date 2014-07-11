@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -63,6 +65,13 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
+    
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(AutnumQueryDaoImpl.class);    
+    
     /**
      * remarkQueryDao.
      */
@@ -87,13 +96,22 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
      */
     @Autowired
     private QueryDao<Entity> entityQueryDao;
-
-    @SuppressWarnings("unchecked")
+    
+    /**
+     * query an autnum.
+     * 
+     * @param queryParam
+     *            param for an autnum.
+     * @return Autnum
+     *            autnum.
+     */
     @Override
     public Autnum query(QueryParam queryParam) {
+        LOGGER.info("query, queryParam:" + queryParam);
         Autnum autnum = queryWithoutInnerObjects(queryParam);
         queryAndSetInnerObjects(autnum);
         queryAndSetEntities(autnum);
+        LOGGER.info("query, autnum:" + autnum);
         return autnum;
     }
 
@@ -110,16 +128,29 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
                         ModelType.AUTNUM);
         autnum.setEntities(entities);
     }
-
+    
+    /**
+     * query autnums associated to an outer object.
+     * 
+     * @param outerObjectId
+     *            associated object id.
+     * @param outerModelType
+     *            associated object type.
+     * @return List<Autnum>
+     *            autnums.
+     */
     @Override
     public List<Autnum> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
+        LOGGER.info("queryAsInnerObjects, outerObjectId:" + outerObjectId
+                + ", outerModelType:" + outerModelType);
         if (!ModelType.ENTITY.equals(outerModelType)) {
             throw new UnsupportedOperationException(
                     "only support ENTITY modelType.");
         }
         List<Autnum> autnums = queryWithoutInnerObjects(outerObjectId);
         queryAndSetInnerObjects(autnums);
+        LOGGER.info("queryAsInnerObjects, autnums:" + autnums);
         return autnums;
     }
 
@@ -139,7 +170,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     }
 
     /**
-     * query autnum without inner objects.Only in ENTITY!
+     * query autnum without inner objects.Only in ENTITY.
      * 
      * @param outerObjectId
      *            entity id.

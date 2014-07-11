@@ -74,26 +74,69 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
-
+    /**
+     * query result of object T .
+     * 
+     * @param queryParam
+     *            query object id/name.
+     * @return T
+     *            here is an abstract method.
+     * 
+     * @throws UnsupportedOperationException.
+     *             
+     */
     @Override
     public T query(QueryParam queryParam) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-
+    /**
+     * query results of object list of T to an associated object.
+     *   ie. domain to name servers,
+     *       use queryAsInnerObjects(domainId) to query name servers
+     * @param outerObjectId
+     *            associated object id.
+     * @param outerModelType
+     *            associated object type.            
+     * @return List<T>
+     *            here is an abstract method.
+     * 
+     * @throws UnsupportedOperationException.
+     *             
+     */
     @Override
     public List<T> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-
+    /**
+     * search results, object list of T .
+     * 
+     * @param queryParam
+     *            search string.
+     * @return List<T>
+     *            here is an abstract method.
+     * 
+     * @throws UnsupportedOperationException.
+     *             
+     */
     @Override
     public List<T> search(QueryParam queryParam) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-
+    /**
+     * get count of search results.
+     * 
+     * @param queryParam
+     *            search string.
+     * @return Long
+     *            here is an abstract method.
+     * 
+     * @throws UnsupportedOperationException.
+     *             
+     */
     @Override
     public Long searchCount(QueryParam queryParam) {
         throw new UnsupportedOperationException(
@@ -121,7 +164,8 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      *            object list.
      * @return object id list.
      */
-    protected List<Long> getModelIds(List<? extends BaseModel> baseModelObjects) {
+    protected List<Long>
+    getModelIds(List<? extends BaseModel> baseModelObjects) {
         List<Long> result = new ArrayList<Long>();
         if (null == baseModelObjects) {
             return result;
@@ -147,7 +191,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
                     .parse(dateTimeStr);
             return DateFormatUtils.format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'");
         } catch (Exception e) {
-            LOGGER.error("error timestamp format.");
+            LOGGER.error("error timestamp format,error:", e);
             return null;
         }
     }

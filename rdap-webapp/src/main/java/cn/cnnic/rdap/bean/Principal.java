@@ -28,6 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
+
 package cn.cnnic.rdap.bean;
 
 /**
@@ -45,17 +46,19 @@ public class Principal {
      * identity, user id.
      */
     private Long id;
-    
+
     /**
      * check is anonymous.
+     * 
      * @return true if is, false if not.
      */
-    public boolean isAnonymous(){
+    public boolean isAnonymous() {
         return USER_ID_ANONYMOUS.equals(id);
     }
 
     /**
      * get anonymous principal.
+     * 
      * @return Principal object.
      */
     public static Principal getAnonymousPrincipal() {

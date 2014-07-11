@@ -39,6 +39,8 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -56,24 +58,26 @@ import cn.cnnic.rdap.dao.PolicyDao;
  */
 @Repository
 public class PolicyDaoImpl implements PolicyDao {
+    
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(PolicyDaoImpl.class); 
+    
     /**
      * jdbcTemplate.
      */
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Override
-    public Map<String,Set<String>> loadAllPolicyMap() {
-        Map<String, Set<String>> mapPolicy = queryPolicyMap();
-        return mapPolicy;
-    }
-
     /**
-     * query Hidden Columns Map.
+     * query policy Map.
      * 
      * @return map of policy.
      */
-    public Map<String, Set<String>> queryPolicyMap() {
+    public Map<String, Set<String>> loadAllPolicyMap() {
+        LOGGER.info("loadAllPolicyMap.");
         final String sql = "select * from RDAP_POLICY";
         Map<String, Set<String>> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {

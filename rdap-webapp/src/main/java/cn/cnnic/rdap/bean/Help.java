@@ -41,14 +41,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "notices"})
+@JsonPropertyOrder({ "rdapConformance", "notices" })
 public class Help extends BaseModel {
- 
+    /**
+     * @return objectType: HELP.
+     */
     @Override
     public ModelType getObjectType() {
         return ModelType.HELP;
     }
-
+    /**
+     * @return String.
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("Help")

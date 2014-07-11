@@ -64,12 +64,12 @@ public class HttpRequestFilter implements RdapFilter {
     /**
      * allow methods.
      */
-    private static final List<String> allowMethods = new ArrayList<String>();
+    private static final List<String> ALLOW_METHODS = new ArrayList<String>();
     /**
      * init allow methods.
      */
     static {
-        allowMethods.add("GET");
+        ALLOW_METHODS.add("GET");
     }
 
     /**
@@ -79,7 +79,18 @@ public class HttpRequestFilter implements RdapFilter {
         super();
         LOGGER.info("init RDAP filter:{}", this.getName());
     }
-
+    /**
+     * do pre process request method.
+     * 
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true if success processed,and can do service operation; false if
+     *         not.
+     */
     @Override
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -128,16 +139,28 @@ public class HttpRequestFilter implements RdapFilter {
      */
     private boolean httpMethodIsValid(HttpServletRequest request) {
         String method = request.getMethod();
-        boolean httpMethodIsValid = allowMethods.contains(method);
+        boolean httpMethodIsValid = ALLOW_METHODS.contains(method);
         return httpMethodIsValid;
     }
-
+    /**
+     * do post process.
+     * 
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     * @throws Exception
+     *             Exception.
+     * @return true .
+     */
     @Override
     public boolean postProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         return true;
     }
-
+    /**
+     * @return this class name.
+     */
     @Override
     public String getName() {
         return getClass().getSimpleName();

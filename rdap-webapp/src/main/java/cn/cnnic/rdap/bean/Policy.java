@@ -30,8 +30,6 @@
  */
 package cn.cnnic.rdap.bean;
 
-import java.util.Set;
-
 /**
  * denotes information about the service providing RDAP information.
  * 
@@ -47,20 +45,42 @@ public class Policy extends BaseModel {
      * description.
      */
     private String hideColumn;
-    
-    public void setModelType(String modelType){
+
+    /**
+     * set the modelType for policy.
+     * 
+     * @param modelType
+     *            object modelType.
+     */
+    public void setModelType(String modelType) {
         this.modelType = modelType;
     }
-    
-    public String getModelType(){
+
+    /**
+     * get the modelType of object.
+     * 
+     * @return modelType string.
+     */
+    public String getModelType() {
         return modelType;
     }
-    
-    public void setHideColumn(String hideColumn){
+
+    /**
+     * set the hidden column according policy.
+     * 
+     * @param hideColumn
+     *            the column which will be hidden.
+     */
+    public void setHideColumn(String hideColumn) {
         this.hideColumn = hideColumn;
     }
-    
-    public String getHideColumn(){
+
+    /**
+     * get the hidden column according policy.
+     * 
+     * @return hiddenColumn String.
+     */
+    public String getHideColumn() {
         return hideColumn;
     }
 }

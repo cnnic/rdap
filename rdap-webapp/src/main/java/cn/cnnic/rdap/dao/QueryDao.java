@@ -55,7 +55,7 @@ public interface QueryDao<T extends BaseModel> {
     T query(QueryParam queryParam);
 
     /**
-     * * query model list, as nested models of other Model.
+     * query model list, as nested models of other Model.
      * 
      * @param outerObjectId
      *            id of outer object.

@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -76,7 +78,12 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
-
+    
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(DomainQueryDaoImpl.class);   
     /**
      * variant dao.
      */
@@ -140,6 +147,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Override
     public Domain query(QueryParam queryParam) {
+        LOGGER.info("query, queryParam:" + queryParam);
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
 
         // RIR domain, like 1.0.0.in-addr.arpa
@@ -147,18 +155,20 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             Domain domain = queryArpaWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             queryAndSetInnerNetwork(domain);
+            LOGGER.info("query, domain:" + domain);
             return domain;
         } else {
             // LDH domain for DNR
             Domain domain = queryDomainWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             queryAndSetVariants(domain);
+            LOGGER.info("query, domain:" + domain);
             return domain;
         }
     }
 
     /**
-     * search DNR domain .
+     * search DNR domain.
      * 
      * @param queryParam
      *            QueryParam.
@@ -166,9 +176,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Override
     public List<Domain> search(QueryParam queryParam) {
+        LOGGER.info("search, queryParam:" + queryParam);
         List<Domain> domains = searchWithoutInnerObjects(queryParam);
         queryAndSetDomainStatus(domains);
         queryAndSetInnerObjectsWithoutNotice(domains);
+        LOGGER.info("search, domains:" + domains);
         return domains;
     }
 
@@ -181,6 +193,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Override
     public Long searchCount(QueryParam queryParam) {
+        LOGGER.info("searchCount, queryParam:" + queryParam);
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         final String domainName = domainQueryParam.getQ();
         final String punyName = domainQueryParam.getPunyName();
@@ -199,6 +212,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 return ps;
             }
         }, new CountResultSetExtractor());
+        LOGGER.info("searchCount, domainCount:" + domainCount);
         return domainCount;
     }
 
@@ -649,7 +663,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * 
+     * count the number of resutlset.
      * @author jiashuo
      * 
      */

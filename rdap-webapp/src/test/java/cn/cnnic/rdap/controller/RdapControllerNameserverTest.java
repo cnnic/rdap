@@ -65,7 +65,14 @@ public class RdapControllerNameserverTest extends BaseTest {
 
     private MockMvc mockMvc;
 
+    /**
+     * nameserver query url.
+     */
     final private String urlPath = "/.well-known/rdap/nameserver/";
+    /**
+     * output json.
+     */
+    final private String rdapJson = "application/json";
 
     @Before
     public void setup() {
@@ -82,6 +89,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserverTest.xml")
     public void testQueryExistNameserver() throws Exception {
+        RestResponseUtil.initErrorMessages();
     	RestResponseUtil.initConformanceService();
         String nsName = "ns.cnnic.cn";
         String nsNameWithPrefixBlank = " ns.cnnic.cn";
@@ -103,6 +111,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     @Test
     public void testQueryNonExistNS() throws Exception {
+        RestResponseUtil.initErrorMessages();
         commonQueryNonExistNS("1cnnic.cn");
         commonQueryNonExistNS("cnnic.com.cn");
         commonQueryNonExistNS("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
@@ -118,6 +127,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     public void testQueryInvalidNS() throws Exception {
+        RestResponseUtil.initErrorMessages();
         commonQueryInvalidNS("123");
         commonQueryInvalidNS("c nnic.cn");
     }
@@ -135,9 +145,9 @@ public class RdapControllerNameserverTest extends BaseTest {
     private void commonQueryExistNS(String queryNSName, String lang) throws Exception {
         mockMvc.perform(
         		MockMvcRequestBuilders.get(urlPath + StringUtil.urlEncode(queryNSName))
-        		.accept(MediaType.parseMediaType("application/json")))
+        		.accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.lang").value(lang))
                 .andExpect(jsonPath("$.ldhName").exists())
                 .andExpect(jsonPath("$.unicodeName").exists())
@@ -155,9 +165,9 @@ public class RdapControllerNameserverTest extends BaseTest {
     private void commonQueryNonExistNS(String queryDomainName) throws Exception {
         mockMvc.perform(
                 get(urlPath + StringUtil.urlEncode(queryDomainName)).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("NOT FOUND"))
@@ -175,9 +185,9 @@ public class RdapControllerNameserverTest extends BaseTest {
     private void commonQueryInvalidNS(String nsName) throws Exception {
         mockMvc.perform(
                 get(urlPath + StringUtil.urlEncode(nsName)).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))

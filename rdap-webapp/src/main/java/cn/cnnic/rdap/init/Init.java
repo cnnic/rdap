@@ -44,11 +44,29 @@ import cn.cnnic.rdap.init.mysql.InitDao;
  * @author jiashuo
  * 
  */
-public class Init {
+public final class Init {
+    /**
+     * private constructor.
+     */
+    private Init() {
+
+    }
+
     /**
      * LOGGER.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(InitDao.class);
+
+    /**
+     * spring create database conf file.
+     */
+    private static final String SPRING_CONF_CREATEDB =
+            "spring-serviceContext-init-createDb.xml";
+    /**
+     * spring load data into database conf file.
+     */
+    private static final String SPRING_CONF_LOADDATA =
+            "spring-serviceContext-init-loadData.xml";
 
     /**
      * main method.
@@ -65,37 +83,114 @@ public class Init {
             return;
         }
         String arg = args[0];
-        if (!(isInitSchemaCmd(arg) || isInitDataCmd(arg))) {
+        if (!(isInitSchemaCmd(arg) || isInitDataCmd(args))) {
             printUsage();
             return;
         }
-        ApplicationContext ctx =
-                new ClassPathXmlApplicationContext(
-                        "classpath:init/spring-serviceContext-init.xml");
-        InitDao initDao = (InitDao) ctx.getBean("initDao");
         if (isInitSchemaCmd(arg)) {
-            initDao.initSchema();
+            initSchema();
         }
-        if (isInitDataCmd(arg)) {
-            initDao.initData();
+        if (isInitDataCmd(args)) {
+            initData(args);
         }
-        LOGGER.info("init successful...............");
+        LOGGER.info("init end...............");
     }
 
+    /**
+     * init data.
+     * 
+     * @param args
+     *            args.
+     */
+    private static void initData(String[] args) {
+        try {
+            ApplicationContext ctx = createSpringCtx(SPRING_CONF_LOADDATA);
+            InitDao initDao = (InitDao) ctx.getBean("initDao");
+            initDao.initData("file:" + args[1]);
+        } catch (Exception e) {
+            LOGGER.error("initData error:", e);
+        }
+    }
+
+    /**
+     * init schema.
+     */
+    private static void initSchema() {
+        try {
+            ApplicationContext ctx = createSpringCtx(SPRING_CONF_CREATEDB);
+            InitDao initDao = (InitDao) ctx.getBean("initDao");
+            initDao.createDatabase();
+            initDao.resetDataSourceUrl();
+            initDao.initSchema();
+            initDao.initBaseData();
+        } catch (Exception e) {
+            LOGGER.error("initSchema error:", e);
+        }
+    }
+
+    /**
+     * get file in classpath.
+     * 
+     * @param fileName
+     *            fileName.
+     * @return file path.
+     */
+    private static String getClassPathFile(String fileName) {
+        return "classpath:init/" + fileName;
+    }
+
+    /**
+     * create spring context.
+     * 
+     * @param ctxFile
+     *            ctx file.
+     * @return ApplicationContext.
+     */
+    private static ApplicationContext createSpringCtx(String ctxFile) {
+        return new ClassPathXmlApplicationContext(getClassPathFile(ctxFile));
+    }
+
+    /**
+     * logger to print messages.
+     */
     private static void printUsage() {
         LOGGER.info("usage:");
-        LOGGER.info("first init schema:");
-        LOGGER.info("   java cn.cnnic.rdap.init.Init schema");
-        LOGGER.info("if you are testing,you may init test data:");
-        LOGGER.info("   java cn.cnnic.rdap.init.Init data");
+        LOGGER.info("1.Before run this init, first configure database in "
+                + "$TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties");
+        LOGGER.info("2.First init schema:");
+        LOGGER.info("   java cn.cnnic.rdap.init.Init initschema");
+        LOGGER.info("3.If you want load test data into database, "
+                + "run following command,"
+                + " $ABS_DATAFILE_PATH MUST be replaced by "
+                + "real data file name:");
+        LOGGER.info("   java cn.cnnic.rdap.init.Init loaddata "
+                + "$ABS_DATAFILE_PATH");
     }
 
-    private static boolean isInitDataCmd(String arg) {
-        return arg.equalsIgnoreCase("data");
+    /**
+     * check if command is the init data.
+     * 
+     * @param args
+     *            param to check.
+     * @return if yes return true, or return false.
+     */
+    private static boolean isInitDataCmd(String[] args) {
+        if (null == args || args.length < 2 || StringUtils.isBlank(args[0])
+                || StringUtils.isBlank(args[1])) {
+            return false;
+        }
+        return args[0].equalsIgnoreCase("initdata");
     }
 
+    /**
+     * check if is init schema command.
+     * 
+     * @param arg
+     *            string to check.
+     * @return if yes return true, or return false.
+     */
     private static boolean isInitSchemaCmd(String arg) {
-        return arg.equalsIgnoreCase("schema");
+        return arg.equalsIgnoreCase("initschema");
     }
 
 }

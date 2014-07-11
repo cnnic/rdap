@@ -32,10 +32,13 @@ package cn.cnnic.rdap.init.mysql;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import cn.cnnic.rdap.init.InitContext;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * init schema and data dao.
@@ -67,11 +70,82 @@ public class InitDao {
      */
     private InitContext initContext;
 
+    @Autowired
+    private ComboPooledDataSource dataSource;
+    /**
+     * drop db sql.
+     */
+    private static final String SQL_DROP_DB = "DROP DATABASE IF EXISTS `%s`";
+    /**
+     * create db sql.
+     */
+    private static final String SQL_CREATE_DB =
+            "CREATE DATABASE `%s` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;";
     /**
      * db name.
      */
     @Value("${jdbc.url.dbName}")
     private String databaseName;
+
+    /**
+     * jdbc url host and port.
+     */
+    @Value("${jdbc.url.hostPort}")
+    private String databaseHostAndPort;
+
+    /**
+     * jdbc url params.
+     */
+    @Value("${jdbc.url.params}")
+    private String databaseUrlParams;
+
+    /**
+     * reset datasource url.
+     */
+    public void resetDataSourceUrl() {
+        String jdbcUrl = getJdbcUrl();
+        LOGGER.info("resetDataSource jdbc url ...");
+        dataSource.setJdbcUrl(jdbcUrl);
+    }
+
+    /**
+     * get jdbc url.
+     * 
+     * @return jdbc url.
+     */
+    private String getJdbcUrl() {
+        String jdbcUrl =
+                databaseHostAndPort + databaseName + "?" + databaseUrlParams;
+        LOGGER.info("jdbc url:{}", jdbcUrl);
+        return jdbcUrl;
+    }
+
+    /**
+     * create database.
+     */
+    public void createDatabase() {
+        LOGGER.info("init database begin...");
+        LOGGER.info("drop database if exist :{}", databaseName);
+        String dropSql = String.format(SQL_DROP_DB, databaseName);
+        LOGGER.info("sql:{}", dropSql);
+        jdbcTemplate.update(dropSql);
+        LOGGER.info("create database :{}", databaseName);
+        String createSql = String.format(SQL_CREATE_DB, databaseName);
+        LOGGER.info("sql:{}", createSql);
+        jdbcTemplate.update(createSql);
+        LOGGER.info("init database end.");
+    }
+
+    /**
+     * init base data:RDAP_ERRORMESSAGE and RDAP_CONFORMANCE.
+     */
+    public void initBaseData() {
+        LOGGER.info("initBaseData begin...");
+        LOGGER.info("file:{},database:{}", SQL_RESOURCE_DATA_PATH, databaseName);
+        initContext.executeSqlScript(jdbcTemplate, SQL_RESOURCE_DATA_PATH,
+                databaseName, false);
+        LOGGER.info("initBaseData end.");
+    }
 
     /**
      * init schema.
@@ -88,13 +162,14 @@ public class InitDao {
     /**
      * initData.
      * 
-     * @param arg
+     * @param dataFile
+     *            dataFile.
      */
-    public void initData() {
+    public void initData(String dataFile) {
         LOGGER.info("initData begin...");
-        LOGGER.info("file:{},database:{}", SQL_RESOURCE_DATA_PATH, databaseName);
-        initContext.executeSqlScript(jdbcTemplate, SQL_RESOURCE_DATA_PATH,
-                databaseName, false);
+        LOGGER.info("data:{},database:{}", dataFile, databaseName);
+        initContext.executeSqlScript(jdbcTemplate, dataFile, databaseName,
+                false);
         LOGGER.info("initData end.");
     }
 
@@ -119,6 +194,26 @@ public class InitDao {
     }
 
     /**
+     * set host and port.
+     * 
+     * @param databaseHostAndPort
+     *            databaseHostAndPort
+     */
+    public void setDatabaseHostAndPort(String databaseHostAndPort) {
+        this.databaseHostAndPort = databaseHostAndPort;
+    }
+
+    /**
+     * set url params.
+     * 
+     * @param databaseUrlParams
+     *            databaseUrlParams.
+     */
+    public void setDatabaseUrlParams(String databaseUrlParams) {
+        this.databaseUrlParams = databaseUrlParams;
+    }
+
+    /**
      * set initContext.
      * 
      * @param initContext
@@ -126,6 +221,16 @@ public class InitDao {
      */
     public void setInitContext(InitContext initContext) {
         this.initContext = initContext;
+    }
+
+    /**
+     * set datasource.
+     * 
+     * @param dataSource
+     *            dataSource.
+     */
+    public void setDataSource(ComboPooledDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
 }

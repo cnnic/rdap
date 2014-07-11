@@ -34,6 +34,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -43,34 +45,42 @@ import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.dao.ErrorMessageDao;
 
 /**
- * error message DAO implementation
+ * error message DAO implementation.
  * 
  * @author jiashuo
  * 
  */
 @Repository
 public class ErrorMessageDaoImpl implements ErrorMessageDao {
-	@Autowired
-	protected JdbcTemplate jdbcTemplate;
+    
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(ErrorMessageDaoImpl.class);   
+    
+    /**
+     * jdbc dao template.
+     */
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-	/**
-	 * get all erroMessage
-	 */
-	@Override
-	public List<ErrorMessage> getAllErrorMessages() {
-		final String sql = "select * from RDAP_ERRORMESSAGE";
-		List<ErrorMessage> result = jdbcTemplate.query(sql,
-				new RowMapper<ErrorMessage>() {
-					public ErrorMessage mapRow(ResultSet rs, int rowNum)
-							throws SQLException {
-						ErrorMessage errorMessage = new ErrorMessage();
-						errorMessage.setErrorCode(rs.getLong("ERROR_CODE"));
-						errorMessage.setTitle(rs.getString("TITLE"));
-						errorMessage.addDescription(rs.getString("DESCRIPTION"));
-						errorMessage.setLang(rs.getString("LANG"));
-						return errorMessage;
-					}
-				});
-		return result;
-	}
+    @Override
+    public List<ErrorMessage> getAllErrorMessages() {
+        final String sql = "select * from RDAP_ERRORMESSAGE";
+        List<ErrorMessage> result = jdbcTemplate.query(sql,
+                new RowMapper<ErrorMessage>() {
+                    public ErrorMessage mapRow(ResultSet rs, int rowNum)
+                            throws SQLException {
+                        ErrorMessage errorMessage = new ErrorMessage();
+                        errorMessage.setErrorCode(rs.getLong("ERROR_CODE"));
+                        errorMessage.setTitle(rs.getString("TITLE"));
+                        errorMessage.addDescription(
+                                rs.getString("DESCRIPTION"));
+                        errorMessage.setLang(rs.getString("LANG"));
+                        return errorMessage;
+                    }
+                });
+        return result;
+    }
 }

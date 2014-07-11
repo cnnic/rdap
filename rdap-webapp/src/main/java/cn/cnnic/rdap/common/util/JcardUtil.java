@@ -114,6 +114,9 @@ public final class JcardUtil {
         if (StringUtils.isNotBlank(entity.getUrl())) {
             vcard.addUrl(entity.getUrl());
         }
+        if (StringUtils.isNotBlank(entity.getLang())) {
+            vcard.addLanguage(entity.getLang());
+        }
         return vcard;
     }
 
@@ -180,7 +183,8 @@ public final class JcardUtil {
             }
             return telBuilder.build();
         } catch (Exception e) {
-            LOGGER.error("buildTelUri error:{} for tel:{}", e.getMessage(), tel);
+            LOGGER.error("buildTelUri error:{} for tel:{}",
+                    e.getMessage(), tel);
         }
         return null;
     }

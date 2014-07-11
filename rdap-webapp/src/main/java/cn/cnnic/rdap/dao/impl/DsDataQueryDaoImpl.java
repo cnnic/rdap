@@ -37,9 +37,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -60,6 +61,12 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
+    
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(DsDataQueryDaoImpl.class);        
     /**
      * event dao.
      */
@@ -72,12 +79,26 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
     @Autowired
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
-
+    
+    /**
+     * query DsDatas associated to an outer object.
+     * 
+     * @param outerObjectId
+     *            associated object id.
+     * @param outerModelType
+     *            associated object type.
+     * @return List<DsData>
+     *            DsData list.
+     */
     @Override
     public List<DsData> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
+        LOGGER.info("queryAsInnerObjects,outerObjId:{},outerModel:{}",
+                outerObjectId, outerModelType);
         List<DsData> dsDataList = queryWithoutInnerObjects(outerObjectId);
         queryAndSetInnerObjects(dsDataList);
+        LOGGER.info("queryAsInnerObjects,dsDataList:{}",
+                dsDataList);
         return dsDataList;
     }
 
@@ -145,8 +166,7 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
      */
     class DsDataResultSetExtractor implements ResultSetExtractor<List<DsData>> {
         @Override
-        public List<DsData> extractData(ResultSet rs) throws SQLException,
-                DataAccessException {
+        public List<DsData> extractData(ResultSet rs) throws SQLException {
             List<DsData> result = new ArrayList<DsData>();
             while (rs.next()) {
                 DsData dsData = new DsData();
