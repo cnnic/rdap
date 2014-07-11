@@ -54,7 +54,9 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 		source rdap-db-test-data.sql;    #insert test data
 	   	```
    * Use init tool to init
+     
      This step will use database info in jdbc.properties you haved configured before.
+     
      WARN: this step will DROP database of 'jdbc.url.dbName' if it is existing, and then recreate it.
 	   
 		```
