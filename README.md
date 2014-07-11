@@ -3,15 +3,15 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 ### Install Instruction
 1. Install JDK6(Java SE Development Kit 6), or higer verison: [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html)
 (Skip this step if JDK6 already installed)
-1. Install Mysql and init database.
-   * [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
-     (Skip this step if Mysql5 or higer version already installed)
-     You must get an user/password pair, we called $MYSQL_USERNAME/$MYSQL_PASSWORD, used for RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege.
+2. Install Mysql and init database. (Skip this step if Mysql5 or higer version already installed)
+   [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
+     
+   You must get an user/password pair, we called $MYSQL_USERNAME/$MYSQL_PASSWORD, used for RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege.
 
-1. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).
+3. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).
 Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
 
-1. Get war file 'rdap.war'. There are two methods to get war file
+4. Get war file 'rdap.war'. There are two methods to get war file
    * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
@@ -28,7 +28,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 			(target/rdap.war  is the build war file)
 	
 		```
-1. Deploy rdap.war to tomcat
+5. Deploy rdap.war to tomcat
    * create folder 'rdap' in dir $TOMCAT_HOME/webapps/
    * unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
 		
@@ -48,7 +48,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 			inTlds: value change to puny name of tlds in this registry, splited by ';'.Only in this list can query.
 			notInTlds: value change to puny name of tlds NOT in this registry, splited by ';'. Tlds  in this list can NOT be query, and will query redirect instead.
 		```
-1. Init database. 
+6. Init database. 
    There are two methods, if you are familiar with Mysql, you may use first method, and if not you should use second.
    * Use Mysql client to init
       *  Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username.
@@ -77,7 +77,7 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 	   	```
 		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initdata  init/mysql/test-data.sql      
 	   	```
-1. Start up tomcat
+7. Start up tomcat
    * Start up tomcat
 	   
 		```
