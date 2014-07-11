@@ -31,8 +31,8 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 5. Deploy rdap.war to tomcat.
    * create folder 'rdap' in dir $TOMCAT_HOME/webapps/
    * unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
-   * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
-   * Edit global configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties:
+   * Edit database configuration file $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties, [see here](https://github.com/cnnic/rdap/wiki/jdbc.properties)
+   * Edit global configuration file $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties, [see here](https://github.com/cnnic/rdap/wiki/rdap.properties)
 
 6. Init database. 
    There are two methods, if you are familiar with Mysql, you may use first method, and if not you should use second.
