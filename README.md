@@ -6,7 +6,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 2. Install Mysql and init database. (Skip this step if Mysql5 or higer version already installed)
    [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
      
-   You must get an user/password pair, we called $MYSQL_USERNAME/$MYSQL_PASSWORD, used for RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. See [Mysql Ref](http://dev.mysql.com/doc/refman/5.1/en/grant.html).
+   You must get an user/password pair, we called $MYSQL_USERNAME/$MYSQL_PASSWORD, used for access RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. See [Mysql Ref](http://dev.mysql.com/doc/refman/5.1/en/grant.html).
 
 3. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).
 Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
