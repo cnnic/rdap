@@ -21,7 +21,7 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 		```
 			[in Linux, open a shell and execute command:]
 				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
-				mvn package -Dmaven.test.skip=true	# mvn must in system variable. Option '-Dmaven.compiler.target' can be used for higher jdk version, such as '-Dmaven.compiler.target=1.7' for jdk 1.7
+				mvn package -Dmaven.test.skip=true	# mvn must in system variable. Option '-Dmaven.compiler.target' can be used for higher jdk version, such as '-Dmaven.compiler.target=1.7' for jdk7
 			[in Windows7 or Windows8, open command prompt window and execute command:]
 				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
 				mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
