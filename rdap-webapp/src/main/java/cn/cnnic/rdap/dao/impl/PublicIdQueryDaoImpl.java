@@ -76,11 +76,11 @@ public class PublicIdQueryDaoImpl extends AbstractQueryDao<PublicId> {
     @Override
     public List<PublicId> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        LOGGER.info("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
+        LOGGER.debug("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
                     outerObjectId , outerModelType);
         List<PublicId> publicIds = queryWithoutInnerObjects(outerObjectId,
                 outerModelType);
-        LOGGER.info("queryAsInnerObjects, result:{}", publicIds);
+        LOGGER.debug("queryAsInnerObjects, result:{}", publicIds);
         return publicIds;
     }
 

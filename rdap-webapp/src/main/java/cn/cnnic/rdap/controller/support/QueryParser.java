@@ -160,7 +160,7 @@ public class QueryParser {
             final String[] strParamOrg) {
         
         String strQuery = request.getQueryString();
-        LOGGER.info("getFirstParameter, query:" + strQuery 
+        LOGGER.debug("getFirstParameter, query:" + strQuery 
                 + ",strParamOrg:" + strParamOrg);
         
         if (StringUtils.isBlank(strQuery)) {
@@ -187,8 +187,6 @@ public class QueryParser {
             if (strParamName != null) {
                 for (int j = 0; j < strParamOrg.length; ++j) {
                     if (strParamName[0].equals(strParamOrg[j])) {
-                        LOGGER.info("getFirstParameter, param:" 
-                                    + strParamOrg[j]); 
                         return strParamName[0];
                     }
                 }

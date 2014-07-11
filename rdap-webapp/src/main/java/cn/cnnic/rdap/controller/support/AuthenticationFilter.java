@@ -36,7 +36,7 @@ public class AuthenticationFilter implements RdapFilter {
      */
     public AuthenticationFilter() {
         super();
-        LOGGER.info("init RDAP filter:{}", this.getName());
+        LOGGER.debug("init RDAP filter:{}", this.getName());
     }
     /**
      * do pre process request authorization.

@@ -32,7 +32,7 @@ public class QueryCountLimitFilter implements RdapFilter {
      */
     public QueryCountLimitFilter() {
         super();
-        LOGGER.info("init RDAP filter:{}", this.getName());
+        LOGGER.debug("init RDAP filter:{}", this.getName());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class QueryCountLimitFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         if (ConnectionControlService
                 .incrementConcurrentQCountAndCheckIfExceedMax()) {
-            LOGGER.info("exceed max concurrent count,return 509 error.");
+            LOGGER.debug("exceed max concurrent count,return 509 error.");
             this.writeError509Response(response);
             return false;
         }

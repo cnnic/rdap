@@ -109,7 +109,7 @@ public final class StringUtil {
      */
     public static String generateEncodedRedirectURL(String param,
             String servicePartUri, String baseUrl) {
-        LOGGER.info("   redirect found,baseUrl:{},return 301.", baseUrl);
+        LOGGER.debug("   redirect found,baseUrl:{},return 301.", baseUrl);
         if (StringUtils.endsWith(baseUrl, URL_SEPARATOR)) {
             baseUrl = StringUtils.removeEnd(baseUrl, URL_SEPARATOR);
         }
@@ -125,7 +125,7 @@ public final class StringUtil {
         String absoluteUrl = baseUrl + URL_SEPARATOR + servicePartUri
                 + URL_SEPARATOR + param;
         absoluteUrl = StringUtil.urlEncode(absoluteUrl);
-        LOGGER.info("   redirect URL:{}", absoluteUrl);
+        LOGGER.debug("   redirect URL:{}", absoluteUrl);
         return absoluteUrl;
     }
 

@@ -107,11 +107,11 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
      */
     @Override
     public Autnum query(QueryParam queryParam) {
-        LOGGER.info("query, queryParam:" + queryParam);
+        LOGGER.debug("query, queryParam:" + queryParam);
         Autnum autnum = queryWithoutInnerObjects(queryParam);
         queryAndSetInnerObjects(autnum);
         queryAndSetEntities(autnum);
-        LOGGER.info("query, autnum:" + autnum);
+        LOGGER.debug("query, autnum:" + autnum);
         return autnum;
     }
 
@@ -142,7 +142,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     @Override
     public List<Autnum> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
-        LOGGER.info("queryAsInnerObjects, outerObjectId:" + outerObjectId
+        LOGGER.debug("queryAsInnerObjects, outerObjectId:" + outerObjectId
                 + ", outerModelType:" + outerModelType);
         if (!ModelType.ENTITY.equals(outerModelType)) {
             throw new UnsupportedOperationException(
@@ -150,7 +150,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
         }
         List<Autnum> autnums = queryWithoutInnerObjects(outerObjectId);
         queryAndSetInnerObjects(autnums);
-        LOGGER.info("queryAsInnerObjects, autnums:" + autnums);
+        LOGGER.debug("queryAsInnerObjects, autnums:" + autnums);
         return autnums;
     }
 

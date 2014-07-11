@@ -125,11 +125,11 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      */
     @Override
     public Network query(QueryParam queryParam) {
-        LOGGER.info("query, queryParam:{}", queryParam);
+        LOGGER.debug("query, queryParam:{}", queryParam);
         Network network = queryWithoutInnerObjects(queryParam);
         queryAndSetInnerObjectsWithoutEntities(network);
         queryAndSetEntities(network);
-        LOGGER.info("query, network:{}", network);
+        LOGGER.debug("query, network:{}", network);
         return network;
     }
     
@@ -159,20 +159,20 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     @Override
     public List<Network> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
-        LOGGER.info("queryAsInnerObjects,outerObjId:{},outerModel:{}",
+        LOGGER.debug("queryAsInnerObjects,outerObjId:{},outerModel:{}",
                 outerObjectId, outerModelType);
         if (ModelType.ENTITY.equals(outerModelType)) {
             List<Network> networks =
                     queryWithoutInnerObjectsForEntity(outerObjectId);
             queryAndSetInnerObjects(networks);
-            LOGGER.info("for entities result size:{}", networks.size());
+            LOGGER.debug("for entities result size:{}", networks.size());
             return networks;
         }
         if (ModelType.ARPA.equals(outerModelType)) {
             List<Network> networks =
                     queryWithoutInnerObjectsForArpa(outerObjectId);
             queryAndSetInnerObjects(networks);
-            LOGGER.info("for arpa result size:{}", networks.size());
+            LOGGER.debug("for arpa result size:{}", networks.size());
             return networks;
         }
         throw new UnsupportedOperationException(

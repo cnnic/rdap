@@ -77,7 +77,7 @@ public class PolicyDaoImpl implements PolicyDao {
      * @return map of policy.
      */
     public Map<String, Set<String>> loadAllPolicyMap() {
-        LOGGER.info("loadAllPolicyMap.");
+        LOGGER.debug("loadAllPolicyMap.");
         final String sql = "select * from RDAP_POLICY";
         Map<String, Set<String>> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
