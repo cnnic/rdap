@@ -31,23 +31,9 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 5. Deploy rdap.war to tomcat.
    * create folder 'rdap' in dir $TOMCAT_HOME/webapps/
    * unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
-		
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
-	
-		```
-		jdbc.url.hostPort=jdbc:mysql://$MYSQL_HOST_OR_IP:3306/:  change $MYSQL_HOST_OR_IP to Mysql host or ip
-		jdbc.url.dbName=rdap: value change to RDAP database name
-		jdbc.username=: value change to Mysql username
-		jdbc.password=: value change to Mysql password
-		```
-		
    * Edit global configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties:
-	
-		```
-		localServiceUrl=rdap.restfulwhois.org: value change to local RDAP service url, This value is used in redirect service to check if redirect url is local service url, and will ignore the redirect if is local service url.
-		inTlds=cn;xn--fiqs8sx;: value change to puny name of tlds in this registry, splited by ';'.Only in this list can query.
-		notInTlds=edu.cn: value change to puny name of tlds NOT in this registry, splited by ';'. Tlds  in this list can NOT be query, and will query redirect instead.
-		```
+
 6. Init database. 
    There are two methods, if you are familiar with Mysql, you may use first method, and if not you should use second.
    * Use Mysql client to init
