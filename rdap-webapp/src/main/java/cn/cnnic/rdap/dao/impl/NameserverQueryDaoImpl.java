@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -72,6 +74,11 @@ import cn.cnnic.rdap.dao.QueryDao;
  */
 @Repository
 public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(LinkQueryDaoImpl.class); 
     /**
      * remark dao.
      */
@@ -313,7 +320,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * get bigDecimal of ip from nameserver query parameter。
+     * get bigDecimal of ip from nameserver query parameter.
      * @param queryParam
      *            query parameter of nameserver。
      * @return BigDecimal[] for ip。
@@ -499,7 +506,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * count the number of resultSet。
+     * count the number of resultSet.
      * @author weijunkai
      * 
      */

@@ -36,6 +36,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -53,11 +55,32 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 @Repository
 public class PublicIdQueryDaoImpl extends AbstractQueryDao<PublicId> {
 
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(RemarkQueryDaoImpl.class);   
+    
+    /**
+     * query results of PublicId list to an associated object.
+     *   ie. domain to PublicId,
+     *       use queryAsInnerObjects(domainId) to query variants
+     * @param outerObjectId
+     *            associated object id.
+     * @param outerModelType
+     *            associated object type.            
+     * @return List<PublicId>
+     *            PublicIds associated to the object.
+     *   
+     */
     @Override
     public List<PublicId> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
+        LOGGER.info("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
+                    outerObjectId , outerModelType);
         List<PublicId> publicIds = queryWithoutInnerObjects(outerObjectId,
                 outerModelType);
+        LOGGER.info("queryAsInnerObjects, result:{}", publicIds);
         return publicIds;
     }
 

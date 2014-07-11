@@ -78,8 +78,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(NetworkQueryDaoImpl.class);
-    
+            .getLogger(NetworkQueryDaoImpl.class);    
     /**
      * notice dao.
      */
@@ -116,12 +115,21 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      */
     @Autowired
     private QueryDao<Entity> entityQueryDao;
-
+    /**
+     * query network object.
+     * 
+     * @param queryParam
+     *            query parameter.
+     * @return network
+     *              ip address.
+     */
     @Override
     public Network query(QueryParam queryParam) {
+        LOGGER.info("query, queryParam:{}", queryParam);
         Network network = queryWithoutInnerObjects(queryParam);
         queryAndSetInnerObjectsWithoutEntities(network);
         queryAndSetEntities(network);
+        LOGGER.info("query, network:{}", network);
         return network;
     }
     

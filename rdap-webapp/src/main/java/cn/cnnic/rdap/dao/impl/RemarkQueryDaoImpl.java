@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -61,18 +63,38 @@ import cn.cnnic.rdap.dao.QueryDao;
 @Repository
 public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
     /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(RemarkQueryDaoImpl.class);   
+    /**
      * link dao.
      */
     @Autowired
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
 
+    /**
+     * query results of Remark list to an associated object.
+     *   ie. domain to Remark,
+     *       use queryAsInnerObjects(domainId) to query variants
+     * @param outerObjectId
+     *            associated object id.
+     * @param outerModelType
+     *            associated object type.            
+     * @return List<Remark>
+     *            Remark associated to the object.
+     *   
+     */
     @Override
     public List<Remark> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
+        LOGGER.info("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
+                outerObjectId , outerModelType);
         List<Remark> remarks = queryWithoutInnerObjects(outerObjectId,
                 outerModelType);
         queryAndSetInnerObjects(remarks);
+        LOGGER.info("queryAsInnerObjects, result:{}", remarks);
         return remarks;
     }
 
