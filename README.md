@@ -25,7 +25,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
 
 1. Get war file 'rdap.war'. There are two methods to get war file
-   * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version must build from source, see following section)
+   * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.(Higer JDK version should build from source, see following section)
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  make a dir used to download source code and build, which is called 'WORK_DIR'
