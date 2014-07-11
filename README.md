@@ -4,22 +4,9 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 1. Install JDK6(Java SE Development Kit 6), or higer verison: [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html)
 (Skip this step if JDK6 already installed)
 1. Install Mysql and init database.
-   * [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version.  
+   * [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
      (Skip this step if Mysql5 or higer version already installed)
-   * Login into Mysql with mysql client, and add user, and init database schema: 
-      * Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. Commands:
-	   ```
-		cd $MYSQL_HOME     #$MYSQL_HOME must be replaced by real Mysql home dir
-		[in Linux, open a shell and execute command:]
-	   		mysql -h127.0.0.1 -u$MYSQL_USERNAME  -p
-		[in Windows, open command prompt window and execute command:]
-			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
-	   ```
-      * Download [rdap-db-init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-init-schema.sql) and [rdap-db-test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-test-data.sql). Execute following commands : 
-	   ```
-	   	source rdap-db-init-schema.sql;    # init database schema
-		source rdap-db-test-data.sql;    #insert test data
-	   ```
+     You must get an user/password pair, we called $MYSQL_USERNAME/$MYSQL_PASSWORD, used for RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege.
 
 1. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).
 Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
@@ -61,7 +48,36 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 			inTlds: value change to puny name of tlds in this registry, splited by ';'.Only in this list can query.
 			notInTlds: value change to puny name of tlds NOT in this registry, splited by ';'. Tlds  in this list can NOT be query, and will query redirect instead.
 		```
+1. Init database. 
+   There are two methods, if you are familiar with Mysql, you may use first method, and if not you should use second.
+   * Use Mysql client to init
+      *  Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username.
+     
+		```
+		cd $MYSQL_HOME     #$MYSQL_HOME must be replaced by real Mysql home dir
+		[in Linux, open a shell and execute command:]
+	   		mysql -h127.0.0.1 -u$MYSQL_USERNAME  -p
+		[in Windows, open command prompt window and execute command:]
+			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
+		```
+      *  Download [rdap-db-init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-init-schema.sql) and [rdap-db-test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/build/rdap-db-test-data.sql). Execute: 
+      
+	   	```
+	   	source rdap-db-init-schema.sql;    # init database schema
+		source rdap-db-test-data.sql;    #insert test data
+	   	```
+   * Use init tool to init
+	   	```
+   		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
+		CLASSPATH=.:$CLASSPATH
+		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initschema      #this will DROP database for 'jdbc.url.dbName', and recreate this database, and create table, load base data.
+	   	```
+		If you want load some test data, execute:
 
+	   	```
+		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initdata  init/mysql/test-data.sql      
+	   	```
+1. Start up tomcat
    * Start up tomcat
 	   
 		```
