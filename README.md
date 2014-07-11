@@ -19,34 +19,34 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
       *  [Download source zip file](https://github.com/cnnic/rdap/archive/master.zip), unzip it to $WORK_DIR
       *  build project:
 		```
-			[in Linux, open a shell and execute command:]
-				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
-				mvn package -Dmaven.test.skip=true	# mvn must in system variable. Option '-Dmaven.compiler.target' can be used for higher jdk version, such as '-Dmaven.compiler.target=1.7' for jdk7
-			[in Windows7 or Windows8, open command prompt window and execute command:]
-				cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
-				mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
-			(target/rdap.war  is the build war file)
+		[in Linux, open a shell and execute command:]
+			cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
+			mvn package -Dmaven.test.skip=true	# mvn must in system variable. Option '-Dmaven.compiler.target' can be used for higher jdk version, such as '-Dmaven.compiler.target=1.7' for jdk7
+		[in Windows7 or Windows8, open command prompt window and execute command:]
+			cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
+			mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
+		(target/rdap.war  is the build war file)
 	
 		```
-5. Deploy rdap.war to tomcat
+5. Deploy rdap.war to tomcat.
    * create folder 'rdap' in dir $TOMCAT_HOME/webapps/
    * unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
 		
    * Edit database configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties:
 	
 		```
-			jdbc.url.hostPort=jdbc:mysql://$MYSQL_HOST_OR_IP:3306/:  change $MYSQL_HOST_OR_IP to Mysql host or ip
-			jdbc.url.dbName=rdap: value change to RDAP database name
-			jdbc.username=: value change to Mysql username
-			jdbc.password=: value change to Mysql password
+		jdbc.url.hostPort=jdbc:mysql://$MYSQL_HOST_OR_IP:3306/:  change $MYSQL_HOST_OR_IP to Mysql host or ip
+		jdbc.url.dbName=rdap: value change to RDAP database name
+		jdbc.username=: value change to Mysql username
+		jdbc.password=: value change to Mysql password
 		```
 		
    * Edit global configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties:
 	
 		```
-			localServiceUrl=rdap.restfulwhois.org: value change to local RDAP service url, This value is used in redirect service to check if redirect url is local service url, and will ignore the redirect if is local service url.
-			inTlds=cn;xn--fiqs8sx;: value change to puny name of tlds in this registry, splited by ';'.Only in this list can query.
-			notInTlds=edu.cn: value change to puny name of tlds NOT in this registry, splited by ';'. Tlds  in this list can NOT be query, and will query redirect instead.
+		localServiceUrl=rdap.restfulwhois.org: value change to local RDAP service url, This value is used in redirect service to check if redirect url is local service url, and will ignore the redirect if is local service url.
+		inTlds=cn;xn--fiqs8sx;: value change to puny name of tlds in this registry, splited by ';'.Only in this list can query.
+		notInTlds=edu.cn: value change to puny name of tlds NOT in this registry, splited by ';'. Tlds  in this list can NOT be query, and will query redirect instead.
 		```
 6. Init database. 
    There are two methods, if you are familiar with Mysql, you may use first method, and if not you should use second.
@@ -81,18 +81,18 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
    * Start up tomcat
 	   
 		```
-			[in Linux, open a shell and execute command:]
-				cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
-				bin/startup.sh
-			[in Windows, open command prompt window and execute command:]
-				cd $TOMCAT_HOME/bin		#$TOMCAT_HOME must be replaced by real dir
-				startup.bat
+		[in Linux, open a shell and execute command:]
+			cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
+			bin/startup.sh
+		[in Windows, open command prompt window and execute command:]
+			cd $TOMCAT_HOME/bin		#$TOMCAT_HOME must be replaced by real dir
+			startup.bat
 		```
 
    * Test if it is runing ok
 	   	```
-			curl -H Accept:application/rdap+json http://$RDAP_SERVER_IP:$RDAP_SERVER_PORT/rdap/.well-known/rdap/autnum/2100
-			(change '8080' to real tomcat HTTP port if it's not 8080)
+		curl -H Accept:application/rdap+json http://$RDAP_SERVER_IP:$RDAP_SERVER_PORT/rdap/.well-known/rdap/autnum/2100
+		(change '8080' to real tomcat HTTP port if it's not 8080)
 		```
 	It's ok if response contains 'rdapConformance'. 
 
