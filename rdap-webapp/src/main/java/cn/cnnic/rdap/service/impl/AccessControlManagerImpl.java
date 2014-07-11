@@ -76,7 +76,7 @@ public class AccessControlManagerImpl implements AccessControlManager {
         Assert.notNull(object.getId());
         Assert.notNull(object.getObjectType());
         
-        LOGGER.info("hasPermission:" + object);
+        LOGGER.debug("hasPermission:" + object);
         Principal principal = PrincipalHolder.getPrincipal();
         SecureObject secureObject = new SecureObject(object.getId(), object
                 .getObjectType().getName());

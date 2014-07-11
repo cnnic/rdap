@@ -76,7 +76,7 @@ public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
      * @return EntityAddress list.
      */
     public List<EntityAddress> query(final Entity entity) {
-        LOGGER.info("query, entity:{}", entity);
+        LOGGER.debug("query, entity:{}", entity);
         if (null == entity || null == entity.getId()) {
             return null;
         }
@@ -91,7 +91,7 @@ public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
                         return ps;
                     }
                 }, new EntityAddressResultSetExtractor());
-        LOGGER.info("query, result:{}", result);
+        LOGGER.debug("query, result:{}", result);
         return result;
     }
 

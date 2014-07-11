@@ -87,7 +87,7 @@ public class NoticeDaoImpl implements NoticeDao {
      */
     @Override
     public List<Notice> getAllNotices() {
-        LOGGER.info("getAllNotices.");
+        LOGGER.debug("getAllNotices.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
         queryAndSetInnerObjects(notices, NoticeType.Notice);
         return notices;
@@ -99,7 +99,7 @@ public class NoticeDaoImpl implements NoticeDao {
      */
     @Override
     public List<Notice> getHelp() {
-        LOGGER.info("getHelp.");
+        LOGGER.debug("getHelp.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.HELP);
         queryAndSetInnerObjects(notices, NoticeType.HELP);
         return notices;

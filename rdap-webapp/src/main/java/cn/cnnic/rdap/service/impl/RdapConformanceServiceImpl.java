@@ -71,7 +71,7 @@ public class RdapConformanceServiceImpl implements RdapConformanceService {
      */
     @Override
     public void initRdapConformance() {
-        LOGGER.info("initRdapConformance");
+        LOGGER.debug("initRdapConformance");
         rdapConformance = conformanceDao.queryConformance();
     }
     /**
@@ -82,7 +82,7 @@ public class RdapConformanceServiceImpl implements RdapConformanceService {
      */   
     @Override
     public void setRdapConformance(BaseModel model) {
-        LOGGER.info("setRdapConformance:" + model);
+        LOGGER.debug("setRdapConformance:" + model);
         if (null == model) {
             return;
         }

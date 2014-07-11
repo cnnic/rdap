@@ -185,7 +185,7 @@ public class QueryServiceImpl implements QueryService {
      */
     @Override
     public boolean tldInThisRegistry(QueryParam queryParam) {
-        LOGGER.info("tldInThisRegistry, queryParam:" + queryParam);
+        LOGGER.debug("tldInThisRegistry, queryParam:" + queryParam);
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
         String fullPunyTld = domainQueryParam.getFullPunyTld();
         List<String> allTlds = getAllTlds(fullPunyTld);
@@ -193,13 +193,13 @@ public class QueryServiceImpl implements QueryService {
                 CollectionUtils.containsAny(allTlds,
                         RdapProperties.getNotInTldsInThisRegistry());
         if (inNotInTlds) {
-            LOGGER.info("tldInThisRegistry, false");
+            LOGGER.debug("tldInThisRegistry, false");
             return false;
         }
         boolean inThisRegTlds =
                 CollectionUtils.containsAny(allTlds,
                         RdapProperties.getInTldsInThisRegistry());
-        LOGGER.info("tldInThisRegistry, return:" + inThisRegTlds);
+        LOGGER.debug("tldInThisRegistry, return:" + inThisRegTlds);
         return inThisRegTlds;
     }
 
@@ -211,7 +211,7 @@ public class QueryServiceImpl implements QueryService {
      * @return tld list.
      */
     private List<String> getAllTlds(String fullTld) {
-        LOGGER.info("getAllTlds, fullTld:" + fullTld);
+        LOGGER.debug("getAllTlds, fullTld:" + fullTld);
         if (StringUtils.isBlank(fullTld)) {
             return null;
         }
@@ -227,7 +227,7 @@ public class QueryServiceImpl implements QueryService {
             }
             currentTld = subTld;
         }
-        LOGGER.info("getAllTlds, tldList:" + tldList);
+        LOGGER.debug("getAllTlds, tldList:" + tldList);
         return tldList;
     }
 

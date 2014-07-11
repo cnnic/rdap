@@ -107,7 +107,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
         ModelType modelType = ((BaseModel) objModel).getObjectType();
         strObjType = modelType.getName();
         if (strObjType == "errorMessage") {
-            LOGGER.info("getModelString, objModel is errorMessage");
+            LOGGER.debug("getModelString, objModel is errorMessage");
             return null;
         }
         return strObjType;

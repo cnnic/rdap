@@ -103,7 +103,7 @@ public class NetworkQueryParam extends QueryParam {
      * init all ip to 0.
      */
     private void initAllIpZero() {
-        LOGGER.info("initAllIpZero");
+        LOGGER.debug("initAllIpZero");
         ipQueryStartHigh = BigDecimal.valueOf(0);
         ipQueryEndHigh = BigDecimal.valueOf(0);
         ipQueryStartLow = BigDecimal.valueOf(0);
@@ -238,7 +238,7 @@ public class NetworkQueryParam extends QueryParam {
      *            query ip v4 string.
      */
     private void parseQueryIpV4Mask(String strQuery) {
-        LOGGER.info("parseQueryIpV4Mask, strQuery:" + strQuery);
+        LOGGER.debug("parseQueryIpV4Mask, strQuery:" + strQuery);
         final long numBase = 2;
         final long numBytes = 32;
         BigDecimal[] ipV4 = IpUtil.ipV4ToDecimal(strQuery);
@@ -261,7 +261,7 @@ public class NetworkQueryParam extends QueryParam {
             ipQueryEndLow = ipV4[1];
             ipQueryStartLow = ipV4[1];
         }
-        LOGGER.info("parseQueryIpV4Mask, ipQueryEndLow:" + ipQueryEndLow
+        LOGGER.debug("parseQueryIpV4Mask, ipQueryEndLow:" + ipQueryEndLow
                 + ", ipQueryStartLow:" + ipQueryStartLow);
     }
 
@@ -274,8 +274,7 @@ public class NetworkQueryParam extends QueryParam {
      *            for ip BigDecimal style
      */
     private void parseQueryIpV6Mask(String strQuery, BigDecimal[] ipV6) {
-        LOGGER.info("parseQueryIpV6Mask, strQuery:" + strQuery
-                + ", ipV6:" + ipV6);
+        
         final int lowLimitShift = 64;
         long maskRangeBytes = 0;
         if (numMask > 0) {
@@ -308,7 +307,7 @@ public class NetworkQueryParam extends QueryParam {
                 .subtract(endSubDecimalBase);
         ipQueryEndLow = ipQueryStartLow.add(lowEndPlusDecimal);
         
-        LOGGER.info("parseQueryIpV6Mask, ipQueryStartHigh:" + ipQueryStartHigh
+        LOGGER.debug("parseQueryIpV6Mask, ipQueryStartHigh:" + ipQueryStartHigh
                 + ", ipQueryStartLow:" + ipQueryStartLow
                 + ", ipQueryEndHigh:" + ipQueryEndHigh
                 + ", ipQueryEndLow:" + ipQueryEndLow);
@@ -318,7 +317,7 @@ public class NetworkQueryParam extends QueryParam {
      * parseQueryIpMask .
      */
     public void parseQueryIpMask() {
-        LOGGER.info("parseQueryIpMask");
+        LOGGER.debug("parseQueryIpMask");
                 
         final long v6Bytes = 128;
         String strQuery = getQ();
