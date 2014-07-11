@@ -49,9 +49,9 @@ Installed Tomcat root folder called 'TOMCAT_HOME', which contains folders:bin,co
 	
 		```
 			jdbc.url.hostPort=jdbc:mysql://$MYSQL_HOST_OR_IP:3306/:  change $MYSQL_HOST_OR_IP to Mysql host or ip
-			jdbc.url.dbName: value change to RDAP database name,default is: rdap
-			jdbc.username: value change to Mysql username
-			jdbc.password: value change to Mysql password
+			jdbc.url.dbName=rdap: value change to RDAP database name
+			jdbc.username=: value change to Mysql username
+			jdbc.password=: value change to Mysql password
 		```
 		
    * Edit global configuration file: $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties:
