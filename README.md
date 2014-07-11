@@ -6,7 +6,7 @@ Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windo
 2. Install Mysql and init database. (Skip this step if Mysql5 or higer version already installed)
    [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
      
-   You must get an user/password pair, we called $MYSQL_USERNAME/$MYSQL_PASSWORD, used for access RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. See [Mysql Ref](http://dev.mysql.com/doc/refman/5.1/en/grant.html).
+   You must get or generate an Mysql user/password pair, we called $MYSQL_USERNAME/$MYSQL_PASSWORD, used for access RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html).
 
 3. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).
 Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.).
@@ -35,8 +35,12 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
    * Edit global configuration file $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties, [see here](https://github.com/cnnic/rdap/wiki/rdap.properties)
 
 6. Init database. 
-   There are two methods, if you are familiar with Mysql, you may use first method, and if not you should use second.
-   * Use Mysql client to init
+   
+   This step will create database called 'rdap', and create schema, and you can insert test data into it. 
+
+   There are two methods to init, if you are familiar with Mysql, you may use the first method, and if not you should use second.
+   
+   * (1)Use Mysql client to init
       *  Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username.
      
 		```
@@ -53,7 +57,7 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 		(If you want load some test data, execute following command:)
 		source rdap-db-test-data.sql;    #insert test data
 	   	```
-   * Use init tool to init
+   * (2)Use init tool to init
      
      This step will use database info in jdbc.properties you haved configured before.
      
