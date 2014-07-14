@@ -15,9 +15,9 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
    * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
-      *  make a dir used to download source code and build, which is called 'WORK_DIR'
+      *  Make a dir used to download source code and build, which is called 'WORK_DIR'
       *  [Download source zip file](https://github.com/cnnic/rdap/archive/master.zip), unzip it to $WORK_DIR
-      *  build project:
+      *  Build project:
 		```
 		[in Linux, open a shell and execute command:]
 			cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
@@ -29,8 +29,8 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 	
 		```
 5. Deploy rdap.war to tomcat.
-   * create folder 'rdap' in dir $TOMCAT_HOME/webapps/
-   * unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
+   * Create folder 'rdap' in dir $TOMCAT_HOME/webapps/
+   * Unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
    * Edit database configuration file $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties, [see here](https://github.com/cnnic/rdap/wiki/jdbc.properties)
    * Edit global configuration file $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties, [see here](https://github.com/cnnic/rdap/wiki/rdap.properties)
 
