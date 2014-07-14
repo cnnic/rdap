@@ -91,8 +91,8 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 		```
 	It's ok if response contains 'rdapConformance'. 
 
-### [Api doc](https://github.com/cnnic/rdap/wiki/Api-doc)
-### [Known issues](https://github.com/cnnic/rdap/wiki/Known%20issues)
-### [Develop guide](https://github.com/cnnic/rdap/wiki/Develop-guide)
+### [Api Doc](https://github.com/cnnic/rdap/wiki/Api-Doc)
+### [Known Issues](https://github.com/cnnic/rdap/wiki/Known%20Issues)
+### [Develop Guide](https://github.com/cnnic/rdap/wiki/Develop-Guide)
 
 Any questions please [create issue](https://github.com/cnnic/rdap/issues/new) with details.
