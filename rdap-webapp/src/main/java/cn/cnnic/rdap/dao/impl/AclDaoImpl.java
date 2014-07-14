@@ -54,7 +54,7 @@ import cn.cnnic.rdap.dao.AclDao;
  * 
  */
 @Repository
-public class AclDaoIml implements AclDao {
+public class AclDaoImpl implements AclDao {
     /**
      * logger.
      */
@@ -68,7 +68,7 @@ public class AclDaoIml implements AclDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     /**
-     * has a prinicipal any acl entry for a secure object.
+     * has a principal any acl entry for a secure object.
      * 
      * @param principal
      *            principal.
