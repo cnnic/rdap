@@ -57,6 +57,8 @@ import cn.cnnic.rdap.service.SearchService;
 /**
  * search service implementation.
  * 
+ * RdapController's search for domain/NS/IP/entity .etc .
+ *  
  * @author jiashuo
  * 
  */
