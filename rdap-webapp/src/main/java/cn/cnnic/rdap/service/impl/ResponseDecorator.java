@@ -43,6 +43,8 @@ import cn.cnnic.rdap.service.RdapConformanceService;
 /**
  * decorate response.
  * 
+ * RdapController's query for notice or help.
+ *  
  * @author jiashuo
  * 
  */

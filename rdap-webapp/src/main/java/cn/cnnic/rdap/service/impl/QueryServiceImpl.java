@@ -62,6 +62,11 @@ import cn.cnnic.rdap.service.RdapConformanceService;
 /**
  * query service implementation.
  * 
+ * RdapController's main query service for querying and searching.
+ * 
+ * requirement from
+ * http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
+ * 
  * @author jiashuo
  * 
  */
