@@ -53,7 +53,7 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
       
 	   	```
 		DROP DATABASE IF EXISTS `rdap`;
-		CREATE DATABASE `rdap` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_croatian_ci */;
+		CREATE DATABASE `rdap` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
 	   	source init-schema.sql;    # init database schema
 		source init-data.sql;	  #init base data 
 
