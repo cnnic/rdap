@@ -35,12 +35,13 @@ import cn.cnnic.rdap.bean.BaseModel;
 /**
  * Access Control Manager.
  * 
+ * 
  * @author jiashuo
  * 
  */
 public interface AccessControlManager {
     /**
-     * check if current request user has perssion for model object.
+     * check if current request user has permission for model object.
      * 
      * @param object
      *            secure object.

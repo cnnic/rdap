@@ -71,7 +71,38 @@ import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
 /**
- * controller for query and search.All methods return message in JSON format.
+ * <pre>
+ * This is the central class in this package. 
+ * This is Controller for RDAP service - query and search, Conformance to
+ * http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
+ * 
+ * Request:
+ * </pre>
+ * 
+ * <pre>
+ *      Only support HTTP 'GET' method.
+ *      'Accept' in HTTP header must be 'application/rdap+json'.
+ *      URI and parameters must be encoded in UTF-8.
+ *      Unknown parameters will be ignored.
+ * </pre>
+ * 
+ * All response is in JSON format.
+ * 
+ * Response code:
+ * 
+ * <pre>
+ *      200:exist for query, or no error for search.
+ *      400:parameter is invalid, or URI can't be handled.
+ *      401:unauthorized.
+ *      403:forbidden.
+ *      404:not found for query.
+ *      405:method not allowed. Only support GET method.
+ *      415:unsupported media type. Only 'application/rdap+json' is supported.
+ *      422:unprocessable query parameter for search. See search* method.
+ *      429:too many requests.Client should reduce request Frequency.
+ *      500:internal server error.
+ *      509:bandwith limit exceed.
+ * </pre>
  * 
  * @author jiashuo
  * 
@@ -116,7 +147,7 @@ public class RdapController {
     @Autowired
     private QueryParser queryParser;
     /**
-     * responseDecorator.
+     * response decorator.
      */
     @Autowired
     private ResponseDecorator responseDecorator;
@@ -126,16 +157,21 @@ public class RdapController {
      */
     @Autowired
     private AccessControlManager accessControlManager;
-    
+
     /**
-     * RedirectService.
+     * redirect service.
      */
     @Autowired
     private RedirectService redirectService;
 
     /**
-     * help.
+     * <pre>
+     * Query help.
+     * URI:/help.
+     * This service is not under permission control.
+     * This service is not under policy control.
      * 
+     * <pre>
      * @param request
      *            HttpServletRequest.
      * @param response
@@ -143,12 +179,12 @@ public class RdapController {
      * @return JSON formated result,with HTTP code.
      */
     @RequestMapping(value = "/help", method = RequestMethod.GET)
-    public ResponseEntity queryHelp(HttpServletRequest request, 
-                                        HttpServletResponse response) {
+    public ResponseEntity queryHelp(HttpServletRequest request,
+            HttpServletResponse response) {
         LOGGER.debug("help");
 
-        Help result = queryService.queryHelp(queryParser
-                .parseQueryParam("HELP"));
+        Help result =
+                queryService.queryHelp(queryParser.parseQueryParam("HELP"));
         if (null != result) {
             // No permission control
             responseDecorator.decorateResponseForHelp(result);
@@ -156,9 +192,15 @@ public class RdapController {
         }
         return RestResponseUtil.createResponse404();
     }
-    
+
     /**
+     * <pre>
      * query entity.
+     * Uri:/entity/{handle}.
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * <pre>
      * 
      * @param handle
      *            entity handle.
@@ -176,8 +218,8 @@ public class RdapController {
         if (!StringUtil.isValidEntityHandleOrName(handle)) {
             return RestResponseUtil.createResponse400();
         }
-        Entity result = queryService.queryEntity(queryParser
-                .parseQueryParam(handle));
+        Entity result =
+                queryService.queryEntity(queryParser.parseQueryParam(handle));
         if (null != result) {
             if (!accessControlManager.hasPermission(result)) {
                 return RestResponseUtil.createResponse403();
@@ -187,24 +229,38 @@ public class RdapController {
         }
         return RestResponseUtil.createResponse404();
     }
-    
+
     /**
+     * <pre>
      * search entity by handle or name.
-     * @param fn fn.
-     * @param handle handle.
-     * @param request request.
+     * URI:/entities?fn={entity name} ; /entities?handle={handle}.
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * The first appearance parameter 'fn' and 'handle' will be handled,
+     * and other parameters will be ignored.
+     * Parameter will be trimed.
+     * 
+     * <pre>
+     * @param fn
+     *            fn.
+     * @param handle
+     *            handle.
+     * @param request
+     *            request.
      * @return ResponseEntity.
      */
     @RequestMapping(value = "/entities", method = RequestMethod.GET)
-    public ResponseEntity searchEntity(
-            @RequestParam(required = false) String fn,
-            @RequestParam(required = false) String handle,
-            HttpServletRequest request) {
+    public ResponseEntity
+            searchEntity(@RequestParam(required = false) String fn,
+                    @RequestParam(required = false) String handle,
+                    HttpServletRequest request) {
         LOGGER.debug("search entities.fn:{},handle:{}", fn, handle);
         final String fnParamName = "fn";
         final String handleParamName = "handle";
-        String paramName = queryParser.getFirstParameter(request,
-                new String[]{fnParamName, handleParamName});
+        String paramName =
+                queryParser.getFirstParameter(request, new String[] {
+                        fnParamName, handleParamName });
         if (StringUtils.isBlank(paramName)) {
             return RestResponseUtil.createResponse400();
         }
@@ -217,8 +273,8 @@ public class RdapController {
         if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
             return RestResponseUtil.createResponse422();
         }
-        QueryParam queryParam = queryParser
-                .parseEntityQueryParam(paramValue, paramName);
+        QueryParam queryParam =
+                queryParser.parseEntityQueryParam(paramValue, paramName);
         LOGGER.debug("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
@@ -232,7 +288,17 @@ public class RdapController {
     }
 
     /**
+     * <pre>
      * query autnum.
+     * URI:/autnum/{autnum}
+     * 
+     * First query autnum in local registry, if not exist, then query 
+     * for redirect.
+     *   
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * <pre>
      * 
      * @param autnum
      *            an AS Plain autonomous system number [RFC5396].
@@ -249,8 +315,7 @@ public class RdapController {
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
-        QueryParam queryParam = queryParser
-                .parseQueryParam(autnum);
+        QueryParam queryParam = queryParser.parseQueryParam(autnum);
         Autnum result = queryService.queryAutnum(queryParam);
         if (null != result) {
             if (!accessControlManager.hasPermission(result)) {
@@ -259,7 +324,7 @@ public class RdapController {
             responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
-        LOGGER.debug("query redirect autnum :{}" , queryParam);
+        LOGGER.debug("query redirect autnum :{}", queryParam);
         RedirectResponse redirect = redirectService.queryAutnum(queryParam);
         if (redirectService.isValidRedirect(redirect)) {
             String redirectUrl =
@@ -271,7 +336,20 @@ public class RdapController {
     }
 
     /**
+     * 
+     * <pre>
      * query domain by domain name.
+     * URI:/domain/{domainName}
+     * 
+     * If domain tld is configured in 'inTlds' and not in 'notInTlds'
+     *  of rdap.properties file, will query in local registry; 
+     * If domain tld is configured in 'notInTlds' and not in 'inTlds',
+     *  will query for redirect.
+     *   
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * <pre>
      * 
      * @param domainName
      *            is a fully-qualified (relative to the root) domain name
@@ -287,8 +365,8 @@ public class RdapController {
         String decodeDomain = domainName;
         String punyDomainName = decodeDomain;
         try {
-            decodeDomain = DomainUtil
-                    .decodeAndReplaceAsciiToLowercase(domainName);
+            decodeDomain =
+                    DomainUtil.decodeAndReplaceAsciiToLowercase(domainName);
             // long lable exception
             punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
         } catch (Exception e) {
@@ -301,8 +379,8 @@ public class RdapController {
         LOGGER.debug("after normalization: {}", decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
-        QueryParam queryParam = queryParser
-                .parseDomainQueryParam(decodeDomain, punyDomainName);
+        QueryParam queryParam =
+                queryParser.parseDomainQueryParam(decodeDomain, punyDomainName);
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryDomainInThisRegistry(queryParam);
         }
@@ -311,9 +389,11 @@ public class RdapController {
 
     /**
      * query redirect domain or nameserver.
-     * @param queryParam queryParam.
+     * 
+     * @param queryParam
+     *            queryParam.
      * @param paramName
-     *          the string param.
+     *            the string param.
      * @return ResponseEntity.
      */
     private ResponseEntity queryRedirectDomainOrNs(QueryParam queryParam,
@@ -336,27 +416,35 @@ public class RdapController {
 
     /**
      * query domain in this registry.
-     * @param queryParam queryParam.
+     * 
+     * @param queryParam
+     *            queryParam.
      * @return ResponseEntity.
      */
     private ResponseEntity queryDomainInThisRegistry(QueryParam queryParam) {
-        LOGGER.debug("   queryDomainInThisRegistry:{}" , queryParam);
+        LOGGER.debug("   queryDomainInThisRegistry:{}", queryParam);
         Domain domain = queryService.queryDomain(queryParam);
         if (null != domain) {
-            LOGGER.debug("   found domain:{}" , queryParam);
+            LOGGER.debug("   found domain:{}", queryParam);
             if (!accessControlManager.hasPermission(domain)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domain);
             return RestResponseUtil.createResponse200(domain);
         }
-        LOGGER.debug("   domain not found,return 404. {}" , queryParam);
+        LOGGER.debug("   domain not found,return 404. {}", queryParam);
         return RestResponseUtil.createResponse404();
     }
 
     /**
+     * <pre>
      * search domain by domain name.
+     * URI:/domains?name={domain name}
      * 
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * <pre>
      * @param name
      *            is a fully-qualified (relative to the root) domain name
      *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
@@ -377,8 +465,8 @@ public class RdapController {
         String decodeDomain = name;
         try {
             decodeDomain = DomainUtil.iso8859Decode(name);
-            decodeDomain = DomainUtil
-                    .decodeAndReplaceAsciiToLowercase(decodeDomain);
+            decodeDomain =
+                    DomainUtil.decodeAndReplaceAsciiToLowercase(decodeDomain);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
@@ -394,8 +482,9 @@ public class RdapController {
         }
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         decodeDomain = StringUtils.lowerCase(decodeDomain);
-        DomainSearch domainSearch = searchService.searchDomain(queryParser
-                .parseDomainQueryParam(decodeDomain, decodeDomain));
+        DomainSearch domainSearch =
+                searchService.searchDomain(queryParser.parseDomainQueryParam(
+                        decodeDomain, decodeDomain));
         if (null != domainSearch) {
             if (domainSearch.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
@@ -407,7 +496,14 @@ public class RdapController {
     }
 
     /**
+     * <pre>
      * query nameserver by nameserver name.
+     * URI:/nameserver/{nameserver name}
+     * 
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * <pre>
      * 
      * @param nameserverName
      *            represents information regarding DNS name servers used in both
@@ -423,8 +519,8 @@ public class RdapController {
         String decodeNS = nameserverName;
         String punyNSName = decodeNS;
         try {
-            decodeNS = DomainUtil
-                    .decodeAndReplaceAsciiToLowercase(nameserverName);
+            decodeNS =
+                    DomainUtil.decodeAndReplaceAsciiToLowercase(nameserverName);
             // long lable exception
             punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
         } catch (Exception e) {
@@ -437,8 +533,8 @@ public class RdapController {
         LOGGER.debug("after normalization: {}", decodeNS);
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
         decodeNS = StringUtils.lowerCase(decodeNS);
-        QueryParam queryParam = queryParser
-                .parseNameserverQueryParam(decodeNS, punyNSName);
+        QueryParam queryParam =
+                queryParser.parseNameserverQueryParam(decodeNS, punyNSName);
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryNsInThisRegistry(queryParam);
         }
@@ -447,21 +543,23 @@ public class RdapController {
 
     /**
      * query nameserver in this registry.
-     * @param queryParam queryParam.
+     * 
+     * @param queryParam
+     *            queryParam.
      * @return ResponseEntity.
      */
     private ResponseEntity queryNsInThisRegistry(QueryParam queryParam) {
-        LOGGER.debug("   queryNsInThisRegistry:{}" , queryParam);
+        LOGGER.debug("   queryNsInThisRegistry:{}", queryParam);
         Nameserver ns = queryService.queryNameserver(queryParam);
         if (null != ns) {
-            LOGGER.debug("   found ns:{}" , queryParam);
+            LOGGER.debug("   found ns:{}", queryParam);
             if (!accessControlManager.hasPermission(ns)) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(ns);
             return RestResponseUtil.createResponse200(ns);
         }
-        LOGGER.debug("   ns not found,return 404. {}" , queryParam);
+        LOGGER.debug("   ns not found,return 404. {}", queryParam);
         return RestResponseUtil.createResponse404();
     }
 
@@ -487,7 +585,7 @@ public class RdapController {
         final String strIp = "ip";
         final String strName = "name";
         NameserverQueryParam nsQueryParam = null;
-        final String[] strParamOrg = {strIp, strName};
+        final String[] strParamOrg = { strIp, strName };
         String nameParam = queryParser.getFirstParameter(request, strParamOrg);
         if (StringUtils.isBlank(nameParam)) {
             return RestResponseUtil.createResponse400();
@@ -501,8 +599,9 @@ public class RdapController {
                 return RestResponseUtil.createResponse400();
             }
             name = StringUtils.lowerCase(name);
-            nsQueryParam = (NameserverQueryParam) queryParser
-                    .parseNameserverQueryParam(name, name);
+            nsQueryParam =
+                    (NameserverQueryParam) queryParser
+                            .parseNameserverQueryParam(name, name);
             nsQueryParam.setIsSearchByIp(true);
         } else if (0 == nameParam.compareTo(strName)) {
             // search by name
@@ -510,8 +609,9 @@ public class RdapController {
             String decodeNameserver = name;
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
-                decodeNameserver = DomainUtil
-                        .decodeAndReplaceAsciiToLowercase(decodeNameserver);
+                decodeNameserver =
+                        DomainUtil
+                                .decodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
@@ -527,16 +627,17 @@ public class RdapController {
             }
             decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
             decodeNameserver = StringUtils.lowerCase(decodeNameserver);
-            nsQueryParam = (NameserverQueryParam) queryParser
-                    .parseNameserverQueryParam(decodeNameserver,
-                            decodeNameserver);
+            nsQueryParam =
+                    (NameserverQueryParam) queryParser
+                            .parseNameserverQueryParam(decodeNameserver,
+                                    decodeNameserver);
             nsQueryParam.setIsSearchByIp(false);
         } else {
             return RestResponseUtil.createResponse400();
         }
 
-        NameserverSearch nsSearch = searchService
-                .searchNameserver(nsQueryParam);
+        NameserverSearch nsSearch =
+                searchService.searchNameserver(nsQueryParam);
 
         if (null != nsSearch) {
             if (nsSearch.getHasNoAuthForAllObjects()) {
@@ -623,8 +724,8 @@ public class RdapController {
         }
         StringUtils.lowerCase(strIp);
         // query ip
-        QueryParam queryParam = queryParser.parseIpQueryParam(strIp,
-                numMask, ipVersion);
+        QueryParam queryParam =
+                queryParser.parseIpQueryParam(strIp, numMask, ipVersion);
         Network ip = queryService.queryIp(queryParam);
         if (null != ip) {
             if (!accessControlManager.hasPermission(ip)) {
