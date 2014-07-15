@@ -46,6 +46,11 @@ import cn.cnnic.rdap.service.ErrorMessageService;
 /**
  * error message service implementation.
  * 
+ * requirement from 
+ * http://tools.ietf.org/html/draft-ietf-weirds-json-response-07#section-7.
+ * 
+ * get error codes and relevant messages for response. 
+ * 
  * @author jiashuo
  * 
  */
