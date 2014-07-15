@@ -44,6 +44,9 @@ import cn.cnnic.rdap.service.RdapConformanceService;
 /**
  * RdapConformanceService implementation.
  * 
+ * RdapController's query for rdapConformance.
+ * 
+ * @see ResponseDecorator
  * @author jiashuo
  * 
  */

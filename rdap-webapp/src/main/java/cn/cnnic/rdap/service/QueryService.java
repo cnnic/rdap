@@ -41,6 +41,9 @@ import cn.cnnic.rdap.bean.QueryParam;
 /**
  * query service interface.
  * 
+ * query Domain/IP/AS/Name server/entity/help
+ * and is the query object in own registry 
+ * 
  * @author jiashuo
  * 
  */

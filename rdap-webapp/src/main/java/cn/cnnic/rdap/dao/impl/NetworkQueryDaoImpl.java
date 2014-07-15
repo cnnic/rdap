@@ -134,8 +134,8 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     }
     
     /**
-     * query and set entities.
-     * @param network network.
+     * query and set entities to network.
+     * @param network which will be set with entities.
      */
     private void queryAndSetEntities(Network network) {
         if (null == network) {
@@ -148,12 +148,12 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     }
 
     /**
-     * query network for arpa.
+     * query network for arpa and entity.
      * 
      * @param outerObjectId
-     *            object related to network
+     *            outer object related to network
      * @param outerModelType
-     *            object type related to network
+     *            outer object type related to network
      * @return network list.
      */
     @Override
@@ -181,7 +181,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
 
     /**
      * query network for arpa domain.
-     * @param outerObjectId outerObjectId.
+     * @param outerObjectId outer Object Id.
      * @return network list.
      */
     private List<Network> queryWithoutInnerObjectsForArpa(Long outerObjectId) {
@@ -201,10 +201,10 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     }
 
     /**
-     * query and set inner objects.
+     * query and set inner objects for network.
      * 
      * @param networks
-     *            networks.
+     *            networks which will be set.
      */
     private void queryAndSetInnerObjects(List<Network> networks) {
         if (null == networks) {
@@ -216,11 +216,11 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     }
 
     /**
-     * query network, without inner objects.Only support ENTITY!
+     * query network from RDAP_IP, without inner objects.Only support ENTITY.
      * 
      * @param outerObjectId
-     *            entityId.
-     * @return network.
+     *            entity id.
+     * @return network list
      */
     private List<Network> queryWithoutInnerObjectsForEntity(
             final Long outerObjectId) {
@@ -293,11 +293,11 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     }
 
     /**
-     * queryIpStatus.
+     * query ip status from RDAP_IP_STATUS.
      * 
      * @param ipId
      *            find ip Status by ipId
-     * @return list<String>
+     * @return list of status
      */
     private List<String> queryNetworkStatus(final Long ipId) {
         final String sql = "select * from RDAP_IP_STATUS ip where "
@@ -318,10 +318,10 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     }
 
     /**
-     * query ip, without inner objects.
+     * query ip using queryParam, without inner objects.
      * 
      * @param queryParam
-     *            query parameter
+     *            query parameter of network
      * @return Ip object
      */
     private Network queryWithoutInnerObjects(QueryParam queryParam) {
@@ -336,8 +336,11 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     }
 
     /**
-     * generate PreparedStatementCreator.
-     * @param queryParam queryParam.
+     * <pre>
+     * generate PreparedStatementCreator by executing sql.
+     * select network ip by high address and low address and match the most accurate one.
+     * </pre>
+     * @param queryParam queryParam of network.
      * @param ipTableName the database ip table name.
      * @return PreparedStatementCreator.
      */
@@ -437,7 +440,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * @param rs
      *            ResultSet.
      * @param objIp
-     *            Ip.
+     *            Ip will be set to.
      * @throws SQLException
      *             SQLException.
      */

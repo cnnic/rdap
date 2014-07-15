@@ -139,12 +139,15 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     }
 
     /**
-     * query SecureDNS.One domain has 0 or 1 secureDns, so query first one.
+     * <pre>
+     * query SecureDNS from RDAP_SECUREDNS domain.
+     * every domain has 0 or 1 secureDns, so query first one.
+     * </pre>
      * 
      * @param outerObjectId
      *            object id of outer object.
      * @param type
-     *            object model type
+     *            object model type of outer object.
      * @return SecureDNS list
      */
     private List<SecureDns> queryWithoutInnerObjects(

@@ -44,8 +44,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * String util.
- * 
+ * *
+ * <p>
+ * Operations on {@link java.lang.String} that are <code>null</code> safe.
+ * </p>
+ * <ul>
+ *  <li><b>generateEncodedRedirectURL</b>
+ *      - generate encoded redirect URL, for redirect service</li>
+ *  <li><b>parseTldsToListIfTldListIsNull</b>
+ *      - parse tlds to list</li>
+ *  <li><b>addQuotas</b>
+ *      - add "'" before and after str</li>
+ *  <li><b>checkIsValidSearchPattern</b>
+ *      - check if str is valid search pattern.</li>
+ *  <li><b>containsAtMostOnce</b>
+ *      - check if str contains searchStr more than once.</li>
+ *  <li><b>isValidEntityHandleOrName</b>
+ *      - check is valid entity handle</li>
+ *  <li><b>urlEncode</b>
+ *      - encoded url with UTF-8 encoding</li>
+ *  <li><b>getNormalization</b>
+ *      - get normalization format string</li>
+ *  <li><b>parseUnsignedLong</b>
+ *      - Parses the string argument as an unsigned decimal</li>
+ * </ul>
  * @author jiashuo
  * 
  */
@@ -114,16 +136,17 @@ public final class StringUtil {
             baseUrl = StringUtils.removeEnd(baseUrl, URL_SEPARATOR);
         }
         if (StringUtils.startsWith(servicePartUri, URL_SEPARATOR)) {
-            servicePartUri = StringUtils.removeStart(servicePartUri,
-                    URL_SEPARATOR);
+            servicePartUri =
+                    StringUtils.removeStart(servicePartUri, URL_SEPARATOR);
         }
         if (StringUtils.endsWith(servicePartUri, URL_SEPARATOR)) {
-            servicePartUri = StringUtils.removeEnd(servicePartUri,
-                    URL_SEPARATOR);
+            servicePartUri =
+                    StringUtils.removeEnd(servicePartUri, URL_SEPARATOR);
         }
 
-        String absoluteUrl = baseUrl + URL_SEPARATOR + servicePartUri
-                + URL_SEPARATOR + param;
+        String absoluteUrl =
+                baseUrl + URL_SEPARATOR + servicePartUri + URL_SEPARATOR
+                        + param;
         absoluteUrl = StringUtil.urlEncode(absoluteUrl);
         LOGGER.debug("   redirect URL:{}", absoluteUrl);
         return absoluteUrl;
@@ -244,8 +267,9 @@ public final class StringUtil {
         String result = str;
         try {
             String decodedURL = URLDecoder.decode(str, CHAR_SET_UTF8);
-            decodedURL = decodedURL.replaceAll("\\\\",
-                    URLEncoder.encode("\\", CHAR_SET_UTF8));
+            decodedURL =
+                    decodedURL.replaceAll("\\\\",
+                            URLEncoder.encode("\\", CHAR_SET_UTF8));
             URI uri = new URI(decodedURL);
             result = uri.toASCIIString();
         } catch (Exception e) {

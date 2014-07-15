@@ -45,20 +45,24 @@ import cn.cnnic.rdap.bean.NetworkQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
 
 /**
- * get request parameter from url.
+ * This class is used to parse request, and get parameter from url.
+ * 
+ * <p>
+ * Methods parseQueryParam and parseXxxQueryParam, is called to generate
+ * {@link cn.cnnic.rdap.bean.QueryParam} before query service.
  * 
  * @author jiashuo
  * 
  */
 @Component
 public class QueryParser {
-    
+
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(QueryParser.class);
-    
+
     /**
      * generate QueryParam.
      * 
@@ -111,8 +115,8 @@ public class QueryParser {
      */
     public QueryParam parseIpQueryParam(String ipAddr, long numMask,
             IpVersion ipVersion) {
-        NetworkQueryParam ipQueryParam = new NetworkQueryParam(ipAddr, numMask,
-                ipVersion);
+        NetworkQueryParam ipQueryParam =
+                new NetworkQueryParam(ipAddr, numMask, ipVersion);
         ipQueryParam.parseQueryIpMask();
         return ipQueryParam;
     }
@@ -158,15 +162,15 @@ public class QueryParser {
      */
     public String getFirstParameter(HttpServletRequest request,
             final String[] strParamOrg) {
-        
+
         String strQuery = request.getQueryString();
-        LOGGER.debug("getFirstParameter, query:" + strQuery 
-                + ",strParamOrg:" + strParamOrg);
-        
+        LOGGER.debug("getFirstParameter, query:" + strQuery + ",strParamOrg:"
+                + strParamOrg);
+
         if (StringUtils.isBlank(strQuery)) {
             return null;
         }
-        
+
         // get first '?'
         int pos = strQuery.indexOf("?");
         if (-1 != pos) {
@@ -177,7 +181,7 @@ public class QueryParser {
                 return null;
             }
         }
-        
+
         // get first param in strParamOrg
         final String strSplit = "&";
         String[] strParam = strQuery.split(strSplit);

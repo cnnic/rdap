@@ -71,7 +71,10 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
+ * <pre>
  * entity query DAO.
+ * query entity object from database.
+ * </pre>
  * 
  * @author jiashuo
  * 
@@ -190,7 +193,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     
     /**
      * query and set inner entities.
-     * @param entities entities.
+     * @param entities entities which will be set to entity.
      */
     private void queryAndSetInnerEntities(List<Entity> entities) {
         if (null == entities) {
@@ -205,7 +208,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      * query and set network and autnum.
      * 
      * @param entity
-     *            entity.
+     *            entity which will be filled with network and autnum.
      */
     private void queryAndSetNetworksAndAs(Entity entity) {
         List<Network> networks =
@@ -221,7 +224,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     
     /**
      * query and set network and autnum.
-     * @param entities entities.
+     * @param entities entity list.
      */
     private void queryAndSetNetworksAndAs(List<Entity> entities) {
         if (null == entities) {
@@ -233,10 +236,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * query inner objects of entity,and set fill them to entity.
+     * query inner objects of entity,and fill them to entity.
      * 
      * @param entities
-     *            entities.
+     *            entity list.
      */
     private void queryAndSetInnerObjectsWithoutEntities(List<Entity> entities) {
         if (null == entities) {
@@ -251,7 +254,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      * convert entity to vcard and set to entity.
      * 
      * @param entity
-     *            entity.
+     *            entity object.
      */
     private void convertAndSetVcardArray(Entity entity) {
         List<EntityTel> telephones = entityTelDao.query(entity);
@@ -451,9 +454,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      * extract entity ResultSet.
      * 
      * @param rs
-     *            ResultSet.
+     *            ResultSet will be set to entity.
      * @param entity
-     *            entity.
+     *            entity to be set.
      * @throws SQLException
      *             SQLException.
      */
@@ -499,7 +502,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
     
     /**
-     * EntityResultSetExtractor.
+     * EntityResultSetExtractor extract entity from result set.
      * @author jiashuo
      *
      */
@@ -518,10 +521,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * query and set status.
+     * query and set status to entity.
      * 
      * @param entity
-     *            entity.
+     *            entity which will be set.
      */
     private void queryAndSetStatus(Entity entity) {
         List<Entity> models = new ArrayList<Entity>();
@@ -533,10 +536,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * query and set status.
+     * query and set status to entity list.
      * 
      * @param models
-     *            model list.
+     *            entity list which will be filled with status.
      */
     private void queryAndSetStatus(List<Entity> models) {
         List<Long> entityIds = getModelIds(models);
@@ -553,10 +556,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
     
     /**
-     * query and set roles.
+     * query and set roles to entity list.
      * 
      * @param models
-     *            model list.
+     *            entity list which will be filled with roles.
      */
     private void queryAndSetRoles(List<Entity> models) {
         List<Long> entityIds = getModelIds(models);
@@ -573,10 +576,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * query status.
+     * query status from RDAP_ENTITY_STATUS.
      * 
      * @param modelIds
-     *            model id list.
+     *            model id list as the query parameter.
      * @return model status list.
      */
     private List<ModelStatus> queryStatus(List<Long> modelIds) {
@@ -601,9 +604,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
     
     /**
-     * query roles.
-     * @param entityIds entityIds.
-     * @return role list.
+     * query roles from REL_ENTITY_REGISTRATION by entity id.
+     * @param entityIds entity id list to check.
+     * @return entity role list queried from database.
      */
     private List<EntityRole> queryRoles(List<Long> entityIds) {
         if (null == entityIds || entityIds.size() == 0) {
@@ -621,13 +624,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                         return new EntityRole(rs.getLong("ENTITY_ID"), rs
                                 .getString("ENTITY_ROLE"));
                     }
-
                 });
         return result;
     }
 
     /**
-     * 
+     * count the number of result set.
      * @author jiashuo
      * 
      */
@@ -643,11 +645,11 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * search entity, without inner objects.
+     * search entity from RDAP_ENTITY, without inner objects.
      * 
      * @param params
-     *            query parameter.
-     * @return entity list.
+     *            query parameter include entity's name.
+     * @return entity list which will be filled with data.
      */
     private List<Entity> searchWithoutInnerObjects(final QueryParam params) {
         EntityQueryParam entityQueryParam = (EntityQueryParam) params;

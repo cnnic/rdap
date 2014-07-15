@@ -52,7 +52,12 @@ import cn.cnnic.rdap.dao.PolicyDao;
 import cn.cnnic.rdap.service.PolicyControlService;
 
 /**
- * policy control service implementation.
+ * registry policy control service implementation.
+ * 
+ * Requirement from
+ * http://tools.ietf.org/html/draft-ietf-weirds-rdap-sec-06#section-3.4
+ * 
+ * registry rules for disclosure of certain object .
  * 
  * @author weijunkai
  * 

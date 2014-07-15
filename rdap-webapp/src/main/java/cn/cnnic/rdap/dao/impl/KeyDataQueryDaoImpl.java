@@ -88,10 +88,10 @@ public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
     }
 
     /**
-     * query inner objects, and set them to keyData.
+     * query inner objects, and set them to keyData list.
      * 
      * @param keyDataList
-     *            keyData list.
+     *            keyData list which will be set with inner objects.
      */
     private void queryAndSetInnerObjects(List<KeyData> keyDataList) {
         if (null == keyDataList || keyDataList.size() == 0) {
@@ -106,7 +106,7 @@ public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
      * query inner objects, and set them to keyData.
      * 
      * @param keyData
-     *            keyData.
+     *            keyData which will be set with inner objects like event etc.
      */
     private void queryAndSetInnerObjects(KeyData keyData) {
         if (null == keyData) {
@@ -121,9 +121,9 @@ public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
     }
 
     /**
-     * query keyData, without inner objects.
-     * @param outerObjectId outerObjectId.
-     * @return keyData list.
+     * query keyData from RDAP_KEYDATA, without inner objects.
+     * @param outerObjectId outer object id such as domain id.
+     * @return keyData list which will be filled to outer object.
      */
     private List<KeyData> queryWithoutInnerObjects(final Long outerObjectId) {
         final String sql = "select * from REL_SECUREDNS_DSKEY rel,RDAP_KEYDATA"

@@ -55,7 +55,7 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 /**
  * link query DAO.
  * 
- * @author jiashuo.
+ * @author jiashuo
  * 
  */
 @Repository
@@ -82,9 +82,9 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
      * set title to links. This method will modify links.
      * 
      * @param links
-     *            link list
+     *            link list will be filled with title
      * @param linksTitle
-     *            link title
+     *            link title will be set to link
      * @return modified link list
      */
     private List<Link> setTitleToLinks(List<Link> links,
@@ -120,10 +120,10 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
      * find link from link list by link id.
      * 
      * @param linkId
-     *            link id.
+     *            link id
      * @param links
      *            link list
-     * @return link if find, null if not.
+     * @return link if find, null if not
      */
     private Link findLinkFromListById(Long linkId, List<Link> links) {
         if (null == links || null == linkId) {
@@ -138,7 +138,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * query link's title.
+     * query link's title from RDAP_LINK_TITLE by link id.
      * 
      * @param linksIds
      *            link id list.
@@ -166,13 +166,13 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * query link with hreflang.
+     * query link with hreflang as inner objects for outer object.
      * 
      * @param outerObjectId
-     *            object id of outer object.
+     *            object id of outer object
      * @param outerModelType
-     *            model type of outer object.
-     * @return link list.
+     *            model type of outer object
+     * @return link list
      */
     private List<Link> queryLinkWithHreflang(final Long outerObjectId,
             final ModelType outerModelType) {
@@ -197,7 +197,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     /**
      * link ResultSetExtractor extract data from ResultSet.
      * 
-     * @author jiashuo.
+     * @author jiashuo
      * 
      */
     class LinkWithHreflangResultSetExtractor implements
@@ -232,7 +232,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
      * to link.
      * 
      * @param link
-     *          link to encode uri.
+     *          link to encode uri
      */
     private void encodeUriAndSetToLink(Link link) {
         link.setHref(StringUtil.urlEncode(link.getHref()));

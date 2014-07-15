@@ -129,7 +129,7 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
     }
 
     /**
-     * query remark, without inner objects.
+     * query remark from RDAP_NOTICE, without inner objects.
      * 
      * @param outerObjectId
      *            object id of outer object.

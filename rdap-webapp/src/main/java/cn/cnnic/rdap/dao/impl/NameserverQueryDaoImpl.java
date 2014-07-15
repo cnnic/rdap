@@ -110,7 +110,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     private QueryDao<Entity> entityQueryDao;
 
     /**
-     * query inner objects of nameserver,and set object value to them.
+     * query nameserver object as inner objects,and get the list of nameserver.
      * 
      * @param outerObjectId
      *            id from domain.
@@ -197,8 +197,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * query and set entities fro nameserver.
-     * @param ns nameserver.
+     * query entities from database and set them to nameserver.
+     * @param ns nameserver which will be set.
      */
     private void queryAndSetEntities(Nameserver ns) {
         if (ns == null) {
@@ -210,11 +210,11 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * query nameserver, without inner objects.
+     * query nameserver from RDAP_NAMESERVER using punyname, without inner objects.
      * 
      * @param queryParam
-     *            query parameter of Nameserver.
-     * @return nameserver object.
+     *            query parameter of Nameserver include punyname
+     * @return nameserver object
      */
     private Nameserver queryWithoutInnerObjects(QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
@@ -308,7 +308,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     /**
      * query and set entities to nameserver.
      * @param nameservers
-     *          nameserver list.
+     *          nameserver list which will be set with entities.
      */
     private void queryAndSetEntities(List<Nameserver> nameservers) {
         if (null == nameservers) {
@@ -322,8 +322,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     /**
      * get bigDecimal of ip from nameserver query parameter.
      * @param queryParam
-     *            query parameter of nameserver.
-     * @return BigDecimal[] for ip.
+     *            query parameter of nameserver
+     * @return BigDecimal[] for ip
      * 
      * @author weijunkai
      */
@@ -397,10 +397,13 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * search nameserver, without inner objects.
+     * <pre>
+     * search nameservers from RDAP_NAMESERVER, without inner objects.
+     * it can be indexed by ip,or by ldhName.
+     * </pre>
      * 
      * @param queryParam
-     *            query parameter of nameserver.
+     *            query parameter of nameserver include index.
      * @return nameserver list.
      */
     private List<Nameserver> searchWithoutInnerObjects(
@@ -558,7 +561,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * query nameserver status.
+     * query nameserver status from RDAP_NAMESERVER_STATUS by nameserver id.
      * 
      * @param nameserverIds
      *            nameserver id list.

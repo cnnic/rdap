@@ -36,6 +36,7 @@ import cn.cnnic.rdap.bean.Notice;
 
 /**
  * notice DAO.
+ * Interface to access NoticeDaoImpl.
  *
  * @author jiashuo.
  *

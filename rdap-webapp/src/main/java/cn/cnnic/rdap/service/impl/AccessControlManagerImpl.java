@@ -46,6 +46,12 @@ import cn.cnnic.rdap.service.AccessControlManager;
 /**
  * AccessControlManager implementation.
  * 
+ * Requirement from  
+ * http://tools.ietf.org/html/draft-ietf-weirds-rdap-sec-06#section-3.2 .
+ * 
+ * Provide authorization to user and its access object, 
+ * according to Access Control List.
+ * 
  * @author jiashuo
  * 
  */

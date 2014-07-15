@@ -35,6 +35,7 @@ import cn.cnnic.rdap.bean.SecureObject;
 
 /**
  * Access Control List entry dao.
+ * Interface to access AclDaoImpl.
  *
  * @author jiashuo
  *

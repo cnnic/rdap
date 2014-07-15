@@ -68,10 +68,10 @@ public class ConformanceDaoImpl implements ConformanceDao {
     private JdbcTemplate jdbcTemplate;
     
     /**
-     * query conformances.
+     * query conformances from database.
      * 
      * @return List<String>
-     *            conformance list.
+     *            return the queried records to conformance list.
      */
     @Override
     public List<String> queryConformance() {

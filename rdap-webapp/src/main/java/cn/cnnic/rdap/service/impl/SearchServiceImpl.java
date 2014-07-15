@@ -57,6 +57,10 @@ import cn.cnnic.rdap.service.SearchService;
 /**
  * search service implementation.
  * 
+ * RdapController's searching for domain/NS/IP/entity .etc .
+ *  
+ * The result list is paged by 'batchsizeSearch' property.
+ *  
  * @author jiashuo
  * 
  */

@@ -54,7 +54,10 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
+ * <pre>
  * dsData query DAO.
+ * select DsData from database.
+ * </pre>
  * 
  * @author jiashuo
  * 
@@ -103,10 +106,10 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
     }
 
     /**
-     * query inner objects, and set them to dsData.
+     * query inner objects for dsData list.
      * 
      * @param dsDataList
-     *            dsData list.
+     *            dsData list which will be filled with inner objects one by one.
      */
     private void queryAndSetInnerObjects(List<DsData> dsDataList) {
         if (null == dsDataList || dsDataList.size() == 0) {
@@ -121,7 +124,7 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
      * query inner objects, and set them to dsData.
      * 
      * @param dsData
-     *            dsData.
+     *            dsData which will be filled with inner objects.
      */
     private void queryAndSetInnerObjects(DsData dsData) {
         if (null == dsData) {
@@ -136,10 +139,10 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
     }
 
     /**
-     * query dsData, without inner objects.
+     * query dsData from RDAP_DSDATA table, without inner objects.
      * 
-     * @param outerObjectId outerObjectId.
-     * @return dsData list.
+     * @param outerObjectId secure dns id which is used as key while querying.
+     * @return dsData list object without inner objects.
      */
     private List<DsData> queryWithoutInnerObjects(final Long outerObjectId) {
         final String sql = "select * from REL_SECUREDNS_DSKEY rel,"

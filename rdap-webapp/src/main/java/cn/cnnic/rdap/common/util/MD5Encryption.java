@@ -34,7 +34,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * algorithm to use md5.
+ * Algorithm to encrypt with md5.
  * 
  * @author wang
  */
