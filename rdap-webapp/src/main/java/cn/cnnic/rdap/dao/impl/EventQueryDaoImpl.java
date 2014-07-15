@@ -120,7 +120,7 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
     }
 
     /**
-     * query event,without inner objects.
+     * query event from RDAP_EVENT,without inner objects.
      * 
      * @param outerObjectId
      *            outer object id

@@ -35,6 +35,7 @@ import cn.cnnic.rdap.bean.ErrorMessage;
 
 /**
  * error message DAO.
+ * Interface to access ErrorMessageDaoImpl.
  * 
  * @author jiashuo.
  * 

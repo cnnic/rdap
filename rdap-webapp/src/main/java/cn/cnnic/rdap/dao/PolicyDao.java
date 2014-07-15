@@ -35,6 +35,7 @@ import java.util.Set;
 
 /**
  * policy DAO.
+ * Interface to access PolicyDaoImpl.
  * 
  * @author weijunkai
  * 
@@ -43,6 +44,7 @@ public interface PolicyDao {
 
     /**
      * get all policy map.
+     * first String is object,second one is set of fields.
      * 
      * @return map of policy.
      */

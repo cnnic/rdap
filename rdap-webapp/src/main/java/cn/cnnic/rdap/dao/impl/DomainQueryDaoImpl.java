@@ -71,7 +71,10 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
+ * <pre>
  * domain query DAO.
+ * query domain object from database,include inner objects such as nameserver,variants etc.
+ * </pre>
  * 
  * @author jiashuo
  * 
@@ -83,7 +86,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(DomainQueryDaoImpl.class);   
+            .getLogger(DomainQueryDaoImpl.class);
     /**
      * variant dao.
      */
@@ -142,8 +145,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * query domain (RIR or DNR).
      * 
      * @param queryParam
-     *            QueryParam.
-     * @return domain .
+     *            QueryParam include punyname.
+     * @return domain object.
      */
     @Override
     public Domain query(QueryParam queryParam) {
@@ -186,6 +189,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     /**
      * search domain count.
+     * <p>
+     * select the counter number of domain from database.
      * 
      * @param queryParam
      *            QueryParam.
@@ -237,7 +242,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * query domain status.
+     * query domain status from RDAP_DOMAIN_STATUS with domain id.
      * 
      * @param domainIds
      *            domain id list.
@@ -285,7 +290,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * query domain status.
+     * query domain status from RDAP_ARPA_STATUS using domain id.
      * 
      * @param domainIds
      *            domain id list.
@@ -313,7 +318,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * query inner objects of domain,and set fill them to domain.
+     * query inner objects of domain,and set them to domain object.
      * 
      * @param domains
      *            domain list.
@@ -329,7 +334,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * query inner objects of domain,and set fill them to domain.
+     * query inner objects of domain,and set them to domain object.
      * 
      * @param domain
      *            inner objects will be filled.
@@ -364,10 +369,10 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * query and set variants.
+     * query and set variants for domain object.
      * 
      * @param domain
-     *            domain.
+     *            domain object which will be filled with variants.
      */
     private void queryAndSetVariants(Domain domain) {
         if (null == domain) {
@@ -382,7 +387,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * query networks for arpa ,then fill them to domain.
      * 
      * @param domain
-     *            networks will be filled.
+     *            which will be filled with networks.
      */
     private void queryAndSetInnerNetwork(Domain domain) {
         if (null == domain) {
@@ -402,11 +407,14 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * query domain, without inner objects.
+     * query domain by arpa, without inner objects.
+     * <p>
+     * different sql for ipv4 and ipv6.
      * 
      * @param queryParam
-     *            query parameter
+     *            query parameter include punyname
      * @return domain
+     * 			  the domain object without inner objects
      */
     private Domain queryArpaWithoutInnerObjects(QueryParam queryParam) {
 
@@ -500,11 +508,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * query arpa, without inner objects.
+     * query common domain and its status from database, without inner objects.
      * 
      * @param queryParam
-     *            query parameter
+     *            query parameter include punyname.
      * @return domain
+     * 			  object without inner objects.
      */
     private Domain queryDomainWithoutInnerObjects(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
@@ -553,9 +562,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * extract domain from ResultSet.
      * 
      * @param rs
-     *            ResultSet.
+     *            ResultSet extract from.
      * @param domain
-     *            domain.
+     *            domain argument to set.
      * @throws SQLException
      *             SQLException.
      */
@@ -573,9 +582,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * extract arpa from ResultSet.
      * 
      * @param rs
-     *            ResultSet.
+     *            ResultSet which extract arpa from.
      * @param domain
-     *            domain.
+     *            domain argument to set.
      * @throws SQLException
      *             SQLException.
      */
@@ -638,8 +647,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * load arpa domain by id.
      * 
      * @param domainId
-     *            domainId.
-     * @return Domain if exist, null if not.
+     *            domainId argument.
+     * @return Domain if exist in database, return null if not.
      */
     public Domain loadArpaDomain(final Long domainId) {
         if (null == domainId) {
@@ -679,10 +688,10 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     }
 
     /**
-     * search domain, without inner objects.
+     * search domain using punyname or unicodeName, without inner objects.
      * 
      * @param params
-     *            query parameter.
+     *            query parameter include domain punyname.
      * @return domain list.
      */
     private List<Domain> searchWithoutInnerObjects(final QueryParam params) {

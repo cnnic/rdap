@@ -110,7 +110,10 @@ public class AclDaoImpl implements AclDao {
     }
 
     /**
+     * <pre>
      * check if prinicipal has acl entry for secureObject.
+     * select the count number of identity acl from database.
+     * </pre>
      * 
      * @param principal
      *            principal.

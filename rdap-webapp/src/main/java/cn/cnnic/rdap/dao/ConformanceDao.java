@@ -34,6 +34,7 @@ import java.util.List;
 
 /**
  * conformance DAO.
+ * Interface to access ConformanceDaoImpl.
  * 
  * @author weijunkai.
  * 
@@ -41,7 +42,7 @@ import java.util.List;
 public interface ConformanceDao {
 
     /**
-     * get all conformance list.
+     * query all conformance list from database.
      * 
      * @return query list string.
      */

@@ -50,7 +50,11 @@ import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
- * abstract query DAO, base class for all query DAO.
+ * <pre>
+ * This is the abstract class in this package, base class for all query DAO.
+ * Using jdbc to execute sql query.
+ * Pass the query parameter by QueryParam class.
+ * </pre>
  * 
  * @param <T>
  *          object derived from BaseModel.
@@ -196,7 +200,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
         }
     }
     /**
-     * get integer from ResultSet.rs.getInt()will return 0 for null value.
+     * get integer from ResultSet.rs.getInt() will return 0 for null value.
      * 
      * @param rs
      *            ResultSet.

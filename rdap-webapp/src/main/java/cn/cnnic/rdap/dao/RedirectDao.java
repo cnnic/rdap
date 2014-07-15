@@ -34,7 +34,8 @@ import cn.cnnic.rdap.bean.QueryParam;
 import cn.cnnic.rdap.bean.RedirectResponse;
 
 /**
- * redirect DAO interface.
+ * redirect DAO.
+ * Interface to access AutnumRedirectDao DomainRedirectDao NetworkRedirectDao.
  * 
  * @author jiashuo
  * 
@@ -42,7 +43,7 @@ import cn.cnnic.rdap.bean.RedirectResponse;
 public interface RedirectDao {
 
     /**
-     * query redirect.
+     * query redirect object.
      * 
      * @param queryParam
      *            queryParam.
