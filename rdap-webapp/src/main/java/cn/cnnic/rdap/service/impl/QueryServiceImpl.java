@@ -57,14 +57,15 @@ import cn.cnnic.rdap.dao.impl.DomainQueryDaoImpl;
 import cn.cnnic.rdap.dao.impl.NameserverQueryDaoImpl;
 import cn.cnnic.rdap.dao.impl.NetworkQueryDaoImpl;
 import cn.cnnic.rdap.service.QueryService;
-import cn.cnnic.rdap.service.RdapConformanceService;
 
 /**
  * query service implementation.
  * 
- * RdapController's main query service for querying and searching.
+ * RdapController's main query service for querying or searching.
  * 
- * requirement from
+ * Provide the all tlds to be supported
+ * 
+ * Requirement from
  * http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
  * 
  * @author jiashuo
@@ -79,12 +80,6 @@ public class QueryServiceImpl implements QueryService {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(QueryServiceImpl.class);
     
-    /**
-     * rdap conformance service.
-     */
-    @Autowired
-    private RdapConformanceService rdapConformanceService;
-
     /**
      * domain DAO.
      */

@@ -38,6 +38,8 @@ import cn.cnnic.rdap.bean.QueryParam;
 /**
  * search service interface.
  * 
+ * search object list of domain/name server/entity.
+ * 
  * @author jiashuo
  * 
  */
