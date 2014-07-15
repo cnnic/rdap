@@ -1,5 +1,11 @@
 ### Operating environment
 Red Hat Enterprise Linux Server release 5.3; CentOS release 5.7; Windows7; Windows8
+### Api Doc
+    [Api Doc](https://github.com/cnnic/rdap/wiki/Api-Doc)
+### Known Issues
+    [Known Issues](https://github.com/cnnic/rdap/wiki/Known%20Issues)
+### Develop Guide
+    [Develop Guide](https://github.com/cnnic/rdap/wiki/Develop-Guide)
 ### Install Instruction
 1. Install JDK6(Java SE Development Kit 6), or higer verison: [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html)
 (Skip this step if JDK6 already installed)
@@ -91,9 +97,5 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 		curl -H Accept:application/rdap+json http://$RDAP_SERVER_IP:$RDAP_SERVER_PORT/rdap/.well-known/rdap/autnum/2100
 		```
 	It's ok if response contains 'rdapConformance'. 
-
-### [Api Doc](https://github.com/cnnic/rdap/wiki/Api-Doc)
-### [Known Issues](https://github.com/cnnic/rdap/wiki/Known%20Issues)
-### [Develop Guide](https://github.com/cnnic/rdap/wiki/Develop-Guide)
 
 Any questions please [create issue](https://github.com/cnnic/rdap/issues/new) with details.
