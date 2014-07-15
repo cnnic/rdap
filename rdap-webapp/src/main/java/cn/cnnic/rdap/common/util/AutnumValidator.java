@@ -33,7 +33,10 @@ package cn.cnnic.rdap.common.util;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * autnum validator.
+ * <a href='http://www.iana.org/assignments/as-numbers/as-numbers.xhtml'> As
+ * Number</a> validator.
+ * <p>
+ * Not check resolved number.
  * 
  * @author jiashuo
  * 
@@ -67,8 +70,7 @@ public final class AutnumValidator {
      * @return true if valid, false if not
      */
     public static boolean isValidAutnum(String autnum) {
-        if (StringUtils.isBlank(autnum)
-                || autnum.length() > AUTNUM_MAX_LENGTH) {
+        if (StringUtils.isBlank(autnum) || autnum.length() > AUTNUM_MAX_LENGTH) {
             return false;
         }
         if (!autnum.equals(String.valueOf(MIN_AS_NUM))

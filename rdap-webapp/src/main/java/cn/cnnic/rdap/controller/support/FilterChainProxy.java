@@ -22,7 +22,16 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.service.impl.ConnectionControlService;
 
 /**
- * RDAP proxy filter.
+ * The FilterChainProxy is used to do filter for all {@link RdapFilter}.
+ * <p>
+ * All RDAP filters must be initialized in static block below. And filters list
+ * are ordered.
+ * <p>
+ * It will stop execute filter chain whenever preProcess method or postProcess
+ * method in RDAP filter returns false, or throws exception.
+ * <p>
+ * Concurrent query count can't be used as RDAP filter, for it maintains a
+ * global counter, which must be increased and decreased for each request.
  * 
  * @author jiashuo
  * 
@@ -59,15 +68,24 @@ public class FilterChainProxy implements Filter {
     @Override
     public void destroy() {
     }
+
     /**
      * filter chain .
+     * <p>
+     * This method call preProcess method for each RDAP filter in filters,
+     * before call service method, and then call postProcess for each filters.
+     * Filter chain will stop whenever these methods fail.
+     * 
+     * <p>
+     * Concurrent query count must be decreased for each request, WHENEVER the
+     * filter is success or fail.
      * 
      * @param req
      *            request.
      * @param res
      *            response.
      * @param chain
-     *            filterchain.          
+     *            filterchain.
      * @throws IOException
      *             Exception.
      * @throws ServletException
@@ -154,13 +172,14 @@ public class FilterChainProxy implements Filter {
         }
         return true;
     }
+
     /**
      * initialize.
      * 
      * @param config
      *            FilterConfig.
      * @throws ServletException
-     *              exception.            
+     *             exception.
      */
     @Override
     public void init(FilterConfig config) throws ServletException {

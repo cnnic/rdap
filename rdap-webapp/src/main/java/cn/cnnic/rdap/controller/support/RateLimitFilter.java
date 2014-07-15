@@ -14,7 +14,14 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.service.impl.ConnectionControlService;
 
 /**
- * rate limit filter.
+ * This class is used to limit access rate.
+ * <p>
+ * Rate limit is done by compareing the time interval between two request for
+ * each IP address.
+ * <p>
+ * This filter is validate before query service, and do nothing in postProcess.
+ * <p>
+ * If exceed rate limit, it will return HTTP 429 error.
  * 
  * @author jiashuo
  * 
@@ -34,6 +41,7 @@ public class RateLimitFilter implements RdapFilter {
         super();
         LOGGER.debug("init RDAP filter:{}", this.getName());
     }
+
     /**
      * do pre process request address.
      * 
@@ -72,6 +80,7 @@ public class RateLimitFilter implements RdapFilter {
                 RestResponseUtil.createResponse429();
         FilterHelper.writeResponse(responseEntity, response);
     }
+
     /**
      * @return this class name.
      */
@@ -79,6 +88,7 @@ public class RateLimitFilter implements RdapFilter {
     public String getName() {
         return getClass().getSimpleName();
     }
+
     /**
      * do post process.
      * 

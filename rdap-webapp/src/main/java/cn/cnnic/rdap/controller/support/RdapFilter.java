@@ -34,7 +34,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * rdap filter interface.
+ * RDAP filter interface.
+ * <p>
+ * A RDAP filter is an object that performs filtering tasks on either the
+ * request to a resource, or on the response from a resource, or both.
+ * <p>
+ * RDAP filter is called in {@link javax.servlet.Filter#doFilter()}.
+ * 
+ * <p>
+ * Filters perform pre filtering in the <code>preProcess</code> method, and
+ * perform post filterting in the <code>postProcess</code> method. Every Filter
+ * has reference to HttpServletRequest and HttpServletResponse.Each method may
+ * throw Exception.
+ * 
+ * <p>
+ * Filters are configured in {@link FilterChainProxy}.
  * 
  * @author jiashuo
  * 

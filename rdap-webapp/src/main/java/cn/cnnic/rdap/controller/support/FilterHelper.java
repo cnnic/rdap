@@ -46,7 +46,10 @@ import cn.cnnic.rdap.common.util.StringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Filter helper.
+ * Filter helper to write response and HTTP STATUS.
+ * <p>
+ * FilterHelper.writeResponse() is typically used when error occured, writing
+ * error response.
  * 
  * @author jiashuo
  * 
@@ -56,17 +59,18 @@ public final class FilterHelper {
      * constructor.
      */
     private FilterHelper() {
-        
+
     }
+
     /**
-     * write response.
+     * write response for responseEntity.
      * 
      * @param responseEntity
-     *            response entity for error message
+     *            response entity for error message.
      * @param response
-     *            http servlet response
+     *            HttpServletResponse.
      * @throws IOException
-     *             exception of io
+     *             IOException.
      */
     public static void writeResponse(
             ResponseEntity<ErrorMessage> responseEntity,
@@ -91,10 +95,10 @@ public final class FilterHelper {
      * convert bean to JSON format String.
      * 
      * @param object
-     *            bean object
-     * @return string of json
+     *            bean object.
+     * @return string of json.
      * @throws IOException
-     *             exception of io
+     *             exception of io.
      */
     private static String beanToJSON(Object object) throws IOException {
         ObjectMapper mapper = new ObjectMapper();

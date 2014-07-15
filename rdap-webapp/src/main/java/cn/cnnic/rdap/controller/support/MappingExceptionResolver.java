@@ -16,7 +16,12 @@ import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 
 /**
- * handle exception.
+ * This is an
+ * {@link org.springframework.web.servlet.handler.SimpleMappingExceptionResolver}
+ * implementation, that handle
+ * {@link org.springframework.http.InvalidMediaTypeException} and other
+ * exceptions. For InvalidMediaTypeException it will return HTTP 415 error, and
+ * reutrn 500 for all other exceptions.
  * 
  * @author jiashuo
  * 

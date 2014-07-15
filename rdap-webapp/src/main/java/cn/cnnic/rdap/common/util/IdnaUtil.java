@@ -40,7 +40,12 @@ import com.vgrs.xcode.idna.Punycode;
 import com.vgrs.xcode.util.XcodeException;
 
 /**
- * Idna util. rfc5890-5894.
+ * This class is IDN domain validator, by using verisign's IDN util.
+ * <p>
+ * Ref: rfc5890-5894.
+ * 
+ * <p>
+ * This class loading needs much memory, 1024M is suggested.
  * 
  * @author qichao.
  * 

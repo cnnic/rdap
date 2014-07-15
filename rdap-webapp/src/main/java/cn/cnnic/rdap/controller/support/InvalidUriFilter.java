@@ -48,7 +48,21 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
- * filter invalid uri which spring can't catch.
+ * This filter is used to invalid URI.
+ * <p>
+ * Some URI can be seized by spring URL mapping, these URI is validated by this
+ * filter pre spring mapping.
+ * <p>
+ * Now it validates:
+ * 
+ * <pre>
+ *      URI can not be Empty;
+ *      URI can not contain '\';
+ *      URI can not contain '//';
+ *      URI can not contain invalid space;
+ *      URI must starts with '.well-known/rdap';
+ *      If media type in 'Accept' header is 'application/rdap+json';
+ * </pre>
  * 
  * @author jiashuo
  * 
@@ -72,6 +86,7 @@ public class InvalidUriFilter implements RdapFilter {
         super();
         LOGGER.debug("init RDAP filter:{}", this.getName());
     }
+
     /**
      * do pre process url.
      * 
@@ -210,6 +225,7 @@ public class InvalidUriFilter implements RdapFilter {
         }
         return URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
     }
+
     /**
      * do post process.
      * 
@@ -226,6 +242,7 @@ public class InvalidUriFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         return true;
     }
+
     /**
      * @return this class name.
      */

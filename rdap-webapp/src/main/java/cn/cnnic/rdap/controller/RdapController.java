@@ -63,6 +63,7 @@ import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.IpUtil;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
+import cn.cnnic.rdap.controller.support.MappingExceptionResolver;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.AccessControlManager;
 import cn.cnnic.rdap.service.QueryService;
@@ -71,13 +72,30 @@ import cn.cnnic.rdap.service.SearchService;
 import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
 /**
+ * This is the central class in this package.
+ * <p>
  * <pre>
- * This is the central class in this package. 
- * This is Controller for RDAP service - query and search, Conformance to
- * http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
- * 
- * Request:
+ * This class accept request,and then query/search/redirect result.
+ * Ref <a href= 'http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt'>
+ * draft-ietf-weirds-rdap-query</a>.
  * </pre>
+ * <p>
+ * Redirect service is called in this class.
+ * <p>
+ * Access control is checked before return response to client.
+ * <p>
+ * Some columns can not be shown for Policy reason, and this is checked before
+ * return response to client.
+ * <p>
+ * <pre>
+ * This class is use as 'controller' in MVC, and modified by
+ * {@link org.springframework.stereotype.Controller}, so this class MUST under
+ * spring {@link org.springframework.context.annotation.ComponentScan}. 
+ * The spring dispatcher scans such annotated classes for mapped methods and
+ * detects @RequestMapping annotations.
+ * 
+ * <pre>
+ * Request:
  * 
  * <pre>
  *      Only support HTTP 'GET' method.
@@ -101,7 +119,18 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  *      422:unprocessable query parameter for search. See search* method.
  *      429:too many requests.Client should reduce request Frequency.
  *      500:internal server error.
- *      509:bandwith limit exceed.
+ *      509:bandwidth limit exceed.
+ * </pre>
+ * 
+ * <p>
+ * Exception:
+ * 
+ * <pre>
+ *      1.Service Exception is handled in each methods, returning Corresponding HTTP error
+ * code; 
+ *      2.Unchecked Exception is handled in {@link MappingExceptionResolver},so
+ * 'exceptionResolver' with MappingExceptionResolver MUST be configured in spring 
+ *  configuration file, and now this configuration is in spring-servlet.xml;
  * </pre>
  * 
  * @author jiashuo
@@ -564,7 +593,17 @@ public class RdapController {
     }
 
     /**
-     * search nameserver by name.
+     * 
+     * <pre>
+     * search nameserver by name or ip.
+     * URI:/nameservers?name={nsName}  OR /nameservers?ip={ip} 
+     * 
+     * parameter 'ip' can only be precise ip address. 
+     * 
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * <pre>
      * 
      * @param name
      *            is a fully-qualified (relative to the root) domain name
@@ -650,7 +689,14 @@ public class RdapController {
     }
 
     /**
-     * query ip by mask.
+     * <pre>
+     * query ip by ip and mask.
+     * URI:/ip/{ipAddr}/{mask} 
+     * 
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * <pre>
      * 
      * @param ipAddr
      *            the query ip
@@ -667,7 +713,14 @@ public class RdapController {
     }
 
     /**
-     * query ip by address.
+     * <pre>
+     * query ip by ip address.
+     * URI:/ip/{ipAddr} 
+     * 
+     * This service is under permission control, @see AccessControlManager.
+     * This service is under policy control, @see PolicyControlService.
+     * 
+     * <pre>
      * 
      * @param ipAddr
      *            the query ip
@@ -680,7 +733,7 @@ public class RdapController {
     }
 
     /**
-     * invoked by upper functions.
+     * do query ip.
      * 
      * @param ipAddr
      *            the query ip.

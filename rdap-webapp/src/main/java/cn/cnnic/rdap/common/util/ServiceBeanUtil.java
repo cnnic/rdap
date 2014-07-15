@@ -36,7 +36,11 @@ import org.springframework.stereotype.Component;
 import cn.cnnic.rdap.service.IdentityCheckService;
 
 /**
- * RestResponseUtil is used to create ResponseEntity.
+ * This class is facade for services.It has static access method for service.
+ * <p>
+ * Now it only contains {@link IdentityCheckService}.
+ * <p>
+ * Some other service may put into this class.
  * 
  * @author jiashuo
  * 

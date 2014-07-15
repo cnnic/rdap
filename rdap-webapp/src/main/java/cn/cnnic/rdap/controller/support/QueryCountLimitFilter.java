@@ -14,11 +14,16 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.service.impl.ConnectionControlService;
 
 /**
- * concurrent query count limit filter.
+ * Concurrent query count limit filter.
+ * <p>
+ * This class is deprecated, and its service is moved into
+ * {@link FilterChainProxy}, For postProcess can not guarantee to be called
+ * after response.
  * 
  * @author jiashuo
  * 
  */
+@Deprecated
 public class QueryCountLimitFilter implements RdapFilter {
 
     /**
