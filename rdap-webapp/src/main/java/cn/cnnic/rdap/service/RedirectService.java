@@ -36,6 +36,8 @@ import cn.cnnic.rdap.bean.RedirectResponse;
 /**
  * redirect service interface.
  * 
+ * provide methods: is the own url or redirect to domain/AS/IP url.
+ * 
  * @author jiashuo
  * 
  */

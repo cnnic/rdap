@@ -45,7 +45,7 @@ import cn.cnnic.rdap.controller.support.PrincipalHolder;
 /**
  * connection control service.
  * 
- * requirement from
+ * Requirement from
  * http://tools.ietf.org/html/draft-ietf-weirds-rdap-sec-06#section-3.3
  *
  * limit the number of connections.

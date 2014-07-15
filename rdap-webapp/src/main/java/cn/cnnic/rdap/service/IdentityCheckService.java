@@ -34,7 +34,7 @@ import cn.cnnic.rdap.bean.User;
 
 
 /**
- * check user authorization.
+ * check user authorization by user id and password.
  * 
  * @author wang
  */

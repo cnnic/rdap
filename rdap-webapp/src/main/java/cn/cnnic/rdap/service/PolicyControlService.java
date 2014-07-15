@@ -36,6 +36,8 @@ import java.util.Set;
 /**
  * policy control interface.
  * 
+ * load policy and apply policy.
+ * 
  * @author weijunkai
  * 
  */

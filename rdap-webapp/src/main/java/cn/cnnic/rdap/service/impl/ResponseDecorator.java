@@ -43,8 +43,12 @@ import cn.cnnic.rdap.service.RdapConformanceService;
 /**
  * decorate response.
  * 
- * RdapController's query for notice or help.
+ * RdapController's query for rdapconformace, notices or helps,
+ * 
+ * The response should be decorated after query service. 
  *  
+ * @see RdapConformanceService 
+ * @see PolicyControlService
  * @author jiashuo
  * 
  */

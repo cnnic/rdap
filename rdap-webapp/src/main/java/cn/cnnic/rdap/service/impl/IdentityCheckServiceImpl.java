@@ -47,7 +47,7 @@ import cn.cnnic.rdap.service.IdentityCheckService;
  * Requirement from  
  * http://tools.ietf.org/html/draft-ietf-weirds-rdap-sec-06#section-3.1 .
  *
- * Provide basic authentication to user and its object
+ * Provide basic authentication to user and its password.
  * 
  * @author wang
  */
