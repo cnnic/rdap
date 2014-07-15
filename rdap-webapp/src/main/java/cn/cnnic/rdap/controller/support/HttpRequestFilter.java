@@ -45,7 +45,14 @@ import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 
 /**
- * filter HTTP request.
+ * This Filter is used to validate HTTP request.
+ * <p>
+ * Now it validates:
+ * 
+ * <pre>
+ *      If HTTP method is 'GET'.
+ *      If media type in 'Accept' header is 'application/rdap+json'.
+ * </pre>
  * 
  * @author jiashuo
  * 
@@ -79,6 +86,7 @@ public class HttpRequestFilter implements RdapFilter {
         super();
         LOGGER.debug("init RDAP filter:{}", this.getName());
     }
+
     /**
      * do pre process request method.
      * 
@@ -142,6 +150,7 @@ public class HttpRequestFilter implements RdapFilter {
         boolean httpMethodIsValid = ALLOW_METHODS.contains(method);
         return httpMethodIsValid;
     }
+
     /**
      * do post process.
      * 
@@ -158,6 +167,7 @@ public class HttpRequestFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         return true;
     }
+
     /**
      * @return this class name.
      */

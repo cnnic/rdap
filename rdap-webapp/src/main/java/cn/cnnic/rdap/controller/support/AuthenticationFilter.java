@@ -19,9 +19,18 @@ import cn.cnnic.rdap.common.util.ServiceBeanUtil;
 import cn.cnnic.rdap.service.IdentityCheckService;
 
 /**
- * authentication filter, set user id to session after logined.
+ * This class is used to authenticate.
+ * <p>
+ * It support HTTP BASIC.
+ * <p>
+ * Client MUST use HTTPS when use HTTP BASIC authentication.
+ * <p>
+ * After success authentication, an {@link Principal} will be set in request
+ * thread local variable, in PrincipalHolder; And HTTP 401 will be responsed if
+ * fail.
  * 
- * @author
+ * @author cnnic
+ * @author jiashuo
  * 
  */
 public class AuthenticationFilter implements RdapFilter {
@@ -38,6 +47,7 @@ public class AuthenticationFilter implements RdapFilter {
         super();
         LOGGER.debug("init RDAP filter:{}", this.getName());
     }
+
     /**
      * do pre process request authorization.
      * 
@@ -59,8 +69,7 @@ public class AuthenticationFilter implements RdapFilter {
         Principal principal = Principal.getAnonymousPrincipal();
         if (StringUtils.isNotBlank(tempPass)) {
             String authBasicPrefix = "Basic ";
-            if (!StringUtils.startsWithIgnoreCase(tempPass,
-                    authBasicPrefix)) {
+            if (!StringUtils.startsWithIgnoreCase(tempPass, authBasicPrefix)) {
                 writeError401Response(response);
                 return false;
             }
@@ -118,6 +127,7 @@ public class AuthenticationFilter implements RdapFilter {
                 RestResponseUtil.createResponse401();
         FilterHelper.writeResponse(responseEntity, response);
     }
+
     /**
      * do post process.
      * 
@@ -134,6 +144,7 @@ public class AuthenticationFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         return true;
     }
+
     /**
      * @return this class name.
      */

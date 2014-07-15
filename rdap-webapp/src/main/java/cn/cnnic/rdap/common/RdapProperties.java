@@ -32,10 +32,19 @@ package cn.cnnic.rdap.common;
 
 import java.util.List;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+
 import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
- * static properties,load from property file,by spring.
+ * This class contains variables.
+ * <p>
+ * Variables in this class is set by spring, from filr 'rdap.properties'.
+ * <p>
+ * Bean 'rdapProperties' MUST configured in spring configuration file,and now
+ * configuration file is load by {@link PropertyPlaceholderConfigurer}.
+ * <p>
+ * If property is changed, system need restart to reload it.
  * 
  * @author jiashuo
  * 
