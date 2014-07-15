@@ -213,8 +213,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * query nameserver, without inner objects.
      * 
      * @param queryParam
-     *            query parameter of Nameserver.
-     * @return nameserver object.
+     *            query parameter of Nameserver
+     * @return nameserver object
      */
     private Nameserver queryWithoutInnerObjects(QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
@@ -322,8 +322,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     /**
      * get bigDecimal of ip from nameserver query parameter.
      * @param queryParam
-     *            query parameter of nameserver.
-     * @return BigDecimal[] for ip.
+     *            query parameter of nameserver
+     * @return BigDecimal[] for ip
      * 
      * @author weijunkai
      */
