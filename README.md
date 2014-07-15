@@ -99,7 +99,7 @@ Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,c
 ### Develop Guide
 [Develop Guide](https://github.com/cnnic/rdap/wiki/Develop-Guide)
 ### Contribute
-We love contributions! You can fork us on [github](https://github.com/cnnic/rdap).Please refer to [contribution guidelines]() for details.
+We love contributions! You can fork us on [github](https://github.com/cnnic/rdap).Please refer to [contribution guidelines](https://github.com/cnnic/rdap/wiki/Develop-Guide) for details.
 
 
 Any questions please [create issue](https://github.com/cnnic/rdap/issues/new) with details.
