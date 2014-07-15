@@ -50,6 +50,7 @@ import cn.cnnic.rdap.dao.RedirectDao;
 
 /**
  * autnum redirect DAO.
+ * return the redirectResponse.
  * 
  * @author jiashuo
  * 
@@ -67,8 +68,11 @@ public class AutnumRedirectDao implements RedirectDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    /**
+    /**<pre>
      * redirect the autnum.
+     * select data from RDAP_AUTNUM_REDIRECT table.
+     * </pre>
+     * 
      * @param queryParam
      *          the queryParam for autnum.
      * @return RedirectResponse

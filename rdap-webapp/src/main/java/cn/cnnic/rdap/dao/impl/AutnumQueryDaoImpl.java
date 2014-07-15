@@ -170,7 +170,10 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
     }
 
     /**
+     * <pre>
      * query autnum without inner objects.Only in ENTITY.
+     * select data from RDAP_AUTNUM RDAP_AUTNUM_STATUS table.
+     * </pre>
      * 
      * @param outerObjectId
      *            entity id.

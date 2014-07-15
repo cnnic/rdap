@@ -72,7 +72,10 @@ public class PolicyDaoImpl implements PolicyDao {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * query policy Map.
+     * <pre>
+     * query policy to map from RDAP_POLICY.
+     * first string is object,second one is set of fields.
+     * </pre>
      * 
      * @return map of policy.
      */

@@ -33,12 +33,13 @@ package cn.cnnic.rdap.dao;
 import cn.cnnic.rdap.bean.User;
 
 /**
- *
+ * query user identit from database.
+ * Interface to access IndentityCheckDaoImpl.
  * @author wang
  */
 public interface IdentityCheckDao {
     /**
-     * check the user id.
+     * check the user id to identify the user.
      * @param userId
      *      id of user to check.
      * @return

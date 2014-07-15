@@ -85,13 +85,13 @@ public class PublicIdQueryDaoImpl extends AbstractQueryDao<PublicId> {
     }
 
     /**
-     * query variant.
+     * query public id from RDAP_PUBLICID.
      * 
      * @param outerObjectId
      *            object id of outer object.
      * @param outerModelType
-     *            model type.
-     * @return variant list
+     *            model type of outer object.
+     * @return public id list
      */
     private List<PublicId> queryWithoutInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {

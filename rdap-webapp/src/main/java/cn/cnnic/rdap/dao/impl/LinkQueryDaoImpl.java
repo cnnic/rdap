@@ -82,9 +82,9 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
      * set title to links. This method will modify links.
      * 
      * @param links
-     *            link list
+     *            link list will be filled with title
      * @param linksTitle
-     *            link title
+     *            link title will be set to link
      * @return modified link list
      */
     private List<Link> setTitleToLinks(List<Link> links,
@@ -138,7 +138,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * query link's title.
+     * query link's title from RDAP_LINK_TITLE by link id.
      * 
      * @param linksIds
      *            link id list.
@@ -166,7 +166,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     }
 
     /**
-     * query link with hreflang.
+     * query link with hreflang as inner objects for outer object.
      * 
      * @param outerObjectId
      *            object id of outer object

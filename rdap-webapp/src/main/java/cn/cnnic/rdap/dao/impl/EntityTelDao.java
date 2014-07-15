@@ -70,11 +70,11 @@ public class EntityTelDao extends AbstractQueryDao<EntityTel> {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * query entity telephone.
+     * query entity telephone from RDAP_VCARD_TEL using entity id.
      * 
      * @param entity
-     *            entity.
-     * @return EntityTel EntityTel.
+     *            entity object.
+     * @return EntityTel EntityTel list.
      */
     public List<EntityTel> query(final Entity entity) {
         if (null == entity || null == entity.getId()) {

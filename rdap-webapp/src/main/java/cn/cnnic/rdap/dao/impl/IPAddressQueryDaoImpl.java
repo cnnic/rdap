@@ -52,7 +52,10 @@ import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
+ * <pre>
  * IPAddress query DAO.
+ * this ip is for nameserver.
+ * </pre>
  * 
  * @author weijunkai
  * 
@@ -78,11 +81,11 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
     }
 
     /**
-     * query IPAddress, without inner objects.
+     * query IPAddress from RDAP_NAMESERVER_IP for nameserver, without inner objects.
      * 
      * @param outerObjectId
-     *            nsId.
-     * @return IPAddress.
+     *            nameserver id which as the relation with nameserver.
+     * @return IPAddress will be set to nameserver.
      */
     private IPAddress queryWithoutInnerObjects(final Long outerObjectId) {
         final String sql = "select * from RDAP_NAMESERVER_IP nsIP "
@@ -132,6 +135,7 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
 
         /**
          * set ip version,and high/low address.
+         * change them to unsigned long.
          * 
          * @param rs
          *            ResultSet.

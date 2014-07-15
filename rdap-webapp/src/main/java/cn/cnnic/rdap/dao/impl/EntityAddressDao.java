@@ -51,6 +51,7 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
  * entity address query DAO.
+ * select entity address from RDAP_VCARD_ADR for entity.
  * 
  * @author jiashuo
  * 
@@ -69,11 +70,12 @@ public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * query entity address.
+     * query entity address using entity id from RDAP_VCARD_ADR.
      * 
      * @param entity
-     *            entity.
-     * @return EntityAddress list.
+     *            entity which will be filled with entity address.
+     * @return EntityAddress list
+     * 			  which will be set to entity.
      */
     public List<EntityAddress> query(final Entity entity) {
         LOGGER.debug("query, entity:{}", entity);
@@ -120,9 +122,9 @@ public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
      * extract address from ResultSet.
      * 
      * @param rs
-     *            ResultSet.
+     *            ResultSet is the result set select from database.
      * @param address
-     *            address.
+     *            Entity address which will be filled with data.
      * @throws SQLException
      *             SQLException.
      */

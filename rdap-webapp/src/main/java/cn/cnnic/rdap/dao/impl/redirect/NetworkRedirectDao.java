@@ -68,7 +68,7 @@ public class NetworkRedirectDao implements RedirectDao {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * redirect the network.
+     * redirect the network by select object from RDAP_IP_REDIRECT.
      * @param queryParam
      *          the queryParam for network.
      * @return RedirectResponse

@@ -71,7 +71,7 @@ public class DomainRedirectDao implements RedirectDao {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * redirect the domain.
+     * redirect the domain by select object from RDAP_DOMAIN_REDIRECT.
      * @param queryParam
      *          parameter for domain query.
      * @return RedirectResponse

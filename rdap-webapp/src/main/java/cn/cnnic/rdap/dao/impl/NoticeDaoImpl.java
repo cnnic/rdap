@@ -149,7 +149,7 @@ public class NoticeDaoImpl implements NoticeDao {
     }
 
     /**
-     * query notice, without inner objects.
+     * query notice from RDAP_NOTICE, without inner objects.
      * @param type notice type.
      * @return notice list
      */

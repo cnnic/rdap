@@ -109,9 +109,9 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
      * add variant to variants list.
      * 
      * @param variant
-     *            variant.
+     *            variant will be added.
      * @param variantsList
-     *            variantsList.
+     *            variants list.
      */
     private void addVariantToVariantsList(Variant variant,
             List<Variants> variantsList) {
@@ -136,7 +136,7 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
     }
 
     /**
-     * query variant.
+     * query variant from RDAP_VARIANT.
      * 
      * @param outerObjectId
      *            object id of outer object.
@@ -192,10 +192,10 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
      * find variant from list.
      * 
      * @param variantId
-     *            variantId.
+     *            variant id.
      * @param variantList
-     *            variantList.
-     * @return variant if exist,null if not.
+     *            variant list.
+     * @return variant if exist,return null if not.
      */
     private Variant findVariantFromList(Long variantId,
             List<Variant> variantList) {
