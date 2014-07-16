@@ -35,6 +35,7 @@ import cn.cnnic.rdap.bean.BaseModel;
 /**
  * Access Control Manager.
  * 
+ * According to Access Control List
  * 
  * @author jiashuo
  * 

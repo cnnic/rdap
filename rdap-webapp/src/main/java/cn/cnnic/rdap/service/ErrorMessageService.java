@@ -37,6 +37,10 @@ import cn.cnnic.rdap.bean.ErrorMessage;
 /**
  * error message interface.
  * 
+ * query error codes and messages user defined.
+ * 
+ * used in rdapController initialization.
+ * 
  * @author jiashuo
  * 
  */

@@ -50,7 +50,16 @@ import ezvcard.util.TelUri;
 import ezvcard.util.TelUri.Builder;
 
 /**
- * Jcard util, see draft-ietf-jcardcal-jcard.
+ * This class is used to convert <a href='http://tools.ietf.org/html/rfc6350'>
+ * VCARD</a> to JSON string, see <a
+ * href='http://tools.ietf.org/html/draft-ietf-jcardcal-jcard-07'>
+ * draft-ietf-jcardcal-jcard</a>.
+ * <p>
+ * This class use <a href='https://code.google.com/p/ez-vcard'>ezvcard</a> to
+ * convert VCARD to JSON.
+ * 
+ * <p>
+ * Content will not be converted if exception occured.
  * 
  * @author jiashuo
  * 
@@ -183,8 +192,7 @@ public final class JcardUtil {
             }
             return telBuilder.build();
         } catch (Exception e) {
-            LOGGER.error("buildTelUri error:{} for tel:{}",
-                    e.getMessage(), tel);
+            LOGGER.error("buildTelUri error:{} for tel:{}", e.getMessage(), tel);
         }
         return null;
     }

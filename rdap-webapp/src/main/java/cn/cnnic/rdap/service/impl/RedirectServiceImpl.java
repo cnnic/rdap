@@ -46,10 +46,10 @@ import cn.cnnic.rdap.service.RedirectService;
 /**
  * redirect service implementation.
  * 
- * requirement from
- * http://tools.ietf.org/html/draft-ietf-weirds-redirects-04
+ * Requirement from
+ * http://tools.ietf.org/html/draft-ietf-weirds-redirects-04.
  * 
- * redirect for domain/IP/AS
+ * get redirect url for domain/IP/AS .
  * 
  * @author jiashuo
  * 

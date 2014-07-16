@@ -40,7 +40,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * domain util.
+ * Domain util.
+ * <p>
+ * This class contains DNR domain and RIR domain validator,and puny name
+ * generator.
+ * <p>
+ * This class support IDN domain,by using verisign's IDN util, see
+ * {@link IdnaUtil}.
  * 
  * @author jiashuo
  * 
@@ -100,12 +106,12 @@ public final class DomainUtil {
      * 0x0020.
      */
     public static final String BLANK_IN_DOMAIN = " ";
-    
+
     /**
      * \u3002\uff0e\uff61.
      */
     public static final java.lang.String DISALLOWED_DELIMITERS = "。．｡";
-    
+
     /**
      * check if domainName is valid arpa domain.
      * 
@@ -146,9 +152,9 @@ public final class DomainUtil {
         if (!domainName.endsWith(IPV4_ARPA_SUFFIX)) {
             return false;
         }
-        domainName = StringUtils.removeEndIgnoreCase(domainName,
-                IPV4_ARPA_SUFFIX);
-        String ipV4ArpaReg = 
+        domainName =
+                StringUtils.removeEndIgnoreCase(domainName, IPV4_ARPA_SUFFIX);
+        String ipV4ArpaReg =
                 "^((1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.){1,4}$";
         if (domainName.matches(ipV4ArpaReg)) {
             return true;
@@ -171,8 +177,8 @@ public final class DomainUtil {
         if (!domainName.endsWith(IPV6_ARPA_SUFFIX)) {
             return false;
         }
-        domainName = StringUtils.removeEndIgnoreCase(domainName,
-                IPV6_ARPA_SUFFIX);
+        domainName =
+                StringUtils.removeEndIgnoreCase(domainName, IPV6_ARPA_SUFFIX);
         // match
         // b.a.9.8.7.6.5.0.4.0.0.0.3.0.0.0.2.0.0.0.1.0.0.0.0.0.0.0.1.2.3.4.
         String ipV6ArpaReg = "^([\\d|a|b|c|d|e|f]\\.){1,32}$";
@@ -242,49 +248,49 @@ public final class DomainUtil {
      * @return true if is valid IDNA2008 domain, false if not.
      */
     public static boolean validateSearchStringIsValidIdna(String searchString) {
-        
-        // searchString should not be null or empty 
+
+        // searchString should not be null or empty
         if (StringUtils.isBlank(searchString)) {
             return false;
-        }        
+        }
         // should NOT contains 0x0020
         if (searchString.contains(BLANK_IN_DOMAIN)) {
             return false;
         }
         // only one * in search string
-        if (1 < StringUtils.countMatches(searchString, 
-                                StringUtil.ASTERISK)) {
+        if (1 < StringUtils.countMatches(searchString, StringUtil.ASTERISK)) {
             return false;
-        }        
+        }
         // '*' is replaced with no char
-        String domainName = searchString.replace(StringUtil.ASTERISK, ""); 
+        String domainName = searchString.replace(StringUtil.ASTERISK, "");
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        }        
-        // '*' is replaced with  dot
-        domainName = searchString.replace(StringUtil.ASTERISK, 
-                                StringUtil.TLD_SPLITOR); 
+        }
+        // '*' is replaced with dot
+        domainName =
+                searchString.replace(StringUtil.ASTERISK,
+                        StringUtil.TLD_SPLITOR);
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        }        
+        }
         // '*' is replaced with a digit or an alphabet, like '1'
-        domainName = searchString.replace(StringUtil.ASTERISK, "1"); 
+        domainName = searchString.replace(StringUtil.ASTERISK, "1");
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        } 
+        }
         // '*' means '.' plus letter/digit
-        domainName = searchString.replace("*", ".1"); 
+        domainName = searchString.replace("*", ".1");
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        } 
+        }
         // '*' means [letter/digit][.][letter/digit]
-        domainName = searchString.replace("*", "1.1"); 
+        domainName = searchString.replace("*", "1.1");
         if (validateDomainNameIsValidIdna(domainName)) {
             return true;
-        } 
+        }
         return false;
     }
-    
+
     /**
      * remove the last '.' in paramStr.
      * 
@@ -406,8 +412,9 @@ public final class DomainUtil {
         }
         String result = str;
         try {
-            result = new String(str.getBytes(StringUtil.CHAR_SET_ISO8859),
-                    StringUtil.CHAR_SET_UTF8);
+            result =
+                    new String(str.getBytes(StringUtil.CHAR_SET_ISO8859),
+                            StringUtil.CHAR_SET_UTF8);
         } catch (UnsupportedEncodingException e) {
             LOGGER.error(e.getMessage());
         }
@@ -437,8 +444,9 @@ public final class DomainUtil {
                 return false;
             }
         }
-        String ldhReg = "^(?!-)(?!.*?-$)([0-9a-zA-Z][0-9a-zA-Z-]{0,62}\\.)+"
-                + "[0-9a-zA-Z][0-9a-zA-Z-]{0,62}$";
+        String ldhReg =
+                "^(?!-)(?!.*?-$)([0-9a-zA-Z][0-9a-zA-Z-]{0,62}\\.)+"
+                        + "[0-9a-zA-Z][0-9a-zA-Z-]{0,62}$";
         if (domainWithoutLastPoint.matches(ldhReg)) {
             return true;
         }
@@ -457,11 +465,11 @@ public final class DomainUtil {
             return false;
         }
         if (domainWithoutLastDot.length() < MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT
-        || domainWithoutLastDot.length() > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
+                || domainWithoutLastDot.length() > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
             return false;
         }
         return true;
-        
+
     }
 
     /**

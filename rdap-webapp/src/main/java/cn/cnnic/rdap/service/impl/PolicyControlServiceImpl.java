@@ -57,7 +57,7 @@ import cn.cnnic.rdap.service.PolicyControlService;
  * Requirement from
  * http://tools.ietf.org/html/draft-ietf-weirds-rdap-sec-06#section-3.4
  * 
- * registry can make rule for some properties' disclosure   
+ * registry rules for disclosure of certain object .
  * 
  * @author weijunkai
  * 

@@ -45,11 +45,19 @@ import org.springframework.stereotype.Component;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.service.ErrorMessageService;
-import cn.cnnic.rdap.service.impl.ResponseDecorator;
 import cn.cnnic.rdap.service.PolicyControlService;
+import cn.cnnic.rdap.service.impl.ResponseDecorator;
 
 /**
- * RestResponseUtil is used to create ResponseEntity.
+ * This class is used to create ResponseEntity for some HTTP code and HTTP
+ * header.
+ * 
+ * <p>
+ * ResponseEntity contains error message for each HTTP code, and these messages
+ * is load from database when system start up, filling to 'errorMessageMap'
+ * variable.
+ * <p>
+ * If error message is not found, empty message will be returned.
  * 
  * @author jiashuo
  * 
@@ -71,7 +79,7 @@ public class RestResponseUtil {
      * for response object.
      */
     private static ResponseDecorator responseDecorator;
-    
+
     /**
      * for policy service.
      */
@@ -86,7 +94,7 @@ public class RestResponseUtil {
         initPolicyService();
         initConformanceService();
     }
-    
+
     /**
      * init conformance service.
      */
@@ -100,7 +108,7 @@ public class RestResponseUtil {
     public static void initPolicyService() {
         policyService.initAllPolicyByMap();
     }
-    
+
     /**
      * init ErrorMessages list.
      */
@@ -294,8 +302,7 @@ public class RestResponseUtil {
      *            error message service to set.
      */
     @Autowired
-    public void setErrorMessageService(
-            ErrorMessageService errorMessageService) {
+    public void setErrorMessageService(ErrorMessageService errorMessageService) {
         RestResponseUtil.errorMessageService = errorMessageService;
     }
 
@@ -309,6 +316,7 @@ public class RestResponseUtil {
     public void setResponseDecorator(ResponseDecorator responseDecorator) {
         RestResponseUtil.responseDecorator = responseDecorator;
     }
+
     /**
      * policy service.
      * 

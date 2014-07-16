@@ -33,7 +33,13 @@ package cn.cnnic.rdap.controller.support;
 import cn.cnnic.rdap.bean.Principal;
 
 /**
- * thread local principal holder.
+ * This class is used to hold principal for each request.
+ * <p>
+ * Principal is maintains in {@link java.lang.ThreadLocal} variable.
+ * <p>
+ * PrincipalHolder.setPrincipal() is typically used when a request is comming,
+ * and PrincipalHolder.remove() is used after response is send to client.
+ * <p>
  * 
  * @author jiashuo
  * 
@@ -50,8 +56,8 @@ public final class PrincipalHolder {
     /**
      * thread local principal.
      */
-    private static final ThreadLocal<Principal> PRINCIPAL
-        = new ThreadLocal<Principal>();
+    private static final ThreadLocal<Principal> PRINCIPAL =
+            new ThreadLocal<Principal>();
 
     /**
      * set principal.
