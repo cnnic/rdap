@@ -45,7 +45,8 @@ import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.dao.ErrorMessageDao;
 
 /**
- * error message DAO implementation.
+ * error message DAO implementation get all error messages from database
+ * while the system is starting.
  * 
  * @author jiashuo
  * 

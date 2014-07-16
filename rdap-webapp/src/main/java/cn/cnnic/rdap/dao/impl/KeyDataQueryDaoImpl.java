@@ -54,8 +54,10 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * keyData query DAO.
- * 
+ * <pre>
+ * keyData query DAO select keydata information for domain.
+ * keyData has event and link as inner objects.
+ * </pre>
  * @author jiashuo
  * 
  */

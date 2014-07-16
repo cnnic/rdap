@@ -48,7 +48,10 @@ import org.springframework.stereotype.Repository;
 import cn.cnnic.rdap.dao.ConformanceDao;
 
 /**
- * conformance query DAO.
+ * <pre>
+ * conformance query DAO mainly select conformance information from RDAP_CONFORMANCE.
+ * these information will be valid after restart the system.
+ * </pre>
  * 
  * @author weijunkai
  * 
