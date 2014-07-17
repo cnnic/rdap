@@ -59,7 +59,7 @@ import ezvcard.util.TelUri.Builder;
  * convert VCARD to JSON.
  * 
  * <p>
- * Content will not be converted if exception occured.
+ * Content will not be converted if exception occurred.
  * 
  * @author jiashuo
  * 
@@ -192,7 +192,7 @@ public final class JcardUtil {
             }
             return telBuilder.build();
         } catch (Exception e) {
-            LOGGER.error("buildTelUri error:{} for tel:{}", e.getMessage(), tel);
+            LOGGER.error("buildTelUri error:{} tel:{}", e.getMessage(), tel);
         }
         return null;
     }
