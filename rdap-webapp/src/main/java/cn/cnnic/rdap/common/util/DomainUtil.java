@@ -386,7 +386,7 @@ public final class DomainUtil {
      *            string.
      * @return String decoded string.
      */
-    private static String urlDecode(String str) {
+    public static String urlDecode(String str) {
         if (StringUtils.isBlank(str)) {
             return str;
         }

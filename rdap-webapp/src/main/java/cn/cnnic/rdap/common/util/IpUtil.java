@@ -46,7 +46,7 @@ import com.googlecode.ipv6.IPv6Address;
  * This class contains methods to validate IP
  * address:isIpV4StrValid,isIpV6StrValid.
  * <p>
- * IP address is stored in number format, for fast compareing reason.This class
+ * IP address is stored in number format, for fast comparing reason.This class
  * contains methods to convert IP address string to number, and number to
  * string:ipToLong, ipV6ToLong,longToIpV4,longToIpV6.
  * 

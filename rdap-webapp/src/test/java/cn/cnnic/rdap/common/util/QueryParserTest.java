@@ -57,6 +57,19 @@ public class QueryParserTest extends BaseTest {
      * test valid autnum of one number
      */
     @Test
+    public void testGetRealParamInPath() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addParameter("", "");
+        request.setRequestURI("/domain/cnnic.cn%1a");
+        String paramV = queryParser.getLastSplitInURI(request);
+        assertNotNull(paramV);
+        assertEquals("cnnic.cn%1a", paramV);
+    }
+
+    /**
+     * test valid autnum of one number
+     */
+    @Test
     public void testParseQ() {
         String q = "3";
         QueryParam queryParam = queryParser.parseQueryParam(q);

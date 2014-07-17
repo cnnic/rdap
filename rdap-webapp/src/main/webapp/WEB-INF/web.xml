@@ -20,7 +20,7 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>FilterChainProxy</filter-name>
-		<url-pattern>/.well-known/rdap/*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<servlet>
 		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
