@@ -117,6 +117,20 @@ public final class StringUtil {
      * max entity handle length.
      */
     public static final int MAX_ENTITY_HANDLE_LENGTH = 253;
+    
+    /**
+     * check if decodeUri contain non-ascii-printable chars.
+     * 
+     * @param decodeUri
+     *            decodeUri
+     * @return true if contains,false if not.
+     */
+    public static boolean containNonAsciiPrintableChars(String decodeUri) {
+        if (StringUtils.isBlank(decodeUri)) {
+            return false;
+        }
+        return !StringUtils.isAsciiPrintable(decodeUri);
+    }
 
     /**
      * generate url encoded redirect URL.
