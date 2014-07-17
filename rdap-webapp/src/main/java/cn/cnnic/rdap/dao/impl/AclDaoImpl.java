@@ -48,7 +48,10 @@ import cn.cnnic.rdap.bean.SecureObject;
 import cn.cnnic.rdap.dao.AclDao;
 
 /**
- * AclDao implementation.
+ * <pre>
+ * AclDao implementation mainly select the count of specified object 
+ * from RDAP_IDENTITY_ACL and RDAP_IDENTITY_USER_REL_ROLE.
+ * </pre>
  * 
  * @author jiashuo
  * 

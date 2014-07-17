@@ -53,8 +53,8 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
  * <pre>
- * IPAddress query DAO.
- * this ip is for nameserver.
+ * IPAddress query DAO select IPAddress from RDAP_NAMESERVER_IP.
+ * the selected ip is for nameserver.
  * </pre>
  * 
  * @author weijunkai

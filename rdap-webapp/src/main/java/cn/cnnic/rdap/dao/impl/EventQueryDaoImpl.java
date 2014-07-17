@@ -52,7 +52,8 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * remark query DAO.
+ * event query DAO select event objects from RDAP_EVENT.
+ * it is used as the inner object of others,and has link as inner object.
  * 
  * @author jiashuo
  * 

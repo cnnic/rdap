@@ -56,7 +56,10 @@ import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * notice query DAO.
+ * notice query DAO select notice object from RDAP_NOTICE.
+ * <p>
+ * and set the notice object before domain nameserver entity 
+ * network object etc.
  * 
  * @author jiashuo
  * 

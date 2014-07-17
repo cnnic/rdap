@@ -48,7 +48,10 @@ import cn.cnnic.rdap.dao.RedirectDao;
 import cn.cnnic.rdap.dao.impl.NetworkQueryDaoImpl;
 
 /**
- * network redirect DAO.
+ * <pre>
+ * network redirect DAO mainly select network object from RDAP_IP_REDIRECT.
+ * query method overrite the counterpart in RedirectDao.
+ * </pre>
  * 
  * @author jiashuo
  * 
