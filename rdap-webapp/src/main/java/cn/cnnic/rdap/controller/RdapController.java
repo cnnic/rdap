@@ -74,6 +74,7 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
 /**
  * This is the central class in this package.
  * <p>
+ * 
  * <pre>
  * This class accept request,and then query/search/redirect result.
  * Ref <a href= 'http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt'>
@@ -87,6 +88,7 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * Some columns can not be shown for Policy reason, and this is checked before
  * return response to client.
  * <p>
+ * 
  * <pre>
  * This class is use as 'controller' in MVC, and modified by
  * {@link org.springframework.stereotype.Controller}, so this class MUST under
@@ -94,7 +96,7 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * The spring dispatcher scans such annotated classes for mapped methods and
  * detects @RequestMapping annotations.
  * 
- * <pre>
+ * </pre>
  * Request:
  * 
  * <pre>
@@ -126,11 +128,12 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * Exception:
  * 
  * <pre>
- *      1.Service Exception is handled in each methods, returning Corresponding HTTP error
- * code; 
+ *      1.Service Exception is handled in each methods, returning Corresponding
+ *        HTTP error code; 
  *      2.Unchecked Exception is handled in {@link MappingExceptionResolver},so
- * 'exceptionResolver' with MappingExceptionResolver MUST be configured in spring 
- *  configuration file, and now this configuration is in spring-servlet.xml;
+ *        'exceptionResolver' with MappingExceptionResolver MUST be configured 
+ *        in spring configuration file, and now this configuration is in 
+ *        spring-servlet.xml;
  * </pre>
  * 
  * @author jiashuo
@@ -200,7 +203,7 @@ public class RdapController {
      * This service is not under permission control.
      * This service is not under policy control.
      * 
-     * <pre>
+     * </pre>
      * @param request
      *            HttpServletRequest.
      * @param response
@@ -210,10 +213,11 @@ public class RdapController {
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ResponseEntity queryHelp(HttpServletRequest request,
             HttpServletResponse response) {
-        LOGGER.debug("help");
-
-        Help result =
-                queryService.queryHelp(queryParser.parseQueryParam("HELP"));
+        String lastSpliInURI = queryParser.getLastSplitInURI(request);
+        if (!"help".equals(lastSpliInURI)) {
+            return RestResponseUtil.createResponse400();
+        }
+        Help result = queryService.queryHelp(queryParser.parseQueryParam(""));
         if (null != result) {
             // No permission control
             responseDecorator.decorateResponseForHelp(result);
@@ -229,7 +233,7 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param handle
      *            entity handle.
@@ -243,6 +247,7 @@ public class RdapController {
     public ResponseEntity queryEntity(@PathVariable String handle,
             HttpServletRequest request, HttpServletResponse response) {
         LOGGER.debug("query entity,handle:" + handle);
+        handle = queryParser.getLastSplitInURI(request);
         handle = StringUtils.trim(handle);
         if (!StringUtil.isValidEntityHandleOrName(handle)) {
             return RestResponseUtil.createResponse400();
@@ -270,7 +275,7 @@ public class RdapController {
      * and other parameters will be ignored.
      * Parameter will be trimed.
      * 
-     * <pre>
+     * </pre>
      * @param fn
      *            fn.
      * @param handle
@@ -285,6 +290,10 @@ public class RdapController {
                     @RequestParam(required = false) String handle,
                     HttpServletRequest request) {
         LOGGER.debug("search entities.fn:{},handle:{}", fn, handle);
+        String lastSpliInURI = queryParser.getLastSplitInURI(request);
+        if (!"entities".equals(lastSpliInURI)) {
+            return RestResponseUtil.createResponse400();
+        }
         final String fnParamName = "fn";
         final String handleParamName = "handle";
         String paramName =
@@ -327,7 +336,7 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param autnum
      *            an AS Plain autonomous system number [RFC5396].
@@ -341,6 +350,7 @@ public class RdapController {
     public ResponseEntity queryAs(@PathVariable String autnum,
             HttpServletRequest request, HttpServletResponse response) {
         LOGGER.debug("query autnum:" + autnum);
+        autnum = queryParser.getLastSplitInURI(request);
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
@@ -378,19 +388,23 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param domainName
      *            is a fully-qualified (relative to the root) domain name
      *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
      *            RIRs) or a fully-qualified domain name in a zone administered
      *            by the server operator (for DNRs).
+     * @param request
+     *            request.
      * @return JSON formated result,with HTTP code.
      */
     @RequestMapping(value = { "/domain/{domainName}" },
             method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryDomain(@PathVariable String domainName) {
+    public ResponseEntity queryDomain(@PathVariable String domainName,
+            HttpServletRequest request) {
+        domainName = queryParser.getLastSplitInURI(request);
         String decodeDomain = domainName;
         String punyDomainName = decodeDomain;
         try {
@@ -473,7 +487,7 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * @param name
      *            is a fully-qualified (relative to the root) domain name
      *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
@@ -490,6 +504,10 @@ public class RdapController {
     public ResponseEntity searchDomain(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
+        String lastSpliInURI = queryParser.getLastSplitInURI(request);
+        if (!"domains".equals(lastSpliInURI)) {
+            return RestResponseUtil.createResponse400();
+        }
         name = queryParser.getParameter(request, "name");
         String decodeDomain = name;
         try {
@@ -532,19 +550,23 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param nameserverName
      *            represents information regarding DNS name servers used in both
      *            forward and reverse DNS. RIRs and some DNRs register or expose
      *            nameserver information as an attribute of a domain name, while
      *            other DNRs model nameservers as "first class objects".
+     * @param request
+     *            request.
      * @return JSON formatted result,with HTTP code.
      */
     @RequestMapping(value = { "/nameserver/{nameserverName}" },
             method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryNameserver(@PathVariable String nameserverName) {
+    public ResponseEntity queryNameserver(@PathVariable String nameserverName,
+            HttpServletRequest request) {
+        nameserverName = queryParser.getLastSplitInURI(request);
         String decodeNS = nameserverName;
         String punyNSName = decodeNS;
         try {
@@ -603,7 +625,7 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param name
      *            is a fully-qualified (relative to the root) domain name
@@ -621,10 +643,14 @@ public class RdapController {
     public ResponseEntity searchNameserver(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
+        String lastSpliInURI = queryParser.getLastSplitInURI(request);
+        if (!"nameservers".equals(lastSpliInURI)) {
+            return RestResponseUtil.createResponse400();
+        }
         final String strIp = "ip";
         final String strName = "name";
         NameserverQueryParam nsQueryParam = null;
-        final String[] strParamOrg = { strIp, strName };
+        final String[] strParamOrg = {strIp, strName };
         String nameParam = queryParser.getFirstParameter(request, strParamOrg);
         if (StringUtils.isBlank(nameParam)) {
             return RestResponseUtil.createResponse400();
@@ -649,8 +675,8 @@ public class RdapController {
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
                 decodeNameserver =
-                        DomainUtil
-                                .decodeAndReplaceAsciiToLowercase(decodeNameserver);
+                DomainUtil
+                    .decodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
@@ -696,19 +722,23 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param ipAddr
      *            the query ip
      * @param mask
      *            the ip mask
+     * @param request
+     *            request.
      * @return JSON formatted result,with HTTP code.
      */
     @RequestMapping(value = { "/ip/{ipAddr}/{mask}" },
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryIpWithMask(@PathVariable String ipAddr,
-            @PathVariable String mask) {
+            @PathVariable String mask, HttpServletRequest request) {
+        ipAddr = queryParser.getLastSecondSplitInURI(request);
+        mask = queryParser.getLastSplitInURI(request);
         return queryIpAddress(ipAddr, mask, ipAddr + "/" + mask);
     }
 
@@ -720,15 +750,19 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param ipAddr
      *            the query ip
+     * @param request
+     *            request.
      * @return ResponseEntity
      */
     @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryIp(@PathVariable String ipAddr) {
+    public ResponseEntity queryIp(@PathVariable String ipAddr,
+            HttpServletRequest request) {
+        ipAddr = queryParser.getLastSplitInURI(request);
         return queryIpAddress(ipAddr, "", ipAddr);
     }
 

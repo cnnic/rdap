@@ -298,12 +298,12 @@ public class RestResponseUtil {
     /**
      * set error message service.
      * 
-     * @param errorMessageService
+     * @param errorMsgService
      *            error message service to set.
      */
     @Autowired
-    public void setErrorMessageService(ErrorMessageService errorMessageService) {
-        RestResponseUtil.errorMessageService = errorMessageService;
+    public void setErrorMessageService(ErrorMessageService errorMsgService) {
+        RestResponseUtil.errorMessageService = errorMsgService;
     }
 
     /**
