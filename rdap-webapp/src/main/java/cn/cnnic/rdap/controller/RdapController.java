@@ -96,7 +96,7 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * The spring dispatcher scans such annotated classes for mapped methods and
  * detects @RequestMapping annotations.
  * 
- * <pre>
+ * </pre>
  * Request:
  * 
  * <pre>
@@ -128,11 +128,12 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * Exception:
  * 
  * <pre>
- *      1.Service Exception is handled in each methods, returning Corresponding HTTP error
- * code; 
+ *      1.Service Exception is handled in each methods, returning Corresponding
+ *        HTTP error code; 
  *      2.Unchecked Exception is handled in {@link MappingExceptionResolver},so
- * 'exceptionResolver' with MappingExceptionResolver MUST be configured in spring 
- *  configuration file, and now this configuration is in spring-servlet.xml;
+ *        'exceptionResolver' with MappingExceptionResolver MUST be configured 
+ *        in spring configuration file, and now this configuration is in 
+ *        spring-servlet.xml;
  * </pre>
  * 
  * @author jiashuo
@@ -202,7 +203,7 @@ public class RdapController {
      * This service is not under permission control.
      * This service is not under policy control.
      * 
-     * <pre>
+     * </pre>
      * @param request
      *            HttpServletRequest.
      * @param response
@@ -232,7 +233,7 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param handle
      *            entity handle.
@@ -274,7 +275,7 @@ public class RdapController {
      * and other parameters will be ignored.
      * Parameter will be trimed.
      * 
-     * <pre>
+     * </pre>
      * @param fn
      *            fn.
      * @param handle
@@ -331,7 +332,7 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param autnum
      *            an AS Plain autonomous system number [RFC5396].
@@ -383,13 +384,15 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param domainName
      *            is a fully-qualified (relative to the root) domain name
      *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
      *            RIRs) or a fully-qualified domain name in a zone administered
      *            by the server operator (for DNRs).
+     * @param request
+     *            request.
      * @return JSON formated result,with HTTP code.
      */
     @RequestMapping(value = { "/domain/{domainName}" },
@@ -480,7 +483,7 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * @param name
      *            is a fully-qualified (relative to the root) domain name
      *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
@@ -539,13 +542,15 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param nameserverName
      *            represents information regarding DNS name servers used in both
      *            forward and reverse DNS. RIRs and some DNRs register or expose
      *            nameserver information as an attribute of a domain name, while
      *            other DNRs model nameservers as "first class objects".
+     * @param request
+     *            request.
      * @return JSON formatted result,with HTTP code.
      */
     @RequestMapping(value = { "/nameserver/{nameserverName}" },
@@ -612,7 +617,7 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param name
      *            is a fully-qualified (relative to the root) domain name
@@ -633,7 +638,7 @@ public class RdapController {
         final String strIp = "ip";
         final String strName = "name";
         NameserverQueryParam nsQueryParam = null;
-        final String[] strParamOrg = { strIp, strName };
+        final String[] strParamOrg = {strIp, strName };
         String nameParam = queryParser.getFirstParameter(request, strParamOrg);
         if (StringUtils.isBlank(nameParam)) {
             return RestResponseUtil.createResponse400();
@@ -658,8 +663,8 @@ public class RdapController {
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
                 decodeNameserver =
-                        DomainUtil
-                                .decodeAndReplaceAsciiToLowercase(decodeNameserver);
+                DomainUtil
+                    .decodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
@@ -705,12 +710,14 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param ipAddr
      *            the query ip
      * @param mask
      *            the ip mask
+     * @param request
+     *            request.
      * @return JSON formatted result,with HTTP code.
      */
     @RequestMapping(value = { "/ip/{ipAddr}/{mask}" },
@@ -731,10 +738,12 @@ public class RdapController {
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
      * 
-     * <pre>
+     * </pre>
      * 
      * @param ipAddr
      *            the query ip
+     * @param request
+     *            request.
      * @return ResponseEntity
      */
     @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
