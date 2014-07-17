@@ -74,6 +74,7 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
 /**
  * This is the central class in this package.
  * <p>
+ * 
  * <pre>
  * This class accept request,and then query/search/redirect result.
  * Ref <a href= 'http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt'>
@@ -87,6 +88,7 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * Some columns can not be shown for Policy reason, and this is checked before
  * return response to client.
  * <p>
+ * 
  * <pre>
  * This class is use as 'controller' in MVC, and modified by
  * {@link org.springframework.stereotype.Controller}, so this class MUST under
@@ -210,10 +212,11 @@ public class RdapController {
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ResponseEntity queryHelp(HttpServletRequest request,
             HttpServletResponse response) {
-        LOGGER.debug("help");
-
-        Help result =
-                queryService.queryHelp(queryParser.parseQueryParam("HELP"));
+        String lastSpliInURI = queryParser.getLastSplitInURI(request);
+        if (!"help".equals(lastSpliInURI)) {
+            return RestResponseUtil.createResponse400();
+        }
+        Help result = queryService.queryHelp(queryParser.parseQueryParam(""));
         if (null != result) {
             // No permission control
             responseDecorator.decorateResponseForHelp(result);
@@ -243,6 +246,7 @@ public class RdapController {
     public ResponseEntity queryEntity(@PathVariable String handle,
             HttpServletRequest request, HttpServletResponse response) {
         LOGGER.debug("query entity,handle:" + handle);
+        handle = queryParser.getLastSplitInURI(request);
         handle = StringUtils.trim(handle);
         if (!StringUtil.isValidEntityHandleOrName(handle)) {
             return RestResponseUtil.createResponse400();
@@ -341,6 +345,7 @@ public class RdapController {
     public ResponseEntity queryAs(@PathVariable String autnum,
             HttpServletRequest request, HttpServletResponse response) {
         LOGGER.debug("query autnum:" + autnum);
+        autnum = queryParser.getLastSplitInURI(request);
         if (!AutnumValidator.isValidAutnum(autnum)) {
             return RestResponseUtil.createResponse400();
         }
@@ -390,7 +395,9 @@ public class RdapController {
     @RequestMapping(value = { "/domain/{domainName}" },
             method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryDomain(@PathVariable String domainName) {
+    public ResponseEntity queryDomain(@PathVariable String domainName,
+            HttpServletRequest request) {
+        domainName = queryParser.getLastSplitInURI(request);
         String decodeDomain = domainName;
         String punyDomainName = decodeDomain;
         try {
@@ -544,7 +551,9 @@ public class RdapController {
     @RequestMapping(value = { "/nameserver/{nameserverName}" },
             method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryNameserver(@PathVariable String nameserverName) {
+    public ResponseEntity queryNameserver(@PathVariable String nameserverName,
+            HttpServletRequest request) {
+        nameserverName = queryParser.getLastSplitInURI(request);
         String decodeNS = nameserverName;
         String punyNSName = decodeNS;
         try {
@@ -708,7 +717,9 @@ public class RdapController {
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryIpWithMask(@PathVariable String ipAddr,
-            @PathVariable String mask) {
+            @PathVariable String mask, HttpServletRequest request) {
+        ipAddr = queryParser.getLastSecondSplitInURI(request);
+        mask = queryParser.getLastSplitInURI(request);
         return queryIpAddress(ipAddr, mask, ipAddr + "/" + mask);
     }
 
@@ -728,7 +739,9 @@ public class RdapController {
      */
     @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryIp(@PathVariable String ipAddr) {
+    public ResponseEntity queryIp(@PathVariable String ipAddr,
+            HttpServletRequest request) {
+        ipAddr = queryParser.getLastSplitInURI(request);
         return queryIpAddress(ipAddr, "", ipAddr);
     }
 

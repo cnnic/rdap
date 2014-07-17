@@ -58,6 +58,19 @@ public class StringUtilTest extends BaseTest {
      * test generateEncodedRedirectURL.
      */
     @Test
+    public void testContainInvalidChar() {
+        assertTrue(StringUtil.containNonAsciiPrintableChars("http://我们"));
+        assertTrue(StringUtil.containNonAsciiPrintableChars("http://"));
+        assertFalse(StringUtil
+                .containNonAsciiPrintableChars("http://localhost:8080/.well-known/rdap%1a/ip/1.1.1.1/32"));
+        assertFalse(StringUtil
+                .containNonAsciiPrintableChars("https://localhost:8080/.well-known/rdap%1a/ip/1.1.1.1/32"));
+    }
+
+    /**
+     * test generateEncodedRedirectURL.
+     */
+    @Test
     public void testGenerateEncodedRedirectURL() {
         String result = "http://rdap.cn/domain/%E4%B8%AD%E5%9B%BD.cn";
         assertEquals(result, StringUtil.generateEncodedRedirectURL("中国.cn",
