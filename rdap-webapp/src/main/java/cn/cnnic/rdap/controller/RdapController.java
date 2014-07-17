@@ -290,6 +290,10 @@ public class RdapController {
                     @RequestParam(required = false) String handle,
                     HttpServletRequest request) {
         LOGGER.debug("search entities.fn:{},handle:{}", fn, handle);
+        String lastSpliInURI = queryParser.getLastSplitInURI(request);
+        if (!"entities".equals(lastSpliInURI)) {
+            return RestResponseUtil.createResponse400();
+        }
         final String fnParamName = "fn";
         final String handleParamName = "handle";
         String paramName =
@@ -500,6 +504,10 @@ public class RdapController {
     public ResponseEntity searchDomain(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
+        String lastSpliInURI = queryParser.getLastSplitInURI(request);
+        if (!"domains".equals(lastSpliInURI)) {
+            return RestResponseUtil.createResponse400();
+        }
         name = queryParser.getParameter(request, "name");
         String decodeDomain = name;
         try {
@@ -635,6 +643,10 @@ public class RdapController {
     public ResponseEntity searchNameserver(
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response) {
+        String lastSpliInURI = queryParser.getLastSplitInURI(request);
+        if (!"nameservers".equals(lastSpliInURI)) {
+            return RestResponseUtil.createResponse400();
+        }
         final String strIp = "ip";
         final String strName = "name";
         NameserverQueryParam nsQueryParam = null;
