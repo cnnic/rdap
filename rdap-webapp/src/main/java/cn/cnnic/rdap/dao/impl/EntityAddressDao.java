@@ -50,9 +50,9 @@ import cn.cnnic.rdap.bean.EntityAddress;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * entity address query DAO select entity address from RDAP_VCARD_ADR for entity.
+ * entity address query DAO select entity address from database for entity.
  * <p>
- * entity address use query method as interface,
+ * entity address use query method as an outer object interface.
  * 
  * @author jiashuo
  * 

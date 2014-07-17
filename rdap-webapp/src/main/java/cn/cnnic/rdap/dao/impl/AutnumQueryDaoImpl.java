@@ -61,9 +61,10 @@ import cn.cnnic.rdap.dao.QueryDao;
  * <pre>
  * autnum query DAO mainly select autnum object from RDAP_AUTNUM.
  * Meantime select related status from RDAP_AUTNUM_STATUS.
- * And select remark event link object as inner objects。
+ * And select remark, event, link object as inner objects。
  * 
- * query, queryAsInnerObjects method overrite the counterpart in abstractQueryDao.
+ * query, queryAsInnerObjects methods overrite the counterpart 
+ * in abstractQueryDao.
  * ResultSetExtractor, createPreparedStatement implement from jdbc.
  * </pre>
  * 

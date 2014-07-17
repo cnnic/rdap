@@ -56,7 +56,7 @@ import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * remark query DAO select remark from database.
- * it can be nested in many objects,and it has link as inner object.
+ * it can be nested in many objects,and has link as inner object.
  * 
  * @author jiashuo
  * 

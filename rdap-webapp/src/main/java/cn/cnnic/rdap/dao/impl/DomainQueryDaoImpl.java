@@ -72,9 +72,10 @@ import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * <pre>
- * domain query DAO.
- * query domain object from database,include inner objects such as nameserver,variants etc.
- * search domain objects from database include reverse domain(in-addr.arpa).
+ * domain query DAO query domain object from database,
+ * include inner objects such as nameserver,variants etc.
+ * search domain objects has the same process with query,
+ * except search part include reverse domain(in-addr.arpa).
  * </pre>
  * 
  * @author jiashuo

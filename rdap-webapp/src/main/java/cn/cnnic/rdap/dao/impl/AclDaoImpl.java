@@ -49,8 +49,10 @@ import cn.cnnic.rdap.dao.AclDao;
 
 /**
  * <pre>
- * AclDao implementation mainly select the count of specified object 
- * from RDAP_IDENTITY_ACL and RDAP_IDENTITY_USER_REL_ROLE.
+ * AclDao implementation mainly select the acl entry for specified object 
+ * from database.
+ * <p>
+ * check if object has entry using isPrincipalHasEntry and isObjectIsSecure.
  * </pre>
  * 
  * @author jiashuo

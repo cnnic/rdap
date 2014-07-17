@@ -69,7 +69,7 @@ import cn.cnnic.rdap.dao.QueryDao;
 /**
  * <pre>
  * nameserver query DAO select nameserver object from RDAP_NAMESERVER.
- * overwrite query queryAsInnerObject methods.
+ * overwrite query queryAsInnerObject methods from AbstractQueryDao.
  * search batch nameservers by overwriting search method.
  * there are remark link event entity and ipAddress as inner objects.
  * </pre>

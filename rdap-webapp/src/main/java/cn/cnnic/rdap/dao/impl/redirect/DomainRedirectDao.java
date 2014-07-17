@@ -51,7 +51,7 @@ import cn.cnnic.rdap.dao.RedirectDao;
 
 /**
  * <pre>
- * domain redirect DAO mainly select domain object from RDAP_DOMAIN_REDIRECT.
+ * domain redirect DAO mainly select domain object from database.
  * query method overrite the counterpart in RedirectDao.
  * </pre>
  * 

@@ -56,7 +56,7 @@ import cn.cnnic.rdap.dao.QueryDao;
 /**
  * <pre>
  * dsData query DAO select DsData from RDAP_DSDATA.
- * dsData only be queried as inner objects.
+ * dsData only be queried as inner objects for domain.
  * </pre>
  * 
  * @author jiashuo
