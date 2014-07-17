@@ -81,7 +81,8 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
     }
 
     /**
-     * query IPAddress from RDAP_NAMESERVER_IP for nameserver, without inner objects.
+     * query IPAddress from RDAP_NAMESERVER_IP for nameserver, 
+     * without inner objects.
      * 
      * @param outerObjectId
      *            nameserver id which as the relation with nameserver.

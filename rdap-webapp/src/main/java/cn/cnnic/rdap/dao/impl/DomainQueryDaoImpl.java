@@ -416,7 +416,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @param queryParam
      *            query parameter include punyname
      * @return domain
-     * 			  the domain object without inner objects
+     *            the domain object without inner objects
      */
     private Domain queryArpaWithoutInnerObjects(QueryParam queryParam) {
 
@@ -515,7 +515,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @param queryParam
      *            query parameter include punyname.
      * @return domain
-     * 			  object without inner objects.
+     *            object without inner objects.
      */
     private Domain queryDomainWithoutInnerObjects(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;

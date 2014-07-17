@@ -342,7 +342,8 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     /**
      * <pre>
      * generate PreparedStatementCreator by executing sql.
-     * select network ip by high address and low address and match the most accurate one.
+     * select network ip by high address and low address and match the 
+     * most accurate one.
      * </pre>
      * @param queryParam queryParam of network.
      * @param ipTableName the database ip table name.

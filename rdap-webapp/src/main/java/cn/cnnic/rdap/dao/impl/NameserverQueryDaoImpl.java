@@ -215,7 +215,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * query nameserver from RDAP_NAMESERVER using punyname, without inner objects.
+     * query nameserver from RDAP_NAMESERVER using punyname,
+     * without inner objects.
      * 
      * @param queryParam
      *            query parameter of Nameserver include punyname
