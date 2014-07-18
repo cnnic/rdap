@@ -28,6 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
+
 package cn.cnnic.rdap.service.impl;
 
 import org.slf4j.Logger;
@@ -97,4 +98,3 @@ public class IdentityCheckServiceImpl implements IdentityCheckService {
         return null;
     }
 }
-
