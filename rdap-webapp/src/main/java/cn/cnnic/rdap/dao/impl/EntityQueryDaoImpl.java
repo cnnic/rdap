@@ -72,8 +72,11 @@ import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * <pre>
- * entity query DAO.
- * query entity object from database.
+ * entity query DAO select entity object from RDAP_ENTITY.
+ * overwrite query method to select entity without inner object.
+ * overwrite queryAsInnerObject method to select inner objects within entity.
+ * overwrite search method to finish batch query.
+ * there also can be entities in entity object.
  * </pre>
  * 
  * @author jiashuo

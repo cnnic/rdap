@@ -92,13 +92,11 @@ public class RdapControllerNameserverTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
     	RestResponseUtil.initConformanceService();
         String nsName = "ns.cnnic.cn";
-        String nsNameWithPrefixBlank = " ns.cnnic.cn";
         String nsChineseLDH = "ns.清华大学.cn";
         String nsLangEn = "en";
         String nsLangZh = "zh";
         String nsNameWithUpperCase = "Ns.cnnic.cn";
         commonQueryExistNS(nsName, nsLangEn);
-        commonQueryExistNS(nsNameWithPrefixBlank, nsLangEn);
         commonQueryExistNS(nsNameWithUpperCase, nsLangEn);
         nsChineseLDH = StringUtil.urlEncode(nsChineseLDH);
         commonQueryExistNS(nsChineseLDH, nsLangZh);

@@ -53,8 +53,8 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
  * <pre>
- * IPAddress query DAO.
- * this ip is for nameserver.
+ * IPAddress query DAO select IPAddress from RDAP_NAMESERVER_IP.
+ * the selected ip is for nameserver.
  * </pre>
  * 
  * @author weijunkai
@@ -81,7 +81,8 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
     }
 
     /**
-     * query IPAddress from RDAP_NAMESERVER_IP for nameserver, without inner objects.
+     * query IPAddress from RDAP_NAMESERVER_IP for nameserver, 
+     * without inner objects.
      * 
      * @param outerObjectId
      *            nameserver id which as the relation with nameserver.

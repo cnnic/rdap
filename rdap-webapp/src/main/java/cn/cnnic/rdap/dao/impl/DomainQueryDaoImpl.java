@@ -72,8 +72,10 @@ import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * <pre>
- * domain query DAO.
- * query domain object from database,include inner objects such as nameserver,variants etc.
+ * domain query DAO query domain object from database,
+ * include inner objects such as nameserver,variants etc.
+ * search domain objects has the same process with query,
+ * except search part include reverse domain(in-addr.arpa).
  * </pre>
  * 
  * @author jiashuo
@@ -414,7 +416,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @param queryParam
      *            query parameter include punyname
      * @return domain
-     * 			  the domain object without inner objects
+     *            the domain object without inner objects
      */
     private Domain queryArpaWithoutInnerObjects(QueryParam queryParam) {
 
@@ -513,7 +515,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @param queryParam
      *            query parameter include punyname.
      * @return domain
-     * 			  object without inner objects.
+     *            object without inner objects.
      */
     private Domain queryDomainWithoutInnerObjects(QueryParam queryParam) {
         DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;

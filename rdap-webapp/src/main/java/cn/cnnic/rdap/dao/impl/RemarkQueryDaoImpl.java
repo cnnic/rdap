@@ -55,7 +55,8 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * remark query DAO.
+ * remark query DAO select remark from database.
+ * it can be nested in many objects,and has link as inner object.
  * 
  * @author jiashuo
  * 
@@ -89,8 +90,8 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
     @Override
     public List<Remark> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        LOGGER.debug("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
-                outerObjectId , outerModelType);
+        LOGGER.debug("queryAsInnerObjects, outerObjectId:{},"
+                + " outerModelType:{}", outerObjectId, outerModelType);
         List<Remark> remarks = queryWithoutInnerObjects(outerObjectId,
                 outerModelType);
         queryAndSetInnerObjects(remarks);

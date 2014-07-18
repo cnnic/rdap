@@ -67,7 +67,12 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * nameserver query DAO.
+ * <pre>
+ * nameserver query DAO select nameserver object from RDAP_NAMESERVER.
+ * overwrite query queryAsInnerObject methods from AbstractQueryDao.
+ * search batch nameservers by overwriting search method.
+ * there are remark link event entity and ipAddress as inner objects.
+ * </pre>
  * 
  * @author weijunkai
  * 
@@ -210,7 +215,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * query nameserver from RDAP_NAMESERVER using punyname, without inner objects.
+     * query nameserver from RDAP_NAMESERVER using punyname,
+     * without inner objects.
      * 
      * @param queryParam
      *            query parameter of Nameserver include punyname

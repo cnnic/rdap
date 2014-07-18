@@ -50,8 +50,8 @@ import cn.cnnic.rdap.bean.EntityTel;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * entity telephone query DAO.
- * 
+ * entity telephone query DAO select entity telephone from RDAP_VCARD_TEL.
+ * it is an object belonged to entity,and use query method as interface.
  * @author jiashuo
  * 
  */

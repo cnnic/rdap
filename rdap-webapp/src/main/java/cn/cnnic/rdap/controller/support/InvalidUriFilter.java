@@ -104,7 +104,8 @@ public class InvalidUriFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         decodeServletPathForSpringUrlMapping(request);
         String path = request.getRequestURI();
-        if (StringUtils.isBlank(path)) {
+        LOGGER.info("request URI: {} ", path);
+        if (StringUtils.isBlank(path) || "/".equals(path)) {
             writeError400Response(response);
             return false;
         }
@@ -132,10 +133,16 @@ public class InvalidUriFilter implements RdapFilter {
             writeError400Response(response);
             return false;
         }
+        if (pathContainInvalidChar(decodeUri)) {
+            writeError400Response(response);
+            return false;
+        }
         if (!"/".equals(decodeUri)) { // if not /,then must begin with rdapUrl
             String uriWithoutPrefixSlash =
                     decodeUri.substring(1, decodeUri.length());
-            if (!uriWithoutPrefixSlash.startsWith(RDAP_URL_PREFIX)) {
+            if (!uriWithoutPrefixSlash.startsWith(RDAP_URL_PREFIX + "/")) {
+                LOGGER.debug("URI {} not start with {}", uriWithoutPrefixSlash,
+                        RDAP_URL_PREFIX);
                 writeError400Response(response);
                 return false;
             } else if (!uriWithoutPrefixSlash.equals(RDAP_URL_PREFIX + "/")
@@ -148,6 +155,19 @@ public class InvalidUriFilter implements RdapFilter {
             }
         }
         return true;
+    }
+
+    /**
+     * check if decodeUri path section contain invalid space.
+     * 
+     * @param decodeUri
+     *            decodeUri.
+     * @return true if contain, false if not.
+     */
+    private boolean pathContainInvalidChar(String decodeUri) {
+        String substringBeforeLast =
+                StringUtils.substringBeforeLast(decodeUri, "/");
+        return StringUtil.containNonAsciiPrintableChars(substringBeforeLast);
     }
 
     /**

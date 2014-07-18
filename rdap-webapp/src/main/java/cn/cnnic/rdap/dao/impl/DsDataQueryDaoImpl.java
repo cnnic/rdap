@@ -55,8 +55,8 @@ import cn.cnnic.rdap.dao.QueryDao;
 
 /**
  * <pre>
- * dsData query DAO.
- * select DsData from database.
+ * dsData query DAO select DsData from RDAP_DSDATA.
+ * dsData only be queried as inner objects for domain.
  * </pre>
  * 
  * @author jiashuo
@@ -69,7 +69,7 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(DsDataQueryDaoImpl.class);        
+            .getLogger(DsDataQueryDaoImpl.class);
     /**
      * event dao.
      */
@@ -109,7 +109,7 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
      * query inner objects for dsData list.
      * 
      * @param dsDataList
-     *            dsData list which will be filled with inner objects one by one.
+     *          dsData list which will be filled with inner objects one by one.
      */
     private void queryAndSetInnerObjects(List<DsData> dsDataList) {
         if (null == dsDataList || dsDataList.size() == 0) {

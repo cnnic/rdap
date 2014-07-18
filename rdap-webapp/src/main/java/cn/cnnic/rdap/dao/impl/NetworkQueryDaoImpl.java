@@ -66,7 +66,11 @@ import cn.cnnic.rdap.dao.NoticeDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * ip query DAO.
+ * <pre>
+ * network query DAO select ip from RDAP_IP.
+ * need to query notice remark link event entity as inner objects.
+ * for ipAddress,support ipv4 and ipv6.
+ * </pre>
  * 
  * @author weijunkai
  * 
@@ -78,7 +82,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(NetworkQueryDaoImpl.class);    
+            .getLogger(NetworkQueryDaoImpl.class);
     /**
      * notice dao.
      */
@@ -338,7 +342,8 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     /**
      * <pre>
      * generate PreparedStatementCreator by executing sql.
-     * select network ip by high address and low address and match the most accurate one.
+     * select network ip by high address and low address and match the 
+     * most accurate one.
      * </pre>
      * @param queryParam queryParam of network.
      * @param ipTableName the database ip table name.

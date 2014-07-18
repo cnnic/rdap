@@ -50,8 +50,9 @@ import cn.cnnic.rdap.bean.EntityAddress;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * entity address query DAO.
- * select entity address from RDAP_VCARD_ADR for entity.
+ * entity address query DAO select entity address from database for entity.
+ * <p>
+ * entity address use query method as an outer object interface.
  * 
  * @author jiashuo
  * 
@@ -75,7 +76,7 @@ public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
      * @param entity
      *            entity which will be filled with entity address.
      * @return EntityAddress list
-     * 			  which will be set to entity.
+     *            which will be set to entity.
      */
     public List<EntityAddress> query(final Entity entity) {
         LOGGER.debug("query, entity:{}", entity);

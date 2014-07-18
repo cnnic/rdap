@@ -43,6 +43,7 @@ import cn.cnnic.rdap.bean.NameserverQueryParam;
 import cn.cnnic.rdap.bean.Network.IpVersion;
 import cn.cnnic.rdap.bean.NetworkQueryParam;
 import cn.cnnic.rdap.bean.QueryParam;
+import cn.cnnic.rdap.common.util.DomainUtil;
 
 /**
  * This class is used to parse request, and get parameter from url.
@@ -198,4 +199,44 @@ public class QueryParser {
         }
         return null;
     }
+
+    /**
+     * get last split in URI.
+     * <p>
+     * For spring will ignore ending params, eg: /cnnic.cn%1a.
+     * <p>
+     * eg: for URI '/domain/cnnic.cn' return 'cnnic.cn'.
+     * 
+     * @param request
+     *            request.
+     * @return param value.
+     */
+    public String getLastSplitInURI(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        String result = StringUtils.substringAfterLast(path, "/");
+        result = DomainUtil.urlDecode(result);
+        LOGGER.debug("last split in URI: {}", result);
+        return result;
+    }
+
+    /**
+     * get last second split in URI.
+     * <p>
+     * For spring will ignore ending params, eg: /1.1.1.1%1a/32.
+     * <p>
+     * eg: for URI '/1.1.1.1%1a/32' return '1.1.1.1%1a'.
+     * 
+     * @param request
+     *            request.
+     * @return param value.
+     */
+    public String getLastSecondSplitInURI(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        String substringBeforeLast = StringUtils.substringBeforeLast(path, "/");
+        String result =
+                StringUtils.substringAfterLast(substringBeforeLast, "/");
+        LOGGER.debug("last second split in URI: {}", result);
+        return result;
+    }
+
 }

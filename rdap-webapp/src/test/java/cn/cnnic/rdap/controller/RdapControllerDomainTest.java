@@ -80,12 +80,9 @@ public class RdapControllerDomainTest extends BaseTest {
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain.xml")
     public void testQueryExistDomain() throws Exception {
         String domainName = "cnnic.cn";
-        String domainNameWithPrefixBlank = " cnnic.cn";// validate by filter
         String domainNameWithUpperCase = "Cnnic.cn";
         String domainNameInFullWith = "ｃｎｎｉｃ.cn";
         commonQueryExistDomain(domainName, domainName, domainName);
-        commonQueryExistDomain(domainNameWithPrefixBlank, domainName,
-                domainName);
         commonQueryExistDomain(domainNameWithUpperCase, domainName, domainName);
         commonQueryExistDomain(domainNameInFullWith, domainName, domainName);
     }

@@ -48,7 +48,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Repository;
 
 /**
- * check user authorization.
+ * check user authorization by select user information from RDAP_IDENTITY_USER.
  * 
  * @author wang
  */

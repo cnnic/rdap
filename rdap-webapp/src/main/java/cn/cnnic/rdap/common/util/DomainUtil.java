@@ -386,7 +386,7 @@ public final class DomainUtil {
      *            string.
      * @return String decoded string.
      */
-    private static String urlDecode(String str) {
+    public static String urlDecode(String str) {
         if (StringUtils.isBlank(str)) {
             return str;
         }
@@ -465,7 +465,8 @@ public final class DomainUtil {
             return false;
         }
         if (domainWithoutLastDot.length() < MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT
-                || domainWithoutLastDot.length() > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
+                || domainWithoutLastDot.length()
+                > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
             return false;
         }
         return true;
