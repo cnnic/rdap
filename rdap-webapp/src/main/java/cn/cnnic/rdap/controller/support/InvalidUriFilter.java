@@ -104,7 +104,8 @@ public class InvalidUriFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         decodeServletPathForSpringUrlMapping(request);
         String path = request.getRequestURI();
-        if (StringUtils.isBlank(path)) {
+        LOGGER.info("request URI: {} ", path);
+        if (StringUtils.isBlank(path) || "/".equals(path)) {
             writeError400Response(response);
             return false;
         }
