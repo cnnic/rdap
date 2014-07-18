@@ -72,7 +72,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     /**
      * output json.
      */
-    final private String rdapJson = "application/json";
+    final private String rdapJson = "application/rdap+json";
 
     @Before
     public void setup() {
