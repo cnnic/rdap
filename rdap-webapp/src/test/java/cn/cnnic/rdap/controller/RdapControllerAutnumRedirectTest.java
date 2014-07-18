@@ -62,6 +62,11 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+    
+    /**
+     * output json.
+     */
+    final private String rdapJson = "application/rdap+json";
 
     @Before
     public void setup() {
@@ -93,9 +98,9 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
     private void commonExist(String autnumStr) throws Exception {
         mockMvc.perform(
                 get("/.well-known/rdap/autnum/" + autnumStr).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.country").value("zh"))
                 .andExpect(jsonPath("$.lang").value("cn"))
                 .andExpect(jsonPath("$.name").value("name1"));
@@ -127,9 +132,9 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
     private void commonNonExist(String nonExistAutnumStr) throws Exception {
         mockMvc.perform(
                 get("/.well-known/rdap/autnum/" + nonExistAutnumStr).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404));
     }
 
@@ -159,9 +164,9 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
     private void commonRedirect(String redirectAutnum) throws Exception {
         mockMvc.perform(
                 get("/.well-known/rdap/autnum/" + redirectAutnum).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isMovedPermanently())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(301));
     }
 
@@ -191,9 +196,9 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
     private void commonInvalid(String autnumStr) throws Exception {
         mockMvc.perform(
                 get("/.well-known/rdap/autnum/" + autnumStr).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))

@@ -64,6 +64,11 @@ public class RdapControllerDomainTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+    
+    /**
+     * output json.
+     */
+    final private String rdapJson = "application/json";
 
     @Before
     public void setup() {
@@ -150,15 +155,15 @@ public class RdapControllerDomainTest extends BaseTest {
                 get(
                         "/.well-known/rdap/domain/"
                                 + StringUtil.urlEncode(queryDomainName))
-                        .accept(MediaType.parseMediaType("application/json")))
+                        .accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.lang").value("zh"))
                 .andExpect(jsonPath("$.handle").value("1"))
                 .andExpect(jsonPath("$.ldhName").value(expectedLdhName))
                 .andExpect(jsonPath("$.unicodeName").value(expectedUnicodeName))
                 .andExpect(jsonPath("$.port43").value("port43"))
-//                .andExpect(jsonPath("$.secureDNS").exists())
+                .andExpect(jsonPath("$.secureDNS").exists())
                 .andExpect(jsonPath("$.status").isArray())
                 .andExpect(
                         jsonPath("$.status").value(
@@ -183,7 +188,7 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.remarks[0].links[0].type").exists())
                 .andExpect(
                         jsonPath("$.remarks[0].links[0].type").value(
-                                "application/json"))
+                                rdapJson))
                 // links.
                 .andExpect(
                         jsonPath("$.links[0].hreflang").value(
@@ -207,9 +212,9 @@ public class RdapControllerDomainTest extends BaseTest {
                 get(
                         "/.well-known/rdap/domain/"
                                 + StringUtil.urlEncode(queryDomainName))
-                        .accept(MediaType.parseMediaType("application/json")))
+                        .accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("NOT FOUND"))
@@ -229,9 +234,9 @@ public class RdapControllerDomainTest extends BaseTest {
                 get(
                         "/.well-known/rdap/domain/"
                                 + StringUtil.urlEncode(domainName)).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))
