@@ -70,7 +70,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     /**
      * output json.
      */
-    private final String rdapJson = "application/json";
+    private final String rdapJson = "application/rdap+json";
 
     @Autowired
     private WebApplicationContext wac;

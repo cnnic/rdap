@@ -73,6 +73,11 @@ public class RdapControllerHelpTest extends BaseTest {
      * a url string.
      */
     final private String urlPath = "/.well-known/rdap/help";
+    
+    /**
+     * output json.
+     */
+    final private String rdapJson = "application/rdap+json";
 
     /**
      * set up mockMvc.
@@ -110,9 +115,9 @@ public class RdapControllerHelpTest extends BaseTest {
             throws Exception {
         mockMvc.perform(
                 get(urlPath).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.notices").exists());
 
     }
