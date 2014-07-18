@@ -28,6 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
+
 package cn.cnnic.rdap.service;
 
 import cn.cnnic.rdap.bean.User;
@@ -49,6 +50,4 @@ public interface IdentityCheckService {
      * @return user or null.
      */
     User identityCheckService(final String userId, final String userPwd);
-    
 }
-
