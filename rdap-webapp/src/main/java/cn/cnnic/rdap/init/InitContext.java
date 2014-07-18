@@ -45,7 +45,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-//import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.util.StringUtils;
 
 import cn.cnnic.rdap.common.util.StringUtil;
@@ -98,11 +97,11 @@ public class InitContext implements ApplicationContextAware {
      *            the event of an error
      * @see #setSqlScriptEncoding
      */
-    public void
-            executeSqlScript(JdbcTemplate jdbcTemplate, String sqlResourcePath,
-                    String databaseName, boolean continueOnError) {
-        Resource resource =
-                this.applicationContext.getResource(sqlResourcePath);
+    public void executeSqlScript(JdbcTemplate jdbcTemplate,
+            String sqlResourcePath, String databaseName,
+             boolean continueOnError) {
+        Resource resource = this.applicationContext
+                .getResource(sqlResourcePath);
         executeSqlScript(jdbcTemplate, new EncodedResource(resource,
                 StringUtil.CHAR_SET_UTF8), databaseName, continueOnError);
     }
@@ -154,7 +153,8 @@ public class InitContext implements ApplicationContextAware {
                 } catch (DataAccessException ex) {
                     if (continueOnError) {
                         LOGGER.error(
-                                "Failed to execute SQL script statement at line "
+                                "Failed to execute"
+                                + " SQL script statement at line "
                                         + lineNumber + " of resource "
                                         + resource + ": " + statement, ex);
                     } else {
@@ -191,13 +191,13 @@ public class InitContext implements ApplicationContextAware {
      */
     private static void executeUseDatabaseStatement(String statement,
             JdbcTemplate jdbcTemplate, String databaseName) {
-        String[] notAddArrays =
-                new String[] { "CREATE DATABASE", "DROP DATABASE", "USE " };
+        String[] notAddArrays = new String[] {"CREATE DATABASE",
+                "DROP DATABASE", "USE " };
         if (StringUtils.isEmpty(statement)) {
             return;
         }
-        String statementUppercase =
-                org.apache.commons.lang.StringUtils.upperCase(statement);
+        String statementUppercase = org.apache.commons.lang.StringUtils
+                .upperCase(statement);
         boolean startWithNotAddSql = false;
         for (String prefix : notAddArrays) {
             if (statementUppercase.startsWith(prefix)) {
@@ -280,8 +280,8 @@ public class InitContext implements ApplicationContextAware {
      * @return {@code true} if the script contains the delimiter; {@code false}
      *         otherwise
      */
-    public static boolean
-            containsSqlScriptDelimiters(String script, char delim) {
+    public static boolean containsSqlScriptDelimiters(String script,
+            char delim) {
         boolean inLiteral = false;
         char[] content = script.toCharArray();
         for (int i = 0; i < script.length(); i++) {

@@ -90,8 +90,8 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
     @Override
     public List<Remark> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
-        LOGGER.debug("queryAsInnerObjects, outerObjectId:{}, outerModelType:{}", 
-                outerObjectId , outerModelType);
+        LOGGER.debug("queryAsInnerObjects, outerObjectId:{},"
+                + " outerModelType:{}", outerObjectId, outerModelType);
         List<Remark> remarks = queryWithoutInnerObjects(outerObjectId,
                 outerModelType);
         queryAndSetInnerObjects(remarks);
