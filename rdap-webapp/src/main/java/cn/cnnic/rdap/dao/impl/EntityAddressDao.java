@@ -75,7 +75,7 @@ public class EntityAddressDao extends AbstractQueryDao<EntityAddress> {
      * @param entity
      *            entity which will be filled with entity address.
      * @return EntityAddress list
-     * 			  which will be set to entity.
+     *            which will be set to entity.
      */
     public List<EntityAddress> query(final Entity entity) {
         LOGGER.debug("query, entity:{}", entity);

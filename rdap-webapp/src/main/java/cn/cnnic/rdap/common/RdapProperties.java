@@ -31,9 +31,6 @@
 package cn.cnnic.rdap.common;
 
 import java.util.List;
-
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-
 import cn.cnnic.rdap.common.util.StringUtil;
 
 /**

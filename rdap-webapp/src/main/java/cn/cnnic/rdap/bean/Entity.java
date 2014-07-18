@@ -50,7 +50,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 @JsonPropertyOrder({ "rdapConformance", "notices", "handle", "vcardArray",
         "roles", "publicIds", "entities", "remarks", "links", "events",
         "asEventActor", "status", "port43", "networks", "autnums",
-        "resultsTruncated"})
+        "resultsTruncated" })
 public class Entity extends BaseModel {
     /**
      * a JSON vCard with the entity's contact information.

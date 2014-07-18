@@ -44,8 +44,6 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-//import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.util.StringUtils;
 
 import cn.cnnic.rdap.common.util.StringUtil;
@@ -192,7 +190,7 @@ public class InitContext implements ApplicationContextAware {
     private static void executeUseDatabaseStatement(String statement,
             JdbcTemplate jdbcTemplate, String databaseName) {
         String[] notAddArrays =
-                new String[] { "CREATE DATABASE", "DROP DATABASE", "USE " };
+                new String[] {"CREATE DATABASE", "DROP DATABASE", "USE "};
         if (StringUtils.isEmpty(statement)) {
             return;
         }

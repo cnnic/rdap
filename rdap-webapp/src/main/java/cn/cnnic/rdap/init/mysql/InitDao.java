@@ -69,7 +69,9 @@ public class InitDao {
      * init context.
      */
     private InitContext initContext;
-
+    /**
+     * db data source.
+     */
     @Autowired
     private ComboPooledDataSource dataSource;
     /**
@@ -80,7 +82,8 @@ public class InitDao {
      * create db sql.
      */
     private static final String SQL_CREATE_DB =
-            "CREATE DATABASE `%s` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;";
+        "CREATE DATABASE `%s` "
+        + "/*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;";
     /**
      * db name.
      */
@@ -141,7 +144,8 @@ public class InitDao {
      */
     public void initBaseData() {
         LOGGER.info("initBaseData begin...");
-        LOGGER.info("file:{},database:{}", SQL_RESOURCE_DATA_PATH, databaseName);
+        LOGGER.info("file:{},database:{}", 
+                SQL_RESOURCE_DATA_PATH, databaseName);
         initContext.executeSqlScript(jdbcTemplate, SQL_RESOURCE_DATA_PATH,
                 databaseName, false);
         LOGGER.info("initBaseData end.");

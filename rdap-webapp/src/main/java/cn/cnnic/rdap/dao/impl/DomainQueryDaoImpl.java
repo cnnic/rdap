@@ -73,7 +73,10 @@ import cn.cnnic.rdap.dao.QueryDao;
 /**
  * <pre>
  * domain query DAO.
- * query domain object from database,include inner objects such as nameserver,variants etc.
+ * 
+ * query domain object from database,
+ * include inner objects such as nameserver,variants etc.
+ * 
  * </pre>
  * 
  * @author jiashuo

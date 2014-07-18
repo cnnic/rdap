@@ -78,6 +78,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
+
     /**
      * query result of object T .
      * 
