@@ -50,7 +50,10 @@ import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.RedirectDao;
 
 /**
- * domain redirect DAO.
+ * <pre>
+ * domain redirect DAO mainly select domain object from database.
+ * query method overrite the counterpart in RedirectDao.
+ * </pre>
  * 
  * @author jiashuo
  * 

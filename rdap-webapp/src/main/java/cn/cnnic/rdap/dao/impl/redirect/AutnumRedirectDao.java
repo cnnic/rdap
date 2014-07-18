@@ -49,8 +49,10 @@ import cn.cnnic.rdap.bean.RedirectResponse;
 import cn.cnnic.rdap.dao.RedirectDao;
 
 /**
- * autnum redirect DAO.
- * return the redirectResponse.
+ * <pre>
+ * autnum redirect DAO maily select autnum object from RDAP_AUTNUM_REDIRECT.
+ * overrite the query method in RedirectDao and return the RedirectResponse.
+ * </pre>
  * 
  * @author jiashuo
  * 

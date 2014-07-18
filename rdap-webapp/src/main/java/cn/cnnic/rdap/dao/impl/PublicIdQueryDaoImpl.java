@@ -47,7 +47,8 @@ import cn.cnnic.rdap.bean.PublicId;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * publicId query DAO.
+ * publicId query DAO select publicIds from database.
+ * it can only be the inner objects of domain.
  * 
  * @author jiashuo
  * 

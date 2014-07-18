@@ -53,7 +53,8 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * secureDns query DAO.
+ * secureDns query DAO select secureDns from database for domain.
+ * query keyData and dsData as inner objects by using autowired dao。
  * 
  * @author jiashuo
  * 

@@ -58,7 +58,15 @@ import cn.cnnic.rdap.dao.AbstractQueryDao;
 import cn.cnnic.rdap.dao.QueryDao;
 
 /**
- * autnum query DAO.
+ * <pre>
+ * autnum query DAO mainly select autnum object from RDAP_AUTNUM.
+ * Meantime select related status from RDAP_AUTNUM_STATUS.
+ * And select remark, event, link object as inner objects。
+ * 
+ * query, queryAsInnerObjects methods overrite the counterpart 
+ * in abstractQueryDao.
+ * ResultSetExtractor, createPreparedStatement implement from jdbc.
+ * </pre>
  * 
  * @author jiashuo
  * 
@@ -206,7 +214,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
      * query inner objects of autnum,and set them to autnum.
      * 
      * @param autnum
-     *            autnum.
+     *            autnum object.
      */
     private void queryAndSetInnerObjects(Autnum autnum) {
         if (null == autnum) {

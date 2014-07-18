@@ -53,7 +53,8 @@ import cn.cnnic.rdap.common.util.StringUtil;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * link query DAO.
+ * link query DAO select link object from RDAP_LINK.
+ * there are title and Hreflang details in link object.
  * 
  * @author jiashuo
  * 

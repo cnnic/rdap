@@ -50,7 +50,11 @@ import cn.cnnic.rdap.bean.Variants;
 import cn.cnnic.rdap.dao.AbstractQueryDao;
 
 /**
- * variant query DAO.
+ * variant query DAO mainly select variants from RDAP_VARIANT
+ * according to the related domain id in REL_DOMAIN_VARIANT.
+ * <p>
+ * queryAsInnerObjects method overrite the counterpart in abstractQueryDao.
+ * ResultSetExtractor, createPreparedStatement implement from jdbc.
  * 
  * @author jiashuo
  * 
@@ -62,7 +66,7 @@ public class VariantsQueryDaoImpl extends AbstractQueryDao<Variants> {
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(VariantsQueryDaoImpl.class);    
+            .getLogger(VariantsQueryDaoImpl.class);
     /**
      * query results of Variants list to an associated object.
      *   ie. domain to variants,

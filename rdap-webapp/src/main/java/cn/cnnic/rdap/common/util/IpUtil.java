@@ -164,25 +164,6 @@ public final class IpUtil {
     }
 
     /**
-     * verify if IP v6 string is valid by jar.
-     * 
-     * @param strIp
-     *            IP string.
-     * @return true if valid, false if not.
-     */
-    public static boolean isIpV6JarValid(String strIp) {
-        try {
-            IPv6Address v6Addr = IPv6Address.fromString(strIp);
-            if (v6Addr != null) {
-                return true;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return false;
-    }
-
-    /**
      * check if IP v6 string is valid by regex.
      * 
      * @param strIp

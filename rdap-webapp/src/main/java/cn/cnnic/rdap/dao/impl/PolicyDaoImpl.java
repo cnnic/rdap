@@ -51,7 +51,8 @@ import cn.cnnic.rdap.dao.PolicyDao;
 
 
 /**
- * hidden column query DAO.
+ * policy query DAO select the hidden column from RDAP_POLICY.
+ * load all hidden columns while system is loading.
  * 
  * @author weijunkai
  * 
@@ -63,7 +64,7 @@ public class PolicyDaoImpl implements PolicyDao {
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(PolicyDaoImpl.class); 
+            .getLogger(PolicyDaoImpl.class);
     
     /**
      * jdbcTemplate.
