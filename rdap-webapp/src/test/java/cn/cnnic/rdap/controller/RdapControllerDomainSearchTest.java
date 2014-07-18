@@ -74,6 +74,11 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+    
+    /**
+     * output json.
+     */
+    final private String rdapJson = "application/json";
 
     @Before
     public void setup() {
@@ -112,25 +117,25 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         for (String q : q422List) {
             mockMvc.perform(
                     get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
-                            MediaType.parseMediaType("application/json")))
+                            MediaType.parseMediaType(rdapJson)))
                     .andExpect(status().isUnprocessableEntity())
-                    .andExpect(content().contentType("application/json"))
+                    .andExpect(content().contentType(rdapJson))
                     .andExpect(jsonPath("$.errorCode").value(422));
         }
         for (String q : q400List) {
             mockMvc.perform(
                     get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
-                            MediaType.parseMediaType("application/json")))
+                            MediaType.parseMediaType(rdapJson)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().contentType("application/json"))
+                    .andExpect(content().contentType(rdapJson))
                     .andExpect(jsonPath("$.errorCode").value(400));
         }
         for (String q : q200List) {// no data, return 404 instead 200.
             mockMvc.perform(
                     get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
-                            MediaType.parseMediaType("application/json")))
+                            MediaType.parseMediaType(rdapJson)))
                     .andExpect(status().isNotFound())
-                    .andExpect(content().contentType("application/json"))
+                    .andExpect(content().contentType(rdapJson))
                     .andExpect(jsonPath("$.errorCode").value(404));
         }
 
@@ -149,9 +154,9 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         String domainName = "cnnic.cn";
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "cnnic*").accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
                 .andExpect(
@@ -234,7 +239,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                 .andExpect(
                         jsonPath(
                                 "$.domainSearchResults[0].remarks[0].links[0].type")
-                                .value("application/json"))
+                                .value(rdapJson))
                 // links.
                 .andExpect(
                         jsonPath("$.domainSearchResults[0].links[0].hreflang")
@@ -257,9 +262,9 @@ public class RdapControllerDomainSearchTest extends BaseTest {
             void testSearchTruncatedDomain() throws Exception {
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "truncated*").accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.resultsTruncated").value(true))
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
@@ -281,10 +286,10 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "nonexist*").accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("NOT FOUND"))
@@ -304,9 +309,9 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "*").accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(422))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("UNPROCESSABLE ENTITY"))

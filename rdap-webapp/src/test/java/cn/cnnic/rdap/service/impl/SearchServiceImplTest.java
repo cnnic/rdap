@@ -67,7 +67,7 @@ public class SearchServiceImplTest extends BaseTest {
      * test search domain.
      */
     @Test
-     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
     public void testSearchEntity() {
         String entityHandle = "truncated*";

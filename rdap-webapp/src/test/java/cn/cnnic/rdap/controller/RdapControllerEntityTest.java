@@ -62,6 +62,11 @@ public class RdapControllerEntityTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+    
+    /**
+     * output json.
+     */
+    final private String rdapJson = "application/rdap+json";
 
     @Before
     public void setup() {
@@ -81,9 +86,9 @@ public class RdapControllerEntityTest extends BaseTest {
         String entityHandle = "h1";
         mockMvc.perform(
                 get("/.well-known/rdap/entity/" + entityHandle).accept(
-                        MediaType.parseMediaType("application/rdap+json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(entityHandle))
                 .andExpect(jsonPath("$.vcardArray").exists())
                 .andExpect(jsonPath("$.vcardArray[0]").value("vcard"))
@@ -110,9 +115,9 @@ public class RdapControllerEntityTest extends BaseTest {
         String nonExistHandle = "1000000";
         mockMvc.perform(
                 get("/.well-known/rdap/entity/" + nonExistHandle).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404));
     }
 
@@ -130,9 +135,9 @@ public class RdapControllerEntityTest extends BaseTest {
         String invalidHandle = "";
         mockMvc.perform(
                 get("/.well-known/rdap/entity/" + invalidHandle).accept(
-                        MediaType.parseMediaType("application/json")))
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400));
     }
 
