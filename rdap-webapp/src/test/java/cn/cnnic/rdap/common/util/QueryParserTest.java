@@ -63,7 +63,7 @@ public class QueryParserTest extends BaseTest {
         request.setRequestURI("/domain/cnnic.cn%1a");
         String paramV = queryParser.getLastSplitInURI(request);
         assertNotNull(paramV);
-        assertEquals("cnnic.cn%1a", paramV);
+        assertEquals("cnnic.cn", paramV);
     }
 
     /**
