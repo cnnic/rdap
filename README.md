@@ -1,8 +1,8 @@
 ### Install Instruction
-1. Install JDK6(Java SE Development Kit 6). (Skip this step if JDK6 already installed)
+1. Install JDK6, or higher version. (Skip this step if already installed)
    
-   [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html), or higer verison
-2. Install Mysql and init database. (Skip this step if Mysql5 or higer version already installed)
+   [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html), or higer verison.
+2. Install Mysql5, or higher version. (Skip this step if already installed)
    
    [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
      
