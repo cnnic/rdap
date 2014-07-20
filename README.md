@@ -2,6 +2,7 @@
 1. Install JDK6(Java SE Development Kit 6), or higer verison: [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html)
 (Skip this step if JDK6 already installed)
 2. Install Mysql and init database. (Skip this step if Mysql5 or higer version already installed)
+   
    [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
      
    You must get (from DBA) or generate an Mysql user/password pair, used to access RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html).
