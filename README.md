@@ -4,7 +4,7 @@
 2. Install Mysql and init database. (Skip this step if Mysql5 or higer version already installed)
    [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
      
-   You must get or generate an Mysql user/password pair, used to access RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html).
+   You must get (from DBA) or generate an Mysql user/password pair, used to access RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html).
 
 3. [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port). 
 
