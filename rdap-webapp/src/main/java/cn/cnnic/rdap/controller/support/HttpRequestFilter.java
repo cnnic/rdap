@@ -132,7 +132,10 @@ public class HttpRequestFilter implements RdapFilter {
             return true;
         }
         if (VALID_CONTENT_TYPE.equals(acceptHeader)
-                || acceptHeader.startsWith(VALID_CONTENT_TYPE + ";")) {
+                || acceptHeader.startsWith(VALID_CONTENT_TYPE + ";")
+                || acceptHeader.startsWith(VALID_CONTENT_TYPE + ",")
+                || acceptHeader.contains("," + VALID_CONTENT_TYPE + ",")
+                || acceptHeader.endsWith("," + VALID_CONTENT_TYPE)) {
             return true;
         }
         return false;
