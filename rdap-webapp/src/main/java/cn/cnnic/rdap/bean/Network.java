@@ -36,6 +36,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * represents information regarding ip used in both forward and reverse DNS.
@@ -457,6 +458,7 @@ public class Network extends BaseModel {
          * 
          * @return name.
          */
+        @JsonValue
         public String getName() {
             return name;
         }
