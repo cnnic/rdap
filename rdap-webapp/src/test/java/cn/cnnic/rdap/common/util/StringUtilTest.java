@@ -32,6 +32,8 @@ package cn.cnnic.rdap.common.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -42,6 +44,7 @@ import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import org.springframework.http.MediaType;
 
 import cn.cnnic.rdap.BaseTest;
 
@@ -53,6 +56,76 @@ import cn.cnnic.rdap.BaseTest;
  */
 @SuppressWarnings("rawtypes")
 public class StringUtilTest extends BaseTest {
+
+    /**
+     * test parseMediaTypes.
+     */
+    @Test
+    public void testParseMediaTypes() {
+        // test one type.
+        List<MediaType> mediaTypes =
+                StringUtil.parseMediaTypes("application/rdap+json");
+        assertNotNull(mediaTypes);
+        assertEquals(1, mediaTypes.size());
+        assertNotNull(mediaTypes.get(0));
+        assertEquals("application", mediaTypes.get(0).getType());
+        assertEquals("rdap+json", mediaTypes.get(0).getSubtype());
+        // test with charset.
+        mediaTypes =
+                StringUtil
+                        .parseMediaTypes("application/rdap+json;charset=UTF-8");
+        assertNotNull(mediaTypes);
+        assertEquals(1, mediaTypes.size());
+        assertNotNull(mediaTypes.get(0));
+        assertEquals("application", mediaTypes.get(0).getType());
+        assertEquals("rdap+json", mediaTypes.get(0).getSubtype());
+        // test multi types.
+        mediaTypes =
+                StringUtil
+                        .parseMediaTypes("application/json,application/rdap+json;charset=UTF-8");
+        assertNotNull(mediaTypes);
+        assertEquals(2, mediaTypes.size());
+        assertNotNull(mediaTypes.get(0));
+        assertEquals("application", mediaTypes.get(0).getType());
+        assertEquals("json", mediaTypes.get(0).getSubtype());
+        assertNotNull(mediaTypes.get(1));
+        assertEquals("application", mediaTypes.get(1).getType());
+        assertEquals("rdap+json", mediaTypes.get(1).getSubtype());
+        // test with space
+        mediaTypes =
+                StringUtil
+                        .parseMediaTypes(" application/json , application/rdap+json ; charset=UTF-8");
+        assertNotNull(mediaTypes);
+        assertEquals(2, mediaTypes.size());
+        assertNotNull(mediaTypes.get(0));
+        assertEquals("application", mediaTypes.get(0).getType());
+        assertEquals("json", mediaTypes.get(0).getSubtype());
+        assertNotNull(mediaTypes.get(1));
+        assertEquals("application", mediaTypes.get(1).getType());
+        assertEquals("rdap+json", mediaTypes.get(1).getSubtype());
+        // upper case
+        mediaTypes =
+                StringUtil
+                        .parseMediaTypes(" APPLICATION/JSON, APPLICATION/RDAP+JSON ; charset=UTF-8");
+        assertNotNull(mediaTypes);
+        assertEquals(2, mediaTypes.size());
+        assertNotNull(mediaTypes.get(0));
+        assertEquals("application", mediaTypes.get(0).getType());
+        assertEquals("json", mediaTypes.get(0).getSubtype());
+        assertNotNull(mediaTypes.get(1));
+        assertEquals("application", mediaTypes.get(1).getType());
+        assertEquals("rdap+json", mediaTypes.get(1).getSubtype());
+        // invalid charset.
+        mediaTypes =
+                StringUtil
+                        .parseMediaTypes("application/rdap+json;charset=UNKNOWN");
+        assertNull(mediaTypes);
+        // invalid string.
+        mediaTypes =
+                StringUtil
+                        .parseMediaTypes(" someUnKnonwn!@#/!@#, APPLICATION/RDAP+JSON ; charset=UTF-8");
+        assertNull(mediaTypes);
+    }
 
     /**
      * test generateEncodedRedirectURL.

@@ -42,6 +42,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 
 /**
  * *
@@ -49,25 +50,20 @@ import org.slf4j.LoggerFactory;
  * Operations on {@link java.lang.String} that are <code>null</code> safe.
  * </p>
  * <ul>
- *  <li><b>generateEncodedRedirectURL</b>
- *      - generate encoded redirect URL, for redirect service</li>
- *  <li><b>parseTldsToListIfTldListIsNull</b>
- *      - parse tlds to list</li>
- *  <li><b>addQuotas</b>
- *      - add "'" before and after str</li>
- *  <li><b>checkIsValidSearchPattern</b>
- *      - check if str is valid search pattern.</li>
- *  <li><b>containsAtMostOnce</b>
- *      - check if str contains searchStr more than once.</li>
- *  <li><b>isValidEntityHandleOrName</b>
- *      - check is valid entity handle</li>
- *  <li><b>urlEncode</b>
- *      - encoded url with UTF-8 encoding</li>
- *  <li><b>getNormalization</b>
- *      - get normalization format string</li>
- *  <li><b>parseUnsignedLong</b>
- *      - Parses the string argument as an unsigned decimal</li>
+ * <li><b>generateEncodedRedirectURL</b> - generate encoded redirect URL, for
+ * redirect service</li>
+ * <li><b>parseTldsToListIfTldListIsNull</b> - parse tlds to list</li>
+ * <li><b>addQuotas</b> - add "'" before and after str</li>
+ * <li><b>checkIsValidSearchPattern</b> - check if str is valid search pattern.</li>
+ * <li><b>containsAtMostOnce</b> - check if str contains searchStr more than
+ * once.</li>
+ * <li><b>isValidEntityHandleOrName</b> - check is valid entity handle</li>
+ * <li><b>urlEncode</b> - encoded url with UTF-8 encoding</li>
+ * <li><b>getNormalization</b> - get normalization format string</li>
+ * <li><b>parseUnsignedLong</b> - Parses the string argument as an unsigned
+ * decimal</li>
  * </ul>
+ * 
  * @author jiashuo
  * 
  */
@@ -117,9 +113,26 @@ public final class StringUtil {
      * max entity handle length.
      */
     public static final int MAX_ENTITY_HANDLE_LENGTH = 253;
-    
+
     /**
-     * check if decodeUri contain non-ascii-printable chars.
+     * parse media types from media type string.
+     * 
+     * @param mediaTypesStr
+     *            media type string.
+     * @return media type list.
+     */
+    public static List<MediaType> parseMediaTypes(String mediaTypesStr) {
+        try {
+            return MediaType.parseMediaTypes(mediaTypesStr);
+        } catch (Exception e) {
+            LOGGER.error("invalid media type for {}, error :{}", mediaTypesStr,
+                    e);
+        }
+        return null;
+    }
+
+    /**
+     * check if decodeUri contain non-ASCII-printable chars.
      * 
      * @param decodeUri
      *            decodeUri
