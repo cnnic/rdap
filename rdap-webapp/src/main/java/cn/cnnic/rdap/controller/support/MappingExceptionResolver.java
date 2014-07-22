@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
@@ -17,8 +18,7 @@ import cn.cnnic.rdap.common.util.RestResponseUtil;
 
 /**
  * This is an
- * {@link org.springframework.web.servlet
- * .handler.SimpleMappingExceptionResolver}
+ * {@link org.springframework.web.servlet .handler.SimpleMappingExceptionResolver}
  * implementation, that handle
  * {@link org.springframework.http.InvalidMediaTypeException} and other
  * exceptions. For InvalidMediaTypeException it will return HTTP 415 error, and
@@ -39,7 +39,8 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
             HttpServletResponse response, Object handler, Exception ex) {
         ResponseEntity<ErrorMessage> responseEntity = null;
         LOGGER.error("error:", ex);
-        if (ex instanceof InvalidMediaTypeException) {
+        if (ex instanceof InvalidMediaTypeException
+                || ex instanceof HttpMediaTypeNotAcceptableException) {
             responseEntity = RestResponseUtil.createResponse415();
         } else {
             responseEntity = RestResponseUtil.createResponse500();
