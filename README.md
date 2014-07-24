@@ -6,7 +6,7 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
    
    [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html), or higher verison.
 
-   For OS X,you should use [JDK7](http://www.oracle.com/technetwork/java/javase/downloads) or higher version.
+   For OS X,you should use [JDK7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) or higher version.
 2. Install Mysql5, or higher version. (Skip this step if already installed)
    
    [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higher version. 
