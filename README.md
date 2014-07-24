@@ -1,10 +1,15 @@
 ### Install Instruction
+
+Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.
+
 1. Install JDK6, or higher version. (Skip this step if already installed)
    
-   [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html), or higer verison.
+   [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html), or higher verison.
+
+   For mac os,you should use [JDK7](http://www.oracle.com/technetwork/java/javase/downloads) or higher version.
 2. Install Mysql5, or higher version. (Skip this step if already installed)
    
-   [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higer version. 
+   [Download and Install Mysql5](http://dev.mysql.com/downloads/mysql) or higher version. 
      
    You must get (from DBA) or generate an Mysql user/password pair, used to access RDAP database, and this user must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html).
 
@@ -14,6 +19,8 @@
 
 
     Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.
+    
+    For mac os,you should use tar.gz formated Binary Distributions.
 
 4. Get war file 'rdap.war'. 
 
@@ -25,7 +32,7 @@
       *  [Download source zip file](https://github.com/cnnic/rdap/archive/master.zip), unzip it to $WORK_DIR
       *  Build project:
 		```
-		[in Linux, open a shell and execute command:]
+		[in Linux/os x, open a shell and execute command:]
 			cd $WORK_DIR/rdap-master/rdap-webapp		# $WORK_DIR must be replaced by real dir
 			mvn package -Dmaven.test.skip=true	# mvn must in system variable. Option '-Dmaven.compiler.target' can be used for higher jdk version, such as '-Dmaven.compiler.target=1.7' for jdk7
 		[in Windows7 or Windows8, open command prompt window and execute command:]
@@ -50,7 +57,7 @@
      
 		```
 		cd $MYSQL_HOME     #$MYSQL_HOME must be replaced by real Mysql home dir
-		[in Linux, open a shell and execute command:]
+		[in Linux/os x, open a shell and execute command:]
 	   		mysql -h127.0.0.1 -u$MYSQL_USERNAME  -p
 		[in Windows, open command prompt window and execute command:]
 			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
@@ -84,7 +91,7 @@
    * Start up tomcat
 	   
 		```
-		[in Linux, open a shell and execute command:]
+		[in Linux/os x, open a shell and execute command:]
 			cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
 			bin/startup.sh
 		[in Windows, open command prompt window and execute command:]
