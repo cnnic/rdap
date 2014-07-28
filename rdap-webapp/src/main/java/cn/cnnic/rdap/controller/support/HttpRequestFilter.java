@@ -39,10 +39,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import cn.cnnic.rdap.bean.ErrorMessage;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
+import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
  * This Filter is used to validate HTTP request.
@@ -65,9 +67,10 @@ public class HttpRequestFilter implements RdapFilter {
             .getLogger(AuthenticationFilter.class);
 
     /**
-     * rdap content type.
+     * supported media type list.
      */
-    private static final String VALID_CONTENT_TYPE = "application/rdap+json";
+    private static final List<MediaType> SUPPORTED_MEDIA_TYPE =
+            new ArrayList<MediaType>();
     /**
      * allow methods.
      */
@@ -77,6 +80,8 @@ public class HttpRequestFilter implements RdapFilter {
      */
     static {
         ALLOW_METHODS.add("GET");
+        SUPPORTED_MEDIA_TYPE.add(new MediaType("application", "rdap+json"));
+        SUPPORTED_MEDIA_TYPE.add(new MediaType("application", "json"));
     }
 
     /**
@@ -103,14 +108,16 @@ public class HttpRequestFilter implements RdapFilter {
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         boolean httpMethodIsValid = httpMethodIsValid(request);
+        LOGGER.debug("http method is valid:{}", httpMethodIsValid);
         if (!httpMethodIsValid) {
             ResponseEntity<ErrorMessage> responseEntity =
                     RestResponseUtil.createResponse405();
             FilterHelper.writeResponse(responseEntity, response);
             return false;
         }
-        boolean contentTypeIsValid = contentTypeIsValid(request);
-        if (!contentTypeIsValid) {
+        boolean mediaTypeIsValid = mediaTypeIsValid(request);
+        LOGGER.debug("mediaType is valid:{}", mediaTypeIsValid);
+        if (!mediaTypeIsValid) {
             ResponseEntity<ErrorMessage> responseEntity =
                     RestResponseUtil.createResponse415();
             FilterHelper.writeResponse(responseEntity, response);
@@ -120,20 +127,44 @@ public class HttpRequestFilter implements RdapFilter {
     }
 
     /**
-     * check if content type is valid.
+     * check if media type is valid.
      * 
      * @param request
      *            HttpServletRequest
      * @return true if valid, false if not
      */
-    private boolean contentTypeIsValid(HttpServletRequest request) {
+    private boolean mediaTypeIsValid(HttpServletRequest request) {
         String acceptHeader = request.getHeader("Accept");
+        LOGGER.debug("acceptHeader:{}", acceptHeader);
         if (StringUtils.isBlank(acceptHeader)) {
+            return false;
+        }
+        List<MediaType> mediaTypes = StringUtil.parseMediaTypes(acceptHeader);
+        if (containsSupportedMediaType(mediaTypes)) {
             return true;
         }
-        if (VALID_CONTENT_TYPE.equals(acceptHeader)
-                || acceptHeader.startsWith(VALID_CONTENT_TYPE + ";")) {
-            return true;
+        return false;
+    }
+
+    /**
+     * check if mediaTypes contains supported media type.
+     * 
+     * @param mediaTypes
+     *            mediaTypes.
+     * @return true if contain, false if not.
+     */
+    private boolean containsSupportedMediaType(List<MediaType> mediaTypes) {
+        LOGGER.debug("SUPPORTED_MEDIA_TYPE:{}", SUPPORTED_MEDIA_TYPE);
+        for (MediaType supportedMediaType : SUPPORTED_MEDIA_TYPE) {
+            for (MediaType mediaType : SUPPORTED_MEDIA_TYPE) {
+                if (StringUtils.equalsIgnoreCase(supportedMediaType.getType(),
+                        mediaType.getType())
+                        && StringUtils.equalsIgnoreCase(
+                                supportedMediaType.getSubtype(),
+                                mediaType.getSubtype())) {
+                    return true;
+                }
+            }
         }
         return false;
     }
