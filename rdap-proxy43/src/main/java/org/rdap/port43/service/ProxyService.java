@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.rdap.port43.service.command.DomainQueryHandler;
+import org.rdap.port43.service.format.ResponseFormater;
 
 /**
  * proxy service.

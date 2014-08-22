@@ -1,10 +1,11 @@
-package org.rdap.port43.service;
+package org.rdap.port43.service.format;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.rdap.port43.service.JsonUtil;
 
 import ezvcard.Ezvcard;
 import ezvcard.Ezvcard.ParserChainJsonString;
@@ -15,17 +16,14 @@ import ezvcard.VCard;
  * @author jiashuo
  * 
  */
-public class ResponseFormater {
-    private static ThreadLocal<MutableInteger> depth =
-            new ThreadLocal<MutableInteger>() {
-                @Override
-                protected MutableInteger initialValue() {
-                    return new MutableInteger(0);
-                }
-            };
-    private final static String tabs = StringUtils.repeat("\t", 20);
+public class TextFormater implements Formater {
+    /**
+     * tabs for format.
+     */
+    private final static String TABS = StringUtils.repeat("\t", 20);
 
-    public static String format(Map map) {
+    @Override
+    public String format(Map map) {
         if (null == map) {
             return StringUtils.EMPTY;
         }
@@ -38,16 +36,23 @@ public class ResponseFormater {
         return result.toString();
     }
 
-    public static void formatObject(String key, Object object,
-            StringBuffer result) {
+    private static ThreadLocal<MutableInteger> depth =
+            new ThreadLocal<MutableInteger>() {
+                @Override
+                protected MutableInteger initialValue() {
+                    return new MutableInteger(0);
+                }
+            };
+
+    public void formatObject(String key, Object object, StringBuffer result) {
         if ("vcardArray".equals(key)) {
             // System.err.println("add "+getDepth()+" tab for key:"+key);
-            result.append(tabs, 0, getDepth());
+            result.append(TABS, 0, getDepth());
             String jcardString = JsonUtil.toJson(object);
             ParserChainJsonString e = Ezvcard.parseJson(jcardString);
             List<VCard> list = e.all();
             String displayValue = Ezvcard.write(list.get(0)).prodId(false).go();
-            String replacement = StringUtils.substring(tabs, 0, getDepth() + 1);// add
+            String replacement = StringUtils.substring(TABS, 0, getDepth() + 1);// add
                                                                                 // tab
             displayValue = "\r\n" + displayValue;
             displayValue = StringUtils.removeEnd(displayValue, "\r\n");
@@ -61,14 +66,14 @@ public class ResponseFormater {
             result.append("\r\n");
         } else if (object instanceof String) {
             // System.err.println("add "+getDepth()+" tab for key:"+key);
-            result.append(tabs, 0, getDepth());
+            result.append(TABS, 0, getDepth());
             result.append(key);
             result.append(":");
             result.append(object);
             result.append("\r\n");
         } else if (object instanceof Map) {
             // System.err.println("add "+getDepth()+" tab for key:"+key);
-            result.append(tabs, 0, getDepth());
+            result.append(TABS, 0, getDepth());
             result.append(key);
             result.append(":");
             result.append("\r\n");
@@ -82,11 +87,11 @@ public class ResponseFormater {
         }
     }
 
-    private static int getDepth() {
+    private int getDepth() {
         return depth.get().get();
     }
 
-    public static void formatMap(Map<String, Object> map, StringBuffer result) {
+    public void formatMap(Map<String, Object> map, StringBuffer result) {
         if (null == map) {
             return;
         }
@@ -98,8 +103,7 @@ public class ResponseFormater {
         return;
     }
 
-    public static void formatList(String key, List<Object> list,
-            StringBuffer result) {
+    public void formatList(String key, List<Object> list, StringBuffer result) {
         if (null == list) {
             return;
         }
@@ -107,6 +111,7 @@ public class ResponseFormater {
             formatObject(key, object, result);
         }
     }
+
 }
 
 class MutableInteger {

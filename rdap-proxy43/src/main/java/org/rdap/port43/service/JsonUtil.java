@@ -1,7 +1,10 @@
 package org.rdap.port43.service;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.rdap.port43.service.format.ResponseFormater;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -38,11 +41,22 @@ public class JsonUtil {
         return "";
     }
 
+    public static String toJsonWithPrettyFormat(Object object) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static Map convertToMap(String jsonStr) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map result = null;
         try {
-            result = objectMapper.readValue(jsonStr, Map.class);
+            result = objectMapper.readValue(jsonStr, LinkedHashMap.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,16 +73,16 @@ class JcardDeserializer extends JsonDeserializer<Map<String, Object>> {
     }
 
     @Override
-    public Map<String, Object>
-            deserialize(JsonParser jp, DeserializationContext ctxt)
-                    throws IOException, JsonProcessingException {
+    public Map<String, Object> deserialize(JsonParser jp,
+            DeserializationContext ctxt) throws IOException,
+            JsonProcessingException {
         ObjectCodec codec = jp.getCodec();
         JsonNode node = codec.readTree(jp);
-//        if (!"".equals(node.getTextValue())) {
-//            return mapper.readValue(node,
-//                    new TypeReference<Map<String, Object>>() {
-//                    });
-//        }
+        // if (!"".equals(node.getTextValue())) {
+        // return mapper.readValue(node,
+        // new TypeReference<Map<String, Object>>() {
+        // });
+        // }
         return null; // Node was an empty string
     }
 }
