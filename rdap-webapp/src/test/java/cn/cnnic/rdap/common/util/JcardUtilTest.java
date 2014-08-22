@@ -43,6 +43,9 @@ import org.junit.Test;
 import cn.cnnic.rdap.bean.Entity;
 import cn.cnnic.rdap.bean.EntityAddress;
 import cn.cnnic.rdap.bean.EntityTel;
+import ezvcard.Ezvcard;
+import ezvcard.Ezvcard.ParserChainJsonString;
+import ezvcard.VCard;
 import ezvcard.property.Kind;
 
 /**
@@ -89,6 +92,9 @@ public class JcardUtilTest {
         entity.setUrl("http://www.acme-co.com");
         entity.setLang("zh_CN");
         String jcardString = JcardUtil.toJcardString(entity);
+        ParserChainJsonString e = Ezvcard.parseJson(jcardString);
+        List<VCard> list = e.all();
+        System.err.println(Ezvcard.write(list.get(0)).prodId(false).go());
         assertNotNull(jcardString);
         assertThat(jcardString, new StringContains("zh_CN")); 
         // invalid lang also can work
