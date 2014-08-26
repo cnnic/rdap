@@ -36,7 +36,7 @@ import java.util.List;
  * domain search handler.
  * 
  * <pre>
- * whois --domains cnnic*.cn
+ * whois domains cnnic*.cn
  * </pre>
  * 
  * @author jiashuo

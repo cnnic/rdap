@@ -35,6 +35,10 @@ import java.util.List;
 /**
  * nameserver query handler.
  * 
+ * <pre>
+ * whois nameserver ns.cnnic.cn
+ * </pre>
+ * 
  * @author jiashuo
  * 
  */

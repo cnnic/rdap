@@ -35,6 +35,10 @@ import java.util.List;
 /**
  * entity query handler.
  * 
+ * <pre>
+ * whois entity handle_of_entity
+ * </pre>
+ * 
  * @author jiashuo
  * 
  */

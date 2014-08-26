@@ -157,4 +157,37 @@ public abstract class QueryHandler {
         }
         return result;
     }
+
+    /**
+     * check if is prefixed agrument.
+     * 
+     * @param prefixedArgument
+     *            prefixedArgument.
+     * @param prefix
+     *            prefix.
+     * @return true if prefixed,false if not.
+     */
+    protected boolean
+            isPrefixedArgument(String prefixedArgument, String prefix) {
+        if (StringUtils.isBlank(prefixedArgument)) {
+            return false;
+        }
+        return StringUtils.startsWith(prefixedArgument, prefix);
+    }
+
+    /**
+     * get prefixed agrument.
+     * 
+     * @param prefixedArgument
+     *            prefixedArgument.
+     * @param prefix
+     *            prefix.
+     * @return value.
+     */
+    protected String removePrefix(String prefixedArgument, String prefix) {
+        if (StringUtils.isBlank(prefixedArgument)) {
+            return StringUtils.EMPTY;
+        }
+        return StringUtils.removeStart(prefixedArgument, prefix + "=");
+    }
 }

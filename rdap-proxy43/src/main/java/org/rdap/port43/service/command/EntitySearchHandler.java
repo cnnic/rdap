@@ -37,6 +37,11 @@ import org.rdap.port43.service.ServiceException;
 /**
  * entity search handler.
  * 
+ * <pre>
+ * whois entities fn=name_of_entity_search_string
+ * whois entities handle=handle_of_entity_search_string
+ * </pre>
+ * 
  * @author jiashuo
  * 
  */
@@ -51,18 +56,20 @@ public class EntitySearchHandler extends QueryHandler {
     protected String getRelativeRequestURI(Command command) {
         List<String> argumentList = command.getArgumentList();
         throwExceptionIfArguementIsEmpty(argumentList);
-        String uri = "/entities?";
+        String uri = "entities?";
         String OPTION_FN = CommandOption.ENTITY_SEARCH_FN.getOption();
         String OPTION_HANDLE = CommandOption.ENTITY_SEARCH_HANDLE.getOption();
-        if (containsOption(OPTION_FN, command)) {
-            uri = uri + OPTION_FN + "=" + getValueOfOption(OPTION_FN, command);
-        } else if (containsOption(OPTION_HANDLE, command)) {
+        if (isPrefixedArgument(argumentList.get(0), OPTION_FN)) {
+            uri =
+                    uri + OPTION_FN + "="
+                            + removePrefix(argumentList.get(0), OPTION_FN);
+        } else if (isPrefixedArgument(argumentList.get(0), OPTION_HANDLE)) {
             uri =
                     uri + OPTION_HANDLE + "="
-                            + getValueOfOption(OPTION_HANDLE, command);
+                            + removePrefix(argumentList.get(0), OPTION_HANDLE);
         } else {
             throw new ServiceException("invalid argument");
         }
-        return "nameservers?" + uri;
+        return uri;
     }
 }

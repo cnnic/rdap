@@ -51,9 +51,10 @@ public enum CommandOption {
     /**
      * has arg
      */
-    ENTITY_SEARCH_FN("fn", true, "search entity with fn"),
-    ENTITY_SEARCH_HANDLE("handle", true, "search entity with handle"),
-    NAMESERVER_SEARCH_BY_IP("ip", true, "search nameserver with ip"), ;
+    ENTITY_SEARCH_FN("fn", true, "search entity by name"),
+    ENTITY_SEARCH_HANDLE("handle", true, "search entity by handle"),
+    NAMESERVER_SEARCH_BY_IP("ip", true, "search nameserver by ip"),
+    NAMESERVER_SEARCH_BY_NAME("name", true, "search nameserver by name"), ;
 
     /**
      * option.

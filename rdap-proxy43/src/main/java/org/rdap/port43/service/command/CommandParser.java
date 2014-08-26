@@ -30,13 +30,11 @@
  */
 package org.rdap.port43.service.command;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang.StringUtils;
@@ -48,7 +46,6 @@ import org.rdap.port43.service.ServiceException;
  * 
  */
 public class CommandParser {
-    private static final String WHOIS_CMD_PREFIX = "whois";
 
     /**
      * 
@@ -71,20 +68,7 @@ public class CommandParser {
         } catch (ParseException e) {
             throw new ServiceException("invalid command");
         }
-        Option[] options = line.getOptions();
-        Command command = null;
-        for (Option option : options) {
-            command = new Command(CommandOption.getByStr(option.getOpt()));
-            if (null != command) {
-                break;
-            }
-        }
-        if (null == command) {
-            command = new Command(CommandOption.IP_OR_DOMAIN_QUERY);
-        }
-        command.setArgumentList(line.getArgList());
-        parseAllOptionsAndSetToCommand(options, command);
-        return command;
+        return doParseCommand(line.getArgList());
     }
 
     /**
@@ -104,18 +88,28 @@ public class CommandParser {
     /**
      * parse all options and set it to command.
      * 
-     * @param options
-     *            options.
-     * @param command
-     *            command.
+     * @param argumentList
+     *            argumentList, more than two arguments as 'has option'.
+     * @return command command.
      */
-    private static void parseAllOptionsAndSetToCommand(Option[] options,
-            Command command) {
-        Map<String, String> allOptionsMap = new HashMap<String, String>();
-        for (Option option : options) {
-            allOptionsMap.put(option.getOpt(), option.getValue());
+    private static Command doParseCommand(List<String> argumentList) {
+        Command command = new Command();
+        command.setArgumentList(argumentList);
+        if (null == argumentList || argumentList.size() < 2) {
+            return command;
         }
-        command.setAllOptionsMap(allOptionsMap);
+        String optionStr = argumentList.get(0);
+        CommandOption option = CommandOption.getByStr(optionStr);
+        if (null != option) {
+            // has valid option.
+            command.setCommandType(option);
+            // remove option.
+            argumentList.remove(0);
+        } else {
+            // default option.
+            command.setCommandType(CommandOption.IP_OR_DOMAIN_QUERY);
+        }
+        return command;
     }
 
     /**
@@ -138,4 +132,5 @@ public class CommandParser {
         }
         return commandStr;
     }
+
 }

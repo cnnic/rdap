@@ -57,6 +57,13 @@ public class Command {
     private Map<String, String> allOptionsMap;
 
     /**
+     * default constructor.
+     */
+    public Command() {
+        super();
+    }
+
+    /**
      * constructor.
      * 
      * @param commandType
@@ -95,5 +102,5 @@ public class Command {
     public void setAllOptionsMap(Map<String, String> allOptionsMap) {
         this.allOptionsMap = allOptionsMap;
     }
-    
+
 }

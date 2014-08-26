@@ -44,6 +44,7 @@ import org.rdap.port43.service.command.EntityQueryHandler;
 import org.rdap.port43.service.command.EntitySearchHandler;
 import org.rdap.port43.service.command.ErrorQueryHandler;
 import org.rdap.port43.service.command.IpQueryHandler;
+import org.rdap.port43.service.command.NameserverQueryHandler;
 import org.rdap.port43.service.command.NameserverSearchHandler;
 import org.rdap.port43.service.command.QueryHandler;
 import org.rdap.port43.service.format.ResponseFormater;
@@ -77,6 +78,7 @@ public class ProxyService {
         queryHandlers.add(new DomainSearchHandler());
         queryHandlers.add(new EntityQueryHandler());
         queryHandlers.add(new EntitySearchHandler());
+        queryHandlers.add(new NameserverQueryHandler());
         queryHandlers.add(new NameserverSearchHandler());
         queryHandlers.add(new IpQueryHandler());// MUST before domain query.
         queryHandlers.add(new DomainQueryHandler());// MUST at last.

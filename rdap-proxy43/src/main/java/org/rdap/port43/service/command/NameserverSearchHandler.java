@@ -35,6 +35,11 @@ import java.util.List;
 /**
  * nameserver search handler.
  * 
+ * <pre>
+ * whois nameservers ns.cnnic*.cn
+ * whois nameservers ip=218.2.2.2
+ * </pre>
+ * 
  * @author jiashuo
  * 
  */
@@ -47,16 +52,23 @@ public class NameserverSearchHandler extends QueryHandler {
 
     @Override
     protected String getRelativeRequestURI(Command command) {
-        String uri = "/nameservers?";
+        List<String> argumentList = command.getArgumentList();
+        throwExceptionIfArguementIsEmpty(argumentList);
+        String uri = "nameservers?";
         String OPTION_IP = CommandOption.NAMESERVER_SEARCH_BY_IP.getOption();
-        if (containsOption(OPTION_IP, command)) {
-            uri = uri + OPTION_IP + "=" + getValueOfOption(OPTION_IP, command);
-        } else {
+        String OPTION_NAME =
+                CommandOption.NAMESERVER_SEARCH_BY_NAME.getOption();
+        if (isPrefixedArgument(argumentList.get(0), OPTION_IP)) {
+            // search by ip.
+            uri =
+                    uri + OPTION_IP + "="
+                            + removePrefix(argumentList.get(0), OPTION_IP);
+        } else {// search by name.
             List<String> argumntList = command.getArgumentList();
             throwExceptionIfArguementIsEmpty(argumntList);
-            String argument = argumntList.get(0);
-            uri = uri + "name=" + argument;
+            uri = uri + OPTION_NAME + "=" + argumntList.get(0);
         }
         return uri;
     }
+
 }

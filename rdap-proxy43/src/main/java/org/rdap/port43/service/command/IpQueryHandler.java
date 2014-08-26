@@ -59,10 +59,15 @@ public class IpQueryHandler extends QueryHandler {
         if (null == argumentList || argumentList.isEmpty()) {
             return false;
         }
-        if (StringUtils.isBlank(argumentList.get(0))) {
+        String argument = argumentList.get(0);
+        if (StringUtils.isBlank(argument)) {
             return false;
         }
-        boolean isIp = IpUtil.isIpV4OrV6Str(argumentList.get(0));
+        String ipPart = argument;
+        if (StringUtils.contains(argument, "/")) {
+            ipPart = StringUtils.substringBefore(argument, "/");
+        }
+        boolean isIp = IpUtil.isIpV4OrV6Str(ipPart);
         return isIp;
     }
 
@@ -77,4 +82,5 @@ public class IpQueryHandler extends QueryHandler {
         }
         return "ip/" + argumentList.get(0);
     }
+
 }
