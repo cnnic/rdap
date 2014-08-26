@@ -28,30 +28,35 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.rdap.port43.util;
+package org.rdap.port43.service.command;
+
+import java.util.List;
 
 /**
- * reflection util.
+ * nameserver search handler.
  * 
  * @author jiashuo
  * 
  */
-public class ReflectionUtil {
+public class NameserverSearchHandler extends QueryHandler {
 
-    /**
-     * create instance by class name.
-     * 
-     * @param className
-     *            class name.
-     * @return instance.
-     */
-    public static Object createInstance(String className) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            return clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public boolean supportCmd(Command command) {
+        return CommandOption.NAMESERVER_SEARCH.equals(command.getCommandType());
+    }
+
+    @Override
+    protected String getRelativeRequestURI(Command command) {
+        String uri = "/nameservers?";
+        String OPTION_IP = CommandOption.NAMESERVER_SEARCH_BY_IP.getOption();
+        if (containsOption(OPTION_IP, command)) {
+            uri = uri + OPTION_IP + "=" + getValueOfOption(OPTION_IP, command);
+        } else {
+            List<String> argumntList = command.getArgumentList();
+            throwExceptionIfArguementIsEmpty(argumntList);
+            String argument = argumntList.get(0);
+            uri = uri + "name=" + argument;
         }
-        return null;
+        return uri;
     }
 }

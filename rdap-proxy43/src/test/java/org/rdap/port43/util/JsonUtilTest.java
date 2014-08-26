@@ -30,28 +30,26 @@
  */
 package org.rdap.port43.util;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.util.Map;
+
+import org.junit.Test;
+
 /**
- * reflection util.
  * 
  * @author jiashuo
  * 
  */
-public class ReflectionUtil {
+public class JsonUtilTest {
 
-    /**
-     * create instance by class name.
-     * 
-     * @param className
-     *            class name.
-     * @return instance.
-     */
-    public static Object createInstance(String className) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            return clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Test
+    public void testDeserializate() {
+        String json =
+                "{\"address\":[{\"a\":\"b\"},{\"c\":\"d\"}],\"name\":\"haha\",\"id\":1,\"email\":\"email\"}";
+        Map convertToMap = JsonUtil.deserializateJsonToMap(json);
+        assertNotNull(convertToMap);
+        assertNotNull(convertToMap.get("address"));
     }
+
 }

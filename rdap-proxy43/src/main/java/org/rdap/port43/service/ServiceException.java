@@ -28,30 +28,47 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.rdap.port43.util;
+package org.rdap.port43.service;
 
 /**
- * reflection util.
+ * service exception.
  * 
  * @author jiashuo
  * 
  */
-public class ReflectionUtil {
+public class ServiceException extends RuntimeException {
 
     /**
-     * create instance by class name.
      * 
-     * @param className
-     *            class name.
-     * @return instance.
      */
-    public static Object createInstance(String className) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            return clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    private static final long serialVersionUID = 5841305724038890337L;
+
+    /**
+     * constructor.
+     */
+    public ServiceException() {
+        super();
     }
+
+    /**
+     * constructor with msg and cause.
+     */
+    public ServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * constructor with msg.
+     */
+    public ServiceException(String message) {
+        super(message);
+    }
+
+    /**
+     * constructor with cause.
+     */
+    public ServiceException(Throwable cause) {
+        super(cause);
+    }
+
 }

@@ -1,4 +1,4 @@
-package cn.cnnic.rdap;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +16,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.rdap.port43.service.JsonUtil;
+import org.rdap.port43.util.JsonUtil;
 
 /**
  * Unit test for simple App.
@@ -33,7 +33,7 @@ public class AppTest extends TestCase {
         
         String json =
                 "{\"address\":[{\"a\":\"b\"},{\"c\":\"d\"}],\"name\":\"haha\",\"id\":1,\"email\":\"email\"}";
-        Map convertToMap = JsonUtil.convertToMap(json);
+        Map convertToMap = JsonUtil.deserializateJsonToMap(json);
         System.err.println(ToStringBuilder.reflectionToString(convertToMap,
                 RecursiveToStringStyle.getInstance()));
         

@@ -30,28 +30,67 @@
  */
 package org.rdap.port43.util;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.rdap.port43.service.ServiceException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
- * reflection util.
+ * JSON util.
  * 
  * @author jiashuo
  * 
  */
-public class ReflectionUtil {
+public class JsonUtil {
 
     /**
-     * create instance by class name.
+     * convert object to JSON string.
      * 
-     * @param className
-     *            class name.
-     * @return instance.
+     * @param object
+     *            object.
+     * @return string.
      */
-    public static Object createInstance(String className) {
+    public static String toJson(Object object) {
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Class<?> clazz = Class.forName(className);
-            return clazz.newInstance();
-        } catch (Exception e) {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
+
+    public static String toJsonWithPrettyFormat(Object object) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * deserializate JSON, to map.
+     * 
+     * @param jsonStr
+     *            jsonStr.
+     * @return map.
+     */
+    public static Map deserializateJsonToMap(String jsonStr) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map result = null;
+        try {
+            result = objectMapper.readValue(jsonStr, LinkedHashMap.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("deserializateJsonToMap error.");
+        }
+        return result;
+    }
+
 }

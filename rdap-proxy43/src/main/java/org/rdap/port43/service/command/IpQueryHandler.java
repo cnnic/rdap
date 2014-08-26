@@ -28,30 +28,53 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.rdap.port43.util;
+package org.rdap.port43.service.command;
+
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.rdap.port43.service.ServiceException;
+import org.rdap.port43.util.IpUtil;
 
 /**
- * reflection util.
+ * ip query handler.
+ * 
+ * <pre>
+ * always support! 
+ * so MUST check ipQueryHandler at last,before DomainQueryHandler.
+ * </pre>
+ * 
+ * <pre>
+ * command option for IP query is null, eg: whois 218.241.1.1
+ * </pre>
  * 
  * @author jiashuo
  * 
  */
-public class ReflectionUtil {
+public class IpQueryHandler extends QueryHandler {
 
-    /**
-     * create instance by class name.
-     * 
-     * @param className
-     *            class name.
-     * @return instance.
-     */
-    public static Object createInstance(String className) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            return clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public boolean supportCmd(Command command) {
+        List<String> argumentList = command.getArgumentList();
+        if (null == argumentList || argumentList.isEmpty()) {
+            return false;
         }
-        return null;
+        if (StringUtils.isBlank(argumentList.get(0))) {
+            return false;
+        }
+        boolean isIp = IpUtil.isIpV4OrV6Str(argumentList.get(0));
+        return isIp;
+    }
+
+    @Override
+    protected String getRelativeRequestURI(Command command) {
+        List<String> argumentList = command.getArgumentList();
+        if (null == argumentList || argumentList.isEmpty()) {
+            throw new ServiceException("invalid argument");
+        }
+        if (StringUtils.isBlank(argumentList.get(0))) {
+            throw new ServiceException("invalid argument");
+        }
+        return "ip/" + argumentList.get(0);
     }
 }

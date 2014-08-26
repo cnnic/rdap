@@ -28,30 +28,33 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.rdap.port43.util;
+package org.rdap.port43.service.command;
+
+import java.util.List;
 
 /**
- * reflection util.
+ * domain search handler.
+ * 
+ * <pre>
+ * whois --domains cnnic*.cn
+ * </pre>
  * 
  * @author jiashuo
  * 
  */
-public class ReflectionUtil {
+public class DomainSearchHandler extends QueryHandler {
 
-    /**
-     * create instance by class name.
-     * 
-     * @param className
-     *            class name.
-     * @return instance.
-     */
-    public static Object createInstance(String className) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            return clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public boolean supportCmd(Command command) {
+        return CommandOption.DOMAIN_SEARCH.equals(command.getCommandType());
     }
+
+    @Override
+    protected String getRelativeRequestURI(Command command) {
+        List<String> argumntList = command.getArgumentList();
+        throwExceptionIfArguementIsEmpty(argumntList);
+        String argument = argumntList.get(0);
+        return "domains?name=" + argument;
+    }
+
 }

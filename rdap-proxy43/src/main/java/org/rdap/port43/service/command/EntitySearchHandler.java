@@ -28,30 +28,41 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.rdap.port43.util;
+package org.rdap.port43.service.command;
+
+import java.util.List;
+
+import org.rdap.port43.service.ServiceException;
 
 /**
- * reflection util.
+ * entity search handler.
  * 
  * @author jiashuo
  * 
  */
-public class ReflectionUtil {
+public class EntitySearchHandler extends QueryHandler {
 
-    /**
-     * create instance by class name.
-     * 
-     * @param className
-     *            class name.
-     * @return instance.
-     */
-    public static Object createInstance(String className) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            return clazz.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public boolean supportCmd(Command command) {
+        return CommandOption.ENTITY_SEARCH.equals(command.getCommandType());
+    }
+
+    @Override
+    protected String getRelativeRequestURI(Command command) {
+        List<String> argumentList = command.getArgumentList();
+        throwExceptionIfArguementIsEmpty(argumentList);
+        String uri = "/entities?";
+        String OPTION_FN = CommandOption.ENTITY_SEARCH_FN.getOption();
+        String OPTION_HANDLE = CommandOption.ENTITY_SEARCH_HANDLE.getOption();
+        if (containsOption(OPTION_FN, command)) {
+            uri = uri + OPTION_FN + "=" + getValueOfOption(OPTION_FN, command);
+        } else if (containsOption(OPTION_HANDLE, command)) {
+            uri =
+                    uri + OPTION_HANDLE + "="
+                            + getValueOfOption(OPTION_HANDLE, command);
+        } else {
+            throw new ServiceException("invalid argument");
         }
-        return null;
+        return "nameservers?" + uri;
     }
 }
