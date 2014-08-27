@@ -31,7 +31,7 @@
 package org.rdap.port43.server;
 
 /**
- * Proxy43 server.
+ * Proxy43 server.Use netty.
  * @author jiashuo
  * 
  */

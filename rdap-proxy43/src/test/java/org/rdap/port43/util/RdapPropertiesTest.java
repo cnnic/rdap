@@ -17,6 +17,7 @@ public class RdapPropertiesTest {
         assertNotNull(RdapProperties.getMinSecondsAccessInterval());
         assertNotNull(RdapProperties.getPort());
         assertNotNull(RdapProperties.getRdapServerBaseUrl());
+        assertNotNull(RdapProperties.getResponseFormater());
     }
 
 }

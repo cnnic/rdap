@@ -32,6 +32,7 @@ package org.rdap.port43.service.format;
 
 import java.util.Map;
 
+import org.rdap.port43.util.RdapProperties;
 import org.rdap.port43.util.ReflectionUtil;
 
 /**
@@ -41,6 +42,18 @@ import org.rdap.port43.util.ReflectionUtil;
  * 
  */
 public class ResponseFormater {
+    /**
+     * formater.
+     */
+    private static Formater formater;
+    /**
+     * init formater when class load.
+     */
+    static {
+        formater =
+                (Formater) ReflectionUtil.createInstance(RdapProperties
+                        .getResponseFormater());
+    }
 
     /**
      * format map to string.
@@ -50,9 +63,6 @@ public class ResponseFormater {
      * @return string.
      */
     public static String format(Map map) {
-        Formater formater =
-                (Formater) ReflectionUtil
-                        .createInstance("org.rdap.port43.service.format.TextFormater");
         return formater.format(map);
     }
 

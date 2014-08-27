@@ -55,12 +55,17 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, String request) {
-        String response;
+        String response = "";
         if (request.isEmpty()) {
             response = "command can't be empty.";
         } else {
             ProxyService proxyService = ProxyService.getInstance();
-            response = proxyService.execute(request);
+            try {
+                response = proxyService.execute(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+                response = "internal error.";
+            }
         }
         ChannelFuture future = ctx.write(response);
         // Close the connection.
