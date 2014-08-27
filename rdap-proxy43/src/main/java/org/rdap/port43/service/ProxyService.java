@@ -104,7 +104,7 @@ public class ProxyService {
      * @throws ServiceException
      *             ServiceException.
      */
-    public String execute(String commandStr) throws ServiceException {
+    public String execute(String commandStr) throws Exception {
         String requestURI = StringUtils.EMPTY;
         try {
             Command command = CommandParser.parse(commandStr);

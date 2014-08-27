@@ -28,6 +28,10 @@ public class RdapProperties {
      */
     private static Long minSecondsAccessInterval;
     /**
+     * responseFormater class name.
+     */
+    private static String responseFormater;
+    /**
      * prop file.
      */
     private static final String PROPERTIES_FILE = "/proxy43.properties";
@@ -44,6 +48,7 @@ public class RdapProperties {
             setPort(Integer.parseInt(resource.getProperty("port", "43")));
             setMinSecondsAccessInterval(Long.parseLong(resource
                     .getProperty("minSecondsAccessInterval")));
+            setResponseFormater(resource.getProperty("responseFormater"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,6 +77,14 @@ public class RdapProperties {
     public static void
             setMinSecondsAccessInterval(Long minSecondsAccessInterval) {
         RdapProperties.minSecondsAccessInterval = minSecondsAccessInterval;
+    }
+
+    public static String getResponseFormater() {
+        return responseFormater;
+    }
+
+    public static void setResponseFormater(String responseFormater) {
+        RdapProperties.responseFormater = responseFormater;
     }
 
 }

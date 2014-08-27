@@ -46,4 +46,5 @@ public class JsonFormater implements Formater {
     public String format(Map map) {
         return JsonUtil.toJsonWithPrettyFormat(map);
     }
+    
 }
