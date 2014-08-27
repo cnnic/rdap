@@ -36,6 +36,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.rdap.port43.service.ServiceException;
+import org.rdap.port43.util.RdapProperties;
 
 /**
  * abstract query handler.
@@ -44,6 +45,11 @@ import org.rdap.port43.service.ServiceException;
  * 
  */
 public abstract class QueryHandler {
+    /**
+     * RDAP server base URL.
+     */
+    private static final String RDAP_SERVER_BASE_URL = RdapProperties
+            .getRdapServerBaseUrl();
 
     /**
      * check if support this command.
@@ -64,7 +70,7 @@ public abstract class QueryHandler {
      */
     public String generateRequestURI(Command command) {
         String relativeURI = this.getRelativeRequestURI(command);
-        return "http://rdap.restfulwhois.org/.well-known/rdap/" + relativeURI;
+        return RDAP_SERVER_BASE_URL + relativeURI;
     }
 
     /**

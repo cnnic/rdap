@@ -49,8 +49,17 @@ import io.netty.handler.codec.string.StringEncoder;
  */
 public class ServerInitializer extends ChannelInitializer<SocketChannel> {
 
+    /**
+     * decoder.
+     */
     private static final StringDecoder DECODER = new StringDecoder();
+    /**
+     * encoder.
+     */
     private static final StringEncoder ENCODER = new StringEncoder();
+    /**
+     * server handler.
+     */
     private static final ServerHandler SERVER_HANDLER = new ServerHandler();
 
     public ServerInitializer() {
@@ -65,8 +74,8 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
         // the encoder and decoder are static as these are sharable
         pipeline.addLast(DECODER);
         pipeline.addLast(ENCODER);
-
         // and then business logic.
         pipeline.addLast(SERVER_HANDLER);
     }
+
 }

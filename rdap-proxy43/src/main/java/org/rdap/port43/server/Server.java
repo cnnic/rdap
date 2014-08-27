@@ -42,17 +42,32 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
+import org.rdap.port43.util.RdapProperties;
+
 /**
  * server.
  */
 public final class Server {
 
-    static final boolean SSL = System.getProperty("ssl") != null;
-    static final int PORT = Integer.parseInt("43");
+    /**
+     * boss thread pool size.
+     */
+    private static final int THREAD_POOL_SIZE_BOSS = 1;
+    /**
+     * server port.
+     */
+    private static final int PORT = RdapProperties.getPort();
 
+    /**
+     * main method.
+     * 
+     * @param args
+     *            args.
+     * @throws Exception
+     *             Exception.
+     */
     public static void main(String[] args) throws Exception {
-
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup bossGroup = new NioEventLoopGroup(THREAD_POOL_SIZE_BOSS);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
@@ -60,7 +75,6 @@ public final class Server {
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ServerInitializer());
-
             b.bind(PORT).sync().channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
