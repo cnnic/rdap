@@ -33,7 +33,11 @@ package org.rdap.port43.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpStatus;
 import org.rdap.port43.service.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +49,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  */
 public class JsonUtil {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(JsonUtil.class);
 
     /**
      * convert object to JSON string.
@@ -58,7 +67,7 @@ public class JsonUtil {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("to JSON error:{}", e);
         }
         return "";
     }
@@ -69,26 +78,34 @@ public class JsonUtil {
             return objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error("toJsonWithPrettyFormat error:{}", e);
         }
-        return "";
+        return StringUtils.EMPTY;
     }
 
     /**
      * deserializate JSON, to map.
      * 
-     * @param jsonStr
-     *            jsonStr.
+     * @param restResponse
+     *            restResponse.
      * @return map.
      */
-    public static Map deserializateJsonToMap(String jsonStr) {
+    public static Map deserializateJsonToMap(RestResponse restResponse) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map result = null;
         try {
-            result = objectMapper.readValue(jsonStr, LinkedHashMap.class);
+            result =
+                    objectMapper.readValue(restResponse.getBody(),
+                            LinkedHashMap.class);
+            if (HttpStatus.SC_MOVED_PERMANENTLY == restResponse.getStatusCode()) {
+                LOGGER.info(
+                        "response code from RDAP server is 301,set location to result:{}",
+                        restResponse.getLocationHeader());
+                result.put("location", restResponse.getLocationHeader());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServiceException("deserializateJsonToMap error.");
+            LOGGER.error("deserializateJsonToMap error:{}", e);
+            throw new ServiceException("deserializateJsonToMap error.", e);
         }
         return result;
     }

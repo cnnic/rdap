@@ -7,21 +7,18 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.rdap.port43.util.JsonUtil;
+import org.rdap.port43.util.RestResponse;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest extends TestCase {
+public class AppTest  {
 
     public static void main(String[] args) {
         Domain domain = new Domain("cnnic.cn");
@@ -33,7 +30,10 @@ public class AppTest extends TestCase {
         
         String json =
                 "{\"address\":[{\"a\":\"b\"},{\"c\":\"d\"}],\"name\":\"haha\",\"id\":1,\"email\":\"email\"}";
-        Map convertToMap = JsonUtil.deserializateJsonToMap(json);
+        RestResponse restResponse = new RestResponse();
+        restResponse.setBody(json);
+        restResponse.setStatusCode(200);
+        Map convertToMap = JsonUtil.deserializateJsonToMap(restResponse);
         System.err.println(ToStringBuilder.reflectionToString(convertToMap,
                 RecursiveToStringStyle.getInstance()));
         
@@ -41,30 +41,6 @@ public class AppTest extends TestCase {
 //        System.err.println(ToStringBuilder.reflectionToString(domain,
 //                RecursiveToStringStyle.getInstance()));
         // new MultiLineToStringStyle()));
-    }
-
-    /**
-     * Create the test case
-     * 
-     * @param testName
-     *            name of the test case
-     */
-    public AppTest(String testName) {
-        super(testName);
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite() {
-        return new TestSuite(AppTest.class);
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp() {
-        assertTrue(true);
     }
 }
 

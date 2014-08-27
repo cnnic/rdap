@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.rdap.port43.service;
+package org.rdap.port43.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,11 +36,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.rdap.port43.service.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * rest client. TODO:refactor.
@@ -49,9 +56,22 @@ import org.apache.http.impl.client.HttpClients;
  * 
  */
 public final class RestClient {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(JsonUtil.class);
 
+    /**
+     * instance.
+     */
     private static RestClient restClient = new RestClient();
 
+    /**
+     * get singleton instance.
+     * 
+     * @return
+     */
     public static RestClient getInstance() {
         return restClient;
     }
@@ -61,24 +81,37 @@ public final class RestClient {
      * @param url
      * @return
      */
-    public String execute(String url) throws ServiceException {
+    public RestResponse execute(String url) throws ServiceException {
         CloseableHttpClient client = HttpClients.createDefault();
+        RequestConfig requestConfig = RequestConfig.custom().setRedirectsEnabled(false).build();
         HttpGet request = new HttpGet(url);
+        request.setConfig(requestConfig);
         request.setHeader("Accept", "application/rdap+json");
         HttpResponse response = null;
-        String result = null;
+        String responseBody = StringUtils.EMPTY;
+        int statusCode = HttpStatus.SC_OK;
+        String locationHeader = StringUtils.EMPTY;
         try {
             response = client.execute(request);
             HttpEntity entity = response.getEntity();
+            statusCode = response.getStatusLine().getStatusCode();
+            Header[] headers = response.getHeaders("location");
+            if (null != headers && headers.length > 0) {
+                locationHeader = headers[0].getValue();
+            }
             if (entity != null) {
                 InputStream inStream = entity.getContent();
-                result = convertStreamToString(inStream);
+                responseBody = convertStreamToString(inStream);
                 inStream.close();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOGGER.error("request RDAP server error:{}", ex);
             throw new ServiceException("request RDAP server error");
         }
+        RestResponse result = new RestResponse();
+        result.setBody(responseBody);
+        result.setStatusCode(statusCode);
+        result.setLocationHeader(locationHeader);
         return result;
     }
 

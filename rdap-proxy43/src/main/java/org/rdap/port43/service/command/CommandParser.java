@@ -39,6 +39,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang.StringUtils;
 import org.rdap.port43.service.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -46,6 +48,11 @@ import org.rdap.port43.service.ServiceException;
  * 
  */
 public class CommandParser {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(CommandParser.class);
 
     /**
      * 
@@ -58,6 +65,7 @@ public class CommandParser {
      *             ServiceException.
      */
     public static Command parse(String commandStr) throws ServiceException {
+        LOGGER.debug("parse command:{}", commandStr);
         commandStr = validateAndFormatCommandStr(commandStr);
         String[] commandSplits = StringUtils.split(commandStr);
         Options supportedOptions = initSupportedOptions();
@@ -66,6 +74,7 @@ public class CommandParser {
         try {
             line = parser.parse(supportedOptions, commandSplits, false);
         } catch (ParseException e) {
+            LOGGER.error("parse command error:{}", e);
             throw new ServiceException("invalid command");
         }
         return doParseCommand(line.getArgList());
@@ -78,10 +87,10 @@ public class CommandParser {
      */
     private static Options initSupportedOptions() {
         Options supportedOptions = new Options();
-        for (CommandOption option : CommandOption.values()) {
-            supportedOptions.addOption(option.getOption(), option.getOption(),
-                    option.isHasArg(), option.getDescription());
-        }
+        // for (CommandOption option : CommandOption.values()) {
+        // supportedOptions.addOption(option.getOption(), option.getOption(),
+        // option.isHasArg(), option.getDescription());
+        // }
         return supportedOptions;
     }
 
@@ -95,19 +104,20 @@ public class CommandParser {
     private static Command doParseCommand(List<String> argumentList) {
         Command command = new Command();
         command.setArgumentList(argumentList);
+        command.setCommandType(CommandOption.IP_OR_DOMAIN_QUERY);
         if (null == argumentList || argumentList.size() < 2) {
+            LOGGER.info("agruments is less than 2");
             return command;
         }
         String optionStr = argumentList.get(0);
+        LOGGER.info("agruments size >= 2, parse first para to option:{}",
+                optionStr);
         CommandOption option = CommandOption.getByStr(optionStr);
         if (null != option) {
             // has valid option.
             command.setCommandType(option);
             // remove option.
             argumentList.remove(0);
-        } else {
-            // default option.
-            command.setCommandType(CommandOption.IP_OR_DOMAIN_QUERY);
         }
         return command;
     }
@@ -124,10 +134,12 @@ public class CommandParser {
     private static String validateAndFormatCommandStr(String commandStr)
             throws ServiceException {
         if (StringUtils.isBlank(commandStr)) {
+            LOGGER.error("commandStr is empty.");
             throw new ServiceException("invalid command");
         }
         commandStr = StringUtils.trim(commandStr);
         if (StringUtils.isBlank(commandStr)) {
+            LOGGER.error("commandStr is empty.");
             throw new ServiceException("invalid command");
         }
         return commandStr;

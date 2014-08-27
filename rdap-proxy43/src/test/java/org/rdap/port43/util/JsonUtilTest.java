@@ -47,7 +47,10 @@ public class JsonUtilTest {
     public void testDeserializate() {
         String json =
                 "{\"address\":[{\"a\":\"b\"},{\"c\":\"d\"}],\"name\":\"haha\",\"id\":1,\"email\":\"email\"}";
-        Map convertToMap = JsonUtil.deserializateJsonToMap(json);
+        RestResponse restResponse = new RestResponse();
+        restResponse.setBody(json);
+        restResponse.setStatusCode(200);
+        Map convertToMap = JsonUtil.deserializateJsonToMap(restResponse);
         assertNotNull(convertToMap);
         assertNotNull(convertToMap.get("address"));
     }

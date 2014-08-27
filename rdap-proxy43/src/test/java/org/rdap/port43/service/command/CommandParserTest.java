@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Map;
-
 import org.junit.Test;
 
 /**
@@ -18,7 +16,7 @@ public class CommandParserTest {
 
     @Test
     public void testParse_domain_query() {
-        Command command = CommandParser.parse("whois cnnic.cn");
+        Command command = CommandParser.parse("cnnic.cn");
         assertNotNull(command);
         assertEquals(CommandOption.IP_OR_DOMAIN_QUERY, command.getCommandType());
         assertNotNull(command.getArgumentList());
@@ -28,7 +26,7 @@ public class CommandParserTest {
 
     @Test
     public void testParse_ip_query() {
-        Command command = CommandParser.parse("whois 218.241.1.1");
+        Command command = CommandParser.parse("218.241.1.1");
         assertNotNull(command);
         assertEquals(CommandOption.IP_OR_DOMAIN_QUERY, command.getCommandType());
         assertNotNull(command.getArgumentList());
@@ -38,7 +36,7 @@ public class CommandParserTest {
 
     @Test
     public void testParse_domain_search() {
-        Command command = CommandParser.parse("whois --domains cnnic.cn");
+        Command command = CommandParser.parse("domains cnnic.cn");
         assertNotNull(command);
         assertEquals(CommandOption.DOMAIN_SEARCH, command.getCommandType());
         assertNotNull(command.getArgumentList());
@@ -48,7 +46,7 @@ public class CommandParserTest {
 
     @Test
     public void testParse_nameserver_query() {
-        Command command = CommandParser.parse("whois --nameserver ns.cnnic.cn");
+        Command command = CommandParser.parse("nameserver ns.cnnic.cn");
         assertNotNull(command);
         assertEquals(CommandOption.NAMESERVER_QUERY, command.getCommandType());
         assertNotNull(command.getArgumentList());
@@ -58,8 +56,7 @@ public class CommandParserTest {
 
     @Test
     public void testParse_nameserver_search() {
-        Command command =
-                CommandParser.parse("whois --nameservers ns*.cnnic.cn");
+        Command command = CommandParser.parse("nameservers ns*.cnnic.cn");
         assertNotNull(command);
         assertEquals(CommandOption.NAMESERVER_SEARCH, command.getCommandType());
         assertNotNull(command.getArgumentList());
@@ -69,23 +66,15 @@ public class CommandParserTest {
 
     @Test
     public void testParse_nameserver_search_by_ip() {
-        Command command =
-                CommandParser.parse("whois --nameservers --ip=218.241.1.1");
+        Command command = CommandParser.parse("nameservers ip=218.241.1.1");
         assertNotNull(command);
         assertEquals(CommandOption.NAMESERVER_SEARCH, command.getCommandType());
         assertNotNull(command.getArgumentList());
-        Map<String, String> allOptionsMap = command.getAllOptionsMap();
-        assertNotNull(allOptionsMap);
-        assertTrue(allOptionsMap
-                .containsKey(CommandOption.NAMESERVER_SEARCH_BY_IP.getOption()));
-        assertEquals("218.241.1.1",
-                allOptionsMap.get(CommandOption.NAMESERVER_SEARCH_BY_IP
-                        .getOption()));
     }
 
     @Test
     public void testParse_entity_query() {
-        Command command = CommandParser.parse("whois --entity john");
+        Command command = CommandParser.parse("entity john");
         assertNotNull(command);
         assertEquals(CommandOption.ENTITY_QUERY, command.getCommandType());
         assertNotNull(command.getArgumentList());
@@ -95,30 +84,16 @@ public class CommandParserTest {
 
     @Test
     public void testParse_entity_search_by_fn() {
-        Command command = CommandParser.parse("whois --entities --fn=john");
+        Command command = CommandParser.parse("entities fn=john");
         assertNotNull(command);
         assertEquals(CommandOption.ENTITY_SEARCH, command.getCommandType());
-        Map<String, String> allOptionsMap = command.getAllOptionsMap();
-        assertNotNull(allOptionsMap);
-        assertTrue(allOptionsMap.containsKey(CommandOption.ENTITY_SEARCH_FN
-                .getOption()));
-        assertEquals("john",
-                allOptionsMap.get(CommandOption.ENTITY_SEARCH_FN.getOption()));
     }
 
     @Test
     public void testParse_entity_search_by_handle() {
-        Command command =
-                CommandParser.parse("whois --entities --handle=handle_john");
+        Command command = CommandParser.parse("entities handle=handle_john");
         assertNotNull(command);
         assertEquals(CommandOption.ENTITY_SEARCH, command.getCommandType());
-        Map<String, String> allOptionsMap = command.getAllOptionsMap();
-        assertNotNull(allOptionsMap);
-        assertTrue(allOptionsMap.containsKey(CommandOption.ENTITY_SEARCH_HANDLE
-                .getOption()));
-        assertEquals("handle_john",
-                allOptionsMap.get(CommandOption.ENTITY_SEARCH_HANDLE
-                        .getOption()));
     }
 
 }

@@ -28,55 +28,72 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.rdap.port43.service.command;
-
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package org.rdap.port43.util;
 
 /**
- * domain query handler.
- * 
- * <pre>
- * MUST check domainQueryHandler at last!
- * </pre>
- * 
- * <pre>
- * command option for domain query is null, eg: whois cnnic.cn
- * </pre>
  * 
  * @author jiashuo
  * 
  */
-public class DomainQueryHandler extends QueryHandler {
+public class RestResponse {
     /**
-     * logger.
+     * status code.
      */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(DomainQueryHandler.class);
-    @Override
-    public boolean supportCmd(Command command) {
-        // This is always support!
-        List<String> argumentList = command.getArgumentList();
-        if (null == argumentList || argumentList.isEmpty()) {
-            return false;
-        }
-        if (StringUtils.isBlank(argumentList.get(0))) {
-            return false;
-        }
-        return true;
+    private int statusCode;
+    /**
+     * body.
+     */
+    private String body;
+
+    /**
+     * location header.
+     */
+    private String locationHeader;
+
+    /**
+     * get statusCode.
+     * 
+     * @return statusCode.
+     */
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    @Override
-    protected String getRelativeRequestURI(Command command) {
-        List<String> argumentList = command.getArgumentList();
-        throwExceptionIfArguementIsEmpty(argumentList);
-        String argument = argumentList.get(0);
-        String uri = "domain/" + argument;
-        LOGGER.info("request for RDAP server URI:{}",uri);
-        return uri;
+    /**
+     * set statusCode.
+     * 
+     * @param statusCode
+     *            statusCode.
+     */
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    /**
+     * get body.
+     * 
+     * @return body.
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * set body.
+     * 
+     * @param body
+     *            body.
+     */
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getLocationHeader() {
+        return locationHeader;
+    }
+
+    public void setLocationHeader(String locationHeader) {
+        this.locationHeader = locationHeader;
     }
 
 }
