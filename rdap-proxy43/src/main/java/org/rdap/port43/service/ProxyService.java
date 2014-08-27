@@ -49,6 +49,10 @@ import org.rdap.port43.service.command.NameserverSearchHandler;
 import org.rdap.port43.service.command.QueryHandler;
 import org.rdap.port43.service.format.ResponseFormater;
 import org.rdap.port43.util.JsonUtil;
+import org.rdap.port43.util.RestClient;
+import org.rdap.port43.util.RestResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * proxy service.
@@ -57,6 +61,11 @@ import org.rdap.port43.util.JsonUtil;
  * 
  */
 public class ProxyService {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ProxyService.class);
     /**
      * singleton instance.
      */
@@ -75,6 +84,7 @@ public class ProxyService {
      */
     public ProxyService() {
         super();
+        LOGGER.info("initial command handler...");
         queryHandlers.add(new DomainSearchHandler());
         queryHandlers.add(new EntityQueryHandler());
         queryHandlers.add(new EntitySearchHandler());
@@ -105,19 +115,23 @@ public class ProxyService {
      *             ServiceException.
      */
     public String execute(String commandStr) throws Exception {
+        LOGGER.info("receive query:{}", commandStr);
         String requestURI = StringUtils.EMPTY;
         try {
             Command command = CommandParser.parse(commandStr);
             requestURI = generateRequestURI(command);
             if (StringUtils.isBlank(requestURI)) {
+                LOGGER.error("requestURI to RDAP server is blank.");
                 throw new ServiceException("invalid command:" + commandStr);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("generateRequest URI for RDAP server error:{}", e);
+            LOGGER.error("try to generate error 400 URI...");
             requestURI = generateRequestURIForError();
         }
-        String jsonStr = RestClient.getInstance().execute(requestURI);
-        Map jsonMap = JsonUtil.deserializateJsonToMap(jsonStr);
+        RestResponse restResponse =
+                RestClient.getInstance().execute(requestURI);
+        Map jsonMap = JsonUtil.deserializateJsonToMap(restResponse);
         String result = ResponseFormater.format(jsonMap);
         return result;
     }
