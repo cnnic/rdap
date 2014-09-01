@@ -42,6 +42,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
+import org.rdap.port43.service.ClearRateLimitMapTimer;
 import org.rdap.port43.util.RdapProperties;
 
 /**
@@ -67,6 +68,7 @@ public final class Server {
      *             Exception.
      */
     public static void main(String[] args) throws Exception {
+        ClearRateLimitMapTimer.schedule();
         EventLoopGroup bossGroup = new NioEventLoopGroup(THREAD_POOL_SIZE_BOSS);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
