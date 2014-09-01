@@ -101,7 +101,7 @@ public class JsonUtil {
                 LOGGER.info(
                         "response code from RDAP server is 301,set location to result:{}",
                         restResponse.getLocationHeader());
-                result.put("location", restResponse.getLocationHeader());
+                result.put("redirect location", restResponse.getLocationHeader());
             }
         } catch (Exception e) {
             LOGGER.error("deserializateJsonToMap error:{}", e);

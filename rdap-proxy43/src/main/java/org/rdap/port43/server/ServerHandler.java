@@ -36,7 +36,13 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import java.net.InetSocketAddress;
+
+import org.apache.commons.lang.StringUtils;
+import org.rdap.port43.service.ConnectionControlService;
 import org.rdap.port43.service.ProxyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Server handler.
@@ -48,6 +54,16 @@ import org.rdap.port43.service.ProxyService;
  */
 @Sharable
 public class ServerHandler extends SimpleChannelInboundHandler<String> {
+    /**
+     * rate limit msg.
+     */
+    private static final String ERROR_MSG_RATE_LIMIT =
+            "Exceed rate limit, please try some seconds later.";
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ServerHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -55,7 +71,17 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, String request) {
-        String response = "";
+        InetSocketAddress socketAddress =
+                (InetSocketAddress) ctx.channel().remoteAddress();
+        String remoteAddr = socketAddress.getAddress().getHostAddress();
+        LOGGER.info("clientAddress:{}", remoteAddr);
+        String response = StringUtils.EMPTY;
+        if (ConnectionControlService.exceedRateLimit(remoteAddr)) {
+            LOGGER.debug("exceedRateLimit,return 429 error.");
+            response = get429Response();
+            writeResponseAndcloseConnection(ctx, response);
+            return;
+        }
         if (request.isEmpty()) {
             response = "command can't be empty.";
         } else {
@@ -63,10 +89,32 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
             try {
                 response = proxyService.execute(request);
             } catch (Exception e) {
-                e.printStackTrace();
-                response = "internal error.";
+                LOGGER.error("internal server error:{}", e);
+                response = "internal server error.";
             }
         }
+        writeResponseAndcloseConnection(ctx, response);
+    }
+
+    /**
+     * get 429 error response.
+     * 
+     * @return string.
+     */
+    private String get429Response() {
+        return ERROR_MSG_RATE_LIMIT;
+    }
+
+    /**
+     * close connection.
+     * 
+     * @param ctx
+     *            ctx.
+     * @param response
+     *            response.
+     */
+    private void writeResponseAndcloseConnection(ChannelHandlerContext ctx,
+            String response) {
         ChannelFuture future = ctx.write(response);
         // Close the connection.
         future.addListener(ChannelFutureListener.CLOSE);

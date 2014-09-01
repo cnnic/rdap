@@ -2,6 +2,9 @@ package org.rdap.port43.util;
 
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * properties.
  * 
@@ -9,7 +12,11 @@ import java.util.Properties;
  * 
  */
 public class RdapProperties {
-
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(RdapProperties.class);
     /**
      * properties.
      */
@@ -42,6 +49,7 @@ public class RdapProperties {
     static {
         resource = new Properties();
         try {
+            LOGGER.info("load properties from file:{}", PROPERTIES_FILE);
             resource.load(RdapProperties.class
                     .getResourceAsStream(PROPERTIES_FILE));
             setRdapServerBaseUrl(resource.getProperty("rdapServerBaseUrl"));
@@ -59,6 +67,7 @@ public class RdapProperties {
     }
 
     public static void setRdapServerBaseUrl(String rdapServerBaseUrl) {
+        LOGGER.info("set rdapServerBaseUrl:{}", rdapServerBaseUrl);
         RdapProperties.rdapServerBaseUrl = rdapServerBaseUrl;
     }
 
@@ -67,6 +76,7 @@ public class RdapProperties {
     }
 
     public static void setPort(Integer port) {
+        LOGGER.info("set port:{}", port);
         RdapProperties.port = port;
     }
 
@@ -76,6 +86,7 @@ public class RdapProperties {
 
     public static void
             setMinSecondsAccessInterval(Long minSecondsAccessInterval) {
+        LOGGER.info("set minSecondsAccessInterval:{}", minSecondsAccessInterval);
         RdapProperties.minSecondsAccessInterval = minSecondsAccessInterval;
     }
 
@@ -84,6 +95,7 @@ public class RdapProperties {
     }
 
     public static void setResponseFormater(String responseFormater) {
+        LOGGER.info("set responseFormater:{}", responseFormater);
         RdapProperties.responseFormater = responseFormater;
     }
 
