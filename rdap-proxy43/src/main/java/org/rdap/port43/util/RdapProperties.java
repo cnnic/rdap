@@ -1,5 +1,8 @@
 package org.rdap.port43.util;
 
+import java.io.FileInputStream;
+import java.net.URL;
+import java.security.CodeSource;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -12,6 +15,10 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class RdapProperties {
+    /**
+     * default value for port.
+     */
+    private static final String DEFAULT_VALUE_PORT = "43";
     /**
      * logger.
      */
@@ -41,7 +48,7 @@ public class RdapProperties {
     /**
      * prop file.
      */
-    private static final String PROPERTIES_FILE = "/proxy43.properties";
+    private static final String PROPERTIES_FILE = "proxy43.properties";
 
     /**
      * Load the resource file
@@ -50,15 +57,21 @@ public class RdapProperties {
         resource = new Properties();
         try {
             LOGGER.info("load properties from file:{}", PROPERTIES_FILE);
-            resource.load(RdapProperties.class
-                    .getResourceAsStream(PROPERTIES_FILE));
+            CodeSource src =
+                    RdapProperties.class.getProtectionDomain().getCodeSource();
+            URL url = new URL(src.getLocation(), PROPERTIES_FILE);
+            resource.load(new FileInputStream(url.getPath()));
+            // this dosen't work if property file is out of jar.
+            // resource.load(RdapProperties.class
+            // .getResourceAsStream(PROPERTIES_FILE));
             setRdapServerBaseUrl(resource.getProperty("rdapServerBaseUrl"));
-            setPort(Integer.parseInt(resource.getProperty("port", "43")));
+            setPort(Integer.parseInt(resource.getProperty("port",
+                    DEFAULT_VALUE_PORT)));
             setMinSecondsAccessInterval(Long.parseLong(resource
                     .getProperty("minSecondsAccessInterval")));
             setResponseFormater(resource.getProperty("responseFormater"));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.info("load properties error:{}", e);
         }
     }
 
