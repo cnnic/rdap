@@ -1,19 +1,26 @@
-package org.rdap.port43.service;
+package cn.cnnic.rdap.timer;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Component;
+
+import cn.cnnic.rdap.service.impl.ConnectionControlService;
+
 /**
- * clear rate limit ip timer.
+ * clear rate limit ip map timer.
  * 
  * @author jiashuo
  * 
  */
-public class ClearRateLimitMapTimer {
+@Component
+public class ClearRateLimitIpMapTimer {
     /**
      * interval in milliseconds.
      */
-    private static final long INTERVAL = 5000;
+    private static final long INTERVAL = 1000 * 60 * 10;
     /**
      * delay in milliseconds.
      */
@@ -22,7 +29,8 @@ public class ClearRateLimitMapTimer {
     /**
      * call this method to start timer.
      */
-    public static void schedule() {
+    @PostConstruct
+    public void schedule() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override

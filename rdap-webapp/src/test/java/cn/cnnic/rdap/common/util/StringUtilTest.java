@@ -174,28 +174,28 @@ public class StringUtilTest extends BaseTest {
      */
     @Test
     public void testParseTldsToListIfTldListIsNull() {
-        assertThat(StringUtil.parseTldsToListIfTldListIsNull("cn", null),
+        assertThat(StringUtil.parseSeparatedStringToListIfListIsNull("cn", null),
                 CoreMatchers.hasItems("cn"));
         assertThat(
-                StringUtil.parseTldsToListIfTldListIsNull("edu.cn;cn", null),
+                StringUtil.parseSeparatedStringToListIfListIsNull("edu.cn;cn", null),
                 CoreMatchers.hasItems("cn", "edu.cn"));
         assertThat(
-                StringUtil.parseTldsToListIfTldListIsNull("cn;edu.cn", null),
+                StringUtil.parseSeparatedStringToListIfListIsNull("cn;edu.cn", null),
                 CoreMatchers.hasItems("cn", "edu.cn"));
         assertThat(
-                StringUtil.parseTldsToListIfTldListIsNull("cn;edu.cn;", null),
+                StringUtil.parseSeparatedStringToListIfListIsNull("cn;edu.cn;", null),
                 CoreMatchers.hasItems("cn", "edu.cn"));
         assertThat(
-                StringUtil.parseTldsToListIfTldListIsNull(";cn;edu.cn;", null),
+                StringUtil.parseSeparatedStringToListIfListIsNull(";cn;edu.cn;", null),
                 CoreMatchers.hasItems("cn", "edu.cn"));
         assertThat(
-                StringUtil.parseTldsToListIfTldListIsNull(";cn;edu.cn", null),
+                StringUtil.parseSeparatedStringToListIfListIsNull(";cn;edu.cn", null),
                 CoreMatchers.hasItems("cn", "edu.cn"));
         List<String> tldList = new ArrayList<String>();
         tldList.add("cn");
         tldList.add("edu.cn");
         assertThat(
-                StringUtil.parseTldsToListIfTldListIsNull("com.cn", tldList),
+                StringUtil.parseSeparatedStringToListIfListIsNull("com.cn", tldList),
                 CoreMatchers.hasItems("cn", "edu.cn"));
     }
 
