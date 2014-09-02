@@ -32,7 +32,9 @@ package cn.cnnic.rdap.service.impl;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.StringUtils;
@@ -54,6 +56,18 @@ import cn.cnnic.rdap.controller.support.PrincipalHolder;
  * 
  */
 public final class ConnectionControlService {
+    /**
+     * min access interval in seconds.
+     */
+    private static final Long MIN_SECONDS_ACCESS_INTERVAL = RdapProperties
+            .getMinSecondsAccessIntervalAnonymous();
+
+    /**
+     * ip white list for access interval.
+     */
+    private static final List<String> IP_WHITE_LIST_FOR_ACCESS_INTERVAL =
+            RdapProperties.getIpWhiteListArrayForAccessInterval();
+
     /**
      * logger.
      */
@@ -87,26 +101,76 @@ public final class ConnectionControlService {
      * @return true if exceed rate limit,false if not.
      */
     public static boolean exceedRateLimit(String ip) {
+        if (!hasLimit()) {
+            return false;
+        }
         LOGGER.debug("check exceedRateLimit, ip:{}" + ip);
         if (StringUtils.isBlank(ip)) {
             return false;
         }
+        if (isInIpWhiteList(ip)) {
+            return false;
+        }
         Long lastAccessTime = CLIENT_IP2LAST_ACCESS_TIME_MAP.get(ip);
         long currentTimeMillis = System.currentTimeMillis();
-        CLIENT_IP2LAST_ACCESS_TIME_MAP.put(ip, currentTimeMillis);
+        if (hasLimit()) {
+            CLIENT_IP2LAST_ACCESS_TIME_MAP.put(ip, currentTimeMillis);
+        }
         if (null == lastAccessTime) {
             return false;
         }
         long accessTimeInterval = currentTimeMillis - lastAccessTime;
         if (PrincipalHolder.getPrincipal().isAnonymous()) {
             LOGGER.debug("check exceedRateLimit, is anonymous.");
-            return accessTimeInterval <= RdapProperties
-                    .getMinSecondsAccessIntervalAnonymous();
+            return accessTimeInterval <= MIN_SECONDS_ACCESS_INTERVAL;
         } else {
             LOGGER.debug("check exceedRateLimit, is logined user.");
             return accessTimeInterval <= RdapProperties
                     .getMinSecondsAccessIntervalAuthed();
         }
+    }
+
+    /**
+     * check if has limit. MIN_SECONDS_ACCESS_INTERVAL >0 is has limit.
+     * 
+     * @return true if has limit, false if not.
+     */
+    private static boolean hasLimit() {
+        return MIN_SECONDS_ACCESS_INTERVAL > 0;
+    }
+
+    /**
+     * check if ip in white list.
+     * 
+     * @param ip
+     *            ip.
+     * @return true if in white list, false if not.
+     */
+    private static boolean isInIpWhiteList(String ip) {
+        List<String> whiteList = IP_WHITE_LIST_FOR_ACCESS_INTERVAL;
+        if (null != whiteList && whiteList.contains(ip)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * clear ip map.
+     */
+    public static void clearIpMap() {
+        LOGGER.trace("clearIpMap begin...");
+        if (null == CLIENT_IP2LAST_ACCESS_TIME_MAP) {
+            return;
+        }
+        Set<String> keys = CLIENT_IP2LAST_ACCESS_TIME_MAP.keySet();
+        for (String key : keys) {
+            if ((System.currentTimeMillis() - CLIENT_IP2LAST_ACCESS_TIME_MAP
+                    .get(key)) >= MIN_SECONDS_ACCESS_INTERVAL) {
+                LOGGER.trace("remove ip:{}", key);
+                CLIENT_IP2LAST_ACCESS_TIME_MAP.remove(key);
+            }
+        }
+        LOGGER.trace("clearIpMap end.");
     }
 
     /**
