@@ -128,7 +128,6 @@ public class TextFormater implements Formater {
                             LINE_SEPARATOR + replacement);
             result.append(key);
             result.append(KEY_VALUE_SEPARATOR);
-            result.append(LINE_SEPARATOR);
             result.append(displayValue);
             result.append(LINE_SEPARATOR);
         } else if (object instanceof String) {
