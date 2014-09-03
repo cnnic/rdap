@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.rdap.port43.service.command.AsQueryHandler;
 import org.rdap.port43.service.command.Command;
 import org.rdap.port43.service.command.CommandOption;
 import org.rdap.port43.service.command.CommandParser;
@@ -85,6 +86,7 @@ public class ProxyService {
     public ProxyService() {
         super();
         LOGGER.info("initial command handler...");
+        queryHandlers.add(new AsQueryHandler());
         queryHandlers.add(new DomainSearchHandler());
         queryHandlers.add(new EntityQueryHandler());
         queryHandlers.add(new EntitySearchHandler());
