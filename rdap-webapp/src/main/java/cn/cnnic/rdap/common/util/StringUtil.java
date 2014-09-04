@@ -38,11 +38,14 @@ import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * *
@@ -471,5 +474,16 @@ public final class StringUtil {
      */
     private static int compare(long x, long y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
+  
+    /**
+     * get foldCase format string by input string.
+     * 
+     * @param strParam
+     *            :string.
+     * @return string.
+     */
+    public static String foldCase(String strParam) {
+        return UCharacter.foldCase(strParam, true);
     }
 }
