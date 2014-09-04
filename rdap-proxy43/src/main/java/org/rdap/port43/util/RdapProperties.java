@@ -16,9 +16,13 @@ import org.slf4j.LoggerFactory;
  */
 public class RdapProperties {
     /**
-     * default value for port.
+     * default value for service port.
      */
-    private static final String DEFAULT_VALUE_PORT = "43";
+    private static final String DEFAULT_SERVICE_PORT = "43";
+    /**
+     * default value for manage port.
+     */
+    private static final String DEFAULT_MANAGE_PORT = "9999";
     /**
      * logger.
      */
@@ -34,9 +38,13 @@ public class RdapProperties {
      */
     private static String rdapServerBaseUrl;
     /**
-     * port.
+     * service port.
      */
-    private static Integer port;
+    private static Integer servicePort;
+    /**
+     * manage port.
+     */
+    private static Integer managePort;
     /**
      * min seconds between access interval.
      */
@@ -65,8 +73,10 @@ public class RdapProperties {
             // resource.load(RdapProperties.class
             // .getResourceAsStream(PROPERTIES_FILE));
             setRdapServerBaseUrl(resource.getProperty("rdapServerBaseUrl"));
-            setPort(Integer.parseInt(resource.getProperty("port",
-                    DEFAULT_VALUE_PORT)));
+            setServicePort(Integer.parseInt(resource.getProperty("servicePort",
+                    DEFAULT_SERVICE_PORT)));
+            setManagePort(Integer.parseInt(resource.getProperty("managePort",
+                    DEFAULT_MANAGE_PORT)));
             setMinSecondsAccessInterval(Long.parseLong(resource
                     .getProperty("minSecondsAccessInterval")));
             setResponseFormater(resource.getProperty("responseFormater"));
@@ -84,13 +94,22 @@ public class RdapProperties {
         RdapProperties.rdapServerBaseUrl = rdapServerBaseUrl;
     }
 
-    public static Integer getPort() {
-        return port;
+    public static Integer getServicePort() {
+        return servicePort;
     }
 
-    public static void setPort(Integer port) {
-        LOGGER.info("set port:{}", port);
-        RdapProperties.port = port;
+    public static Integer getManagePort() {
+        return managePort;
+    }
+
+    public static void setManagePort(Integer managePort) {
+        LOGGER.info("set managePort:{}", managePort);
+        RdapProperties.managePort = managePort;
+    }
+
+    public static void setServicePort(Integer servicePort) {
+        LOGGER.info("set servicePort:{}", servicePort);
+        RdapProperties.servicePort = servicePort;
     }
 
     public static Long getMinSecondsAccessInterval() {

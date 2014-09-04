@@ -19,17 +19,26 @@ public class ClearRateLimitMapTimer {
      */
     private static final long TIMER_DELAY = 1000 * 60 * 5;
 
+    private static final Timer timer = new Timer();
+
     /**
      * call this method to start timer.
      */
     public static void schedule() {
-        Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 ConnectionControlService.clearIpMap();
             }
         }, TIMER_DELAY, INTERVAL);
+    }
+
+    /**
+     * stop timer.
+     */
+    public static void stop() {
+        timer.cancel();
+        timer.purge();
     }
 
 }

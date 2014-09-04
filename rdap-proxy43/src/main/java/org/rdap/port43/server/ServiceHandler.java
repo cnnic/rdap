@@ -45,15 +45,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Server handler.
+ * service handler.
+ * 
  * @author jiashuo
- *
- */
-/**
- * Handles a server-side channel.
+ * 
  */
 @Sharable
-public class ServerHandler extends SimpleChannelInboundHandler<String> {
+public class ServiceHandler extends SimpleChannelInboundHandler<String> {
+
+    /**
+     * start command.
+     */
+    public static final String CMD_START = "start";
     /**
      * rate limit msg.
      */
@@ -63,7 +66,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(ServerHandler.class);
+            .getLogger(ServiceHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -115,19 +118,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
      */
     private void writeResponseAndcloseConnection(ChannelHandlerContext ctx,
             String response) {
-        ChannelFuture future = ctx.write(response);
+        ChannelFuture future = ctx.writeAndFlush(response);
         // Close the connection.
         future.addListener(ChannelFutureListener.CLOSE);
-    }
-
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.flush();
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        ctx.close();
     }
 }

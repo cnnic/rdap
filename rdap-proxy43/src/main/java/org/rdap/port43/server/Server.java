@@ -36,20 +36,21 @@ package org.rdap.port43.server;
  * 
  */
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-import org.rdap.port43.service.ClearRateLimitMapTimer;
-import org.rdap.port43.util.RdapProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * server.
  */
 public final class Server {
-
     /**
      * boss thread pool size.
      */
@@ -57,30 +58,96 @@ public final class Server {
     /**
      * server port.
      */
-    private static final int PORT = RdapProperties.getPort();
+    private int port;
+    /**
+     * bossGroup.
+     */
+    private EventLoopGroup bossGroup = new NioEventLoopGroup(
+            THREAD_POOL_SIZE_BOSS);
+    /**
+     * workerGroup.
+     */
+    private EventLoopGroup workerGroup;
 
     /**
-     * main method.
+     * server initializer.
+     */
+    private ChannelInitializer serverInitializer;
+
+    /**
+     * server channelFuture.
+     */
+    private ChannelFuture serverChannelFuture;
+
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+
+    /**
+     * constructor.
      * 
-     * @param args
-     *            args.
+     * @param port
+     *            port.
+     * @param serverInitializer
+     *            serverInitializer.
+     */
+    public Server(int port, ChannelInitializer serverInitializer) {
+        super();
+        this.port = port;
+        this.serverInitializer = serverInitializer;
+        workerGroup = new NioEventLoopGroup();
+    }
+
+    /**
+     * constructor.
+     * 
+     * @param port
+     *            port.
+     * @param serverInitializer
+     *            serverInitializer.
+     * @param workerGroupSize
+     *            workerGroupSize.
+     */
+    public Server(int port, ChannelInitializer serverInitializer,
+            int workerGroupSize) {
+        super();
+        this.port = port;
+        this.serverInitializer = serverInitializer;
+        workerGroup = new NioEventLoopGroup(workerGroupSize);
+    }
+
+    /**
+     * run server.
+     * 
      * @throws Exception
      *             Exception.
      */
-    public static void main(String[] args) throws Exception {
-        ClearRateLimitMapTimer.schedule();
-        EventLoopGroup bossGroup = new NioEventLoopGroup(THREAD_POOL_SIZE_BOSS);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ServerInitializer());
-            b.bind(PORT).sync().channel().closeFuture().sync();
-        } finally {
+    public ChannelFuture start() throws Exception {
+        ServerBootstrap b = new ServerBootstrap();
+        b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+                .handler(new LoggingHandler(LogLevel.INFO))
+                .childHandler(this.serverInitializer);
+        serverChannelFuture = b.bind(port);
+        return serverChannelFuture;
+    }
+
+    /**
+     * shutdown server.
+     */
+    public void shutdown() {
+        if (null != serverChannelFuture) {
+            if (null != serverChannelFuture.channel()) {
+                serverChannelFuture.channel().close();
+            }
+        }
+        if (null != bossGroup) {
             bossGroup.shutdownGracefully();
+        }
+        if (null != workerGroup) {
             workerGroup.shutdownGracefully();
+            workerGroup.terminationFuture();
         }
     }
+
 }

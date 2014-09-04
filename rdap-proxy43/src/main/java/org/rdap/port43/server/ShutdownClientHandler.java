@@ -30,52 +30,46 @@
  */
 package org.rdap.port43.server;
 
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.Delimiters;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-
 /**
- * server initializer.
+ * shutdown client handler.
  * @author jiashuo
- *
+ * 
  */
+import io.netty.channel.ChannelHandlerAdapter;
+import io.netty.channel.ChannelHandlerContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Creates a newly configured {@link ChannelPipeline} for a new channel.
+ * server.
  */
-public class ServerInitializer extends ChannelInitializer<SocketChannel> {
+public final class ShutdownClientHandler extends ChannelHandlerAdapter {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ShutdownClientHandler.class);
 
-    /**
-     * decoder.
-     */
-    private static final StringDecoder DECODER = new StringDecoder();
-    /**
-     * encoder.
-     */
-    private static final StringEncoder ENCODER = new StringEncoder();
-    /**
-     * server handler.
-     */
-    private static final ServerHandler SERVER_HANDLER = new ServerHandler();
-
-    public ServerInitializer() {
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        LOGGER.info("send command:{}", ManageServerHandler.CMD_SHUTDOWN);
+        ctx.writeAndFlush(ManageServerHandler.CMD_SHUTDOWN);
+        ctx.writeAndFlush(ManageServerInitializer.LINE_DELIMITER);
     }
 
     @Override
-    public void initChannel(SocketChannel ch) throws Exception {
-        ChannelPipeline pipeline = ch.pipeline();
-        // Add the text line codec combination first,
-        pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters
-                .lineDelimiter()));
-        // the encoder and decoder are static as these are sharable
-        pipeline.addLast(DECODER);
-        pipeline.addLast(ENCODER);
-        // and then business logic.
-        pipeline.addLast(SERVER_HANDLER);
+    public void channelRead(ChannelHandlerContext ctx, Object msg)
+            throws Exception {
+        LOGGER.info("shutdown client...");
+        ShutdownServer.shutdownMe();
+        LOGGER.info("shutdown client end.");
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+            throws Exception {
+        LOGGER.info("can't connect server:{}", cause);
     }
 
 }
