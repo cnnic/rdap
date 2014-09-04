@@ -39,16 +39,18 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 /**
- * server initializer.
+ * service server initializer.
+ * 
  * @author jiashuo
- *
  */
 
-/**
- * Creates a newly configured {@link ChannelPipeline} for a new channel.
- */
-public class ServerInitializer extends ChannelInitializer<SocketChannel> {
+public class ServiceServerInitializer extends ChannelInitializer<SocketChannel> {
 
+    /**
+     * line based decoder.
+     */
+    private static final DelimiterBasedFrameDecoder DELIMITER_BASED_FRAME_DECODER =
+            new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter());
     /**
      * decoder.
      */
@@ -58,24 +60,20 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
      */
     private static final StringEncoder ENCODER = new StringEncoder();
     /**
-     * server handler.
+     * service handler.
      */
-    private static final ServerHandler SERVER_HANDLER = new ServerHandler();
-
-    public ServerInitializer() {
-    }
+    private static final ServiceHandler SERVICE_HANDLER = new ServiceHandler();
 
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
         // Add the text line codec combination first,
-        pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters
-                .lineDelimiter()));
+        pipeline.addLast(DELIMITER_BASED_FRAME_DECODER);
         // the encoder and decoder are static as these are sharable
         pipeline.addLast(DECODER);
         pipeline.addLast(ENCODER);
         // and then business logic.
-        pipeline.addLast(SERVER_HANDLER);
+        pipeline.addLast(SERVICE_HANDLER);
     }
 
 }
