@@ -45,7 +45,8 @@ import io.netty.handler.logging.LoggingHandler;
 import org.rdap.port43.util.RdapProperties;
 
 /**
- * shutdown server handler.
+ * This class is to shutdown proxy43 server, by sending shutdown command to
+ * server.
  * 
  * @author jiashuo
  */

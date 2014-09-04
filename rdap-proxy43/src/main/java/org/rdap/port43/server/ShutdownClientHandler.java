@@ -30,11 +30,6 @@
  */
 package org.rdap.port43.server;
 
-/**
- * shutdown client handler.
- * @author jiashuo
- * 
- */
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -42,7 +37,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * server.
+ * This class send shutdown command to server, and shutdown manage server after
+ * received message from server.
+ * 
+ * @author jiashuo
+ * 
  */
 public final class ShutdownClientHandler extends ChannelHandlerAdapter {
     /**
