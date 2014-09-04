@@ -39,6 +39,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
@@ -85,7 +87,8 @@ public final class ShutdownServer {
                     public void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline p = ch.pipeline();
                         p.addLast(new LoggingHandler(LogLevel.INFO));
-                        p.addLast(ManageServerInitializer.DELIMITER_BASED_FRAME_DECODER);
+                        p.addLast(new DelimiterBasedFrameDecoder(8192,
+                                Delimiters.lineDelimiter()));
                         p.addLast(ManageServerInitializer.DECODER);
                         p.addLast(ManageServerInitializer.ENCODER);
                         p.addLast(new ShutdownClientHandler());
