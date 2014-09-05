@@ -32,8 +32,9 @@ package cn.cnnic.rdap.common;
 
 import java.util.List;
 
-//import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
+//import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import cn.cnnic.rdap.common.util.StringUtil;
 
 /**
@@ -60,6 +61,11 @@ public class RdapProperties {
      * localServiceUrl.
      */
     private static String localServiceUrl;
+
+    /**
+     * ip white list for access interval, these ip are not limited.
+     */
+    private static String ipWhiteListForAccessInterval;
 
     /**
      * min seconds between access interval,for Anonymous.
@@ -114,7 +120,8 @@ public class RdapProperties {
      */
     public static List<String> getInTldsInThisRegistry() {
         RdapProperties.inTldList =
-                StringUtil.parseTldsToListIfTldListIsNull(inTlds, inTldList);
+                StringUtil.parseSeparatedStringToListIfListIsNull(inTlds,
+                        inTldList);
         return RdapProperties.inTldList;
     }
 
@@ -125,9 +132,23 @@ public class RdapProperties {
      */
     public static List<String> getNotInTldsInThisRegistry() {
         RdapProperties.notInTldList =
-                StringUtil.parseTldsToListIfTldListIsNull(notInTlds,
+                StringUtil.parseSeparatedStringToListIfListIsNull(notInTlds,
                         notInTldList);
         return RdapProperties.notInTldList;
+    }
+
+    /**
+     * get ip white list for access interval.
+     * 
+     * @return list.
+     */
+    public static List<String> getIpWhiteListArrayForAccessInterval() {
+        List<String> ipWhiteListForAccessIntervalList = null;
+        ipWhiteListForAccessIntervalList =
+                StringUtil.parseSeparatedStringToListIfListIsNull(
+                        ipWhiteListForAccessInterval,
+                        ipWhiteListForAccessIntervalList);
+        return ipWhiteListForAccessIntervalList;
     }
 
     /**
@@ -284,6 +305,27 @@ public class RdapProperties {
      */
     public void setMaxConcurrentCount(Integer maxConcurrentCount) {
         RdapProperties.maxConcurrentCount = maxConcurrentCount;
+    }
+
+    /**
+     * get ipWhiteListForAccessInterval.
+     * 
+     * @return ipWhiteListForAccessInterval.
+     */
+    public static String getIpWhiteListForAccessInterval() {
+        return ipWhiteListForAccessInterval;
+    }
+
+    /**
+     * set ipWhiteListForAccessInterval.
+     * 
+     * @param ipWhiteListForAccessInterval
+     *            ipWhiteListForAccessInterval.
+     */
+    public void setIpWhiteListForAccessInterval(
+            String ipWhiteListForAccessInterval) {
+        RdapProperties.ipWhiteListForAccessInterval =
+                ipWhiteListForAccessInterval;
     }
 
 }

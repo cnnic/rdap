@@ -182,31 +182,31 @@ public final class StringUtil {
     }
 
     /**
-     * parse tlds to tldList if tldList is null.
+     * parse separated string to list if list is null.
      * 
-     * @param tlds
-     *            ';' separated tlds, eg: cn;edu.cn
-     * @param tldList
-     *            tldList.
+     * @param separatedStr
+     *            ';' separated string, eg: cn;edu.cn
+     * @param list
+     *            list.
      * @return List<String>.
      */
-    public static List<String> parseTldsToListIfTldListIsNull(String tlds,
-            List<String> tldList) {
-        if (null != tldList) {
-            return tldList;
+    public static List<String> parseSeparatedStringToListIfListIsNull(
+            String separatedStr, List<String> list) {
+        if (null != list) {
+            return list;
         }
-        tldList = new ArrayList<String>();
-        if (null == tlds) {
-            return tldList;
+        list = new ArrayList<String>();
+        if (null == separatedStr) {
+            return list;
         }
-        String[] splits = StringUtils.split(tlds, ";");
+        String[] splits = StringUtils.split(separatedStr, ";");
         for (String tld : splits) {
             tld = StringUtils.trim(tld);
             if (StringUtils.isNotBlank(tld)) {
-                tldList.add(tld);
+                list.add(tld);
             }
         }
-        return tldList;
+        return list;
     }
 
     /**

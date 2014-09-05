@@ -7,7 +7,7 @@
 		   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 	default-autowire="byType" default-lazy-init="false">
 	<context:property-placeholder location="classpath:*.properties" />
-	
+
 	<bean
 		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
 	<bean id="rdapProperties" class="cn.cnnic.rdap.common.RdapProperties">
@@ -18,6 +18,7 @@
 		<property name="notInTlds" value="${notInTlds}" />
 		<property name="minSecondsAccessIntervalAnonymous" value="${minSecondsAccessIntervalAnonymous}" />
 		<property name="minSecondsAccessIntervalAuthed" value="${minSecondsAccessIntervalAuthed}" />
+		<property name="ipWhiteListForAccessInterval" value="${ipWhiteListForAccessInterval}" />
 		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />
 	</bean>
 	<import resource="classpath:spring/spring-serviceContext.xml" />
