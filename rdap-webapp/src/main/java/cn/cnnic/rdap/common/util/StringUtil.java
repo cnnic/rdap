@@ -38,7 +38,6 @@ import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -485,5 +484,17 @@ public final class StringUtil {
      */
     public static String foldCase(String strParam) {
         return UCharacter.foldCase(strParam, true);
+    }
+    
+    /**
+     * get foldCase and normalization format string by input string.
+     * 
+     * @param strParam
+     *            :string.
+     * @return string.
+     */
+    public static String foldCaseAndNormalization(String strParam) {
+        String strFold =  UCharacter.foldCase(strParam, true);
+        return StringUtil.getNormalization(strFold);
     }
 }
