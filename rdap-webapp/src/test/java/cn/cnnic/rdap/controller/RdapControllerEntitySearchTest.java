@@ -35,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,11 +58,16 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class RdapControllerEntitySearchTest extends BaseTest {
 
+    /**
+     * domain search URI.
+     */
+    private static final String URI_ENTITY_SEARCH = "/entities?handle=";
+
     @Autowired
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
-    
+
     /**
      * output json.
      */
@@ -86,8 +90,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
     public void testQueryExist() throws Exception {
         String entityHandle = "truncated*";
         mockMvc.perform(
-                get("/.well-known/rdap/entities?handle=" + entityHandle)
-                        .accept(MediaType.parseMediaType(rdapJson)))
+                get(URI_ENTITY_SEARCH + entityHandle).accept(
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.entitySearchResults").exists())
@@ -134,8 +138,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
     public void testQueryNonExistAutnum() throws Exception {
         String nonExistHandle = "1000000";
         mockMvc.perform(
-                get("/.well-known/rdap/entities?handle=" + nonExistHandle)
-                        .accept(MediaType.parseMediaType(rdapJson)))
+                get(URI_ENTITY_SEARCH + nonExistHandle).accept(
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404));
@@ -153,8 +157,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
     public void testQueryAutnumWithInvalidQ() throws Exception {
         String invalidHandle = "";
         mockMvc.perform(
-                get("/.well-known/rdap/entities?handle=" + invalidHandle)
-                        .accept(MediaType.parseMediaType(rdapJson)))
+                get(URI_ENTITY_SEARCH + invalidHandle).accept(
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400));

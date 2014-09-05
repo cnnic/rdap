@@ -58,7 +58,10 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class RdapControllerNetworkRedirectTest extends BaseTest {
 
-    private static final String URI_IP = "/.well-known/rdap/ip/";
+    /**
+     * ip query URI.
+     */
+    private static final String URI_IP_Q = "/ip/";
 
     @Autowired
     private WebApplicationContext wac;
@@ -102,7 +105,7 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      */
     private void commonExist(String networkStr) throws Exception {
         mockMvc.perform(
-                get(URI_IP + networkStr).accept(
+                get(URI_IP_Q + networkStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -138,7 +141,7 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      */
     private void commonNonExist(String networkStr) throws Exception {
         mockMvc.perform(
-                get(URI_IP + networkStr).accept(
+                get(URI_IP_Q + networkStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -174,7 +177,7 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      */
     private void commonRedirect(String networkStr) throws Exception {
         mockMvc.perform(
-                get(URI_IP + networkStr).accept(
+                get(URI_IP_Q + networkStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isMovedPermanently())
                 .andExpect(content().contentType(rdapJson))
@@ -206,7 +209,7 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      */
     private void commonInvalid(String networkStr) throws Exception {
         mockMvc.perform(
-                get(URI_IP + networkStr).accept(
+                get(URI_IP_Q + networkStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))

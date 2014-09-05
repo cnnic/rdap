@@ -97,7 +97,7 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
      */
     private void commonExist(String autnumStr) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/autnum/" + autnumStr).accept(
+                get(RdapControllerAutnumTest.URI_AS + autnumStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -131,7 +131,7 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
      */
     private void commonNonExist(String nonExistAutnumStr) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/autnum/" + nonExistAutnumStr).accept(
+                get(RdapControllerAutnumTest.URI_AS + nonExistAutnumStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -163,7 +163,7 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
      */
     private void commonRedirect(String redirectAutnum) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/autnum/" + redirectAutnum).accept(
+                get(RdapControllerAutnumTest.URI_AS + redirectAutnum).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isMovedPermanently())
                 .andExpect(content().contentType(rdapJson))
@@ -195,7 +195,7 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
      */
     private void commonInvalid(String autnumStr) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/autnum/" + autnumStr).accept(
+                get(RdapControllerAutnumTest.URI_AS + autnumStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))

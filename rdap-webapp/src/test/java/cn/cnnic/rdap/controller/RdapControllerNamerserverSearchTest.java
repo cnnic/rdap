@@ -64,9 +64,9 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class RdapControllerNamerserverSearchTest extends BaseTest {
     /**
-     * domain search uri.
+     * ns search URI.
      */
-    private static final String SEARCH_URI = "/.well-known/rdap/nameservers?";
+    private static final String URI_NS_SEARCH = "/nameservers?";
     /**
      * output json.
      */
@@ -128,7 +128,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 2L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 2L);
         mockMvc.perform(
-                get(SEARCH_URI + strObject).accept(
+                get(URI_NS_SEARCH + strObject).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nameserverSearchResults").exists())
@@ -226,7 +226,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         ReflectionTestUtils.setField(prop, "maxsizeSearch", finalSize);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", finalSize);
         mockMvc.perform(
-                get(SEARCH_URI + strObj).accept(
+                get(URI_NS_SEARCH + strObj).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -272,7 +272,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      */
     private void searchNonExistNS(String strObject) throws Exception {
         mockMvc.perform(
-                get(SEARCH_URI + strObject).accept(
+                get(URI_NS_SEARCH + strObject).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -295,7 +295,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     public void testSearchInvalidNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
-                get(SEARCH_URI + "name=*").accept(
+                get(URI_NS_SEARCH + "name=*").accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentType(rdapJson))
@@ -345,7 +345,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      */
     private void seachIllegalNS(String strObj) throws Exception {
         mockMvc.perform(
-                get(SEARCH_URI + strObj).accept(
+                get(URI_NS_SEARCH + strObj).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))

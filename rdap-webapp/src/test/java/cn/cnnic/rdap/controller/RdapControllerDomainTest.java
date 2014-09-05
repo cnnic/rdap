@@ -60,6 +60,11 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class RdapControllerDomainTest extends BaseTest {
 
+    /**
+     * domain query URI.
+     */
+    public static final String URI_DOMAIN_Q = "/domain/";
+
     @Autowired
     private WebApplicationContext wac;
 
@@ -153,7 +158,7 @@ public class RdapControllerDomainTest extends BaseTest {
             throws Exception {
         mockMvc.perform(
                 get(
-                        "/.well-known/rdap/domain/"
+                        URI_DOMAIN_Q
                                 + StringUtil.urlEncode(queryDomainName))
                         .accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
@@ -210,7 +215,7 @@ public class RdapControllerDomainTest extends BaseTest {
             throws Exception {
         mockMvc.perform(
                 get(
-                        "/.well-known/rdap/domain/"
+                        URI_DOMAIN_Q
                                 + StringUtil.urlEncode(queryDomainName))
                         .accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
@@ -232,7 +237,7 @@ public class RdapControllerDomainTest extends BaseTest {
     private void commonQueryInvalidDomain(String domainName) throws Exception {
         mockMvc.perform(
                 get(
-                        "/.well-known/rdap/domain/"
+                        URI_DOMAIN_Q
                                 + StringUtil.urlEncode(domainName)).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())

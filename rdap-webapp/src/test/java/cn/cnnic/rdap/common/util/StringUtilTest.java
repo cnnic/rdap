@@ -38,6 +38,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,9 +136,9 @@ public class StringUtilTest extends BaseTest {
         assertTrue(StringUtil.containNonAsciiPrintableChars("http://我们"));
         assertTrue(StringUtil.containNonAsciiPrintableChars("http://"));
         assertFalse(StringUtil
-                .containNonAsciiPrintableChars("http://localhost:8080/.well-known/rdap%1a/ip/1.1.1.1/32"));
+                .containNonAsciiPrintableChars("http://localhost:8080/rdap%1a/ip/1.1.1.1/32"));
         assertFalse(StringUtil
-                .containNonAsciiPrintableChars("https://localhost:8080/.well-known/rdap%1a/ip/1.1.1.1/32"));
+                .containNonAsciiPrintableChars("https://localhost:8080/rdap%1a/ip/1.1.1.1/32"));
     }
 
     /**

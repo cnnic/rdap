@@ -68,7 +68,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      * domain search uri.
      */
     private static final String DOMAIN_SEARCH_URI =
-            "/.well-known/rdap/domains?name=";
+            "/domains?name=";
 
     @Autowired
     private WebApplicationContext wac;

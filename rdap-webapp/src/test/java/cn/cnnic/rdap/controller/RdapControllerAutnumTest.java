@@ -57,7 +57,12 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class RdapControllerAutnumTest extends BaseTest {
-
+    
+    /**
+     * as query URI.
+     */
+    public static final String URI_AS = "/autnum/";
+    
     @Autowired
     private WebApplicationContext wac;
 
@@ -85,7 +90,7 @@ public class RdapControllerAutnumTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
         mockMvc.perform(
-                get("/.well-known/rdap/autnum/" + autnumStr).accept(
+                get(URI_AS + autnumStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -106,7 +111,7 @@ public class RdapControllerAutnumTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
         mockMvc.perform(
-                get("/.well-known/rdap/autnum/" + autnumStr).accept(
+                get(URI_AS + autnumStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -126,7 +131,7 @@ public class RdapControllerAutnumTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         String nonExistAutnumStr = "1000";
         mockMvc.perform(
-                get("/.well-known/rdap/autnum/" + nonExistAutnumStr).accept(
+                get(URI_AS + nonExistAutnumStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -144,7 +149,7 @@ public class RdapControllerAutnumTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         String invalidAutnumStr = "invalidQ";
         mockMvc.perform(
-                get("/.well-known/rdap/autnum/" + invalidAutnumStr).accept(
+                get(URI_AS + invalidAutnumStr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
