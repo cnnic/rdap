@@ -252,6 +252,7 @@ public class RdapController {
         if (!StringUtil.isValidEntityHandleOrName(handle)) {
             return RestResponseUtil.createResponse400();
         }
+        handle = StringUtil.foldCaseAndNormalization(handle);
         Entity result =
                 queryService.queryEntity(queryParser.parseQueryParam(handle));
         if (null != result) {
@@ -304,10 +305,12 @@ public class RdapController {
         }
         String paramValue = queryParser.getParameter(request, paramName);
         paramValue = DomainUtil.iso8859Decode(paramValue);
-        paramValue = StringUtils.trim(paramValue);
         if (!StringUtil.isValidEntityHandleOrName(paramValue)) {
             return RestResponseUtil.createResponse400();
         }
+        paramValue = StringUtil.foldCaseAndNormalization(paramValue);
+        paramValue = StringUtils.trim(paramValue);
+        
         if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
             return RestResponseUtil.createResponse422();
         }
@@ -406,8 +409,12 @@ public class RdapController {
             HttpServletRequest request) {
         domainName = queryParser.getLastSplitInURI(request);
         String decodeDomain = domainName;
+        if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
+            return RestResponseUtil.createResponse400();
+        }
         String punyDomainName = decodeDomain;
         try {
+            domainName = StringUtil.foldCaseAndNormalization(decodeDomain);
             decodeDomain =
                     DomainUtil.decodeAndReplaceAsciiToLowercase(domainName);
             // long lable exception
@@ -415,13 +422,10 @@ public class RdapController {
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
-        decodeDomain = StringUtil.getNormalization(decodeDomain);
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
-            return RestResponseUtil.createResponse400();
-        }
+        decodeDomain = StringUtil.getNormalization(decodeDomain);        
         LOGGER.debug("after normalization: {}", decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
-        decodeDomain = StringUtils.lowerCase(decodeDomain);
+
         QueryParam queryParam =
                 queryParser.parseDomainQueryParam(decodeDomain, punyDomainName);
         if (queryService.tldInThisRegistry(queryParam)) {
@@ -510,8 +514,13 @@ public class RdapController {
         }
         name = queryParser.getParameter(request, "name");
         String decodeDomain = name;
+
         try {
             decodeDomain = DomainUtil.iso8859Decode(name);
+            if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
+                return RestResponseUtil.createResponse400();
+            }
+            decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
             decodeDomain =
                     DomainUtil.decodeAndReplaceAsciiToLowercase(decodeDomain);
         } catch (Exception e) {
@@ -524,11 +533,8 @@ public class RdapController {
         if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
             return RestResponseUtil.createResponse422();
         }
-        if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
-            return RestResponseUtil.createResponse400();
-        }
+       
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
-        decodeDomain = StringUtils.lowerCase(decodeDomain);
         DomainSearch domainSearch =
                 searchService.searchDomain(queryParser.parseDomainQueryParam(
                         decodeDomain, decodeDomain));
@@ -552,7 +558,7 @@ public class RdapController {
      * 
      * </pre>
      * 
-     * @param nameserverName
+     * @param nsName
      *            represents information regarding DNS name servers used in both
      *            forward and reverse DNS. RIRs and some DNRs register or expose
      *            nameserver information as an attribute of a domain name, while
@@ -561,35 +567,37 @@ public class RdapController {
      *            request.
      * @return JSON formatted result,with HTTP code.
      */
-    @RequestMapping(value = { "/nameserver/{nameserverName}" },
+    @RequestMapping(value = { "/nameserver/{nsName}" },
             method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity queryNameserver(@PathVariable String nameserverName,
+    public ResponseEntity queryNameserver(@PathVariable String nsName,
             HttpServletRequest request) {
-        nameserverName = queryParser.getLastSplitInURI(request);
-        String decodeNS = nameserverName;
+        nsName = queryParser.getLastSplitInURI(request);
+        String decodeNS = nsName;
+        if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
+            return RestResponseUtil.createResponse400();
+        }
         String punyNSName = decodeNS;
         try {
+            nsName = StringUtil.foldCaseAndNormalization(decodeNS);
             decodeNS =
-                    DomainUtil.decodeAndReplaceAsciiToLowercase(nameserverName);
+                    DomainUtil.decodeAndReplaceAsciiToLowercase(nsName);
             // long lable exception
             punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
         decodeNS = StringUtil.getNormalization(decodeNS);
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
-            return RestResponseUtil.createResponse400();
-        }
+        
         LOGGER.debug("after normalization: {}", decodeNS);
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
-        decodeNS = StringUtils.lowerCase(decodeNS);
+
         QueryParam queryParam =
                 queryParser.parseNameserverQueryParam(decodeNS, punyNSName);
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryNsInThisRegistry(queryParam);
         }
-        return queryRedirectDomainOrNs(queryParam, nameserverName);
+        return queryRedirectDomainOrNs(queryParam, nsName);
     }
 
     /**
@@ -672,8 +680,13 @@ public class RdapController {
             // search by name
             name = queryParser.getParameter(request, strName);
             String decodeNameserver = name;
+            
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
+                if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
+                    return RestResponseUtil.createResponse400();
+                }
+                decodeNameserver = StringUtil.foldCaseAndNormalization(decodeNameserver);
                 decodeNameserver =
                 DomainUtil
                     .decodeAndReplaceAsciiToLowercase(decodeNameserver);
@@ -687,11 +700,9 @@ public class RdapController {
             if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
                 return RestResponseUtil.createResponse422();
             }
-            if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
-                return RestResponseUtil.createResponse400();
-            }
+            
             decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
-            decodeNameserver = StringUtils.lowerCase(decodeNameserver);
+
             nsQueryParam =
                     (NameserverQueryParam) queryParser
                             .parseNameserverQueryParam(decodeNameserver,
