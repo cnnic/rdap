@@ -378,6 +378,34 @@ public final class DomainUtil {
         }
         return asciiLowerCasedSb.toString();
     }
+    
+    /**
+     * decode string.
+     * 
+     * @param str
+     *            string.
+     * @return str.
+     */
+    public static String decodeAndReplaceAscii(String str) {
+        if (StringUtils.isBlank(str)) {
+            return str;
+        }
+        str = urlDecode(str);
+        LOGGER.debug("after decode: {}", str);
+        // replace all ASCII char.
+        StringBuffer asciiCasedSb = new StringBuffer();
+        for (int i = 0; i < str.length(); i++) {
+            int c = str.charAt(i);
+            char charVal = str.charAt(i);
+            if (c <= MAX_ASCII_CODE) {
+                asciiCasedSb.append(String
+                        .valueOf(charVal));
+            } else {
+                asciiCasedSb.append(String.valueOf(charVal));
+            }
+        }
+        return asciiCasedSb.toString();
+    }
 
     /**
      * decoded url use UTF-8.

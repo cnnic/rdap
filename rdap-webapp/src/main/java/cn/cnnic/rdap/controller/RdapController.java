@@ -414,9 +414,9 @@ public class RdapController {
         }
         String punyDomainName = decodeDomain;
         try {
-            domainName = StringUtil.foldCaseAndNormalization(decodeDomain);
             decodeDomain =
-                    DomainUtil.decodeAndReplaceAsciiToLowercase(domainName);
+                    DomainUtil.decodeAndReplaceAscii(domainName);
+            decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
             // long lable exception
             punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
         } catch (Exception e) {
@@ -579,9 +579,9 @@ public class RdapController {
         }
         String punyNSName = decodeNS;
         try {
-            nsName = StringUtil.foldCaseAndNormalization(decodeNS);
             decodeNS =
-                    DomainUtil.decodeAndReplaceAsciiToLowercase(nsName);
+                    DomainUtil.decodeAndReplaceAscii(nsName);
+            decodeNS = StringUtil.foldCaseAndNormalization(decodeNS);
             // long lable exception
             punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
         } catch (Exception e) {
