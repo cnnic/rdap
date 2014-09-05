@@ -58,6 +58,11 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class RdapControllerEntityTest extends BaseTest {
 
+    /**
+     * entity query URI.
+     */
+    private static final String URI_ENTITY_Q = "/entity/";
+
     @Autowired
     private WebApplicationContext wac;
 
@@ -85,7 +90,7 @@ public class RdapControllerEntityTest extends BaseTest {
     public void testQueryExist() throws Exception {
         String entityHandle = "h1";
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + entityHandle).accept(
+                get(URI_ENTITY_Q + entityHandle).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -114,7 +119,7 @@ public class RdapControllerEntityTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         String nonExistHandle = "1000000";
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + nonExistHandle).accept(
+                get(URI_ENTITY_Q + nonExistHandle).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -134,7 +139,7 @@ public class RdapControllerEntityTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         String invalidHandle = "";
         mockMvc.perform(
-                get("/.well-known/rdap/entity/" + invalidHandle).accept(
+                get(URI_ENTITY_Q + invalidHandle).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))

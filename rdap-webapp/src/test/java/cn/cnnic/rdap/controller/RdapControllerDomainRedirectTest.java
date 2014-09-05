@@ -110,7 +110,7 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
      */
     private void commonExist(String domainName) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/domain/" + domainName).accept(
+                get(RdapControllerDomainTest.URI_DOMAIN_Q + domainName).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -153,7 +153,7 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
      */
     private void commconNonExist(String domainName) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/domain/" + domainName).accept(
+                get(RdapControllerDomainTest.URI_DOMAIN_Q + domainName).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -219,7 +219,7 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
      */
     private void commconRedirect(String domainName) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/domain/" + domainName).accept(
+                get(RdapControllerDomainTest.URI_DOMAIN_Q + domainName).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isMovedPermanently())
                 .andExpect(content().contentType(rdapJson))
@@ -264,7 +264,7 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
      */
     private void commonInvalid(String domainName) throws Exception {
         mockMvc.perform(
-                get("/.well-known/rdap/domain/" + domainName).accept(
+                get(RdapControllerDomainTest.URI_DOMAIN_Q + domainName).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))

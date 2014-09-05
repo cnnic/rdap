@@ -63,6 +63,7 @@ import cn.cnnic.rdap.common.util.DomainUtil;
 import cn.cnnic.rdap.common.util.IpUtil;
 import cn.cnnic.rdap.common.util.RestResponseUtil;
 import cn.cnnic.rdap.common.util.StringUtil;
+import cn.cnnic.rdap.controller.support.MappingExceptionResolver;
 //import cn.cnnic.rdap.controller.support.MappingExceptionResolver;
 import cn.cnnic.rdap.controller.support.QueryParser;
 import cn.cnnic.rdap.service.AccessControlManager;
@@ -140,7 +141,7 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * 
  */
 @Controller
-@RequestMapping("/{dot}well-known/rdap")
+@RequestMapping("/")
 public class RdapController {
     /**
      * autnum query URI.

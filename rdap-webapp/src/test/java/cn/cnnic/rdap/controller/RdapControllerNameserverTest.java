@@ -66,9 +66,9 @@ public class RdapControllerNameserverTest extends BaseTest {
     private MockMvc mockMvc;
 
     /**
-     * nameserver query url.
+     * nameserver query URI.
      */
-    final private String urlPath = "/.well-known/rdap/nameserver/";
+    final private String URI_NS_Q = "/nameserver/";
     /**
      * output json.
      */
@@ -142,7 +142,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     private void commonQueryExistNS(String queryNSName, String lang) throws Exception {
         mockMvc.perform(
-        		MockMvcRequestBuilders.get(urlPath + StringUtil.urlEncode(queryNSName))
+        		MockMvcRequestBuilders.get(URI_NS_Q + StringUtil.urlEncode(queryNSName))
         		.accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -162,7 +162,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     private void commonQueryNonExistNS(String queryDomainName) throws Exception {
         mockMvc.perform(
-                get(urlPath + StringUtil.urlEncode(queryDomainName)).accept(
+                get(URI_NS_Q + StringUtil.urlEncode(queryDomainName)).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -182,7 +182,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     private void commonQueryInvalidNS(String nsName) throws Exception {
         mockMvc.perform(
-                get(urlPath + StringUtil.urlEncode(nsName)).accept(
+                get(URI_NS_Q + StringUtil.urlEncode(nsName)).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))

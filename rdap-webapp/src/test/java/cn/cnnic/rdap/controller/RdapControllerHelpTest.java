@@ -30,7 +30,6 @@
  */
 package cn.cnnic.rdap.controller;
 
-import cn.cnnic.rdap.BaseTest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,10 +40,10 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import cn.cnnic.rdap.BaseTest;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -72,7 +71,7 @@ public class RdapControllerHelpTest extends BaseTest {
     /**
      * a url string.
      */
-    final private String urlPath = "/.well-known/rdap/help";
+    final private String urlPath = "/help";
     
     /**
      * output json.

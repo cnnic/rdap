@@ -30,7 +30,6 @@
  */
 package cn.cnnic.rdap.controller;
 
-import cn.cnnic.rdap.BaseTest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,6 +42,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import cn.cnnic.rdap.BaseTest;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -68,9 +69,9 @@ public class RdapControllerIpTest extends BaseTest {
     private MockMvc mockMvc;
 
     /**
-     * a url string.
+     * ip query URI.
      */
-    final private String urlPath = "/.well-known/rdap/ip/";
+    final private String URI_IP = "/ip/";
     
     /**
      * output json.
@@ -128,7 +129,7 @@ public class RdapControllerIpTest extends BaseTest {
     private void commonQueryExistIP(String queryIP, String lang)
             throws Exception {
         mockMvc.perform(
-                get(urlPath + queryIP).accept(
+                get(URI_IP + queryIP).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -165,7 +166,7 @@ public class RdapControllerIpTest extends BaseTest {
     private void commonQueryNonExistIP(String ipAddr) throws Exception {
         final int numNotFound = 404;
         mockMvc.perform(
-                get(urlPath + ipAddr).accept(
+                get(URI_IP + ipAddr).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -204,7 +205,7 @@ public class RdapControllerIpTest extends BaseTest {
     private void commonQueryInvalidIP(String ipName) throws Exception {
         final int numInvalid = 400;
         mockMvc.perform(
-                get(urlPath + ipName).accept(
+                get(URI_IP + ipName).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))

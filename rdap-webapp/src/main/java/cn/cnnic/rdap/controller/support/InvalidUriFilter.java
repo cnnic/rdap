@@ -60,7 +60,6 @@ import cn.cnnic.rdap.common.util.StringUtil;
  *      URI can not contain '\';
  *      URI can not contain '//';
  *      URI can not contain invalid space;
- *      URI must starts with '.well-known/rdap';
  *      If media type in 'Accept' header is 'application/rdap+json';
  * </pre>
  * 
@@ -73,11 +72,6 @@ public class InvalidUriFilter implements RdapFilter {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(InvalidUriFilter.class);
-
-    /**
-     * rdap url prefix.
-     */
-    private static final String RDAP_URL_PREFIX = ".well-known/rdap";
 
     /**
      * constructor.
@@ -137,19 +131,9 @@ public class InvalidUriFilter implements RdapFilter {
             writeError400Response(response);
             return false;
         }
-        if (!"/".equals(decodeUri)) { // if not /,then must begin with rdapUrl
-            String uriWithoutPrefixSlash =
-                    decodeUri.substring(1, decodeUri.length());
-            if (!uriWithoutPrefixSlash.startsWith(RDAP_URL_PREFIX + "/")) {
-                LOGGER.debug("URI {} not start with {}", uriWithoutPrefixSlash,
-                        RDAP_URL_PREFIX);
-                writeError400Response(response);
-                return false;
-            } else if (!uriWithoutPrefixSlash.equals(RDAP_URL_PREFIX + "/")
-                    && decodeUri.endsWith("/")) {
-                writeError400Response(response);
-                return false;
-            } else if (uriWithoutPrefixSlash.endsWith("/.")) {
+        if (!"/".equals(decodeUri)) {
+            String uriWithoutPrefixSlash = StringUtils.substring(decodeUri, 1);
+            if (uriWithoutPrefixSlash.endsWith("/.")) {
                 writeError400Response(response);
                 return false;
             }
@@ -181,8 +165,7 @@ public class InvalidUriFilter implements RdapFilter {
         if (StringUtils.isBlank(decodeUri)) {
             return false;
         }
-        if (StringUtils.startsWith(decodeUri, "/" + RDAP_URL_PREFIX
-                + "/entity/")) {
+        if (StringUtils.startsWith(decodeUri, "/entity/")) {
             return false;
         }
         if (StringUtils.contains(decodeUri, "/ ")
