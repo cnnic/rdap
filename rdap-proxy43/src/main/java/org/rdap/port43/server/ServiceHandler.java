@@ -41,6 +41,7 @@ import java.net.InetSocketAddress;
 import org.apache.commons.lang.StringUtils;
 import org.rdap.port43.service.ConnectionControlService;
 import org.rdap.port43.service.ProxyService;
+import org.rdap.port43.service.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,6 +92,8 @@ public class ServiceHandler extends SimpleChannelInboundHandler<String> {
             ProxyService proxyService = ProxyService.getInstance();
             try {
                 response = proxyService.execute(request);
+            } catch (ServiceException e) {
+                response = e.getMessage();
             } catch (Exception e) {
                 LOGGER.error("internal server error:{}", e);
                 response = "internal server error.";

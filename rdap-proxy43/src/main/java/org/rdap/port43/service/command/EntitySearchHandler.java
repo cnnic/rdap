@@ -59,13 +59,14 @@ public class EntitySearchHandler extends QueryHandler {
         String uri = "entities?";
         String OPTION_FN = CommandOption.ENTITY_SEARCH_FN.getOption();
         String OPTION_HANDLE = CommandOption.ENTITY_SEARCH_HANDLE.getOption();
-        if (isPrefixedArgument(argumentList.get(0), OPTION_FN)) {
+        if (isPrefixedArgument(argumentList.get(0), OPTION_FN + PARAM_SEPARATOR)) {
             uri =
-                    uri + OPTION_FN + "="
+                    uri + OPTION_FN + PARAM_SEPARATOR
                             + removePrefix(argumentList.get(0), OPTION_FN);
-        } else if (isPrefixedArgument(argumentList.get(0), OPTION_HANDLE)) {
+        } else if (isPrefixedArgument(argumentList.get(0), OPTION_HANDLE
+                + PARAM_SEPARATOR)) {
             uri =
-                    uri + OPTION_HANDLE + "="
+                    uri + OPTION_HANDLE + PARAM_SEPARATOR
                             + removePrefix(argumentList.get(0), OPTION_HANDLE);
         } else {
             throw new ServiceException("invalid argument");

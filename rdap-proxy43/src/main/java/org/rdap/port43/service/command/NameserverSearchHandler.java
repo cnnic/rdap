@@ -58,7 +58,7 @@ public class NameserverSearchHandler extends QueryHandler {
         String OPTION_IP = CommandOption.NAMESERVER_SEARCH_BY_IP.getOption();
         String OPTION_NAME =
                 CommandOption.NAMESERVER_SEARCH_BY_NAME.getOption();
-        if (isPrefixedArgument(argumentList.get(0), OPTION_IP)) {
+        if (isPrefixedArgument(argumentList.get(0), OPTION_IP + PARAM_SEPARATOR)) {
             // search by ip.
             uri =
                     uri + OPTION_IP + "="
