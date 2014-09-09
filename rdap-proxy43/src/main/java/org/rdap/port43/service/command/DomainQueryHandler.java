@@ -74,7 +74,7 @@ public class DomainQueryHandler extends QueryHandler {
         List<String> argumentList = command.getArgumentList();
         throwExceptionIfArguementIsEmpty(argumentList);
         String argument = argumentList.get(0);
-        String uri = "domain/" + argument;
+        String uri = "domain/" + urlEncode(argument);
         LOGGER.info("request for RDAP server URI:{}",uri);
         return uri;
     }

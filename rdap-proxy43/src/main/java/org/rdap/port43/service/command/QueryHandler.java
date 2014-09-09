@@ -30,6 +30,8 @@
  */
 package org.rdap.port43.service.command;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.rdap.port43.service.ServiceException;
 import org.rdap.port43.util.RdapProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * abstract query handler.
@@ -45,6 +49,11 @@ import org.rdap.port43.util.RdapProperties;
  * 
  */
 public abstract class QueryHandler {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(QueryHandler.class);
 
     /**
      * parameter separator.
@@ -67,6 +76,22 @@ public abstract class QueryHandler {
     public boolean supportCmd(Command command) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
+    }
+
+    /**
+     * encode url.
+     * 
+     * @param url
+     *            url.
+     * @return encoded url.
+     */
+    protected String urlEncode(String url) {
+        try {
+            url = URLEncoder.encode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("url encode error:{}", e);
+        }
+        return url;
     }
 
     /**

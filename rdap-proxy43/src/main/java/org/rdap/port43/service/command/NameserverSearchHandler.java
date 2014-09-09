@@ -60,13 +60,14 @@ public class NameserverSearchHandler extends QueryHandler {
                 CommandOption.NAMESERVER_SEARCH_BY_NAME.getOption();
         if (isPrefixedArgument(argumentList.get(0), OPTION_IP + PARAM_SEPARATOR)) {
             // search by ip.
-            uri =
-                    uri + OPTION_IP + "="
-                            + removePrefix(argumentList.get(0), OPTION_IP);
+            String argumentWithoutPrefix =
+                    removePrefix(argumentList.get(0), OPTION_IP);
+            argumentWithoutPrefix = urlEncode(argumentWithoutPrefix);
+            uri = uri + OPTION_IP + "=" + argumentWithoutPrefix;
         } else {// search by name.
             List<String> argumntList = command.getArgumentList();
             throwExceptionIfArguementIsEmpty(argumntList);
-            uri = uri + OPTION_NAME + "=" + argumntList.get(0);
+            uri = uri + OPTION_NAME + "=" + urlEncode(argumntList.get(0));
         }
         return uri;
     }
