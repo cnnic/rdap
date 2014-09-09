@@ -119,6 +119,7 @@ public class ServiceHandler extends SimpleChannelInboundHandler<String> {
     private void writeResponseAndcloseConnection(ChannelHandlerContext ctx,
             String response) {
         ChannelFuture future = ctx.writeAndFlush(response);
+        ctx.writeAndFlush(ManageServerInitializer.LINE_DELIMITER);
         // Close the connection.
         future.addListener(ChannelFutureListener.CLOSE);
     }
