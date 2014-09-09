@@ -55,8 +55,8 @@ public final class ConnectionControlService {
     /**
      * min access interval in seconds.
      */
-    private static final Long MIN_SECONDS_ACCESS_INTERVAL = RdapProperties
-            .getMinSecondsAccessInterval();
+    private static final Long MIN_MILLI_SECONDS_ACCESS_INTERVAL =
+            RdapProperties.getMinSecondsAccessInterval() * 1000;
     /**
      * logger.
      */
@@ -101,7 +101,7 @@ public final class ConnectionControlService {
             return false;
         }
         long accessTimeInterval = currentTimeMillis - lastAccessTime;
-        return accessTimeInterval <= MIN_SECONDS_ACCESS_INTERVAL;
+        return accessTimeInterval <= MIN_MILLI_SECONDS_ACCESS_INTERVAL;
     }
 
     /**
@@ -110,7 +110,7 @@ public final class ConnectionControlService {
      * @return true if has limit, false if not.
      */
     private static boolean hasLimit() {
-        return MIN_SECONDS_ACCESS_INTERVAL > 0;
+        return MIN_MILLI_SECONDS_ACCESS_INTERVAL > 0;
     }
 
     /**
@@ -124,7 +124,7 @@ public final class ConnectionControlService {
         Set<String> keys = CLIENT_IP2LAST_ACCESS_TIME_MAP.keySet();
         for (String key : keys) {
             if ((System.currentTimeMillis() - CLIENT_IP2LAST_ACCESS_TIME_MAP
-                    .get(key)) >= MIN_SECONDS_ACCESS_INTERVAL) {
+                    .get(key)) >= MIN_MILLI_SECONDS_ACCESS_INTERVAL) {
                 LOGGER.debug("remove ip:{}", key);
                 CLIENT_IP2LAST_ACCESS_TIME_MAP.remove(key);
             }
