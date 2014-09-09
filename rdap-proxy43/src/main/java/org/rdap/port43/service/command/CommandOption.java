@@ -30,6 +30,9 @@
  */
 package org.rdap.port43.service.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * command option.
  * 
@@ -56,6 +59,23 @@ public enum CommandOption {
     NAMESERVER_SEARCH_BY_IP("ip", true, "search nameserver by ip"),
     NAMESERVER_SEARCH_BY_NAME("name", true, "search nameserver by name"), ;
 
+    /**
+     * all options that are not with args.This is used to parse query type.
+     */
+    private static List<CommandOption> OPTIONS_NOT_WITH_ARGS =
+            new ArrayList<CommandOption>();
+    /**
+     * init.
+     */
+    static {
+        OPTIONS_NOT_WITH_ARGS.add(IP_OR_DOMAIN_QUERY);
+        OPTIONS_NOT_WITH_ARGS.add(DOMAIN_SEARCH);
+        OPTIONS_NOT_WITH_ARGS.add(ENTITY_QUERY);
+        OPTIONS_NOT_WITH_ARGS.add(ENTITY_SEARCH);
+        OPTIONS_NOT_WITH_ARGS.add(NAMESERVER_QUERY);
+        OPTIONS_NOT_WITH_ARGS.add(NAMESERVER_SEARCH);
+        OPTIONS_NOT_WITH_ARGS.add(AS);
+    }
     /**
      * option.
      */
@@ -97,8 +117,7 @@ public enum CommandOption {
      * @return CommandOption.
      */
     public static CommandOption getByStr(String optionStr) {
-        CommandOption[] options = CommandOption.values();
-        for (CommandOption option : options) {
+        for (CommandOption option : OPTIONS_NOT_WITH_ARGS) {
             if (option.getOption().equals(optionStr)) {
                 return option;
             }
