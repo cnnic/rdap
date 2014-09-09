@@ -83,7 +83,8 @@ public final class RestClient {
      */
     public RestResponse execute(String url) throws ServiceException {
         CloseableHttpClient client = HttpClients.createDefault();
-        RequestConfig requestConfig = RequestConfig.custom().setRedirectsEnabled(false).build();
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setRedirectsEnabled(false).build();
         HttpGet request = new HttpGet(url);
         request.setConfig(requestConfig);
         request.setHeader("Accept", "application/rdap+json");

@@ -54,7 +54,7 @@ public class DomainSearchHandler extends QueryHandler {
         List<String> argumntList = command.getArgumentList();
         throwExceptionIfArguementIsEmpty(argumntList);
         String argument = argumntList.get(0);
-        return "domains?name=" + argument;
+        return "domains?name=" + urlEncode(argument);
     }
 
 }

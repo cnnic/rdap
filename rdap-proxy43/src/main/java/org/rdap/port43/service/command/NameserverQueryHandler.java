@@ -54,7 +54,7 @@ public class NameserverQueryHandler extends QueryHandler {
         List<String> argumentList = command.getArgumentList();
         throwExceptionIfArguementIsEmpty(argumentList);
         String argument = argumentList.get(0);
-        return "nameserver/" + argument;
+        return "nameserver/" + urlEncode(argument);
     }
 
 }

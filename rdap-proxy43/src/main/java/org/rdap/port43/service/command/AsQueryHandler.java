@@ -54,6 +54,6 @@ public class AsQueryHandler extends QueryHandler {
         List<String> argumentList = command.getArgumentList();
         throwExceptionIfArguementIsEmpty(argumentList);
         String argument = argumentList.get(0);
-        return "autnum/" + argument;
+        return "autnum/" + urlEncode(argument);
     }
 }

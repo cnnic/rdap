@@ -54,6 +54,6 @@ public class EntityQueryHandler extends QueryHandler {
         List<String> argumentList = command.getArgumentList();
         throwExceptionIfArguementIsEmpty(argumentList);
         String argument = argumentList.get(0);
-        return "entity/" + argument;
+        return "entity/" + urlEncode(argument);
     }
 }
