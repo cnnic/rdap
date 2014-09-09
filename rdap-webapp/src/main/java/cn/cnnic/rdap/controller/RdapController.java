@@ -98,12 +98,14 @@ import cn.cnnic.rdap.service.impl.ResponseDecorator;
  * detects @RequestMapping annotations.
  * 
  * </pre>
+ * 
  * Request:
  * 
  * <pre>
  *      Only support HTTP 'GET' method.
- *      'Accept' in HTTP header must be 'application/rdap+json'.
- *      URI and parameters must be encoded in UTF-8.
+ *      'Accept' in HTTP header MUST be 'application/rdap+json'.
+ *      URI and parameters MUST be encoded in UTF-8.
+ *      Query data in database MUST be NFKC and case-folded.
  *      Unknown parameters will be ignored.
  * </pre>
  * 
@@ -205,6 +207,7 @@ public class RdapController {
      * This service is not under policy control.
      * 
      * </pre>
+     * 
      * @param request
      *            HttpServletRequest.
      * @param response
@@ -278,6 +281,7 @@ public class RdapController {
      * Parameter will be trimed.
      * 
      * </pre>
+     * 
      * @param fn
      *            fn.
      * @param handle
@@ -309,12 +313,11 @@ public class RdapController {
         if (!StringUtil.isValidEntityHandleOrName(paramValue)) {
             return RestResponseUtil.createResponse400();
         }
-        paramValue = StringUtil.foldCaseAndNormalization(paramValue);
-        paramValue = StringUtils.trim(paramValue);
-        
         if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
             return RestResponseUtil.createResponse422();
         }
+        paramValue = StringUtil.foldCaseAndNormalization(paramValue);
+        paramValue = StringUtils.trim(paramValue);
         QueryParam queryParam =
                 queryParser.parseEntityQueryParam(paramValue, paramName);
         LOGGER.debug("generate queryParam:{}", queryParam);
@@ -410,20 +413,18 @@ public class RdapController {
             HttpServletRequest request) {
         domainName = queryParser.getLastSplitInURI(request);
         String decodeDomain = domainName;
+        String punyDomainName = decodeDomain;
+        decodeDomain = DomainUtil.urlDecode(domainName);
         if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
             return RestResponseUtil.createResponse400();
         }
-        String punyDomainName = decodeDomain;
+        decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
         try {
-            decodeDomain =
-                    DomainUtil.decodeAndReplaceAscii(domainName);
-            decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
             // long lable exception
             punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
-        decodeDomain = StringUtil.getNormalization(decodeDomain);        
         LOGGER.debug("after normalization: {}", decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
 
@@ -493,6 +494,7 @@ public class RdapController {
      * This service is under policy control, @see PolicyControlService.
      * 
      * </pre>
+     * 
      * @param name
      *            is a fully-qualified (relative to the root) domain name
      *            [RFC1594] in either the in-addr.arpa or ip6.arpa zones (for
@@ -518,23 +520,21 @@ public class RdapController {
 
         try {
             decodeDomain = DomainUtil.iso8859Decode(name);
-            if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
-                return RestResponseUtil.createResponse400();
-            }
-            decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
-            decodeDomain =
-                    DomainUtil.decodeAndReplaceAsciiToLowercase(decodeDomain);
+            decodeDomain = DomainUtil.urlDecode(decodeDomain);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
         if (StringUtils.isBlank(decodeDomain)) {
             return RestResponseUtil.createResponse400();
         }
-        decodeDomain = StringUtil.getNormalization(decodeDomain);
         if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
             return RestResponseUtil.createResponse422();
         }
-       
+        if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
+            return RestResponseUtil.createResponse400();
+        }
+
+        decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         DomainSearch domainSearch =
                 searchService.searchDomain(queryParser.parseDomainQueryParam(
@@ -575,21 +575,18 @@ public class RdapController {
             HttpServletRequest request) {
         nsName = queryParser.getLastSplitInURI(request);
         String decodeNS = nsName;
+        String punyNSName = decodeNS;
+        decodeNS = DomainUtil.urlDecode(nsName);
         if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
             return RestResponseUtil.createResponse400();
         }
-        String punyNSName = decodeNS;
+        decodeNS = StringUtil.foldCaseAndNormalization(decodeNS);
         try {
-            decodeNS =
-                    DomainUtil.decodeAndReplaceAscii(nsName);
-            decodeNS = StringUtil.foldCaseAndNormalization(decodeNS);
             // long lable exception
             punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
-        decodeNS = StringUtil.getNormalization(decodeNS);
-        
         LOGGER.debug("after normalization: {}", decodeNS);
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
 
@@ -659,7 +656,7 @@ public class RdapController {
         final String strIp = "ip";
         final String strName = "name";
         NameserverQueryParam nsQueryParam = null;
-        final String[] strParamOrg = {strIp, strName };
+        final String[] strParamOrg = { strIp, strName };
         String nameParam = queryParser.getFirstParameter(request, strParamOrg);
         if (StringUtils.isBlank(nameParam)) {
             return RestResponseUtil.createResponse400();
@@ -681,27 +678,24 @@ public class RdapController {
             // search by name
             name = queryParser.getParameter(request, strName);
             String decodeNameserver = name;
-            
+
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
-                if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
-                    return RestResponseUtil.createResponse400();
-                }
-                decodeNameserver = StringUtil.foldCaseAndNormalization(decodeNameserver);
-                decodeNameserver =
-                DomainUtil
-                    .decodeAndReplaceAsciiToLowercase(decodeNameserver);
+                decodeNameserver = DomainUtil.urlDecode(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
             if (StringUtils.isBlank(decodeNameserver)) {
                 return RestResponseUtil.createResponse400();
             }
-            decodeNameserver = StringUtil.getNormalization(decodeNameserver);
             if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
                 return RestResponseUtil.createResponse422();
             }
-            
+            if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
+                return RestResponseUtil.createResponse400();
+            }
+            decodeNameserver =
+                    StringUtil.foldCaseAndNormalization(decodeNameserver);
             decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
 
             nsQueryParam =
