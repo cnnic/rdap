@@ -124,11 +124,11 @@ public final class Server {
      *             Exception.
      */
     public ChannelFuture start() throws Exception {
-        ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+        ServerBootstrap b = new ServerBootstrap();
+        b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(this.serverInitializer);
-        serverChannelFuture = bootstrap.bind(port);
+        serverChannelFuture = b.bind(port);
         return serverChannelFuture;
     }
 
