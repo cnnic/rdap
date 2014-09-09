@@ -56,7 +56,7 @@ public final class ConnectionControlService {
      * min access interval in seconds.
      */
     private static final Long MIN_MILLI_SECONDS_ACCESS_INTERVAL =
-            RdapProperties.getMinSecondsAccessInterval() * 1000;
+            RdapProperties.getMinSecondsAccessInterval();
     /**
      * logger.
      */

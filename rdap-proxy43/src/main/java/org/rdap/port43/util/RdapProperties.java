@@ -46,7 +46,7 @@ public class RdapProperties {
      */
     private static Integer managePort;
     /**
-     * min seconds between access interval.
+     * min milliseconds between access interval.
      */
     private static Long minSecondsAccessInterval;
     /**
