@@ -133,6 +133,10 @@ public class ProxyService {
         }
         RestResponse restResponse =
                 RestClient.getInstance().execute(requestURI);
+        if (null == restResponse || StringUtils.isBlank(restResponse.getBody())) {
+            LOGGER.error("response from RDAP server is empty");
+            throw new ServiceException("invalid command:" + commandStr);
+        }
         Map jsonMap = JsonUtil.deserializateJsonToMap(restResponse);
         String result = ResponseFormater.format(jsonMap);
         return result;

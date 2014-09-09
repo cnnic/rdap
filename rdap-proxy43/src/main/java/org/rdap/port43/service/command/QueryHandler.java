@@ -45,6 +45,12 @@ import org.rdap.port43.util.RdapProperties;
  * 
  */
 public abstract class QueryHandler {
+
+    /**
+     * parameter separator.
+     */
+    protected static final String PARAM_SEPARATOR = "=";
+
     /**
      * RDAP server base URL.
      */
@@ -194,6 +200,7 @@ public abstract class QueryHandler {
         if (StringUtils.isBlank(prefixedArgument)) {
             return StringUtils.EMPTY;
         }
-        return StringUtils.removeStart(prefixedArgument, prefix + "=");
+        return StringUtils.removeStart(prefixedArgument, prefix
+                + PARAM_SEPARATOR);
     }
 }
