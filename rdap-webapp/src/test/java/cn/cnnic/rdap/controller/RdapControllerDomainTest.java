@@ -91,10 +91,10 @@ public class RdapControllerDomainTest extends BaseTest {
     public void testQueryExistDomain() throws Exception {
         String domainName = "cnnic.cn";
         String domainNameWithUpperCase = "Cnnic.cn";
-        String domainNameInFullWith = "ｃｎｎｉｃ.cn";
+        String domainNameInFullWidth = "ｃｎｎｉｃ.cn";
         commonQueryExistDomain(domainName, domainName, domainName);
         commonQueryExistDomain(domainNameWithUpperCase, domainName, domainName);
-        commonQueryExistDomain(domainNameInFullWith, domainName, domainName);
+        commonQueryExistDomain(domainNameInFullWidth, domainName, domainName);
     }
 
     /**

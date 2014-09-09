@@ -104,7 +104,7 @@ public final class ConnectionControlService {
         if (!hasLimit()) {
             return false;
         }
-        LOGGER.debug("check exceedRateLimit, ip:{}" + ip);
+        LOGGER.debug("check exceedRateLimit, ip:{}", ip);
         if (StringUtils.isBlank(ip)) {
             return false;
         }
@@ -147,6 +147,8 @@ public final class ConnectionControlService {
      * @return true if in white list, false if not.
      */
     private static boolean isInIpWhiteList(String ip) {
+        LOGGER.debug("ip white list:{}", IP_WHITE_LIST_FOR_ACCESS_INTERVAL);
+        LOGGER.debug("check ip:{}", ip);
         List<String> whiteList = IP_WHITE_LIST_FOR_ACCESS_INTERVAL;
         if (null != whiteList && whiteList.contains(ip)) {
             return true;
@@ -185,10 +187,10 @@ public final class ConnectionControlService {
             return false;
         }
         int count = CONCURRENT_Q_COUNT.getAndIncrement();
-        LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax:{}" + count);
+        LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax:{}", count);
         if (count > RdapProperties.getMaxConcurrentCount() - 1) {
-            LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax :{} "
-                    + RdapProperties.getMaxConcurrentCount());
+            LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax :{} ",
+                    RdapProperties.getMaxConcurrentCount());
             return true;
         }
         return false;
