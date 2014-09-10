@@ -54,6 +54,19 @@ import cn.cnnic.rdap.bean.Domain;
 public class RestResponseUtilTest extends BaseTest {
 
     /**
+     * checkAllowOriginHeader.
+     * 
+     * @param result
+     *            result.
+     */
+    private void checkAllowOriginHeader(ResponseEntity result) {
+        assertTrue(result.getHeaders().containsKey(
+                "Access-Control-Allow-Origin"));
+        assertThat(result.getHeaders().get("Access-Control-Allow-Origin"),
+                CoreMatchers.hasItems("*"));
+    }
+
+    /**
      * test create ResponseEntity with HTTP code 200.
      */
     @Test
@@ -66,6 +79,7 @@ public class RestResponseUtilTest extends BaseTest {
         Assert.notNull(result);
         assertEquals(result.getBody().getLdhName(), domainName);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -76,6 +90,7 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse400();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -86,6 +101,7 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse401();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.UNAUTHORIZED);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -96,6 +112,7 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse403();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -106,6 +123,7 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse404();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -119,6 +137,7 @@ public class RestResponseUtilTest extends BaseTest {
         assertTrue(result.getHeaders().containsKey("Allow"));
         assertThat(result.getHeaders().get("Allow"),
                 CoreMatchers.hasItems(HttpMethod.GET.toString()));
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -129,6 +148,7 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse415();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -139,6 +159,7 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse500();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -149,6 +170,7 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse422();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.UNPROCESSABLE_ENTITY);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -160,6 +182,7 @@ public class RestResponseUtilTest extends BaseTest {
                 RestResponseUtil.createResponse301("http://cnnic.cn");
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.MOVED_PERMANENTLY);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -170,6 +193,7 @@ public class RestResponseUtilTest extends BaseTest {
         ResponseEntity result = RestResponseUtil.createResponse429();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.TOO_MANY_REQUESTS);
+        checkAllowOriginHeader(result);
     }
 
     /**
@@ -181,5 +205,6 @@ public class RestResponseUtilTest extends BaseTest {
         Assert.notNull(result);
         assertEquals(result.getStatusCode(),
                 HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+        checkAllowOriginHeader(result);
     }
 }
