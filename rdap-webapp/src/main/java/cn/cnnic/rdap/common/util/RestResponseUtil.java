@@ -145,7 +145,8 @@ public class RestResponseUtil {
      * @return ResponseEntity<T> ResponseEntity model.
      */
     public static <T> ResponseEntity<T> createResponse200(T response) {
-        return new ResponseEntity<T>(response, HttpStatus.OK);
+        HttpHeaders headers = generateCrossOriginHeader();
+        return new ResponseEntity<T>(response, headers, HttpStatus.OK);
     }
 
     /**
@@ -176,6 +177,27 @@ public class RestResponseUtil {
     }
 
     /**
+     * generate HTTP header for Access-Control-Allow-Origin.
+     * 
+     * @return http headers.
+     */
+    private static HttpHeaders generateCrossOriginHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        addCrossOriginHeader(headers);
+        return headers;
+    }
+
+    /**
+     * add Access-Control-Allow-Origin to headers.
+     * 
+     * @param headers
+     *            headers.
+     */
+    private static void addCrossOriginHeader(HttpHeaders headers) {
+        headers.add("Access-Control-Allow-Origin", "*");
+    }
+
+    /**
      * create response with HTTP status code 405.
      * 
      * @return ResponseEntity
@@ -185,6 +207,7 @@ public class RestResponseUtil {
         Set<HttpMethod> allowMethods = new HashSet<HttpMethod>();
         allowMethods.add(HttpMethod.GET);
         headers.setAllow(allowMethods);
+        addCrossOriginHeader(headers);
         ResponseEntity<ErrorMessage> response =
                 createErrorResponseWithHeaders(HttpStatus.METHOD_NOT_ALLOWED,
                         headers);
@@ -238,6 +261,7 @@ public class RestResponseUtil {
             String redirectUrl) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Location", redirectUrl);
+        addCrossOriginHeader(headers);
         ResponseEntity<ErrorMessage> response =
                 createErrorResponseWithHeaders(HttpStatus.MOVED_PERMANENTLY,
                         headers);
@@ -274,7 +298,9 @@ public class RestResponseUtil {
         ErrorMessage errorMessage =
                 getErrorMessageByErrorCode(errorStatus.toString());
         responseDecorator.decorateResponse(errorMessage);
-        return new ResponseEntity<ErrorMessage>(errorMessage, errorStatus);
+        HttpHeaders headers = generateCrossOriginHeader();
+        return new ResponseEntity<ErrorMessage>(errorMessage, headers,
+                errorStatus);
     }
 
     /**
