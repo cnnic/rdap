@@ -213,7 +213,7 @@ public abstract class QueryHandler {
     }
 
     /**
-     * get prefixed agrument.
+     * get prefixed argument.
      * 
      * @param prefixedArgument
      *            prefixedArgument.

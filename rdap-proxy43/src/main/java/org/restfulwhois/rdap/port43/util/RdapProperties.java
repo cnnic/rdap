@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * properties.
+ * properties, from file PROPERTIES_FILE.
  * 
  * @author jiashuo
  * 
@@ -85,47 +85,102 @@ public class RdapProperties {
         }
     }
 
+    /**
+     * get rdapServerBaseUrl.
+     * 
+     * @return rdapServerBaseUrl.
+     */
     public static String getRdapServerBaseUrl() {
         return rdapServerBaseUrl;
     }
 
+    /**
+     * set rdapServerBaseUrl.
+     * 
+     * @param rdapServerBaseUrl
+     *            rdapServerBaseUrl.
+     */
     public static void setRdapServerBaseUrl(String rdapServerBaseUrl) {
         LOGGER.info("set rdapServerBaseUrl:{}", rdapServerBaseUrl);
         RdapProperties.rdapServerBaseUrl = rdapServerBaseUrl;
     }
 
+    /**
+     * get servicePort.
+     * 
+     * @return servicePort.
+     */
     public static Integer getServicePort() {
         return servicePort;
     }
 
+    /**
+     * set servicePort.
+     * 
+     * @return servicePort.
+     */
     public static Integer getManagePort() {
         return managePort;
     }
 
+    /**
+     * get managePort.
+     * 
+     * @param managePort
+     *            managePort.
+     */
     public static void setManagePort(Integer managePort) {
         LOGGER.info("set managePort:{}", managePort);
         RdapProperties.managePort = managePort;
     }
 
+    /**
+     * set managePort.
+     * 
+     * @param servicePort
+     *            managePort.
+     */
     public static void setServicePort(Integer servicePort) {
         LOGGER.info("set servicePort:{}", servicePort);
         RdapProperties.servicePort = servicePort;
     }
 
+    /**
+     * get minSecondsAccessInterval.
+     * 
+     * @return minSecondsAccessInterval.
+     */
     public static Long getMinSecondsAccessInterval() {
         return minSecondsAccessInterval;
     }
 
+    /**
+     * set minSecondsAccessInterval.
+     * 
+     * @param minSecondsAccessInterval
+     *            .
+     */
     public static void
             setMinSecondsAccessInterval(Long minSecondsAccessInterval) {
         LOGGER.info("set minSecondsAccessInterval:{}", minSecondsAccessInterval);
         RdapProperties.minSecondsAccessInterval = minSecondsAccessInterval;
     }
 
+    /**
+     * get responseFormater.
+     * 
+     * @return responseFormater.
+     */
     public static String getResponseFormater() {
         return responseFormater;
     }
 
+    /**
+     * set responseFormater.
+     * 
+     * @param responseFormater
+     *            responseFormater.
+     */
     public static void setResponseFormater(String responseFormater) {
         LOGGER.info("set responseFormater:{}", responseFormater);
         RdapProperties.responseFormater = responseFormater;
