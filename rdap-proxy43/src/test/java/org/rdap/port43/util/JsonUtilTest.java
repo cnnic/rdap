@@ -35,6 +35,8 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Map;
 
 import org.junit.Test;
+import org.restfulwhois.rdap.port43.util.JsonUtil;
+import org.restfulwhois.rdap.port43.util.RestResponse;
 
 /**
  * 
