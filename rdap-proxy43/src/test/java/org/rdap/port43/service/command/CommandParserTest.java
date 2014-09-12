@@ -5,6 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.restfulwhois.rdap.port43.service.command.Command;
+import org.restfulwhois.rdap.port43.service.command.CommandOption;
+import org.restfulwhois.rdap.port43.service.command.CommandParser;
 
 /**
  * command parser test.

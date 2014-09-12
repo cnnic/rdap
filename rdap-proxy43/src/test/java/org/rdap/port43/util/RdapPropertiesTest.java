@@ -3,6 +3,7 @@ package org.rdap.port43.util;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
+import org.restfulwhois.rdap.port43.util.RdapProperties;
 
 /**
  * RdapProperties test.

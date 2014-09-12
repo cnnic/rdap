@@ -14,7 +14,7 @@
 		<level value="ERROR" />
 		<appender-ref ref="STDOUT" />
 	</logger>
-	<logger name="cn.cnnic" additivity="false">
+	<logger name="org.restfulwhois.rdap" additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="STDOUT" />
 	</logger>

@@ -12,8 +12,8 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.rdap.port43.util.JsonUtil;
-import org.rdap.port43.util.RestResponse;
+import org.restfulwhois.rdap.port43.util.JsonUtil;
+import org.restfulwhois.rdap.port43.util.RestResponse;
 
 /**
  * Unit test for simple App.
