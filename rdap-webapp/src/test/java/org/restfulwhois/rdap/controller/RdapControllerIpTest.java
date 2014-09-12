@@ -92,8 +92,8 @@ public class RdapControllerIpTest extends BaseTest {
      *             throw a exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/ip-query.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/ip-query.xml")
     public void testQueryExistIp() throws Exception {
         String ipV4 = "0.0.0.1";
         String ipV4Mask = "0.0.1.1/1";

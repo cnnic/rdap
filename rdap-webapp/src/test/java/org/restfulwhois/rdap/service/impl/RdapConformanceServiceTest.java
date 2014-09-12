@@ -61,8 +61,8 @@ public class RdapConformanceServiceTest extends BaseTest {
 	 * test query exist autnum
 	 */
 	@Test
-	@DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/rdapConformance.xml")
+	@DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+	@DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/rdapConformance.xml")
 	public void testSetRdapConformanceToAutnum() {
 		Autnum autnum = new Autnum();
 		Assert.notNull(autnum);
@@ -78,8 +78,8 @@ public class RdapConformanceServiceTest extends BaseTest {
 	 * test query exist domain
 	 */
 	@Test
-	@DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/rdapConformance.xml")
+	@DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+	@DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/rdapConformance.xml")
 	public void testSetRdapConformanceToDomain() {
 		Domain domain = new Domain();
 		Assert.notNull(domain);

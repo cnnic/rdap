@@ -35,12 +35,10 @@ import java.util.List;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
-//import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-
 /**
  * This class contains variables.
  * <p>
- * Variables in this class is set by spring, from filr 'rdap.properties'.
+ * Variables in this class is set by spring, from file 'rdap.properties'.
  * <p>
  * Bean 'rdapProperties' MUST configured in spring configuration file,and now
  * configuration file is load by {@link PropertyPlaceholderConfigurer}.

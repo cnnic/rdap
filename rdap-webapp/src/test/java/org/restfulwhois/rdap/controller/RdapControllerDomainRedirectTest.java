@@ -80,8 +80,8 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryExistDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         // set both 'in' and 'not in' tld.
@@ -123,8 +123,8 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryNonExistDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         // set both 'in' and 'not in' tld.
@@ -168,8 +168,8 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryRedirect() throws Exception {
         RestResponseUtil.initErrorMessages();
         // set both 'in' and 'not in' tld.
@@ -234,8 +234,8 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryInvalid() throws Exception {
         RestResponseUtil.initErrorMessages();
         // set both 'in' and 'not in' tld.

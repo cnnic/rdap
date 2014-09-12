@@ -83,8 +83,8 @@ public class RdapControllerAutnumTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnumWithRdapAndJson() throws Exception {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
@@ -104,8 +104,8 @@ public class RdapControllerAutnumTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnum() throws Exception {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
@@ -125,7 +125,7 @@ public class RdapControllerAutnumTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryNonExistAutnum() throws Exception {
         RestResponseUtil.initErrorMessages();
         String nonExistAutnumStr = "1000";
@@ -143,7 +143,7 @@ public class RdapControllerAutnumTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryAutnumWithInvalidQ() throws Exception {
         RestResponseUtil.initErrorMessages();
         String invalidAutnumStr = "invalidQ";

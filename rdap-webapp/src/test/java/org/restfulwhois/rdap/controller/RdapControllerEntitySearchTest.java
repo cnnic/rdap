@@ -84,8 +84,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
     public void testQueryExist() throws Exception {
         String entityHandle = "truncated*";
         mockMvc.perform(
@@ -132,8 +132,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
     public void testQueryNonExistAutnum() throws Exception {
         String nonExistHandle = "1000000";
         mockMvc.perform(
@@ -151,8 +151,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
     public void testQueryAutnumWithInvalidQ() throws Exception {
         String invalidHandle = "";
         mockMvc.perform(

@@ -66,8 +66,8 @@ public class SearchServiceImplTest extends BaseTest {
      * test search domain.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity-search.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
     public void testSearchEntity() {
         String entityHandle = "truncated*";
         RdapProperties prop = new RdapProperties();
@@ -113,8 +113,8 @@ public class SearchServiceImplTest extends BaseTest {
      * test search domain.
      */
     @Test
-     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-search-page.xml")
+     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-search-page.xml")
     public void testQueryDomain() {
         String domainName = "truncated*.cn";
         RdapProperties prop = new RdapProperties();
@@ -160,8 +160,8 @@ public class SearchServiceImplTest extends BaseTest {
      * test search nameserver.
      */
     @Test
-     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserver-search-page.xml")
+     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserver-search-page.xml")
     public void testSearchNameserver() {
         String nsName = "ns.truncated*.cn";
         RdapProperties prop = new RdapProperties();

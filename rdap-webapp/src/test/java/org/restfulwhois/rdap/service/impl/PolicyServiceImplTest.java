@@ -71,8 +71,8 @@ public class PolicyServiceImplTest extends BaseTest {
 	 * test policy.
 	 */
 	@Test
-	@DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/policy.xml")
+	@DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+	@DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/policy.xml")
 	public void testSetPolicyOneWrap() {
 		policyService.initAllPolicyByMap();
 
@@ -163,8 +163,8 @@ public class PolicyServiceImplTest extends BaseTest {
 	}
 
 	@Test
-	@DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-	@DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/policyTwoWrap.xml")
+	@DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+	@DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/policyTwoWrap.xml")
 	public void testSetPolicyMultiWrap() {
 		policyService.initAllPolicyByMap();
 
