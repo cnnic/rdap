@@ -57,8 +57,8 @@ public class AccessControlManagerImplTest extends BaseTest {
      * test for exist entry.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/acl.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/acl.xml")
     public void testHasEntry() {
         Domain domain = new Domain();
         domain.setId(1L);
@@ -82,8 +82,8 @@ public class AccessControlManagerImplTest extends BaseTest {
      * test for hasEntry for non-exist entry.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/acl.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/acl.xml")
     public void testHasEntryForNonExistEntry() {
         Domain domain = new Domain();
         /**

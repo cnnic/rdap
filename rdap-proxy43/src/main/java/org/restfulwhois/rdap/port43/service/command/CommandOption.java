@@ -155,7 +155,7 @@ public enum CommandOption {
     /**
      * set hasArg.
      * 
-     * @param hasArg
+     * @param hasArg hasArg.
      *            .
      */
     public void setHasArg(boolean hasArg) {

@@ -39,7 +39,7 @@ package org.restfulwhois.rdap.port43.service;
 public class ServiceException extends RuntimeException {
 
     /**
-     * 
+     * serialVersionUID.
      */
     private static final long serialVersionUID = 5841305724038890337L;
 

@@ -85,8 +85,8 @@ public class RdapControllerNameserverTest extends BaseTest {
      * 			exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserverTest.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserverTest.xml")
     public void testQueryExistNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
     	RestResponseUtil.initConformanceService();
@@ -122,7 +122,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryInvalidNS() throws Exception {
         RestResponseUtil.initErrorMessages();
         commonQueryInvalidNS("123");

@@ -164,7 +164,7 @@ public abstract class BaseTest {
      *             Exception.
      */
     protected static IDataSet getDeleteAllTableRowsDataSet() throws Exception {
-        String dataSetFilePath = "cn/cnnic/rdap/dao/impl/teardown.xml";
+        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/teardown.xml";
         return getDataSet(dataSetFilePath);
     }
 
@@ -176,7 +176,7 @@ public abstract class BaseTest {
      *             Exception.
      */
     protected static IDataSet getInitDataSet() throws Exception {
-        String dataSetFilePath = "cn/cnnic/rdap/dao/impl/initData.xml";
+        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/initData.xml";
         return getDataSet(dataSetFilePath);
     }
 

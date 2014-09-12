@@ -88,8 +88,8 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      *             throw a exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserver-search.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserver-search.xml")
     public void testSearchExistNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
         String nsNameCn = "name=ns.cnnic*";
@@ -197,8 +197,8 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      *             throw a exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/nameserver-search.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserver-search.xml")
     public void testSearchTruncatedNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
         String nsHead = "name=";
@@ -248,7 +248,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      */
     @Test
     @DatabaseSetup(type = DatabaseOperation.REFRESH,
-            value = "classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+            value = "classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchNonExistNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
         String nsHead = "name=";
@@ -290,7 +290,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      *             throw a exception.
      */
     @Test
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchInvalidNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
@@ -312,7 +312,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      *             throw a exception.
      */
     @Test
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchIllegalNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
         String nsHead = "name=";

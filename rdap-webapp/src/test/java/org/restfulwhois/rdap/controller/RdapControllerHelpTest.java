@@ -92,8 +92,8 @@ public class RdapControllerHelpTest extends BaseTest {
      *             throw a exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/help-query.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/help-query.xml")
     public void testQueryHelp() throws Exception {
         
         commonQueryHelp();

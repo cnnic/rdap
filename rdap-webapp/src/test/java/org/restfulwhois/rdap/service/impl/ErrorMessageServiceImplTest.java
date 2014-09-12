@@ -62,8 +62,8 @@ public class ErrorMessageServiceImplTest extends BaseTest {
      * test query exist autnum
      */
     @Test
-     @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testGetAllErrorMessageMap() {
         Map<Long, ErrorMessage> errorMessageMap = errorMessageService
                 .getAllErrorMessageMap();

@@ -82,8 +82,8 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryExist() throws Exception {
         RestResponseUtil.initErrorMessages();
         // v4
@@ -118,8 +118,8 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryNonExist() throws Exception {
         RestResponseUtil.initErrorMessages();
         // v4
@@ -154,8 +154,8 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryRedirect() throws Exception {
         RestResponseUtil.initErrorMessages();
         // v4
@@ -190,8 +190,8 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryInvalid() throws Exception {
         RestResponseUtil.initErrorMessages();
         String invalidIpStr = "invalidNumber";

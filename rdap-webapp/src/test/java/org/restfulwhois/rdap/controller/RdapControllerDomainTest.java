@@ -85,8 +85,8 @@ public class RdapControllerDomainTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain.xml")
     public void testQueryExistDomain() throws Exception {
         String domainName = "cnnic.cn";
         String domainNameWithUpperCase = "Cnnic.cn";
@@ -102,7 +102,7 @@ public class RdapControllerDomainTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testQueryNonExistDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         commonQueryNonExistDomain("1cnnic.cn");
@@ -118,7 +118,7 @@ public class RdapControllerDomainTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testQueryInvalidDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         commonQueryInvalidDomain("123");

@@ -71,8 +71,8 @@ public class QueryServiceImplTest extends BaseTest {
      * test query exist entity.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity.xml")
     public void testTldInThisRegistry() {
         String domainName = "cnnic.cn";
         RdapProperties prop = new RdapProperties();
@@ -104,8 +104,8 @@ public class QueryServiceImplTest extends BaseTest {
      * test query exist entity.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/entity.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity.xml")
     public void testQueryEntity() {
         String handle = "h1";
         Entity entity =
@@ -125,8 +125,8 @@ public class QueryServiceImplTest extends BaseTest {
      * test query exist autnum
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
     public void testQueryAutnum() {
         String autnumStr = "1";
         Autnum autnum =
@@ -146,8 +146,8 @@ public class QueryServiceImplTest extends BaseTest {
      * test query domain.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain.xml")
     public void testQueryDomain() {
         String domainName = "cnnic.cn";
         Domain domain =

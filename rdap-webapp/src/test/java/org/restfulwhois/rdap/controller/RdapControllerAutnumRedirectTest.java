@@ -78,8 +78,8 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-redirect.xml")
     public void testQueryExist() throws Exception {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "1000";
@@ -112,8 +112,8 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-redirect.xml")
     public void testQueryNonExist() throws Exception {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "100000";
@@ -144,8 +144,8 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-redirect.xml")
     public void testQueryRedirect() throws Exception {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
@@ -176,8 +176,8 @@ public class RdapControllerAutnumRedirectTest extends BaseTest {
      *             Exception.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-redirect.xml")
     public void testQueryInvalid() throws Exception {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "invalidNumber";

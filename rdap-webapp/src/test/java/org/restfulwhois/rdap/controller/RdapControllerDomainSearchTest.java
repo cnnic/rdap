@@ -146,8 +146,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/domain-search.xml")
     public
             void testSearchExistDomain() throws Exception {
         String domainName = "cnnic.cn";
@@ -255,8 +255,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(value = "classpath:cn/cnnic/rdap/dao/impl/domain-search.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/domain-search.xml")
     public
             void testSearchTruncatedDomain() throws Exception {
         mockMvc.perform(
@@ -280,7 +280,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      */
     @Test
     @DatabaseSetup(type = DatabaseOperation.REFRESH,
-            value = "classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+            value = "classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchNonExistDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
@@ -303,7 +303,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      * @throws Exception
      */
     @Test
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/errorMessage.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchInvalidDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(

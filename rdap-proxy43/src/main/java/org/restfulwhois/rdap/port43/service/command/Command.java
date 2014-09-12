@@ -83,22 +83,50 @@ public class Command {
         return commandType;
     }
 
+    /**
+     * set commandType.
+     * 
+     * @param commandType
+     *            commandType.
+     */
     public void setCommandType(CommandOption commandType) {
         this.commandType = commandType;
     }
 
+    /**
+     * get argumentList.
+     * 
+     * @return argumentList.
+     */
     public List<String> getArgumentList() {
         return argumentList;
     }
 
+    /**
+     * set argumentList.
+     * 
+     * @param argumentList
+     *            argumentList.
+     */
     public void setArgumentList(List<String> argumentList) {
         this.argumentList = argumentList;
     }
 
+    /**
+     * get allOptionsMap.
+     * 
+     * @return allOptionsMap.
+     */
     public Map<String, String> getAllOptionsMap() {
         return allOptionsMap;
     }
 
+    /**
+     * set allOptionsMap.
+     * 
+     * @param allOptionsMap
+     *            allOptionsMap.
+     */
     public void setAllOptionsMap(Map<String, String> allOptionsMap) {
         this.allOptionsMap = allOptionsMap;
     }

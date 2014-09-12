@@ -69,8 +69,8 @@ public class RedirectServiceImplTest extends BaseTest {
      * test query domain.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/domain-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryDomain() {
         String domainName = "cnnic.cn";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
@@ -85,8 +85,8 @@ public class RedirectServiceImplTest extends BaseTest {
      * test query autnum.
      */
     @Test
-    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/autnum-redirect.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-redirect.xml")
     public void testQueryAutnum() {
         String autnumStr = "1";
         QueryParam queryParam = queryParser.parseQueryParam(autnumStr);
@@ -99,8 +99,8 @@ public class RedirectServiceImplTest extends BaseTest {
      * test query network.
      */
     @Test
-//    @DatabaseTearDown("classpath:cn/cnnic/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:cn/cnnic/rdap/dao/impl/network-redirect.xml")
+//    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryNetwork() {
         QueryParam queryParam =
                 queryParser.parseIpQueryParam("1.0.0.0", 0, IpVersion.V4);
