@@ -19,7 +19,7 @@
 			</list>
 		</property>
 	</bean>
-	<context:component-scan base-package="cn.cnnic.rdap" />
+	<context:component-scan base-package="org.restfulwhois.rdap" />
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
 	<bean id="jsonConverter"
@@ -32,6 +32,6 @@
 		</property>
 	</bean>
 	<bean id="exceptionResolver"
-		class="cn.cnnic.rdap.controller.support.MappingExceptionResolver">
+		class="org.restfulwhois.rdap.controller.support.MappingExceptionResolver">
 	</bean>
 </beans>
