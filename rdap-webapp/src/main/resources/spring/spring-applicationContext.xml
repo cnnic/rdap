@@ -20,6 +20,7 @@
 		<property name="minSecondsAccessIntervalAuthed" value="${minSecondsAccessIntervalAuthed}" />
 		<property name="ipWhiteListForAccessInterval" value="${ipWhiteListForAccessInterval}" />
 		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />
+		<property name="ianaRedirectRegistryBaseUrl" value="${ianaRedirectRegistryBaseUrl}" />
 	</bean>
 	<import resource="classpath:spring/spring-serviceContext.xml" />
 </beans>
