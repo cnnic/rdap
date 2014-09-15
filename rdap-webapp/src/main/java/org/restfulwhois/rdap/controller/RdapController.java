@@ -44,9 +44,9 @@ import org.restfulwhois.rdap.bean.Nameserver;
 import org.restfulwhois.rdap.bean.NameserverQueryParam;
 import org.restfulwhois.rdap.bean.NameserverSearch;
 import org.restfulwhois.rdap.bean.Network;
+import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.common.util.AutnumValidator;
 import org.restfulwhois.rdap.common.util.DomainUtil;
 import org.restfulwhois.rdap.common.util.IpUtil;
@@ -54,6 +54,7 @@ import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.controller.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.controller.support.QueryParser;
+import org.restfulwhois.rdap.exception.DecodeException;
 import org.restfulwhois.rdap.service.AccessControlManager;
 import org.restfulwhois.rdap.service.QueryService;
 import org.restfulwhois.rdap.service.RedirectService;
@@ -216,7 +217,7 @@ public class RdapController {
      */
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ResponseEntity queryHelp(HttpServletRequest request,
-            HttpServletResponse response) {
+            HttpServletResponse response) throws DecodeException {
         String lastSpliInURI = queryParser.getLastSplitInURI(request);
         if (!"help".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
@@ -249,7 +250,8 @@ public class RdapController {
      */
     @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
     public ResponseEntity queryEntity(@PathVariable String handle,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws DecodeException {
         LOGGER.debug("query entity,handle:" + handle);
         handle = queryParser.getLastSplitInURI(request);
         handle = StringUtils.trim(handle);
@@ -294,7 +296,7 @@ public class RdapController {
     public ResponseEntity
             searchEntity(@RequestParam(required = false) String fn,
                     @RequestParam(required = false) String handle,
-                    HttpServletRequest request) {
+                    HttpServletRequest request) throws DecodeException {
         LOGGER.debug("search entities.fn:{},handle:{}", fn, handle);
         String lastSpliInURI = queryParser.getLastSplitInURI(request);
         if (!"entities".equals(lastSpliInURI)) {
@@ -355,7 +357,8 @@ public class RdapController {
      */
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws DecodeException {
         LOGGER.debug("query autnum:" + autnum);
         autnum = queryParser.getLastSplitInURI(request);
         if (!AutnumValidator.isValidAutnum(autnum)) {
@@ -410,7 +413,7 @@ public class RdapController {
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryDomain(@PathVariable String domainName,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws DecodeException {
         domainName = queryParser.getLastSplitInURI(request);
         String decodeDomain = domainName;
         String punyDomainName = decodeDomain;
@@ -510,7 +513,8 @@ public class RdapController {
     @ResponseBody
     public ResponseEntity searchDomain(
             @RequestParam(required = false) String name,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws DecodeException {
         String lastSpliInURI = queryParser.getLastSplitInURI(request);
         if (!"domains".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
@@ -572,7 +576,7 @@ public class RdapController {
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryNameserver(@PathVariable String nsName,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws DecodeException {
         nsName = queryParser.getLastSplitInURI(request);
         String decodeNS = nsName;
         String punyNSName = decodeNS;
@@ -648,7 +652,8 @@ public class RdapController {
     @ResponseBody
     public ResponseEntity searchNameserver(
             @RequestParam(required = false) String name,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws DecodeException {
         String lastSpliInURI = queryParser.getLastSplitInURI(request);
         if (!"nameservers".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
@@ -742,7 +747,8 @@ public class RdapController {
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryIpWithMask(@PathVariable String ipAddr,
-            @PathVariable String mask, HttpServletRequest request) {
+            @PathVariable String mask, HttpServletRequest request)
+            throws DecodeException {
         ipAddr = queryParser.getLastSecondSplitInURI(request);
         mask = queryParser.getLastSplitInURI(request);
         return queryIpAddress(ipAddr, mask, ipAddr + "/" + mask);
@@ -767,7 +773,7 @@ public class RdapController {
     @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryIp(@PathVariable String ipAddr,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws DecodeException {
         ipAddr = queryParser.getLastSplitInURI(request);
         return queryIpAddress(ipAddr, "", ipAddr);
     }
@@ -848,4 +854,5 @@ public class RdapController {
     public ResponseEntity error400() {
         return RestResponseUtil.createResponse400();
     }
+    
 }
