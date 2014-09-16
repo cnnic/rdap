@@ -45,7 +45,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "ldhName",
+@JsonPropertyOrder({ "rdapConformance", "notices","objectClassName", "handle", "ldhName",
         "unicodeName", "variants", "nameServers", "secureDNS", "entities",
         "status", "publicIds", "remarks", "links", "port43", "events",
         "network", "lang" })
@@ -112,6 +112,10 @@ public class Domain extends BaseModel {
      * represents the IP network for which a reverse DNS domain is referenced.
      */
     private Network network;
+    /**
+     * the object class name of a particular object as a string.
+     */
+    private String objectClassName="domain";
 
     @Override
     public ModelType getObjectType() {
@@ -404,8 +408,27 @@ public class Domain extends BaseModel {
     public void setNetwork(Network network) {
         this.network = network;
     }
-
+    
     /**
+     * get objectClassName.
+     * 
+     * @return String of objectClassName
+     */
+    public String getObjectClassName() {
+		return objectClassName;
+	}
+    
+    /**
+     * set objectClassName.
+     * 
+     * @param objectClassName
+     *          string of objectClassName to set
+     */
+	public void setObjectClassName(String objectClassName) {
+		this.objectClassName = objectClassName;
+	}
+
+	/**
      * get domain type .
      * 
      * @return domain type : ARPA or DOMAIN .

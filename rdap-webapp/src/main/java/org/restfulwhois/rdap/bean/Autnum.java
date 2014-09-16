@@ -44,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "startAutnum",
+@JsonPropertyOrder({ "rdapConformance", "notices", "objectClassName", "handle", "startAutnum",
         "endAutnum", "name", "type", "status", "country", "remarks", "links",
         "events", "entities", "port43", "lang" })
 public class Autnum extends BaseModel {
@@ -96,6 +96,10 @@ public class Autnum extends BaseModel {
      * events.
      */
     private List<Event> events;
+    /**
+     * the object class name of a particular object as a string.
+     */
+    private String objectClassName="autnum";
 
     @Override
     public ModelType getObjectType() {
@@ -338,4 +342,24 @@ public class Autnum extends BaseModel {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+    
+    /**
+     * get objectClassName.
+     * 
+     * @return String of objectClassName
+     */
+    public String getObjectClassName() {
+		return objectClassName;
+	}
+    
+    /**
+     * set objectClassName.
+     * 
+     * @param objectClassName
+     *          string of objectClassName to set
+     */
+	public void setObjectClassName(String objectClassName) {
+		this.objectClassName = objectClassName;
+	}
+
 }

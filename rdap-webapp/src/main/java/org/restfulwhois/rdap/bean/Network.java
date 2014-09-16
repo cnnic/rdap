@@ -44,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @author weijunkai
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "notices", "handle", "startAddress",
+@JsonPropertyOrder({ "rdapConformance", "notices", "objectClassName", "handle", "startAddress",
         "endAddress", "ipVersion", "name", "type", "country", "parentHandle",
         "status", "entities", "remarks", "links", "port43", "events", "lang" })
 public class Network extends BaseModel {
@@ -104,6 +104,10 @@ public class Network extends BaseModel {
      * events.
      */
     private List<Event> events;
+    /**
+     * the object class name of a particular object as a string.
+     */
+    private String objectClassName="ip network";
 
     @Override
     public ModelType getObjectType() {
@@ -394,6 +398,25 @@ public class Network extends BaseModel {
     public void setParentHandle(String parentHandle) {
         this.parentHandle = parentHandle;
     }
+    
+    /**
+     * get objectClassName.
+     * 
+     * @return String of objectClassName
+     */
+    public String getObjectClassName() {
+		return objectClassName;
+	}
+    
+    /**
+     * set objectClassName.
+     * 
+     * @param objectClassName
+     *          string of objectClassName to set
+     */
+	public void setObjectClassName(String objectClassName) {
+		this.objectClassName = objectClassName;
+	}
 
     /**
      * ip version:v4,v6.
@@ -461,6 +484,8 @@ public class Network extends BaseModel {
         @JsonValue
         public String getName() {
             return name;
-        }
+        }       
+       
     }
+    
 }

@@ -114,7 +114,8 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value("1"))
-                .andExpect(jsonPath("$.ldhName").value(domainName));
+                .andExpect(jsonPath("$.ldhName").value(domainName))
+                .andExpect(jsonPath("$.objectClassName").value("domain"));
     }
 
     /**
