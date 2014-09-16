@@ -36,6 +36,7 @@ import java.net.IDN;
 import java.net.URLDecoder;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.exception.DecodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -359,7 +360,7 @@ public final class DomainUtil {
      * @return str.
      */
     @Deprecated
-    public static String decodeAndReplaceAsciiToLowercase(String str) {
+    public static String decodeAndReplaceAsciiToLowercase(String str) throws DecodeException{
         if (StringUtils.isBlank(str)) {
             return str;
         }
@@ -379,7 +380,7 @@ public final class DomainUtil {
         }
         return asciiLowerCasedSb.toString();
     }
-    
+
     /**
      * decoded url use UTF-8.
      * 
@@ -387,7 +388,7 @@ public final class DomainUtil {
      *            string.
      * @return String decoded string.
      */
-    public static String urlDecode(String str) {
+    public static String urlDecode(String str) throws DecodeException {
         if (StringUtils.isBlank(str)) {
             return str;
         }
@@ -395,7 +396,10 @@ public final class DomainUtil {
         try {
             result = URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
         } catch (UnsupportedEncodingException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("UnsupportedEncodingException:{}", e);
+        } catch (Exception e) {
+            LOGGER.error("urlDecode error:{}", e);
+            throw new DecodeException("urlDecode error", e);
         }
         return result;
     }
@@ -466,8 +470,7 @@ public final class DomainUtil {
             return false;
         }
         if (domainWithoutLastDot.length() < MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT
-                || domainWithoutLastDot.length()
-                > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
+                || domainWithoutLastDot.length() > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
             return false;
         }
         return true;

@@ -51,6 +51,11 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 public class RdapProperties {
 
     /**
+     * ianaRedirectRegistryBaseUrl.
+     */
+    private static String ianaRedirectRegistryBaseUrl;
+
+    /**
      * max concurrent count.
      */
     private static Integer maxConcurrentCount;
@@ -324,6 +329,27 @@ public class RdapProperties {
             String ipWhiteListForAccessInterval) {
         RdapProperties.ipWhiteListForAccessInterval =
                 ipWhiteListForAccessInterval;
+    }
+
+    /**
+     * get ianaRedirectRegistryBaseUrl.
+     * 
+     * @return ianaRedirectRegistryBaseUrl.
+     */
+    public static String getIanaRedirectRegistryBaseUrl() {
+        return ianaRedirectRegistryBaseUrl;
+    }
+
+    /**
+     * set ianaRedirectRegistryBaseUrl.
+     * 
+     * @param ianaRedirectRegistryBaseUrl
+     *            ianaRedirectRegistryBaseUrl.
+     */
+    public static void setIanaRedirectRegistryBaseUrl(
+            String ianaRedirectRegistryBaseUrl) {
+        RdapProperties.ianaRedirectRegistryBaseUrl =
+                ianaRedirectRegistryBaseUrl;
     }
 
 }
