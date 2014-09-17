@@ -30,11 +30,6 @@
  */
 package org.restfulwhois.rdap.service.impl;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
-
 import org.restfulwhois.rdap.bean.BaseModel;
 import org.restfulwhois.rdap.bean.Principal;
 import org.restfulwhois.rdap.bean.SecureObject;
@@ -92,87 +87,4 @@ public class AccessControlManagerImpl implements AccessControlManager {
                 .getObjectType().getName());
         return aclDao.hasEntry(principal, secureObject);
     }
-
-	@Override
-	public boolean hasPermissionTest(BaseModel object) {
-		// TODO Auto-generated method stub
-		Class	c = object .getClass();				
-		Field f[]=c.getDeclaredFields();
-		for(int i=0;i<f.length;i++)
-    	  {		    	  
-    	   System.out.println("属性的名字是:"+f[i].getName());
-    	   System.out.println("属性的类型是:"+f[i].getType());
-    	   try {
-             f[i].setAccessible(true);
-			System.out.println("属性的值是:"+f[i].get(object));
-		} catch (IllegalArgumentException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-    	//   System.out.println("属性的类型是:"+f[i].getGenericType());
-    	   Object obj;
-    	   
-    	   Class  classType = f[i].getType();
-    	   if(classType.isPrimitive()) continue;
-    	   if(classType.getName().startsWith("java.lang")) continue;
-    	   
-    	   if(classType.isAssignableFrom(List.class)){
-    		   Type fc= f[i].getGenericType();
-    		   if(fc==null) continue;
-    		   if(fc instanceof ParameterizedType){
-    			   ParameterizedType pt =(ParameterizedType)fc;
-    			   Class genericClazz =(Class) pt.getActualTypeArguments()[0];
-    			   try {
-					obj=genericClazz.newInstance();
-					 if(obj instanceof BaseModel){
-						   System.out.println("aaaa");
-	    			   }
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-    			  
-    		   }
-    	   }else{
-			   try {
-					
-					obj =f[i].getType().newInstance();
-					if( obj instanceof BaseModel){
-			    		   System.out.println("aaaa");
-			    	   }
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		   }
-		/*try {
-		
-			obj =f[i].getType().newInstance();
-			if( obj instanceof BaseModel){
-	    		   System.out.println("aaaa");
-	    	   }
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-    	   
-    	  }
-
-	System.out.println("qqqq");
-	
-	
-		return false;
-	}
 }

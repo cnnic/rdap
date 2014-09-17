@@ -49,6 +49,4 @@ public interface AccessControlManager {
      * @return true if has permission,false if not.
      */
     boolean hasPermission(BaseModel object);
-    
-    boolean hasPermissionTest(BaseModel object);
 }
