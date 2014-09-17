@@ -47,7 +47,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({"rdapConformance", "notices", "handle", "vcardArray",
+@JsonPropertyOrder({"rdapConformance", "notices", "objectClassName", "handle", "vcardArray",
         "roles", "publicIds", "entities", "remarks", "links", "events",
         "asEventActor", "status", "port43", "networks", "autnums",
         "resultsTruncated" })
@@ -158,6 +158,11 @@ public class Entity extends BaseModel {
      */
     @JsonIgnore
     private String lang;
+    
+    /**
+     * the object class name of a particular object.
+     */
+    private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.ENTITY;
 
     @Override
     public ModelType getObjectType() {
@@ -606,5 +611,24 @@ public class Entity extends BaseModel {
     public void setResultsTruncated(Boolean resultsTruncated) {
         this.resultsTruncated = resultsTruncated;
     }
+    
+    /**
+     * get ObjectClassNameEnum.
+     * 
+     * @return objectClassName.
+     */
+	public ObjectClassNameEnum getObjectClassName() {
+		return objectClassName;
+	}
+	
+	/**
+     * set ObjectClassNameEnum.
+     * 
+     * @param objectClassNameEnum
+     *            objectClassName for set.
+     */
+	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
+		this.objectClassName = objectClassName;
+	}
 
 }

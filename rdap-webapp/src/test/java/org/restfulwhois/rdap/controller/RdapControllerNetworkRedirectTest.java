@@ -108,7 +108,8 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.port43").value("port43"));
+                .andExpect(jsonPath("$.port43").value("port43"))
+                .andExpect(jsonPath("$.objectClassName").value("ip network"));
     }
 
     /**
