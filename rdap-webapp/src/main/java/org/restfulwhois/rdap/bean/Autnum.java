@@ -99,7 +99,7 @@ public class Autnum extends BaseModel {
     /**
      * the object class name of a particular object.
      */
-    private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.AUTNUM;;
+    private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.AUTNUM;
 
     @Override
     public ModelType getObjectType() {
