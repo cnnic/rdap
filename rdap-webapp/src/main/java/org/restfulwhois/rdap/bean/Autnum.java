@@ -97,9 +97,9 @@ public class Autnum extends BaseModel {
      */
     private List<Event> events;
     /**
-     * the object class name of a particular object as a string.
+     * the object class name of a particular object.
      */
-    private String objectClassName = ObjectClassNameEnum.AUTNUM.getName();
+    private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.AUTNUM;;
 
     @Override
     public ModelType getObjectType() {
@@ -344,21 +344,21 @@ public class Autnum extends BaseModel {
     }
     
     /**
-     * get objectClassName.
+     * get ObjectClassNameEnum.
      * 
-     * @return String of objectClassName
+     * @return objectClassName.
      */
-    public String getObjectClassName() {
+	public ObjectClassNameEnum getObjectClassName() {
 		return objectClassName;
 	}
-    
-    /**
-     * set objectClassName.
+	
+	/**
+     * set ObjectClassNameEnum.
      * 
-     * @param objectClassName
-     *          string of objectClassName to set
+     * @param objectClassNameEnum
+     *            objectClassName for set.
      */
-	public void setObjectClassName(String objectClassName) {
+	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
 		this.objectClassName = objectClassName;
 	}
 

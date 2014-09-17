@@ -115,7 +115,7 @@ public class Domain extends BaseModel {
     /**
      * the object class name of a particular object as a string.
      */
-    private String objectClassName = ObjectClassNameEnum.DOMAIN.getName();
+    private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.DOMAIN;
 
     @Override
     public ModelType getObjectType() {
@@ -409,25 +409,7 @@ public class Domain extends BaseModel {
         this.network = network;
     }
     
-    /**
-     * get objectClassName.
-     * 
-     * @return String of objectClassName
-     */
-    public String getObjectClassName() {
-		return objectClassName;
-	}
-    
-    /**
-     * set objectClassName.
-     * 
-     * @param objectClassName
-     *          string of objectClassName to set
-     */
-	public void setObjectClassName(String objectClassName) {
-		this.objectClassName = objectClassName;
-	}
-
+   
 	/**
      * get domain type .
      * 
@@ -445,4 +427,23 @@ public class Domain extends BaseModel {
         }
         return ModelType.DOMAIN;
     }
+    
+    /**
+     * get ObjectClassNameEnum.
+     * 
+     * @return objectClassName.
+     */
+	public ObjectClassNameEnum getObjectClassName() {
+		return objectClassName;
+	}
+	
+	/**
+     * set ObjectClassNameEnum.
+     * 
+     * @param objectClassNameEnum
+     *            objectClassName for set.
+     */
+	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
+		this.objectClassName = objectClassName;
+	}
 }

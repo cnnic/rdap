@@ -1,5 +1,7 @@
 package org.restfulwhois.rdap.bean;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 
 
 /**
@@ -28,29 +30,14 @@ public enum ObjectClassNameEnum {
      */
     private ObjectClassNameEnum(String name) {
         this.name = name;
-    }
-    /**
-     * get ObjectClassNameEnum by name.
-     * 
-     * @param name
-     *           
-     * @return objectClassNameEnum .
-     */
-    public static ObjectClassNameEnum getObjectClassNameEnum(String name) {
-    	ObjectClassNameEnum[] objectClassNameEnums = ObjectClassNameEnum.values();
-        for (ObjectClassNameEnum objectClassNameEnum : objectClassNameEnums) {
-            if (objectClassNameEnum.getName().equals(name)) {
-                return objectClassNameEnum;
-            }
-        }
-        return null;
-    }
+    }   
     
     /**
      * get ObjectClassNameEnum name.
      * 
      * @return ObjectClassNameEnum name.
      */
+    @JsonValue
     public String getName() {
         return name;
     }

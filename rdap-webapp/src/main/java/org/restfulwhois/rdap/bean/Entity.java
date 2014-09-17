@@ -160,9 +160,9 @@ public class Entity extends BaseModel {
     private String lang;
     
     /**
-     * the object class name of a particular object as a string.
+     * the object class name of a particular object.
      */
-    private String objectClassName = ObjectClassNameEnum.ENTITY.getName();
+    private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.ENTITY;
 
     @Override
     public ModelType getObjectType() {
@@ -613,21 +613,21 @@ public class Entity extends BaseModel {
     }
     
     /**
-     * get objectClassName.
+     * get ObjectClassNameEnum.
      * 
-     * @return String of objectClassName
+     * @return objectClassName.
      */
-    public String getObjectClassName() {
+	public ObjectClassNameEnum getObjectClassName() {
 		return objectClassName;
 	}
-    
-    /**
-     * set objectClassName.
+	
+	/**
+     * set ObjectClassNameEnum.
      * 
-     * @param objectClassName
-     *          string of objectClassName to set
+     * @param objectClassNameEnum
+     *            objectClassName for set.
      */
-	public void setObjectClassName(String objectClassName) {
+	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
 		this.objectClassName = objectClassName;
 	}
 
