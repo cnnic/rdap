@@ -23,6 +23,7 @@
 	
 	<import resource="classpath:spring/spring-serviceContext.xml" />
 	<import resource="classpath:spring/spring-servlet.xml" />
+	<import resource="classpath:spring/spring-timer.xml" />
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />

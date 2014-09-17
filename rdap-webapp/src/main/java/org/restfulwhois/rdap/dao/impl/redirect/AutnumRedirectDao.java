@@ -38,6 +38,7 @@ import java.util.List;
 
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,5 +113,11 @@ public class AutnumRedirectDao implements RedirectDao {
         }
         LOGGER.debug("query, result:" + result.get(0));
         return new RedirectResponse(result.get(0));
+    }
+
+    @Override
+    public void save(List<Redirect> redirects) {
+        // TODO Auto-generated method stub
+        
     }
 }

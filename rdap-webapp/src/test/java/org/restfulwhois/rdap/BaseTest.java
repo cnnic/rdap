@@ -41,6 +41,7 @@ import javax.sql.DataSource;
 import org.apache.commons.lang.StringUtils;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -262,6 +263,14 @@ public abstract class BaseTest {
             return str;
         }
         return new String(str.getBytes(), StringUtil.CHAR_SET_ISO8859);
+    }
+    
+    /**
+     * get empty dataSet.
+     * @return
+     */
+    protected QueryDataSet getEmptyDataSet(){
+        return new QueryDataSet(connection);
     }
 
 }
