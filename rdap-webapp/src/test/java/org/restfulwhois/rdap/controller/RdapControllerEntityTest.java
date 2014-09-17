@@ -102,7 +102,8 @@ public class RdapControllerEntityTest extends BaseTest {
                 .andExpect(jsonPath("$.vcardArray[1][0][3]").value("4.0"))
                 .andExpect(jsonPath("$.vcardArray[1][1][0]").value("kind"))
                 .andExpect(
-                        jsonPath("$.vcardArray[1][1][3]").value("individual"));
+                        jsonPath("$.vcardArray[1][1][3]").value("individual"))
+                .andExpect(jsonPath("$.objectClassName").value("entity"));;
     }
 
     /**

@@ -148,7 +148,8 @@ public class RdapControllerNameserverTest extends BaseTest {
                 .andExpect(jsonPath("$.lang").value(lang))
                 .andExpect(jsonPath("$.ldhName").exists())
                 .andExpect(jsonPath("$.unicodeName").exists())
-                .andExpect(jsonPath("$.port43").value("port43"));
+                .andExpect(jsonPath("$.port43").value("port43"))
+                .andExpect(jsonPath("$.objectClassName").value("nameserver"));
     }
 
     /**

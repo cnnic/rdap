@@ -198,6 +198,8 @@ public class RdapControllerDomainTest extends BaseTest {
                         jsonPath("$.links[0].hreflang").value(
                                 CoreMatchers.hasItems("en", "zh")))
                 .andExpect(jsonPath("$.links[0].title").exists())
+                //objectClassName
+                 .andExpect(jsonPath("$.objectClassName").value("domain"))
 
         ;
     }

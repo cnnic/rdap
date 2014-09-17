@@ -245,7 +245,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                                 .value(CoreMatchers.hasItems("en", "zh")))
                 .andExpect(
                         jsonPath("$.domainSearchResults[0].links[0].title")
-                                .exists());
+                                .exists())
+                                .andExpect(jsonPath("$.domainSearchResults[0].objectClassName").value("domain"));
 
     }
 

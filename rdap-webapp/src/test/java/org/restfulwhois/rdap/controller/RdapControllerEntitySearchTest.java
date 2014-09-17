@@ -121,7 +121,9 @@ public class RdapControllerEntitySearchTest extends BaseTest {
                                 .value("individual"))
                 .andExpect(
                         jsonPath("$.entitySearchResults[0].port43").value(
-                                "whois.example.net"));
+                                "whois.example.net"))
+                .andExpect(jsonPath("$.entitySearchResults[0].objectClassName").value("entity"));
+        
 
     }
 
