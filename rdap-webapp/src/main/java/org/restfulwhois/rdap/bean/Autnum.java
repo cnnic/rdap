@@ -99,7 +99,7 @@ public class Autnum extends BaseModel {
     /**
      * the object class name of a particular object as a string.
      */
-    private String objectClassName="autnum";
+    private String objectClassName = ObjectClassNameEnum.AUTNUM.getName();
 
     @Override
     public ModelType getObjectType() {

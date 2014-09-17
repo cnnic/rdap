@@ -136,7 +136,7 @@ public class RdapControllerIpTest extends BaseTest {
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.type").exists())
                 .andExpect(jsonPath("$.port43").value("port43"))
-                .andExpect(jsonPath("$.objectClassName").value("ip network"));;
+                .andExpect(jsonPath("$.objectClassName").value("ip network"));
     }
 
     /**

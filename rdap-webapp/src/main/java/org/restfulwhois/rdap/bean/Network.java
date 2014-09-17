@@ -107,7 +107,7 @@ public class Network extends BaseModel {
     /**
      * the object class name of a particular object as a string.
      */
-    private String objectClassName="ip network";
+    private String objectClassName = ObjectClassNameEnum.IP.getName();
 
     @Override
     public ModelType getObjectType() {

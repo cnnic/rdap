@@ -115,7 +115,7 @@ public class Domain extends BaseModel {
     /**
      * the object class name of a particular object as a string.
      */
-    private String objectClassName="domain";
+    private String objectClassName = ObjectClassNameEnum.DOMAIN.getName();
 
     @Override
     public ModelType getObjectType() {

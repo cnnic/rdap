@@ -94,7 +94,7 @@ public class Nameserver extends BaseModel {
     /**
      * the object class name of a particular object as a string.
      */
-    private String objectClassName="nameserver";
+    private String objectClassName = ObjectClassNameEnum.NAMESERVER.getName();
 
     @Override
     public ModelType getObjectType() {

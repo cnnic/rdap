@@ -162,7 +162,7 @@ public class Entity extends BaseModel {
     /**
      * the object class name of a particular object as a string.
      */
-    private String objectClassName="entity";
+    private String objectClassName = ObjectClassNameEnum.ENTITY.getName();
 
     @Override
     public ModelType getObjectType() {
