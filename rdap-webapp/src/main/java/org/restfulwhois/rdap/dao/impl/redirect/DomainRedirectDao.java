@@ -69,11 +69,6 @@ public class DomainRedirectDao implements RedirectDao {
             "insert into RDAP_DOMAIN_REDIRECT(REDIRECT_TLD,REDIRECT_URL) values (?,?)";
 
     /**
-     * delete by tld.
-     */
-    private static final String DELETE_DOMAIN_REDIRECT_BY_TLD =
-            "delete from RDAP_DOMAIN_REDIRECT where REDIRECT_TLD = ?";
-    /**
      * select max id.
      */
     private static final String SELECT_MAX_ID =

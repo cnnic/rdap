@@ -85,6 +85,8 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
         try {
             ipMaskLongVal = Long.parseLong(ipMask);
         } catch (Exception e) {
+            LOGGER.error("ipMask {} parseLong error:{}", ipMask, e);
+            LOGGER.error("ignore this key/urls:{},{}", key, registryUrls);
             return redirects;
         }
         NetworkRedirect networkRedirect =

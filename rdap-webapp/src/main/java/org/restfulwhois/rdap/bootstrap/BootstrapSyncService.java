@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.restfulwhois.rdap.bootstrap.handler.RegistryHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +21,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BootstrapSyncService {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(BootstrapSyncService.class);
 
     /**
      * registryHandlers is defined in spring configuration file.
@@ -30,9 +37,12 @@ public class BootstrapSyncService {
      * synchronize all registry data.
      */
     public void syncAllRegistry() {
+        LOGGER.info("syncAllRegistry begin...");
         for (RegistryHandler handler : registryHandlers) {
+            LOGGER.info("sync registry :{} begin", handler);
             handler.handle();
         }
+        LOGGER.info("syncAllRegistry end.");
     }
 
 }
