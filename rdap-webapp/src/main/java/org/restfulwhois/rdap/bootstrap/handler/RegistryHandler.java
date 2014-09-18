@@ -42,6 +42,8 @@ import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.bootstrap.registry.DataProvider;
 import org.restfulwhois.rdap.common.RdapProperties;
 import org.restfulwhois.rdap.service.RedirectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -60,7 +62,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
  * 
  */
 public abstract class RegistryHandler {
-
+    /**
+     * logger.
+     */
+    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
     /**
      * redirectService
      */
@@ -84,10 +89,12 @@ public abstract class RegistryHandler {
         BootstrapRegistries bootstrapRegistries =
                 dataProvider.getDataFromRegistry(getRegistryRelativateUrl());
         if (null == bootstrapRegistries) {
+            LOGGER.error("bootstrapRegistries is null,not do sync.");
             return;
         }
         List<Redirect> redirects =
                 generateRedirectsFromBootstraps(bootstrapRegistries);
+        LOGGER.debug("generateRedirectsFromBootstraps,redirects:{}", redirects);
         saveRedirects(redirects);
     }
 

@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.bootstrap.bean;
 
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.bean.NetworkQueryParam;
 
 /**
@@ -134,6 +135,12 @@ public class NetworkRedirect extends Redirect {
      */
     public void setNetworkQueryParam(NetworkQueryParam networkQueryParam) {
         this.networkQueryParam = networkQueryParam;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(getPrefix()).append(getMask())
+                .append(getNetworkQueryParam()).append(getUrls()).toString();
     }
 
 }

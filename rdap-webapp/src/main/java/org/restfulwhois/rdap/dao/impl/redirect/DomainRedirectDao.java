@@ -158,8 +158,15 @@ public class DomainRedirectDao implements RedirectDao {
 
     @Override
     public void save(List<Redirect> bootstraps) {
+        if (null == bootstraps || bootstraps.size() == 0) {
+            LOGGER.info("bootstraps is empty, not do sync.");
+            return;
+        }
         Long maxOldId = getMaxId();
+        LOGGER.info("get tobe delete maxOldId:{}", maxOldId);
+        LOGGER.info("save new bootstraps...");
         saveNew(bootstraps);
+        LOGGER.info("delete old bootstraps...");
         deleteOld(maxOldId);
     }
 
@@ -170,6 +177,10 @@ public class DomainRedirectDao implements RedirectDao {
      *            maxOldId.
      */
     private void deleteOld(Long maxOldId) {
+        if (null == maxOldId) {
+            LOGGER.info("maxOldId is null, not delete.");
+            return;
+        }
         jdbcTemplate.update(DELETE_SMALLER_THAN_ID, maxOldId);
     }
 
@@ -200,114 +211,4 @@ public class DomainRedirectDao implements RedirectDao {
         return jdbcTemplate.queryForObject(SELECT_MAX_ID, Long.class);
     }
 
-    /**
-     * save redirects.
-     * 
-     * @param bootstraps
-     *            bootstraps redirects.
-     */
-    private void saveOrUpdate(List<Redirect> bootstraps) {
-        List<Object[]> batchDeleteParams = new ArrayList<Object[]>();
-        List<Object[]> batchSaveParams = new ArrayList<Object[]>();
-        for (Redirect redirect : bootstraps) {
-            DomainRedirect domainRedirect = (DomainRedirect) redirect;
-            batchDeleteParams.add(new String[] { domainRedirect.getTld() });
-            batchSaveParams.add(new String[] { domainRedirect.getTld(),
-                    domainRedirect.getUrls().get(0) });
-        }
-        if (batchDeleteParams.size() > 0) {
-            jdbcTemplate.batchUpdate(DELETE_DOMAIN_REDIRECT_BY_TLD,
-                    batchDeleteParams);
-        }
-        if (batchSaveParams.size() > 0) {
-            jdbcTemplate.batchUpdate(SAVE_DOMAIN_REDIRECT, batchSaveParams);
-        }
-    }
-
-    /**
-     * delete redirects.
-     * 
-     * @param bootstraps
-     *            bootstraps.
-     */
-    private void deleteNotInBootstraps(List<Redirect> bootstraps) {
-        List<String> allTldsInDb = getAllTldsInDb();
-        List<String> deleteTlds = getTldsNeedDelete(bootstraps, allTldsInDb);
-        deleteTlds(deleteTlds);
-    }
-
-    /**
-     * delete redirects by tld.
-     * 
-     * @param deleteTlds
-     *            deleteTlds.
-     */
-    private void deleteTlds(List<String> deleteTlds) {
-        List<Object[]> batchDeleteParams = new ArrayList<Object[]>();
-        for (String tld : deleteTlds) {
-            batchDeleteParams.add(new String[] { tld });
-        }
-        if (batchDeleteParams.size() > 0) {
-            jdbcTemplate.batchUpdate(DELETE_DOMAIN_REDIRECT_BY_TLD,
-                    batchDeleteParams);
-        }
-    }
-
-    /**
-     * get tlds need delete.
-     * 
-     * @param bootstraps
-     *            bootstraps redirects.
-     * @param allTldsInDb
-     *            allTldsInDb.
-     * @return allTldsInDb.
-     */
-    private List<String> getTldsNeedDelete(List<Redirect> bootstraps,
-            List<String> allTldsInDb) {
-        List<String> deleteTlds = new ArrayList<String>();
-        for (String tldInDb : allTldsInDb) {
-            boolean tldInBootstraps = existInBootstraps(bootstraps, tldInDb);
-            if (!tldInBootstraps) {
-                deleteTlds.add(tldInDb);
-            }
-        }
-        return deleteTlds;
-    }
-
-    /**
-     * get all tlds in db.
-     * 
-     * @return tlds.
-     */
-    public List<String> getAllTldsInDb() {
-        final String sql = "select REDIRECT_TLD from RDAP_DOMAIN_REDIRECT ";
-        List<String> allTlds = jdbcTemplate.query(sql, new RowMapper<String>() {
-            @Override
-            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getString("REDIRECT_TLD");
-            }
-        });
-        return allTlds;
-    }
-
-    /**
-     * check if exist in bootstraps.
-     * 
-     * @param bootstraps
-     *            bootstraps.
-     * @param tld
-     *            tld.
-     * @return true if exist, false if not.
-     */
-    private boolean existInBootstraps(List<Redirect> bootstraps, String tld) {
-        boolean existInRedirects = false;
-        for (Redirect redirect : bootstraps) {
-            DomainRedirect domainRedirect = (DomainRedirect) redirect;
-            if (domainRedirect.getTld().equals(tld)) {
-                existInRedirects = true;
-            }
-        }
-        return existInRedirects;
-    }
-    
 }

@@ -32,6 +32,8 @@ package org.restfulwhois.rdap.bootstrap.bean;
 
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
  * Registry entry for domain.
  * 
@@ -74,6 +76,12 @@ public class DomainRedirect extends Redirect {
      */
     public void setTld(String tld) {
         this.tld = tld;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(getTld()).append(getUrls())
+                .toString();
     }
 
 }

@@ -32,6 +32,8 @@ package org.restfulwhois.rdap.bootstrap.registry;
 
 import org.restfulwhois.rdap.bootstrap.bean.BootstrapRegistries;
 import org.restfulwhois.rdap.common.RdapProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -45,19 +47,26 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class RestDataProvider implements DataProvider {
     /**
-     * bootstrap base URL.
+     * logger.
      */
-    private static String BOOTSTRAP_BASE_URL = RdapProperties
-            .getBootstrapRegistryBaseUrl();
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(RestDataProvider.class);
 
     @Override
     public BootstrapRegistries getDataFromRegistry(String relativateUrl) {
-        String registryUrl = BOOTSTRAP_BASE_URL + relativateUrl;
+        String registryUrl =
+                RdapProperties.getBootstrapRegistryBaseUrl() + relativateUrl;
+        LOGGER.info("getDataFromRegistry, registryUrl:{}", registryUrl);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<BootstrapRegistries> response =
-                restTemplate.getForEntity(registryUrl,
-                        BootstrapRegistries.class);
-        return response.getBody();
+        try {
+            ResponseEntity<BootstrapRegistries> response =
+                    restTemplate.getForEntity(registryUrl,
+                            BootstrapRegistries.class);
+            return response.getBody();
+        } catch (Exception e) {
+            LOGGER.info("restTemplate error:{}", e);
+            return null;
+        }
     }
 
 }

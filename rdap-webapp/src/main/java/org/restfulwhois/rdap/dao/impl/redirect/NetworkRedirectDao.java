@@ -126,10 +126,14 @@ public class NetworkRedirectDao implements RedirectDao {
     @Override
     public void save(List<Redirect> bootstraps) {
         if (null == bootstraps || bootstraps.size() == 0) {
+            LOGGER.info("bootstraps is empty, not do sync.");
             return;
         }
         Long maxOldId = getMaxId();
+        LOGGER.info("get tobe delete maxOldId:{}", maxOldId);
+        LOGGER.info("save new bootstraps...");
         saveNew(bootstraps);
+        LOGGER.info("delete old bootstraps...");
         deleteOld(maxOldId, bootstraps);
     }
 
@@ -144,6 +148,14 @@ public class NetworkRedirectDao implements RedirectDao {
      * @param bootstraps
      */
     private void deleteOld(Long maxOldId, List<Redirect> bootstraps) {
+        if (null == maxOldId) {
+            LOGGER.info("maxOldId is null, not delete old.");
+            return;
+        }
+        if (null == bootstraps || bootstraps.size() == 0) {
+            LOGGER.info("bootstraps is empty, not delete old.");
+            return;
+        }
         NetworkRedirect redirect = (NetworkRedirect) bootstraps.get(0);
         IpVersion ipVersion =
                 redirect.getNetworkQueryParam().getQueryIpVersion();
