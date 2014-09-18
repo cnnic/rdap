@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bootstrap.bean.BootstrapEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +105,14 @@ public class BootstrapEntryDeserializer extends
     private List<String> parseStringList(JsonNode keysNode) {
         List<String> keys = new ArrayList<String>();
         for (Iterator<JsonNode> it = keysNode.iterator(); it.hasNext();) {
-            keys.add(it.next().toString());
+            JsonNode jsonNode = it.next();
+            String key = StringUtils.EMPTY;
+            if (jsonNode.isArray()) {
+                key = jsonNode.toString();
+            } else {
+                key = jsonNode.asText();
+            }
+            keys.add(key);
         }
         return keys;
     }
