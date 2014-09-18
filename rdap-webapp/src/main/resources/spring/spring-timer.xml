@@ -21,6 +21,7 @@
 	<bean id="bootstrapTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="bootstrapTaskJobDetail" />
 		<property name="cronExpression" value="${cron.bootstrap}" />
+		<property name="startDelay" value="20000" />
 	</bean>
 
 	<bean id="taskScheduler"
