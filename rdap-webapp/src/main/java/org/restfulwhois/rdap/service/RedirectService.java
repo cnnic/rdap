@@ -98,4 +98,12 @@ public interface RedirectService {
      */
     void saveNetworkRedirect(List<Redirect> redirects);
 
+    /**
+     * save as number redirects.
+     * 
+     * @param redirects
+     *            redirects.
+     */
+    void saveAutnumRedirect(List<Redirect> redirects);
+
 }

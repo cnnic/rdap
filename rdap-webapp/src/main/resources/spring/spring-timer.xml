@@ -9,6 +9,7 @@
 		<ref bean="domainRegistryHandler" />
 		<ref bean="networkV4RegistryHandler" />
 		<ref bean="networkV6RegistryHandler" />
+		<ref bean="autnumRegistryHandler" />
 	</util:list>
 
 	<bean id="bootstrapTaskJobDetail"

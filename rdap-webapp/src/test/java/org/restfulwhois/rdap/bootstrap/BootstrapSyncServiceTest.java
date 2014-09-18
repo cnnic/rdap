@@ -47,11 +47,13 @@ import org.restfulwhois.rdap.bootstrap.bean.BootstrapEntry;
 import org.restfulwhois.rdap.bootstrap.bean.BootstrapRegistries;
 import org.restfulwhois.rdap.bootstrap.bean.DomainRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.bootstrap.handler.AutnumRegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.DomainRegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV4RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV6RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.registry.DataProvider;
 import org.restfulwhois.rdap.controller.support.QueryParser;
+import org.restfulwhois.rdap.dao.impl.redirect.AutnumRedirectDao;
 import org.restfulwhois.rdap.dao.impl.redirect.DomainRedirectDao;
 import org.restfulwhois.rdap.dao.impl.redirect.NetworkRedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +80,12 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     @Autowired
     private NetworkRedirectDao networkRedirectDao;
+    
+    /**
+     * autnumRedirectDao.
+     */
+    @Autowired
+    private AutnumRedirectDao autnumRedirectDao;
 
     /**
      * syncRedirectDataService.
@@ -100,6 +108,11 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     @Autowired
     private NetworkV6RegistryHandler networkV6RegistryHandler;
+    /**
+     * AutnumRegistryHandler.
+     */
+    @Autowired
+    private AutnumRegistryHandler autnumRegistryHandler;
     /**
      * queryParser.
      */
@@ -142,6 +155,39 @@ public class BootstrapSyncServiceTest extends BaseTest {
         assertNetworkV6("REDIRECT_URL_1_UPDATED_1");
     }
 
+    /**
+     * testSync_autnum.
+     */
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:"
+            + "org/restfulwhois/rdap/dao/impl/autnum-redirect-sync.xml")
+    public void testSync_autnum() {
+        assertAutnum("http://cnnic.cn/rdap");
+        syncRedirectDataService.syncAllRegistry();
+        assertAutnum("REDIRECT_URL_1_UPDATED_1");
+    }
+
+    /**
+     * assertAutnum.
+     * 
+     * @param expectUrl
+     *            expectUrl.
+     */
+    private void assertAutnum(String expectUrl) {
+        QueryParam queryParam = queryParser.parseQueryParam("1");
+        RedirectResponse redirectResponse =
+                autnumRedirectDao.query(queryParam);
+        assertNotNull(redirectResponse);
+        assertEquals(expectUrl, redirectResponse.getUrl());
+    }
+
+    /**
+     * assertNetworkV6.
+     * 
+     * @param expectUrl
+     *            expectUrl.
+     */
     private void assertNetworkV6(String expectUrl) {
         QueryParam queryParam =
                 queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:1", 0,
@@ -152,6 +198,12 @@ public class BootstrapSyncServiceTest extends BaseTest {
         assertEquals(expectUrl, redirectResponse.getUrl());
     }
 
+    /**
+     * assertNetworkV4.
+     * 
+     * @param expectUrl
+     *            expectUrl.
+     */
     private void assertNetworkV4(String expectUrl) {
         QueryParam queryParam =
                 queryParser.parseIpQueryParam("1.0.0.0", 0, IpVersion.V4);
@@ -175,6 +227,33 @@ public class BootstrapSyncServiceTest extends BaseTest {
         DataProvider networkV6 = getMockDataProviderForV6();
         ReflectionTestUtils.setField(networkV6RegistryHandler, "dataProvider",
                 networkV6);
+        DataProvider autnum = getMockDataProviderForAutnum();
+        ReflectionTestUtils.setField(autnumRegistryHandler, "dataProvider",
+                autnum);
+    }
+
+    /**
+     * getMockDataProviderForAutnum.
+     * 
+     * @return DataProvider.
+     */
+    private DataProvider getMockDataProviderForAutnum() {
+        return new DataProvider() {
+            @Override
+            public BootstrapRegistries
+                    getDataFromRegistry(String relativateUrl) {
+                BootstrapRegistries bootstrap =
+                        BootstrapRegistriesBuilder.build();
+                BootstrapEntry entry =
+                        BootstrapRegistriesBuilder.appendEntry(bootstrap);
+                BootstrapRegistriesBuilder.appendKey(entry, "1,100");
+                BootstrapRegistriesBuilder.appendRegistryUrl(entry,
+                        "REDIRECT_URL_1_UPDATED_1");
+                BootstrapRegistriesBuilder.appendRegistryUrl(entry,
+                        "REDIRECT_URL_1_UPDATED_2");
+                return bootstrap;
+            }
+        };
     }
 
     /**

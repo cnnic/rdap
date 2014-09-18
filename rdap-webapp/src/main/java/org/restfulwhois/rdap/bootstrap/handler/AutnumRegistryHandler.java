@@ -31,44 +31,73 @@
 package org.restfulwhois.rdap.bootstrap.handler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.bootstrap.bean.DomainRedirect;
+import org.restfulwhois.rdap.bootstrap.bean.AutnumRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.common.RdapProperties;
 import org.springframework.stereotype.Service;
 
 /**
- * This class is used to Update domain registry.
+ * This class is used to Update as number registry.
  * 
  * @author jiashuo
  * 
  */
 @Service
-public class DomainRegistryHandler extends RegistryHandler {
+public class AutnumRegistryHandler extends RegistryHandler {
+    /**
+     * start/end as number separator.
+     */
+    private static final String AS_START_END_SEPARATOR = ",";
 
     @Override
     String getRegistryRelativateUrl() {
-        return RdapProperties.getBootstrapRegistryUriForDomain();
+        return RdapProperties.getBootstrapRegistryUriForAs();
     }
 
     @Override
     void saveRedirects(List<Redirect> redirects) {
-        redirectService.saveDomainRedirect(redirects);
+        redirectService.saveAutnumRedirect(redirects);
     }
 
     @Override
     List<Redirect> generateRedirects(String key, List<String> registryUrls) {
+        // key:[1,100]
         List<Redirect> redirects = new ArrayList<Redirect>();
         if (StringUtils.isBlank(key)
                 || !removeEmptyUrlsAndValidate(registryUrls)) {
-            LOGGER.error("key or registryUrls is blank, not generate redirects.");
-            LOGGER.error("key:{}", key);
-            LOGGER.error("registryUrls:{}", registryUrls);
+            LOGGER.error(
+                    "ignore this key/urls. Key or registryUrls is blank,key:{}, urls:{}",
+                    key, registryUrls);
             return redirects;
         }
-        redirects.add(new DomainRedirect(key, registryUrls));
+        key = StringUtils.trim(key);
+        key = StringUtils.removeStart(key, "[");
+        key = StringUtils.removeEnd(key, "]");
+        String[] splits = StringUtils.split(key, AS_START_END_SEPARATOR);
+        if (splits.length != 2) {
+            LOGGER.error(
+                    "ignore this key/value. Key's format MUST be 'startNum,endNumber'. But it's:{}",
+                    Arrays.toString(splits));
+            return redirects;
+        }
+        Long startAsNumber = 0L;
+        Long endAsNumber = 0L;
+        try {
+            startAsNumber = Long.parseLong(StringUtils.trim(splits[0]));
+            endAsNumber = Long.parseLong(StringUtils.trim(splits[1]));
+        } catch (Exception e) {
+            LOGGER.error("{},{}parseLong error:{}", new Object[] { splits[0],
+                    splits[1], e });
+            LOGGER.error("ignore this key/urls:{},{}", key, registryUrls);
+            return redirects;
+        }
+        AutnumRedirect autnumRedirect =
+                new AutnumRedirect(startAsNumber, endAsNumber, registryUrls);
+        redirects.add(autnumRedirect);
         return redirects;
     }
 

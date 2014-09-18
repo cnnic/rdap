@@ -130,16 +130,15 @@ public class RedirectServiceImpl implements RedirectService {
      */
     @Override
     public boolean isValidRedirect(RedirectResponse redirect) {
-        LOGGER.debug("isValidRedirect:" + redirect);
         if (null == redirect || StringUtils.isBlank(redirect.getUrl())) {
             return false;
         }
         if (redirect.getUrl().contains(RdapProperties.getLocalServiceUrl())) {
-            LOGGER.debug("redirect url is local RDAP,ignore.",
+            LOGGER.debug("redirect url: {} is local RDAP,ignore.",
                     redirect.getUrl());
             return false;
         }
-        LOGGER.debug("redirect url can be redirected.", redirect.getUrl());
+        LOGGER.debug("redirect url {} can be redirected.", redirect.getUrl());
         return true;
     }
 
@@ -151,6 +150,11 @@ public class RedirectServiceImpl implements RedirectService {
     @Override
     public void saveNetworkRedirect(List<Redirect> bootstraps) {
         networkRedirectDao.save(bootstraps);
+    }
+
+    @Override
+    public void saveAutnumRedirect(List<Redirect> bootstraps) {
+        autnumRedirectDao.save(bootstraps);
     }
 
 }

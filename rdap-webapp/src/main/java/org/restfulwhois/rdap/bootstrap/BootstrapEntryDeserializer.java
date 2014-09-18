@@ -36,6 +36,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.restfulwhois.rdap.bootstrap.bean.BootstrapEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -63,7 +65,11 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public class BootstrapEntryDeserializer extends
         JsonDeserializer<BootstrapEntry> {
-
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(BootstrapEntryDeserializer.class);
     /**
      * entries length.
      */
@@ -75,6 +81,7 @@ public class BootstrapEntryDeserializer extends
                     throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
         if (node.size() < ENTRY_LENGTH) {
+            LOGGER.error("ignore bootstrapEntry, wrong formated:{}", node);
             return null;
         }
         JsonNode keysNode = node.get(0);
@@ -97,7 +104,7 @@ public class BootstrapEntryDeserializer extends
     private List<String> parseStringList(JsonNode keysNode) {
         List<String> keys = new ArrayList<String>();
         for (Iterator<JsonNode> it = keysNode.iterator(); it.hasNext();) {
-            keys.add(it.next().asText());
+            keys.add(it.next().toString());
         }
         return keys;
     }

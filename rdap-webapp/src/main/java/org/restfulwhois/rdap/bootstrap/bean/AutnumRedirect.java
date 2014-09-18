@@ -28,48 +28,80 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.bootstrap.handler;
+package org.restfulwhois.rdap.bootstrap.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.bootstrap.bean.DomainRedirect;
-import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.common.RdapProperties;
-import org.springframework.stereotype.Service;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * This class is used to Update domain registry.
+ * Registry entry for as number.
  * 
  * @author jiashuo
  * 
  */
-@Service
-public class DomainRegistryHandler extends RegistryHandler {
+public class AutnumRedirect extends Redirect {
+    /**
+     * start number of as number.
+     */
+    private Long startAutnum;
+    /**
+     * end number of as number.
+     */
+    private Long endAutnum;
 
-    @Override
-    String getRegistryRelativateUrl() {
-        return RdapProperties.getBootstrapRegistryUriForDomain();
+    /**
+     * constructor.
+     */
+    public AutnumRedirect(Long startAutnum, Long endAutnum, List<String> urls) {
+        super();
+        this.startAutnum = startAutnum;
+        this.endAutnum = endAutnum;
+        super.urls = urls;
+    }
+
+    /**
+     * get startAutnum.
+     * 
+     * @return startAutnum.
+     */
+    public Long getStartAutnum() {
+        return startAutnum;
+    }
+
+    /**
+     * set startAutnum.
+     * 
+     * @param startAutnum
+     *            startAutnum.
+     */
+    public void setStartAutnum(Long startAutnum) {
+        this.startAutnum = startAutnum;
+    }
+
+    /**
+     * get endAutnum.
+     * 
+     * @return endAutnum.
+     */
+    public Long getEndAutnum() {
+        return endAutnum;
+    }
+
+    /**
+     * set endAutnum.
+     * 
+     * @param endAutnum
+     *            endAutnum.
+     */
+    public void setEndAutnum(Long endAutnum) {
+        this.endAutnum = endAutnum;
     }
 
     @Override
-    void saveRedirects(List<Redirect> redirects) {
-        redirectService.saveDomainRedirect(redirects);
-    }
-
-    @Override
-    List<Redirect> generateRedirects(String key, List<String> registryUrls) {
-        List<Redirect> redirects = new ArrayList<Redirect>();
-        if (StringUtils.isBlank(key)
-                || !removeEmptyUrlsAndValidate(registryUrls)) {
-            LOGGER.error("key or registryUrls is blank, not generate redirects.");
-            LOGGER.error("key:{}", key);
-            LOGGER.error("registryUrls:{}", registryUrls);
-            return redirects;
-        }
-        redirects.add(new DomainRedirect(key, registryUrls));
-        return redirects;
+    public String toString() {
+        return new ToStringBuilder(this).append(getStartAutnum())
+                .append(getEndAutnum()).toString();
     }
 
 }
