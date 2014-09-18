@@ -6,6 +6,7 @@
 		   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 	default-autowire="byType" default-lazy-init="false">
+	<context:component-scan base-package="org.restfulwhois.rdap" />
 	<context:property-placeholder location="classpath:*.properties" />
 
 	<bean
@@ -20,7 +21,12 @@
 		<property name="minSecondsAccessIntervalAuthed" value="${minSecondsAccessIntervalAuthed}" />
 		<property name="ipWhiteListForAccessInterval" value="${ipWhiteListForAccessInterval}" />
 		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />
-		<property name="ianaRedirectRegistryBaseUrl" value="${ianaRedirectRegistryBaseUrl}" />
+		<property name="bootstrapRegistryBaseUrl" value="${bootstrapRegistryBaseUrl}" />
+		<property name="bootstrapRegistryUriForDomain" value="${bootstrapRegistryUriForDomain}" />
+		<property name="bootstrapRegistryUriForAs" value="${bootstrapRegistryUriForAs}" />
+		<property name="bootstrapRegistryUriForIpv4" value="${bootstrapRegistryUriForIpv4}" />
+		<property name="bootstrapRegistryUriForIpv6" value="${bootstrapRegistryUriForIpv6}" />
 	</bean>
 	<import resource="classpath:spring/spring-serviceContext.xml" />
+	<import resource="classpath:spring/spring-timer.xml" />
 </beans>

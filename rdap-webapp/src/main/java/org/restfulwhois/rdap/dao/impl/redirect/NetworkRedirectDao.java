@@ -32,10 +32,15 @@ package org.restfulwhois.rdap.dao.impl.redirect;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.restfulwhois.rdap.bean.Network.IpVersion;
+import org.restfulwhois.rdap.bean.NetworkQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
+import org.restfulwhois.rdap.bootstrap.bean.NetworkRedirect;
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.restfulwhois.rdap.dao.impl.NetworkQueryDaoImpl;
 import org.slf4j.Logger;
@@ -57,12 +62,31 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class NetworkRedirectDao implements RedirectDao {
-    
+
     /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(NetworkRedirectDao.class);    
+            .getLogger(NetworkRedirectDao.class);
+    /**
+     * save network redirect.
+     */
+    private static final String SAVE_NETWORK_REDIRECT =
+            "insert into RDAP_IP_REDIRECT(ENDHIGHADDRESS,STARTHIGHADDRESS,"
+                    + " ENDLOWADDRESS,STARTLOWADDRESS,REDIRECT_URL,VERSION)"
+                    + " values(?,?,?,?,?,?)";
+    /**
+     * select max id.
+     */
+    private static final String SELECT_MAX_ID =
+            "select max(RDAP_IP_REDIRECT_ID) from RDAP_IP_REDIRECT";
+
+    /**
+     * delete rows <= id.
+     */
+    private static final String DELETE_SMALLER_THAN_ID =
+            "delete from RDAP_IP_REDIRECT where RDAP_IP_REDIRECT_ID<=?"
+                    + " and VERSION=?";
     /**
      * JDBC template.
      */
@@ -71,10 +95,10 @@ public class NetworkRedirectDao implements RedirectDao {
 
     /**
      * redirect the network by select object from RDAP_IP_REDIRECT.
+     * 
      * @param queryParam
-     *          the queryParam for network.
-     * @return RedirectResponse
-     *          response to select redirect network.
+     *            the queryParam for network.
+     * @return RedirectResponse response to select redirect network.
      */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
@@ -97,5 +121,75 @@ public class NetworkRedirectDao implements RedirectDao {
         }
         LOGGER.debug("query, result:" + result.get(0));
         return new RedirectResponse(result.get(0));
+    }
+
+    @Override
+    public void save(List<Redirect> bootstraps) {
+        if (null == bootstraps || bootstraps.size() == 0) {
+            LOGGER.info("bootstraps is empty, not do sync.");
+            return;
+        }
+        Long maxOldId = getMaxId();
+        LOGGER.info("get tobe delete maxOldId:{}", maxOldId);
+        LOGGER.info("save new bootstraps...");
+        saveNew(bootstraps);
+        LOGGER.info("delete old bootstraps...");
+        deleteOld(maxOldId, bootstraps);
+    }
+
+    /**
+     * delete old redirects.
+     * <p>
+     * NOTICE not to delete another IP type rows which just inserted.
+     * </p>
+     * 
+     * @param maxOldId
+     *            maxOldId.
+     * @param bootstraps
+     */
+    private void deleteOld(Long maxOldId, List<Redirect> bootstraps) {
+        if (null == maxOldId) {
+            LOGGER.info("maxOldId is null, not delete old.");
+            return;
+        }
+        if (null == bootstraps || bootstraps.size() == 0) {
+            LOGGER.info("bootstraps is empty, not delete old.");
+            return;
+        }
+        NetworkRedirect redirect = (NetworkRedirect) bootstraps.get(0);
+        IpVersion ipVersion =
+                redirect.getNetworkQueryParam().getQueryIpVersion();
+        jdbcTemplate.update(DELETE_SMALLER_THAN_ID, maxOldId,
+                ipVersion.getName());
+    }
+
+    /**
+     * save new bootstraps.
+     * 
+     * @param bootstraps
+     *            bootstraps.
+     */
+    private void saveNew(List<Redirect> bootstraps) {
+        List<Object[]> batchSaveParams = new ArrayList<Object[]>();
+        for (Redirect bootstrap : bootstraps) {
+            NetworkRedirect redirect = (NetworkRedirect) bootstrap;
+            NetworkQueryParam q = redirect.getNetworkQueryParam();
+            batchSaveParams.add(new Object[] { q.getIpQueryEndHigh(),
+                    q.getIpQueryStartHigh(), q.getIpQueryEndLow(),
+                    q.getIpQueryStartLow(), bootstrap.getUrls().get(0),
+                    q.getQueryIpVersion().getName() });
+        }
+        if (batchSaveParams.size() > 0) {
+            jdbcTemplate.batchUpdate(SAVE_NETWORK_REDIRECT, batchSaveParams);
+        }
+    }
+
+    /**
+     * get max id .
+     * 
+     * @return max id.
+     */
+    private Long getMaxId() {
+        return jdbcTemplate.queryForObject(SELECT_MAX_ID, Long.class);
     }
 }
