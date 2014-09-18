@@ -125,11 +125,13 @@ public class DomainRedirectDaoForBootstrapTest extends BaseTest {
 
     /**
      * testSync_2update_1delete.
+     * 
+     * @throws DataSetException
      */
     @Test
     @DatabaseTearDown("teardown.xml")
     @DatabaseSetup("domain-redirect-sync.xml")
-    public void testSync_2update_1delete() {
+    public void testSync_2update_1delete() throws DataSetException {
         QueryParam parseDomainQueryParam =
                 queryParser.parseDomainQueryParam("cnnic.cn", "cnnic.cn");
         // before sync
@@ -148,13 +150,18 @@ public class DomainRedirectDaoForBootstrapTest extends BaseTest {
         bootstraps.add(redirect);
         bootstraps.add(redirectComCn);
         redirectDao.save(bootstraps);
-        List<String> allTlds = domainRedirectDao.getAllTldsInDb();
-        assertNotNull(allTlds);
-        assertEquals(2, allTlds.size());
-        assertEquals("cn", allTlds.get(0));
+
+        QueryDataSet actual = getEmptyDataSet();
+        actual.addTable("RDAP_DOMAIN_REDIRECT",
+                "select REDIRECT_TLD from RDAP_DOMAIN_REDIRECT ");
+        ITable table = actual.getTable("RDAP_DOMAIN_REDIRECT");
+        assertEquals(2, table.getRowCount());
+        List<String> allTlds = new ArrayList<String>();
+        allTlds.add(table.getValue(0, "REDIRECT_TLD").toString());
+        allTlds.add(table.getValue(1, "REDIRECT_TLD").toString());
         assertThat(allTlds, CoreMatchers.hasItems("cn"));
         assertThat(allTlds, CoreMatchers.hasItems("com.cn"));
-        assertThat(allTlds, CoreMatchers.not(CoreMatchers.hasItems("com")));
+
         redirectResponse = redirectDao.query(parseDomainQueryParam);
         assertNotNull(redirectResponse);
         assertEquals(newUrl, redirectResponse.getUrl());

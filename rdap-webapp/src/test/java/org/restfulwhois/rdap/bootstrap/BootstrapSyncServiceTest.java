@@ -32,12 +32,10 @@ package org.restfulwhois.rdap.bootstrap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
@@ -267,12 +265,6 @@ public class BootstrapSyncServiceTest extends BaseTest {
         DomainRedirect redirect = new DomainRedirect("cn", urls);
         bootstraps.add(redirect);
         domainRedirectDao.save(bootstraps);
-        List<String> allTlds = domainRedirectDao.getAllTldsInDb();
-        assertNotNull(allTlds);
-        assertEquals(1, allTlds.size());
-        assertThat(allTlds, CoreMatchers.hasItems("cn"));
-        assertThat(allTlds, CoreMatchers.not(CoreMatchers.hasItems("com")));
-        assertThat(allTlds, CoreMatchers.not(CoreMatchers.hasItems("com.cn")));
         RedirectResponse redirectResponse =
                 domainRedirectDao.query(parseDomainQueryParam);
         assertNotNull(redirectResponse);
