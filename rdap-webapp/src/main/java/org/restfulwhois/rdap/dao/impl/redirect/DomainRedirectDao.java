@@ -66,7 +66,8 @@ public class DomainRedirectDao implements RedirectDao {
      * save.
      */
     private static final String SAVE_DOMAIN_REDIRECT =
-            "insert into RDAP_DOMAIN_REDIRECT(REDIRECT_TLD,REDIRECT_URL) values (?,?)";
+            "insert into RDAP_DOMAIN_REDIRECT"
+                    + "(REDIRECT_TLD,REDIRECT_URL) values (?,?)";
 
     /**
      * select max id.

@@ -214,6 +214,8 @@ public class RdapController {
      * @param response
      *            HttpServletResponse
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ResponseEntity queryHelp(HttpServletRequest request,
@@ -247,6 +249,8 @@ public class RdapController {
      * @param response
      *            HttpServletResponse
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
     public ResponseEntity queryEntity(@PathVariable String handle,
@@ -291,6 +295,8 @@ public class RdapController {
      * @param request
      *            request.
      * @return ResponseEntity.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/entities", method = RequestMethod.GET)
     public ResponseEntity
@@ -354,6 +360,8 @@ public class RdapController {
      * @param response
      *            HttpServletResponse
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
@@ -408,6 +416,8 @@ public class RdapController {
      * @param request
      *            request.
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = { "/domain/{domainName}" },
             method = RequestMethod.GET)
@@ -508,6 +518,8 @@ public class RdapController {
      * @param response
      *            response for httpServlet.
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/domains", method = RequestMethod.GET)
     @ResponseBody
@@ -571,6 +583,8 @@ public class RdapController {
      * @param request
      *            request.
      * @return JSON formatted result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = { "/nameserver/{nsName}" },
             method = RequestMethod.GET)
@@ -647,6 +661,8 @@ public class RdapController {
      * @param response
      *            HttpServletResponse
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/nameservers", method = RequestMethod.GET)
     @ResponseBody
@@ -742,6 +758,8 @@ public class RdapController {
      * @param request
      *            request.
      * @return JSON formatted result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = { "/ip/{ipAddr}/{mask}" },
             method = RequestMethod.GET)
@@ -768,7 +786,9 @@ public class RdapController {
      *            the query ip
      * @param request
      *            request.
-     * @return ResponseEntity
+     * @return ResponseEntity ResponseEntity.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
     @ResponseBody

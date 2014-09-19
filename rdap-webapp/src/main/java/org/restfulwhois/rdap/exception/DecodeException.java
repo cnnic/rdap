@@ -52,6 +52,11 @@ public class DecodeException extends Exception {
 
     /**
      * constructor with msg and cause.
+     * 
+     * @param message
+     *            message.
+     * @param cause
+     *            cause.
      */
     public DecodeException(String message, Throwable cause) {
         super(message, cause);
@@ -59,6 +64,9 @@ public class DecodeException extends Exception {
 
     /**
      * constructor with msg.
+     * 
+     * @param message
+     *            message.
      */
     public DecodeException(String message) {
         super(message);
@@ -66,6 +74,9 @@ public class DecodeException extends Exception {
 
     /**
      * constructor with cause.
+     * 
+     * @param cause
+     *            cause.
      */
     public DecodeException(Throwable cause) {
         super(cause);

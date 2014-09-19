@@ -63,9 +63,10 @@ public class DomainRegistryHandler extends RegistryHandler {
         List<Redirect> redirects = new ArrayList<Redirect>();
         if (StringUtils.isBlank(key)
                 || !removeEmptyUrlsAndValidate(registryUrls)) {
-            LOGGER.error("key or registryUrls is blank, not generate redirects.");
-            LOGGER.error("key:{}", key);
-            LOGGER.error("registryUrls:{}", registryUrls);
+            logger.error("key or registryUrls is blank,"
+                    + " not generate redirects.");
+            logger.error("key:{}", key);
+            logger.error("registryUrls:{}", registryUrls);
             return redirects;
         }
         redirects.add(new DomainRedirect(key, registryUrls));

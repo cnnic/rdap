@@ -69,8 +69,9 @@ public class AutnumRegistryHandler extends RegistryHandler {
         List<Redirect> redirects = new ArrayList<Redirect>();
         if (StringUtils.isBlank(key)
                 || !removeEmptyUrlsAndValidate(registryUrls)) {
-            LOGGER.error(
-                    "ignore this key/urls. Key or registryUrls is blank,key:{}, urls:{}",
+            logger.error(
+                    "ignore this key/urls. Key or registryUrls"
+                    + " is blank,key:{}, urls:{}",
                     key, registryUrls);
             return redirects;
         }
@@ -79,8 +80,9 @@ public class AutnumRegistryHandler extends RegistryHandler {
         key = StringUtils.removeEnd(key, "]");
         String[] splits = StringUtils.split(key, AS_START_END_SEPARATOR);
         if (splits.length != 2) {
-            LOGGER.error(
-                    "ignore this key/value. Key's format MUST be 'startNum,endNumber'. But it's:{}",
+            logger.error(
+                    "ignore this key/value. Key's format"
+                    + " MUST be 'startNum,endNumber'. But it's:{}",
                     Arrays.toString(splits));
             return redirects;
         }
@@ -90,9 +92,9 @@ public class AutnumRegistryHandler extends RegistryHandler {
             startAsNumber = Long.parseLong(StringUtils.trim(splits[0]));
             endAsNumber = Long.parseLong(StringUtils.trim(splits[1]));
         } catch (Exception e) {
-            LOGGER.error("{},{}parseLong error:{}", new Object[] { splits[0],
+            logger.error("{},{}parseLong error:{}", new Object[] { splits[0],
                     splits[1], e });
-            LOGGER.error("ignore this key/urls:{},{}", key, registryUrls);
+            logger.error("ignore this key/urls:{},{}", key, registryUrls);
             return redirects;
         }
         AutnumRedirect autnumRedirect =
