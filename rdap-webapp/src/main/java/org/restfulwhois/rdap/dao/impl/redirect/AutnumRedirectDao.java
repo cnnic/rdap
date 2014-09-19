@@ -34,10 +34,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
+import org.restfulwhois.rdap.bootstrap.bean.AutnumRedirect;
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,23 +64,41 @@ public class AutnumRedirectDao implements RedirectDao {
     /**
      * logger.
      */
-    protected static final Logger LOGGER = LoggerFactory
-            .getLogger(AutnumRedirectDao.class);       
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(AutnumRedirectDao.class);
+    /**
+     * save.
+     */
+    private static final String SAVE_REDIRECT =
+            "insert into RDAP_AUTNUM_REDIRECT"
+                    + "(START_AUTNUM,END_AUTNUM,REDIRECT_URL) values (?,?,?)";
+
+    /**
+     * select max id.
+     */
+    private static final String SELECT_MAX_ID =
+            "select max(AS_REDIRECT_ID) from RDAP_AUTNUM_REDIRECT";
+
+    /**
+     * delete rows <= id.
+     */
+    private static final String DELETE_SMALLER_THAN_ID =
+            "delete from RDAP_AUTNUM_REDIRECT where AS_REDIRECT_ID<=?";
     /**
      * JDBC template.
      */
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    /**<pre>
+    /**
+     * <pre>
      * redirect the autnum.
      * select data from RDAP_AUTNUM_REDIRECT table.
      * </pre>
      * 
      * @param queryParam
-     *          the queryParam for autnum.
-     * @return RedirectResponse
-     *          response of select redirect autnum.
+     *            the queryParam for autnum.
+     * @return RedirectResponse response of select redirect autnum.
      */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
@@ -113,4 +134,61 @@ public class AutnumRedirectDao implements RedirectDao {
         LOGGER.debug("query, result:" + result.get(0));
         return new RedirectResponse(result.get(0));
     }
+
+    @Override
+    public void save(List<Redirect> bootstraps) {
+        if (null == bootstraps || bootstraps.size() == 0) {
+            LOGGER.info("bootstraps is empty, not do sync.");
+            return;
+        }
+        Long maxOldId = getMaxId();
+        LOGGER.info("get tobe delete maxOldId:{}", maxOldId);
+        LOGGER.info("save new bootstraps...");
+        saveNew(bootstraps);
+        LOGGER.info("delete old bootstraps...");
+        deleteOld(maxOldId);
+    }
+
+    /**
+     * delete old redirects.
+     * 
+     * @param maxOldId
+     *            maxOldId.
+     */
+    private void deleteOld(Long maxOldId) {
+        if (null == maxOldId) {
+            LOGGER.info("maxOldId is null, not delete.");
+            return;
+        }
+        jdbcTemplate.update(DELETE_SMALLER_THAN_ID, maxOldId);
+    }
+
+    /**
+     * save new bootstraps.
+     * 
+     * @param bootstraps
+     *            bootstraps.
+     */
+    private void saveNew(List<Redirect> bootstraps) {
+        List<Object[]> batchSaveParams = new ArrayList<Object[]>();
+        for (Redirect bootstrap : bootstraps) {
+            AutnumRedirect autnumRedirect = (AutnumRedirect) bootstrap;
+            batchSaveParams.add(new Object[] { autnumRedirect.getStartAutnum(),
+                    autnumRedirect.getEndAutnum(),
+                    autnumRedirect.getUrls().get(0) });
+        }
+        if (batchSaveParams.size() > 0) {
+            jdbcTemplate.batchUpdate(SAVE_REDIRECT, batchSaveParams);
+        }
+    }
+
+    /**
+     * get max id.
+     * 
+     * @return max id.
+     */
+    private Long getMaxId() {
+        return jdbcTemplate.queryForObject(SELECT_MAX_ID, Long.class);
+    }
+
 }

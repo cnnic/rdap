@@ -36,10 +36,11 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bean.DomainQueryParam;
 import org.restfulwhois.rdap.bean.EntityQueryParam;
 import org.restfulwhois.rdap.bean.NameserverQueryParam;
+import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.NetworkQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.common.util.DomainUtil;
+import org.restfulwhois.rdap.exception.DecodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -209,8 +210,11 @@ public class QueryParser {
      * @param request
      *            request.
      * @return param value.
+     * @throws DecodeException
+     *             DecodeException.
      */
-    public String getLastSplitInURI(HttpServletRequest request) {
+    public String getLastSplitInURI(HttpServletRequest request)
+            throws DecodeException {
         String path = request.getRequestURI();
         String result = StringUtils.substringAfterLast(path, "/");
         result = DomainUtil.urlDecode(result);

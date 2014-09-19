@@ -56,7 +56,7 @@ import com.ibm.icu.lang.UCharacter;
  * redirect service</li>
  * <li><b>parseTldsToListIfTldListIsNull</b> - parse tlds to list</li>
  * <li><b>addQuotas</b> - add "'" before and after str</li>
- * <li><b>checkIsValidSearchPattern</b> - check if str is valid search pattern.</li>
+ * <li><b>checkIsValidSearchPattern</b> - check if valid search pattern.</li>
  * <li><b>containsAtMostOnce</b> - check if str contains searchStr more than
  * once.</li>
  * <li><b>isValidEntityHandleOrName</b> - check is valid entity handle</li>
@@ -474,7 +474,7 @@ public final class StringUtil {
     private static int compare(long x, long y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
-  
+
     /**
      * get foldCase format string by input string.
      * 
@@ -485,7 +485,7 @@ public final class StringUtil {
     public static String foldCase(String strParam) {
         return UCharacter.foldCase(strParam, true);
     }
-    
+
     /**
      * get foldCase and normalization format string by input string.
      * 
@@ -494,7 +494,7 @@ public final class StringUtil {
      * @return string.
      */
     public static String foldCaseAndNormalization(String strParam) {
-        String strFold =  UCharacter.foldCase(strParam, true);
+        String strFold = UCharacter.foldCase(strParam, true);
         return StringUtil.getNormalization(strFold);
     }
 }

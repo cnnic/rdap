@@ -36,6 +36,7 @@ import java.net.IDN;
 import java.net.URLDecoder;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.exception.DecodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -352,42 +353,15 @@ public final class DomainUtil {
     }
 
     /**
-     * decode,and replace ASCII char to lower case.
-     * 
-     * @param str
-     *            string.
-     * @return str.
-     */
-    @Deprecated
-    public static String decodeAndReplaceAsciiToLowercase(String str) {
-        if (StringUtils.isBlank(str)) {
-            return str;
-        }
-        str = urlDecode(str);
-        LOGGER.debug("after decode: {}", str);
-        // replace all ASCII char to lower case.
-        StringBuffer asciiLowerCasedSb = new StringBuffer();
-        for (int i = 0; i < str.length(); i++) {
-            int c = str.charAt(i);
-            char charVal = str.charAt(i);
-            if (c <= MAX_ASCII_CODE) {
-                asciiLowerCasedSb.append(StringUtils.lowerCase(String
-                        .valueOf(charVal)));
-            } else {
-                asciiLowerCasedSb.append(String.valueOf(charVal));
-            }
-        }
-        return asciiLowerCasedSb.toString();
-    }
-    
-    /**
      * decoded url use UTF-8.
      * 
      * @param str
      *            string.
      * @return String decoded string.
+     * @throws DecodeException
+     *             DecodeException.
      */
-    public static String urlDecode(String str) {
+    public static String urlDecode(String str) throws DecodeException {
         if (StringUtils.isBlank(str)) {
             return str;
         }
@@ -395,7 +369,10 @@ public final class DomainUtil {
         try {
             result = URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
         } catch (UnsupportedEncodingException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("UnsupportedEncodingException:{}", e);
+        } catch (Exception e) {
+            LOGGER.error("urlDecode error:{}", e);
+            throw new DecodeException("urlDecode error", e);
         }
         return result;
     }
@@ -465,9 +442,11 @@ public final class DomainUtil {
         if (StringUtils.isBlank(domainWithoutLastDot)) {
             return false;
         }
-        if (domainWithoutLastDot.length() < MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT
-                || domainWithoutLastDot.length()
-                > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
+        int domainLength = domainWithoutLastDot.length();
+        if (domainLength < MIN_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
+            return false;
+        }
+        if (domainLength > MAX_DOMAIN_LENGTH_WITHOUT_LAST_DOT) {
             return false;
         }
         return true;

@@ -38,6 +38,7 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.controller.support.QueryParser;
+import org.restfulwhois.rdap.exception.DecodeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -54,9 +55,10 @@ public class QueryParserTest extends BaseTest {
 
     /**
      * test valid autnum of one number
+     * @throws DecodeException 
      */
     @Test
-    public void testGetRealParamInPath() {
+    public void testGetRealParamInPath() throws DecodeException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("", "");
         request.setRequestURI("/domain/cnnic.cn%1a");

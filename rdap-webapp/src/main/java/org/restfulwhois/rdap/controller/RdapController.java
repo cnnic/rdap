@@ -55,6 +55,7 @@ import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.controller.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.controller.support.QueryParser;
+import org.restfulwhois.rdap.exception.DecodeException;
 import org.restfulwhois.rdap.service.AccessControlManager;
 import org.restfulwhois.rdap.service.QueryService;
 import org.restfulwhois.rdap.service.RedirectService;
@@ -214,10 +215,12 @@ public class RdapController {
      * @param response
      *            HttpServletResponse
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ResponseEntity queryHelp(HttpServletRequest request,
-            HttpServletResponse response) {
+            HttpServletResponse response) throws DecodeException {
         String lastSpliInURI = queryParser.getLastSplitInURI(request);
         if (!"help".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
@@ -247,10 +250,13 @@ public class RdapController {
      * @param response
      *            HttpServletResponse
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
     public ResponseEntity queryEntity(@PathVariable String handle,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws DecodeException {
         LOGGER.debug("query entity,handle:" + handle);
         handle = queryParser.getLastSplitInURI(request);
         handle = StringUtils.trim(handle);
@@ -290,12 +296,14 @@ public class RdapController {
      * @param request
      *            request.
      * @return ResponseEntity.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/entities", method = RequestMethod.GET)
     public ResponseEntity
             searchEntity(@RequestParam(required = false) String fn,
                     @RequestParam(required = false) String handle,
-                    HttpServletRequest request) {
+                    HttpServletRequest request) throws DecodeException {
         LOGGER.debug("search entities.fn:{},handle:{}", fn, handle);
         String lastSpliInURI = queryParser.getLastSplitInURI(request);
         if (!"entities".equals(lastSpliInURI)) {
@@ -353,10 +361,13 @@ public class RdapController {
      * @param response
      *            HttpServletResponse
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws DecodeException {
         LOGGER.debug("query autnum:" + autnum);
         autnum = queryParser.getLastSplitInURI(request);
         if (!AutnumValidator.isValidAutnum(autnum)) {
@@ -406,12 +417,14 @@ public class RdapController {
      * @param request
      *            request.
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = { "/domain/{domainName}" },
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryDomain(@PathVariable String domainName,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws DecodeException {
         domainName = queryParser.getLastSplitInURI(request);
         String decodeDomain = domainName;
         String punyDomainName = decodeDomain;
@@ -508,12 +521,15 @@ public class RdapController {
      * @param response
      *            response for httpServlet.
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/domains", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity searchDomain(
             @RequestParam(required = false) String name,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws DecodeException {
         String lastSpliInURI = queryParser.getLastSplitInURI(request);
         if (!"domains".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
@@ -631,12 +647,14 @@ public class RdapController {
      * @param request
      *            request.
      * @return JSON formatted result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = { "/nameserver/{nsName}" },
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryNameserver(@PathVariable String nsName,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws DecodeException {
         nsName = queryParser.getLastSplitInURI(request);
         String decodeNS = nsName;
         String punyNSName = decodeNS;
@@ -707,12 +725,15 @@ public class RdapController {
      * @param response
      *            HttpServletResponse
      * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = "/nameservers", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity searchNameserver(
             @RequestParam(required = false) String name,
-            HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response)
+            throws DecodeException {
         String lastSpliInURI = queryParser.getLastSplitInURI(request);
         if (!"nameservers".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
@@ -801,12 +822,15 @@ public class RdapController {
      * @param request
      *            request.
      * @return JSON formatted result,with HTTP code.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = { "/ip/{ipAddr}/{mask}" },
             method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryIpWithMask(@PathVariable String ipAddr,
-            @PathVariable String mask, HttpServletRequest request) {
+            @PathVariable String mask, HttpServletRequest request)
+            throws DecodeException {
         ipAddr = queryParser.getLastSecondSplitInURI(request);
         mask = queryParser.getLastSplitInURI(request);
         return queryIpAddress(ipAddr, mask, ipAddr + "/" + mask);
@@ -826,12 +850,14 @@ public class RdapController {
      *            the query ip
      * @param request
      *            request.
-     * @return ResponseEntity
+     * @return ResponseEntity ResponseEntity.
+     * @throws DecodeException
+     *             DecodeException.
      */
     @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryIp(@PathVariable String ipAddr,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws DecodeException {
         ipAddr = queryParser.getLastSplitInURI(request);
         return queryIpAddress(ipAddr, "", ipAddr);
     }
@@ -912,4 +938,5 @@ public class RdapController {
     public ResponseEntity error400() {
         return RestResponseUtil.createResponse400();
     }
+    
 }

@@ -30,8 +30,11 @@
  */
 package org.restfulwhois.rdap.service;
 
+import java.util.List;
+
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 
 /**
  * redirect service interface.
@@ -45,8 +48,9 @@ public interface RedirectService {
 
     /**
      * check if redirect response is valid.
+     * 
      * @param redirect
-     *              for respose of redirect.
+     *            for respose of redirect.
      * @return true if valid, false if not.
      */
     boolean isValidRedirect(RedirectResponse redirect);
@@ -77,5 +81,29 @@ public interface RedirectService {
      * @return RedirectResponse RedirectResponse.
      */
     RedirectResponse queryIp(QueryParam queryParam);
+
+    /**
+     * save domain redirects.
+     * 
+     * @param redirects
+     *            redirects.
+     */
+    void saveDomainRedirect(List<Redirect> redirects);
+
+    /**
+     * save network redirects.
+     * 
+     * @param redirects
+     *            redirects.
+     */
+    void saveNetworkRedirect(List<Redirect> redirects);
+
+    /**
+     * save as number redirects.
+     * 
+     * @param redirects
+     *            redirects.
+     */
+    void saveAutnumRedirect(List<Redirect> redirects);
 
 }

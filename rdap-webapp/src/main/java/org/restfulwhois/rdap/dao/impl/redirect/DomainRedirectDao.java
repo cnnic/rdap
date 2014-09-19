@@ -39,6 +39,8 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bean.DomainQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
+import org.restfulwhois.rdap.bootstrap.bean.DomainRedirect;
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.slf4j.Logger;
@@ -51,7 +53,7 @@ import org.springframework.stereotype.Repository;
 /**
  * <pre>
  * domain redirect DAO mainly select domain object from database.
- * query method overrite the counterpart in RedirectDao.
+ * query method overwrite the counterpart in RedirectDao.
  * </pre>
  * 
  * @author jiashuo
@@ -59,13 +61,31 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DomainRedirectDao implements RedirectDao {
-    
+
+    /**
+     * save.
+     */
+    private static final String SAVE_DOMAIN_REDIRECT =
+            "insert into RDAP_DOMAIN_REDIRECT"
+                    + "(REDIRECT_TLD,REDIRECT_URL) values (?,?)";
+
+    /**
+     * select max id.
+     */
+    private static final String SELECT_MAX_ID =
+            "select max(RDAP_DOMAIN_REDIRECT_ID) from RDAP_DOMAIN_REDIRECT";
+
+    /**
+     * delete rows <= id.
+     */
+    private static final String DELETE_SMALLER_THAN_ID =
+            "delete from RDAP_DOMAIN_REDIRECT where RDAP_DOMAIN_REDIRECT_ID<=?";
     /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(DomainRedirectDao.class);   
-    
+            .getLogger(DomainRedirectDao.class);
+
     /**
      * JDBC template.
      */
@@ -74,10 +94,10 @@ public class DomainRedirectDao implements RedirectDao {
 
     /**
      * redirect the domain by select object from RDAP_DOMAIN_REDIRECT.
+     * 
      * @param queryParam
-     *          parameter for domain query.
-     * @return RedirectResponse
-     *          response to select redirect domain.
+     *            parameter for domain query.
+     * @return RedirectResponse response to select redirect domain.
      */
     @Override
     public RedirectResponse query(QueryParam queryParam) {
@@ -131,4 +151,60 @@ public class DomainRedirectDao implements RedirectDao {
         }
         return StringUtils.join(tldList, ",");
     }
+
+    @Override
+    public void save(List<Redirect> bootstraps) {
+        if (null == bootstraps || bootstraps.size() == 0) {
+            LOGGER.info("bootstraps is empty, not do sync.");
+            return;
+        }
+        Long maxOldId = getMaxId();
+        LOGGER.info("get tobe delete maxOldId:{}", maxOldId);
+        LOGGER.info("save new bootstraps...");
+        saveNew(bootstraps);
+        LOGGER.info("delete old bootstraps...");
+        deleteOld(maxOldId);
+    }
+
+    /**
+     * delete old redirects.
+     * 
+     * @param maxOldId
+     *            maxOldId.
+     */
+    private void deleteOld(Long maxOldId) {
+        if (null == maxOldId) {
+            LOGGER.info("maxOldId is null, not delete.");
+            return;
+        }
+        jdbcTemplate.update(DELETE_SMALLER_THAN_ID, maxOldId);
+    }
+
+    /**
+     * save new bootstraps.
+     * 
+     * @param bootstraps
+     *            bootstraps.
+     */
+    private void saveNew(List<Redirect> bootstraps) {
+        List<Object[]> batchSaveParams = new ArrayList<Object[]>();
+        for (Redirect bootstrap : bootstraps) {
+            DomainRedirect domainRedirect = (DomainRedirect) bootstrap;
+            batchSaveParams.add(new String[] { domainRedirect.getTld(),
+                    domainRedirect.getUrls().get(0) });
+        }
+        if (batchSaveParams.size() > 0) {
+            jdbcTemplate.batchUpdate(SAVE_DOMAIN_REDIRECT, batchSaveParams);
+        }
+    }
+
+    /**
+     * get max id.
+     * 
+     * @return max id.
+     */
+    private Long getMaxId() {
+        return jdbcTemplate.queryForObject(SELECT_MAX_ID, Long.class);
+    }
+
 }

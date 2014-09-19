@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.restfulwhois.rdap.bean.ErrorMessage;
 import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.exception.DecodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.InvalidMediaTypeException;
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 /**
  * This is an
- * {@link org.springframework.web.servlet .handler.SimpleMappingExceptionResolver}
+ * {@link SimpleMappingExceptionResolver}
  * implementation, that handle
  * {@link org.springframework.http.InvalidMediaTypeException} and other
  * exceptions. For InvalidMediaTypeException it will return HTTP 415 error, and
@@ -38,7 +39,9 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
             HttpServletResponse response, Object handler, Exception ex) {
         ResponseEntity<ErrorMessage> responseEntity = null;
         LOGGER.error("error:", ex);
-        if (ex instanceof InvalidMediaTypeException
+        if (ex instanceof DecodeException) {
+            responseEntity = RestResponseUtil.createResponse400();
+        } else if (ex instanceof InvalidMediaTypeException
                 || ex instanceof HttpMediaTypeNotAcceptableException) {
             responseEntity = RestResponseUtil.createResponse415();
         } else {

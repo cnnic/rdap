@@ -30,9 +30,12 @@
  */
 package org.restfulwhois.rdap.service.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.common.RdapProperties;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.restfulwhois.rdap.service.RedirectService;
@@ -45,8 +48,7 @@ import org.springframework.stereotype.Service;
 /**
  * redirect service implementation.
  * 
- * Requirement from
- * http://tools.ietf.org/html/draft-ietf-weirds-redirects-04.
+ * Requirement from http://tools.ietf.org/html/draft-ietf-weirds-redirects-04.
  * 
  * get redirect url for domain/IP/AS .
  * 
@@ -79,63 +81,80 @@ public class RedirectServiceImpl implements RedirectService {
     @Autowired
     @Qualifier("networkRedirectDao")
     private RedirectDao networkRedirectDao;
+
     /**
      * query domain redirect.
      * 
      * @param queryParam
      *            param for domain RedirectResponse.
      * @return redirect response.
-     */    
+     */
     @Override
     public RedirectResponse queryDomain(QueryParam queryParam) {
         LOGGER.debug("queryDomain:" + queryParam);
         return domainRedirectDao.query(queryParam);
     }
+
     /**
      * query AS redirect.
      * 
      * @param queryParam
      *            param for AS RedirectResponse.
      * @return redirect response.
-     */    
+     */
     @Override
     public RedirectResponse queryAutnum(QueryParam queryParam) {
         LOGGER.debug("queryAutnum:" + queryParam);
         return autnumRedirectDao.query(queryParam);
     }
+
     /**
      * query ip redirect.
      * 
      * @param queryParam
      *            param for IP RedirectResponse.
      * @return redirect response.
-     */    
+     */
     @Override
     public RedirectResponse queryIp(QueryParam queryParam) {
         LOGGER.debug("queryIp:" + queryParam);
         return networkRedirectDao.query(queryParam);
     }
+
     /**
      * is a redirect response valid.
      * 
      * @param redirect
      *            param for RedirectResponse.
      * @return boolean.
-     */    
+     */
     @Override
     public boolean isValidRedirect(RedirectResponse redirect) {
-        LOGGER.debug("isValidRedirect:" + redirect);
         if (null == redirect || StringUtils.isBlank(redirect.getUrl())) {
             return false;
         }
         if (redirect.getUrl().contains(RdapProperties.getLocalServiceUrl())) {
-            LOGGER.debug("redirect url is local RDAP,ignore.",
+            LOGGER.debug("redirect url: {} is local RDAP,ignore.",
                     redirect.getUrl());
             return false;
         }
-        LOGGER.debug("redirect url can be redirected.",
-                redirect.getUrl());
+        LOGGER.debug("redirect url {} can be redirected.", redirect.getUrl());
         return true;
+    }
+
+    @Override
+    public void saveDomainRedirect(List<Redirect> bootstraps) {
+        domainRedirectDao.save(bootstraps);
+    }
+
+    @Override
+    public void saveNetworkRedirect(List<Redirect> bootstraps) {
+        networkRedirectDao.save(bootstraps);
+    }
+
+    @Override
+    public void saveAutnumRedirect(List<Redirect> bootstraps) {
+        autnumRedirectDao.save(bootstraps);
     }
 
 }

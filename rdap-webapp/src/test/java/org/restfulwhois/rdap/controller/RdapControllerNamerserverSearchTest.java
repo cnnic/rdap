@@ -187,7 +187,8 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                                 .value(CoreMatchers.hasItems("en", "zh")))
                 .andExpect(
                         jsonPath("$.nameserverSearchResults[0].links[0].title")
-                                .exists());
+                                .exists())
+                 .andExpect(jsonPath("$.nameserverSearchResults[0].objectClassName").value("nameserver"));
     }
 
     /**

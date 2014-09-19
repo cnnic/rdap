@@ -30,12 +30,15 @@
  */
 package org.restfulwhois.rdap.dao;
 
+import java.util.List;
+
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 
 /**
- * redirect DAO.
- * Interface to access AutnumRedirectDao DomainRedirectDao NetworkRedirectDao.
+ * redirect DAO. Interface to access AutnumRedirectDao DomainRedirectDao
+ * NetworkRedirectDao.
  * 
  * @author jiashuo
  * 
@@ -50,4 +53,12 @@ public interface RedirectDao {
      * @return RedirectResponse RedirectResponse.
      */
     RedirectResponse query(QueryParam queryParam);
+
+    /**
+     * save redirect, from bootstraps.
+     * 
+     * @param bootstraps
+     *            bootstraps redirects.
+     */
+    void save(List<Redirect> bootstraps);
 }

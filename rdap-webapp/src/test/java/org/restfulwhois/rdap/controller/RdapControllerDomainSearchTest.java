@@ -173,7 +173,6 @@ public class RdapControllerDomainSearchTest extends BaseTest {
 	        searchDomain(nsIpV4, domainName);
 	        searchDomain(nsIpZero, domainName);
 	        searchDomain(nsIpV4V6, domainName);
-
     }
 
     

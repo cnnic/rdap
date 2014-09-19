@@ -95,7 +95,8 @@ public class RdapControllerAutnumTest extends BaseTest {
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.country").value("zh"))
                 .andExpect(jsonPath("$.lang").value("cn"))
-                .andExpect(jsonPath("$.name").value("name1"));
+                .andExpect(jsonPath("$.name").value("name1"))
+                .andExpect(jsonPath("$.objectClassName").value("autnum"));
     }
 
     /**
@@ -116,7 +117,8 @@ public class RdapControllerAutnumTest extends BaseTest {
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.country").value("zh"))
                 .andExpect(jsonPath("$.lang").value("cn"))
-                .andExpect(jsonPath("$.name").value("name1"));
+                .andExpect(jsonPath("$.name").value("name1"))
+                .andExpect(jsonPath("$.objectClassName").value("autnum"));
     }
 
     /**
