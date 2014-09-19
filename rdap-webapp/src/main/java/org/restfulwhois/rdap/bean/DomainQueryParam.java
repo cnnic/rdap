@@ -112,4 +112,28 @@ public class DomainQueryParam extends QueryParam {
         return new ToStringBuilder(this).append(getQ()).append(punyName)
                 .toString();
     }
+    
+    /**
+     * search by domain name, nsLdhName, nsIp
+     */
+    private String searchByParam;
+
+    /**
+     * get method for SearchByParam.
+     * 
+     * @return String searchByParam.
+     */
+	public String getSearchByParam() {
+		return searchByParam;
+	}
+	
+    /**
+     * set method for SearchByParam.
+     * 
+     * @return bool flag.
+     */
+	public void setSearchByParam(String searchByParam) {
+		this.searchByParam = searchByParam;
+	}
+    
 }

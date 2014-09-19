@@ -48,6 +48,7 @@ import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -67,8 +68,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      * domain search uri.
      */
     private static final String DOMAIN_SEARCH_URI =
-            "/domains?name=";
-
+            "/domains";
+    
     @Autowired
     private WebApplicationContext wac;
 
@@ -115,7 +116,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         q200List.add("中国*");
         for (String q : q422List) {
             mockMvc.perform(
-                    get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
+                    get(DOMAIN_SEARCH_URI +"?name=" + encodeWithIso8859(q)).accept(
                             MediaType.parseMediaType(rdapJson)))
                     .andExpect(status().isUnprocessableEntity())
                     .andExpect(content().contentType(rdapJson))
@@ -123,7 +124,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         }
         for (String q : q400List) {
             mockMvc.perform(
-                    get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
+                    get(DOMAIN_SEARCH_URI +"?name=" + encodeWithIso8859(q)).accept(
                             MediaType.parseMediaType(rdapJson)))
                     .andExpect(status().isBadRequest())
                     .andExpect(content().contentType(rdapJson))
@@ -131,7 +132,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         }
         for (String q : q200List) {// no data, return 404 instead 200.
             mockMvc.perform(
-                    get(DOMAIN_SEARCH_URI + encodeWithIso8859(q)).accept(
+                    get(DOMAIN_SEARCH_URI +"?name=" + encodeWithIso8859(q)).accept(
                             MediaType.parseMediaType(rdapJson)))
                     .andExpect(status().isNotFound())
                     .andExpect(content().contentType(rdapJson))
@@ -148,107 +149,81 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/domain-search.xml")
-    public
-            void testSearchExistDomain() throws Exception {
-        String domainName = "cnnic.cn";
-        mockMvc.perform(
-                get(DOMAIN_SEARCH_URI + "cnnic*").accept(
-                        MediaType.parseMediaType(rdapJson)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.domainSearchResults").exists())
-                .andExpect(jsonPath("$.domainSearchResults").isArray())
-                .andExpect(
-                        jsonPath("$.domainSearchResults",
-                                Matchers.hasItem(Matchers.hasKey("handle"))))
-                .andExpect(
-                        jsonPath("$.domainSearchResults",
-                                Matchers.hasItem(Matchers.hasValue("cnnic.cn"))))
-                .andExpect(
-                        jsonPath("$.domainSearchResults", Matchers
-                                .hasItem(Matchers.hasValue("cnnic2.cn"))))
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].lang").value("zh"))
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].handle").value("1"))
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].ldhName").value(
-                                domainName))
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].unicodeName").value(
-                                domainName))
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].port43").value(
-                                "port43"))
-//                .andExpect(
-//                        jsonPath("$.domainSearchResults[0].secureDNS").exists())
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].status").isArray())
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].status").value(
-                                CoreMatchers.hasItems("validated",
-                                        "update prohibited")))
-                // remarks.
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].remarks").isArray())
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].remarks[0]")
-                                .exists())
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].remarks[0].title")
-                                .exists())
-                .andExpect(
-                        jsonPath(
-                                "$.domainSearchResults[0].remarks[0].description")
-                                .exists())
-                .andExpect(
-                        jsonPath(
-                                "$.domainSearchResults[0].remarks[0].description")
-                                .isArray())
-                .andExpect(
-                        jsonPath(
-                                "$.domainSearchResults[0].remarks[0].description")
-                                .value(CoreMatchers.hasItems("description1",
-                                        "description2")))
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].remarks[0].links")
-                                .exists())
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].remarks[0].links")
-                                .isArray())
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].remarks[0].links[0]")
-                                .exists())
-                .andExpect(
-                        jsonPath(
-                                "$.domainSearchResults[0].remarks[0].links[0].value")
-                                .exists())
-                .andExpect(
-                        jsonPath(
-                                "$.domainSearchResults[0].remarks[0].links[0].rel")
-                                .exists())
-                .andExpect(
-                        jsonPath(
-                                "$.domainSearchResults[0].remarks[0].links[0].href")
-                                .exists())
-                .andExpect(
-                        jsonPath(
-                                "$.domainSearchResults[0].remarks[0].links[0].type")
-                                .exists())
-                .andExpect(
-                        jsonPath(
-                                "$.domainSearchResults[0].remarks[0].links[0].type")
-                                .value(rdapJson))
-                // links.
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].links[0].hreflang")
-                                .value(CoreMatchers.hasItems("en", "zh")))
-                .andExpect(
-                        jsonPath("$.domainSearchResults[0].links[0].title")
-                                .exists());
+    public void testSearchExistDomain() throws Exception {
+        	String domainName = "cnnic.cn";
+        	/** search domain by nsLdhName */
+            String nameHead = "?name=cnnic*";
+            searchDomain(nameHead, domainName);
+                        
+    		/** search domain by nsLdhName */
+            String nsLdhNameHead = "?nsLdhName=ns.cnnic*";
+            searchDomain(nsLdhNameHead, domainName);
+    
+	        /** search domain by nsIp */
+    		String ipHead = "?nsIp=";
+	        String nsNameIpV4 = ipHead + "255.255.255.255";
+	        String nsNameIpV6Full = ipHead + "ffff:ffff:ffff:ffff:0:0:0:ffff";
+	        String nsNameIpV6Omit = ipHead + "ffff:ffff:ffff:ffff::ffff";
+	        String nsIpV4 = ipHead + "0::0";
+	        String nsIpZero = ipHead + "::";
+	        String nsIpV4V6 = ipHead + "::f:f:0.15.0.15";
+	        searchDomain(nsNameIpV4, domainName);
+	        searchDomain(nsNameIpV6Full, domainName);
+	        searchDomain(nsNameIpV6Omit, domainName);
+	        searchDomain(nsIpV4, domainName);
+	        searchDomain(nsIpZero, domainName);
+	        searchDomain(nsIpV4V6, domainName);
 
     }
 
+    
+    /** search domain by nsIp */
+    private void searchDomain(String strObject, String domainName) throws Exception {
+    mockMvc.perform(
+            get(DOMAIN_SEARCH_URI+ strObject).accept(
+                    MediaType.parseMediaType(rdapJson)))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(rdapJson))
+            .andExpect(jsonPath("$.domainSearchResults").exists())
+            .andExpect(jsonPath("$.domainSearchResults").isArray())
+            .andExpect(jsonPath("$.domainSearchResults",
+                            Matchers.hasItem(Matchers.hasKey("handle"))))
+            .andExpect(jsonPath("$.domainSearchResults",
+                            Matchers.hasItem(Matchers.hasValue(domainName))))
+            .andExpect(jsonPath("$.domainSearchResults", Matchers
+                            .hasItem(Matchers.hasValue(domainName))))
+            .andExpect(jsonPath("$.domainSearchResults[0].lang").value("zh"))
+            .andExpect(jsonPath("$.domainSearchResults[0].handle").value("1"))
+            .andExpect(jsonPath("$.domainSearchResults[0].ldhName").value(domainName))
+            .andExpect(jsonPath("$.domainSearchResults[0].unicodeName").value(domainName))
+            .andExpect(jsonPath("$.domainSearchResults[0].port43").value("port43"))
+            .andExpect(jsonPath("$.domainSearchResults[0].status").isArray())
+            .andExpect(jsonPath("$.domainSearchResults[0].status").value(CoreMatchers.hasItems("validated",
+                                    "update prohibited")))
+            // remarks.
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks").isArray())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0]").exists())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].title").exists())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].description").exists())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].description").isArray())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].description")
+                            .value(CoreMatchers.hasItems("description1","description2")))
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].links").exists())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].links").isArray())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].links[0]").exists())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].links[0].value").exists())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].links[0].rel").exists())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].links[0].href").exists())
+            .andExpect(jsonPath("$.domainSearchResults[0].remarks[0].links[0].type").exists())
+            .andExpect(jsonPath(
+                       "$.domainSearchResults[0].remarks[0].links[0].type").value(rdapJson))
+            // links.
+            .andExpect(jsonPath("$.domainSearchResults[0].links[0].hreflang")
+            		.value(CoreMatchers.hasItems("en", "zh")))
+            .andExpect(jsonPath("$.domainSearchResults[0].links[0].title")
+            		.exists());
+	}
     /**
      * test query exist domain.
      * 
@@ -257,10 +232,9 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/domain-search.xml")
-    public
-            void testSearchTruncatedDomain() throws Exception {
+    public void testSearchTruncatedDomain() throws Exception {
         mockMvc.perform(
-                get(DOMAIN_SEARCH_URI + "truncated*").accept(
+                get(DOMAIN_SEARCH_URI+"?name=" + "truncated*").accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -268,9 +242,17 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
                 .andExpect(jsonPath("$.domainSearchResults", hasSize(5)))
-                .andExpect(
-                        jsonPath("$.domainSearchResults",
-                                Matchers.hasItem(Matchers.hasKey("handle"))));
+                .andExpect(jsonPath("$.domainSearchResults",Matchers.hasItem(Matchers.hasKey("handle"))));
+        //test by nsIp
+        mockMvc.perform(
+                get(DOMAIN_SEARCH_URI+"?nsIp=::ffff:ffff:ffff:fffe").accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultsTruncated").value(true))
+                .andExpect(jsonPath("$.domainSearchResults").exists())
+                .andExpect(jsonPath("$.domainSearchResults").isArray())
+                .andExpect(jsonPath("$.domainSearchResults", hasSize((int) 5l)))
+                .andExpect(jsonPath("$.domainSearchResults",Matchers.hasItem(Matchers.hasKey("handle"))));;
     }
 
     /**
@@ -283,8 +265,9 @@ public class RdapControllerDomainSearchTest extends BaseTest {
             value = "classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchNonExistDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
+      //test by name
         mockMvc.perform(
-                get(DOMAIN_SEARCH_URI + "nonexist*").accept(
+                get(DOMAIN_SEARCH_URI+"?name=" + "nonexist*").accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -295,6 +278,32 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.description").value("NOT FOUND"))
                 .andExpect(jsonPath("$.resultsTruncated").doesNotExist())
                 .andExpect(jsonPath("$.domainSearchResults").doesNotExist());
+        //test by nsLdhName
+        mockMvc.perform(
+                get(DOMAIN_SEARCH_URI+"?nsLdhName=" + "nonexist*").accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(404))
+                .andExpect(jsonPath("$.lang").value("en"))
+                .andExpect(jsonPath("$.title").value("NOT FOUND"))
+                .andExpect(jsonPath("$.description").value("NOT FOUND"))
+                .andExpect(jsonPath("$.resultsTruncated").doesNotExist())
+                .andExpect(jsonPath("$.domainSearchResults").doesNotExist());
+      //test by nsIp
+        mockMvc.perform(
+                get(DOMAIN_SEARCH_URI+"?nsIp=" + "255.255.255.0").accept(
+                        MediaType.parseMediaType(rdapJson)))
+	            .andExpect(status().isNotFound())
+	            .andExpect(content().contentType(rdapJson))
+	            .andExpect(jsonPath("$.errorCode").value(404))
+	            .andExpect(jsonPath("$.lang").value("en"))
+	            .andExpect(jsonPath("$.title").value("NOT FOUND"))
+	            .andExpect(jsonPath("$.description").value("NOT FOUND"))
+	            .andExpect(jsonPath("$.resultsTruncated").doesNotExist())
+	            .andExpect(jsonPath("$.nameserverSearchResults").doesNotExist());
+        
     }
 
     /**
@@ -307,15 +316,35 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     public void testSearchInvalidDomain() throws Exception {
         RestResponseUtil.initErrorMessages();
         mockMvc.perform(
-                get(DOMAIN_SEARCH_URI + "*").accept(
+                get(DOMAIN_SEARCH_URI+"?name=" + "*").accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(422))
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("UNPROCESSABLE ENTITY"))
-                .andExpect(
-                        jsonPath("$.description").value("UNPROCESSABLE ENTITY"));
+                .andExpect(jsonPath("$.description").value("UNPROCESSABLE ENTITY"));
+        //test by nsLdhName
+        mockMvc.perform(
+                get(DOMAIN_SEARCH_URI+"?nsLdhName=*").accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(422))
+                .andExpect(jsonPath("$.lang").value("en"))
+                .andExpect(jsonPath("$.title").value("UNPROCESSABLE ENTITY"))
+                .andExpect(jsonPath("$.description").value("UNPROCESSABLE ENTITY"));
+        //test by nsIp
+        mockMvc.perform(
+                get(DOMAIN_SEARCH_URI+"?nsIp=*").accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.lang").value("en"))
+                .andExpect(jsonPath("$.title").value("BAD REQUEST"))
+                .andExpect(jsonPath("$.description").value("BAD REQUEST"));
 
     }
+    
 }
