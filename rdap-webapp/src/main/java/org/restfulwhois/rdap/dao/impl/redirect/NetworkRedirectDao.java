@@ -146,6 +146,7 @@ public class NetworkRedirectDao implements RedirectDao {
      * @param maxOldId
      *            maxOldId.
      * @param bootstraps
+     *            bootstraps.
      */
     private void deleteOld(Long maxOldId, List<Redirect> bootstraps) {
         if (null == maxOldId) {

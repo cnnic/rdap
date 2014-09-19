@@ -18,7 +18,7 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 /**
  * This is an
- * {@link org.springframework.web.servlet .handler.SimpleMappingExceptionResolver}
+ * {@link SimpleMappingExceptionResolver}
  * implementation, that handle
  * {@link org.springframework.http.InvalidMediaTypeException} and other
  * exceptions. For InvalidMediaTypeException it will return HTTP 415 error, and

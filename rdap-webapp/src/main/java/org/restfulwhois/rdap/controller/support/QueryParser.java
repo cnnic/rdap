@@ -210,8 +210,11 @@ public class QueryParser {
      * @param request
      *            request.
      * @return param value.
+     * @throws DecodeException
+     *             DecodeException.
      */
-    public String getLastSplitInURI(HttpServletRequest request) throws DecodeException{
+    public String getLastSplitInURI(HttpServletRequest request)
+            throws DecodeException {
         String path = request.getRequestURI();
         String result = StringUtils.substringAfterLast(path, "/");
         result = DomainUtil.urlDecode(result);
