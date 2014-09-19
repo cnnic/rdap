@@ -38,7 +38,7 @@ import java.util.List;
  * @author weijunkai
  * 
  */
-public class NameserverSearch extends BaseSearchModel {
+public class NameserverSearch extends BaseSearchModel<Nameserver> {
     /**
      * nameserver list.
      */

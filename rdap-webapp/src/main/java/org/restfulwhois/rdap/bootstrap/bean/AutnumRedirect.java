@@ -52,6 +52,13 @@ public class AutnumRedirect extends Redirect {
 
     /**
      * constructor.
+     * 
+     * @param startAutnum
+     *            startAutnum.
+     * @param endAutnum
+     *            endAutnum.
+     * @param urls
+     *            urls.
      */
     public AutnumRedirect(Long startAutnum, Long endAutnum, List<String> urls) {
         super();

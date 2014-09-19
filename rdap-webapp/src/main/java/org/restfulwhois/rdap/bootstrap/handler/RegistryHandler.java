@@ -65,7 +65,7 @@ public abstract class RegistryHandler {
     /**
      * logger.
      */
-    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     /**
      * redirectService
      */
@@ -82,19 +82,17 @@ public abstract class RegistryHandler {
     /**
      * save redirect from bootstrap.
      * 
-     * @param bootstrapRegistries
-     *            bootstrapRegistries.
      */
     public void handle() {
         BootstrapRegistries bootstrapRegistries =
                 dataProvider.getDataFromRegistry(getRegistryRelativateUrl());
         if (null == bootstrapRegistries) {
-            LOGGER.error("bootstrapRegistries is null,not do sync.");
+            logger.error("bootstrapRegistries is null,not do sync.");
             return;
         }
         List<Redirect> redirects =
                 generateRedirectsFromBootstraps(bootstrapRegistries);
-        LOGGER.debug("generateRedirectsFromBootstraps,redirects:{}", redirects);
+        logger.debug("generateRedirectsFromBootstraps,result:{}", redirects);
         saveRedirects(redirects);
     }
 
