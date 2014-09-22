@@ -38,6 +38,7 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bootstrap.bean.AutnumRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.common.RdapProperties;
+import org.restfulwhois.rdap.common.util.AutnumValidator;
 import org.springframework.stereotype.Service;
 
 /**
@@ -94,10 +95,38 @@ public class AutnumRegistryHandler extends RegistryHandler {
             logger.error("ignore this key/urls:{},{}", key, registryUrls);
             return redirects;
         }
+        if (!validateAsNumber(startAsNumber, endAsNumber)) {
+            logger.error("ignore this key/urls:{},{}", key, registryUrls);
+            return redirects;
+        }
         AutnumRedirect autnumRedirect =
                 new AutnumRedirect(startAsNumber, endAsNumber, registryUrls);
         redirects.add(autnumRedirect);
         return redirects;
+    }
+
+    /**
+     * validate as.
+     * 
+     * @param startAs
+     *            startAs.
+     * @param endAs
+     *            endAs.
+     * @return true if valid, false if not.
+     */
+    private boolean validateAsNumber(Long startAs, Long endAs) {
+        if (startAs > endAs) {
+            logger.error("start as can not larger than end as:{},{}", startAs,
+                    endAs);
+            return false;
+        }
+        if (!AutnumValidator.isValidAutnum(startAs + "")
+                || !AutnumValidator.isValidAutnum(endAs + "")) {
+            logger.error("{},{} are invalid formated as number.", startAs,
+                    endAs);
+            return false;
+        }
+        return true;
     }
 
 }

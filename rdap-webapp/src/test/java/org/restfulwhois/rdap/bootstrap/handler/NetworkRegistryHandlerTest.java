@@ -54,7 +54,7 @@ public class NetworkRegistryHandlerTest {
     /**
      * handler.
      */
-    NetworkRegistryHandler handler = new NetworkRegistryHandler() {
+    NetworkRegistryHandler handler = new NetworkV4RegistryHandler() {
         @Override
         String getRegistryRelativateUrl() {
             return null;
