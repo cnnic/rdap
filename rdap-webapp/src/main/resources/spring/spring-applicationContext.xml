@@ -26,6 +26,7 @@
 		<property name="bootstrapRegistryUriForAs" value="${bootstrapRegistryUriForAs}" />
 		<property name="bootstrapRegistryUriForIpv4" value="${bootstrapRegistryUriForIpv4}" />
 		<property name="bootstrapRegistryUriForIpv6" value="${bootstrapRegistryUriForIpv6}" />
+		<property name="needCheckAccess" value="${needCheckAccess}" />
 	</bean>
 	<import resource="classpath:spring/spring-serviceContext.xml" />
 	<import resource="classpath:spring/spring-timer.xml" />

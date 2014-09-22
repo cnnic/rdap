@@ -124,6 +124,29 @@ public class RdapProperties {
      * list for not in tlds.
      */
     private static List<String> notInTldList;
+    /**
+     * inner object need  check Access.
+     */
+    private static String needCheckAccess;
+    
+    /**
+     * get needCheckAccess.
+     * 
+     * @return needCheckAccess.
+     */
+    public static String getNeedCheckAccess() {
+         return needCheckAccess;
+    }
+    
+    /**
+     * set needCheckAccess.
+     * 
+     * @param needCheckAccess
+     *            needCheckAccess.
+     */
+    public static void setNeedCheckAccess(String needCheckAccess) {
+        RdapProperties.needCheckAccess = needCheckAccess;
+    }
 
     /**
      * clear 'in' and 'not in' tlds in memory,used for reload tlds.

@@ -49,4 +49,14 @@ public interface AccessControlManager {
      * @return true if has permission,false if not.
      */
     boolean hasPermission(BaseModel object);
+    
+    /**
+     * check if current request user has permission for inner object.
+     *   delete the inner object if not 
+     * @param object
+     *            secure object.
+     * 
+     */
+    
+    void innerObjectHasPermission(final BaseModel object);
 }
