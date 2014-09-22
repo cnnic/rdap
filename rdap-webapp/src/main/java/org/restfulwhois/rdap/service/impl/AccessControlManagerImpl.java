@@ -31,10 +31,11 @@
 package org.restfulwhois.rdap.service.impl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bean.Autnum;
 import org.restfulwhois.rdap.bean.BaseModel;
 import org.restfulwhois.rdap.bean.Domain;
@@ -124,54 +125,55 @@ public class AccessControlManagerImpl implements AccessControlManager {
 
     @Override
     public void innerObjectHasPermission(BaseModel object) {
-        String needCheckAccess = RdapProperties.getNeedCheckAccess();
-        if (object == null || StringUtils.isBlank(needCheckAccess) 
-            || needCheckAccess.equals("false")) {
+        boolean needCheckAccess = RdapProperties.getNeedCheckAccess();
+        if (object == null || !needCheckAccess) {
              return;
-        }        
-        Field[] allField = object.getClass().getDeclaredFields();
-        if (allField == null) {
-            return;
         }
-        for (int i = 0; i < allField.length; i++) {
-          if (allField[i].getType().isPrimitive()) {
-             continue;
-           }
-          if (allField[i].getType().getName().startsWith("java.lang")) {
-              continue;
-          }
-          try {
+        try {
+            Field[] allField = object.getClass().getDeclaredFields();
+            if (allField == null) {
+                return;
+            }
+            for (int i = 0; i < allField.length; i++) {             
                 allField[i].setAccessible(true);
                 Object value = allField[i].get(object);
                 if (value == null) {
                     continue;
                 }
-                if (value != null && value instanceof List) {
-                    if (((List<?>) value).size() > 0
-                        && isSecureObjectType(((List<?>) value).get(0))) {
-                        for (int j = 0; j < ((List<?>) value).size(); j++) {
-                             Object valueIn = ((List<?>) value).get(j);
-                             if (hasPermission((BaseModel) valueIn)) {
-                                  innerObjectHasPermission((BaseModel) valueIn);
-                             } else {
-                                  ((List<?>) value).remove(j);
-                             }
-                         }
-                         allField[i].set(object, value);
-                     }
-                 } else if (isSecureObjectType(value)) {
-                      if (hasPermission((BaseModel) value)) {
-                          innerObjectHasPermission((BaseModel) value);
-                      } else {
-                          allField[i].set(object, null);
-                      }
-                 }
-            } catch (IllegalArgumentException e1) {
-                e1.printStackTrace();
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
-        }
+                if (value instanceof List && ((List<?>) value).size() > 0
+                      && isSecureObjectType(((List<?>) value).get(0))) {
+                    innerListHasPermission(value);
+                    allField[i].set(object, value);                    
+                } 
+                if (isSecureObjectType(value)) {
+                   if (hasPermission((BaseModel) value)) {
+                       innerObjectHasPermission((BaseModel) value);
+                    } else {
+                       allField[i].set(object, null);
+                    }
+                }    
+           }
+        } catch (IllegalAccessException e) {
+             LOGGER.error("innerObjectHasPermission ", e.getMessage());
+        } 
+        
+    }
+    /**
+     * check the inner list Object need access.
+     * 
+     * @param object
+     *            object .
+     */
+    private void innerListHasPermission(final Object object) {
+        Iterator<?> iter =  ((List<?>) object).iterator();
+        while (iter.hasNext()) {
+           Object valueIn = iter.next();
+           if (hasPermission((BaseModel) valueIn)) {
+              innerObjectHasPermission((BaseModel) valueIn);
+           } else {
+              iter.remove();
+           }
+        }      
     }
     
     /**

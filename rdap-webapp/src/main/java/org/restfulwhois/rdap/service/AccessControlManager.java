@@ -51,7 +51,7 @@ public interface AccessControlManager {
     boolean hasPermission(BaseModel object);
     
     /**
-     * check if current request user has permission for inner object.
+     * check if current request user has permission for search  inner object.
      *   delete the inner object if not 
      * @param object
      *            secure object.

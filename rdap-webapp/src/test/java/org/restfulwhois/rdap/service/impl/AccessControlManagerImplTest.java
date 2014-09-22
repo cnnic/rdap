@@ -116,7 +116,7 @@ public class AccessControlManagerImplTest extends BaseTest {
     public void testDomainInnerObjectHasPermission() {
         RdapProperties prop = new RdapProperties();
       //set needCheckAccess true
-        ReflectionTestUtils.setField(prop, "needCheckAccess", "false");
+        ReflectionTestUtils.setField(prop, "needCheckAccess", false);
          String domainName = 
      "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
           Domain domain =
@@ -136,7 +136,7 @@ public class AccessControlManagerImplTest extends BaseTest {
           assertNotNull(domain.getEntities()); 
           assertEquals(1L, domain.getEntities().size());
           //set needCheckAccess true
-          ReflectionTestUtils.setField(prop, "needCheckAccess", "true");
+          ReflectionTestUtils.setField(prop, "needCheckAccess", true);
           accessControlManager.innerObjectHasPermission(domain);
           assertNull(domain.getNetwork());    
           assertEquals(1L, domain.getnameServers().size()); 
