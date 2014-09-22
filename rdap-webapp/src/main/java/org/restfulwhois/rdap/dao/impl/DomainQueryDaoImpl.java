@@ -969,7 +969,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         final String strLast = "order by LDH_NAME limit ?,?";
         final String sql = strHead + tmpSql + strEnd + arpaSql + tmpSql
                 + strEnd + strLast;
-        System.out.println(sql);
         result = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
