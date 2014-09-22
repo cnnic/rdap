@@ -58,9 +58,14 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 public class RdapControllerEntitySearchTest extends BaseTest {
 
     /**
-     * domain search URI.
+     * search by handle.
      */
     private static final String URI_ENTITY_SEARCH = "/entities?handle=";
+
+    /**
+     * search by fn.
+     */
+    private static final String URI_ENTITY_SEARCH_BY_FN = "/entities?fn=";
 
     @Autowired
     private WebApplicationContext wac;
@@ -78,6 +83,52 @@ public class RdapControllerEntitySearchTest extends BaseTest {
     }
 
     /**
+     * test_handle_support_casefold.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
+    public
+            void test_handle_support_casefold() throws Exception {
+        String entityHandle = "TRUNcated1*";
+        mockMvc.perform(
+                get(URI_ENTITY_SEARCH + entityHandle).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.entitySearchResults").exists())
+                .andExpect(jsonPath("$.entitySearchResults").isArray())
+                .andExpect(
+                        jsonPath("$.entitySearchResults",
+                                Matchers.hasItem(Matchers.hasKey("handle"))))
+                .andExpect(
+                        jsonPath("$.entitySearchResults", Matchers
+                                .hasItem(Matchers.hasValue("truncated1"))));
+    }
+
+    /**
+     * test_fn_not_support_casefold.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
+    public
+            void test_fn_not_support_casefold() throws Exception {
+        String fn = "TRUNcated1*";
+        mockMvc.perform(
+                get(URI_ENTITY_SEARCH_BY_FN + fn).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(rdapJson));
+    }
+
+    /**
      * test query exist.
      * 
      * @throws Exception
@@ -86,7 +137,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
-    public void testQueryExist() throws Exception {
+    public
+            void testQueryExist() throws Exception {
         String entityHandle = "truncated*";
         mockMvc.perform(
                 get(URI_ENTITY_SEARCH + entityHandle).accept(
@@ -122,8 +174,9 @@ public class RdapControllerEntitySearchTest extends BaseTest {
                 .andExpect(
                         jsonPath("$.entitySearchResults[0].port43").value(
                                 "whois.example.net"))
-                .andExpect(jsonPath("$.entitySearchResults[0].objectClassName").value("entity"));
-        
+                .andExpect(
+                        jsonPath("$.entitySearchResults[0].objectClassName")
+                                .value("entity"));
 
     }
 
@@ -136,7 +189,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
-    public void testQueryNonExistAutnum() throws Exception {
+    public
+            void testQueryNonExistEntity() throws Exception {
         String nonExistHandle = "1000000";
         mockMvc.perform(
                 get(URI_ENTITY_SEARCH + nonExistHandle).accept(
@@ -155,7 +209,8 @@ public class RdapControllerEntitySearchTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml")
-    public void testQueryAutnumWithInvalidQ() throws Exception {
+    public
+            void testQueryEntityWithInvalidQ() throws Exception {
         String invalidHandle = "";
         mockMvc.perform(
                 get(URI_ENTITY_SEARCH + invalidHandle).accept(

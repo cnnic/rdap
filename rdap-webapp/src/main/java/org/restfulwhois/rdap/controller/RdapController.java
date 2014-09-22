@@ -311,9 +311,8 @@ public class RdapController {
         }
         final String fnParamName = "fn";
         final String handleParamName = "handle";
-        String paramName =
-                queryParser.getFirstParameter(request, new String[] {
-                        fnParamName, handleParamName });
+        String paramName = queryParser.getFirstParameter(request, new String[] {
+                fnParamName, handleParamName });
         if (StringUtils.isBlank(paramName)) {
             return RestResponseUtil.createResponse400();
         }
@@ -325,7 +324,11 @@ public class RdapController {
         if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
             return RestResponseUtil.createResponse422();
         }
-        paramValue = StringUtil.foldCaseAndNormalization(paramValue);
+        if (handleParamName.equals(paramName)) {// fold case when by handle
+            paramValue = StringUtil.foldCaseAndNormalization(paramValue);
+        } else {
+            paramValue = StringUtil.getNormalization(paramValue);
+        }
         paramValue = StringUtils.trim(paramValue);
         QueryParam queryParam =
                 queryParser.parseEntityQueryParam(paramValue, paramName);
@@ -428,18 +431,19 @@ public class RdapController {
         domainName = queryParser.getLastSplitInURI(request);
         String decodeDomain = domainName;
         String punyDomainName = decodeDomain;
-        decodeDomain = DomainUtil.urlDecode(domainName);
+        decodeDomain =
+                DomainUtil.urlDecodeAndReplaceAsciiToLowercase(domainName);
         if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
             return RestResponseUtil.createResponse400();
         }
         decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
+        LOGGER.debug("after foldCaseAndNormalization: {}", decodeDomain);
         try {
             // long lable exception
             punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
-        LOGGER.debug("after normalization: {}", decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
 
         QueryParam queryParam =
@@ -574,7 +578,6 @@ public class RdapController {
             name = queryParser.getParameter(request, strNsLdhName);
             // search by name
             String decodeNameserver = name;
-
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
                 decodeNameserver = DomainUtil.urlDecode(decodeNameserver);
@@ -614,10 +617,8 @@ public class RdapController {
             } else {
                return RestResponseUtil.createResponse400();
             }
-        
         DomainSearch domainSearch =
                 searchService.searchDomain(domainQueryParam);
-        
         if (null != domainSearch) {
             if (domainSearch.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
@@ -658,18 +659,18 @@ public class RdapController {
         nsName = queryParser.getLastSplitInURI(request);
         String decodeNS = nsName;
         String punyNSName = decodeNS;
-        decodeNS = DomainUtil.urlDecode(nsName);
+        decodeNS = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(nsName);
         if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
             return RestResponseUtil.createResponse400();
         }
         decodeNS = StringUtil.foldCaseAndNormalization(decodeNS);
+        LOGGER.debug("after foldCaseAndNormalization: {}", decodeNS);
         try {
             // long lable exception
             punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
-        LOGGER.debug("after normalization: {}", decodeNS);
         decodeNS = DomainUtil.deleteLastPoint(decodeNS);
 
         QueryParam queryParam =
@@ -766,7 +767,9 @@ public class RdapController {
 
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
-                decodeNameserver = DomainUtil.urlDecode(decodeNameserver);
+                decodeNameserver =
+                        DomainUtil
+                                .urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
@@ -938,5 +941,5 @@ public class RdapController {
     public ResponseEntity error400() {
         return RestResponseUtil.createResponse400();
     }
-    
+
 }

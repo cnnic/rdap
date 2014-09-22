@@ -353,6 +353,45 @@ public final class DomainUtil {
     }
 
     /**
+     * decode,and replace ASCII char to lower case.
+     * 
+     * @param str
+     *            string.
+     * @return str.
+     */
+    public static String urlDecodeAndReplaceAsciiToLowercase(String str)
+            throws DecodeException {
+        str = urlDecode(str);
+        LOGGER.debug("after decode: {}", str);
+        return replaceAsciiToLowercase(str);
+    }
+
+    /**
+     * replace all ASCII char to lower case.
+     * 
+     * @param str
+     *            str.
+     * @return string.
+     */
+    public static String replaceAsciiToLowercase(String str) {
+        if (StringUtils.isBlank(str)) {
+            return str;
+        }
+        StringBuffer asciiLowerCasedSb = new StringBuffer();
+        for (int i = 0; i < str.length(); i++) {
+            int c = str.charAt(i);
+            char charVal = str.charAt(i);
+            if (c <= MAX_ASCII_CODE) {
+                asciiLowerCasedSb.append(StringUtils.lowerCase(String
+                        .valueOf(charVal)));
+            } else {
+                asciiLowerCasedSb.append(String.valueOf(charVal));
+            }
+        }
+        return asciiLowerCasedSb.toString();
+    }
+
+    /**
      * decoded url use UTF-8.
      * 
      * @param str
