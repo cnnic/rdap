@@ -89,6 +89,11 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
             logger.error("ignore this key/urls:{},{}", key, registryUrls);
             return redirects;
         }
+        if (!validateMask(ipMaskLongVal)) {
+            logger.error("ipMask is out of range:{}", ipMask);
+            logger.error("ignore this key/urls:{},{}", key, registryUrls);
+            return redirects;
+        }
         NetworkRedirect networkRedirect =
                 new NetworkRedirect(ipPrefix, ipMask, registryUrls);
         IpVersion ipVersion = parseIpVersion(ipPrefix);
@@ -101,6 +106,17 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
         networkRedirect.setNetworkQueryParam((NetworkQueryParam) queryParam);
         redirects.add(networkRedirect);
         return redirects;
+    }
+
+    /**
+     * validate mask.
+     * 
+     * @param ipMask
+     *            mask.
+     * @return true if valid, false if not.
+     */
+    protected boolean validateMask(Long ipMask) {
+        throw new UnsupportedOperationException();
     }
 
     /**

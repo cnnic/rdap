@@ -80,7 +80,7 @@ public class IpQueryHandler extends QueryHandler {
         if (StringUtils.isBlank(argumentList.get(0))) {
             throw new ServiceException("invalid argument");
         }
-        return "ip/" + urlEncode(argumentList.get(0));
+        return "ip/" + argumentList.get(0);// CAN NOT do urlencode: 1.1.1.1/8
     }
 
 }
