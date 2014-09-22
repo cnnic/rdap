@@ -94,7 +94,8 @@ public class Nameserver extends BaseModel {
     /**
      * the object class name of a particular object.
      */
-    private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.NAMESERVER;
+    private ObjectClassNameEnum objectClassName = 
+            ObjectClassNameEnum.NAMESERVER;
 
     @Override
     public ModelType getObjectType() {
@@ -315,17 +316,17 @@ public class Nameserver extends BaseModel {
      * 
      * @return objectClassName.
      */
-	public ObjectClassNameEnum getObjectClassName() {
-		return objectClassName;
-	}
-	
-	/**
+    public ObjectClassNameEnum getObjectClassName() {
+        return objectClassName;
+    }
+    
+    /**
      * set ObjectClassNameEnum.
      * 
-     * @param objectClassNameEnum
+     * @param objectClassName
      *            objectClassName for set.
      */
-	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
-		this.objectClassName = objectClassName;
-	}
+     public void setObjectClassName(ObjectClassNameEnum objectClassName) {
+         this.objectClassName = objectClassName;
+     }
 }
