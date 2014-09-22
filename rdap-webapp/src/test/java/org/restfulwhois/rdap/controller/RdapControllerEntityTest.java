@@ -66,7 +66,7 @@ public class RdapControllerEntityTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
-    
+
     /**
      * output json.
      */
@@ -75,6 +75,25 @@ public class RdapControllerEntityTest extends BaseTest {
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    }
+
+    /**
+     * test_handle_casefold.
+     * 
+     * @throws Exception
+     *             Exception.
+     */
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity.xml")
+    public void test_handle_casefold() throws Exception {
+        String entityHandle = "H1";
+        mockMvc.perform(
+                get(URI_ENTITY_Q + entityHandle).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value("h1"));
     }
 
     /**
@@ -103,7 +122,7 @@ public class RdapControllerEntityTest extends BaseTest {
                 .andExpect(jsonPath("$.vcardArray[1][1][0]").value("kind"))
                 .andExpect(
                         jsonPath("$.vcardArray[1][1][3]").value("individual"))
-                .andExpect(jsonPath("$.objectClassName").value("entity"));;
+                .andExpect(jsonPath("$.objectClassName").value("entity"));
     }
 
     /**

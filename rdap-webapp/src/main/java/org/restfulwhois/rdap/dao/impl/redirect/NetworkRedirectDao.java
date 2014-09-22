@@ -54,7 +54,7 @@ import org.springframework.stereotype.Repository;
 /**
  * <pre>
  * network redirect DAO mainly select network object from RDAP_IP_REDIRECT.
- * query method overrite the counterpart in RedirectDao.
+ * query method overwrite the counterpart in RedirectDao.
  * </pre>
  * 
  * @author jiashuo

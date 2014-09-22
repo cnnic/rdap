@@ -41,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -79,7 +78,7 @@ public class BootstrapEntryDeserializer extends
     @Override
     public BootstrapEntry
             deserialize(JsonParser jp, DeserializationContext ctxt)
-                    throws IOException, JsonProcessingException {
+                    throws IOException {
         JsonNode node = jp.getCodec().readTree(jp);
         if (node.size() < ENTRY_LENGTH) {
             LOGGER.error("ignore bootstrapEntry, wrong formated:{}", node);
