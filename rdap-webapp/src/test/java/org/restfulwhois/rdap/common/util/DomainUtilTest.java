@@ -95,13 +95,41 @@ public class DomainUtilTest {
         inValidArpaDomain.add("cn.ip6.arpa");
         inValidArpaDomain.add(".ip6.arpa");
     }
+    
+    
 
     /**
-     * test isArpaTldAndLabelIsValid.
+     * testUrlDecodeAndReplaceAsciiToLowercase.
+     * @throws DecodeException 
      * 
      */
     @Test
-    public void testIsArpaTldAndLabelIsValid() {
+    public void testUrlDecodeAndReplaceAsciiToLowercase() throws DecodeException {
+        assertEquals("cnnic.cn", DomainUtil.urlDecodeAndReplaceAsciiToLowercase("Cnnic.cn"));
+        assertEquals("cnnic.cn", DomainUtil.replaceAsciiToLowercase("CNNIC.cn"));
+        assertEquals("cnnic.cn", DomainUtil.replaceAsciiToLowercase("CNNIC.CN"));
+        assertEquals("中国.cn", DomainUtil.replaceAsciiToLowercase("中国.CN"));
+    }
+        
+    /**
+     * testReplaceAsciiToLowercase.
+     * 
+     */
+    @Test
+    public void testReplaceAsciiToLowercase() {
+        assertEquals("cnnic.cn", DomainUtil.replaceAsciiToLowercase("Cnnic.cn"));
+        assertEquals("cnnic.cn", DomainUtil.replaceAsciiToLowercase("CNNIC.cn"));
+        assertEquals("cnnic.cn", DomainUtil.replaceAsciiToLowercase("CNNIC.CN"));
+        assertEquals("中国.cn", DomainUtil.replaceAsciiToLowercase("中国.CN"));
+    }
+    
+        
+        /**
+         * test isArpaTldAndLabelIsValid.
+         * 
+         */
+        @Test
+        public void testIsArpaTldAndLabelIsValid() {
 
         assertTrue(DomainUtil
                 .isArpaTldAndLabelIsValid("1.1.1.d.a.c.a.0.ip6.arpa"));
@@ -269,7 +297,8 @@ public class DomainUtilTest {
     private boolean validateDomainNameIsValidIdna(String domainName) {
         String decodeDomain = domainName;
         try {
-            decodeDomain = DomainUtil.urlDecode(domainName);
+            decodeDomain =
+                    DomainUtil.urlDecodeAndReplaceAsciiToLowercase(domainName);
         } catch (DecodeException e) {
             e.printStackTrace();
         }
@@ -286,7 +315,8 @@ public class DomainUtilTest {
     private boolean validateSearchStringIsValidIdna(String domainName) {
         String decodeDomain = domainName;
         try {
-            decodeDomain = DomainUtil.urlDecode(domainName);
+            decodeDomain =
+                    DomainUtil.urlDecodeAndReplaceAsciiToLowercase(domainName);
         } catch (DecodeException e) {
             e.printStackTrace();
         }
@@ -447,9 +477,10 @@ public class DomainUtilTest {
     public void testDecodeAndTrim() throws DecodeException {
         assertEquals("中文.中国",
                 DomainUtil.urlDecode("%E4%B8%AD%E6%96%87.%E4%B8%AD%E5%9B%BD"));
-        assertEquals("中文.cn", DomainUtil.urlDecode("中文.CN"));
-        assertEquals("中文.cn", DomainUtil.urlDecode("中文.Cn"));
-        assertEquals("中c文n.cn", DomainUtil.urlDecode("中C文n.Cn"));
+        assertEquals("中文.cn",
+                DomainUtil.urlDecodeAndReplaceAsciiToLowercase("中文.Cn"));
+        assertEquals("中c文n.cn",
+                DomainUtil.urlDecodeAndReplaceAsciiToLowercase("中C文n.Cn"));
     }
 
     /**
