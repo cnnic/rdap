@@ -539,13 +539,14 @@ public class RdapController {
         if (!"domains".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
         }
-        
         String decodeDomain = "";
         final String[] strParamOrg = {DomainSearchType.NAME.value(), 
             DomainSearchType.NSLDHNAME.value(), DomainSearchType.NSIP.value() };
-        
         String nameParam = queryParser.getFirstParameter(request, strParamOrg);
         DomainSearchParam domainSearchParam;
+        if (StringUtils.isBlank(nameParam)) {
+            return RestResponseUtil.createResponse400();
+        }
         
         if (0 == nameParam.compareTo(DomainSearchType.NAME.value())) {
             // search by domain name
