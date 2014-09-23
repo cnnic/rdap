@@ -125,8 +125,9 @@ public class AccessControlManagerImpl implements AccessControlManager {
 
     @Override
     public void innerObjectHasPermission(final BaseModel object) {
-        boolean needCheckAccess = RdapProperties.getNeedCheckAccess();
-        if (object == null || !needCheckAccess) {
+        boolean accessControlForInnerObjectForSearch = 
+                RdapProperties.getAccessControlForInnerObjectForSearch();
+        if (object == null || !accessControlForInnerObjectForSearch) {
              return;
         }
         try {

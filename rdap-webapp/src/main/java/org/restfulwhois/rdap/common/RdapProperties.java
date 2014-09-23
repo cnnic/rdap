@@ -125,27 +125,29 @@ public class RdapProperties {
      */
     private static List<String> notInTldList;
     /**
-     * access control for search inner object.
+     * access control for inner object for search.
      */
-    private static boolean needCheckAccess;
+    private static boolean accessControlForInnerObjectForSearch;
     
     /**
-     * get needCheckAccess.
+     * get accessControlForInnerObjectForSearch.
      * 
-     * @return needCheckAccess.
+     * @return accessControlForInnerObjectForSearch.
      */
-    public static boolean getNeedCheckAccess() {
-         return needCheckAccess;
+    public static boolean getAccessControlForInnerObjectForSearch() {
+         return accessControlForInnerObjectForSearch;
     }
     
     /**
      * set needCheckAccess.
      * 
-     * @param needCheckAccess
-     *            needCheckAccess.
+     * @param accessControlForInnerObjectForSearch
+     *            accessControlForInnerObjectForSearch.
      */
-    public static void setNeedCheckAccess(boolean needCheckAccess) {
-        RdapProperties.needCheckAccess = needCheckAccess;
+    public static void setAccessControlForInnerObjectForSearch(
+           boolean accessControlForInnerObjectForSearch) {
+        RdapProperties.accessControlForInnerObjectForSearch = 
+                   accessControlForInnerObjectForSearch;
     }
 
     /**
