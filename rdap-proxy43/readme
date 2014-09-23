@@ -1,0 +1,4 @@
+startup:
+	nohup java -jar rdap-proxy43-jar-with-dependencies.jar  start &
+shutdown:
+	java -jar rdap-proxy43-jar-with-dependencies.jar shutdown
