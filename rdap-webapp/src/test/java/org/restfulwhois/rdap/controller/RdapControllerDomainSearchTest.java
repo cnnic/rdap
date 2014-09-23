@@ -181,7 +181,6 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     mockMvc.perform(
             get(DOMAIN_SEARCH_URI+ strObject).accept(
                     MediaType.parseMediaType(rdapJson)))
-            .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andExpect(content().contentType(rdapJson))
             .andExpect(jsonPath("$.domainSearchResults").exists())
