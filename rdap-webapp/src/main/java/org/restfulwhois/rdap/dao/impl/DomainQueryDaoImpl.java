@@ -808,12 +808,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         if (arrayIp == null) {
             return 0L;
         }
-        BigDecimal ipTmp = new BigDecimal(0L);
+        BigDecimal ipLowTmp = new BigDecimal(0L);
         if (arrayIp.length > 1) {
-            ipTmp = arrayIp[1];
+           ipLowTmp = arrayIp[1];
         }
         final BigDecimal ipHigh = arrayIp[0];
-        final BigDecimal ipLow = ipTmp;
+        final BigDecimal ipLow = ipLowTmp;
         final String strHead = "select count(0) as COUNT from (select t1.* "
          + "from  RDAP_DOMAIN t1 "
          + "inner join REL_DOMAIN_NAMESERVER t2 on t1.DOMAIN_ID = t2.DOMAIN_ID "
@@ -949,12 +949,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         startPage = startPage >= 0 ? startPage : 0;
         final long startRow = startPage * page.getMaxRecords();
         BigDecimal[] arrayIp = getBigDecimalIp(domainQueryParam);
-        BigDecimal ipTmp = new BigDecimal(0L);
+        BigDecimal ipLowTmp = new BigDecimal(0L);
         if (arrayIp.length > 1) {
-            ipTmp = arrayIp[1];
+          ipLowTmp = arrayIp[1];
         }
         final BigDecimal ipHigh = arrayIp[0];
-        final BigDecimal ipLow = ipTmp;
+        final BigDecimal ipLow = ipLowTmp;
         final String strHead = "SELECT t1.* FROM  RDAP_DOMAIN t1 "
                + "INNER JOIN REL_DOMAIN_NAMESERVER t2 "
                + "ON t1.DOMAIN_ID = t2.DOMAIN_ID INNER JOIN "
@@ -999,7 +999,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @author weijunkai
      */
     private BigDecimal[] getBigDecimalIp(QueryParam queryParam) {
-    	DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
+        DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
         final String strIp = domainQueryParam.getQ();
         if (!IpUtil.isIpV4StrWholeValid(strIp)
                 && !IpUtil.isIpV6StrValid(strIp)) {
