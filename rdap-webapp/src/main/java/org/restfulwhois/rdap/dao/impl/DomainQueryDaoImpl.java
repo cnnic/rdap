@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.dao.impl;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,6 +45,8 @@ import org.restfulwhois.rdap.bean.Arpa;
 import org.restfulwhois.rdap.bean.BaseModel;
 import org.restfulwhois.rdap.bean.Domain;
 import org.restfulwhois.rdap.bean.DomainQueryParam;
+import org.restfulwhois.rdap.bean.DomainSearchParam;
+import org.restfulwhois.rdap.bean.DomainSearchType;
 import org.restfulwhois.rdap.bean.Entity;
 import org.restfulwhois.rdap.bean.Event;
 import org.restfulwhois.rdap.bean.Link;
@@ -51,13 +54,14 @@ import org.restfulwhois.rdap.bean.ModelStatus;
 import org.restfulwhois.rdap.bean.ModelType;
 import org.restfulwhois.rdap.bean.Nameserver;
 import org.restfulwhois.rdap.bean.Network;
+import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.PageBean;
 import org.restfulwhois.rdap.bean.PublicId;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
 import org.restfulwhois.rdap.bean.SecureDns;
 import org.restfulwhois.rdap.bean.Variants;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
+import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
@@ -200,28 +204,24 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     @Override
     public Long searchCount(QueryParam queryParam) {
         LOGGER.debug("searchCount, queryParam:" + queryParam);
-        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
-        final String domainName = domainQueryParam.getQ();
-        final String punyName = domainQueryParam.getPunyName();
-        final String domainNameLikeClause = super
-                .generateLikeClause(domainName);
-        final String punyNameLikeClause = super.generateLikeClause(punyName);
-        final String sql = "select count(1) as COUNT from RDAP_DOMAIN domain "
-                + " where LDH_NAME like ? or UNICODE_NAME like ? ";
-        Long domainCount = jdbcTemplate.query(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(
-                    Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ps.setString(1, punyNameLikeClause);
-                ps.setString(2, domainNameLikeClause);
-                return ps;
-            }
-        }, new CountResultSetExtractor());
-        LOGGER.debug("searchCount, domainCount:" + domainCount);
-        return domainCount;
+        DomainSearchParam domainSearchParam = (DomainSearchParam) queryParam;
+        if (DomainSearchType.NAME.value().equals(
+             domainSearchParam.getSearchByParam())) {
+            //search domain by name
+            return searchCountByName(queryParam);
+        } else if (DomainSearchType.NSLDHNAME.value().equals(
+             domainSearchParam.getSearchByParam())) {
+             //search domain by nsLdhName
+           return searchCountByNsLdhName(queryParam);
+        } else if (DomainSearchType.NSIP.value().equals(
+             domainSearchParam.getSearchByParam())) {
+            //search domain by nsIp
+           return searchCountByNsIp(queryParam);
+        } else {
+           return 0L;
+        }
     }
-
+    
     /**
      * query and set domain status.
      * 
@@ -696,15 +696,220 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @return domain list.
      */
     private List<Domain> searchWithoutInnerObjects(final QueryParam params) {
-        DomainQueryParam domainQueryParam = (DomainQueryParam) params;
-        final String domainName = domainQueryParam.getQ();
-        final String punyName = domainQueryParam.getPunyName();
-        final String domainNameLikeClause = super
-                .generateLikeClause(domainName);
-        final String punyNameLikeClause = super.generateLikeClause(punyName);
-        final String sql = "select * from RDAP_DOMAIN domain "
-                + " where LDH_NAME like ? or UNICODE_NAME like ? "
-                + " order by domain.LDH_NAME limit ?,? ";
+        DomainSearchParam domainSearchParam = (DomainSearchParam) params;
+        if (DomainSearchType.NAME.value().equals(
+                domainSearchParam.getSearchByParam())) {
+            //search domain by name
+            return searchWithoutInnerObjectsByName(params);
+        } else if (DomainSearchType.NSLDHNAME.value().equals(
+                domainSearchParam.getSearchByParam())) {
+            //search domain by nsLdhName
+            return searchWithoutInnerObjectsByNsLdhName(params);
+        } else if (DomainSearchType.NSIP.value().equals(
+                domainSearchParam.getSearchByParam())) {
+            //search domain by nsIp
+            return searchWithoutInnerObjectsByNsIp(params);
+        } else {
+            return null;
+        }
+       
+    }
+    
+    
+    /**
+     * search domain count by name
+     * <p>
+     * select the counter number of domain from database.
+     * 
+     * @param queryParam
+     *            QueryParam.
+     * @return domain count.
+     */
+    public Long searchCountByName(QueryParam queryParam) {
+       LOGGER.debug("searchCount, queryParam:" + queryParam);
+       DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
+       final String domainName = domainQueryParam.getQ();
+       final String punyName = domainQueryParam.getPunyName();
+       final String domainNameLikeClause = super.generateLikeClause(domainName);
+       final String punyNameLikeClause = super.generateLikeClause(punyName);
+       final String sql = "select count(1) as COUNT from RDAP_DOMAIN domain "
+                    + " where LDH_NAME like ? or UNICODE_NAME like ? ";
+       Long domainCount = jdbcTemplate.query(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(
+                        Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(sql);
+                    ps.setString(1, punyNameLikeClause);
+                    ps.setString(2, domainNameLikeClause);
+                    return ps;
+                }
+            }, new CountResultSetExtractor());
+            LOGGER.debug("searchCount, domainCount:" + domainCount);
+            return domainCount;
+    }
+    
+    /**
+     * search domain count by nsLdhName 
+     * <p>
+     * select the counter number of domain from database.
+     * 
+     * @param queryParam
+     *            QueryParam.
+     * @return domain count.
+     */
+    private Long searchCountByNsLdhName(QueryParam queryParam) {
+       LOGGER.debug("searchCount, queryParam:" + queryParam);
+       DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
+       final String domainName = domainQueryParam.getQ();
+       final String punyName = domainQueryParam.getPunyName();
+       final String domainNameLikeClause = super.generateLikeClause(domainName);
+       final String punyNameLikeClause = super.generateLikeClause(punyName);
+       final String sql = "select count(0) as COUNT from  (SELECT t1.* from " 
+        + "RDAP_DOMAIN t1 inner join REL_DOMAIN_NAMESERVER t2 " 
+        + "on t1.DOMAIN_ID = t2.DOMAIN_ID inner join RDAP_NAMESERVER "
+        + "t3 on t2.NAMESERVER_ID = t3.NAMESERVER_ID "
+        + "where t2.DOMAIN_TYPE='domain' and t3.LDH_NAME like ? " 
+        + "or t3.UNICODE_NAME  like ? union all "
+        + "select t1.ARPA_ID as DOMAIN_ID, t1.HANDLE, t1.ARPA_NAME as LDH_NAME,"
+        + " '' as UNICODE_NAME, t1.PORT43, " 
+        + "t1.LANG from RDAP_ARPA t1 inner join REL_DOMAIN_NAMESERVER t2 on "
+        + "t1.ARPA_ID = t2.DOMAIN_ID inner join RDAP_NAMESERVER t3 "
+        + "on t2.NAMESERVER_ID = t3.NAMESERVER_ID where t2.DOMAIN_TYPE='arpa' "
+        + "and t3.LDH_NAME like ? or t3.UNICODE_NAME like ?) T";
+        Long domainCount = jdbcTemplate.query(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setString(1, punyNameLikeClause);
+                ps.setString(2, domainNameLikeClause);
+                ps.setString(3, punyNameLikeClause);
+                ps.setString(4, domainNameLikeClause);
+                return ps;
+            }
+        }, new CountResultSetExtractor());
+        LOGGER.debug("searchCount, domainCount:" + domainCount);
+        return domainCount;
+    }
+    
+    
+    /**
+     * search domain count by nsIp
+     * <p>
+     * select the counter number of domain from database.
+     * 
+     * @param queryParam
+     *            QueryParam.
+     * @return domain count.
+     */
+    private Long searchCountByNsIp(QueryParam queryParam) {
+        LOGGER.debug("searchCount, queryParam:" + queryParam);
+        BigDecimal[] arrayIp = getBigDecimalIp(queryParam);
+        if (arrayIp == null) {
+            return 0L;
+        }
+        BigDecimal ipLowTmp = new BigDecimal(0L);
+        if (arrayIp.length > 1) {
+           ipLowTmp = arrayIp[1];
+        }
+        final BigDecimal ipHigh = arrayIp[0];
+        final BigDecimal ipLow = ipLowTmp;
+        final String strHead = "select count(0) as COUNT from (select t1.* "
+         + "from  RDAP_DOMAIN t1 "
+         + "inner join REL_DOMAIN_NAMESERVER t2 on t1.DOMAIN_ID = t2.DOMAIN_ID "
+         + "inner join RDAP_NAMESERVER_IP t3 on "
+         + "t2.NAMESERVER_ID = t3.NAMESERVER_ID where t3.IP_LOW = ? && ";
+        String arpaSql = "UNION ALL SELECT t1.ARPA_ID AS DOMAIN_ID, t1.HANDLE, "
+            + "t1.ARPA_NAME AS LDH_NAME, '' AS UNICODE_NAME, t1.PORT43, "
+            + "t1.LANG FROM RDAP_ARPA t1 INNER JOIN "
+            + "REL_DOMAIN_NAMESERVER t2 ON t1.ARPA_ID = t2.DOMAIN_ID "
+            + "INNER JOIN RDAP_NAMESERVER_IP t3 "
+            + "ON t2.NAMESERVER_ID = t3.NAMESERVER_ID where t3.IP_LOW = ? && ";
+        String tmpSql = "t3.IP_HIGH = ?";
+        if (ipHigh.doubleValue() == 0.0) {
+            tmpSql = "(t3.IP_HIGH = ? or t3.IP_HIGH is null)";
+        }
+        final String sql = strHead + tmpSql + arpaSql + tmpSql + ") T";
+        Long recordsCount = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setBigDecimal(1, ipLow);
+                ps.setBigDecimal(2, ipHigh);
+                ps.setBigDecimal(3, ipLow);
+                ps.setBigDecimal(4, ipHigh);               
+                return ps;
+            }
+        }, new CountResultSetExtractor());
+        return recordsCount;
+    }
+    
+    /**
+     * search domain using name.
+     * 
+     * @param params
+     *            query parameter include domain punyname.
+     * @return domain list.
+     */
+    private List<Domain> searchWithoutInnerObjectsByName(
+          final QueryParam params) {
+       DomainSearchParam domainQueryParam = (DomainSearchParam) params;
+       final String domainName = domainQueryParam.getQ();
+       final String punyName = domainQueryParam.getPunyName();
+       final String domainNameLikeClause = super.generateLikeClause(domainName);
+       final String punyNameLikeClause = super.generateLikeClause(punyName);
+       final String sql = "select * from RDAP_DOMAIN domain "
+          + " where LDH_NAME like ? or UNICODE_NAME like ? "
+          + " order by domain.LDH_NAME limit ?,? ";
+       final PageBean page = params.getPageBean();
+       int startPage = page.getCurrentPage() - 1;
+       startPage = startPage >= 0 ? startPage : 0;
+       final long startRow = startPage * page.getMaxRecords();
+       List<Domain> result = jdbcTemplate.query(
+           new PreparedStatementCreator() {
+                 @Override
+                 public PreparedStatement createPreparedStatement(
+                     Connection connection) throws SQLException {
+                     PreparedStatement ps = connection.prepareStatement(sql);
+                     ps.setString(1, punyNameLikeClause);
+                     ps.setString(2, domainNameLikeClause);
+                     ps.setLong(3, startRow);
+                     ps.setLong(4, page.getMaxRecords());
+                     return ps;
+                 }
+           }, new DomainResultSetExtractor());
+       return result;
+    }
+    
+    
+    /**
+     * search domain using nsLdhName.
+     * 
+     * @param params
+     *            query parameter include domain punyname.
+     * @return domain list.
+     */
+    private List<Domain> searchWithoutInnerObjectsByNsLdhName(
+            final QueryParam params) {
+      DomainSearchParam domainQueryParam = (DomainSearchParam) params;
+      final String nsName = domainQueryParam.getQ();
+      final String punyName = domainQueryParam.getPunyName();
+      final String nsNameLikeClause = super.generateLikeClause(nsName);
+      final String punyNameLikeClause = super.generateLikeClause(punyName);
+      final String sql = "select t1.* from  RDAP_DOMAIN t1 inner join "
+            + "REL_DOMAIN_NAMESERVER t2 on t1.DOMAIN_ID = t2.DOMAIN_ID "
+            + "inner join RDAP_NAMESERVER t3 on  "
+            + "t2.NAMESERVER_ID = t3.NAMESERVER_ID "
+            + "where t2.DOMAIN_TYPE='domain' and t3.LDH_NAME LIKE ? "
+            + "or t3.UNICODE_NAME like ? union all "
+            + "select t1.ARPA_ID as DOMAIN_ID, t1.HANDLE, "
+            + "t1.ARPA_NAME as LDH_NAME, '' as UNICODE_NAME, t1.PORT43, "
+            + "t1.LANG from  RDAP_ARPA t1 inner join REL_DOMAIN_NAMESERVER t2 "
+            + "on t1.ARPA_ID = t2.DOMAIN_ID inner join RDAP_NAMESERVER t3 "
+            + "on t2.NAMESERVER_ID = t3.NAMESERVER_ID where "
+            + "t2.DOMAIN_TYPE='arpa' and t3.LDH_NAME "
+            + "LIKE ? or t3.UNICODE_NAME like ? "
+            + "order by LDH_NAME limit ?,? ";
         final PageBean page = params.getPageBean();
         int startPage = page.getCurrentPage() - 1;
         startPage = startPage >= 0 ? startPage : 0;
@@ -716,12 +921,93 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setString(1, punyNameLikeClause);
-                        ps.setString(2, domainNameLikeClause);
-                        ps.setLong(3, startRow);
-                        ps.setLong(4, page.getMaxRecords());
+                        ps.setString(2, nsNameLikeClause);
+                        ps.setString(3, punyNameLikeClause);
+                        ps.setString(4, nsNameLikeClause);
+                        ps.setLong(5, startRow);
+                        ps.setLong(6, page.getMaxRecords());
                         return ps;
                     }
                 }, new DomainResultSetExtractor());
         return result;
     }
+    
+    
+    /**
+     * search domain using nsIp.
+     * 
+     * @param params
+     *            query parameter include domain punyname.
+     * @return domain list.
+     */
+    private List<Domain> searchWithoutInnerObjectsByNsIp(
+         final QueryParam params) {
+        DomainSearchParam domainQueryParam = (DomainSearchParam) params;
+        List<Domain> result = null;
+        final PageBean page = domainQueryParam.getPageBean();
+        int startPage = page.getCurrentPage() - 1;
+        startPage = startPage >= 0 ? startPage : 0;
+        final long startRow = startPage * page.getMaxRecords();
+        BigDecimal[] arrayIp = getBigDecimalIp(domainQueryParam);
+        BigDecimal ipLowTmp = new BigDecimal(0L);
+        if (arrayIp.length > 1) {
+          ipLowTmp = arrayIp[1];
+        }
+        final BigDecimal ipHigh = arrayIp[0];
+        final BigDecimal ipLow = ipLowTmp;
+        final String strHead = "SELECT t1.* FROM  RDAP_DOMAIN t1 "
+               + "INNER JOIN REL_DOMAIN_NAMESERVER t2 "
+               + "ON t1.DOMAIN_ID = t2.DOMAIN_ID INNER JOIN "
+               + "RDAP_NAMESERVER_IP t3 ON t2.NAMESERVER_ID = t3.NAMESERVER_ID "
+               + "where ";
+        String arpaSql = "UNION ALL SELECT t1.ARPA_ID AS DOMAIN_ID, t1.HANDLE, "
+                + "t1.ARPA_NAME AS LDH_NAME, '' AS UNICODE_NAME, t1.PORT43, "
+                + "t1.LANG FROM RDAP_ARPA t1 INNER JOIN "
+                + "REL_DOMAIN_NAMESERVER t2 ON t1.ARPA_ID = t2.DOMAIN_ID "
+                + "INNER JOIN RDAP_NAMESERVER_IP t3 "
+                + "ON t2.NAMESERVER_ID = t3.NAMESERVER_ID where ";
+        String tmpSql = "t3.IP_HIGH = ? ";
+        if (ipHigh.doubleValue() == 0.0) {
+            tmpSql = "(t3.IP_HIGH = ? or t3.IP_HIGH is NULL) ";
+        }
+        final String strEnd = "and t3.IP_LOW = ? ";
+        final String strLast = "order by LDH_NAME limit ?,?";
+        final String sql = strHead + tmpSql + strEnd + arpaSql + tmpSql
+                + strEnd + strLast;
+        result = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setBigDecimal(1, ipHigh);
+                ps.setBigDecimal(2, ipLow);
+                ps.setBigDecimal(3, ipHigh);
+                ps.setBigDecimal(4, ipLow);
+                ps.setLong(5, startRow);
+                ps.setLong(6, page.getMaxRecords());
+                return ps;
+            }
+        }, new DomainResultSetExtractor());
+        return result;
+    }
+    
+    /**
+     * get bigDecimal of ip from nameserver query parameter.
+     * @param queryParam
+     *            query parameter of nameserver
+     * @return BigDecimal[] for ip
+     * 
+     * @author weijunkai
+     */
+    private BigDecimal[] getBigDecimalIp(QueryParam queryParam) {
+        DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
+        final String strIp = domainQueryParam.getQ();
+        if (!IpUtil.isIpV4StrWholeValid(strIp)
+                && !IpUtil.isIpV6StrValid(strIp)) {
+            return null;
+        }
+        BigDecimal[] arrayIp = IpUtil.ipToBigDecimal(strIp);
+        return arrayIp;
+    }
+    
+    
 }

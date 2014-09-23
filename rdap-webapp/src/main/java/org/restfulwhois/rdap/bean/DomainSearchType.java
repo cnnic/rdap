@@ -30,87 +30,48 @@
  */
 package org.restfulwhois.rdap.bean;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 /**
- * base query parameter bean.
+ * search type enum.
  * 
- * @author jiashuo
- * 
+ *  @return by name, nsLdhName, nsIP.
  */
-public class DomainQueryParam extends QueryParam {
+public enum DomainSearchType {
+
+    /**
+     * name type.
+     */
+     NAME("name"),
+    /**
+     * nsLdhName type.
+     */
+     NSLDHNAME("nsLdhName"),
+    /**
+     * nsIp type.
+     */
+     NSIP("nsIp");
+
+    /**
+     * name of model type.
+     */
+     private String name;
 
     /**
      * constructor.
      * 
-     * @param q
-     *            query string.
-     * @param punyName
-     *            domain puny name.
+     * @param name
+     *            name.
      */
-    public DomainQueryParam(String q, String punyName) {
-        super(q);
-        this.punyName = punyName;
-    }
+     private DomainSearchType(String name) {
+         this.name = name;
+     }
+     
+     /**
+      * value of model type.
+      * @return name
+      */
+     public String value() {
+         return name;
+     }
 
-    /**
-     * domain puny name.
-     */
-    private String punyName;
 
-    /**
-     * get punyName.
-     * 
-     * @return punyName.
-     */
-    public String getPunyName() {
-        return punyName;
-    }
-
-    /**
-     * set punyName.
-     * 
-     * @param punyName
-     *            punyName.
-     */
-    public void setPunyName(String punyName) {
-        this.punyName = punyName;
-    }
-
-    /**
-     * is domain from RIR, like 192.in-addr.arpa or F.0.0.ip6.arpa .
-     * 
-     * @return punyName is from RIR.
-     */
-    public boolean isRirDomain() {
-        if (null != getQ()) {
-            return getQ().endsWith(".in-addr.arpa")
-                    || getQ().endsWith(".ip6.arpa");
-        }
-        return false;
-    }
-
-    /**
-     * get full tld of domain puny name.
-     * 
-     * @return tld tld.
-     */
-    public String getFullPunyTld() {
-        if (StringUtils.isBlank(punyName)) {
-            return null;
-        }
-        String fullTld = StringUtils.substringAfter(punyName, ".");
-        if (StringUtils.isBlank(fullTld)) {
-            return ".";
-        }
-        return fullTld;
-    }
-    
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append(getQ()).append(punyName)
-                .toString();
-    }
-    
 }
