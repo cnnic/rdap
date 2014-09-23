@@ -139,7 +139,7 @@ public class RdapProperties {
     }
     
     /**
-     * set needCheckAccess.
+     * set accessControlForInnerObjectForSearch.
      * 
      * @param accessControlForInnerObjectForSearch
      *            accessControlForInnerObjectForSearch.
