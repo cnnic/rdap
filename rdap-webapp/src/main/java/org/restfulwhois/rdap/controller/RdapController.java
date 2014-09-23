@@ -554,7 +554,7 @@ public class RdapController {
             decodeDomain = name;
             try {
                 decodeDomain = DomainUtil.iso8859Decode(name);
-                decodeDomain = DomainUtil.urlDecode(decodeDomain);
+                decodeDomain = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeDomain);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
@@ -582,7 +582,7 @@ public class RdapController {
             String decodeNameserver = name;
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
-                decodeNameserver = DomainUtil.urlDecode(decodeNameserver);
+                decodeNameserver = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
