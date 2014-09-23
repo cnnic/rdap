@@ -178,11 +178,11 @@ public class SearchServiceImpl implements SearchService {
         return domainSearch;
     }
     /**
-     * search domain.
+     * search nameserver.
      * 
      * @param queryParam
-     *            param for domain.
-     * @return domain search result.
+     *            param for nameserver.
+     * @return nameserver search result.
      */
     @Override
     public NameserverSearch searchNameserver(QueryParam queryParam) {
