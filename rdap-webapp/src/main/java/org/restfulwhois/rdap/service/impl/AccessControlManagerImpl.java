@@ -103,7 +103,7 @@ public class AccessControlManagerImpl implements AccessControlManager {
      * @return boolean.
      */   
     @Override
-    public boolean hasPermission(final BaseModel object) {
+    public boolean hasPermission(BaseModel object) {
         Assert.notNull(object);
         Assert.notNull(object.getId());
         Assert.notNull(object.getObjectType());
@@ -124,7 +124,7 @@ public class AccessControlManagerImpl implements AccessControlManager {
      */ 
 
     @Override
-    public void innerObjectHasPermission(BaseModel object) {
+    public void innerObjectHasPermission(final BaseModel object) {
         boolean needCheckAccess = RdapProperties.getNeedCheckAccess();
         if (object == null || !needCheckAccess) {
              return;
