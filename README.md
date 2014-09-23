@@ -104,7 +104,9 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 		curl -H Accept:application/rdap+json http://$RDAP_SERVER_IP:$RDAP_SERVER_PORT/rdap/autnum/2100
 		```
 	It's ok if response contains 'rdapConformance'. 
-
+	
+### proxy43 Install
+[proxy43 Install](https://github.com/cnnic/rdap/wiki/Proxy43-install-&-usage)
 ### Api Doc
 [Api Doc](https://github.com/cnnic/rdap/wiki/Api-Doc)
 ### Known Issues
