@@ -104,15 +104,33 @@
 					</excludes>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>org.restfulwhois.rdap.port43.server.Server</mainClass>
+							<mainClass>org.restfulwhois.rdap.port43.server.Main</mainClass>
 						</manifest>
-						<manifestEntries>
-							<Class-Path>conf/</Class-Path>
-						</manifestEntries>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<descriptorRefs>
+			        	<descriptorRef>jar-with-dependencies</descriptorRef>
+			        </descriptorRefs>
+			        <archive>
+						<manifest>
+							<mainClass>org.restfulwhois.rdap.port43.server.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
