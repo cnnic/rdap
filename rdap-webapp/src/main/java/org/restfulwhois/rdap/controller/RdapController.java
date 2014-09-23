@@ -36,8 +36,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bean.Autnum;
 import org.restfulwhois.rdap.bean.Domain;
-import org.restfulwhois.rdap.bean.DomainQueryParam;
 import org.restfulwhois.rdap.bean.DomainSearch;
+import org.restfulwhois.rdap.bean.DomainSearchParam;
+import org.restfulwhois.rdap.bean.DomainSearchType;
 import org.restfulwhois.rdap.bean.Entity;
 import org.restfulwhois.rdap.bean.EntitySearch;
 import org.restfulwhois.rdap.bean.Help;
@@ -540,17 +541,16 @@ public class RdapController {
         }
         
         String decodeDomain = "";
-        final String strName = "name";
-        final String strNsLdhName = "nsLdhName";
-        final String nsIp = "nsIp";
-        final String[] strParamOrg = {strName, strNsLdhName, nsIp };
+        final String[] strParamOrg = {DomainSearchType.NAME.value(), 
+            DomainSearchType.NSLDHNAME.value(), DomainSearchType.NSIP.value() };
         
         String nameParam = queryParser.getFirstParameter(request, strParamOrg);
-        DomainQueryParam domainQueryParam;
+        DomainSearchParam domainSearchParam;
         
-        if (0 == nameParam.compareTo(strName)) {
+        if (0 == nameParam.compareTo(DomainSearchType.NAME.value())) {
             // search by domain name
-            name = queryParser.getParameter(request, strName);
+            name = queryParser.getParameter(request, 
+                      DomainSearchType.NAME.value());
             decodeDomain = name;
             try {
                 decodeDomain = DomainUtil.iso8859Decode(name);
@@ -569,13 +569,15 @@ public class RdapController {
             }
             decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
             decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
-            domainQueryParam = (DomainQueryParam) queryParser.
-                  parseDomainQueryParam(decodeDomain, decodeDomain);
+            domainSearchParam = (DomainSearchParam) queryParser.
+                  parseDomainSearchParam(decodeDomain, decodeDomain);
             //set search by domain name
-            domainQueryParam.setSearchByParam(strName);
-            } else if (0 == nameParam.compareTo(strNsLdhName)) {
+            domainSearchParam.setSearchByParam(DomainSearchType.NAME.value());
+            } else if (0 == nameParam.compareTo(
+                    DomainSearchType.NSLDHNAME.value())) {
             // search by nsLdhName
-            name = queryParser.getParameter(request, strNsLdhName);
+            name = queryParser.getParameter(request, 
+                    DomainSearchType.NSLDHNAME.value());
             // search by name
             String decodeNameserver = name;
             try {
@@ -596,29 +598,31 @@ public class RdapController {
             decodeNameserver =
                     StringUtil.foldCaseAndNormalization(decodeNameserver);
             decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
-            domainQueryParam = (DomainQueryParam) queryParser.
-                   parseDomainQueryParam(decodeNameserver, decodeNameserver);
+            domainSearchParam = (DomainSearchParam) queryParser.
+                  parseDomainSearchParam(decodeNameserver, decodeNameserver);
             //set search by strNsLdhName
-            domainQueryParam.setSearchByParam(strNsLdhName);
+            domainSearchParam.setSearchByParam(
+                         DomainSearchType.NSLDHNAME.value());
            
-        } else if (0 == nameParam.compareTo(nsIp)) {
+        } else if (0 == nameParam.compareTo(DomainSearchType.NSIP.value())) {
             // search by nsIp
-            name = queryParser.getParameter(request, nsIp);
+            name = queryParser.getParameter(request, 
+                         DomainSearchType.NSIP.value());
             // checkIP
             if (StringUtils.isBlank(name) || !IpUtil.isIpV4StrWholeValid(name)
                     && !IpUtil.isIpV6StrValid(name)) {
                 return RestResponseUtil.createResponse400();
             }
             name = StringUtils.lowerCase(name);
-            domainQueryParam = (DomainQueryParam) 
-                   queryParser.parseDomainQueryParam(name, name);
+            domainSearchParam = (DomainSearchParam) 
+                   queryParser.parseDomainSearchParam(name, name);
             //set search by strNsLdhName
-            domainQueryParam.setSearchByParam(nsIp);
+            domainSearchParam.setSearchByParam(DomainSearchType.NSIP.value());
             } else {
                return RestResponseUtil.createResponse400();
             }
         DomainSearch domainSearch =
-                searchService.searchDomain(domainQueryParam);
+                searchService.searchDomain(domainSearchParam);
         if (null != domainSearch) {
             if (domainSearch.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
@@ -768,8 +772,7 @@ public class RdapController {
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
                 decodeNameserver =
-                        DomainUtil
-                                .urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
+             DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }

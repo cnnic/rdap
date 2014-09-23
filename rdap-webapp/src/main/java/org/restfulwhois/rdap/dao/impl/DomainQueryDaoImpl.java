@@ -45,26 +45,25 @@ import org.restfulwhois.rdap.bean.Arpa;
 import org.restfulwhois.rdap.bean.BaseModel;
 import org.restfulwhois.rdap.bean.Domain;
 import org.restfulwhois.rdap.bean.DomainQueryParam;
+import org.restfulwhois.rdap.bean.DomainSearchParam;
+import org.restfulwhois.rdap.bean.DomainSearchType;
 import org.restfulwhois.rdap.bean.Entity;
 import org.restfulwhois.rdap.bean.Event;
 import org.restfulwhois.rdap.bean.Link;
 import org.restfulwhois.rdap.bean.ModelStatus;
 import org.restfulwhois.rdap.bean.ModelType;
 import org.restfulwhois.rdap.bean.Nameserver;
-import org.restfulwhois.rdap.bean.NameserverQueryParam;
 import org.restfulwhois.rdap.bean.Network;
+import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.PageBean;
 import org.restfulwhois.rdap.bean.PublicId;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
 import org.restfulwhois.rdap.bean.SecureDns;
 import org.restfulwhois.rdap.bean.Variants;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.dao.QueryDao;
-import org.restfulwhois.rdap.dao.impl.NameserverQueryDaoImpl.CountResultSetExtractor;
-import org.restfulwhois.rdap.dao.impl.NameserverQueryDaoImpl.NameserverResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,14 +204,17 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     @Override
     public Long searchCount(QueryParam queryParam) {
         LOGGER.debug("searchCount, queryParam:" + queryParam);
-        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
-        if ("name".equals(domainQueryParam.getSearchByParam())) {
+        DomainSearchParam domainSearchParam = (DomainSearchParam) queryParam;
+        if (DomainSearchType.NAME.value().equals(
+             domainSearchParam.getSearchByParam())) {
             //search domain by name
             return searchCountByName(queryParam);
-        } else if ("nsLdhName".equals(domainQueryParam.getSearchByParam())) {
+        } else if (DomainSearchType.NSLDHNAME.value().equals(
+             domainSearchParam.getSearchByParam())) {
              //search domain by nsLdhName
            return searchCountByNsLdhName(queryParam);
-        } else if ("nsIp".equals(domainQueryParam.getSearchByParam())) {
+        } else if (DomainSearchType.NSIP.value().equals(
+             domainSearchParam.getSearchByParam())) {
             //search domain by nsIp
            return searchCountByNsIp(queryParam);
         } else {
@@ -694,14 +696,17 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @return domain list.
      */
     private List<Domain> searchWithoutInnerObjects(final QueryParam params) {
-        DomainQueryParam domainQueryParam = (DomainQueryParam) params;
-        if ("name".equals(domainQueryParam.getSearchByParam())) {
+        DomainSearchParam domainSearchParam = (DomainSearchParam) params;
+        if (DomainSearchType.NAME.value().equals(
+                domainSearchParam.getSearchByParam())) {
             //search domain by name
             return searchWithoutInnerObjectsByName(params);
-        } else if ("nsLdhName".equals(domainQueryParam.getSearchByParam())) {
+        } else if (DomainSearchType.NSLDHNAME.value().equals(
+                domainSearchParam.getSearchByParam())) {
             //search domain by nsLdhName
             return searchWithoutInnerObjectsByNsLdhName(params);
-        } else if ("nsIp".equals(domainQueryParam.getSearchByParam())) {
+        } else if (DomainSearchType.NSIP.value().equals(
+                domainSearchParam.getSearchByParam())) {
             //search domain by nsIp
             return searchWithoutInnerObjectsByNsIp(params);
         } else {
@@ -722,7 +727,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     public Long searchCountByName(QueryParam queryParam) {
        LOGGER.debug("searchCount, queryParam:" + queryParam);
-       DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
+       DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
        final String domainName = domainQueryParam.getQ();
        final String punyName = domainQueryParam.getPunyName();
        final String domainNameLikeClause = super.generateLikeClause(domainName);
@@ -754,7 +759,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     private Long searchCountByNsLdhName(QueryParam queryParam) {
        LOGGER.debug("searchCount, queryParam:" + queryParam);
-       DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
+       DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
        final String domainName = domainQueryParam.getQ();
        final String punyName = domainQueryParam.getPunyName();
        final String domainNameLikeClause = super.generateLikeClause(domainName);
@@ -848,7 +853,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     private List<Domain> searchWithoutInnerObjectsByName(
           final QueryParam params) {
-       DomainQueryParam domainQueryParam = (DomainQueryParam) params;
+       DomainSearchParam domainQueryParam = (DomainSearchParam) params;
        final String domainName = domainQueryParam.getQ();
        final String punyName = domainQueryParam.getPunyName();
        final String domainNameLikeClause = super.generateLikeClause(domainName);
@@ -886,7 +891,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     private List<Domain> searchWithoutInnerObjectsByNsLdhName(
             final QueryParam params) {
-      DomainQueryParam domainQueryParam = (DomainQueryParam) params;
+      DomainSearchParam domainQueryParam = (DomainSearchParam) params;
       final String nsName = domainQueryParam.getQ();
       final String punyName = domainQueryParam.getPunyName();
       final String nsNameLikeClause = super.generateLikeClause(nsName);
@@ -937,7 +942,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     private List<Domain> searchWithoutInnerObjectsByNsIp(
          final QueryParam params) {
-        DomainQueryParam domainQueryParam = (DomainQueryParam) params;
+        DomainSearchParam domainQueryParam = (DomainSearchParam) params;
         List<Domain> result = null;
         final PageBean page = domainQueryParam.getPageBean();
         int startPage = page.getCurrentPage() - 1;
@@ -994,7 +999,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @author weijunkai
      */
     private BigDecimal[] getBigDecimalIp(QueryParam queryParam) {
-        DomainQueryParam domainQueryParam = (DomainQueryParam) queryParam;
+    	DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
         final String strIp = domainQueryParam.getQ();
         if (!IpUtil.isIpV4StrWholeValid(strIp)
                 && !IpUtil.isIpV6StrValid(strIp)) {
