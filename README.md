@@ -105,8 +105,8 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 		```
 	It's ok if response contains 'rdapConformance'. 
 	
-### Proxy43 Install
-[Proxy43 Install](https://github.com/cnnic/rdap/wiki/Proxy43-install-&-usage)
+### Port43 Install
+[Port43 Install](https://github.com/cnnic/rdap/wiki/Port43-install-&-usage)
 ### Api Doc
 [Api Doc](https://github.com/cnnic/rdap/wiki/Api-Doc)
 ### Known Issues
