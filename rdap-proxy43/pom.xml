@@ -101,6 +101,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*.properties</exclude>
+						<exclude>assemble/**</exclude>
 					</excludes>
 					<archive>
 						<manifest>

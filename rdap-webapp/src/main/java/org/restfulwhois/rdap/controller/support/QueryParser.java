@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bean.DomainQueryParam;
+import org.restfulwhois.rdap.bean.DomainSearchParam;
 import org.restfulwhois.rdap.bean.EntityQueryParam;
 import org.restfulwhois.rdap.bean.NameserverQueryParam;
 import org.restfulwhois.rdap.bean.Network.IpVersion;
@@ -87,6 +88,20 @@ public class QueryParser {
     public QueryParam parseDomainQueryParam(String domainName,
             String punyDomainName) {
         return new DomainQueryParam(domainName, punyDomainName);
+    }
+    
+    /**
+     * generate DomainSearchParam.
+     * 
+     * @param domainName
+     *            domain name.
+     * @param punyDomainName
+     *            domain puny name.
+     * @return QueryParam.
+     */
+    public QueryParam parseDomainSearchParam(String domainName,
+            String punyDomainName) {
+        return new DomainSearchParam(domainName, punyDomainName);
     }
 
     /**

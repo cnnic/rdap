@@ -34,22 +34,20 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * base query parameter bean.
+ * base search parameter bean.
  * 
- * @author jiashuo
+ * @author xuyao
  * 
  */
-public class DomainQueryParam extends QueryParam {
+public class DomainSearchParam extends QueryParam {
 
     /**
      * constructor.
      * 
-     * @param q
-     *            query string.
-     * @param punyName
-     *            domain puny name.
+     * @param q search string.
+     * @param punyName domain puny name.
      */
-    public DomainQueryParam(String q, String punyName) {
+    public DomainSearchParam(String q, String punyName) {
         super(q);
         this.punyName = punyName;
     }
@@ -111,6 +109,30 @@ public class DomainQueryParam extends QueryParam {
     public String toString() {
         return new ToStringBuilder(this).append(getQ()).append(punyName)
                 .toString();
+    }
+    
+    /**
+     * search by domain name, nsLdhName, nsIp.
+     */
+    private String searchByParam;
+
+    /**
+     * get method for SearchByParam.
+     * 
+     * @return String searchByParam.
+     */
+    public String getSearchByParam() {
+        return searchByParam;
+    }
+
+    /**
+     * set method for SearchByParam.
+     * 
+     *  @param searchByParam
+     *               searchByParam.
+     */
+    public void setSearchByParam(String searchByParam) {
+        this.searchByParam = searchByParam;
     }
     
 }

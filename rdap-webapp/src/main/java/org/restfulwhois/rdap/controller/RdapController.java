@@ -37,6 +37,8 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bean.Autnum;
 import org.restfulwhois.rdap.bean.Domain;
 import org.restfulwhois.rdap.bean.DomainSearch;
+import org.restfulwhois.rdap.bean.DomainSearchParam;
+import org.restfulwhois.rdap.bean.DomainSearchType;
 import org.restfulwhois.rdap.bean.Entity;
 import org.restfulwhois.rdap.bean.EntitySearch;
 import org.restfulwhois.rdap.bean.Help;
@@ -504,8 +506,10 @@ public class RdapController {
 
     /**
      * <pre>
-     * search domain by domain name.
-     * URI:/domains?name={domain name}
+     * search domain by domain name, nsLdhName or nsIp.
+     * URI:/domains?name={domain name} 
+     * or /domains?nsLdhName={nsLdhName}
+     * or /domains?nsIp={nsIp}
      * 
      * This service is under permission control, @see AccessControlManager.
      * This service is under policy control, @see PolicyControlService.
@@ -535,32 +539,91 @@ public class RdapController {
         if (!"domains".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
         }
-        name = queryParser.getParameter(request, "name");
-        String decodeDomain = name;
-
-        try {
-            decodeDomain = DomainUtil.iso8859Decode(name);
-            decodeDomain =
-                    DomainUtil
-                            .urlDecodeAndReplaceAsciiToLowercase(decodeDomain);
-        } catch (Exception e) {
+        String decodeDomain = "";
+        final String[] strParamOrg = {DomainSearchType.NAME.value(), 
+            DomainSearchType.NSLDHNAME.value(), DomainSearchType.NSIP.value() };
+        String nameParam = queryParser.getFirstParameter(request, strParamOrg);
+        DomainSearchParam domainSearchParam;
+        if (StringUtils.isBlank(nameParam)) {
             return RestResponseUtil.createResponse400();
         }
-        if (StringUtils.isBlank(decodeDomain)) {
-            return RestResponseUtil.createResponse400();
-        }
-        if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
-            return RestResponseUtil.createResponse422();
-        }
-        if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
-            return RestResponseUtil.createResponse400();
-        }
-
-        decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
-        decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
+        
+        if (0 == nameParam.compareTo(DomainSearchType.NAME.value())) {
+            // search by domain name
+            name = queryParser.getParameter(request, 
+                      DomainSearchType.NAME.value());
+            decodeDomain = name;
+            try {
+                decodeDomain = DomainUtil.iso8859Decode(name);
+                decodeDomain = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeDomain);
+            } catch (Exception e) {
+                return RestResponseUtil.createResponse400();
+            }
+            if (StringUtils.isBlank(decodeDomain)) {
+                return RestResponseUtil.createResponse400();
+            }
+            if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
+                return RestResponseUtil.createResponse422();
+            }
+            if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
+                return RestResponseUtil.createResponse400();
+            }
+            decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
+            decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
+            domainSearchParam = (DomainSearchParam) queryParser.
+                  parseDomainSearchParam(decodeDomain, decodeDomain);
+            //set search by domain name
+            domainSearchParam.setSearchByParam(DomainSearchType.NAME.value());
+            } else if (0 == nameParam.compareTo(
+                    DomainSearchType.NSLDHNAME.value())) {
+            // search by nsLdhName
+            name = queryParser.getParameter(request, 
+                    DomainSearchType.NSLDHNAME.value());
+            // search by name
+            String decodeNameserver = name;
+            try {
+                decodeNameserver = DomainUtil.iso8859Decode(name);
+                decodeNameserver = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
+            } catch (Exception e) {
+                return RestResponseUtil.createResponse400();
+            }
+            if (StringUtils.isBlank(decodeNameserver)) {
+                return RestResponseUtil.createResponse400();
+            }
+            if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
+                return RestResponseUtil.createResponse422();
+            }
+            if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
+                return RestResponseUtil.createResponse400();
+            }
+            decodeNameserver =
+                    StringUtil.foldCaseAndNormalization(decodeNameserver);
+            decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
+            domainSearchParam = (DomainSearchParam) queryParser.
+                  parseDomainSearchParam(decodeNameserver, decodeNameserver);
+            //set search by strNsLdhName
+            domainSearchParam.setSearchByParam(
+                         DomainSearchType.NSLDHNAME.value());
+           
+        } else if (0 == nameParam.compareTo(DomainSearchType.NSIP.value())) {
+            // search by nsIp
+            name = queryParser.getParameter(request, 
+                         DomainSearchType.NSIP.value());
+            // checkIP
+            if (StringUtils.isBlank(name) || !IpUtil.isIpV4StrWholeValid(name)
+                    && !IpUtil.isIpV6StrValid(name)) {
+                return RestResponseUtil.createResponse400();
+            }
+            name = StringUtils.lowerCase(name);
+            domainSearchParam = (DomainSearchParam) 
+                   queryParser.parseDomainSearchParam(name, name);
+            //set search by strNsLdhName
+            domainSearchParam.setSearchByParam(DomainSearchType.NSIP.value());
+            } else {
+               return RestResponseUtil.createResponse400();
+            }
         DomainSearch domainSearch =
-                searchService.searchDomain(queryParser.parseDomainQueryParam(
-                        decodeDomain, decodeDomain));
+                searchService.searchDomain(domainSearchParam);
         if (null != domainSearch) {
             if (domainSearch.getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
@@ -568,6 +631,7 @@ public class RdapController {
             responseDecorator.decorateResponse(domainSearch);
             return RestResponseUtil.createResponse200(domainSearch);
         }
+        
         return RestResponseUtil.createResponse404();
     }
 
@@ -683,8 +747,7 @@ public class RdapController {
         final String strIp = "ip";
         final String strName = "name";
         NameserverQueryParam nsQueryParam = null;
-        final String[] strParamOrg = {
-                strIp, strName };
+        final String[] strParamOrg = {strIp, strName};
         String nameParam = queryParser.getFirstParameter(request, strParamOrg);
         if (StringUtils.isBlank(nameParam)) {
             return RestResponseUtil.createResponse400();
@@ -710,8 +773,7 @@ public class RdapController {
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
                 decodeNameserver =
-                        DomainUtil
-                                .urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
+             DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }

@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,35 +28,50 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.service;
-
-import org.restfulwhois.rdap.bean.BaseModel;
+package org.restfulwhois.rdap.bean;
 
 /**
- * Access Control Manager.
+ * search type enum.
  * 
- * According to Access Control List
- * 
- * @author jiashuo
- * 
+ *  @return by name, nsLdhName, nsIP.
  */
-public interface AccessControlManager {
+public enum DomainSearchType {
+
     /**
-     * check if current request user has permission for model object.
-     * 
-     * @param object
-     *            secure object.
-     * @return true if has permission,false if not.
+     * name type.
      */
-    boolean hasPermission(BaseModel object);
-    
+     NAME("name"),
     /**
-     * check if current request user has permission for search  inner object.
-     *   delete the inner object if not 
-     * @param object
-     *            secure object.
-     * 
+     * nsLdhName type.
      */
-    
-    void innerObjectHasPermission(final BaseModel object);
+     NSLDHNAME("nsLdhName"),
+    /**
+     * nsIp type.
+     */
+     NSIP("nsIp");
+
+    /**
+     * name of model type.
+     */
+     private String name;
+
+    /**
+     * constructor.
+     * 
+     * @param name
+     *            name.
+     */
+     private DomainSearchType(String name) {
+         this.name = name;
+     }
+     
+     /**
+      * value of model type.
+      * @return name
+      */
+     public String value() {
+         return name;
+     }
+
+
 }
