@@ -124,6 +124,31 @@ public class RdapProperties {
      * list for not in tlds.
      */
     private static List<String> notInTldList;
+    /**
+     * access control for inner object for search.
+     */
+    private static boolean accessControlForInnerObjectForSearch;
+    
+    /**
+     * get accessControlForInnerObjectForSearch.
+     * 
+     * @return accessControlForInnerObjectForSearch.
+     */
+    public static boolean getAccessControlForInnerObjectForSearch() {
+         return accessControlForInnerObjectForSearch;
+    }
+    
+    /**
+     * set accessControlForInnerObjectForSearch.
+     * 
+     * @param accessControlForInnerObjectForSearch
+     *            accessControlForInnerObjectForSearch.
+     */
+    public static void setAccessControlForInnerObjectForSearch(
+           boolean accessControlForInnerObjectForSearch) {
+        RdapProperties.accessControlForInnerObjectForSearch = 
+                   accessControlForInnerObjectForSearch;
+    }
 
     /**
      * clear 'in' and 'not in' tlds in memory,used for reload tlds.

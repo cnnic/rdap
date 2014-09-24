@@ -127,6 +127,7 @@ public class SearchServiceImpl implements SearchService {
             for (T object : objects) {
                 if (authedObjects.size() < RdapProperties.getMaxsizeSearch()
                         && accessControlManager.hasPermission(object)) {
+                    accessControlManager.innerObjectHasPermission(object);
                     authedObjects.add(object);
                 }
                 if (accessControlManager.hasPermission(object)) {
