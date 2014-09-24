@@ -141,8 +141,7 @@ public class AccessControlManagerImpl implements AccessControlManager {
                 if (value == null) {
                     continue;
                 }
-                if (value instanceof List && ((List<?>) value).size() > 0
-                      && isSecureObjectType(((List<?>) value).get(0))) {
+                if (value instanceof List) {
                     innerListHasPermission(value);
                     allField[i].set(object, value);                    
                 } 
@@ -166,15 +165,18 @@ public class AccessControlManagerImpl implements AccessControlManager {
      *            object .
      */
     private void innerListHasPermission(final Object object) {
-        Iterator<?> iter =  ((List<?>) object).iterator();
-        while (iter.hasNext()) {
-           Object valueIn = iter.next();
-           if (hasPermission((BaseModel) valueIn)) {
-              innerObjectHasPermission((BaseModel) valueIn);
-           } else {
-              iter.remove();
-           }
-        }      
+       if (((List<?>) object).size() > 0
+             && isSecureObjectType(((List<?>) object).get(0))) {
+          Iterator<?> iter =  ((List<?>) object).iterator();
+          while (iter.hasNext()) {
+             Object valueIn = iter.next();
+             if (hasPermission((BaseModel) valueIn)) {
+                 innerObjectHasPermission((BaseModel) valueIn);
+             } else {
+                 iter.remove();
+             }
+          }
+       }          
     }
     
     /**
