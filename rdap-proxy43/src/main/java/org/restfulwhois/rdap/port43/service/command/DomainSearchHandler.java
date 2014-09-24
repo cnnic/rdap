@@ -37,6 +37,9 @@ import java.util.List;
  * 
  * <pre>
  * whois domains cnnic*.cn
+ * whois domains nsLdhName=ns.cnnic*.cn
+ * whois domains nsIp=218.241.111.96
+ * 
  * </pre>
  * 
  * @author jiashuo
@@ -51,10 +54,32 @@ public class DomainSearchHandler extends QueryHandler {
 
     @Override
     protected String getRelativeRequestURI(Command command) {
-        List<String> argumntList = command.getArgumentList();
-        throwExceptionIfArguementIsEmpty(argumntList);
-        String argument = argumntList.get(0);
-        return "domains?name=" + urlEncode(argument);
+        List<String> argumentList = command.getArgumentList();
+        throwExceptionIfArguementIsEmpty(argumentList);
+        String uri = "domains?";
+        String OPTION_NAME =
+                CommandOption.DOMAIN_SEARCH_BY_NAME.getOption();
+        String OPTION_NSLDHNAME =
+                CommandOption.DOMAIN_SEARCH_BY_NSLDHNAME.getOption();
+        String OPTION_NSIP = CommandOption.DOMAIN_SEARCH_BY_NSIP.getOption();
+        if (isPrefixedArgument(argumentList.get(0), OPTION_NSLDHNAME + PARAM_SEPARATOR)) {
+            // search by nsLdhName.
+        	String argumentWithoutPrefix =
+                    removePrefix(argumentList.get(0), OPTION_NSLDHNAME);
+            argumentWithoutPrefix = urlEncode(argumentWithoutPrefix);
+            uri = uri + OPTION_NSLDHNAME + "=" + argumentWithoutPrefix;
+            System.out.println(uri);
+        } else if (isPrefixedArgument(argumentList.get(0), OPTION_NSIP + PARAM_SEPARATOR)) {
+        	// search by nsIp.
+            String argumentWithoutPrefix =
+                    removePrefix(argumentList.get(0), OPTION_NSIP);
+            argumentWithoutPrefix = urlEncode(argumentWithoutPrefix);
+            uri = uri + OPTION_NSIP + "=" + argumentWithoutPrefix;
+        } else {
+        	// search by name.
+        	uri = uri + OPTION_NAME + "=" + urlEncode(argumentList.get(0));
+        }
+        return uri;
     }
 
 }

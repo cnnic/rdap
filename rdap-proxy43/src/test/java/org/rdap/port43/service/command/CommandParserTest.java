@@ -38,13 +38,27 @@ public class CommandParserTest {
     }
 
     @Test
-    public void testParse_domain_search() {
+    public void testParse_domain_searchByName() {
         Command command = CommandParser.parse("domains cnnic.cn");
         assertNotNull(command);
         assertEquals(CommandOption.DOMAIN_SEARCH, command.getCommandType());
         assertNotNull(command.getArgumentList());
         assertTrue(command.getArgumentList().size() > 0);
         assertEquals("cnnic.cn", command.getArgumentList().get(0));
+    }
+    @Test
+    public void testParse_domain_searchByNsLdhName() {
+        Command command = CommandParser.parse("domains nsLdhName=1.in-addr.arpa");
+        assertNotNull(command);
+        assertEquals(CommandOption.DOMAIN_SEARCH, command.getCommandType());
+        assertNotNull(command.getArgumentList());
+    }
+    @Test
+    public void testParse_domain_searchByNsIp() {
+        Command command = CommandParser.parse("domains nsIp=218.241.111.96");
+        assertNotNull(command);
+        assertEquals(CommandOption.DOMAIN_SEARCH, command.getCommandType());
+        assertNotNull(command.getArgumentList());
     }
 
     @Test

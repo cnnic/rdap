@@ -57,7 +57,10 @@ public enum CommandOption {
     ENTITY_SEARCH_FN("fn", true, "search entity by name"),
     ENTITY_SEARCH_HANDLE("handle", true, "search entity by handle"),
     NAMESERVER_SEARCH_BY_IP("ip", true, "search nameserver by ip"),
-    NAMESERVER_SEARCH_BY_NAME("name", true, "search nameserver by name"), ;
+    NAMESERVER_SEARCH_BY_NAME("name", true, "search nameserver by name"),
+    DOMAIN_SEARCH_BY_NAME("name", true, "search domain by name"),
+    DOMAIN_SEARCH_BY_NSLDHNAME("nsLdhName", true, "search domain by nsLdhName"),
+    DOMAIN_SEARCH_BY_NSIP("nsIp", true, "search nameserver by ip");
 
     /**
      * all options that are not with args.This is used to parse query type.
