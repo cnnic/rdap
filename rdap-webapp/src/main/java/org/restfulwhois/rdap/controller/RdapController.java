@@ -593,6 +593,9 @@ public class RdapController {
             if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
                 return RestResponseUtil.createResponse422();
             }
+            if (DomainUtil.isLdh(decodeNameserver)) {
+                return RestResponseUtil.createResponse400();
+            }
             if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
                 return RestResponseUtil.createResponse400();
             }

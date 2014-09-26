@@ -445,7 +445,7 @@ public final class DomainUtil {
      *            domain name.
      * @return true if is,false if not.
      */
-    private static boolean isLdh(String domain) {
+    public static boolean isLdh(String domain) {
         if (StringUtils.isBlank(domain)) {
             return false;
         }
