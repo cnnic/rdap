@@ -176,7 +176,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     }
 
     
-    /** search domain by nsIp */
+    /** search domain */
     private void searchDomain(String strObject, String domainName) throws Exception {
     mockMvc.perform(
             get(DOMAIN_SEARCH_URI+ strObject).accept(
@@ -246,10 +246,9 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                 get(DOMAIN_SEARCH_URI+"?nsIp=::ffff:ffff:ffff:fffe").accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.resultsTruncated").value(true))
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
-                .andExpect(jsonPath("$.domainSearchResults", hasSize((int) 5l)))
+                .andExpect(jsonPath("$.domainSearchResults", hasSize(2)))
                 .andExpect(jsonPath("$.domainSearchResults",Matchers.hasItem(Matchers.hasKey("handle"))));;
     }
 
