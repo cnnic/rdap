@@ -124,16 +124,16 @@ public class AccessControlManagerImplTest extends BaseTest {
                   queryService.queryDomain(queryParser.parseDomainQueryParam(
                           domainName, domainName)); 
           assertNotNull(domain.getNetwork());
-          assertNotNull(domain.getnameServers()); 
-          Nameserver ns = domain.getnameServers().get(0);
-          assertEquals(2L, domain.getnameServers().size());
+          assertNotNull(domain.getNameservers()); 
+          Nameserver ns = domain.getNameservers().get(0);
+          assertEquals(2L, domain.getNameservers().size());
           assertNotNull(domain.getEntities()); 
           assertEquals(1L, domain.getEntities().size()); 
           Entity entity = domain.getEntities().get(0);
           accessControlManager.innerObjectHasPermission(domain);
           assertNotNull(domain.getNetwork());
-          assertNotNull(domain.getnameServers()); 
-          assertEquals(2L, domain.getnameServers().size());
+          assertNotNull(domain.getNameservers()); 
+          assertEquals(2L, domain.getNameservers().size());
           assertNotNull(domain.getEntities()); 
           assertEquals(1L, domain.getEntities().size());
           //set needCheckAccess true
@@ -141,8 +141,8 @@ public class AccessControlManagerImplTest extends BaseTest {
                "accessControlForInnerObjectForSearch", true);
           accessControlManager.innerObjectHasPermission(domain);
           assertNull(domain.getNetwork());    
-          assertEquals(1L, domain.getnameServers().size()); 
-          assertFalse(domain.getnameServers().contains(ns));
+          assertEquals(1L, domain.getNameservers().size()); 
+          assertFalse(domain.getNameservers().contains(ns));
           assertEquals(0L, domain.getEntities().size());  
           assertFalse(domain.getEntities().contains(entity));
           assertNull(domain.getNetwork());  

@@ -73,7 +73,15 @@
 	<RDAP_DOMAIN DOMAIN_ID='2' HANDLE='2'
 		LDH_NAME='xn--xkry9kk1bz66a.xn--fiqs8s' UNICODE_NAME='清华大学.中国' PORT43='port43'
 		LANG='zh' />
-	
+	<!-- nameserver -->
+	<RDAP_NAMESERVER NAMESERVER_ID='1' HANDLE='111' LDH_NAME='ns.cnnic1.cn'
+        UNICODE_NAME='ns.cnnic1.cn' PORT43='port43' LANG='en' />
+    <RDAP_NAMESERVER NAMESERVER_ID='2' HANDLE='112' LDH_NAME='ns.cnnic2.cn'
+        UNICODE_NAME='ns.cnnic2.cn' PORT43='port43' LANG='en' />
+    <REL_DOMAIN_NAMESERVER REL_DOMAIN_NS_ID='111' DOMAIN_ID='1' NAMESERVER_ID='1'
+        DOMAIN_TYPE='domain'/>
+    <REL_DOMAIN_NAMESERVER REL_DOMAIN_NS_ID='112' DOMAIN_ID='1' NAMESERVER_ID='2'
+        DOMAIN_TYPE='domain'/>
 	<!-- ARPA -->
     <RDAP_ARPA ARPA_ID='2' HANDLE='2'
         ARPA_NAME='1.0.0.in-addr.arpa' PORT43='port43' LANG='zh' 
