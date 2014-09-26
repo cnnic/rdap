@@ -764,27 +764,25 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
        final String punyName = domainQueryParam.getPunyName();
        final String domainNameLikeClause = super.generateLikeClause(domainName);
        final String punyNameLikeClause = super.generateLikeClause(punyName);
-       final String sql = "select count(0) as COUNT from  (SELECT t1.* from " 
+       final String sql = "select count(0) as COUNT from  (SELECT distinct t1.* from " 
         + "RDAP_DOMAIN t1 inner join REL_DOMAIN_NAMESERVER t2 " 
         + "on t1.DOMAIN_ID = t2.DOMAIN_ID inner join RDAP_NAMESERVER "
         + "t3 on t2.NAMESERVER_ID = t3.NAMESERVER_ID "
         + "where t2.DOMAIN_TYPE='domain' and t3.LDH_NAME like ? " 
-        + "or t3.UNICODE_NAME  like ? union all "
-        + "select t1.ARPA_ID as DOMAIN_ID, t1.HANDLE, t1.ARPA_NAME as LDH_NAME,"
-        + " '' as UNICODE_NAME, t1.PORT43, " 
+        + "union all "
+        + "select distinct t1.ARPA_ID as DOMAIN_ID, t1.HANDLE, t1.ARPA_NAME as LDH_NAME,"
+        + " '' AS UNICODE_NAME, t1.PORT43, " 
         + "t1.LANG from RDAP_ARPA t1 inner join REL_DOMAIN_NAMESERVER t2 on "
         + "t1.ARPA_ID = t2.DOMAIN_ID inner join RDAP_NAMESERVER t3 "
         + "on t2.NAMESERVER_ID = t3.NAMESERVER_ID where t2.DOMAIN_TYPE='arpa' "
-        + "and t3.LDH_NAME like ? or t3.UNICODE_NAME like ?) T";
+        + "and t3.LDH_NAME like ? ) T";
         Long domainCount = jdbcTemplate.query(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql);
                 ps.setString(1, punyNameLikeClause);
-                ps.setString(2, domainNameLikeClause);
-                ps.setString(3, punyNameLikeClause);
-                ps.setString(4, domainNameLikeClause);
+                ps.setString(2, punyNameLikeClause);
                 return ps;
             }
         }, new CountResultSetExtractor());
@@ -814,17 +812,17 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         }
         final BigDecimal ipHigh = arrayIp[0];
         final BigDecimal ipLow = ipLowTmp;
-        final String strHead = "select count(0) as COUNT from (select t1.* "
-         + "from  RDAP_DOMAIN t1 "
+        final String strHead = "select count(0) as COUNT from (select "
+         + "distinct t1.* from  RDAP_DOMAIN t1 "
          + "inner join REL_DOMAIN_NAMESERVER t2 on t1.DOMAIN_ID = t2.DOMAIN_ID "
          + "inner join RDAP_NAMESERVER_IP t3 on "
          + "t2.NAMESERVER_ID = t3.NAMESERVER_ID where t3.IP_LOW = ? && ";
-        String arpaSql = "UNION ALL SELECT t1.ARPA_ID AS DOMAIN_ID, t1.HANDLE, "
-            + "t1.ARPA_NAME AS LDH_NAME, '' AS UNICODE_NAME, t1.PORT43, "
-            + "t1.LANG FROM RDAP_ARPA t1 INNER JOIN "
-            + "REL_DOMAIN_NAMESERVER t2 ON t1.ARPA_ID = t2.DOMAIN_ID "
-            + "INNER JOIN RDAP_NAMESERVER_IP t3 "
-            + "ON t2.NAMESERVER_ID = t3.NAMESERVER_ID where t3.IP_LOW = ? && ";
+        String arpaSql = "UNION ALL SELECT distinct t1.ARPA_ID AS DOMAIN_ID,  "
+         + "t1.HANDLE,t1.ARPA_NAME AS LDH_NAME, '' AS UNICODE_NAME, t1.PORT43, "
+         + "t1.LANG FROM RDAP_ARPA t1 INNER JOIN "
+         + "REL_DOMAIN_NAMESERVER t2 ON t1.ARPA_ID = t2.DOMAIN_ID "
+         + "INNER JOIN RDAP_NAMESERVER_IP t3 "
+         + "ON t2.NAMESERVER_ID = t3.NAMESERVER_ID where t3.IP_LOW = ? && ";
         String tmpSql = "t3.IP_HIGH = ?";
         if (ipHigh.doubleValue() == 0.0) {
             tmpSql = "(t3.IP_HIGH = ? or t3.IP_HIGH is null)";
@@ -896,20 +894,19 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
       final String punyName = domainQueryParam.getPunyName();
       final String nsNameLikeClause = super.generateLikeClause(nsName);
       final String punyNameLikeClause = super.generateLikeClause(punyName);
-      final String sql = "select t1.* from  RDAP_DOMAIN t1 inner join "
+      final String sql = "select distinct t1.* from  RDAP_DOMAIN t1 inner join "
             + "REL_DOMAIN_NAMESERVER t2 on t1.DOMAIN_ID = t2.DOMAIN_ID "
             + "inner join RDAP_NAMESERVER t3 on  "
             + "t2.NAMESERVER_ID = t3.NAMESERVER_ID "
             + "where t2.DOMAIN_TYPE='domain' and t3.LDH_NAME LIKE ? "
-            + "or t3.UNICODE_NAME like ? union all "
-            + "select t1.ARPA_ID as DOMAIN_ID, t1.HANDLE, "
-            + "t1.ARPA_NAME as LDH_NAME, '' as UNICODE_NAME, t1.PORT43, "
+            + "union all "
+            + "select distinct t1.ARPA_ID as DOMAIN_ID, t1.HANDLE, "
+            + "t1.ARPA_NAME as LDH_NAME, '' AS UNICODE_NAME, t1.PORT43, "
             + "t1.LANG from  RDAP_ARPA t1 inner join REL_DOMAIN_NAMESERVER t2 "
             + "on t1.ARPA_ID = t2.DOMAIN_ID inner join RDAP_NAMESERVER t3 "
             + "on t2.NAMESERVER_ID = t3.NAMESERVER_ID where "
             + "t2.DOMAIN_TYPE='arpa' and t3.LDH_NAME "
-            + "LIKE ? or t3.UNICODE_NAME like ? "
-            + "order by LDH_NAME limit ?,? ";
+            + "LIKE ? order by LDH_NAME limit ?,? ";
         final PageBean page = params.getPageBean();
         int startPage = page.getCurrentPage() - 1;
         startPage = startPage >= 0 ? startPage : 0;
@@ -921,11 +918,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setString(1, punyNameLikeClause);
-                        ps.setString(2, nsNameLikeClause);
-                        ps.setString(3, punyNameLikeClause);
-                        ps.setString(4, nsNameLikeClause);
-                        ps.setLong(5, startRow);
-                        ps.setLong(6, page.getMaxRecords());
+                        ps.setString(2, punyNameLikeClause);
+                        ps.setLong(3, startRow);
+                        ps.setLong(4, page.getMaxRecords());
                         return ps;
                     }
                 }, new DomainResultSetExtractor());
@@ -955,14 +950,14 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         }
         final BigDecimal ipHigh = arrayIp[0];
         final BigDecimal ipLow = ipLowTmp;
-        final String strHead = "SELECT t1.* FROM  RDAP_DOMAIN t1 "
+        final String strHead = "SELECT distinct t1.* FROM  RDAP_DOMAIN t1 "
                + "INNER JOIN REL_DOMAIN_NAMESERVER t2 "
                + "ON t1.DOMAIN_ID = t2.DOMAIN_ID INNER JOIN "
                + "RDAP_NAMESERVER_IP t3 ON t2.NAMESERVER_ID = t3.NAMESERVER_ID "
                + "where ";
-        String arpaSql = "UNION ALL SELECT t1.ARPA_ID AS DOMAIN_ID, t1.HANDLE, "
-                + "t1.ARPA_NAME AS LDH_NAME, '' AS UNICODE_NAME, t1.PORT43, "
-                + "t1.LANG FROM RDAP_ARPA t1 INNER JOIN "
+        String arpaSql = "UNION ALL SELECT distinct t1.ARPA_ID AS DOMAIN_ID, "
+                + "t1.HANDLE, t1.ARPA_NAME AS LDH_NAME, '' AS UNICODE_NAME, "
+                + "t1.PORT43, t1.LANG FROM RDAP_ARPA t1 INNER JOIN "
                 + "REL_DOMAIN_NAMESERVER t2 ON t1.ARPA_ID = t2.DOMAIN_ID "
                 + "INNER JOIN RDAP_NAMESERVER_IP t3 "
                 + "ON t2.NAMESERVER_ID = t3.NAMESERVER_ID where ";
