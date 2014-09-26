@@ -55,11 +55,18 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public final class ConnectionControlService {
+
     /**
-     * min access interval in seconds.
+     * min access interval in seconds, for logined user.
      */
-    private static final Long MIN_SECONDS_ACCESS_INTERVAL = RdapProperties
-            .getMinSecondsAccessIntervalAnonymous();
+    private static final Long MIN_SECONDS_ACCESS_INTERVAL_AUTHED =
+            RdapProperties.getMinSecondsAccessIntervalAuthed();
+
+    /**
+     * min access interval in seconds, for anonymous user.
+     */
+    private static final Long MIN_SECONDS_ACCESS_INTERVAL_FOR_ANONYMOUS =
+            RdapProperties.getMinSecondsAccessIntervalAnonymous();
 
     /**
      * ip white list for access interval.
@@ -121,21 +128,21 @@ public final class ConnectionControlService {
         long accessTimeInterval = currentTimeMillis - lastAccessTime;
         if (PrincipalHolder.getPrincipal().isAnonymous()) {
             LOGGER.debug("check exceedRateLimit, is anonymous.");
-            return accessTimeInterval <= MIN_SECONDS_ACCESS_INTERVAL;
+            return accessTimeInterval <= MIN_SECONDS_ACCESS_INTERVAL_FOR_ANONYMOUS;
         } else {
             LOGGER.debug("check exceedRateLimit, is logined user.");
-            return accessTimeInterval <= RdapProperties
-                    .getMinSecondsAccessIntervalAuthed();
+            return accessTimeInterval <= MIN_SECONDS_ACCESS_INTERVAL_AUTHED;
         }
     }
 
     /**
-     * check if has limit. MIN_SECONDS_ACCESS_INTERVAL >0 is has limit.
+     * check if has limit.
      * 
-     * @return true if has limit, false if not.
+     * @return true if one or more intervals > 0, false if all intervals <= 0.
      */
     private static boolean hasLimit() {
-        return MIN_SECONDS_ACCESS_INTERVAL > 0;
+        return MIN_SECONDS_ACCESS_INTERVAL_FOR_ANONYMOUS > 0
+                || MIN_SECONDS_ACCESS_INTERVAL_AUTHED > 0;
     }
 
     /**
@@ -163,10 +170,13 @@ public final class ConnectionControlService {
         if (null == CLIENT_IP2LAST_ACCESS_TIME_MAP) {
             return;
         }
+        long maxSecondsInterval =
+                Math.max(MIN_SECONDS_ACCESS_INTERVAL_FOR_ANONYMOUS,
+                        MIN_SECONDS_ACCESS_INTERVAL_AUTHED);
         Set<String> keys = CLIENT_IP2LAST_ACCESS_TIME_MAP.keySet();
         for (String key : keys) {
             if ((System.currentTimeMillis() - CLIENT_IP2LAST_ACCESS_TIME_MAP
-                    .get(key)) >= MIN_SECONDS_ACCESS_INTERVAL) {
+                    .get(key)) >= maxSecondsInterval) {
                 LOGGER.trace("remove ip:{}", key);
                 CLIENT_IP2LAST_ACCESS_TIME_MAP.remove(key);
             }
