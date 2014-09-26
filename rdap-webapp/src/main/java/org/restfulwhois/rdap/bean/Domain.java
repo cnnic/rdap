@@ -46,7 +46,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * 
  */
 @JsonPropertyOrder({ "rdapConformance", "notices","objectClassName", "handle", "ldhName",
-        "unicodeName", "variants", "nameServers", "secureDNS", "entities",
+        "unicodeName", "variants", "nameservers", "secureDNS", "entities",
         "status", "publicIds", "remarks", "links", "port43", "events",
         "network", "lang" })
 public class Domain extends BaseModel {
@@ -71,9 +71,9 @@ public class Domain extends BaseModel {
     private List<Variants> variants;
 
     /**
-     * list of nameServers.
+     * list of nameservers.
      */
-    private List<Nameserver> nameServers;
+    private List<Nameserver> nameservers;
 
     /**
      * secureDNS.
@@ -220,22 +220,22 @@ public class Domain extends BaseModel {
     }
 
     /**
-     * get nameServers.
+     * get nameservers.
      * 
-     * @return nameServers.
+     * @return nameservers.
      */
-    public List<Nameserver> getnameServers() {
-        return nameServers;
+    public List<Nameserver> getNameservers() {
+        return nameservers;
     }
 
     /**
-     * set nameServers.
+     * set nameservers.
      * 
-     * @param nameServers
-     *            nameServers.
+     * @param nameservers
+     *            nameservers.
      */
-    public void setNameServers(List<Nameserver> nameServers) {
-        this.nameServers = nameServers;
+    public void setNameservers(List<Nameserver> nameservers) {
+        this.nameservers = nameservers;
     }
 
     /**

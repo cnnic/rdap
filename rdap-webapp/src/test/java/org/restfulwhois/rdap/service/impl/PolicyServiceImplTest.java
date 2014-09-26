@@ -186,7 +186,7 @@ public class PolicyServiceImplTest extends BaseTest {
 	 */
 	private void applyPolicySingleWrapDomain(Domain domain) {
 		policyService.applyPolicy(domain);
-		assertEquals(domain.getnameServers(), null);
+		assertEquals(domain.getNameservers(), null);
 		assertEquals(domain.getVariants(), null);
 		assertEquals(domain.getSecureDns(), null);
 		assertEquals(domain.getPublicIds(), null);
@@ -245,7 +245,7 @@ public class PolicyServiceImplTest extends BaseTest {
 		// ns
 		List<Nameserver> nameServers = new ArrayList<Nameserver>();
 		nameServers.add(ns);
-		domain.setNameServers(nameServers);
+		domain.setNameservers(nameServers);
 		// variant
 		List<Variants> variants = new ArrayList<Variants>();
 		Variants variantsOne = new Variants();

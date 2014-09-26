@@ -348,7 +348,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         ModelType type = domain.getDomainType();
         List<Nameserver> nameServers = nameserverQueryDao.queryAsInnerObjects(
                 domainId, type);
-        domain.setNameServers(nameServers);
+        domain.setNameservers(nameServers);
         List<SecureDns> secureDnsList = secureDnsQueryDao.queryAsInnerObjects(
                 domainId, type);
         if (null != secureDnsList && secureDnsList.size() > 0) {
