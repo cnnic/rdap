@@ -527,4 +527,56 @@ public final class DomainUtil {
         }
         return isASCII;
     }
+    
+    /**
+     * validate domain search string represent a valid IDNA domain.
+     * 
+     * @param searchString
+     *            domain or name server string.
+     * @return true if is valid IDNA2008 domain, false if not.
+     */
+    public static boolean validateSearchLdnName(String searchString) {
+
+        // searchString should not be null or empty
+        if (StringUtils.isBlank(searchString)) {
+            return false;
+        }
+        // should NOT contains 0x0020
+        if (searchString.contains(BLANK_IN_DOMAIN)) {
+            return false;
+        }
+        // only one * in search string
+        if (1 < StringUtils.countMatches(searchString, StringUtil.ASTERISK)) {
+            return false;
+        }
+        // '*' is replaced with no char
+        String domainName = searchString.replace(StringUtil.ASTERISK, "");
+        if (isLdh(domainName)) {
+            return true;
+        }
+        // '*' is replaced with dot
+        domainName =
+                searchString.replace(StringUtil.ASTERISK,
+                        StringUtil.TLD_SPLITOR);
+        if (isLdh(domainName)) {
+            return true;
+        }
+        // '*' is replaced with a digit or an alphabet, like '1'
+        domainName = searchString.replace(StringUtil.ASTERISK, "1");
+        if (isLdh(domainName)) {
+            return true;
+        }
+        // '*' means '.' plus letter/digit
+        domainName = searchString.replace("*", ".1");
+        if (isLdh(domainName)) {
+            return true;
+        }
+        // '*' means [letter/digit][.][letter/digit]
+        domainName = searchString.replace("*", "1.1");
+        if (isLdh(domainName)) {
+            return true;
+        }
+        return false;
+    }
+    
 }
