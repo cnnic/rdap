@@ -514,4 +514,14 @@ public class DomainUtilTest {
         String result = DomainUtil.geneDomainPunyName("xn--fiq228c.xn--fiqs8s");
         assertEquals("xn--fiq228c.xn--fiqs8s", result);
     }
+    
+    /**
+     * test generate puny name for unicode domain.
+     * 
+     */
+    @Test
+    public void testIsLdh() {
+        boolean result = DomainUtil.isLdh("ns.ddomain.cn");
+        assertEquals(true, result);
+    }
 }

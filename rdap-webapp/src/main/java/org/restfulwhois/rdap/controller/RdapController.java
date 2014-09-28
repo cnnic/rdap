@@ -555,7 +555,8 @@ public class RdapController {
             decodeDomain = name;
             try {
                 decodeDomain = DomainUtil.iso8859Decode(name);
-                decodeDomain = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeDomain);
+                decodeDomain = DomainUtil.
+                    urlDecodeAndReplaceAsciiToLowercase(decodeDomain);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
@@ -583,7 +584,8 @@ public class RdapController {
             String decodeNameserver = name;
             try {
                 decodeNameserver = DomainUtil.iso8859Decode(name);
-                decodeNameserver = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
+                decodeNameserver = DomainUtil.
+                     urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
             } catch (Exception e) {
                 return RestResponseUtil.createResponse400();
             }
@@ -592,6 +594,9 @@ public class RdapController {
             }
             if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
                 return RestResponseUtil.createResponse422();
+            }
+            if (!DomainUtil.validateSearchLdnName(decodeNameserver)) {
+                return RestResponseUtil.createResponse400();
             }
             if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
                 return RestResponseUtil.createResponse400();
