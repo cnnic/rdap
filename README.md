@@ -25,11 +25,11 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 4. Get war file 'rdap.war'. 
 
    There are two methods to get war file
-   * Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-webapp/build/rdap.war) builded by JDK6.
+   * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK6.
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  Make a dir used to download source code and build, which is called 'WORK_DIR'
-      *  [Download source zip file](https://github.com/cnnic/rdap/archive/master.zip), unzip it to $WORK_DIR
+      *  [Download source zip file](https://github.com/cnnic/rdap/archive/dev.zip), unzip it to $WORK_DIR
       *  Build project:
 		```
 		[in Linux/OS X, open a shell and execute command:]
