@@ -45,7 +45,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * 
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonIgnoreProperties(value = { "id", "objectType" })
+@JsonIgnoreProperties(value = {
+        "id", "objectType" })
 public class BaseModel {
     /**
      * specifications used in the construction of the response.
@@ -99,12 +100,8 @@ public class BaseModel {
      * @return simple name of class
      */
     public ModelType getObjectType() {
-        try {
-            return ModelType.Base;
-        } catch (Exception e) {
-            throw new UnsupportedOperationException(
-                    "must be implemented in sub class if I'am called.");
-        }
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
     }
 
     /**

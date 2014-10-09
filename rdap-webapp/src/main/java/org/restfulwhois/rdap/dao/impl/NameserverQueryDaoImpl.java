@@ -118,18 +118,14 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * 
      * @param outerObjectId
      *            id from domain.
-     * 
-     * @param outerModelType
-     *            type of the object
-     * 
      * @return result for List<Nameserver>
      */
     private List<Nameserver> queryNameserverWithDomainID(
-            final Long outerObjectId, final ModelType outerModelType) {
+            final Long outerObjectId) {
         final String sql = "select * from RDAP_NAMESERVER ns inner join "
                 + "REL_DOMAIN_NAMESERVER rel on (ns.NAMESERVER_ID = "
-                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ? and rel.DOMAIN_TYPE"
-                + " = ? ) left outer join RDAP_NAMESERVER_STATUS status"
+                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ?) "
+                + " left outer join RDAP_NAMESERVER_STATUS status"
                 + " on ns.NAMESERVER_ID = status.NAMESERVER_ID";
 
         List<Nameserver> result = jdbcTemplate.query(
@@ -138,7 +134,6 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setLong(1, outerObjectId);
-                        ps.setString(2, outerModelType.getName());
                         return ps;
                     }
                 }, new NSResultSetExtractor());
@@ -153,7 +148,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     public List<Nameserver> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
         List<Nameserver> listNameserver = queryNameserverWithDomainID(
-                outerObjectId, outerModelType);
+                outerObjectId);
         if (listNameserver == null) {
             return null;
         }

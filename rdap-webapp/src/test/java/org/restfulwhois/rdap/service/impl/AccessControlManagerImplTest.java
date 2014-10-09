@@ -119,7 +119,7 @@ public class AccessControlManagerImplTest extends BaseTest {
         ReflectionTestUtils.setField(prop, 
               "accessControlForInnerObjectForSearch", false);
          String domainName = 
-     "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
+     "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
           Domain domain =
                   queryService.queryDomain(queryParser.parseDomainQueryParam(
                           domainName, domainName)); 
