@@ -1,0 +1,10 @@
+alter table RDAP_ARPA drop column HANDLE;
+alter table RDAP_ARPA drop column ARPA_NAME;
+alter table RDAP_ARPA drop column PORT43;
+alter table RDAP_ARPA drop column LANG;
+alter table REL_DOMAIN_NAMESERVER drop column DOMAIN_TYPE;
+alter table RDAP_SECUREDNS drop column DOMAIN_TYPE;
+alter table RDAP_DOMAIN add column TYPE varchar(10) default 'dnr';
+alter table RDAP_DOMAIN add column NETWORK_ID int(10);
+drop table RDAP_ARPA;
+drop table RDAP_ARPA_STATUS;

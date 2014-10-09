@@ -153,14 +153,13 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
     private List<SecureDns> queryWithoutInnerObjects(
             final Long outerObjectId, final ModelType type) {
         final String sql = "select * from RDAP_SECUREDNS where "
-                + " DOMAIN_ID=? and DOMAIN_TYPE = ? ";
+                + " DOMAIN_ID=? ";
         List<SecureDns> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setLong(1, outerObjectId);
-                        ps.setString(2, type.getName());
                         return ps;
                     }
                 }, new VariantsResultSetExtractor());
