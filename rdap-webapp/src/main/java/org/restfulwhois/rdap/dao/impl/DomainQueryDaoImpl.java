@@ -61,6 +61,7 @@ import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
 import org.restfulwhois.rdap.bean.SecureDns;
 import org.restfulwhois.rdap.bean.Variants;
+import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.dao.QueryDao;
@@ -361,6 +362,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 type);
         domain.setRemarks(remarks);
         List<Link> links = linkQueryDao.queryAsInnerObjects(domainId, type);
+        links.add(AutoGenerateSelfLink.generateSelfLink(domain));
         domain.setLinks(links);
         List<Event> events = eventQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEvents(events);

@@ -168,7 +168,16 @@ public class Entity extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.ENTITY;
     }
+    
+    @Override
+    public ModelType getUri() {
+        return ModelType.ENTITYURI;
+    }
 
+    @Override
+    public String generateLinkHref() {
+        return getUri().getName() + getHandle();
+    }
     /**
      * add a status string to status list.
      * 

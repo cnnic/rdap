@@ -59,9 +59,18 @@ public enum ModelType {
      */
     REMARK("remark"), NOTICE("notice"), SECUREDNS("secureDns"),
     /**
+     * 5 main object URI.
+     */
+    DOMAINURI("domain/"), ENTITYURI("entity/"), NAMESERVERURI("nameServer/"),
+    /**
+     * 5 main object URI.
+     */
+    AUTNUMURI("autnum/"), IPURI("ip/"), BASEURI("base/"),
+    /**
      * ds type.
      */
     DSDATA("dsData"), KEYDATA("keyData");
+    
     /**
      * name of model type.
      */

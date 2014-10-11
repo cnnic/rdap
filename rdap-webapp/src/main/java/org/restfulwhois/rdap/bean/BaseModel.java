@@ -106,7 +106,30 @@ public class BaseModel {
                     "must be implemented in sub class if I'am called.");
         }
     }
-
+    
+    /**
+     * get the uri of object.
+     * 
+     * @return simple name of class
+     */
+    public ModelType getUri() {
+        try {
+            return ModelType.BASEURI;
+        } catch (Exception e) {
+            throw new UnsupportedOperationException(
+                    "must be implemented in sub class if I'am called.");
+        }
+    }
+    
+    /**
+     * get the value of href in the link.
+     * 
+     * @return string
+     */
+    public String generateLinkHref() {
+       return getUri().getName() + getHandle();
+    }
+    
     /**
      * get identity of object.
      * 

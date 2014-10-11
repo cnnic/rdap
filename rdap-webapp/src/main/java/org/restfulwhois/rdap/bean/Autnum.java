@@ -96,6 +96,7 @@ public class Autnum extends BaseModel {
      * events.
      */
     private List<Event> events;
+    
     /**
      * the object class name of a particular object.
      */
@@ -105,7 +106,16 @@ public class Autnum extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.AUTNUM;
     }
+    
+    @Override
+    public ModelType getUri() {
+        return ModelType.AUTNUMURI;
+    }
 
+    @Override
+    public String generateLinkHref() {
+        return getUri().getName() + getStartAutnum();
+    }
     /**
      * add a status string to status list.
      * 
@@ -341,25 +351,25 @@ public class Autnum extends BaseModel {
      */
     public void setEvents(List<Event> events) {
         this.events = events;
-    }
-    
-    /**
+    }  
+
+   /**
      * get ObjectClassNameEnum.
      * 
      * @return objectClassName.
      */
-	public ObjectClassNameEnum getObjectClassName() {
-		return objectClassName;
-	}
-	
-	/**
+    public ObjectClassNameEnum getObjectClassName() {
+       return objectClassName;
+    }
+
+   /**
      * set ObjectClassNameEnum.
      * 
-     * @param objectClassNameEnum
+     * @param objectClassName
      *            objectClassName for set.
      */
-	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
-		this.objectClassName = objectClassName;
-	}
+    public void setObjectClassName(ObjectClassNameEnum objectClassName) {
+         this.objectClassName = objectClassName;
+    }
 
 }

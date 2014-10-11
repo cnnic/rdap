@@ -101,6 +101,15 @@ public class Nameserver extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.NAMESERVER;
     }
+    @Override
+    public ModelType getUri() {
+        return ModelType.NAMESERVERURI;
+    }
+
+    @Override
+    public String generateLinkHref() {
+        return getUri().getName() + getLdhName();
+    }
 
     /**
      * add a status string to status list.

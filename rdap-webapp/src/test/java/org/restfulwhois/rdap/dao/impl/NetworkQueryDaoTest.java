@@ -111,7 +111,7 @@ public class NetworkQueryDaoTest extends BaseTest {
         // links
         List<Link> networkLinks = network.getLinks();
         assertNotNull(networkLinks);
-        assertEquals(1, networkLinks.size());
+        assertEquals(2, networkLinks.size());
         Link networkLink = networkLinks.get(0);
         assertNotNull(networkLink);
         assertEquals("http://networklink", networkLink.getValue());
@@ -172,7 +172,7 @@ public class NetworkQueryDaoTest extends BaseTest {
         // links
         List<Link> networkLinks = network.getLinks();
         assertNotNull(networkLinks);
-        assertEquals(1, networkLinks.size());
+        assertEquals(2, networkLinks.size());
         Link networkLink = networkLinks.get(0);
         assertNotNull(networkLink);
         assertEquals("http://networklink", networkLink.getValue());

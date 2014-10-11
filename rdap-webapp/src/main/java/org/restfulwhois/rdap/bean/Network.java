@@ -105,6 +105,10 @@ public class Network extends BaseModel {
      */
     private List<Event> events;
     /**
+     * network name  cidr.
+     */
+    private String cidr;
+    /**
      * the object class name of a particular object.
      */
     private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.IP;
@@ -113,7 +117,16 @@ public class Network extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.IP;
     }
+    
+    @Override
+    public ModelType getUri() {
+        return ModelType.IPURI;
+    }
 
+    @Override
+    public String generateLinkHref() {
+        return getUri().getName() + getCidr();
+    }
     /**
      * add a status string to status list.
      * 
@@ -397,26 +410,45 @@ public class Network extends BaseModel {
      */
     public void setParentHandle(String parentHandle) {
         this.parentHandle = parentHandle;
-    }
+    }    
     
+    /**
+     * get cidr.
+     * 
+     * @return string cidr.
+     */
+    public String getCidr() {
+        return cidr;
+    }
+
+    /**
+     * set cidr.
+     * 
+     * @param cidr
+     *            cidr for set.
+     */
+    public void setCidr(String cidr) {
+         this.cidr = cidr;
+    }
+
     /**
      * get ObjectClassNameEnum.
      * 
      * @return objectClassName.
      */
-	public ObjectClassNameEnum getObjectClassName() {
-		return objectClassName;
-	}
-	
-	/**
+    public ObjectClassNameEnum getObjectClassName() {
+         return objectClassName;
+    }
+    
+    /**
      * set ObjectClassNameEnum.
      * 
-     * @param objectClassNameEnum
+     * @param objectClassName
      *            objectClassName for set.
      */
-	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
-		this.objectClassName = objectClassName;
-	}
+    public void setObjectClassName(ObjectClassNameEnum objectClassName) {
+         this.objectClassName = objectClassName;
+    }
 
     /**
      * ip version:v4,v6.

@@ -141,7 +141,7 @@ public class EntityQueryDaoTest extends BaseTest {
         // links
         List<Link> domainLinks = entity.getLinks();
         assertNotNull(domainLinks);
-        assertEquals(1, domainLinks.size());
+        assertEquals(2, domainLinks.size());
         Link domainLink = domainLinks.get(0);
         assertNotNull(domainLink);
         assertEquals("http://domainlink", domainLink.getValue());
