@@ -31,11 +31,8 @@
 package org.restfulwhois.rdap.common.util;
 
 import org.restfulwhois.rdap.bean.BaseModel;
-import org.restfulwhois.rdap.bean.Domain;
 import org.restfulwhois.rdap.bean.Link;
 import org.restfulwhois.rdap.common.RdapProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
  /**
  * Auto generate link property for object
