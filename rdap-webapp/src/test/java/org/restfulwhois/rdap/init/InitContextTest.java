@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.init;
 
-import org.restfulwhois.rdap.init.InitContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,7 +50,7 @@ public class InitContextTest {
 
         ApplicationContext ctx =
                 new ClassPathXmlApplicationContext(
-                        "classpath:init/spring-serviceContext-init.xml");
+                        "classpath:init/spring-serviceContext-init-loadData.xml");
         InitContext initContext = (InitContext) ctx.getBean("initContext");
         JdbcTemplate jdbcTemplate = (JdbcTemplate) ctx.getBean("jdbcTemplate");
         initContext.executeSqlScript(jdbcTemplate,

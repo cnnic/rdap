@@ -45,12 +45,11 @@ import org.restfulwhois.rdap.bean.Link;
 import org.restfulwhois.rdap.bean.ModelType;
 import org.restfulwhois.rdap.bean.Network;
 import org.restfulwhois.rdap.bean.Remark;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.controller.support.QueryParser;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -77,8 +76,8 @@ public class NetworkQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(value = "networkV4.xml")
     public void testQueryExistV4Network() {
+        super.databaseSetupWithBinaryColumns("networkV4.xml");
         Long entityId = 1L;
         List<Network> networks =
                 networkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
@@ -138,8 +137,8 @@ public class NetworkQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(value = "networkV6.xml")
     public void testQueryExistV6Network() {
+        super.databaseSetupWithBinaryColumns("networkV6.xml");
         Long entityId = 1L;
         List<Network> networks =
                 networkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
@@ -147,8 +146,8 @@ public class NetworkQueryDaoTest extends BaseTest {
         assertEquals(1, networks.size());
         Network network = networks.get(0);
         assertEquals("h1", network.getHandle());
-        assertEquals("0:0:0:0:2001:6a8:0:1", network.getStartAddress());
-        assertEquals("2001:db8:85a3:0:2001:6a8:0:2", network.getEndAddress());
+        assertEquals("::2001:6a8:0:0", network.getStartAddress());
+        assertEquals("::2001:6a8:0:ffff", network.getEndAddress());
         assertEquals(IpVersion.V6, network.getIpVersion());
         assertEquals("APNIC-1", network.getName());
         assertEquals("Allocated to APNIC", network.getType());
@@ -199,8 +198,8 @@ public class NetworkQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(value = "networkV6.xml")
     public void testQueryNotExistNetwork() {
+        super.databaseSetupWithBinaryColumns("networkV6.xml");
         final Long nonExistDomainId = 1000L;
         List<Network> networks =
                 networkQueryDao.queryAsInnerObjects(nonExistDomainId,

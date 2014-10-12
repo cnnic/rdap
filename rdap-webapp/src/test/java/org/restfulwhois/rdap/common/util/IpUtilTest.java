@@ -30,12 +30,16 @@
  */
 package org.restfulwhois.rdap.common.util;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-import java.math.BigDecimal;
+import javax.xml.bind.DatatypeConverter;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.common.util.IpUtil;
+import org.junit.internal.ArrayComparisonFailure;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
+
+import com.googlecode.ipv6.IPv6Address;
 
 /**
  * Test for IpUtil.
@@ -45,255 +49,291 @@ import org.restfulwhois.rdap.common.util.IpUtil;
  */
 @SuppressWarnings("rawtypes")
 public class IpUtilTest {
-    /**
-     * test longToIpV6.
-     * 
-     */
+    @Test
+    public void test_toByteArray_IPV4() {
+        String ip = "218.241.111.11";
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ip);
+        String hex =
+                DatatypeConverter.printHexBinary(IpUtil.ipToByteArray(ip,
+                        ipVersion));
+        System.err.println("0x" + hex);
+    }
+
+    @Test
+    public void test_toByteArray_IPV6() {
+        String ip = "::f:f:0.15.0.15";
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ip);
+        String hex =
+                DatatypeConverter.printHexBinary(IpUtil.ipToByteArray(ip,
+                        ipVersion));
+        System.err.println("0x" + hex);
+    }
+
+    @Test
+    public void test_generate_ARPA() {
+        // NetworkInBytes networkInBytes = IpUtil.parseArpa("f.f.ip6.arpa");
+        NetworkInBytes networkInBytes =
+                IpUtil.parseArpa("1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa");
+        String hex1 =
+                DatatypeConverter.printHexBinary(networkInBytes
+                        .getStartAddress());
+        System.err.println("0x" + hex1);
+        String hex2 =
+                DatatypeConverter
+                        .printHexBinary(networkInBytes.getEndAddress());
+        System.err.println("0x" + hex2);
+    }
+
+    @Test
+    public void test_ARPA_V4() {
+        NetworkInBytes networkInBytes = IpUtil.parseArpa("2.0.0.in-addr.arpa");
+        assertEquals(IpVersion.V4, networkInBytes.getIpVersion());
+        assertEquals("0.0.2.0", networkInBytes.getStartAddressAsString());
+        assertArrayEquals("", IpV4.toByteArray("0.0.2.0"),
+                networkInBytes.getStartAddress());
+        assertEquals("0.0.2.255", networkInBytes.getEndAddressAsString());
+        assertArrayEquals("", IpV4.toByteArray("0.0.2.255"),
+                networkInBytes.getEndAddress());
+    }
+
+    @Test
+    public void test_ARPA_V6() {
+        doTestArpaV6("F.0.0.0.1.ip6.arpa", "1000:f000::",
+                "1000:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        doTestArpaV6("F.0.0.0.ip6.arpa", "f::",
+                "f:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        doTestArpaV6("F.0.0.ip6.arpa", "f0::",
+                "ff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        doTestArpaV6("F.ip6.arpa", "f000::",
+                "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
+        doTestArpaV6(
+                "F.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa",
+                "::f0", "::ff");
+        doTestArpaV6(
+                "F.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.ip6.arpa",
+                "8000::f0", "8000::ff");
+    }
+
+    private void doTestArpaV6(String arpa, String expectedStartAddress,
+            String expectedEndAddress) throws ArrayComparisonFailure {
+        NetworkInBytes networkInBytes = IpUtil.parseArpa(arpa);
+        assertEquals(IpVersion.V6, networkInBytes.getIpVersion());
+        assertEquals(expectedStartAddress,
+                networkInBytes.getStartAddressAsString());
+        assertArrayEquals("", IpV6.toByteArray(expectedStartAddress),
+                networkInBytes.getStartAddress());
+        assertEquals(expectedEndAddress, networkInBytes.getEndAddressAsString());
+        assertArrayEquals("", IpV6.toByteArray(expectedEndAddress),
+                networkInBytes.getEndAddress());
+    }
+
     @Test
     public void testIpV6ToString() {
-        assertEquals("0:0:0:0:2001:6a8:0:1",
-                IpUtil.longToIpV6(0, 2306131802814676993L));
-        assertEquals("2001:db8:85a3:0:2001:6a8:0:2",
-                IpUtil.longToIpV6(2306139570357600256L, 2306131802814676994L));
-    	assertEquals("0:0:0:1:0:0:0:1", IpUtil.longToIpV6(1, 1));
-    	assertEquals("0:0:0:ffff:0:0:0:0", IpUtil.longToIpV6(0xFFFF, 0));
-    	assertEquals("1:1:1:ffff:1:1:1:0", IpUtil.longToIpV6(0x000100010001FFFFL, 0x0001000100010000L));
-    }
-
-    /**
-     * test longToIpV4.
-     * 
-     */
-    @Test
-    public void testLongToIpV4() {
-        assertEquals("1.0.0.0", IpUtil.longToIpV4(16777216));
-        assertEquals("1.255.255.255", IpUtil.longToIpV4(33554431));
-        long num = (0x100000000L);
-        assertEquals("", IpUtil.longToIpV4(num));
-        num = (0xffffffffL);
-        assertEquals("255.255.255.255", IpUtil.longToIpV4(num));
+        String ipPrefix = "0:0:0:0:2001:6a8:0:1";
+        // "2001:db8:85a3:0:2001:6a8:0:2"
+        // "1:1:1:ffff:1:1:1:0"
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ipPrefix);
+        assertEquals(IpVersion.V6, ipVersion);
+        byte[] bytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
+        String ipString = IpUtil.toString(bytes, ipVersion);
+        assertEquals("::2001:6a8:0:1", ipString);
     }
 
     @Test
-    public void testIsIpV6StrValidTrue() {
-        assertEquals(true, IpUtil.isIpV6StrValid("::"));
-        assertEquals(true,
-                IpUtil.isIpV6StrValid("2001:db8:85a3:0:2001:6a8:0:2"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::1"));
-        assertEquals(true, IpUtil.isIpV6StrValid("fe80::1"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::192.168.1.1"));
-        assertEquals(true, IpUtil.isIpV6StrValid("0:0:0:0:0:0:0:0"));
+    public void test_parse_IPV4() {
+        // assertEquals("1.255.255.255", IpUtil.longToIpV4(33554431));
+        // assertEquals("255.255.255.255", IpUtil.longToIpV4(num));
+        String ipPrefix = "1.0.0.0";
+        // ipPrefix = "1.255.255.255";
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ipPrefix);
+        assertEquals(IpVersion.V4, ipVersion);
+        byte[] bytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
+        String ipString = IpUtil.toString(bytes, ipVersion);
+        // assertEquals("1.255.255.255", ipString);
+        String hex1 = DatatypeConverter.printHexBinary(bytes);
+        System.err.println("0x" + hex1);
+    }
+
+    @Test
+    public void test_parse_network_V4() {
+        String network = "218.241.0.0/16";
+        IpVersion ipVersion = IpUtil.getIpVersionOfNetwork(network);
+        assertEquals(IpVersion.V4, ipVersion);
+        NetworkInBytes networkInBytes = IpUtil.parseNetwork(network, ipVersion);
+        String hex1 =
+                DatatypeConverter.printHexBinary(networkInBytes
+                        .getStartAddress());
+        System.err.println("0x" + hex1);
+        String hex2 =
+                DatatypeConverter
+                        .printHexBinary(networkInBytes.getEndAddress());
+        System.err.println("0x" + hex2);
+        assertEquals(IpVersion.V4, networkInBytes.getIpVersion());
+    }
+
+    public static void main(String[] args) {
+        IPv6Address ip = IPv6Address.fromString("1:1:1:1:1:1:1.0.0.0");
+        System.err.println(ip.isIPv4Mapped());
+    }
+
+    @Test
+    public void test_parse_network_V6() {
+        String network = "2014:2014:2014::/80";
+        IpVersion ipVersion = IpUtil.getIpVersionOfNetwork(network);
+        assertEquals(IpVersion.V6, ipVersion);
+        NetworkInBytes networkInBytes = IpUtil.parseNetwork(network, ipVersion);
+        String hex1 =
+                DatatypeConverter.printHexBinary(networkInBytes
+                        .getStartAddress());
+        System.err.println("0x" + hex1);
+        String hex2 =
+                DatatypeConverter
+                        .printHexBinary(networkInBytes.getEndAddress());
+        System.err.println("0x" + hex2);
+        assertEquals(IpVersion.V6, networkInBytes.getIpVersion());
+    }
+
+    @Test
+    public void testgetIpVersionOfIpTrue() {
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("2001:db8:85a3:0:2001:6a8:0:2"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::1"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("fe80::1"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::192.168.1.1"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("0:0:0:0:0:0:0:0"));
         assertEquals(
-                true,
-                IpUtil.isIpV6StrValid("ffff:FFFF:fffF:Ffff:fFFF:FFff:ffFF:FFFf"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1080::8:800:2C:4A"));
-        assertEquals(true, IpUtil.isIpV6StrValid("FEC0:0:0:0:0:0:0:1"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::FFFF:192.168.1.1"));
-        assertEquals(true, IpUtil.isIpV6StrValid("abcd:ef:111:f123::1"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1138:0:0:0:8:80:800:417A"));
-        assertEquals(true,
-                IpUtil.isIpV6StrValid("fecc:face::b00c:f001:fedc:fedd"));
-        assertEquals(true,
-                IpUtil.isIpV6StrValid("CaFe:BaBe:dEAd:BeeF:12:345:6789:abcd"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::1:a:B:C:d:e:f"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1::a:B:C:d:e:f"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1:a::B:C:d:e:f"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B::C:d:e:f"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C::d:e:f"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C:d::e:f"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C:d:e::f"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C:d:e:f::"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::2:f:E:D:6:7"));
-        assertEquals(true, IpUtil.isIpV6StrValid("2::f:E:D:6:7"));
-        assertEquals(true, IpUtil.isIpV6StrValid("2:f::E:D:6:7"));
-        assertEquals(true, IpUtil.isIpV6StrValid("2:f:E::D:6:7"));
-        assertEquals(true, IpUtil.isIpV6StrValid("2:f:E:D::6:7"));
-        assertEquals(true, IpUtil.isIpV6StrValid("2:f:E:D:6::7"));
-        assertEquals(true, IpUtil.isIpV6StrValid("2:f:E:D:6:7::"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::3:A:b:8:0"));
-        assertEquals(true, IpUtil.isIpV6StrValid("3::A:b:8:0"));
-        assertEquals(true, IpUtil.isIpV6StrValid("3:A::b:8:0"));
-        assertEquals(true, IpUtil.isIpV6StrValid("3:A:b::8:0"));
-        assertEquals(true, IpUtil.isIpV6StrValid("3:A:b:8::0"));
-        assertEquals(true, IpUtil.isIpV6StrValid("3:A:b:8:0::"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::4:5:C:d"));
-        assertEquals(true, IpUtil.isIpV6StrValid("4::5:C:d"));
-        assertEquals(true, IpUtil.isIpV6StrValid("4:5::C:d"));
-        assertEquals(true, IpUtil.isIpV6StrValid("4:5:C::d"));
-        assertEquals(true, IpUtil.isIpV6StrValid("4:5:C:d::"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::5:e:F"));
-        assertEquals(true, IpUtil.isIpV6StrValid("5::e:F"));
-        assertEquals(true, IpUtil.isIpV6StrValid("5:e::F"));
-        assertEquals(true, IpUtil.isIpV6StrValid("5:e:F::"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::6:A"));
-        assertEquals(true, IpUtil.isIpV6StrValid("6::A"));
-        assertEquals(true, IpUtil.isIpV6StrValid("6:A::"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::7"));
-        assertEquals(true, IpUtil.isIpV6StrValid("7::"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::7"));
-        assertEquals(true, IpUtil.isIpV6StrValid("1:a:B:C:d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::a:B:C:d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("a::B:C:d:2:0.0.0.0"));
-        assertEquals(true, IpUtil.isIpV6StrValid("a:B::C:d:2:255.255.255.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("a:B:C::d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("a:B:C:d::2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("a:B:C:d:2::255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::B:C:d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("B::C:d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("B:C::d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("B:C:d::2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("B:C:d:2::255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::C:d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("C::d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("C:d::2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("C:d:2::255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::d:2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("d::2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("d:2::255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::2:255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("2::255.0.0.255"));
-        assertEquals(true, IpUtil.isIpV6StrValid("::255.0.0.255"));
+                IpVersion.V6,
+                IpUtil.getIpVersionOfIp("ffff:FFFF:fffF:Ffff:fFFF:FFff:ffFF:FFFf"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("1080::8:800:2C:4A"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("FEC0:0:0:0:0:0:0:1"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("::FFFF:192.168.1.1"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("abcd:ef:111:f123::1"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("1138:0:0:0:8:80:800:417A"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("fecc:face::b00c:f001:fedc:fedd"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("CaFe:BaBe:dEAd:BeeF:12:345:6789:abcd"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::1:a:B:C:d:e:f"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("1::a:B:C:d:e:f"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("1:a::B:C:d:e:f"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("1:a:B::C:d:e:f"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("1:a:B:C::d:e:f"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("1:a:B:C:d::e:f"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("1:a:B:C:d:e::f"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("1:a:B:C:d:e:f::"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::2:f:E:D:6:7"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("2::f:E:D:6:7"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("2:f::E:D:6:7"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("2:f:E::D:6:7"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("2:f:E:D::6:7"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("2:f:E:D:6::7"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("2:f:E:D:6:7::"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::3:A:b:8:0"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("3::A:b:8:0"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("3:A::b:8:0"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("3:A:b::8:0"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("3:A:b:8::0"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("3:A:b:8:0::"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::4:5:C:d"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("4::5:C:d"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("4:5::C:d"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("4:5:C::d"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("4:5:C:d::"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::5:e:F"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("5::e:F"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("5:e::F"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("5:e:F::"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::6:A"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("6::A"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("6:A::"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::7"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("7::"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::7"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("1:a:B:C:d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("::a:B:C:d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("a::B:C:d:2:0.0.0.0"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("a:B::C:d:2:255.255.255.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("a:B:C::d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("a:B:C:d::2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("a:B:C:d:2::255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("::B:C:d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("B::C:d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("B:C::d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("B:C:d::2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("B:C:d:2::255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("::C:d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("C::d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("C:d::2:255.0.0.255"));
+        assertEquals(IpVersion.V6,
+                IpUtil.getIpVersionOfIp("C:d:2::255.0.0.255"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::d:2:255.0.0.255"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("d::2:255.0.0.255"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("d:2::255.0.0.255"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::2:255.0.0.255"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("2::255.0.0.255"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::255.0.0.255"));
     }
 
     @Test
-    public void testIsIpV6StrValidFalse() {
-        assertEquals(false, IpUtil.isIpV6StrValid("::256.0.0.255"));
-        assertEquals(false, IpUtil.isIpV6StrValid("::256.0.0.2f"));
-        assertEquals(false, IpUtil.isIpV6StrValid(":::255.0.0.2"));
-        assertEquals(false, IpUtil.isIpV6StrValid("f:E:d:c:2:1:0000:ffff:"));
-        assertEquals(false, IpUtil.isIpV6StrValid("f:E:d:c:2:1:0000:ggg"));
-        assertEquals(false, IpUtil.isIpV6StrValid("f:E:d:c:-2:1:0000:ffff:"));
-        assertEquals(false, IpUtil.isIpV6StrValid("::00000"));
+    public void testgetIpVersionOfIpFalse() {
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("::256.0.0.255"));
+        assertEquals(IpVersion.INVALID, IpUtil.getIpVersionOfIp("::256.0.0.2f"));
+        assertEquals(IpVersion.INVALID, IpUtil.getIpVersionOfIp(":::255.0.0.2"));
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("f:E:d:c:2:1:0000:ffff:"));
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("f:E:d:c:2:1:0000:ffff::"));
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("::f:E:d:c:2:1:0000:ffff"));
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("f:E:d:c:2:1:0000:ggg"));
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("f:E:d:c:-2:1:0000:ffff:"));
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("f:E:d:c:2:1:0000:00ffff"));
+        assertEquals(IpVersion.INVALID, IpUtil.getIpVersionOfIp("::00000"));
     }
 
     @Test
     public void testIsIpV4StrValid() {
-    	assertEquals(true, IpUtil.isIpV4StrValid("13.23.45.67"));
-    	assertEquals(true, IpUtil.isIpV4StrValid("0.0.0.0"));
-    	assertEquals(true, IpUtil.isIpV4StrValid("255.255.255.255"));
-    	assertEquals(true, IpUtil.isIpV4StrValid("*.2.255.255"));
-    	assertEquals(false, IpUtil.isIpV4StrValid("1:255.255.255"));
-    	assertEquals(false, IpUtil.isIpV4StrValid("::"));
+        assertEquals(IpVersion.V4, IpUtil.getIpVersionOfIp("13.23.45.67"));
+        assertEquals(IpVersion.V4, IpUtil.getIpVersionOfIp("0.0.0.0"));
+        assertEquals(IpVersion.V4, IpUtil.getIpVersionOfIp("255.255.255.255"));
+        assertEquals(IpVersion.INVALID, IpUtil.getIpVersionOfIp("*.2.255.255"));
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("1:255.255.255"));
     }
-    
+
     @Test
-    public void testIsIpV4StrWholeValid() {
-    	assertEquals(true, IpUtil.isIpV4StrWholeValid("13.23.45.67"));
-    	assertEquals(true, IpUtil.isIpV4StrWholeValid("0.0.0.0"));
-    	assertEquals(true, IpUtil.isIpV4StrWholeValid("255.255.255.255"));
-    	assertEquals(false, IpUtil.isIpV4StrWholeValid("1:255.255.255"));
-    	assertEquals(false, IpUtil.isIpV4StrWholeValid("::"));
-    	assertEquals(false, IpUtil.isIpV4StrWholeValid("*.2.255.255"));
+    public void testgetIpVersionOfIp() {
+        assertEquals(IpVersion.V4, IpUtil.getIpVersionOfIp("13.23.45.67"));
+        assertEquals(IpVersion.V4, IpUtil.getIpVersionOfIp("0.0.0.0"));
+        assertEquals(IpVersion.V4, IpUtil.getIpVersionOfIp("255.255.255.255"));
+        assertEquals(IpVersion.INVALID,
+                IpUtil.getIpVersionOfIp("1:255.255.255"));
+        assertEquals(IpVersion.V6, IpUtil.getIpVersionOfIp("::"));
+        assertEquals(IpVersion.INVALID, IpUtil.getIpVersionOfIp("*.2.255.255"));
     }
-    
-    @Test
-    public void testCountOccurrences() {
-    	assertEquals(3, IpUtil.countOccurrences("13.23.45.67", '.'));
-    	assertEquals(3, IpUtil.countOccurrences("13:23:45:67", ':'));
-    	assertEquals(4, IpUtil.countOccurrences("13::23:45:67", ':'));
-    }
-    
-    @Test
-    public void testGenerateZeroes() {
-    	assertEquals("", IpUtil.generateZeroes(0));
-    	assertEquals("0:", IpUtil.generateZeroes(1));
-    	assertEquals("0:0:", IpUtil.generateZeroes(2));
-    	assertEquals("0:0:0:0:0:0:0:", IpUtil.generateZeroes(7));
-    }
-    
-    @Test
-    public void testExpandShortNotation() {
-    	assertEquals("0:0:0:0:0:0:0:0:", IpUtil.expandShortNotation("::"));
-    	assertEquals("0:0:0:0:0:0:0:1", IpUtil.expandShortNotation("0::1"));
-    	assertEquals("1:0:0:0:0:2:3.4.5.6", IpUtil.expandShortNotation("1::2:3.4.5.6"));
-    }
-    
-	@Test
-    public void testIpv6ToBigDecimal() {
-    	BigDecimal v6[] = new BigDecimal[2];
-    	v6[0]= BigDecimal.valueOf(0);
-    	v6[1]= BigDecimal.valueOf(0);
-    	BigDecimal v6Test[] = IpUtil.ipV6ToBigDecimal("::");
-    	assertEquals(v6[0].longValue(), v6Test[0].longValue());
-    	assertEquals(v6[1].longValue(), v6Test[1].longValue());
-    	v6[0] = BigDecimal.valueOf(0);
-    	v6[1] = BigDecimal.valueOf(1);
-    	v6Test = IpUtil.ipV6ToBigDecimal("0::1");
-    	assertEquals(v6[0].longValue(), v6Test[0].longValue());
-    	assertEquals(v6[1].longValue(), v6Test[1].longValue());
-    	v6[0] = BigDecimal.valueOf(0x0001000000000000L);
-    	v6[1] = BigDecimal.valueOf(0x0000000200000000L+(3*256+4)*65536+5*256+6);
-    	v6Test = IpUtil.ipV6ToBigDecimal("1::2:3.4.5.6");
-    	assertEquals(v6[0].byteValue(), v6Test[0].byteValue());
-    	assertEquals(v6[1].byteValue(), v6Test[1].byteValue());
-    }
-	
-	@Test
-	public void testIpV6ToLong() {
-		long v6[] = IpUtil.ipV6ToLong("::");
-		assertEquals(0, v6[0]);
-		assertEquals(0, v6[1]);
-		v6 = IpUtil.ipV6ToLong("1::1");
-		assertEquals(0x0001000000000000L, v6[0]);
-		assertEquals(0x0000000000000001L, v6[1]);
-		v6 = IpUtil.ipV6ToLong("1::2:3:4");
-		assertEquals(0x0001000000000000L, v6[0]);
-		assertEquals(0x0000000200030004L, v6[1]);
-	}
-	
-	@Test
-	public void testIpv4ToDecimal() {
-		BigDecimal v4[] = new BigDecimal[2];
-		v4[0] = BigDecimal.valueOf(0);
-		v4[1] = BigDecimal.valueOf(0);
-		BigDecimal v4Test[] = IpUtil.ipV4ToDecimal("0.0.0.0");
-		assertEquals(v4Test[0], v4[0]);
-		assertEquals(v4Test[1], v4[1]);
-		v4[0] = BigDecimal.valueOf(0);
-		v4[1] = BigDecimal.valueOf(256*256*256+2*256*256+3*256+4);
-		v4Test = IpUtil.ipV4ToDecimal("1.2.3.4");
-		assertEquals(v4Test[0], v4[0]);
-		assertEquals(v4Test[1], v4[1]);
-	}
-	
-	@Test
-	public void testIpToBigDecimal() {
-		BigDecimal ipAddr[] = new BigDecimal[2];
-		long longIp = 0xffffffffL;
-		ipAddr[0] = BigDecimal.valueOf(0);
-		ipAddr[1] = BigDecimal.valueOf(longIp);
-		BigDecimal ipTest[] = IpUtil.ipToBigDecimal("255.255.255.255");
-		assertEquals(ipAddr[0], ipTest[0]);
-		assertEquals(ipAddr[1], ipTest[1]);
-		longIp = 0x7fffffffffffffffL;
-		BigDecimal bigDec = BigDecimal.valueOf(longIp);
-		ipAddr[0] = bigDec.add(bigDec).add(BigDecimal.valueOf(1));
-		ipAddr[1] = ipAddr[0];
-		ipTest = IpUtil.ipToBigDecimal("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
-		assertEquals(ipAddr[0].byteValue(), ipTest[0].byteValue());
-		assertEquals(ipAddr[1].byteValue(), ipTest[1].byteValue());
-	}
-	
-	@Test
-	public void testIpToLong() {
-		long ipTest[] = IpUtil.ipToLong("127.0.0.1");
-		long ip[] = new long[2];
-		ip[0] = 0;
-		ip[1] = 127*256*256*256+1;
-		assertEquals(ipTest[0],ip[0]);
-		assertEquals(ipTest[1],ip[1]);
-		ipTest = IpUtil.ipToLong("ff:ff:ff::ff");
-		ip[0] = 0x00ff00ff00ff0000L;
-		ip[1] = 0x00000000000000ffL;
-		assertEquals(ipTest[0],ip[0]);
-		assertEquals(ipTest[1],ip[1]);
-	}
-	
-	@Test
-	public void testIsIpLongValid() {
-		assertEquals(true,IpUtil.isIpLongValid("12344", true));
-		assertEquals(false,IpUtil.isIpLongValid("4294967296", true));
-		assertEquals(true,IpUtil.isIpLongValid("4294967296", false));
-		assertEquals(false,IpUtil.isIpLongValid("18446744073709551616", false));
-	}
+
 }

@@ -38,13 +38,12 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.controller.support.QueryParser;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -73,35 +72,35 @@ public class NetworkRedirectDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("network-redirect.xml")
     public void testQueryV4() {
+        super.databaseSetupWithBinaryColumns("network-redirect.xml");
         // exist
         IpVersion versionV4 = IpVersion.V4;
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("1.0.0.0", 0, versionV4);
+                queryParser.parseIpQueryParam("1.0.0.0/8", versionV4);
         RedirectResponse redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
-        queryParam = queryParser.parseIpQueryParam("1.1.0.0", 0, versionV4);
+        queryParam = queryParser.parseIpQueryParam("1.1.0.0/8", versionV4);
         redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         queryParam =
-                queryParser.parseIpQueryParam("1.255.255.254", 0, versionV4);
+                queryParser.parseIpQueryParam("1.255.255.254/8", versionV4);
         redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         queryParam =
-                queryParser.parseIpQueryParam("1.255.255.255", 0, versionV4);
+                queryParser.parseIpQueryParam("1.255.255.255/8", versionV4);
         redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         // non exist
-        queryParam = queryParser.parseIpQueryParam("0.0.0.1", 0, versionV4);
+        queryParam = queryParser.parseIpQueryParam("0.0.0.1/8", versionV4);
         redirect = redirectDao.query(queryParam);
         assertNull(redirect);
         queryParam =
-                queryParser.parseIpQueryParam("2.255.255.255", 0, versionV4);
+                queryParser.parseIpQueryParam("2.255.255.255/8", versionV4);
         redirect = redirectDao.query(queryParam);
         assertNull(redirect);
     }
@@ -111,43 +110,43 @@ public class NetworkRedirectDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("network-redirect.xml")
     public void testQueryV6() {
+        super.databaseSetupWithBinaryColumns("network-redirect.xml");
         // exist
         IpVersion versionV6 = IpVersion.V6;
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:1", 0,
+                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8::/96",
                         versionV6);
         RedirectResponse redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         queryParam =
-                queryParser.parseIpQueryParam("0:0:0:0:2002:6a8:0:1", 0,
+                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8::/100",
                         versionV6);
         redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         queryParam =
-                queryParser.parseIpQueryParam("0:db8:85a3:0:2001:6a8:0:2", 0,
+                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:2/96",
                         versionV6);
         redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         queryParam =
-                queryParser.parseIpQueryParam("2001:db8:85a3:0:2001:6a8:0:2",
-                        0, versionV6);
+                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:2/97",
+                        versionV6);
         redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         // non exist
         queryParam =
-                queryParser.parseIpQueryParam("0:0:0:0:2000:6a8:0:1", 0,
+                queryParser.parseIpQueryParam("0:0:0:0:2000:6a8:0:1/96",
                         versionV6);
         redirect = redirectDao.query(queryParam);
         assertNull(redirect);
         queryParam =
-                queryParser.parseIpQueryParam("2001:db8:85a3:0:2001:6a8:0:3",
-                        0, versionV6);
+                queryParser.parseIpQueryParam("2001:db8:85a3:0:2001:6a8:0:3/96",
+                        versionV6);
         redirect = redirectDao.query(queryParam);
         assertNull(redirect);
     }

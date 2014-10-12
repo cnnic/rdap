@@ -147,8 +147,8 @@ public class QueryServiceImplTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain.xml")
     public void testQueryDomain() {
+        super.databaseSetupWithBinaryColumns("domain.xml");
         String domainName = "cnnic.cn";
         Domain domain =
                 queryService.queryDomain(queryParser.parseDomainQueryParam(
