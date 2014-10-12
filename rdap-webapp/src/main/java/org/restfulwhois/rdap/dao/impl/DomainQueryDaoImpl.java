@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.dao.impl;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.bean.Arpa;
 import org.restfulwhois.rdap.bean.BaseModel;
 import org.restfulwhois.rdap.bean.Domain;
 import org.restfulwhois.rdap.bean.Domain.DomainType;
@@ -55,7 +53,6 @@ import org.restfulwhois.rdap.bean.ModelStatus;
 import org.restfulwhois.rdap.bean.ModelType;
 import org.restfulwhois.rdap.bean.Nameserver;
 import org.restfulwhois.rdap.bean.Network;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.PageBean;
 import org.restfulwhois.rdap.bean.PublicId;
 import org.restfulwhois.rdap.bean.QueryParam;
@@ -63,6 +60,8 @@ import org.restfulwhois.rdap.bean.Remark;
 import org.restfulwhois.rdap.bean.SecureDns;
 import org.restfulwhois.rdap.bean.Variants;
 import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
@@ -368,87 +367,24 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     private Domain queryArpaWithoutInnerObjects(QueryParam queryParam) {
 
         final String arpaName = queryParam.getQ();
-        final Arpa arpa = Arpa.decodeArpa(arpaName);
-        if (null == arpa) {
-            return null;
-        }
+        final NetworkInBytes networkInBytes = IpUtil.parseArpa(arpaName);
         List<Domain> result = null;
-
-        if (IpVersion.V4 == arpa.getIpVersion()) {
-
-            // Arpa for IPv4, ignore high address
-            final String sql = 
-                    "select domain.*, (ENDLOWADDRESS - STARTLOWADDRESS) as low"
-                    + " from RDAP_IP, RDAP_DOMAIN domain"
-                    + " where NETWORK_ID=IP_ID"
-                    + " and STARTLOWADDRESS <= ? and ENDLOWADDRESS >= ?"
-                    + " and (STARTHIGHADDRESS is null "
-                    + " or STARTHIGHADDRESS = '0')"
-                    + " and (ENDHIGHADDRESS is null or ENDHIGHADDRESS = '0')"
-                    + " and version = 'v4' " + " order by low  limit 1  ";
-            result = jdbcTemplate.query(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(
-                        Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setString(
-                            1,
-                            arpa.getStartLowAddress().toString(
-                                    Arpa.RADIX_DECIMAL));
-                    ps.setString(2,
-                            arpa.getEndLowAddress()
-                                    .toString(Arpa.RADIX_DECIMAL));
-                    return ps;
-                }
-            }, new DomainResultSetExtractor());
-
-        } else if (IpVersion.V6 == arpa.getIpVersion()) {
-
-            // Arpa for IPv6, include high address and low address
-            final String sql = 
-                    "select domain.*, (ENDLOWADDRESS - STARTLOWADDRESS) as low,"
-                    + " (ENDHIGHADDRESS - STARTHIGHADDRESS) as high"
-                    + " from RDAP_IP, RDAP_DOMAIN domain"
-                    + " where NETWORK_ID=IP_ID"
-                    + " and (STARTHIGHADDRESS < ? "
-                    + "     or (STARTHIGHADDRESS=? and STARTLOWADDRESS<=?)) "
-                    + " and (ENDHIGHADDRESS > ? "
-                    + "     or (ENDHIGHADDRESS = ? and ENDLOWADDRESS >= ?)) "
-                    + " and version = 'v6' " + " order by high ,low  limit 1  ";
-            result = jdbcTemplate.query(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(
-                        Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setString(
-                            1,
-                            arpa.getStartHighAddress().toString(
-                                    Arpa.RADIX_DECIMAL));
-                    ps.setString(
-                            2,
-                            arpa.getStartHighAddress().toString(
-                                    Arpa.RADIX_DECIMAL));
-                    ps.setString(
-                            3,
-                            arpa.getStartLowAddress().toString(
-                                    Arpa.RADIX_DECIMAL));
-
-                    ps.setString(
-                            4,
-                            arpa.getEndHighAddress().toString(
-                                    Arpa.RADIX_DECIMAL));
-                    ps.setString(
-                            5,
-                            arpa.getEndHighAddress().toString(
-                                    Arpa.RADIX_DECIMAL));
-                    ps.setString(6,
-                            arpa.getEndLowAddress()
-                                    .toString(Arpa.RADIX_DECIMAL));
-
-                    return ps;
-                }
-            }, new DomainResultSetExtractor());
-        }
+        final String sql = 
+                "select domain.*, (ENDADDRESS - STARTADDRESS) as ipRange"
+                + " from RDAP_IP, RDAP_DOMAIN domain"
+                + " where NETWORK_ID=IP_ID"
+                + " and STARTADDRESS <= ? and ENDADDRESS >= ?"
+                + " and domain.TYPE = 'arpa' order by ipRange  limit 1  ";
+        result = jdbcTemplate.query(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setBytes(1,networkInBytes.getStartAddress());
+                ps.setBytes(2,networkInBytes.getStartAddress());
+                return ps;
+            }
+        }, new DomainResultSetExtractor());
         if (null == result || result.size() == 0) {
             return null;
         }
@@ -677,32 +613,19 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     private Long searchCountByNsIp(QueryParam queryParam) {
         LOGGER.debug("searchCount, queryParam:" + queryParam);
-        BigDecimal[] arrayIp = getBigDecimalIp(queryParam);
-        if (arrayIp == null) {
-            return 0L;
-        }
-        BigDecimal ipLowTmp = new BigDecimal(0L);
-        if (arrayIp.length > 1) {
-           ipLowTmp = arrayIp[1];
-        }
-        final BigDecimal ipHigh = arrayIp[0];
-        final BigDecimal ipLow = ipLowTmp;
-        final String strHead = "select COUNT(*) as COUNT"
+        String ipPrefix = queryParam.getQ();
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ipPrefix);
+        final byte[] ipBytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
+        final String sql = "select COUNT(*) as COUNT"
                 + " from RDAP_DOMAIN t1 "
                 + " inner join REL_DOMAIN_NAMESERVER t2 on t1.DOMAIN_ID = t2.DOMAIN_ID "
                 + " inner join RDAP_NAMESERVER_IP t3 on "
-                + " t2.NAMESERVER_ID = t3.NAMESERVER_ID where t3.IP_LOW = ? && ";
-        String tmpSql = "t3.IP_HIGH = ?";
-        if (ipHigh.doubleValue() == 0.0) {
-            tmpSql = "(t3.IP_HIGH = ? or t3.IP_HIGH is null)";
-        }
-        final String sql = strHead + tmpSql;
+                + " t2.NAMESERVER_ID = t3.NAMESERVER_ID where t3.IP = ?";
         Long recordsCount = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql);
-                ps.setBigDecimal(1, ipLow);
-                ps.setBigDecimal(2, ipHigh);
+                ps.setBytes(1, ipBytes);
                 return ps;
             }
         }, new CountResultSetExtractor());
@@ -800,57 +723,25 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         int startPage = page.getCurrentPage() - 1;
         startPage = startPage >= 0 ? startPage : 0;
         final long startRow = startPage * page.getMaxRecords();
-        BigDecimal[] arrayIp = getBigDecimalIp(domainQueryParam);
-        BigDecimal ipLowTmp = new BigDecimal(0L);
-        if (arrayIp.length > 1) {
-          ipLowTmp = arrayIp[1];
-        }
-        final BigDecimal ipHigh = arrayIp[0];
-        final BigDecimal ipLow = ipLowTmp;
-        final String strHead = "SELECT distinct t1.* FROM  RDAP_DOMAIN t1 "
+        String ipPrefix = domainQueryParam.getQ();
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ipPrefix);
+        final byte[] ipBytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
+        final String sql = "SELECT distinct t1.* FROM  RDAP_DOMAIN t1 "
                + "INNER JOIN REL_DOMAIN_NAMESERVER t2 "
                + "ON t1.DOMAIN_ID = t2.DOMAIN_ID INNER JOIN "
                + "RDAP_NAMESERVER_IP t3 ON t2.NAMESERVER_ID = t3.NAMESERVER_ID "
-               + "where ";
-        String tmpSql = "t3.IP_HIGH = ? ";
-        if (ipHigh.doubleValue() == 0.0) {
-            tmpSql = "(t3.IP_HIGH = ? or t3.IP_HIGH is NULL) ";
-        }
-        final String strEnd = "and t3.IP_LOW = ? ";
-        final String strLast = "order by LDH_NAME limit ?,?";
-        final String sql = strHead + tmpSql + strEnd + strLast;
+               + "where t3.IP = ? order by LDH_NAME limit ?,?";
         result = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql);
-                ps.setBigDecimal(1, ipHigh);
-                ps.setBigDecimal(2, ipLow);
-                ps.setLong(3, startRow);
-                ps.setLong(4, page.getMaxRecords());
+                ps.setBytes(1, ipBytes);
+                ps.setLong(2, startRow);
+                ps.setLong(3, page.getMaxRecords());
                 return ps;
             }
         }, new DomainResultSetExtractor());
         return result;
     }
-    
-    /**
-     * get bigDecimal of ip from nameserver query parameter.
-     * @param queryParam
-     *            query parameter of nameserver
-     * @return BigDecimal[] for ip
-     * 
-     * @author weijunkai
-     */
-    private BigDecimal[] getBigDecimalIp(QueryParam queryParam) {
-        DomainSearchParam domainQueryParam = (DomainSearchParam) queryParam;
-        final String strIp = domainQueryParam.getQ();
-        if (!IpUtil.isIpV4StrWholeValid(strIp)
-                && !IpUtil.isIpV6StrValid(strIp)) {
-            return null;
-        }
-        BigDecimal[] arrayIp = IpUtil.ipToBigDecimal(strIp);
-        return arrayIp;
-    }
-    
     
 }

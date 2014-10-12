@@ -86,8 +86,8 @@ public class RdapControllerDomainTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain.xml")
     public void testQueryExistDomain() throws Exception {
+        super.databaseSetupWithBinaryColumns("domain.xml");
         String domainName = "cnnic.cn";
         String domainNameWithUpperCase = "Cnnic.cn";
         String domainNameInFullWidth = "ｃｎｎｉｃ.cn";

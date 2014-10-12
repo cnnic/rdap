@@ -35,12 +35,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.NetworkQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
 import org.restfulwhois.rdap.bootstrap.bean.NetworkRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.restfulwhois.rdap.dao.impl.NetworkQueryDaoImpl;
 import org.slf4j.Logger;
@@ -72,9 +73,8 @@ public class NetworkRedirectDao implements RedirectDao {
      * save network redirect.
      */
     private static final String SAVE_NETWORK_REDIRECT =
-            "insert into RDAP_IP_REDIRECT(ENDHIGHADDRESS,STARTHIGHADDRESS,"
-                    + " ENDLOWADDRESS,STARTLOWADDRESS,REDIRECT_URL,VERSION)"
-                    + " values(?,?,?,?,?,?)";
+            "insert into RDAP_IP_REDIRECT(STARTADDRESS,ENDADDRESS"
+                    + ",REDIRECT_URL,VERSION) values(?,?,?,?)";
     /**
      * select max id.
      */
@@ -159,7 +159,8 @@ public class NetworkRedirectDao implements RedirectDao {
         }
         NetworkRedirect redirect = (NetworkRedirect) bootstraps.get(0);
         IpVersion ipVersion =
-                redirect.getNetworkQueryParam().getQueryIpVersion();
+                redirect.getNetworkQueryParam().getNetworkInBytes()
+                        .getIpVersion();
         jdbcTemplate.update(DELETE_SMALLER_THAN_ID, maxOldId,
                 ipVersion.getName());
     }
@@ -175,10 +176,11 @@ public class NetworkRedirectDao implements RedirectDao {
         for (Redirect bootstrap : bootstraps) {
             NetworkRedirect redirect = (NetworkRedirect) bootstrap;
             NetworkQueryParam q = redirect.getNetworkQueryParam();
-            batchSaveParams.add(new Object[] { q.getIpQueryEndHigh(),
-                    q.getIpQueryStartHigh(), q.getIpQueryEndLow(),
-                    q.getIpQueryStartLow(), bootstrap.getUrls().get(0),
-                    q.getQueryIpVersion().getName() });
+            NetworkInBytes networkInBytes = q.getNetworkInBytes();
+            batchSaveParams.add(new Object[] {
+                    networkInBytes.getStartAddress(),
+                    networkInBytes.getEndAddress(), bootstrap.getUrls().get(0),
+                    networkInBytes.getIpVersion().getName() });
         }
         if (batchSaveParams.size() > 0) {
             jdbcTemplate.batchUpdate(SAVE_NETWORK_REDIRECT, batchSaveParams);

@@ -67,6 +67,7 @@ public class AccessControlManagerImplTest extends BaseTest {
     private QueryService queryService;
     @Autowired
     private QueryParser queryParser;
+
     /**
      * test for exist entry.
      */
@@ -106,94 +107,97 @@ public class AccessControlManagerImplTest extends BaseTest {
         domain.setId(2000000L);
         assertTrue(accessControlManager.hasPermission(domain));
     }
-    
+
     /**
      * test for .
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-search-acl.xml")
     public void testDomainInnerObjectHasPermission() {
+        super.databaseSetupWithBinaryColumns("domain-search-acl.xml");
         RdapProperties prop = new RdapProperties();
-      //set needCheckAccess true
-        ReflectionTestUtils.setField(prop, 
-              "accessControlForInnerObjectForSearch", false);
-         String domainName = 
-     "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
-          Domain domain =
-                  queryService.queryDomain(queryParser.parseDomainQueryParam(
-                          domainName, domainName)); 
-          assertNotNull(domain.getNetwork());
-          assertNotNull(domain.getNameservers()); 
-          Nameserver ns = domain.getNameservers().get(0);
-          assertEquals(2L, domain.getNameservers().size());
-          assertNotNull(domain.getEntities()); 
-          assertEquals(1L, domain.getEntities().size()); 
-          Entity entity = domain.getEntities().get(0);
-          accessControlManager.innerObjectHasPermission(domain);
-          assertNotNull(domain.getNetwork());
-          assertNotNull(domain.getNameservers()); 
-          assertEquals(2L, domain.getNameservers().size());
-          assertNotNull(domain.getEntities()); 
-          assertEquals(1L, domain.getEntities().size());
-          //set needCheckAccess true
-          ReflectionTestUtils.setField(prop, 
-               "accessControlForInnerObjectForSearch", true);
-          accessControlManager.innerObjectHasPermission(domain);
-          assertNull(domain.getNetwork());    
-          assertEquals(1L, domain.getNameservers().size()); 
-          assertFalse(domain.getNameservers().contains(ns));
-          assertEquals(0L, domain.getEntities().size());  
-          assertFalse(domain.getEntities().contains(entity));
-          assertNull(domain.getNetwork());  
+        // set needCheckAccess true
+        ReflectionTestUtils.setField(prop,
+                "accessControlForInnerObjectForSearch", false);
+        String domainName =
+                "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
+        Domain domain =
+                queryService.queryDomain(queryParser.parseDomainQueryParam(
+                        domainName, domainName));
+        assertNotNull(domain);
+        assertNotNull(domain.getNetwork());
+        assertNotNull(domain.getNameservers());
+        Nameserver ns = domain.getNameservers().get(0);
+        assertEquals(2L, domain.getNameservers().size());
+        assertNotNull(domain.getEntities());
+        assertEquals(1L, domain.getEntities().size());
+        Entity entity = domain.getEntities().get(0);
+        accessControlManager.innerObjectHasPermission(domain);
+        assertNotNull(domain.getNetwork());
+        assertNotNull(domain.getNameservers());
+        assertEquals(2L, domain.getNameservers().size());
+        assertNotNull(domain.getEntities());
+        assertEquals(1L, domain.getEntities().size());
+        // set needCheckAccess true
+        ReflectionTestUtils.setField(prop,
+                "accessControlForInnerObjectForSearch", true);
+        accessControlManager.innerObjectHasPermission(domain);
+        assertNull(domain.getNetwork());
+        assertEquals(1L, domain.getNameservers().size());
+        assertFalse(domain.getNameservers().contains(ns));
+        assertEquals(0L, domain.getEntities().size());
+        assertFalse(domain.getEntities().contains(entity));
+        assertNull(domain.getNetwork());
     }
+
     /**
      * test for .
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserver-search-acl.xml")
     public void testNameServerInnerObjectHasPermission() {
-         String nsName =  "ns.cnnic.cn";
-          Nameserver ns =
-          queryService.queryNameserver(queryParser.parseNameserverQueryParam(
-                  nsName, nsName));
-          
-          assertNotNull(ns.getEntities()); 
-          assertEquals(1L, ns.getEntities().size()); 
-          Entity entity = ns.getEntities().get(0);
-          accessControlManager.innerObjectHasPermission(ns);
-          assertFalse(ns.getEntities().contains(entity));
-          assertEquals(0L, ns.getEntities().size());  
-         
+        super.databaseSetupWithBinaryColumns("nameserver-search-acl.xml");
+        String nsName = "ns.cnnic.cn";
+        Nameserver ns =
+                queryService.queryNameserver(queryParser
+                        .parseNameserverQueryParam(nsName, nsName));
+
+        assertNotNull(ns.getEntities());
+        assertEquals(1L, ns.getEntities().size());
+        Entity entity = ns.getEntities().get(0);
+        accessControlManager.innerObjectHasPermission(ns);
+        assertFalse(ns.getEntities().contains(entity));
+        assertEquals(0L, ns.getEntities().size());
+
     }
+
     /**
      * test for .
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search-acl.xml")
-    
-    public void testEntityInnerObjectHasPermission() {
+    public
+            void testEntityInnerObjectHasPermission() {
         String handle = "h1";
         Entity entity =
                 queryService.queryEntity(queryParser.parseQueryParam(handle));
-          assertNotNull(entity.getAutnums());
-          assertNotNull(entity.getNetworks()); 
-          assertEquals(4L, entity.getAutnums().size());
-          assertEquals(3L, entity.getNetworks().size());
-          assertEquals(1L, entity.getEntities().size()); 
-          Autnum autnum = entity.getAutnums().get(0);
-          Network network = entity.getNetworks().get(0);
-          Entity entitySub = entity.getEntities().get(0);
-          accessControlManager.innerObjectHasPermission(entity);           
-          assertEquals(3L, entity.getAutnums().size()); 
-          assertEquals(2L, entity.getNetworks().size()); 
-          assertEquals(0L, entity.getEntities().size());
-          
-          assertFalse(entity.getAutnums().contains(autnum)); 
-          assertFalse(entity.getNetworks().contains(network));
-          assertFalse(entity.getEntities().contains(entitySub));
-           
+        assertNotNull(entity.getAutnums());
+        assertNotNull(entity.getNetworks());
+        assertEquals(4L, entity.getAutnums().size());
+        assertEquals(3L, entity.getNetworks().size());
+        assertEquals(1L, entity.getEntities().size());
+        Autnum autnum = entity.getAutnums().get(0);
+        Network network = entity.getNetworks().get(0);
+        Entity entitySub = entity.getEntities().get(0);
+        accessControlManager.innerObjectHasPermission(entity);
+        assertEquals(3L, entity.getAutnums().size());
+        assertEquals(2L, entity.getNetworks().size());
+        assertEquals(0L, entity.getEntities().size());
+
+        assertFalse(entity.getAutnums().contains(autnum));
+        assertFalse(entity.getNetworks().contains(network));
+        assertFalse(entity.getEntities().contains(entitySub));
+
     }
 }

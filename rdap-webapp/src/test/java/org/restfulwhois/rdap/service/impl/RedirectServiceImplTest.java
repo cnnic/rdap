@@ -37,8 +37,8 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.common.util.DomainUtil;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.controller.support.QueryParser;
 import org.restfulwhois.rdap.service.RedirectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +71,8 @@ public class RedirectServiceImplTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
-    public void testQueryDomain() {
+    public
+            void testQueryDomain() {
         String domainName = "cnnic.cn";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         RedirectResponse redirect =
@@ -87,7 +88,8 @@ public class RedirectServiceImplTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-redirect.xml")
-    public void testQueryAutnum() {
+    public
+            void testQueryAutnum() {
         String autnumStr = "1";
         QueryParam queryParam = queryParser.parseQueryParam(autnumStr);
         RedirectResponse redirect = redirectService.queryAutnum(queryParam);
@@ -99,14 +101,20 @@ public class RedirectServiceImplTest extends BaseTest {
      * test query network.
      */
     @Test
-//    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
-    public void testQueryNetwork() {
+    // @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+            public
+            void testQueryNetwork() {
+        super.databaseSetupWithBinaryColumns("network-redirect.xml");
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("1.0.0.0", 0, IpVersion.V4);
+                queryParser.parseIpQueryParam("1.0.0.0/8", IpVersion.V4);
         RedirectResponse redirect = redirectService.queryIp(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
+        //sub net
+        queryParam =
+                queryParser.parseIpQueryParam("1.0.0.0/10", IpVersion.V4);
+        redirect = redirectService.queryIp(queryParam);
+        assertNotNull(redirect);
     }
 
 }

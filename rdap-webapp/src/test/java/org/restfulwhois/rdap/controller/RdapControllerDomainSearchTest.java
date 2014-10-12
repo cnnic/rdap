@@ -48,7 +48,6 @@ import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -148,8 +147,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/domain-search.xml")
     public void testSearchExistDomain() throws Exception {
+        super.databaseSetupWithBinaryColumns("domain-search.xml");
         	String domainName = "cnnic.cn";
         	/** search domain by nsLdhName */
             String nameHead = "?name=cnnic*";
@@ -161,17 +160,17 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     
 	        /** search domain by nsIp */
     		String ipHead = "?nsIp=";
-	        String nsNameIpV4 = ipHead + "255.255.255.255";
+	        String nsNameIpV4 = ipHead + "218.241.111.11";
 	        String nsNameIpV6Full = ipHead + "ffff:ffff:ffff:ffff:0:0:0:ffff";
 	        String nsNameIpV6Omit = ipHead + "ffff:ffff:ffff:ffff::ffff";
-	        String nsIpV4 = ipHead + "0::0";
-	        String nsIpZero = ipHead + "::";
+	        String nsIpZero1 = ipHead + "0::0";
+	        String nsIpZero2 = ipHead + "::";
 	        String nsIpV4V6 = ipHead + "::f:f:0.15.0.15";
 	        searchDomain(nsNameIpV4, domainName);
 	        searchDomain(nsNameIpV6Full, domainName);
 	        searchDomain(nsNameIpV6Omit, domainName);
-	        searchDomain(nsIpV4, domainName);
-	        searchDomain(nsIpZero, domainName);
+	        searchDomain(nsIpZero1, domainName);
+	        searchDomain(nsIpZero2, domainName);
 	        searchDomain(nsIpV4V6, domainName);
     }
 
@@ -229,8 +228,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/domain-search.xml")
     public void testSearchTruncatedDomain() throws Exception {
+        super.databaseSetupWithBinaryColumns("domain-search.xml");
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI+"?name=" + "truncated*").accept(
                         MediaType.parseMediaType(rdapJson)))

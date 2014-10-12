@@ -37,18 +37,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bean.IPAddress;
 import org.restfulwhois.rdap.bean.ModelType;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.common.util.IpUtil;
-import org.restfulwhois.rdap.common.util.StringUtil;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 /**
  * <pre>
@@ -66,8 +65,8 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(IPAddressQueryDaoImpl.class);  
-    
+            .getLogger(IPAddressQueryDaoImpl.class);
+
     @Override
     public List<IPAddress> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
@@ -80,16 +79,17 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
     }
 
     /**
-     * query IPAddress from RDAP_NAMESERVER_IP for nameserver, 
-     * without inner objects.
+     * query IPAddress from RDAP_NAMESERVER_IP for nameserver, without inner
+     * objects.
      * 
      * @param outerObjectId
      *            nameserver id which as the relation with nameserver.
      * @return IPAddress will be set to nameserver.
      */
     private IPAddress queryWithoutInnerObjects(final Long outerObjectId) {
-        final String sql = "select * from RDAP_NAMESERVER_IP nsIP "
-                + " where nsIP.NAMESERVER_ID = ?";
+        final String sql =
+                "select * from RDAP_NAMESERVER_IP nsIP "
+                        + " where nsIP.NAMESERVER_ID = ?";
         IPAddress result = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
@@ -134,8 +134,7 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
         }
 
         /**
-         * set ip version,and high/low address.
-         * change them to unsigned long.
+         * set ip version,and high/low address. change them to unsigned long.
          * 
          * @param rs
          *            ResultSet.
@@ -149,33 +148,16 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
         private void setIpVersionAndAddress(ResultSet rs, List<String> ipV4,
                 List<String> ipV6) throws SQLException {
             String ipVersionStr = rs.getString("VERSION");
-            String highAddress = rs.getString("IP_HIGH");
-            String lowAddress = rs.getString("IP_LOW");
-            String realAddress = "";
-
-            if (IpVersion.isV6(ipVersionStr)) {
-                if (!StringUtils.isBlank(lowAddress)
-                        && IpUtil.isIpLongValid(lowAddress, false)) {
-                    if (StringUtils.isBlank(highAddress)) {
-                        highAddress = "0";
-                    }
-                    if (IpUtil.isIpLongValid(highAddress, false)) {
-                        realAddress = IpUtil.longToIpV6(
-                                StringUtil.parseUnsignedLong(highAddress),
-                                StringUtil.parseUnsignedLong(lowAddress));
-                    }
-                    if (!realAddress.isEmpty()) {
-                        ipV6.add(realAddress);
-                    }
-                }
-            } else if (IpVersion.isV4(ipVersionStr)) {
-                if (lowAddress != null) {
-                    realAddress = IpUtil.longToIpV4(StringUtil
-                            .parseUnsignedLong(lowAddress));
-                    if (!StringUtils.isBlank(realAddress)) {
-                        ipV4.add(realAddress);
-                    }
-                }
+            IpVersion ipVersion = IpVersion.getIpVersion(ipVersionStr);
+            byte[] ipBytes = rs.getBytes("IP");
+            String realAddress = IpUtil.toString(ipBytes, ipVersion);
+            if (StringUtils.isEmpty(realAddress)) {
+                return;
+            }
+            if (ipVersion.isV4()) {
+                ipV4.add(realAddress);
+            } else if (ipVersion.isV6()) {
+                ipV6.add(realAddress);
             }
         }
     }

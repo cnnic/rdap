@@ -34,9 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * represents information regarding ip used in both forward and reverse DNS.
@@ -417,75 +417,5 @@ public class Network extends BaseModel {
 	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
 		this.objectClassName = objectClassName;
 	}
-
-    /**
-     * ip version:v4,v6.
-     * 
-     * @author jiashuo
-     * 
-     */
-    public enum IpVersion {
-        /**
-         * The representation of IPv4 addresses in this document uses the
-         * dotted-decimal notation described in [RFC1166]. The representation of
-         * IPv6 addresses in this document follow the forms outlined in
-         * [RFC5952].
-         */
-        V4("v4"), V6("v6");
-        /**
-         * a string signifying the IP protocol version of the network: "v4"
-         * signifying an IPv4 network, "v6" signifying an IPv6 network.
-         */
-        private String name;
-
-        /**
-         * check ip version string is ipv4.
-         * 
-         * @param ipVersionStr
-         *            ip version string.
-         * @return true if is, false if not.
-         */
-        public static boolean isV4(String ipVersionStr) {
-            if (V4.getName().equals(ipVersionStr)) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * check ip version string is ipv6.
-         * 
-         * @param ipVersionStr
-         *            ip version string.
-         * @return true if is, false if not.
-         */
-        public static boolean isV6(String ipVersionStr) {
-            if (V6.getName().equals(ipVersionStr)) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * default constructor.
-         * 
-         * @param name
-         *            ip version name.
-         */
-        private IpVersion(String name) {
-            this.name = name;
-        }
-
-        /**
-         * get name.
-         * 
-         * @return name.
-         */
-        @JsonValue
-        public String getName() {
-            return name;
-        }       
-       
-    }
     
 }

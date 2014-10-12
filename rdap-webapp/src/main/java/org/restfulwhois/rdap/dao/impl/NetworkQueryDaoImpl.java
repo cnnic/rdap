@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.dao.impl;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,12 +44,12 @@ import org.restfulwhois.rdap.bean.Event;
 import org.restfulwhois.rdap.bean.Link;
 import org.restfulwhois.rdap.bean.ModelType;
 import org.restfulwhois.rdap.bean.Network;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.NetworkQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
 import org.restfulwhois.rdap.common.util.IpUtil;
-import org.restfulwhois.rdap.common.util.StringUtil;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.dao.NoticeDao;
 import org.restfulwhois.rdap.dao.QueryDao;
@@ -172,8 +171,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
             return networks;
         }
         if (ModelType.DOMAIN.equals(outerModelType)) {
-            List<Network> networks =
-                    findByArpaDomainId(outerObjectId);
+            List<Network> networks = findByArpaDomainId(outerObjectId);
             queryAndSetInnerObjects(networks);
             LOGGER.debug("for arpa result size:{}", networks.size());
             return networks;
@@ -190,12 +188,12 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * @return network list.
      */
     private List<Network> findByArpaDomainId(final Long arpaDomainId) {
-        final String sql = "select * from RDAP_IP ip"
-                + " inner join RDAP_DOMAIN d "
-                + " on ip.IP_ID=d.NETWORK_ID "
-                + " left outer join RDAP_IP_STATUS status"
-                + " on ip.IP_ID = status.IP_ID "
-                + " where d.DOMAIN_ID=?";
+        final String sql =
+                "select * from RDAP_IP ip" + " inner join RDAP_DOMAIN d "
+                        + " on ip.IP_ID=d.NETWORK_ID "
+                        + " left outer join RDAP_IP_STATUS status"
+                        + " on ip.IP_ID = status.IP_ID "
+                        + " where d.DOMAIN_ID=?";
         List<Network> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
@@ -363,45 +361,22 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     public static PreparedStatementCreator generatePStatCreator(
             QueryParam queryParam, String ipTableName) {
         NetworkQueryParam ipQueryParam = (NetworkQueryParam) queryParam;
-        final BigDecimal ipQueryStartLow = ipQueryParam.getIpQueryStartLow();
-        final BigDecimal ipQueryEndLow = ipQueryParam.getIpQueryEndLow();
-        final IpVersion ipVersion = ipQueryParam.getQueryIpVersion();
-        final String sqlV6 =
-                "select *, (ENDHIGHADDRESS-STARTHIGHADDRESS) as high,"
-                        + " (ENDLOWADDRESS-STARTLOWADDRESS) as low from "
-                        + ipTableName
-                        + " ip where (STARTHIGHADDRESS<? or STARTHIGHADDRESS=?"
-                        + " and STARTLOWADDRESS<=?) && (ENDHIGHADDRESS>?"
-                        + " or ENDHIGHADDRESS=? and ENDLOWADDRESS>=?)"
-                        + " && VERSION=? order by high,low limit 1";
-        final BigDecimal ipQueryStartHigh = ipQueryParam.getIpQueryStartHigh();
-        final BigDecimal ipQueryEndHigh = ipQueryParam.getIpQueryEndHigh();
-        final String sqlV4 =
-                "select *,(ENDLOWADDRESS-STARTLOWADDRESS) as low"
+        final NetworkInBytes networkInBytes = ipQueryParam.getNetworkInBytes();
+        final String sql =
+                "select *,(HEX(STARTADDRESS)- HEX(ENDADDRESS)) as ipRange"
                         + " from "
                         + ipTableName
-                        + " where STARTLOWADDRESS<=? && ENDLOWADDRESS>=?"
-                        + " && STARTLOWADDRESS<POW(2,32) && ENDLOWADDRESS<POW(2,32) &&"
-                        + " VERSION = ? order by low limit 1";
+                        + " where STARTADDRESS<=? && ENDADDRESS>=?"
+                        + " && STARTADDRESS<POW(2,32) && ENDADDRESS<POW(2,32) &&"
+                        + " VERSION = ? order by ipRange limit 1";
         PreparedStatementCreator pstatCreator = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = null;
-                if (ipVersion == IpVersion.V6) {
-                    ps = connection.prepareStatement(sqlV6);
-                    ps.setBigDecimal(1, ipQueryStartHigh);
-                    ps.setBigDecimal(2, ipQueryStartHigh);
-                    ps.setBigDecimal(3, ipQueryStartLow);
-                    ps.setBigDecimal(4, ipQueryEndHigh);
-                    ps.setBigDecimal(5, ipQueryEndHigh);
-                    ps.setBigDecimal(6, ipQueryEndLow);
-                    ps.setString(7, ipVersion.getName());
-                } else if (ipVersion == IpVersion.V4) {
-                    ps = connection.prepareStatement(sqlV4);
-                    ps.setBigDecimal(1, ipQueryStartLow);
-                    ps.setBigDecimal(2, ipQueryEndLow);
-                    ps.setString(3, ipVersion.getName());
-                }
+                ps = connection.prepareStatement(sql);
+                ps.setBytes(1, networkInBytes.getStartAddress());
+                ps.setBytes(2, networkInBytes.getEndAddress());
+                ps.setString(3, networkInBytes.getIpVersion().getName());
                 return ps;
             }
         };
@@ -468,31 +443,12 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     private void setIpVersionAndStartEndAddress(ResultSet rs, Network objIp)
             throws SQLException {
         String ipVersionStr = rs.getString("VERSION");
-        String startHighAddress = rs.getString("STARTHIGHADDRESS");
-        String startLowAddress = rs.getString("STARTLOWADDRESS");
-        String endHighAddress = rs.getString("ENDHIGHADDRESS");
-        String endLowAddress = rs.getString("ENDLOWADDRESS");
-        String startAddress = "";
-        String endAddress = "";
-        if (IpVersion.isV6(ipVersionStr)) {
-            objIp.setIpVersion(IpVersion.V6);
-            long longHighStart = StringUtil.parseUnsignedLong(startHighAddress);
-            long longLowStart = StringUtil.parseUnsignedLong(startLowAddress);
-            startAddress = IpUtil.longToIpV6(longHighStart, longLowStart);
-            long longHighEnd = StringUtil.parseUnsignedLong(endHighAddress);
-            long longLowEnd = StringUtil.parseUnsignedLong(endLowAddress);
-            endAddress = IpUtil.longToIpV6(longHighEnd, longLowEnd);
-        } else if (IpVersion.isV4(ipVersionStr)) {
-            objIp.setIpVersion(IpVersion.V4);
-            startAddress =
-                    IpUtil.longToIpV4(StringUtil
-                            .parseUnsignedLong(startLowAddress));
-            endAddress =
-                    IpUtil.longToIpV4(StringUtil
-                            .parseUnsignedLong(endLowAddress));
-        }
-        objIp.setStartAddress(startAddress);
-        objIp.setEndAddress(endAddress);
+        IpVersion ipVersion = IpVersion.getIpVersion(ipVersionStr);
+        objIp.setIpVersion(ipVersion);
+        byte[] startAddressBytes = rs.getBytes("STARTADDRESS");
+        byte[] endAddressBytes = rs.getBytes("ENDADDRESS");
+        objIp.setStartAddress(IpUtil.toString(startAddressBytes, ipVersion));
+        objIp.setEndAddress(IpUtil.toString(endAddressBytes, ipVersion));
     }
 
     /**
