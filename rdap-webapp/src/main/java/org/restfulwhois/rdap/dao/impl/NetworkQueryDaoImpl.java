@@ -362,18 +362,20 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
             QueryParam queryParam, String ipTableName) {
         NetworkQueryParam ipQueryParam = (NetworkQueryParam) queryParam;
         final NetworkInBytes networkInBytes = ipQueryParam.getNetworkInBytes();
-        final String sql =
-                "select *,(HEX(STARTADDRESS)- HEX(ENDADDRESS)) as ipRange"
-                        + " from "
+        String sql =
+                "select * from "
                         + ipTableName
-                        + " where STARTADDRESS<=? && ENDADDRESS>=?"
-                        + " && STARTADDRESS<POW(2,32) && ENDADDRESS<POW(2,32) &&"
-                        + " VERSION = ? order by ipRange limit 1";
+                        + " where STARTADDRESS<=? && ENDADDRESS>=? && VERSION = ?";
+        if (networkInBytes.getIpVersion().isV4()) {
+            sql = sql + " && STARTADDRESS<POW(2,32) && ENDADDRESS<POW(2,32) ";
+        }
+        sql = sql + " order by STARTADDRESS desc,ENDADDRESS limit 1";
+        final String finalSql = sql;
         PreparedStatementCreator pstatCreator = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = null;
-                ps = connection.prepareStatement(sql);
+                ps = connection.prepareStatement(finalSql);
                 ps.setBytes(1, networkInBytes.getStartAddress());
                 ps.setBytes(2, networkInBytes.getEndAddress());
                 ps.setString(3, networkInBytes.getIpVersion().getName());
