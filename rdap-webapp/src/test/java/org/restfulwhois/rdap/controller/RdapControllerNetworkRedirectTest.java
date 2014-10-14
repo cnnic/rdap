@@ -45,7 +45,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -83,14 +82,13 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryExist() throws Exception {
         RestResponseUtil.initErrorMessages();
         // v4
-        String networkStr = "218.241.0.0";
+        String networkStr = "218.241.0.0/16";
         commonExist(networkStr);
         // v6
-        networkStr = "2014:2014:2014::";
+        networkStr = "2014:2014:2014::/80";
         commonExist(networkStr);
     }
 
@@ -120,7 +118,6 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryNonExist() throws Exception {
         RestResponseUtil.initErrorMessages();
         // v4
@@ -156,14 +153,13 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryRedirect() throws Exception {
         RestResponseUtil.initErrorMessages();
         // v4
         String networkStr = "1.0.0.0";
         commonRedirect(networkStr);
         // v6
-        networkStr = "0:0:0:0:2001:6a8:0:1";
+        networkStr = "0:0:0:0:2001:6a8::/96";
         commonRedirect(networkStr);
     }
 
@@ -192,7 +188,6 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/network-redirect.xml")
     public void testQueryInvalid() throws Exception {
         RestResponseUtil.initErrorMessages();
         String invalidIpStr = "invalidNumber";
@@ -217,6 +212,11 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))
                 .andExpect(jsonPath("$.description").value("BAD REQUEST"));
+    }
+
+    @Override
+    public void before() throws Exception {
+        super.databaseSetupWithBinaryColumns("network-redirect.xml");
     }
 
 }

@@ -42,8 +42,13 @@ import org.apache.commons.lang.StringUtils;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
+import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.ITableIterator;
+import org.dbunit.dataset.ITableMetaData;
+import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
@@ -77,7 +82,8 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 @ContextConfiguration(locations = {
         "/spring/spring-applicationContext-test.xml",
         "/spring/spring-servlet.xml" })
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+@TestExecutionListeners({
+        DependencyInjectionTestExecutionListener.class,
         DbUnitTestExecutionListener.class })
 @Transactional
 public abstract class BaseTest {
@@ -131,7 +137,7 @@ public abstract class BaseTest {
     public void before() throws Exception {
         resetDefaultMaxSizeSearch();
     }
-    
+
     @After
     public void after() throws Exception {
         connection.close();
@@ -192,11 +198,73 @@ public abstract class BaseTest {
      * @throws FileNotFoundException
      *             FileNotFoundException.
      */
-    private static IDataSet getDataSet(String dataSetFilePath)
+    protected static IDataSet getDataSet(String dataSetFilePath)
             throws DataSetException, FileNotFoundException {
         URL url = BaseTest.class.getClassLoader().getResource(dataSetFilePath);
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
-        return builder.build(new FileInputStream(url.getPath()));
+        IDataSet dataSet = builder.build(new FileInputStream(url.getPath()));
+        ReplacementDataSet result = new ReplacementDataSet(dataSet);
+        dataFilter(result);
+        return result;
+    }
+
+    /**
+     * filter dataset.
+     * 
+     * @param dataSet
+     *            dataSet.
+     * @throws DataSetException
+     *             DataSetException.
+     */
+    private static void dataFilter(ReplacementDataSet dataSet)
+            throws DataSetException {
+        final String DATA_TYPE_NULL = "NULL";
+        dataSet.addReplacementObject("[" + DATA_TYPE_NULL + "]", null);
+        ITableIterator tables = dataSet.iterator();
+        while (tables.next()) {
+            ITable table = tables.getTable();
+            ITableMetaData metaData = table.getTableMetaData();
+            Column[] columns = metaData.getColumns();
+            int rowCount = table.getRowCount();
+            for (int row = 0; row < rowCount; row++) {
+                for (int i = 0; i < columns.length; i++) {
+                    Column c = columns[i];
+                    String name = c.getColumnName();
+                    Object object = table.getValue(row, name);
+                    if (object instanceof String) {
+                        String value = (String) object;
+                        addReplacementForBinary(dataSet, value);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * addReplacementForBinary.
+     * 
+     * @param dataSet
+     * @param DATA_TYPE_BINARY
+     * @param value
+     */
+    private static void addReplacementForBinary(ReplacementDataSet dataSet,
+            String value) {
+        final String DATA_TYPE_BINARY = "0x";
+        if (StringUtils.isBlank(value)) {
+            return;
+        }
+        if (!StringUtils.startsWith(value, DATA_TYPE_BINARY)) {
+            return;
+        }
+        String bytes = StringUtils.removeStart(value, DATA_TYPE_BINARY);
+        byte[] bin = new byte[bytes.length() / 2];
+        for (int index = 0; index < bytes.length() / 2; index++) {
+            bin[index] =
+                    Integer.valueOf(bytes.substring(index * 2, index * 2 + 2),
+                            16).byteValue();
+        }
+        dataSet.addReplacementObject(value, bin);
+
     }
 
     /**
@@ -247,7 +315,7 @@ public abstract class BaseTest {
     public void setDataSource(DataSource dataSource) {
         BaseTest.dataSource = dataSource;
     }
-    
+
     /**
      * encode with 8859.
      * 
@@ -264,12 +332,29 @@ public abstract class BaseTest {
         }
         return new String(str.getBytes(), StringUtil.CHAR_SET_ISO8859);
     }
-    
+
+    /**
+     * databaseSetupWithBinaryColumns.
+     * 
+     * @param dataFile
+     */
+    protected void databaseSetupWithBinaryColumns(String dataFile) {
+        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/" + dataFile;
+        IDataSet dataSet;
+        try {
+            dataSet = getDataSet(dataSetFilePath);
+            DatabaseOperation.INSERT.execute(connection, dataSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * get empty dataSet.
+     * 
      * @return
      */
-    protected QueryDataSet getEmptyDataSet(){
+    protected QueryDataSet getEmptyDataSet() {
         return new QueryDataSet(connection);
     }
 

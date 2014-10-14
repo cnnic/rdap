@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.bootstrap.handler;
 
 import org.restfulwhois.rdap.common.RdapProperties;
-import org.restfulwhois.rdap.common.util.IpUtil;
 import org.springframework.stereotype.Component;
 
 /**
@@ -46,11 +45,6 @@ public class NetworkV4RegistryHandler extends NetworkRegistryHandler {
     @Override
     String getRegistryRelativateUrl() {
         return RdapProperties.getBootstrapRegistryUriForIpv4();
-    }
-
-    @Override
-    protected boolean validateMask(Long ipMask) {
-        return IpUtil.validateMaskV4(ipMask);
     }
 
 }

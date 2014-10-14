@@ -67,16 +67,10 @@ public class NetworkRedirect extends Redirect {
 
     /**
      * constructor.
-     * 
-     * @param prefix
-     *            prefix.
-     * @param mask
-     *            mask.
+     * @param urls urls。
      */
-    public NetworkRedirect(String prefix, String mask, List<String> urls) {
+    public NetworkRedirect(List<String> urls) {
         super();
-        this.prefix = prefix;
-        this.mask = mask;
         this.urls = urls;
     }
 
