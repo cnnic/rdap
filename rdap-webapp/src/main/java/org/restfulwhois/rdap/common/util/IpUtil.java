@@ -93,6 +93,20 @@ public final class IpUtil {
     }
 
     /**
+     * get hex char size.
+     * 
+     * @return hex char size.
+     */
+    public static int getHexCharSize(IpVersion ipVersion) {
+        if (ipVersion.isV4()) {
+            return IpV4.getHexCharSize();
+        } else if (ipVersion.isV6()) {
+            return IpV6.getHexCharSize();
+        }
+        return 0;
+    }
+
+    /**
      * get IP version of CIDR str.
      * 
      * @param cidr
