@@ -170,8 +170,8 @@ public class Entity extends BaseModel {
     }
     
     @Override
-    public ModelType getUri() {
-        return ModelType.ENTITYURI;
+    public ModelUri getUri() {
+        return ModelUri.ENTITY;
     }
 
     @Override

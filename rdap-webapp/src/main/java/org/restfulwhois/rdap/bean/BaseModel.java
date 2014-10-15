@@ -112,9 +112,9 @@ public class BaseModel {
      * 
      * @return simple name of class
      */
-    public ModelType getUri() {
+    public ModelUri getUri() {
         try {
-            return ModelType.BASEURI;
+            return ModelUri.BASE;
         } catch (Exception e) {
             throw new UnsupportedOperationException(
                     "must be implemented in sub class if I'am called.");

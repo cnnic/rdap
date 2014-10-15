@@ -31,40 +31,24 @@
 package org.restfulwhois.rdap.bean;
 
 /**
- * model type.
+ * model uri.
  * 
- * @author jiashuo
+ * @author zhanyq
  * 
  */
-public enum ModelType {
+public enum ModelUri {
+  
     /**
-     * model type.
+     * 5 main object URI.
      */
-    SEARCH("search"), VARIANT("variant"), ERRORMESSAGE("errorMessage"),
+    DOMAIN("domain/"), ENTITY("entity/"), NAMESERVER("nameServer/"),
     /**
-     * 5 main object model.
+     * 5 main object URI.
      */
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-            "autnum"),
+    AUTNUM("autnum/"), IP("ip/"), BASE("base/");
+   
     /**
-     * another domain type, only used for DB Query.
-     */
-    ARPA("arpa"), Base("base"),
-    /**
-     * help ip event link publicId type.
-     */
-    HELP("help"), IP("ip"), EVENT("event"), LINK("link"), PUBLICID("publicId"),
-    /**
-     * remark notice secureDns type.
-     */
-    REMARK("remark"), NOTICE("notice"), SECUREDNS("secureDns"),    
-    /**
-     * ds type.
-     */
-    DSDATA("dsData"), KEYDATA("keyData");
-    
-    /**
-     * name of model type.
+     * name of model uri.
      */
     private String name;
 
@@ -74,41 +58,41 @@ public enum ModelType {
      * @param name
      *            name.
      */
-    private ModelType(String name) {
+    private ModelUri(String name) {
         this.name = name;
     }
 
     /**
-     * get model type be name.
+     * get model uri be name.
      * 
      * @param name
      *            name.
-     * @return model ModelType.
+     * @return model ModelUri.
      */
-    public static ModelType getModelType(String name) {
-        ModelType[] modelTypes = ModelType.values();
-        for (ModelType modelType : modelTypes) {
-            if (modelType.getName().equals(name)) {
-                return modelType;
+    public static ModelUri getModelUri(String name) {
+        ModelUri[] modelUris = ModelUri.values();
+        for (ModelUri modelUri : modelUris) {
+            if (modelUri.getName().equals(name)) {
+                return modelUri;
             }
         }
         return null;
     }
 
     /**
-     * get type name.
+     * get uri name.
      * 
-     * @return type name.
+     * @return uri name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * set type name.
+     * set uri name.
      * 
      * @param name
-     *            type name.
+     *            uri name.
      */
     public void setName(String name) {
         this.name = name;

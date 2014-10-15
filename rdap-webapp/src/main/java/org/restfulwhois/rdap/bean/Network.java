@@ -119,8 +119,8 @@ public class Network extends BaseModel {
     }
     
     @Override
-    public ModelType getUri() {
-        return ModelType.IPURI;
+    public ModelUri getUri() {
+        return ModelUri.IP;
     }
 
     @Override

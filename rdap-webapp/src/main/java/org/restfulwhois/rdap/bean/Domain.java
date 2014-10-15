@@ -123,8 +123,8 @@ public class Domain extends BaseModel {
     }
     
     @Override
-    public ModelType getUri() {
-        return ModelType.DOMAINURI;
+    public ModelUri getUri() {
+        return ModelUri.DOMAIN;
     }
 
     @Override

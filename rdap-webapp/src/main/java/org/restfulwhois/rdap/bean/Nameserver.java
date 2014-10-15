@@ -102,8 +102,8 @@ public class Nameserver extends BaseModel {
         return ModelType.NAMESERVER;
     }
     @Override
-    public ModelType getUri() {
-        return ModelType.NAMESERVERURI;
+    public ModelUri getUri() {
+        return ModelUri.NAMESERVER;
     }
 
     @Override
