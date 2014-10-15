@@ -37,6 +37,7 @@ package org.restfulwhois.rdap.bean;
  * 
  */
 public enum ModelType {
+    BASE("base"),
     /**
      * model type.
      */
