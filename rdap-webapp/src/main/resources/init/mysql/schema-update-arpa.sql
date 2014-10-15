@@ -24,3 +24,7 @@ drop index IDX_NAMESERVER_IP_IP on RDAP_NAMESERVER_IP;
 alter table RDAP_NAMESERVER_IP drop column IP_HIGH;
 alter table RDAP_NAMESERVER_IP drop column IP_LOW;
 alter table RDAP_NAMESERVER_IP add column IP varbinary(16) not null after NAMESERVER_ID;
+
+
+
+alter table RDAP_IP add column CIDR  varchar(100) not  null ;
