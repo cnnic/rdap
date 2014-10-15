@@ -368,16 +368,16 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     private Domain queryArpaWithoutInnerObjects(QueryParam queryParam) {
 
         final String arpaName = queryParam.getQ();
-        final NetworkInBytes networkInBytes = IpUtil.parseArpa(arpaName);
+        final NetworkInBytes network = IpUtil.parseArpa(arpaName);
         List<Domain> result = null;
+        final int hexCharSize = IpUtil.getHexCharSize(network.getIpVersion());
         String sql =
-                "select d.* " + " from RDAP_IP ip, RDAP_DOMAIN d"
+                "select d.* "
+                        + " from RDAP_IP ip, RDAP_DOMAIN d"
                         + " where d.NETWORK_ID = ip.IP_ID"
                         + " and ip.STARTADDRESS <= ? and ip.ENDADDRESS >= ?"
-                        + " and d.TYPE = 'arpa' and ip.version = ? ";
-        if (networkInBytes.getIpVersion().isV4()) {
-            sql = sql + " && LENGTH(HEX(STARTADDRESS))=8 && LENGTH(HEX(ENDADDRESS))=8 ";
-        }
+                        + " and d.TYPE = 'arpa' and ip.version = ? "
+                        + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? ";
         sql = sql + " order by ip.STARTADDRESS desc,ip.ENDADDRESS limit 1";
         final String finalSql = sql;
         result = jdbcTemplate.query(new PreparedStatementCreator() {
@@ -385,9 +385,11 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(finalSql);
-                ps.setBytes(1, networkInBytes.getStartAddress());
-                ps.setBytes(2, networkInBytes.getStartAddress());
-                ps.setString(3, networkInBytes.getIpVersion().getName());
+                ps.setBytes(1, network.getStartAddress());
+                ps.setBytes(2, network.getStartAddress());
+                ps.setString(3, network.getIpVersion().getName());
+                ps.setInt(4, hexCharSize);
+                ps.setInt(5, hexCharSize);
                 return ps;
             }
         }, new DomainResultSetExtractor());

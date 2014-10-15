@@ -42,7 +42,23 @@ import com.googlecode.ipv6.IPv6Network;
  * 
  */
 public class IpV6 {
-    private static final int MAX_LENGTH_PER = 4;
+    /**
+     * max lengh
+     */
+    private static final int MAX_LENGTH_PER_SPLIT = 4;
+    /**
+     * hex char size is 32, that is 16 bytes.
+     */
+    private static final int HEX_CHAR_SIZE_V6 = 32;
+
+    /**
+     * get hex char size.
+     * 
+     * @return hex char size.
+     */
+    public static int getHexCharSize() {
+        return HEX_CHAR_SIZE_V6;
+    }
 
     /**
      * check if IPv6 is valid.
@@ -96,7 +112,7 @@ public class IpV6 {
             if (StringUtils.contains(split, ".")) {
                 break;
             }
-            if (StringUtils.length(split) > MAX_LENGTH_PER) {
+            if (StringUtils.length(split) > MAX_LENGTH_PER_SPLIT) {
                 return false;
             }
         }
@@ -141,10 +157,10 @@ public class IpV6 {
      * @return string.
      */
     public static String toString(byte[] v6Bytes) {
-        try{
+        try {
             IPv6Address iPv6Address = IPv6Address.fromByteArray(v6Bytes);
             return iPv6Address.toString();
-        }catch(Exception e){
+        } catch (Exception e) {
             return StringUtils.EMPTY;
         }
     }

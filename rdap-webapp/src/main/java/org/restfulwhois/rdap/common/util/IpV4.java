@@ -53,6 +53,20 @@ public class IpV4 {
     private static final int N_BYTES_V4 = 4;
 
     /**
+     * hex char size is 8, that is 4 bytes.
+     */
+    private static final int HEX_CHAR_SIZE_V4 = 8;
+
+    /**
+     * get hex char size.
+     * 
+     * @return hex char size.
+     */
+    public static int getHexCharSize() {
+        return HEX_CHAR_SIZE_V4;
+    }
+
+    /**
      * check if IPv4 is valid.
      * 
      * @param cidr

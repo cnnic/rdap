@@ -361,24 +361,25 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
     public static PreparedStatementCreator generatePStatCreator(
             QueryParam queryParam, String ipTableName) {
         NetworkQueryParam ipQueryParam = (NetworkQueryParam) queryParam;
-        final NetworkInBytes networkInBytes = ipQueryParam.getNetworkInBytes();
+        final NetworkInBytes network = ipQueryParam.getNetworkInBytes();
+        final int hexCharSize = IpUtil.getHexCharSize(network.getIpVersion());
         String sql =
                 "select * from "
                         + ipTableName
-                        + " where STARTADDRESS<=? && ENDADDRESS>=? && VERSION = ?";
-        if (networkInBytes.getIpVersion().isV4()) {
-            sql = sql + " && LENGTH(HEX(STARTADDRESS))=8 && LENGTH(HEX(ENDADDRESS))=8 ";
-        }
-        sql = sql + " order by STARTADDRESS desc,ENDADDRESS limit 1";
+                        + " where STARTADDRESS<=? && ENDADDRESS>=? && VERSION = ?"
+                        + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? "
+                        + " order by STARTADDRESS desc,ENDADDRESS limit 1";
         final String finalSql = sql;
         PreparedStatementCreator pstatCreator = new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = null;
                 ps = connection.prepareStatement(finalSql);
-                ps.setBytes(1, networkInBytes.getStartAddress());
-                ps.setBytes(2, networkInBytes.getEndAddress());
-                ps.setString(3, networkInBytes.getIpVersion().getName());
+                ps.setBytes(1, network.getStartAddress());
+                ps.setBytes(2, network.getEndAddress());
+                ps.setString(3, network.getIpVersion().getName());
+                ps.setInt(4, hexCharSize);
+                ps.setInt(5, hexCharSize);
                 return ps;
             }
         };
