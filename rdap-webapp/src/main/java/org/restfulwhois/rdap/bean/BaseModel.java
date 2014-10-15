@@ -100,8 +100,7 @@ public class BaseModel {
      * @return simple name of class
      */
     public ModelType getObjectType() {
-        throw new UnsupportedOperationException(
-                "must be implemented in sub class if I'am called.");
+        return ModelType.BASE;
     }
 
     /**
