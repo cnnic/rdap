@@ -367,7 +367,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                         + ipTableName
                         + " where STARTADDRESS<=? && ENDADDRESS>=? && VERSION = ?";
         if (networkInBytes.getIpVersion().isV4()) {
-            sql = sql + " && STARTADDRESS<POW(2,32) && ENDADDRESS<POW(2,32) ";
+            sql = sql + " && LENGTH(HEX(STARTADDRESS))=8 && LENGTH(HEX(ENDADDRESS))=8 ";
         }
         sql = sql + " order by STARTADDRESS desc,ENDADDRESS limit 1";
         final String finalSql = sql;

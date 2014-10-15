@@ -31,8 +31,6 @@
 
 package org.restfulwhois.rdap.common.util;
 
-import java.math.BigInteger;
-
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
@@ -73,11 +71,6 @@ public final class IpUtil {
             .getLogger(IpUtil.class);
 
     /**
-     * the V6 ARPA has 32 sections, like F.F.1.0.ip6.arpa .
-     */
-    private static final int BYTE_SIZE_IPV6 = 16;
-
-    /**
      * the V4 IP address has 4 sections, like 192.0.0.in-addr.arpa .
      */
     private static final int BYTE_SIZE_IPV4 = 4;
@@ -91,16 +84,6 @@ public final class IpUtil {
      * Radix 10 .
      */
     public static final int RADIX_DECIMAL = 10;
-
-    /**
-     * 0xFF .
-     */
-    private static final byte BYTE_FF = (byte) 0xFF;
-
-    /**
-     * 0x00 .
-     */
-    private static final byte BYTE_00 = (byte) 0x00;
 
     /**
      * default constructor.
@@ -333,15 +316,6 @@ public final class IpUtil {
             cidr = cidr + "/128";
         }
         return cidr;
-    }
-
-    public static void main(String[] args) {
-        BigInteger inverseIpBigInteger = new BigInteger("F", RADIX_HEX);
-        byte[] byteArray = inverseIpBigInteger.toByteArray();
-        inverseIpBigInteger = new BigInteger("1F", RADIX_HEX);
-        byteArray = inverseIpBigInteger.toByteArray();
-        inverseIpBigInteger = new BigInteger("F1", RADIX_HEX);
-        byteArray = inverseIpBigInteger.toByteArray();
     }
 
     /**

@@ -376,7 +376,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                         + " and ip.STARTADDRESS <= ? and ip.ENDADDRESS >= ?"
                         + " and d.TYPE = 'arpa' and ip.version = ? ";
         if (networkInBytes.getIpVersion().isV4()) {
-            sql = sql + " && ip.STARTADDRESS<POW(2,32) && ip.ENDADDRESS<POW(2,32) ";
+            sql = sql + " && LENGTH(HEX(STARTADDRESS))=8 && LENGTH(HEX(ENDADDRESS))=8 ";
         }
         sql = sql + " order by ip.STARTADDRESS desc,ip.ENDADDRESS limit 1";
         final String finalSql = sql;
