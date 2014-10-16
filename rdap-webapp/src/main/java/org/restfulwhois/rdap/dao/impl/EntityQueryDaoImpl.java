@@ -57,6 +57,7 @@ import org.restfulwhois.rdap.bean.PublicId;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
 import org.restfulwhois.rdap.common.RdapProperties;
+import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.common.util.JcardUtil;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.dao.QueryDao;
@@ -290,6 +291,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setRemarks(remarks);
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
+        links.add(AutoGenerateSelfLink.generateSelfLink(entity));
         entity.setLinks(links);
         queryAndSetEvents(entity, entityId);
     }

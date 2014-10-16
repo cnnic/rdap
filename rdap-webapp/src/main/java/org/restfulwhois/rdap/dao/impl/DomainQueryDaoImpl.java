@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
  *
@@ -59,6 +59,7 @@ import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
 import org.restfulwhois.rdap.bean.SecureDns;
 import org.restfulwhois.rdap.bean.Variants;
+import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.common.util.NetworkInBytes;
@@ -313,6 +314,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 remarkQueryDao.queryAsInnerObjects(domainId, type);
         domain.setRemarks(remarks);
         List<Link> links = linkQueryDao.queryAsInnerObjects(domainId, type);
+        links.add(AutoGenerateSelfLink.generateSelfLink(domain));
         domain.setLinks(links);
         List<Event> events = eventQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEvents(events);

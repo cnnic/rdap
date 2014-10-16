@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
@@ -168,7 +169,16 @@ public class Entity extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.ENTITY;
     }
+    
+    @Override
+    public QueryUri getUri() {
+        return QueryUri.ENTITY;
+    }
 
+    @Override
+    public String generateLinkHref() {
+        return getUri().getName() + getHandle();
+    }
     /**
      * add a status string to status list.
      * 

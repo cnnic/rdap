@@ -206,7 +206,16 @@ public class Domain extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.DOMAIN;
     }
+    
+    @Override
+    public QueryUri getUri() {
+        return QueryUri.DOMAIN;
+    }
 
+    @Override
+    public String generateLinkHref() {
+        return getUri().getName() + getLdhName();
+    }
     /**
      * add a status string to status list.
      * 

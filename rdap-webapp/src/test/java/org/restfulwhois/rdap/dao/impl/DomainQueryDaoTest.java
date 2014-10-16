@@ -113,7 +113,7 @@ public class DomainQueryDaoTest extends BaseTest {
         // links
         List<Link> domainLinks = domain.getLinks();
         assertNotNull(domainLinks);
-        assertEquals(1, domainLinks.size());
+        assertEquals(2, domainLinks.size());
         Link domainLink = domainLinks.get(0);
         assertNotNull(domainLink);
         assertEquals("http://domainlink", domainLink.getValue());
@@ -315,3 +315,4 @@ public class DomainQueryDaoTest extends BaseTest {
     }
     
 }
+
