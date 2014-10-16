@@ -380,7 +380,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                         + " and ip.STARTADDRESS <= ? and ip.ENDADDRESS >= ?"
                         + " and d.TYPE = 'arpa' and ip.version = ? "
                         + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? ";
-        sql = sql + " order by ip.STARTADDRESS desc,ip.ENDADDRESS limit 1";
+        sql = sql + " order by ip.STARTADDRESS desc,ip.ENDADDRESS,d.DOMAIN_ID limit 1";
         final String finalSql = sql;
         result = jdbcTemplate.query(new PreparedStatementCreator() {
             @Override

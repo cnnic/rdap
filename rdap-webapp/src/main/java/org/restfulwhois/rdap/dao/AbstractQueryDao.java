@@ -251,4 +251,22 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
                         ipVersionColumnName, IpVersion.V6.getName());
         return "(" + conditionV4 + " or " + conditionV6 + ")";
     }
+    
+    /**
+     * generate network version sql: v4 or v6 .
+     * 
+     * @param ipVersionColumnName
+     *            ipVersionColumnName.
+     * @return sql.
+     */
+    protected static String generateNetworkVersionSql(String ipVersionColumnName) {
+        String conditionTpl = "%s='%s'";
+        String conditionV4 =
+                String.format(conditionTpl, ipVersionColumnName,
+                        IpVersion.V4.getName());
+        String conditionV6 =
+                String.format(conditionTpl, ipVersionColumnName,
+                        IpVersion.V6.getName());
+        return "(" + conditionV4 + " or " + conditionV6 + ")";
+    }
 }

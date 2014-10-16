@@ -376,6 +376,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                         + ipTableName
                         + " where STARTADDRESS<=? && ENDADDRESS>=? && VERSION = ?"
                         + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? "
+                        + " && " + generateNetworkVersionSql("VERSION")
                         + " order by STARTADDRESS desc,ENDADDRESS limit 1";
         final String finalSql = sql;
         PreparedStatementCreator pstatCreator = new PreparedStatementCreator() {
