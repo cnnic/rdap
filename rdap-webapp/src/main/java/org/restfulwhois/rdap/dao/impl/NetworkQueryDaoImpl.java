@@ -238,7 +238,13 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                         + " on ip.IP_ID = rel.REL_ID "
                         + " left outer join RDAP_IP_STATUS status on ip.IP_ID = "
                         + " status.IP_ID where rel.ENTITY_ID = ? "
-                        + " and REL_OBJECT_TYPE=? " + " order by ip.HANDLE ";
+                        + " and REL_OBJECT_TYPE=? "
+                        + " and "
+                        + super.generateNetworkRangeSql("STARTADDRESS",
+                                "VERSION")
+                        + " and "
+                        + super.generateNetworkRangeSql("ENDADDRESS", "VERSION")
+                        + " order by ip.HANDLE ";
         List<Network> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override

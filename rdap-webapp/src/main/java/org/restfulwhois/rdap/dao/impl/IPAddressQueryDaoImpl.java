@@ -89,7 +89,8 @@ public class IPAddressQueryDaoImpl extends AbstractQueryDao<IPAddress> {
     private IPAddress queryWithoutInnerObjects(final Long outerObjectId) {
         final String sql =
                 "select * from RDAP_NAMESERVER_IP nsIP "
-                        + " where nsIP.NAMESERVER_ID = ?";
+                        + " where nsIP.NAMESERVER_ID = ?" + " and "
+                        + super.generateNetworkRangeSql("IP", "VERSION");
         IPAddress result = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
