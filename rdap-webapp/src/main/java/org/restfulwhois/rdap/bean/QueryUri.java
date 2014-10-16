@@ -36,7 +36,7 @@ package org.restfulwhois.rdap.bean;
  * @author zhanyq
  * 
  */
-public enum ModelUri {
+public enum QueryUri {
   
     /**
      * 5 main object URI.
@@ -58,7 +58,7 @@ public enum ModelUri {
      * @param name
      *            name.
      */
-    private ModelUri(String name) {
+    private QueryUri(String name) {
         this.name = name;
     }
 
@@ -69,9 +69,9 @@ public enum ModelUri {
      *            name.
      * @return model ModelUri.
      */
-    public static ModelUri getModelUri(String name) {
-        ModelUri[] modelUris = ModelUri.values();
-        for (ModelUri modelUri : modelUris) {
+    public static QueryUri getModelUri(String name) {
+        QueryUri[] modelUris = QueryUri.values();
+        for (QueryUri modelUri : modelUris) {
             if (modelUri.getName().equals(name)) {
                 return modelUri;
             }

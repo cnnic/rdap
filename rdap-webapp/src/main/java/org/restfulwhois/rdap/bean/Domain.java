@@ -208,8 +208,8 @@ public class Domain extends BaseModel {
     }
     
     @Override
-    public ModelUri getUri() {
-        return ModelUri.DOMAIN;
+    public QueryUri getUri() {
+        return QueryUri.DOMAIN;
     }
 
     @Override

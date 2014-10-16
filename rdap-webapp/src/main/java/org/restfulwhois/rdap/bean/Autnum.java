@@ -107,8 +107,8 @@ public class Autnum extends BaseModel {
     }
     
     @Override
-    public ModelUri getUri() {
-        return ModelUri.AUTNUM;
+    public QueryUri getUri() {
+        return QueryUri.AUTNUM;
     }
 
     @Override

@@ -103,8 +103,8 @@ public class Nameserver extends BaseModel {
     }
     
     @Override
-    public ModelUri getUri() {
-        return ModelUri.NAMESERVER;
+    public QueryUri getUri() {
+        return QueryUri.NAMESERVER;
     }
 
     @Override

@@ -171,8 +171,8 @@ public class Entity extends BaseModel {
     }
     
     @Override
-    public ModelUri getUri() {
-        return ModelUri.ENTITY;
+    public QueryUri getUri() {
+        return QueryUri.ENTITY;
     }
 
     @Override

@@ -107,9 +107,9 @@ public class BaseModel {
      * 
      * @return simple name of class
      */
-    public ModelUri getUri() {
+    public QueryUri getUri() {
         try {
-            return ModelUri.BASE;
+            return QueryUri.BASE;
         } catch (Exception e) {
             throw new UnsupportedOperationException(
                     "must be implemented in sub class if I'am called.");
