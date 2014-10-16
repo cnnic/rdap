@@ -12,11 +12,11 @@
 	<RDAP_POLICY id="10" OBJECT_TYPE="nameServer" HIDE_COLUMN="ipAddresses" />
 	<RDAP_POLICY id="11" OBJECT_TYPE="nameServer" HIDE_COLUMN="status" />
 	<RDAP_POLICY id="12" OBJECT_TYPE="nameServer" HIDE_COLUMN="unicodeName" />
-<!-- domain-->	
+	<!-- domain -->
 	<RDAP_POLICY id="101" OBJECT_TYPE="domain" HIDE_COLUMN="variants" />
 	<RDAP_POLICY id="102" OBJECT_TYPE="domain" HIDE_COLUMN="nameServers" />
 	<RDAP_POLICY id="103" OBJECT_TYPE="domain" HIDE_COLUMN="secureDNS" />
-<!-- policy-->	
+	<!-- policy -->
 	<RDAP_POLICY id="201" OBJECT_TYPE="entity" HIDE_COLUMN="entities" />
 	<RDAP_POLICY id="202" OBJECT_TYPE="entity" HIDE_COLUMN="asEventActor" />
 	<RDAP_POLICY id="203" OBJECT_TYPE="entity" HIDE_COLUMN="id" />

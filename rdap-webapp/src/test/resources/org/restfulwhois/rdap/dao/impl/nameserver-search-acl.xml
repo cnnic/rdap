@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 	<!-- ASCII ns -->
-	<RDAP_NAMESERVER NAMESERVER_ID='11' HANDLE='h1' LDH_NAME='ns.cnnic.cn'
-		UNICODE_NAME='ns.cnnic.cn' PORT43='port43' LANG='en' />
+	<RDAP_NAMESERVER NAMESERVER_ID='11' HANDLE='h1'
+		LDH_NAME='ns.cnnic.cn' UNICODE_NAME='ns.cnnic.cn' PORT43='port43'
+		LANG='en' />
 	<!-- status -->
-	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="1" NAMESERVER_ID="11"
-		STATUS="validated" />
-	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="2" NAMESERVER_ID="11"
-		STATUS="update prohibited" />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="1"
+		NAMESERVER_ID="11" STATUS="validated" />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="2"
+		NAMESERVER_ID="11" STATUS="update prohibited" />
 	<!-- ipAddress -->
-	<RDAP_NAMESERVER_IP NAMESERVER_IP_ID='11' NAMESERVER_ID='11' IP_HIGH='16777216'
-		IP_LOW='33554431' VERSION='v6' />
-	<RDAP_NAMESERVER_IP NAMESERVER_IP_ID='12' NAMESERVER_ID='11' IP_HIGH='0' IP_LOW='0' VERSION='v6' />
+	<RDAP_NAMESERVER_IP NAMESERVER_IP_ID='11'
+		NAMESERVER_ID='11' IP_HIGH='16777216' IP_LOW='33554431' VERSION='v6' />
+	<RDAP_NAMESERVER_IP NAMESERVER_IP_ID='12'
+		NAMESERVER_ID='11' IP_HIGH='0' IP_LOW='0' VERSION='v6' />
 	<!-- events -->
 	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="weijunkai"
 		EVENT_DATE="2014-01-01 00:01:01" />
@@ -22,8 +24,10 @@
 		HREF="http://nameserverlink" MEDIA="screen" TYPE="application/json" />
 	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="11"
 		REL_OBJECT_TYPE="nameserver" LINK_ID="1" />
-	<RDAP_LINK_HREFLANG HREFLANG_ID='1' LINK_ID="1" HREFLANG="en" />
-	<RDAP_LINK_HREFLANG HREFLANG_ID='2' LINK_ID="1" HREFLANG="zh" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='1' LINK_ID="1"
+		HREFLANG="en" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='2' LINK_ID="1"
+		HREFLANG="zh" />
 	<RDAP_LINK_TITLE TITLE_ID='1' LINK_ID="1" TITLE="Title1 of Link1" />
 	<RDAP_LINK_TITLE TITLE_ID='2' LINK_ID="1" TITLE="Title2 of Link1" />
 	<!-- remarks -->
@@ -41,36 +45,42 @@
 		REL_OBJECT_TYPE="remark" LINK_ID="102" />
 
 	<!-- Unicode ns -->
-	<RDAP_NAMESERVER NAMESERVER_ID='12' HANDLE='h2' LDH_NAME='ns.xn--xkry9kk1bz66a.cn'
-		UNICODE_NAME='ns.清华大学.cn' PORT43='port43' LANG='zh' />
+	<RDAP_NAMESERVER NAMESERVER_ID='12' HANDLE='h2'
+		LDH_NAME='ns.xn--xkry9kk1bz66a.cn' UNICODE_NAME='ns.清华大学.cn' PORT43='port43'
+		LANG='zh' />
 	<!-- status -->
-	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="3" NAMESERVER_ID="12"
+	<RDAP_NAMESERVER_STATUS NAMESERVER_STATUS_ID="3"
+		NAMESERVER_ID="12" STATUS="update prohibited" />
+	<!-- entity -->
+	<RDAP_ENTITY ENTITY_ID='1' HANDLE='h1' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_ENTITY ENTITY_ID='2' HANDLE='h2' KIND='individual'
+		FN='john' EMAIL='john2@gmail.com' TITLE='CEO' ORG='org' URL='http://john2.com'
+		PORT43='whois.example.net' />
+	<RDAP_ENTITY_STATUS ENTITY_STATUS_ID="1" ENTITY_ID="1"
+		STATUS="validated" />
+	<RDAP_ENTITY_STATUS ENTITY_STATUS_ID="2" ENTITY_ID="1"
 		STATUS="update prohibited" />
-    <!-- entity -->
-    <RDAP_ENTITY ENTITY_ID='1' HANDLE='h1' KIND='individual'
-        FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
-        PORT43='whois.example.net' />
-    <RDAP_ENTITY ENTITY_ID='2' HANDLE='h2' KIND='individual'
-        FN='john' EMAIL='john2@gmail.com' TITLE='CEO' ORG='org' URL='http://john2.com'
-        PORT43='whois.example.net' />
-    <RDAP_ENTITY_STATUS ENTITY_STATUS_ID="1" ENTITY_ID="1"
-        STATUS="validated" />
-    <RDAP_ENTITY_STATUS ENTITY_STATUS_ID="2" ENTITY_ID="1"
-        STATUS="update prohibited" />
-    <REL_ENTITY_REGISTRATION REL_ENTITY_ID='1'
-        ENTITY_ID='1' REL_ID='1' REL_OBJECT_TYPE='entity' ENTITY_ROLE="registrant" />
-    <REL_ENTITY_REGISTRATION REL_ENTITY_ID='11'
-        ENTITY_ID='1' REL_ID='11' REL_OBJECT_TYPE='nameServer' ENTITY_ROLE="administrative" />
-    <REL_ENTITY_REGISTRATION REL_ENTITY_ID='111'
-        ENTITY_ID='2' REL_ID='1' REL_OBJECT_TYPE='entity' ENTITY_ROLE="registrant" />
-    <!-- nameserver-acl -->    
-    <RDAP_IDENTITY_USER USER_ID='1' USER_NAME='user1' USER_PWD='pwd' />
-    <RDAP_IDENTITY_ROLE ROLE_ID='1' ROLE_NAME='role1' />   
-    <RDAP_IDENTITY_USER_REL_ROLE ID='1' USER_ID='1' ROLE_ID='1' />
-    
-    <RDAP_IDENTITY_USER USER_ID='2' USER_NAME='user2' USER_PWD='pwd' />
-    <RDAP_IDENTITY_ROLE ROLE_ID='2' ROLE_NAME='role2' />
-    <RDAP_IDENTITY_USER_REL_ROLE ID='2' USER_ID='2' ROLE_ID='2' />   
-    <!-- entity -->
-    <RDAP_IDENTITY_ACL ID='4' OBJECT_TYPE='entity' OBJECT_ID='1' ROLE_ID='1' />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='1'
+		ENTITY_ID='1' REL_ID='1' REL_OBJECT_TYPE='entity' ENTITY_ROLE="registrant" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='11'
+		ENTITY_ID='1' REL_ID='11' REL_OBJECT_TYPE='nameServer' ENTITY_ROLE="administrative" />
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='111'
+		ENTITY_ID='2' REL_ID='1' REL_OBJECT_TYPE='entity' ENTITY_ROLE="registrant" />
+	<!-- nameserver-acl -->
+	<RDAP_IDENTITY_USER USER_ID='1' USER_NAME='user1'
+		USER_PWD='pwd' />
+	<RDAP_IDENTITY_ROLE ROLE_ID='1' ROLE_NAME='role1' />
+	<RDAP_IDENTITY_USER_REL_ROLE ID='1'
+		USER_ID='1' ROLE_ID='1' />
+
+	<RDAP_IDENTITY_USER USER_ID='2' USER_NAME='user2'
+		USER_PWD='pwd' />
+	<RDAP_IDENTITY_ROLE ROLE_ID='2' ROLE_NAME='role2' />
+	<RDAP_IDENTITY_USER_REL_ROLE ID='2'
+		USER_ID='2' ROLE_ID='2' />
+	<!-- entity -->
+	<RDAP_IDENTITY_ACL ID='4' OBJECT_TYPE='entity'
+		OBJECT_ID='1' ROLE_ID='1' />
 </dataset>
