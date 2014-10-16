@@ -124,7 +124,7 @@ public class RestResponseUtil {
      */
     private static ErrorMessage getErrorMessageByErrorCode(String errorCode) {
         Long codeLongVal = Long.valueOf(errorCode);
-        if (null == errorMessageMap) {
+        if (null == errorMessageMap || errorMessageMap.isEmpty()) {
             initErrorMessages();
         }
         ErrorMessage result = errorMessageMap.get(codeLongVal);

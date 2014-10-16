@@ -52,6 +52,7 @@ import org.restfulwhois.rdap.bean.NameserverQueryParam;
 import org.restfulwhois.rdap.bean.PageBean;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
+import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
@@ -191,6 +192,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         ns.setRemarks(remarks);
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
+        links.add(AutoGenerateSelfLink.generateSelfLink(ns));
         ns.setLinks(links);
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);

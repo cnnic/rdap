@@ -105,7 +105,16 @@ public class Autnum extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.AUTNUM;
     }
+    
+    @Override
+    public QueryUri getUri() {
+        return QueryUri.AUTNUM;
+    }
 
+    @Override
+    public String generateLinkHref() {
+        return getUri().getName() + getStartAutnum();
+    }
     /**
      * add a status string to status list.
      * 

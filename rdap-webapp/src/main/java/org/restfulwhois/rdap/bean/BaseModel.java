@@ -102,7 +102,29 @@ public class BaseModel {
     public ModelType getObjectType() {
         return ModelType.BASE;
     }
-
+    /**
+     * get the uri of object.
+     * 
+     * @return simple name of class
+     */
+    public QueryUri getUri() {
+        try {
+            return QueryUri.BASE;
+        } catch (Exception e) {
+            throw new UnsupportedOperationException(
+                    "must be implemented in sub class if I'am called.");
+        }
+    }
+    
+    /**
+     * get the value of href in the link.
+     * 
+     * @return string
+     */
+    public String generateLinkHref() {
+       return getUri().getName() + getHandle();
+    }
+    
     /**
      * get identity of object.
      * 

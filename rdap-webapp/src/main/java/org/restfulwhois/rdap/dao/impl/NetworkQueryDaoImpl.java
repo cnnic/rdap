@@ -47,6 +47,7 @@ import org.restfulwhois.rdap.bean.Network;
 import org.restfulwhois.rdap.bean.NetworkQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
+import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.common.util.NetworkInBytes;
@@ -295,6 +296,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                 remarkQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
         objIp.setRemarks(remarks);
         List<Link> links = linkQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
+        links.add(AutoGenerateSelfLink.generateSelfLink(objIp));
         objIp.setLinks(links);
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
@@ -430,6 +432,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
         network.setParentHandle(rs.getString("PARENT_HANDLE"));
         network.setLang(rs.getString("LANG"));
         network.setPort43(rs.getString("PORT43"));
+        network.setCidr(rs.getString("CIDR"));
         return network;
     }
 
