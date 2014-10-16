@@ -189,6 +189,7 @@ public class Domain extends BaseModel {
      * 
      * @return true if is, false if not.
      */
+    @JsonIgnore
     public boolean isDnrDomain() {
         return DomainType.DNR.equals(type);
     }
@@ -198,6 +199,7 @@ public class Domain extends BaseModel {
      * 
      * @return true if is, false if not.
      */
+    @JsonIgnore
     public boolean isArpaDomain() {
         return DomainType.ARPA.equals(type);
     }
