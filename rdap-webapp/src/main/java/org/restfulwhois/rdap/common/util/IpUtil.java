@@ -114,6 +114,9 @@ public final class IpUtil {
      * @return IP version.
      */
     public static IpVersion getIpVersionOfNetwork(String cidr) {
+        if (StringUtils.contains(cidr, "./")) {
+            return IpVersion.INVALID;
+        }
         if (IpV4.isValidIpV4(cidr)) {
             return IpVersion.V4;
         } else if (IpV6.isValidIpV6(cidr)) {
@@ -409,7 +412,7 @@ public final class IpUtil {
         public static IpVersion getIpVersion(String name) {
             IpVersion[] ipVersions = IpVersion.values();
             for (IpVersion ipVersion : ipVersions) {
-                if (ipVersion.getName().equals(name)) {
+                if (ipVersion.getName().equalsIgnoreCase(name)) {
                     return ipVersion;
                 }
             }

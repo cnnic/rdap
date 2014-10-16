@@ -42,6 +42,8 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.restfulwhois.rdap.bean.BaseModel;
 import org.restfulwhois.rdap.bean.ModelType;
 import org.restfulwhois.rdap.bean.QueryParam;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +69,16 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(AbstractQueryDao.class);
+    /**
+     * hex char size for v4.
+     */
+    private static final int hexCharSizeV4 = IpUtil
+            .getHexCharSize(IpVersion.V4);
+    /**
+     * hex char size for v6.
+     */
+    private static final int hexCharSizeV6 = IpUtil
+            .getHexCharSize(IpVersion.V6);
     /**
      * %:used for SQL 'like' clause.
      */
@@ -217,5 +229,44 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
             intVal = Integer.valueOf(str);
         }
         return intVal;
+    }
+    
+    /**
+     * generate network range sql: v4 is 8, v6 is 32.
+     * 
+     * @param ipColumnName
+     *            ipColumnName.
+     * @param ipVersionColumnName
+     *            ipVersionColumnName.
+     * @return sql.
+     */
+    protected String generateNetworkRangeSql(String ipColumnName,
+            String ipVersionColumnName) {
+        String conditionTpl = "LENGTH(HEX(%s))= %s and %s='%s'";
+        String conditionV4 =
+                String.format(conditionTpl, ipColumnName, hexCharSizeV4,
+                        ipVersionColumnName, IpVersion.V4.getName());
+        String conditionV6 =
+                String.format(conditionTpl, ipColumnName, hexCharSizeV6,
+                        ipVersionColumnName, IpVersion.V6.getName());
+        return "(" + conditionV4 + " or " + conditionV6 + ")";
+    }
+    
+    /**
+     * generate network version sql: v4 or v6 .
+     * 
+     * @param ipVersionColumnName
+     *            ipVersionColumnName.
+     * @return sql.
+     */
+    protected static String generateNetworkVersionSql(String ipVersionColumnName) {
+        String conditionTpl = "%s='%s'";
+        String conditionV4 =
+                String.format(conditionTpl, ipVersionColumnName,
+                        IpVersion.V4.getName());
+        String conditionV6 =
+                String.format(conditionTpl, ipVersionColumnName,
+                        IpVersion.V6.getName());
+        return "(" + conditionV4 + " or " + conditionV6 + ")";
     }
 }
