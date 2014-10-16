@@ -31,12 +31,17 @@
 
 package org.restfulwhois.rdap.common.util;
 
-import java.math.BigDecimal;
-import java.util.regex.Pattern;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.util.SubnetUtils.SubnetInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.googlecode.ipv6.IPv6Address;
+import com.googlecode.ipv6.IPv6Network;
+import com.googlecode.ipv6.IPv6NetworkMask;
 
 /**
  * IP address validator and convert util.
@@ -55,17 +60,30 @@ import com.googlecode.ipv6.IPv6Address;
  */
 public final class IpUtil {
     /**
-     * max mask for v4.
+     * dot char.
      */
-    private static final Long MAX_MASK_V4 = 32L;
+    private static final char CHAR_DOT = '.';
+
     /**
-     * min mask.
+     * logger.
      */
-    private static final Long MIN_MASK = 0L;
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(IpUtil.class);
+
     /**
-     * max mask for v6.
+     * the V4 IP address has 4 sections, like 192.0.0.in-addr.arpa .
      */
-    private static final Long MAX_MASK_V6 = 128L;
+    private static final int BYTE_SIZE_IPV4 = 4;
+
+    /**
+     * Radix 16 .
+     */
+    public static final int RADIX_HEX = 16;
+
+    /**
+     * Radix 10 .
+     */
+    public static final int RADIX_DECIMAL = 10;
 
     /**
      * default constructor.
@@ -75,441 +93,328 @@ public final class IpUtil {
     }
 
     /**
-     * validate mask for v4.
+     * get hex char size.
      * 
-     * @param mask
-     *            mask.
-     * @return true if valid, false if not.
+     * @return hex char size.
      */
-    public static boolean validateMaskV4(Long mask) {
-        return mask <= MAX_MASK_V4 && mask >= MIN_MASK;
-    }
-
-    /**
-     * validate mask for v6.
-     * 
-     * @param mask
-     *            mask.
-     * @return true if valid, false if not.
-     */
-    public static boolean validateMaskV6(Long mask) {
-        return mask <= MAX_MASK_V6 && mask >= MIN_MASK;
-    }
-
-    /**
-     * convert ipV4 Long format to String.
-     * 
-     * @param longIp
-     *            ipV4 long value.
-     * @return ipv4 string.
-     */
-    public static String longToIpV4(long longIp) {
-        final long numBeyond = 0xffffffffL;
-        if (longIp > numBeyond) {
-            return "";
+    public static int getHexCharSize(IpVersion ipVersion) {
+        if (ipVersion.isV4()) {
+            return IpV4.getHexCharSize();
+        } else if (ipVersion.isV6()) {
+            return IpV6.getHexCharSize();
         }
-        final int threeByteSize = 24;
-        final int threeByteMask = 0x00ffffff;
-        final int twoByteSize = 16;
-        final int twoByteMask = 0x0000ffff;
-        final int oneByteSize = 8;
-        final int oneByteMask = 0x000000ff;
-        return String.format("%d.%d.%d.%d", (longIp >>> threeByteSize)
-                & oneByteMask, (longIp & threeByteMask) >>> twoByteSize,
-                (longIp & twoByteMask) >>> oneByteSize, longIp & oneByteMask);
+        return 0;
     }
 
     /**
-     * convert ipV6 Long format to String.
+     * get IP version of CIDR str.
      * 
-     * @param highBits
-     *            high 64 bits long value.
-     * @param lowBits
-     *            low 64 bits long value.
-     * @return ipv6 string.
+     * @param cidr
+     *            ip str.
+     * @return IP version.
      */
-    public static String longToIpV6(long highBits, long lowBits) {
-        final int oneByteSize = 8;
-        final int v6MaxSegment = 8;
-        final int twoByteSize = 16;
-        final int fourByteMask = 0xFFFF;
-        short[] shorts = new short[v6MaxSegment];
-        String[] strings = new String[shorts.length];
-        for (int i = 0; i < v6MaxSegment; i++) {
-            if (i >= 0 && i < v6MaxSegment / 2) {
-                strings[i] =
-                        String.format("%x", (short) (((highBits << i
-                                * twoByteSize) >>> twoByteSize
-                                * (oneByteSize - 1)) & fourByteMask));
-            } else {
-                strings[i] =
-                        String.format("%x", (short) (((lowBits << i
-                                * twoByteSize) >>> twoByteSize
-                                * (oneByteSize - 1)) & fourByteMask));
-            }
+    public static IpVersion getIpVersionOfNetwork(String cidr) {
+        if (IpV4.isValidIpV4(cidr)) {
+            return IpVersion.V4;
+        } else if (IpV6.isValidIpV6(cidr)) {
+            return IpVersion.V6;
         }
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < strings.length; i++) {
-            result.append(strings[i]);
-            if (i < strings.length - 1) {
-                result.append(":");
-            }
-        }
-        return result.toString();
+        return IpVersion.INVALID;
     }
 
     /**
-     * check if IP v4 string is valid.
+     * parse network from CIDR str.
      * 
-     * @param str
-     *            IP string(include *).
-     * @return true if valid, false if not.
+     * @param cidr
+     *            CIDR str.
+     * @param ipVersion
+     *            ip version.
+     * @return NetworkInBytes.
      */
-    public static boolean isIpV4StrValid(String str) {
-        Pattern pattern =
-                Pattern.compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
-                        + "|[*])\\.){3}(\\d|[1-9]\\d|1\\d\\d|"
-                        + "2[0-4]\\d|25[0-5]|[*])$");
-        return pattern.matcher(str).matches();
-    }
-
-    /**
-     * check if IP v4 whole string is valid.
-     * 
-     * @param str
-     *            IP string(without *).
-     * @return true if valid, false if not.
-     */
-    public static boolean isIpV4StrWholeValid(String str) {
-        Pattern pattern =
-                Pattern.compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
-                        + ")\\.){3}(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])$");
-        return pattern.matcher(str).matches();
-    }
-
-    /**
-     * verify if IP v6 string is valid.
-     * 
-     * @param strIp
-     *            IP string.
-     * @return true if valid, false if not.
-     */
-    public static boolean isIpV6StrValid(String strIp) {
-        return isIpV6RegexValid(strIp);
-    }
-
-    /**
-     * check if IP v6 string is valid by regex.
-     * 
-     * @param strIp
-     *            IP string.
-     * @return true if valid, false if not.
-     */
-    public static boolean isIpV6RegexValid(String strIp) {
-        final String regexV6 =
-                "^([\\da-fA-F]{1,4}:){6}"
-                        + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
-                        + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
-                        + "^::([\\da-fA-F]{1,4}:){0,5}"
-                        + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
-                        + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
-                        + "^([\\da-fA-F]{1,4}:):([\\da-fA-F]{1,4}:){0,4}"
-                        + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
-                        + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
-                        + "^([\\da-fA-F]{1,4}:){2}:([\\da-fA-F]{1,4}:){0,3}"
-                        + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
-                        + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
-                        + "^([\\da-fA-F]{1,4}:){3}:([\\da-fA-F]{1,4}:){0,2}"
-                        + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
-                        + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
-                        + "^([\\da-fA-F]{1,4}:){4}:([\\da-fA-F]{1,4}:){0,1}"
-                        + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
-                        + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
-                        + "^([\\da-fA-F]{1,4}:){5}:"
-                        + "((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}"
-                        + "(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$|"
-                        + "^([\\da-fA-F]{1,4}:){7}[\\da-fA-F]{1,4}$|"
-                        + "^:((:[\\da-fA-F]{1,4}){1,7}|:)$|"
-                        + "^[\\da-fA-F]{1,4}:((:[\\da-fA-F]{1,4}){1,6}|:)$|"
-                        + "^([\\da-fA-F]{1,4}:){2}((:[\\da-fA-F]{1,4}){1,5}|:)$|"
-                        + "^([\\da-fA-F]{1,4}:){3}((:[\\da-fA-F]{1,4}){1,4}|:)$|"
-                        + "^([\\da-fA-F]{1,4}:){4}((:[\\da-fA-F]{1,4}){1,3}|:)$|"
-                        + "^([\\da-fA-F]{1,4}:){5}((:[\\da-fA-F]{1,4}){1,2}|:)$|"
-                        + "^([\\da-fA-F]{1,4}:){6}:([\\da-fA-F]{1,4})?$|"
-                        + "^([\\da-fA-F]{1,4}:){7}:$";
-        Pattern pattern = Pattern.compile(regexV6);
-        boolean isRegular = pattern.matcher(strIp).matches();
-        return isRegular;
-    }
-
-    /**
-     * check if ip string is valid.
-     * 
-     * @param ipStr
-     *            ip string.
-     * @param isV4
-     *            if the ip type is V4
-     * 
-     * @return true if valid, false if not.
-     */
-    public static boolean isIpLongValid(String ipStr, boolean isV4) {
-        if (StringUtils.isBlank(ipStr)) {
-            return false;
-        }
-        /**
-         * ipLimitV6 2^64.
-         */
-        final String ipLimitV6 = "18446744073709551616";
-        /**
-         * ipLimitV4 2^32.
-         */
-        final String ipLimitV4 = "4294967296";
-
-        String ipLimit = isV4 ? ipLimitV4 : ipLimitV6;
-        if (ipStr.length() == ipLimit.length()) {
-            if (ipStr.compareTo(ipLimit) < 0) {
-                return true;
-            }
-        } else {
-            if (ipStr.length() < ipLimit.length()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Ip converted to type long.
-     * 
-     * @param ipStr
-     *            string of ip
-     * @return ipLongArr[]
-     */
-    public static long[] ipToLong(String ipStr) {
-        long[] ipLongArr = new long[2];
-        final int leftShift3 = 24;
-        final int leftShift2 = 16;
-        final int leftShift1 = 8;
-        if (ipStr.indexOf(".") >= 0) {
-            String[] ip = ipStr.split("\\.");
-            ipLongArr[1] =
-                    (Long.parseLong(ip[0]) << leftShift3)
-                            + (Long.parseLong(ip[1]) << leftShift2)
-                            + (Long.parseLong(ip[2]) << leftShift1)
-                            + Long.parseLong(ip[3]);
-            ipLongArr[0] = 0;
-        } else {
-            return ipV6ToLong(ipStr);
-        }
-        return ipLongArr;
-    }
-
-    /**
-     * Ip converted to type decimal.
-     * 
-     * @param ipStr
-     *            string for IP
-     * @return BigDecimal[]
-     */
-    public static BigDecimal[] ipToBigDecimal(String ipStr) {
-
-        if (ipStr.indexOf(":") >= 0) {
-            return ipV6ToBigDecimalJar(ipStr);
-        } else {
-            return ipV4ToDecimal(ipStr);
-        }
-    }
-
-    /**
-     * string of IpV4 converted to Decimal.
-     * 
-     * @param ipStr
-     *            ipV4 string
-     * @return BigDecimal[]
-     */
-    public static BigDecimal[] ipV4ToDecimal(String ipStr) {
-        BigDecimal[] ipLongArr = new BigDecimal[2];
-        String[] ip = ipStr.split("\\.");
-        // trim ':'
-        for (int i = 0; i < ip.length; ++i) {
-            ip[i] = ip[i].replaceAll(":", "");
-        }
-        final int leftShift1 = 8;
-        final int leftShift2 = leftShift1 * 2;
-        final int leftShift3 = leftShift1 * 3;
-        ipLongArr[1] =
-                BigDecimal.valueOf((Long.parseLong(ip[0]) << leftShift3)
-                        + (Long.parseLong(ip[1]) << leftShift2)
-                        + (Long.parseLong(ip[2]) << leftShift1)
-                        + Long.parseLong(ip[3]));
-        ipLongArr[0] = BigDecimal.valueOf(0);
-        return ipLongArr;
-    }
-
-    /**
-     * string of IpV6 converted to long.
-     * 
-     * @param longip
-     *            a ipv6 string
-     * @return long[]
-     */
-    public static long[] ipV6ToLong(String longip) {
-        String[] strings = expandShortNotation(longip).split(":");
-        long[] longs = new long[strings.length];
-
-        long high = 0L;
-        long low = 0L;
-        final int radix = 16;
-        final int fieldSize = 4;
-        for (int i = 0; i < strings.length; i++) {
-            if (i >= 0 && i < fieldSize) {
-                high |=
-                        (Long.parseLong(strings[i], radix) << ((longs.length
-                                - i - 1) * radix));
-            } else {
-                low |=
-                        (Long.parseLong(strings[i], radix) << ((longs.length
-                                - i - 1) * radix));
-            }
-        }
-        longs[0] = high;
-        if (longs.length > 1) {
-            longs[1] = low;
-        }
-        return longs;
-    }
-
-    /**
-     * string of IpV6 converted to Decimal,mainly use the jar.
-     * 
-     * @param strIp
-     *            the IP string
-     * @return BigDecimal[]
-     */
-    public static BigDecimal[] ipV6ToBigDecimalJar(String strIp) {
-        BigDecimal[] decimalIp = new BigDecimal[2];
-        final IPv6Address iPv6Address = IPv6Address.fromString(strIp);
-        decimalIp = ipV6ToBigDecimal(iPv6Address.toLongString());
-        return decimalIp;
-    }
-
-    /**
-     * string of IpV6 converted to Decimal,mainly convert to string.
-     * 
-     * @param strIp
-     *            the IP string
-     * @return BigDecimal[]
-     */
-    public static BigDecimal[] ipV6ToBigDecimal(String strIp) {
-        final int radix = 16;
-        final int numMulti = 65536;
-        final int filedEachSeg = 4;
-        String[] strFields = expandShortNotation(strIp).split(":");
-        if (strFields.length <= 0) {
+    public static NetworkInBytes parseNetwork(String cidr, IpVersion ipVersion) {
+        if (ipVersion.isNotValidIp()) {
             return null;
         }
-        String strIpV4 = "";
-        int nV6Fields = strFields.length;
-        for (int i = 0; i < strFields.length; ++i) {
-            if (strFields[i].indexOf(".") >= 0) {
-                nV6Fields = i;
-                strIpV4 = strFields[i];
-                break;
-            }
+        if (ipVersion.isV4()) {
+            return parseNetworkV4(cidr);
         }
-        BigDecimal[] decimalIp = new BigDecimal[strFields.length];
-        for (int i = 0; i < nV6Fields; i++) {
-            long numIp = Long.parseLong(strFields[i], radix);
-            BigDecimal numEachField = BigDecimal.valueOf(numIp);
-            int iFieldNum = i % filedEachSeg;
-            int iSegNum = i / filedEachSeg;
+        if (ipVersion.isV6()) {
+            return parseNetworkV6(cidr);
+        }
+        return null;
+    }
 
-            BigDecimal numShift =
-                    BigDecimal.valueOf(Math.pow(numMulti, (filedEachSeg
-                            - iFieldNum - 1)));
-            numEachField = numEachField.multiply(numShift);
-            if (0 == iFieldNum) {
-                decimalIp[iSegNum] = numEachField;
+    /**
+     * parse network for v6.
+     * 
+     * @param cidr
+     *            cidr.
+     * @return NetworkInBytes
+     */
+    public static NetworkInBytes parseNetworkV6(String cidr) {
+        IPv6Network network = IPv6Network.fromString(cidr);
+        NetworkInBytes result =
+                new NetworkInBytes(IpVersion.V6, network.getFirst()
+                        .toByteArray(), network.getLast().toByteArray());
+        return result;
+    }
+
+    /**
+     * parse network for v4.
+     * 
+     * @param cidr
+     *            cidr.
+     * @return NetworkInBytes
+     */
+    public static NetworkInBytes parseNetworkV4(String cidr) {
+        SubnetUtils utils = new SubnetUtils(cidr);
+        SubnetInfo info = utils.getInfo();
+        NetworkInBytes result =
+                new NetworkInBytes(IpVersion.V4, IpV4.toByteArray(info
+                        .network()), IpV4.toByteArray(info.broadcast()));
+        return result;
+    }
+
+    /**
+     * parse string IP to byte array.
+     * 
+     * @param ipPrefix
+     *            ipPrefix.
+     * @return bytes.
+     */
+    public static byte[] ipToByteArray(String ipPrefix, IpVersion ipVersion) {
+        if (null == ipVersion || ipVersion.isNotValidIp()) {
+            return null;
+        }
+        if (ipVersion.isV4()) {
+            return IpV4.toByteArray(ipPrefix);
+        }
+        if (ipVersion.isV6()) {
+            return IpV6.toByteArray(ipPrefix);
+        }
+        return null;
+    }
+
+    /**
+     * get IpVersion of IP.
+     * 
+     * @param ipPrefix
+     *            ipPrefix.
+     * @return IpVersion.
+     */
+    public static IpVersion getIpVersionOfIp(String ipPrefix) {
+        if (StringUtils.isBlank(ipPrefix)) {
+            return IpVersion.INVALID;
+        }
+        if (StringUtils.contains(ipPrefix, "/")) {
+            return IpVersion.INVALID;
+        }
+        IpVersion ipVersion = getIpVersionOfNetwork(ipPrefix);
+        return ipVersion;
+    }
+
+    /**
+     * IP bytes to string.
+     * 
+     * @param bytes
+     *            bytes.
+     * @param ipVersion
+     *            ipVersion.
+     * @return string.
+     */
+    public static String toString(byte[] bytes, IpVersion ipVersion) {
+        if (null == ipVersion) {
+            return StringUtils.EMPTY;
+        }
+        if (ipVersion.isV4()) {
+            return IpV4.toString(bytes);
+        } else if (ipVersion.isV6()) {
+            return IpV6.toString(bytes);
+        }
+        return StringUtils.EMPTY;
+    }
+
+    /**
+     * decode a string to an Arpa.
+     * 
+     * @param name
+     *            an arpa string.
+     * @return Arpa.
+     */
+    public static NetworkInBytes parseArpa(String name) {
+        LOGGER.debug("parseArpa:{}", name);
+        if (StringUtils.isEmpty(name)) {
+            return null;
+        } else if (StringUtils.endsWith(name, DomainUtil.IPV4_ARPA_SUFFIX)) {
+            return parseIpV4Arpa(name);
+        } else if (StringUtils.endsWith(name, DomainUtil.IPV6_ARPA_SUFFIX)) {
+            return parseIpV6Arpa(name);
+        }
+
+        return null;
+    }
+
+    /**
+     * parse IPV4 ARPA domain to IP bytes.
+     * 
+     * @param name
+     *            an ARPA string.
+     * @return ARPA.
+     */
+    private static NetworkInBytes parseIpV4Arpa(String name) {
+        LOGGER.debug("parseInAddrArpa, name:" + name);
+        String arpa =
+                StringUtils.removeEndIgnoreCase(name, CHAR_DOT
+                        + DomainUtil.IPV4_ARPA_SUFFIX);
+        arpa = StringUtils.reverseDelimited(arpa, CHAR_DOT);
+        String[] arpaLabels = StringUtils.split(arpa, CHAR_DOT);
+        int mask = arpaLabels.length * 8;
+        String[] ipLabels = new String[BYTE_SIZE_IPV4];
+        for (int i = 0; i < BYTE_SIZE_IPV4; i++) {
+            if (i < arpaLabels.length) {
+                ipLabels[i] = arpaLabels[i];
             } else {
-                decimalIp[iSegNum] = decimalIp[iSegNum].add(numEachField);
+                ipLabels[i] = "0";
             }
         }
-        if (StringUtils.isNotBlank(strIpV4)) {
-            BigDecimal[] ipV4Decimal = ipV4ToDecimal(strIpV4);
-            int indexSeg = nV6Fields / filedEachSeg;
-            decimalIp[indexSeg] = decimalIp[indexSeg].add(ipV4Decimal[0]);
-            decimalIp[indexSeg] = decimalIp[indexSeg].add(ipV4Decimal[1]);
-        }
-        return decimalIp;
+        String networkStr = StringUtils.join(ipLabels, CHAR_DOT) + "/" + mask;
+        return parseNetworkV4(networkStr);
     }
 
     /**
-     * The abbreviated IPv6 converted into a standard wording.
+     * parse IPV6 ARPA domain to IP bytes.
      * 
-     * @param strIp
-     *            ip string
-     * @return ipv6String
+     * @param name
+     *            an ARPA string.
+     * @return ARPA.
      */
-    public static String expandShortNotation(String strIp) {
-        final String strDoubleColon = "::";
-        final String strSingleColon = ":";
-        final int allIpV6Colons = 7;
-        int allColons = allIpV6Colons;
-        if (!strIp.contains(strDoubleColon)) {
-            return strIp;
-        } else if (strIp.equals(strDoubleColon)) {
-            return generateZeroes(allColons + 1);
-        } else {
-            final int numberOfColons = countOccurrences(strIp, ':');
-
-            if (strIp.indexOf(".") >= 0) {
-                allColons -= 1;
-            }
-            if (strIp.startsWith(strDoubleColon)) {
-                return strIp.replace(strDoubleColon,
-                        generateZeroes((allColons + 2) - numberOfColons));
-            } else if (strIp.endsWith(strDoubleColon)) {
-                return strIp.replace(strDoubleColon, strSingleColon
-                        + generateZeroes((allColons + 2) - numberOfColons));
-            } else {
-                return strIp.replace(strDoubleColon, strSingleColon
-                        + generateZeroes((allColons + 2 - 1) - numberOfColons));
-            }
-        }
+    private static NetworkInBytes parseIpV6Arpa(String name) {
+        LOGGER.debug("parseIp6Arpa, name:" + name);
+        String arpa =
+                StringUtils.removeEndIgnoreCase(name, CHAR_DOT
+                        + DomainUtil.IPV6_ARPA_SUFFIX);
+        arpa = StringUtils.remove(arpa, CHAR_DOT);
+        String ip = StringUtils.reverse(arpa);
+        String fullIp = StringUtils.rightPad(ip, 32, '0');
+        byte[] startIpBytes = DatatypeConverter.parseHexBinary(fullIp);
+        int networkMask = StringUtils.length(arpa) * 4;
+        IPv6Address fromByteArray = IPv6Address.fromByteArray(startIpBytes);
+        IPv6Network network =
+                IPv6Network.fromAddressAndMask(fromByteArray,
+                        IPv6NetworkMask.fromPrefixLength(networkMask));
+        NetworkInBytes result =
+                new NetworkInBytes(IpVersion.V6, network.getFirst()
+                        .toByteArray(), network.getLast().toByteArray());
+        return result;
     }
 
     /**
-     * Generated IPv6 address 0.
+     * add network mask if not contains mask.
      * 
-     * @param number
-     *            from number to string
-     * @return ipv6String
+     * @param cidr
+     *            cidr.
+     * @return CIDR.
      */
-    public static String generateZeroes(int number) {
-        final StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < number; i++) {
-            builder.append("0:");
+    public static String addNetworkMaskIfNotContainsMask(String cidr) {
+        if (StringUtils.contains(cidr, "/")) {
+            return cidr;
         }
-
-        return builder.toString();
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(cidr);
+        if (ipVersion.isNotValidIp()) {
+            return cidr;
+        }
+        if (ipVersion.isV4()) {
+            cidr = cidr + "/32";
+        }
+        if (ipVersion.isV6()) {
+            cidr = cidr + "/128";
+        }
+        return cidr;
     }
 
     /**
-     * The record ipv6 address: Number of.
+     * IP version:v4,v6.
      * 
-     * @param haystack
-     *            the string
-     * @param needle
-     *            the split char
-     * @return count
+     * @author jiashuo
+     * 
      */
-    public static int countOccurrences(String haystack, char needle) {
-        int count = 0;
-        for (int i = 0; i < haystack.length(); i++) {
-            if (haystack.charAt(i) == needle) {
-                count++;
-            }
+    public enum IpVersion {
+        /**
+         * The representation of IPv4 addresses in this document uses the
+         * dotted-decimal notation described in [RFC1166]. The representation of
+         * IPv6 addresses in this document follow the forms outlined in
+         * [RFC5952].
+         */
+        INVALID("invalid"), V4("v4"), V6("v6");
+        /**
+         * a string signifying the IP protocol version of the network: "v4"
+         * signifying an IPv4 network, "v6" signifying an IPv6 network.
+         */
+        private String name;
+
+        /**
+         * check if is ipv6.
+         * 
+         * @return true if is, false if not.
+         */
+        public boolean isV4() {
+            return V4.equals(this);
         }
-        return count;
+
+        /**
+         * check if is ipv6.
+         * 
+         * @return true if is, false if not.
+         */
+        public boolean isV6() {
+            return V6.equals(this);
+        }
+
+        /**
+         * check if is invalid.
+         * 
+         * @return true if is invalid, false if not.
+         */
+        public boolean isNotValidIp() {
+            return INVALID.equals(this);
+        }
+
+        /**
+         * default constructor.
+         * 
+         * @param name
+         *            ip version name.
+         */
+        private IpVersion(String name) {
+            this.name = name;
+        }
+
+        /**
+         * get name.
+         * 
+         * @return name.
+         */
+        @JsonValue
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * get IpVersion by name.
+         * 
+         * @param name
+         *            name.
+         * @return IpVersion if name is valid, null if not
+         */
+        public static IpVersion getIpVersion(String name) {
+            IpVersion[] ipVersions = IpVersion.values();
+            for (IpVersion ipVersion : ipVersions) {
+                if (ipVersion.getName().equals(name)) {
+                    return ipVersion;
+                }
+            }
+            return null;
+        }
+
     }
 }

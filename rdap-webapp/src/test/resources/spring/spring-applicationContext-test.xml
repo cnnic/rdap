@@ -21,7 +21,7 @@
 		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />
 		<property name="accessControlForInnerObjectForSearch" value="${accessControlForInnerObjectForSearch}" />
 	</bean>
-
+	
 	<import resource="classpath:spring/spring-serviceContext.xml" />
 	<import resource="classpath:spring/spring-servlet.xml" />
 	<import resource="classpath:spring/spring-timer.xml" />

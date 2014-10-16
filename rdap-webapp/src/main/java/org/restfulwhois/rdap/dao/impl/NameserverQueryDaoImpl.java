@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.dao.impl;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,6 +54,7 @@ import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.Remark;
 import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
@@ -83,7 +83,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(LinkQueryDaoImpl.class); 
+            .getLogger(LinkQueryDaoImpl.class);
     /**
      * remark dao.
      */
@@ -107,7 +107,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     @Autowired
     private QueryDao<IPAddress> ipAddressQueryDao;
-    
+
     /**
      * entityQueryDao.
      */
@@ -119,27 +119,23 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * 
      * @param outerObjectId
      *            id from domain.
-     * 
-     * @param outerModelType
-     *            type of the object
-     * 
      * @return result for List<Nameserver>
      */
     private List<Nameserver> queryNameserverWithDomainID(
-            final Long outerObjectId, final ModelType outerModelType) {
-        final String sql = "select * from RDAP_NAMESERVER ns inner join "
-                + "REL_DOMAIN_NAMESERVER rel on (ns.NAMESERVER_ID = "
-                + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ? and rel.DOMAIN_TYPE"
-                + " = ? ) left outer join RDAP_NAMESERVER_STATUS status"
-                + " on ns.NAMESERVER_ID = status.NAMESERVER_ID";
+            final Long outerObjectId) {
+        final String sql =
+                "select * from RDAP_NAMESERVER ns inner join "
+                        + "REL_DOMAIN_NAMESERVER rel on (ns.NAMESERVER_ID = "
+                        + "rel.NAMESERVER_ID and rel.DOMAIN_ID = ?) "
+                        + " left outer join RDAP_NAMESERVER_STATUS status"
+                        + " on ns.NAMESERVER_ID = status.NAMESERVER_ID";
 
-        List<Nameserver> result = jdbcTemplate.query(
-                new PreparedStatementCreator() {
+        List<Nameserver> result =
+                jdbcTemplate.query(new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
                         ps.setLong(1, outerObjectId);
-                        ps.setString(2, outerModelType.getName());
                         return ps;
                     }
                 }, new NSResultSetExtractor());
@@ -153,8 +149,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     @Override
     public List<Nameserver> queryAsInnerObjects(Long outerObjectId,
             ModelType outerModelType) {
-        List<Nameserver> listNameserver = queryNameserverWithDomainID(
-                outerObjectId, outerModelType);
+        List<Nameserver> listNameserver =
+                queryNameserverWithDomainID(outerObjectId);
         if (listNameserver == null) {
             return null;
         }
@@ -184,40 +180,44 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             return;
         }
         Long nsID = ns.getId();
-        List<IPAddress> listIPAddress = ipAddressQueryDao.queryAsInnerObjects(
-                nsID, ModelType.NAMESERVER);
+        List<IPAddress> listIPAddress =
+                ipAddressQueryDao.queryAsInnerObjects(nsID,
+                        ModelType.NAMESERVER);
         if (listIPAddress.size() > 0) {
             IPAddress objIPAddress = listIPAddress.get(0);
             ns.setIpAddresses(objIPAddress);
         }
-        List<Remark> remarks = remarkQueryDao.queryAsInnerObjects(nsID,
-                ModelType.NAMESERVER);
+        List<Remark> remarks =
+                remarkQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
         ns.setRemarks(remarks);
-        List<Link> links = linkQueryDao.queryAsInnerObjects(nsID,
-                ModelType.NAMESERVER);
+        List<Link> links =
+                linkQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
         links.add(AutoGenerateSelfLink.generateSelfLink(ns));
         ns.setLinks(links);
-        List<Event> events = eventQueryDao.queryAsInnerObjects(nsID,
-                ModelType.NAMESERVER);
+        List<Event> events =
+                eventQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
         ns.setEvents(events);
     }
 
     /**
      * query entities from database and set them to nameserver.
-     * @param ns nameserver which will be set.
+     * 
+     * @param ns
+     *            nameserver which will be set.
      */
     private void queryAndSetEntities(Nameserver ns) {
         if (ns == null) {
             return;
         }
-        List<Entity> entities = entityQueryDao.queryAsInnerObjects(
-                ns.getId(), ModelType.NAMESERVER);
+        List<Entity> entities =
+                entityQueryDao.queryAsInnerObjects(ns.getId(),
+                        ModelType.NAMESERVER);
         ns.setEntities(entities);
     }
 
     /**
-     * query nameserver from RDAP_NAMESERVER using punyname,
-     * without inner objects.
+     * query nameserver from RDAP_NAMESERVER using punyname, without inner
+     * objects.
      * 
      * @param queryParam
      *            query parameter of Nameserver include punyname
@@ -226,12 +226,13 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     private Nameserver queryWithoutInnerObjects(QueryParam queryParam) {
         NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
         final String punyName = nsQueryParam.getPunyName();
-        final String sql = "select * from RDAP_NAMESERVER ns "
-                + " left outer join RDAP_NAMESERVER_STATUS status "
-                + " on ns.NAMESERVER_ID = status.NAMESERVER_ID "
-                + " where LDH_NAME= ?";
-        List<Nameserver> result = jdbcTemplate.query(
-                new PreparedStatementCreator() {
+        final String sql =
+                "select * from RDAP_NAMESERVER ns "
+                        + " left outer join RDAP_NAMESERVER_STATUS status "
+                        + " on ns.NAMESERVER_ID = status.NAMESERVER_ID "
+                        + " where LDH_NAME= ?";
+        List<Nameserver> result =
+                jdbcTemplate.query(new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
                             Connection connection) throws SQLException {
                         PreparedStatement ps = connection.prepareStatement(sql);
@@ -314,8 +315,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
 
     /**
      * query and set entities to nameserver.
+     * 
      * @param nameservers
-     *          nameserver list which will be set with entities.
+     *            nameserver list which will be set with entities.
      */
     private void queryAndSetEntities(List<Nameserver> nameservers) {
         if (null == nameservers) {
@@ -324,25 +326,6 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         for (Nameserver nameserver : nameservers) {
             queryAndSetEntities(nameserver);
         }
-    }
-
-    /**
-     * get bigDecimal of ip from nameserver query parameter.
-     * @param queryParam
-     *            query parameter of nameserver
-     * @return BigDecimal[] for ip
-     * 
-     * @author weijunkai
-     */
-    public BigDecimal[] getBigDecimalIp(QueryParam queryParam) {
-        NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
-        final String strIp = nsQueryParam.getQ();
-        if (!IpUtil.isIpV4StrWholeValid(strIp)
-                && !IpUtil.isIpV6StrValid(strIp)) {
-            return null;
-        }
-        BigDecimal[] arrayIp = IpUtil.ipToBigDecimal(strIp);
-        return arrayIp;
     }
 
     @Override
@@ -354,42 +337,33 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         boolean isSearchByIp = nsQueryParam.getIsSearchByIp();
         Long recordsCount = 0L;
         if (isSearchByIp) {
-            BigDecimal[] arrayIp = getBigDecimalIp(nsQueryParam);
-            if (arrayIp == null) {
+            IpVersion ipVersion = IpUtil.getIpVersionOfIp(nsQueryParam.getQ());
+            if (ipVersion.isNotValidIp()) {
                 return 0L;
             }
-            BigDecimal ipTmp = new BigDecimal(0L);
-            if (arrayIp.length > 1) {
-                ipTmp = arrayIp[1];
-            }
-            final BigDecimal ipHigh = arrayIp[0];
-            final BigDecimal ipLow = ipTmp;
-            final String strHead =
+            final String sql =
                     "select count(1) as COUNT from RDAP_NAMESERVER_IP "
-                    + " where IP_LOW = ? && ";
-            String tmpSql = "IP_HIGH = ?";
-            if (ipHigh.doubleValue() == 0.0) {
-                tmpSql = "(IP_HIGH = ? or IP_HIGH is NULL)";
-            }
-            final String sql = strHead + tmpSql;
+                            + " where IP = ? ";
+            final byte[] ipInBytes =
+                    IpUtil.ipToByteArray(nsQueryParam.getQ(), ipVersion);
             recordsCount = jdbcTemplate.query(new PreparedStatementCreator() {
                 public PreparedStatement createPreparedStatement(
                         Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setBigDecimal(2, ipHigh);
-                    ps.setBigDecimal(1, ipLow);
+                    ps.setBytes(1, ipInBytes);
                     return ps;
                 }
             }, new CountResultSetExtractor());
         } else {
             final String nameserver = nsQueryParam.getQ();
             final String punyName = nsQueryParam.getPunyName();
-            final String nameserverLikeClause = super
-                    .generateLikeClause(nameserver);
-            final String punyNameLikeClause = super
-                    .generateLikeClause(punyName);
-            final String sql = "select count(1) as COUNT from RDAP_NAMESERVER "
-                    + " where LDH_NAME like ? or UNICODE_NAME like ? ";
+            final String nameserverLikeClause =
+                    super.generateLikeClause(nameserver);
+            final String punyNameLikeClause =
+                    super.generateLikeClause(punyName);
+            final String sql =
+                    "select count(1) as COUNT from RDAP_NAMESERVER "
+                            + " where LDH_NAME like ? or UNICODE_NAME like ? ";
             recordsCount = jdbcTemplate.query(new PreparedStatementCreator() {
                 public PreparedStatement createPreparedStatement(
                         Connection connection) throws SQLException {
@@ -423,31 +397,23 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         startPage = startPage >= 0 ? startPage : 0;
         final long startRow = startPage * page.getMaxRecords();
         if (isSearchByIp) {
-            BigDecimal[] arrayIp = getBigDecimalIp(nsQueryParam);
-            BigDecimal ipTmp = new BigDecimal(0L);
-            if (arrayIp.length > 1) {
-                ipTmp = arrayIp[1];
+            IpVersion ipVersion = IpUtil.getIpVersionOfIp(nsQueryParam.getQ());
+            if (ipVersion.isNotValidIp()) {
+                return result;
             }
-            final BigDecimal ipHigh = arrayIp[0];
-            final BigDecimal ipLow = ipTmp;
-            final String strHead =
+            final byte[] ipInBytes =
+                    IpUtil.ipToByteArray(nsQueryParam.getQ(), ipVersion);
+            final String sql =
                     "select * from RDAP_NAMESERVER ns,RDAP_NAMESERVER_IP ip"
-                    + " where ns.NAMESERVER_ID=ip.NAMESERVER_ID and ";
-            String tmpSql = "IP_HIGH = ?";
-            if (ipHigh.doubleValue() == 0.0) {
-                tmpSql = "(IP_HIGH = ? or IP_HIGH is NULL) ";
-            }
-            final String strEnd = 
-                    "and IP_LOW = ? order by ns.LDH_NAME limit ?,? ";
-            final String sql = strHead + tmpSql + strEnd;
+                            + " where ns.NAMESERVER_ID=ip.NAMESERVER_ID and "
+                            + " IP = ? order by ns.LDH_NAME limit ?,? ";
             result = jdbcTemplate.query(new PreparedStatementCreator() {
                 public PreparedStatement createPreparedStatement(
                         Connection connection) throws SQLException {
                     PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setBigDecimal(1, ipHigh);
-                    ps.setBigDecimal(2, ipLow);
-                    ps.setLong(3, startRow);
-                    ps.setLong(4, page.getMaxRecords());
+                    ps.setBytes(1, ipInBytes);
+                    ps.setLong(2, startRow);
+                    ps.setLong(3, page.getMaxRecords());
                     return ps;
                 }
             }, new NameserverResultSetExtractor());
@@ -455,11 +421,12 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
             final String nsName = nsQueryParam.getQ();
             final String punyName = nsQueryParam.getPunyName();
             final String nsNameLikeClause = super.generateLikeClause(nsName);
-            final String punyNameLikeClause = super
-                    .generateLikeClause(punyName);
-            final String sql = "select * from RDAP_NAMESERVER ns "
-                    + " where LDH_NAME like ? or UNICODE_NAME like ?"
-                    + " order by ns.LDH_NAME limit ?,? ";
+            final String punyNameLikeClause =
+                    super.generateLikeClause(punyName);
+            final String sql =
+                    "select * from RDAP_NAMESERVER ns "
+                            + " where LDH_NAME like ? or UNICODE_NAME like ?"
+                            + " order by ns.LDH_NAME limit ?,? ";
             result = jdbcTemplate.query(new PreparedStatementCreator() {
                 public PreparedStatement createPreparedStatement(
                         Connection connection) throws SQLException {
@@ -517,6 +484,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
 
     /**
      * count the number of resultSet.
+     * 
      * @author weijunkai
      * 
      */
@@ -557,8 +525,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         List<ModelStatus> nameserverStatusList =
                 queryNameserverStatus(nameserverIds);
         for (ModelStatus status : nameserverStatusList) {
-            BaseModel obj = BaseModel.findObjectFromListById(listNameserver,
-                    status.getId());
+            BaseModel obj =
+                    BaseModel.findObjectFromListById(listNameserver,
+                            status.getId());
             if (null == obj) {
                 continue;
             }
@@ -578,13 +547,14 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         if (null == nameserverIds || nameserverIds.size() == 0) {
             return new ArrayList<ModelStatus>();
         }
-        final String nameserverIdsJoinedByComma = StringUtils.join(
-                nameserverIds, ",");
-        final String sqlTpl = "select * from RDAP_NAMESERVER_STATUS"
-                + " where NAMESERVER_ID in (%s)";
+        final String nameserverIdsJoinedByComma =
+                StringUtils.join(nameserverIds, ",");
+        final String sqlTpl =
+                "select * from RDAP_NAMESERVER_STATUS"
+                        + " where NAMESERVER_ID in (%s)";
         final String sql = String.format(sqlTpl, nameserverIdsJoinedByComma);
-        List<ModelStatus> result = jdbcTemplate.query(sql,
-                new RowMapper<ModelStatus>() {
+        List<ModelStatus> result =
+                jdbcTemplate.query(sql, new RowMapper<ModelStatus>() {
                     @Override
                     public ModelStatus mapRow(ResultSet rs, int rowNum)
                             throws SQLException {

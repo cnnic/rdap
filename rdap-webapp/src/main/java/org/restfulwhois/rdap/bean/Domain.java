@@ -45,11 +45,72 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "notices","objectClassName", "handle", "ldhName",
+@JsonPropertyOrder({
+        "rdapConformance", "notices", "objectClassName", "handle", "ldhName",
         "unicodeName", "variants", "nameservers", "secureDNS", "entities",
         "status", "publicIds", "remarks", "links", "port43", "events",
         "network", "lang" })
 public class Domain extends BaseModel {
+    /**
+     * domain type.
+     * 
+     * @author jiashuo
+     * 
+     */
+    public enum DomainType {
+        /**
+         * all type.
+         */
+        DNR("dnr"), ARPA("arpa");
+        /**
+         * type name.
+         */
+        private String name;
+
+        /**
+         * constructor.
+         * 
+         * @param name
+         *            name.
+         */
+        private DomainType(String name) {
+            this.name = name;
+        }
+
+        /**
+         * get name.
+         * 
+         * @return name.
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * get domain type by name.
+         * 
+         * @param name
+         *            name.
+         * @return DomainType.
+         */
+        public static DomainType getByTypeName(String name) {
+            DomainType[] types = DomainType.values();
+            for (DomainType type : types) {
+                if (type.getName().equals(name)) {
+                    return type;
+                }
+            }
+            return DomainType.DNR;
+        }
+
+    }
+
+    /**
+     * domain type.
+     */
+    @JsonIgnore
+    private DomainType type;
+
     /**
      * representing a registry unique identifier of the domain object instance.
      */
@@ -116,6 +177,30 @@ public class Domain extends BaseModel {
      * the object class name of a particular object as a string.
      */
     private ObjectClassNameEnum objectClassName = ObjectClassNameEnum.DOMAIN;
+    
+    /**
+     * networkId.
+     */
+    @JsonIgnore
+    private Long networkId;
+
+    /**
+     * check if is DNR domain.
+     * 
+     * @return true if is, false if not.
+     */
+    public boolean isDnrDomain() {
+        return DomainType.DNR.equals(type);
+    }
+
+    /**
+     * check if is ARPA domain.
+     * 
+     * @return true if is, false if not.
+     */
+    public boolean isArpaDomain() {
+        return DomainType.ARPA.equals(type);
+    }
 
     @Override
     public ModelType getObjectType() {
@@ -417,26 +502,7 @@ public class Domain extends BaseModel {
     public void setNetwork(Network network) {
         this.network = network;
     }
-    
-   
-    /**
-     * get domain type .
-     * 
-     * @return domain type : ARPA or DOMAIN .
-     * 
-     */
-    @JsonIgnore
-    public ModelType getDomainType() {
-        if (null == this.ldhName) {
-            return ModelType.DOMAIN;
-        } else if (ldhName.endsWith("ip6.arpa")) {
-            return ModelType.ARPA;
-        } else if (ldhName.endsWith("in-addr.arpa")) {
-            return ModelType.ARPA;
-        }
-        return ModelType.DOMAIN;
-    }
-    
+
     /**
      * get ObjectClassNameEnum.
      * 
@@ -449,10 +515,45 @@ public class Domain extends BaseModel {
     /**
      * set ObjectClassNameEnum.
      * 
-     * @param objectClassName
+     * @param objectClassNameEnum
      *            objectClassName for set.
      */
     public void setObjectClassName(ObjectClassNameEnum objectClassName) {
-       this.objectClassName = objectClassName;
+        this.objectClassName = objectClassName;
     }
+
+    /**
+     * get type.
+     * 
+     * @return type.
+     */
+    public DomainType getType() {
+        return type;
+    }
+
+    /**
+     * set type.
+     * 
+     * @param type
+     *            type.
+     */
+    public void setType(DomainType type) {
+        this.type = type;
+    }
+
+    /**
+     * get networkId.
+     * @return networkId.
+     */
+    public Long getNetworkId() {
+        return networkId;
+    }
+    /**
+     * set networkId.
+     * @param networkId networkId.
+     */
+    public void setNetworkId(Long networkId) {
+        this.networkId = networkId;
+    }
+
 }

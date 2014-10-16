@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-	<RDAP_ARPA />
-	<RDAP_ARPA_STATUS />
 	<RDAP_AUTNUM />
 	<RDAP_AUTNUM_REDIRECT />
 	<RDAP_AUTNUM_STATUS />

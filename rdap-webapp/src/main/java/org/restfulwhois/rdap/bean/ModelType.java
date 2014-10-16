@@ -37,6 +37,7 @@ package org.restfulwhois.rdap.bean;
  * 
  */
 public enum ModelType {
+    BASE("base"),
     /**
      * model type.
      */
@@ -47,22 +48,17 @@ public enum ModelType {
     DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
             "autnum"),
     /**
-     * another domain type, only used for DB Query.
-     */
-    ARPA("arpa"), Base("base"),
-    /**
      * help ip event link publicId type.
      */
     HELP("help"), IP("ip"), EVENT("event"), LINK("link"), PUBLICID("publicId"),
     /**
      * remark notice secureDns type.
      */
-    REMARK("remark"), NOTICE("notice"), SECUREDNS("secureDns"),    
+    REMARK("remark"), NOTICE("notice"), SECUREDNS("secureDns"),
     /**
      * ds type.
      */
     DSDATA("dsData"), KEYDATA("keyData");
-    
     /**
      * name of model type.
      */

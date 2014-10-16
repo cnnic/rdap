@@ -11,15 +11,14 @@
            				   http://www.springframework.org/schema/util/spring-util.xsd
            				   http://www.springframework.org/schema/aop 
            				   http://www.springframework.org/schema/aop/spring-aop.xsd">
-
+	
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass">
 			<value>${jdbc.driverClassName}</value>
 		</property>
 		<property name="jdbcUrl">
-			<value>${jdbc.url.hostPort}${jdbc.url.dbName}?${jdbc.url.params}
-			</value>
+			<value>${jdbc.url.hostPort}${jdbc.url.dbName}?${jdbc.url.params}</value>
 		</property>
 		<property name="user">
 			<value>${jdbc.username}</value>

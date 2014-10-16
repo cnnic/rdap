@@ -19,8 +19,7 @@
 			<value>${jdbc.driverClassName}</value>
 		</property>
 		<property name="jdbcUrl">
-			<value>${jdbc.url.hostPort}${jdbc.url.dbName}?${jdbc.url.params}
-			</value>
+			<value>${jdbc.url.hostPort}${jdbc.url.dbName}?${jdbc.url.params}</value>
 		</property>
 		<property name="user">
 			<value>${jdbc.username}</value>

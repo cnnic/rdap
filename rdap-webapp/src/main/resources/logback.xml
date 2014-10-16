@@ -23,7 +23,8 @@
 		<level value="DEBUG" />
 		<appender-ref ref="STDOUT" />
 	</logger>
-	<logger name="java.sql" additivity="false">
+	<logger name="java.sql"
+		additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="STDOUT" />
 	</logger>

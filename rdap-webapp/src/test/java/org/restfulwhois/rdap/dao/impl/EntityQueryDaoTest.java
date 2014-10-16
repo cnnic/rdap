@@ -85,8 +85,8 @@ public class EntityQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("entity.xml")
     public void testQueryExistEntity() {
+        super.databaseSetupWithBinaryColumns("entity.xml");
         String entityHandle = "h1";
         Entity entity =
                 entityQueryDao.query(queryParser.parseQueryParam(entityHandle));

@@ -47,7 +47,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -86,8 +85,8 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserverTest.xml")
     public void testQueryExistNameserver() throws Exception {
+        super.databaseSetupWithBinaryColumns("nameserverTest.xml");
         RestResponseUtil.initErrorMessages();
     	RestResponseUtil.initConformanceService();
         String nsName = "ns.cnnic.cn";

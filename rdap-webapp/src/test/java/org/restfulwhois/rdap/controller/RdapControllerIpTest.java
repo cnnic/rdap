@@ -44,7 +44,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -93,16 +92,16 @@ public class RdapControllerIpTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/ip-query.xml")
     public void testQueryExistIp() throws Exception {
-        String ipV4 = "0.0.0.1";
-        String ipV4Mask = "0.0.1.1/1";
-        String ipV6Omit = "0:1::0";
-        String ipV6Full = "1:1:1:1:1:1:1:1";
-        String ipV6Mask = "1:1:1:1:1:1:1:1/1";
-        String ipV6V4 = "1:1:1:1:1:1:0.1.0.1";
-        String ipV6V4Mask = "1:1:1:1:1:1:0.1.0.1/1";
-        String ipV6V4MaskQ = "1:1:1:1:1:1:0.1.0.1/1?abc";
+        super.databaseSetupWithBinaryColumns("ip-query.xml");
+        String ipV4 = "1.0.0.0";
+        String ipV4Mask = "1.0.0.0/8";
+        String ipV6Omit = "0:0:0:0:2001:6a8::";
+        String ipV6Full = "0:0:0:0:2001:6a8:0:0";
+        String ipV6Mask = "0:0:0:0:2001:6a8::/96";
+        String ipV6V4 = "0:0:0:0:2001:6a8::1.0.0.0";
+        String ipV6V4Mask = "0:0:0:0:2001:6a8::1.0.0.0/96";
+        String ipV6V4MaskQ = "0:0:0:0:2001:6a8::1.0.0.0/96?abc";
         String ipLangEn = "en";
         commonQueryExistIP(ipV4, ipLangEn);
         commonQueryExistIP(ipV4Mask, ipLangEn);
@@ -112,7 +111,6 @@ public class RdapControllerIpTest extends BaseTest {
         commonQueryExistIP(ipV6V4, ipLangEn);
         commonQueryExistIP(ipV6V4Mask, ipLangEn);
         commonQueryExistIP(ipV6V4MaskQ, ipLangEn);
-        commonQueryExistIP("/::/2", ipLangEn);
     }
 
     /**

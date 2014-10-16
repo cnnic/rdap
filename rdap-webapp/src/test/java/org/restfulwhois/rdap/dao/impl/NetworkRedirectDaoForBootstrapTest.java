@@ -42,18 +42,17 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.NetworkQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
 import org.restfulwhois.rdap.bootstrap.bean.NetworkRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.controller.support.QueryParser;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -85,11 +84,11 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("network-redirect-v4-sync.xml")
     public void testSync_v4() throws DataSetException {
+        super.databaseSetupWithBinaryColumns("network-redirect-v4-sync.xml");
         IpVersion versionV4 = IpVersion.V4;
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("1.0.0.0", 0, versionV4);
+                queryParser.parseIpQueryParam("1.0.0.0/8", versionV4);
         RedirectResponse redirectResponse = redirectDao.query(queryParam);
         assertNotNull(redirectResponse);
         assertEquals("http://cnnic.cn/rdap", redirectResponse.getUrl());
@@ -101,10 +100,10 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
         String newUrl = "REDIRECT_URL_1_UPDATED_1";
         urls.add(newUrl);
         urls.add("REDIRECT_URL_1_UPDATED_2");
-        NetworkRedirect redirect = new NetworkRedirect("1.0.0.0", "24", urls);
+        NetworkRedirect redirect = new NetworkRedirect(urls);
         NetworkQueryParam networkQueryParam =
-                (NetworkQueryParam) queryParser.parseIpQueryParam("1.0.0.0",
-                        24, versionV4);
+                (NetworkQueryParam) queryParser.parseIpQueryParam("1.0.0.0/8",
+                        versionV4);
         redirect.setNetworkQueryParam(networkQueryParam);
         bootstraps.add(redirect);
         redirectDao.save(bootstraps);
@@ -141,11 +140,11 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("network-redirect-v6-sync.xml")
     public void testSync_v6() throws DataSetException {
+        super.databaseSetupWithBinaryColumns("network-redirect-v6-sync.xml");
         IpVersion versionV6 = IpVersion.V6;
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:1", 0,
+                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:1/96",
                         versionV6);
         RedirectResponse redirectResponse = redirectDao.query(queryParam);
         assertNotNull(redirectResponse);
@@ -158,11 +157,10 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
         String newUrl = "REDIRECT_URL_1_UPDATED_1";
         urls.add(newUrl);
         urls.add("REDIRECT_URL_1_UPDATED_2");
-        NetworkRedirect redirect =
-                new NetworkRedirect("0:0:0:0:2001:6a8::", "32", urls);
+        NetworkRedirect redirect = new NetworkRedirect(urls);
         NetworkQueryParam networkQueryParam =
                 (NetworkQueryParam) queryParser.parseIpQueryParam(
-                        "0:0:0:0:2001:6a8::",32, versionV6);
+                        "0:0:0:0:2001:6a8::/96", versionV6);
         redirect.setNetworkQueryParam(networkQueryParam);
         bootstraps.add(redirect);
         redirectDao.save(bootstraps);

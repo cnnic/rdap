@@ -37,10 +37,10 @@ import org.restfulwhois.rdap.bean.DomainQueryParam;
 import org.restfulwhois.rdap.bean.DomainSearchParam;
 import org.restfulwhois.rdap.bean.EntityQueryParam;
 import org.restfulwhois.rdap.bean.NameserverQueryParam;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.NetworkQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.common.util.DomainUtil;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.exception.DecodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +89,7 @@ public class QueryParser {
             String punyDomainName) {
         return new DomainQueryParam(domainName, punyDomainName);
     }
-    
+
     /**
      * generate DomainSearchParam.
      * 
@@ -121,6 +121,8 @@ public class QueryParser {
     /**
      * generate IpQueryParam.
      * 
+     * @param ipVersion
+     * 
      * @param ipAddr
      *            ip Address.
      * @param numMask
@@ -129,12 +131,9 @@ public class QueryParser {
      *            v4 or v6.
      * @return QueryParam.
      */
-    public QueryParam parseIpQueryParam(String ipAddr, long numMask,
-            IpVersion ipVersion) {
-        NetworkQueryParam ipQueryParam =
-                new NetworkQueryParam(ipAddr, numMask, ipVersion);
-        ipQueryParam.parseQueryIpMask();
-        return ipQueryParam;
+    public QueryParam parseIpQueryParam(String cidr, IpVersion ipVersion) {
+        NetworkQueryParam param = new NetworkQueryParam(cidr, ipVersion);
+        return param;
     }
 
     /**

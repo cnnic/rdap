@@ -39,7 +39,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
 import org.restfulwhois.rdap.bootstrap.bean.Bootstrap;
@@ -52,6 +51,7 @@ import org.restfulwhois.rdap.bootstrap.handler.DomainRegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV4RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV6RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.registry.DataProvider;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.controller.support.QueryParser;
 import org.restfulwhois.rdap.dao.impl.redirect.AutnumRedirectDao;
 import org.restfulwhois.rdap.dao.impl.redirect.DomainRedirectDao;
@@ -80,7 +80,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     @Autowired
     private NetworkRedirectDao networkRedirectDao;
-    
+
     /**
      * autnumRedirectDao.
      */
@@ -134,9 +134,8 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:"
-            + "org/restfulwhois/rdap/dao/impl/network-redirect-v4-sync.xml")
     public void testSync_network_v4() {
+        databaseSetupWithBinaryColumns("network-redirect-v4-sync.xml");
         assertNetworkV4("http://cnnic.cn/rdap");
         syncRedirectDataService.syncAllRegistry();
         assertNetworkV4("REDIRECT_URL_1_UPDATED_1");
@@ -147,9 +146,8 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:"
-            + "org/restfulwhois/rdap/dao/impl/network-redirect-v6-sync.xml")
     public void testSync_network_v6() {
+        databaseSetupWithBinaryColumns("network-redirect-v6-sync.xml");
         assertNetworkV6("http://cnnic.cn/rdap");
         syncRedirectDataService.syncAllRegistry();
         assertNetworkV6("REDIRECT_URL_1_UPDATED_1");
@@ -176,8 +174,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void assertAutnum(String expectUrl) {
         QueryParam queryParam = queryParser.parseQueryParam("1");
-        RedirectResponse redirectResponse =
-                autnumRedirectDao.query(queryParam);
+        RedirectResponse redirectResponse = autnumRedirectDao.query(queryParam);
         assertNotNull(redirectResponse);
         assertEquals(expectUrl, redirectResponse.getUrl());
     }
@@ -190,7 +187,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void assertNetworkV6(String expectUrl) {
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:1", 0,
+                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:0/112",
                         IpVersion.V6);
         RedirectResponse redirectResponse =
                 networkRedirectDao.query(queryParam);
@@ -206,7 +203,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void assertNetworkV4(String expectUrl) {
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("1.0.0.0", 0, IpVersion.V4);
+                queryParser.parseIpQueryParam("1.0.0.0/8", IpVersion.V4);
         RedirectResponse redirectResponse =
                 networkRedirectDao.query(queryParam);
         assertNotNull(redirectResponse);
@@ -294,7 +291,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
                         BootstrapRegistriesBuilder.build();
                 BootstrapEntry networkV4 =
                         BootstrapRegistriesBuilder.appendEntry(bootstrap);
-                BootstrapRegistriesBuilder.appendKey(networkV4, "1.0.0.0/24");
+                BootstrapRegistriesBuilder.appendKey(networkV4, "1.0.0.0/8");
                 BootstrapRegistriesBuilder.appendRegistryUrl(networkV4,
                         "REDIRECT_URL_1_UPDATED_1");
                 BootstrapRegistriesBuilder.appendRegistryUrl(networkV4,

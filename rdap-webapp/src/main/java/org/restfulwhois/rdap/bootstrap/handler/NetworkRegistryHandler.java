@@ -34,12 +34,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.bean.Network.IpVersion;
 import org.restfulwhois.rdap.bean.NetworkQueryParam;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bootstrap.bean.NetworkRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.controller.support.QueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -71,52 +71,22 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
     @Override
     List<Redirect> generateRedirects(String key, List<String> registryUrls) {
         List<Redirect> redirects = new ArrayList<Redirect>();
-        if (!validateKey(key) || !removeEmptyUrlsAndValidate(registryUrls)) {
+        if (!removeEmptyUrlsAndValidate(registryUrls)) {
+            logger.error("ignore this key/urls:{},{}. Urls are empty.", key,
+                    registryUrls);
             return redirects;
         }
-        key = StringUtils.lowerCase(key);
-        String[] splits = StringUtils.split(key, CIDR_SEPARATOR);
-        if (splits.length != 2) {
+        NetworkRedirect networkRedirect = new NetworkRedirect(registryUrls);
+        IpVersion ipVersion = IpUtil.getIpVersionOfNetwork(key);
+        if (ipVersion.isNotValidIp()) {
+            logger.error("ignore this key/urls:{},{}. Invalid network:{}", key,
+                    registryUrls);
             return redirects;
         }
-        String ipPrefix = splits[0];
-        String ipMask = splits[1];
-        long ipMaskLongVal = 0;
-        try {
-            ipMaskLongVal = Long.parseLong(ipMask);
-        } catch (Exception e) {
-            logger.error("ipMask {} parseLong error:{}", ipMask, e);
-            logger.error("ignore this key/urls:{},{}", key, registryUrls);
-            return redirects;
-        }
-        if (!validateMask(ipMaskLongVal)) {
-            logger.error("ipMask is out of range:{}", ipMask);
-            logger.error("ignore this key/urls:{},{}", key, registryUrls);
-            return redirects;
-        }
-        NetworkRedirect networkRedirect =
-                new NetworkRedirect(ipPrefix, ipMask, registryUrls);
-        IpVersion ipVersion = parseIpVersion(ipPrefix);
-        if (null == ipVersion) {
-            return redirects;
-        }
-        QueryParam queryParam =
-                queryParser.parseIpQueryParam(ipPrefix, ipMaskLongVal,
-                        ipVersion);
+        QueryParam queryParam = queryParser.parseIpQueryParam(key, ipVersion);
         networkRedirect.setNetworkQueryParam((NetworkQueryParam) queryParam);
         redirects.add(networkRedirect);
         return redirects;
-    }
-
-    /**
-     * validate mask.
-     * 
-     * @param ipMask
-     *            mask.
-     * @return true if valid, false if not.
-     */
-    protected boolean validateMask(Long ipMask) {
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -132,28 +102,6 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
             return false;
         }
         return true;
-    }
-
-    /**
-     * parse IP version.
-     * 
-     * @param ipPrefix
-     *            ipPrefix.
-     * @return IpVersion.
-     */
-    private IpVersion parseIpVersion(String ipPrefix) {
-        IpVersion ipVersion = IpVersion.V6;
-        boolean isV4 = IpUtil.isIpV4StrWholeValid(ipPrefix);
-        boolean isV6 = IpUtil.isIpV6StrValid(ipPrefix);
-        if (!isV4 && !isV6) {
-            return null;
-        }
-        if (isV4) {
-            ipVersion = IpVersion.V4;
-        } else if (isV6) {
-            ipVersion = IpVersion.V6;
-        }
-        return ipVersion;
     }
 
 }
