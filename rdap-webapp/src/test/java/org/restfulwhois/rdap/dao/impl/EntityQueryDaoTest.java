@@ -197,8 +197,8 @@ public class EntityQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("entity.xml")
     public void testQueryTruncated() {
+        super.databaseSetupWithBinaryColumns("entity.xml");
         String entityHandle = "h1";
         RdapProperties prop = new RdapProperties();
         // not truncated
@@ -207,7 +207,7 @@ public class EntityQueryDaoTest extends BaseTest {
                 entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
         List<Network> networks = entity.getNetworks();
         assertNotNull(networks);
-        assertEquals(3, networks.size());
+        assertEquals(1, networks.size());
         List<Autnum> autnums = entity.getAutnums();
         Assert.notNull(autnums);
         assertEquals(4, autnums.size());
