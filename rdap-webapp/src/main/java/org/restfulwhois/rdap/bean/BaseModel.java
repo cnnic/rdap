@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.bean;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -107,13 +108,9 @@ public class BaseModel {
      * 
      * @return simple name of class
      */
-    public QueryUri getUri() {
-        try {
-            return QueryUri.BASE;
-        } catch (Exception e) {
-            throw new UnsupportedOperationException(
-                    "must be implemented in sub class if I'am called.");
-        }
+    @JsonIgnore
+    public QueryUri getUri() {        
+         return QueryUri.BASE;      
     }
     
     /**
