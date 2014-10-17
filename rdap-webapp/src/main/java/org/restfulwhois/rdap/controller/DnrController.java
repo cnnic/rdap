@@ -34,37 +34,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.bean.Autnum;
 import org.restfulwhois.rdap.bean.Domain;
 import org.restfulwhois.rdap.bean.DomainSearch;
 import org.restfulwhois.rdap.bean.DomainSearchParam;
 import org.restfulwhois.rdap.bean.DomainSearchType;
-import org.restfulwhois.rdap.bean.Entity;
-import org.restfulwhois.rdap.bean.EntitySearch;
-import org.restfulwhois.rdap.bean.Help;
 import org.restfulwhois.rdap.bean.Nameserver;
 import org.restfulwhois.rdap.bean.NameserverQueryParam;
 import org.restfulwhois.rdap.bean.NameserverSearch;
-import org.restfulwhois.rdap.bean.Network;
 import org.restfulwhois.rdap.bean.QueryParam;
 import org.restfulwhois.rdap.bean.RedirectResponse;
-import org.restfulwhois.rdap.common.util.AutnumValidator;
 import org.restfulwhois.rdap.common.util.DomainUtil;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.common.util.StringUtil;
-import org.restfulwhois.rdap.controller.support.MappingExceptionResolver;
-import org.restfulwhois.rdap.controller.support.QueryParser;
 import org.restfulwhois.rdap.exception.DecodeException;
-import org.restfulwhois.rdap.service.AccessControlManager;
-import org.restfulwhois.rdap.service.QueryService;
-import org.restfulwhois.rdap.service.RedirectService;
-import org.restfulwhois.rdap.service.SearchService;
-import org.restfulwhois.rdap.service.impl.ResponseDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,89 +59,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-//import org.restfulwhois.rdap.controller.support.MappingExceptionResolver;
-
 /**
- * This is the central class in this package.
- * <p>
- * 
- * <pre>
- * This class accept request,and then query/search/redirect result.
- * Ref <a href= 'http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt'>
- * draft-ietf-weirds-rdap-query</a>.
- * </pre>
- * <p>
- * Redirect service is called in this class.
- * <p>
- * Access control is checked before return response to client.
- * <p>
- * Some columns can not be shown for Policy reason, and this is checked before
- * return response to client.
- * <p>
- * 
- * <pre>
- * This class is use as 'controller' in MVC, and modified by
- * {@link org.springframework.stereotype.Controller}, so this class MUST under
- * spring {@link org.springframework.context.annotation.ComponentScan}. 
- * The spring dispatcher scans such annotated classes for mapped methods and
- * detects @RequestMapping annotations.
- * 
- * </pre>
- * 
- * Request:
- * 
- * <pre>
- *      Only support HTTP 'GET' method.
- *      'Accept' in HTTP header MUST be 'application/rdap+json'.
- *      URI and parameters MUST be encoded in UTF-8.
- *      Query data in database MUST be NFKC and case-folded.
- *      Unknown parameters will be ignored.
- * </pre>
- * 
- * All response is in JSON format.
- * 
- * Response code:
- * 
- * <pre>
- *      200:exist for query, or no error for search.
- *      400:parameter is invalid, or URI can't be handled.
- *      401:unauthorized.
- *      403:forbidden.
- *      404:not found for query.
- *      405:method not allowed. Only support GET method.
- *      415:unsupported media type. Only 'application/rdap+json' is supported.
- *      422:unprocessable query parameter for search. See search* method.
- *      429:too many requests.Client should reduce request Frequency.
- *      500:internal server error.
- *      509:bandwidth limit exceed.
- * </pre>
- * 
- * <p>
- * Exception:
- * 
- * <pre>
- *      1.Service Exception is handled in each methods, returning Corresponding
- *        HTTP error code; 
- *      2.Unchecked Exception is handled in {@link MappingExceptionResolver},so
- *        'exceptionResolver' with MappingExceptionResolver MUST be configured 
- *        in spring configuration file, and now this configuration is in 
- *        spring-servlet.xml;
- * </pre>
+ * Controller for DNR.
  * 
  * @author jiashuo
  * 
  */
 @Controller
-@RequestMapping("/")
-public class RdapController {
+public class DnrController extends BaseController {
     /**
-     * autnum query URI.
+     * logger.
      */
-    private static final String SERVICE_URI_AS_Q = "/autnum/";
-    /**
-     * ip query URI.
-     */
-    private static final String SERVICE_URI_IP_Q = "/ip/";
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DnrController.class);
     /**
      * nameserver query URI.
      */
@@ -164,238 +80,6 @@ public class RdapController {
      * domain query URI.
      */
     private static final String SERVICE_URI_DOMAIN_Q = "/domain/";
-    /**
-     * logger.
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(RdapController.class);
-    /**
-     * query service.
-     */
-    @Autowired
-    private QueryService queryService;
-    /**
-     * search service.
-     */
-    @Autowired
-    private SearchService searchService;
-    /**
-     * query parser.
-     */
-    @Autowired
-    private QueryParser queryParser;
-    /**
-     * response decorator.
-     */
-    @Autowired
-    private ResponseDecorator responseDecorator;
-
-    /**
-     * access control manager.
-     */
-    @Autowired
-    private AccessControlManager accessControlManager;
-
-    /**
-     * redirect service.
-     */
-    @Autowired
-    private RedirectService redirectService;
-
-    /**
-     * <pre>
-     * Query help.
-     * URI:/help.
-     * This service is not under permission control.
-     * This service is not under policy control.
-     * 
-     * </pre>
-     * 
-     * @param request
-     *            HttpServletRequest.
-     * @param response
-     *            HttpServletResponse
-     * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = "/help", method = RequestMethod.GET)
-    public ResponseEntity queryHelp(HttpServletRequest request,
-            HttpServletResponse response) throws DecodeException {
-        String lastSpliInURI = queryParser.getLastSplitInURI(request);
-        if (!"help".equals(lastSpliInURI)) {
-            return RestResponseUtil.createResponse400();
-        }
-        Help result = queryService.queryHelp(queryParser.parseQueryParam(""));
-        if (null != result) {
-            // No permission control
-            responseDecorator.decorateResponseForHelp(result);
-            return RestResponseUtil.createResponse200(result);
-        }
-        return RestResponseUtil.createResponse404();
-    }
-
-    /**
-     * <pre>
-     * query entity.
-     * Uri:/entity/{handle}.
-     * This service is under permission control, @see AccessControlManager.
-     * This service is under policy control, @see PolicyControlService.
-     * 
-     * </pre>
-     * 
-     * @param handle
-     *            entity handle.
-     * @param request
-     *            HttpServletRequest.
-     * @param response
-     *            HttpServletResponse
-     * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
-    public ResponseEntity queryEntity(@PathVariable String handle,
-            HttpServletRequest request, HttpServletResponse response)
-            throws DecodeException {
-        LOGGER.debug("query entity,handle:" + handle);
-        handle = queryParser.getLastSplitInURI(request);
-        handle = StringUtils.trim(handle);
-        if (!StringUtil.isValidEntityHandleOrName(handle)) {
-            return RestResponseUtil.createResponse400();
-        }
-        handle = StringUtil.foldCaseAndNormalization(handle);
-        Entity result =
-                queryService.queryEntity(queryParser.parseQueryParam(handle));
-        if (null != result) {
-            if (!accessControlManager.hasPermission(result)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(result);
-            return RestResponseUtil.createResponse200(result);
-        }
-        return RestResponseUtil.createResponse404();
-    }
-
-    /**
-     * <pre>
-     * search entity by handle or name.
-     * URI:/entities?fn={entity name} ; /entities?handle={handle}.
-     * This service is under permission control, @see AccessControlManager.
-     * This service is under policy control, @see PolicyControlService.
-     * 
-     * The first appearance parameter 'fn' and 'handle' will be handled,
-     * and other parameters will be ignored.
-     * Parameter will be trimed.
-     * 
-     * </pre>
-     * 
-     * @param fn
-     *            fn.
-     * @param handle
-     *            handle.
-     * @param request
-     *            request.
-     * @return ResponseEntity.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = "/entities", method = RequestMethod.GET)
-    public ResponseEntity
-            searchEntity(@RequestParam(required = false) String fn,
-                    @RequestParam(required = false) String handle,
-                    HttpServletRequest request) throws DecodeException {
-        LOGGER.debug("search entities.fn:{},handle:{}", fn, handle);
-        String lastSpliInURI = queryParser.getLastSplitInURI(request);
-        if (!"entities".equals(lastSpliInURI)) {
-            return RestResponseUtil.createResponse400();
-        }
-        final String fnParamName = "fn";
-        final String handleParamName = "handle";
-        String paramName = queryParser.getFirstParameter(request, new String[] {
-                fnParamName, handleParamName });
-        if (StringUtils.isBlank(paramName)) {
-            return RestResponseUtil.createResponse400();
-        }
-        String paramValue = queryParser.getParameter(request, paramName);
-        paramValue = DomainUtil.iso8859Decode(paramValue);
-        if (!StringUtil.isValidEntityHandleOrName(paramValue)) {
-            return RestResponseUtil.createResponse400();
-        }
-        if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
-            return RestResponseUtil.createResponse422();
-        }
-        if (handleParamName.equals(paramName)) {// fold case when by handle
-            paramValue = StringUtil.foldCaseAndNormalization(paramValue);
-        } else {
-            paramValue = StringUtil.getNormalization(paramValue);
-        }
-        paramValue = StringUtils.trim(paramValue);
-        QueryParam queryParam =
-                queryParser.parseEntityQueryParam(paramValue, paramName);
-        LOGGER.debug("generate queryParam:{}", queryParam);
-        EntitySearch result = searchService.searchEntity(queryParam);
-        if (null != result) {
-            if (result.getHasNoAuthForAllObjects()) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(result);
-            return RestResponseUtil.createResponse200(result);
-        }
-        return RestResponseUtil.createResponse404();
-    }
-
-    /**
-     * <pre>
-     * query autnum.
-     * URI:/autnum/{autnum}
-     * 
-     * First query autnum in local registry, if not exist, then query 
-     * for redirect.
-     *   
-     * This service is under permission control, @see AccessControlManager.
-     * This service is under policy control, @see PolicyControlService.
-     * 
-     * </pre>
-     * 
-     * @param autnum
-     *            an AS Plain autonomous system number [RFC5396].
-     * @param request
-     *            HttpServletRequest.
-     * @param response
-     *            HttpServletResponse
-     * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
-    public ResponseEntity queryAs(@PathVariable String autnum,
-            HttpServletRequest request, HttpServletResponse response)
-            throws DecodeException {
-        LOGGER.debug("query autnum:" + autnum);
-        autnum = queryParser.getLastSplitInURI(request);
-        if (!AutnumValidator.isValidAutnum(autnum)) {
-            return RestResponseUtil.createResponse400();
-        }
-        QueryParam queryParam = queryParser.parseQueryParam(autnum);
-        Autnum result = queryService.queryAutnum(queryParam);
-        if (null != result) {
-            if (!accessControlManager.hasPermission(result)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(result);
-            return RestResponseUtil.createResponse200(result);
-        }
-        LOGGER.debug("query redirect autnum :{}", queryParam);
-        RedirectResponse redirect = redirectService.queryAutnum(queryParam);
-        if (redirectService.isValidRedirect(redirect)) {
-            String redirectUrl =
-                    StringUtil.generateEncodedRedirectURL(autnum,
-                            SERVICE_URI_AS_Q, redirect.getUrl());
-            return RestResponseUtil.createResponse301(redirectUrl);
-        }
-        return RestResponseUtil.createResponse404();
-    }
 
     /**
      * 
@@ -828,111 +512,4 @@ public class RdapController {
         }
         return RestResponseUtil.createResponse404();
     }
-
-    /**
-     * <pre>
-     * query ip by ip and mask.
-     * URI:/ip/{ipAddr}/{mask} 
-     * 
-     * This service is under permission control, @see AccessControlManager.
-     * This service is under policy control, @see PolicyControlService.
-     * 
-     * </pre>
-     * 
-     * @param ipAddr
-     *            the query ip
-     * @param mask
-     *            the ip mask
-     * @param request
-     *            request.
-     * @return JSON formatted result,with HTTP code.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = { "/ip/{ipAddr}/{mask}" },
-            method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity queryIpWithMask(@PathVariable String ipAddr,
-            @PathVariable String mask, HttpServletRequest request)
-            throws DecodeException {
-        ipAddr = queryParser.getLastSecondSplitInURI(request);
-        mask = queryParser.getLastSplitInURI(request);
-        return doQueryIp(ipAddr + "/" + mask);
-    }
-
-    /**
-     * <pre>
-     * query ip by ip address.
-     * URI:/ip/{ipAddr} 
-     * 
-     * This service is under permission control, @see AccessControlManager.
-     * This service is under policy control, @see PolicyControlService.
-     * 
-     * </pre>
-     * 
-     * @param ipAddr
-     *            the query ip
-     * @param request
-     *            request.
-     * @return ResponseEntity ResponseEntity.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity queryIp(@PathVariable String ipAddr,
-            HttpServletRequest request) throws DecodeException {
-        ipAddr = queryParser.getLastSplitInURI(request);
-        return doQueryIp(ipAddr);
-    }
-
-    /**
-     * do query IP.
-     * 
-     * @param cidr
-     *            CIDR.
-     * @param originQueryParam
-     *            originQueryParam.
-     * @return ResponseEntity ResponseEntity.
-     */
-    private ResponseEntity doQueryIp(String cidr) {
-        if(StringUtils.isBlank(cidr)){
-            return RestResponseUtil.createResponse400();
-        }
-        cidr = IpUtil.addNetworkMaskIfNotContainsMask(cidr);
-        IpVersion ipVersion = IpUtil.getIpVersionOfNetwork(cidr);
-        if (ipVersion.isNotValidIp()) {
-            return RestResponseUtil.createResponse400();
-        }
-        QueryParam queryParam = queryParser.parseIpQueryParam(cidr, ipVersion);
-        Network ip = queryService.queryIp(queryParam);
-        if (null != ip) {
-            if (!accessControlManager.hasPermission(ip)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(ip);
-            return RestResponseUtil.createResponse200(ip);
-        }
-        LOGGER.debug("query redirect network :{}", queryParam);
-        RedirectResponse redirect = redirectService.queryIp(queryParam);
-        if (redirectService.isValidRedirect(redirect)) {
-            String redirectUrl =
-                    StringUtil.generateEncodedRedirectURL(cidr,
-                            SERVICE_URI_IP_Q, redirect.getUrl());
-            return RestResponseUtil.createResponse301(redirectUrl);
-        }
-        LOGGER.debug("   redirect network not found:{}", queryParam);
-        return RestResponseUtil.createResponse404();
-    }
-
-    /**
-     * other invalid query uri will response 400 error.
-     * 
-     * @return JSON formated result,with HTTP code.
-     */
-    @RequestMapping(value = "/**")
-    public ResponseEntity error400() {
-        return RestResponseUtil.createResponse400();
-    }
-
 }
