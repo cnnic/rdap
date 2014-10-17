@@ -126,8 +126,7 @@ public class SearchServiceImpl implements SearchService {
             List<T> objects = queryDao.search(queryParam);
             for (T object : objects) {
                 if (authedObjects.size() < RdapProperties.getMaxsizeSearch()
-                        && accessControlManager.hasPermission(object)) {
-                    accessControlManager.innerObjectHasPermission(object);
+                        && accessControlManager.hasPermission(object)) {                   
                     authedObjects.add(object);
                 }
                 if (accessControlManager.hasPermission(object)) {
