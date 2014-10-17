@@ -30,20 +30,9 @@
  */
 package org.restfulwhois.rdap.service.impl;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.restfulwhois.rdap.bean.Autnum;
 import org.restfulwhois.rdap.bean.BaseModel;
-import org.restfulwhois.rdap.bean.Domain;
-import org.restfulwhois.rdap.bean.Entity;
-import org.restfulwhois.rdap.bean.Nameserver;
-import org.restfulwhois.rdap.bean.Network;
 import org.restfulwhois.rdap.bean.Principal;
 import org.restfulwhois.rdap.bean.SecureObject;
-import org.restfulwhois.rdap.common.RdapProperties;
 import org.restfulwhois.rdap.controller.support.PrincipalHolder;
 import org.restfulwhois.rdap.dao.AclDao;
 import org.restfulwhois.rdap.service.AccessControlManager;
@@ -73,20 +62,7 @@ public class AccessControlManagerImpl implements AccessControlManager {
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(AccessControlManagerImpl.class);
-    /**
-     * all_secure_onbject_type.
-     */
-    private static final List<Class<?>> ALL_SECURE_OBJECT_TYPE = 
-             new ArrayList<Class<?>>();
-    
-    static {        
-        ALL_SECURE_OBJECT_TYPE.add(Domain.class);
-        ALL_SECURE_OBJECT_TYPE.add(Entity.class);
-        ALL_SECURE_OBJECT_TYPE.add(Autnum.class);
-        ALL_SECURE_OBJECT_TYPE.add(Network.class);
-        ALL_SECURE_OBJECT_TYPE.add(Nameserver.class);
-    }
+            .getLogger(AccessControlManagerImpl.class);    
     
     /**
      * acl dao.
@@ -112,84 +88,5 @@ public class AccessControlManagerImpl implements AccessControlManager {
         SecureObject secureObject = new SecureObject(object.getId(), object
                 .getObjectType().getName());
         return aclDao.hasEntry(principal, secureObject);
-    }
-    
-    /**
-     * Is a model permitted for querying innerObject.
-     * 
-     * @param object
-     *            param for object to be queried.
-     * 
-     */ 
-
-    @Override
-    public void innerObjectHasPermission(final BaseModel object) {
-        boolean accessControlForInnerObjectForSearch = 
-                RdapProperties.getAccessControlForInnerObjectForSearch();
-        if (object == null || !accessControlForInnerObjectForSearch) {
-             return;
-        }
-        try {
-            Field[] allField = object.getClass().getDeclaredFields();
-            if (allField == null) {
-                return;
-            }
-            for (int i = 0; i < allField.length; i++) {             
-                allField[i].setAccessible(true);
-                Object value = allField[i].get(object);
-                if (value == null) {
-                    continue;
-                }
-                if (value instanceof List) {
-                    innerListHasPermission(value);
-                    allField[i].set(object, value);                    
-                } 
-                if (isSecureObjectType(value)) {
-                   if (hasPermission((BaseModel) value)) {
-                       innerObjectHasPermission((BaseModel) value);
-                    } else {
-                       allField[i].set(object, null);
-                    }
-                }    
-           }
-        } catch (IllegalAccessException e) {
-             LOGGER.error("innerObjectHasPermission ", e.getMessage());
-        } 
-        
-    }
-    /**
-     * check the inner list Object need access.
-     * 
-     * @param object
-     *            object .
-     */
-    private void innerListHasPermission(final Object object) {
-       if (((List<?>) object).size() > 0
-             && isSecureObjectType(((List<?>) object).get(0))) {
-          Iterator<?> iter =  ((List<?>) object).iterator();
-          while (iter.hasNext()) {
-             Object valueIn = iter.next();
-             if (hasPermission((BaseModel) valueIn)) {
-                 innerObjectHasPermission((BaseModel) valueIn);
-             } else {
-                 iter.remove();
-             }
-          }
-       }          
-    }
-    
-    /**
-     * check if object is main Object .
-     * 
-     * @param object
-     *            object.
-     * @return true if is,false if not.
-     */
-     private boolean isSecureObjectType(Object object) {
-
-        if (ALL_SECURE_OBJECT_TYPE.contains(object.getClass())) {
-           return true;
-        }
-        return false;
-     }
+    }  
 }

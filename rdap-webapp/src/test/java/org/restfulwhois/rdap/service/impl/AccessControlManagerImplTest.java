@@ -30,25 +30,16 @@
  */
 package org.restfulwhois.rdap.service.impl;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.Autnum;
 import org.restfulwhois.rdap.bean.Domain;
-import org.restfulwhois.rdap.bean.Entity;
-import org.restfulwhois.rdap.bean.Nameserver;
-import org.restfulwhois.rdap.bean.Network;
-import org.restfulwhois.rdap.common.RdapProperties;
 import org.restfulwhois.rdap.controller.support.QueryParser;
 import org.restfulwhois.rdap.service.AccessControlManager;
 import org.restfulwhois.rdap.service.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -106,98 +97,5 @@ public class AccessControlManagerImplTest extends BaseTest {
          */
         domain.setId(2000000L);
         assertTrue(accessControlManager.hasPermission(domain));
-    }
-
-    /**
-     * test for .
-     */
-    @Test
-    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    public void testDomainInnerObjectHasPermission() {
-        super.databaseSetupWithBinaryColumns("domain-search-acl.xml");
-        RdapProperties prop = new RdapProperties();
-        // set needCheckAccess true
-        ReflectionTestUtils.setField(prop,
-                "accessControlForInnerObjectForSearch", false);
-        String domainName =
-                "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
-        Domain domain =
-                queryService.queryDomain(queryParser.parseDomainQueryParam(
-                        domainName, domainName));
-        assertNotNull(domain);
-        assertNotNull(domain.getNetwork());
-        assertNotNull(domain.getNameservers());
-        Nameserver ns = domain.getNameservers().get(0);
-        assertEquals(2L, domain.getNameservers().size());
-        assertNotNull(domain.getEntities());
-        assertEquals(1L, domain.getEntities().size());
-        Entity entity = domain.getEntities().get(0);
-        accessControlManager.innerObjectHasPermission(domain);
-        assertNotNull(domain.getNetwork());
-        assertNotNull(domain.getNameservers());
-        assertEquals(2L, domain.getNameservers().size());
-        assertNotNull(domain.getEntities());
-        assertEquals(1L, domain.getEntities().size());
-        // set needCheckAccess true
-        ReflectionTestUtils.setField(prop,
-                "accessControlForInnerObjectForSearch", true);
-        accessControlManager.innerObjectHasPermission(domain);
-        assertNull(domain.getNetwork());
-        assertEquals(1L, domain.getNameservers().size());
-        assertFalse(domain.getNameservers().contains(ns));
-        assertEquals(0L, domain.getEntities().size());
-        assertFalse(domain.getEntities().contains(entity));
-        assertNull(domain.getNetwork());
-    }
-
-    /**
-     * test for .
-     */
-    @Test
-    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    public void testNameServerInnerObjectHasPermission() {
-        super.databaseSetupWithBinaryColumns("nameserver-search-acl.xml");
-        String nsName = "ns.cnnic.cn";
-        Nameserver ns =
-                queryService.queryNameserver(queryParser
-                        .parseNameserverQueryParam(nsName, nsName));
-
-        assertNotNull(ns.getEntities());
-        assertEquals(1L, ns.getEntities().size());
-        Entity entity = ns.getEntities().get(0);
-        accessControlManager.innerObjectHasPermission(ns);
-        assertFalse(ns.getEntities().contains(entity));
-        assertEquals(0L, ns.getEntities().size());
-
-    }
-
-    /**
-     * test for .
-     */
-    @Test
-    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-search-acl.xml")
-    public
-            void testEntityInnerObjectHasPermission() {
-        String handle = "h1";
-        Entity entity =
-                queryService.queryEntity(queryParser.parseQueryParam(handle));
-        assertNotNull(entity.getAutnums());
-        assertNotNull(entity.getNetworks());
-        assertEquals(4L, entity.getAutnums().size());
-        assertEquals(3L, entity.getNetworks().size());
-        assertEquals(1L, entity.getEntities().size());
-        Autnum autnum = entity.getAutnums().get(0);
-        Network network = entity.getNetworks().get(0);
-        Entity entitySub = entity.getEntities().get(0);
-        accessControlManager.innerObjectHasPermission(entity);
-        assertEquals(3L, entity.getAutnums().size());
-        assertEquals(2L, entity.getNetworks().size());
-        assertEquals(0L, entity.getEntities().size());
-
-        assertFalse(entity.getAutnums().contains(autnum));
-        assertFalse(entity.getNetworks().contains(network));
-        assertFalse(entity.getEntities().contains(entitySub));
-
-    }
+    }    
 }
