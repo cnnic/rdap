@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.dao;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.core.bean.BaseNotice;
 import org.restfulwhois.rdap.core.bean.Notice;
 
 /**
@@ -55,4 +56,11 @@ public interface NoticeDao {
      * @return notice list.
      */
     List<Notice> getHelp();
+    
+    /**
+     * get all notice and remark list.
+     *
+     * @return notice list.
+     */
+    List<Notice> getAllNoticesAndRemarks();
 }

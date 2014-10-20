@@ -39,10 +39,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.restfulwhois.rdap.core.bean.BaseNotice;
+import org.restfulwhois.rdap.core.bean.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.bean.Link;
 import org.restfulwhois.rdap.core.bean.ModelType;
 import org.restfulwhois.rdap.core.bean.Notice;
-import org.restfulwhois.rdap.core.bean.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.dao.NoticeDao;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
@@ -105,6 +106,18 @@ public class NoticeDaoImpl implements NoticeDao {
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.HELP);
         queryAndSetInnerObjects(notices, NoticeType.HELP);
         return notices;
+    }
+    /**
+     * query notice list.
+     * 
+     * @return list of notice.
+     */
+    @Override
+    public List<Notice> getAllNoticesAndRemarks() {
+        LOGGER.debug("getAllNoticesAndRemarks.");
+        List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
+        notices.addAll(queryWithoutInnerObjects(NoticeType.REMARK));       
+        return  notices;
     }
     
     /**
@@ -198,5 +211,5 @@ public class NoticeDaoImpl implements NoticeDao {
             }
             return result;
         }
-    }
+    }    
 }
