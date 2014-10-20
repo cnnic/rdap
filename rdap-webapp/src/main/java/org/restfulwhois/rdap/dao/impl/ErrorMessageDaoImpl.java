@@ -34,7 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.restfulwhois.rdap.bean.ErrorMessage;
+import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.restfulwhois.rdap.dao.ErrorMessageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

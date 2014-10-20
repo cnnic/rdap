@@ -34,7 +34,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.common.util.AutnumValidator;
+import org.restfulwhois.rdap.core.common.util.AutnumValidator;
 
 /**
  * Test for RestResponseUtil

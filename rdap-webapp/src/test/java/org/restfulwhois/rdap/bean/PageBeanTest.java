@@ -35,7 +35,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.bean.PageBean;
+import org.restfulwhois.rdap.core.model.PageBean;
 
 /**
  * test for PageBean.

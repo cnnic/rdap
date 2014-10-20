@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.dao;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.bean.Notice;
+import org.restfulwhois.rdap.core.model.Notice;
 
 /**
  * notice DAO.

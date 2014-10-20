@@ -32,9 +32,9 @@ package org.restfulwhois.rdap.dao;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.bean.BaseModel;
-import org.restfulwhois.rdap.bean.ModelType;
-import org.restfulwhois.rdap.bean.QueryParam;
+import org.restfulwhois.rdap.core.model.BaseModel;
+import org.restfulwhois.rdap.core.model.ModelType;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 
 /**
  * query dao interface. Each method return BaseObject, which can be converted to

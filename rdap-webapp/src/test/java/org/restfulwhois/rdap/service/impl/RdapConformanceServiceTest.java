@@ -37,9 +37,9 @@ import static org.junit.Assert.assertThat;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.Autnum;
-import org.restfulwhois.rdap.bean.Domain;
-import org.restfulwhois.rdap.service.RdapConformanceService;
+import org.restfulwhois.rdap.core.model.Autnum;
+import org.restfulwhois.rdap.core.model.Domain;
+import org.restfulwhois.rdap.core.service.RdapConformanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 

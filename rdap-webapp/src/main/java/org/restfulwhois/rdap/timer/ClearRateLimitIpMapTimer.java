@@ -5,7 +5,7 @@ import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
 
-import org.restfulwhois.rdap.service.impl.ConnectionControlService;
+import org.restfulwhois.rdap.core.service.impl.ConnectionControlService;
 import org.springframework.stereotype.Component;
 
 /**

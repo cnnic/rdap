@@ -36,8 +36,8 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.Event;
-import org.restfulwhois.rdap.bean.ModelType;
+import org.restfulwhois.rdap.core.model.Event;
+import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;

@@ -35,10 +35,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.Domain;
-import org.restfulwhois.rdap.controller.support.QueryParser;
-import org.restfulwhois.rdap.service.AccessControlManager;
-import org.restfulwhois.rdap.service.QueryService;
+import org.restfulwhois.rdap.core.controller.support.QueryParser;
+import org.restfulwhois.rdap.core.model.Domain;
+import org.restfulwhois.rdap.core.service.AccessControlManager;
+import org.restfulwhois.rdap.core.service.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
