@@ -39,8 +39,8 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.Link;
-import org.restfulwhois.rdap.bean.ModelType;
+import org.restfulwhois.rdap.core.bean.Link;
+import org.restfulwhois.rdap.core.bean.ModelType;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 

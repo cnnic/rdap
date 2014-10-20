@@ -41,10 +41,10 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.Link;
-import org.restfulwhois.rdap.bean.ModelType;
-import org.restfulwhois.rdap.bean.Remark;
-import org.restfulwhois.rdap.controller.support.QueryParser;
+import org.restfulwhois.rdap.core.bean.Link;
+import org.restfulwhois.rdap.core.bean.ModelType;
+import org.restfulwhois.rdap.core.bean.Remark;
+import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.dao.impl.RemarkQueryDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 

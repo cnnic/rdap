@@ -36,10 +36,10 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.QueryParam;
-import org.restfulwhois.rdap.bean.RedirectResponse;
-import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.controller.support.QueryParser;
+import org.restfulwhois.rdap.core.bean.QueryParam;
+import org.restfulwhois.rdap.core.bean.RedirectResponse;
+import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

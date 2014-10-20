@@ -30,8 +30,8 @@
  */
 package org.restfulwhois.rdap.dao;
 
-import org.restfulwhois.rdap.bean.Principal;
-import org.restfulwhois.rdap.bean.SecureObject;
+import org.restfulwhois.rdap.core.bean.Principal;
+import org.restfulwhois.rdap.core.bean.SecureObject;
 
 /**
  * Access Control List entry dao.

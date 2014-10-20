@@ -37,8 +37,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bootstrap.bean.AutnumRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.common.RdapProperties;
-import org.restfulwhois.rdap.common.util.AutnumValidator;
+import org.restfulwhois.rdap.core.common.RdapProperties;
+import org.restfulwhois.rdap.core.common.util.AutnumValidator;
 import org.springframework.stereotype.Service;
 
 /**
