@@ -37,8 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.bean.BaseModel;
-import org.restfulwhois.rdap.bean.Domain;
+import org.restfulwhois.rdap.core.bean.BaseModel;
+import org.restfulwhois.rdap.core.bean.Domain;
 
 /**
  * test for BaseModel.

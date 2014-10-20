@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.dao;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.bean.ErrorMessage;
+import org.restfulwhois.rdap.core.bean.ErrorMessage;
 
 /**
  * error message DAO.

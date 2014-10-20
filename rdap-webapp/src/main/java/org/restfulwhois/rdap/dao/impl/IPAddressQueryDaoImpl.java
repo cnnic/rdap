@@ -37,10 +37,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.bean.IPAddress;
-import org.restfulwhois.rdap.bean.ModelType;
-import org.restfulwhois.rdap.common.util.IpUtil;
-import org.restfulwhois.rdap.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.bean.IPAddress;
+import org.restfulwhois.rdap.core.bean.ModelType;
+import org.restfulwhois.rdap.core.common.util.IpUtil;
+import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

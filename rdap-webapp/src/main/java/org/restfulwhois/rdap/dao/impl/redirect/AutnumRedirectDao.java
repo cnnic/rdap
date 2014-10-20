@@ -37,10 +37,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.bean.QueryParam;
-import org.restfulwhois.rdap.bean.RedirectResponse;
 import org.restfulwhois.rdap.bootstrap.bean.AutnumRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.core.bean.QueryParam;
+import org.restfulwhois.rdap.core.bean.RedirectResponse;
 import org.restfulwhois.rdap.dao.RedirectDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
