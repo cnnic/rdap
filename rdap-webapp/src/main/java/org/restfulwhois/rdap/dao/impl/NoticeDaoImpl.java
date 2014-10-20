@@ -106,19 +106,7 @@ public class NoticeDaoImpl implements NoticeDao {
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.HELP);
         queryAndSetInnerObjects(notices, NoticeType.HELP);
         return notices;
-    }
-    /**
-     * query notice list.
-     * 
-     * @return list of notice.
-     */
-    @Override
-    public List<Notice> getAllNoticesAndRemarks() {
-        LOGGER.debug("getAllNoticesAndRemarks.");
-        List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
-        notices.addAll(queryWithoutInnerObjects(NoticeType.REMARK));       
-        return  notices;
-    }
+    }    
     
     /**
      * query inner objects, and set them to notices.

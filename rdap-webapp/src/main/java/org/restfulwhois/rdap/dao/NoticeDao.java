@@ -55,12 +55,5 @@ public interface NoticeDao {
      *
      * @return notice list.
      */
-    List<Notice> getHelp();
-    
-    /**
-     * get all notice and remark list.
-     *
-     * @return notice list.
-     */
-    List<Notice> getAllNoticesAndRemarks();
+    List<Notice> getHelp();    
 }
