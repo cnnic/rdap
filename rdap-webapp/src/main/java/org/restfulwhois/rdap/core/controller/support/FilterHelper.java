@@ -37,8 +37,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.core.bean.ErrorMessage;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 

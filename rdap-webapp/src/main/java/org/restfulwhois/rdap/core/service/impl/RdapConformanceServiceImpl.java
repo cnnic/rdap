@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.core.service.impl;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.core.bean.BaseModel;
+import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.service.RdapConformanceService;
 import org.restfulwhois.rdap.dao.ConformanceDao;
 import org.slf4j.Logger;

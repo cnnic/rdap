@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.dao;
 
-import org.restfulwhois.rdap.core.bean.User;
+import org.restfulwhois.rdap.acl.bean.User;
 
 /**
  * query user identit from database.

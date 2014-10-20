@@ -30,10 +30,10 @@
  */
 package org.restfulwhois.rdap.core.service.impl;
 
-import org.restfulwhois.rdap.core.bean.BaseModel;
-import org.restfulwhois.rdap.core.bean.Principal;
-import org.restfulwhois.rdap.core.bean.SecureObject;
+import org.restfulwhois.rdap.acl.bean.Principal;
+import org.restfulwhois.rdap.acl.bean.SecureObject;
 import org.restfulwhois.rdap.core.controller.support.PrincipalHolder;
+import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.service.AccessControlManager;
 import org.restfulwhois.rdap.dao.AclDao;
 import org.slf4j.Logger;

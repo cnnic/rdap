@@ -35,8 +35,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.restfulwhois.rdap.core.bean.Principal;
-import org.restfulwhois.rdap.core.bean.SecureObject;
+import org.restfulwhois.rdap.acl.bean.Principal;
+import org.restfulwhois.rdap.acl.bean.SecureObject;
 import org.restfulwhois.rdap.dao.AclDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

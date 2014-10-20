@@ -5,8 +5,8 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.core.bean.ErrorMessage;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.restfulwhois.rdap.core.service.impl.ConnectionControlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

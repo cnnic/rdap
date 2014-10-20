@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.controller.support;
 
-import org.restfulwhois.rdap.core.bean.Principal;
+import org.restfulwhois.rdap.acl.bean.Principal;
 
 /**
  * This class is used to hold principal for each request.

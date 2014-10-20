@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.core.service;
 
 import java.util.Map;
 
-import org.restfulwhois.rdap.core.bean.ErrorMessage;
+import org.restfulwhois.rdap.core.model.ErrorMessage;
 
 /**
  * error message interface.

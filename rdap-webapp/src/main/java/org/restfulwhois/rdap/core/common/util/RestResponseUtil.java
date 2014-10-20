@@ -36,7 +36,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.restfulwhois.rdap.core.bean.ErrorMessage;
+import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.restfulwhois.rdap.core.service.ErrorMessageService;
 import org.restfulwhois.rdap.core.service.PolicyControlService;
 import org.restfulwhois.rdap.core.service.impl.ResponseDecorator;

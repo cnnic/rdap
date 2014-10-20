@@ -30,13 +30,13 @@
  */
 package org.restfulwhois.rdap.core.service;
 
-import org.restfulwhois.rdap.core.bean.Autnum;
-import org.restfulwhois.rdap.core.bean.Domain;
-import org.restfulwhois.rdap.core.bean.Entity;
-import org.restfulwhois.rdap.core.bean.Help;
-import org.restfulwhois.rdap.core.bean.Nameserver;
-import org.restfulwhois.rdap.core.bean.Network;
-import org.restfulwhois.rdap.core.bean.QueryParam;
+import org.restfulwhois.rdap.core.model.Autnum;
+import org.restfulwhois.rdap.core.model.Domain;
+import org.restfulwhois.rdap.core.model.Entity;
+import org.restfulwhois.rdap.core.model.Help;
+import org.restfulwhois.rdap.core.model.Nameserver;
+import org.restfulwhois.rdap.core.model.Network;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 
 /**
  * query service interface.

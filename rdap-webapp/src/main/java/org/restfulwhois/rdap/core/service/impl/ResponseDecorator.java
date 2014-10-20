@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.service.impl;
 
-import org.restfulwhois.rdap.core.bean.BaseModel;
+import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.service.PolicyControlService;
 import org.restfulwhois.rdap.core.service.RdapConformanceService;
 import org.restfulwhois.rdap.dao.NoticeDao;
