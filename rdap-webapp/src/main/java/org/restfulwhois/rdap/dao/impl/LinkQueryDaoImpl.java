@@ -40,9 +40,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.bean.Link;
-import org.restfulwhois.rdap.core.bean.ModelType;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.core.model.Link;
+import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

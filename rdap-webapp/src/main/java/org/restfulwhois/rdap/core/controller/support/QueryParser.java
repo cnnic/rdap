@@ -33,15 +33,15 @@ package org.restfulwhois.rdap.core.controller.support;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.bean.DomainQueryParam;
-import org.restfulwhois.rdap.core.bean.DomainSearchParam;
-import org.restfulwhois.rdap.core.bean.EntityQueryParam;
-import org.restfulwhois.rdap.core.bean.NameserverQueryParam;
-import org.restfulwhois.rdap.core.bean.NetworkQueryParam;
-import org.restfulwhois.rdap.core.bean.QueryParam;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.exception.DecodeException;
+import org.restfulwhois.rdap.core.queryparam.DomainQueryParam;
+import org.restfulwhois.rdap.core.queryparam.DomainSearchParam;
+import org.restfulwhois.rdap.core.queryparam.EntityQueryParam;
+import org.restfulwhois.rdap.core.queryparam.NameserverQueryParam;
+import org.restfulwhois.rdap.core.queryparam.NetworkQueryParam;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -51,7 +51,7 @@ import org.springframework.stereotype.Component;
  * 
  * <p>
  * Methods parseQueryParam and parseXxxQueryParam, is called to generate
- * {@link org.restfulwhois.rdap.core.bean.QueryParam} before query service.
+ * {@link org.restfulwhois.rdap.core.queryparam.QueryParam} before query service.
  * 
  * @author jiashuo
  * 

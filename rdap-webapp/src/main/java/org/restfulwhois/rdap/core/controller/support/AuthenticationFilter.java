@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.bean.ErrorMessage;
-import org.restfulwhois.rdap.core.bean.Principal;
-import org.restfulwhois.rdap.core.bean.User;
+import org.restfulwhois.rdap.acl.bean.Principal;
+import org.restfulwhois.rdap.acl.bean.User;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.ServiceBeanUtil;
+import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.restfulwhois.rdap.core.service.IdentityCheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

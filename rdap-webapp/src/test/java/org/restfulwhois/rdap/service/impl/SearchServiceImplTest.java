@@ -37,13 +37,13 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.bean.DomainSearch;
-import org.restfulwhois.rdap.core.bean.DomainSearchParam;
-import org.restfulwhois.rdap.core.bean.EntitySearch;
-import org.restfulwhois.rdap.core.bean.NameserverSearch;
 import org.restfulwhois.rdap.core.common.RdapProperties;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
+import org.restfulwhois.rdap.core.queryparam.DomainSearchParam;
 import org.restfulwhois.rdap.core.service.SearchService;
+import org.restfulwhois.rdap.search.bean.DomainSearch;
+import org.restfulwhois.rdap.search.bean.EntitySearch;
+import org.restfulwhois.rdap.search.bean.NameserverSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 

@@ -37,8 +37,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.bean.Entity;
-import org.restfulwhois.rdap.core.bean.EntityTel;
+import org.restfulwhois.rdap.core.model.Entity;
+import org.restfulwhois.rdap.core.model.EntityTel;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.core.bean.Principal;
+import org.restfulwhois.rdap.acl.bean.Principal;
 import org.restfulwhois.rdap.core.controller.support.PrincipalHolder;
 
 /**

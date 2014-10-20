@@ -54,7 +54,7 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.restfulwhois.rdap.core.bean.Principal;
+import org.restfulwhois.rdap.acl.bean.Principal;
 import org.restfulwhois.rdap.core.common.RdapProperties;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.controller.support.PrincipalHolder;

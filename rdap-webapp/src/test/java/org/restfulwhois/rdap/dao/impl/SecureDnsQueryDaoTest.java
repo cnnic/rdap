@@ -37,10 +37,10 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.bean.DsData;
-import org.restfulwhois.rdap.core.bean.KeyData;
-import org.restfulwhois.rdap.core.bean.ModelType;
-import org.restfulwhois.rdap.core.bean.SecureDns;
+import org.restfulwhois.rdap.core.model.DsData;
+import org.restfulwhois.rdap.core.model.KeyData;
+import org.restfulwhois.rdap.core.model.ModelType;
+import org.restfulwhois.rdap.core.model.SecureDns;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
