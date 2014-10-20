@@ -30,9 +30,9 @@
  */
 package org.restfulwhois.rdap.core.common.util;
 
-import org.restfulwhois.rdap.core.bean.BaseModel;
-import org.restfulwhois.rdap.core.bean.Link;
 import org.restfulwhois.rdap.core.common.RdapProperties;
+import org.restfulwhois.rdap.core.model.BaseModel;
+import org.restfulwhois.rdap.core.model.Link;
 
  /**
  * Auto generate link property for object

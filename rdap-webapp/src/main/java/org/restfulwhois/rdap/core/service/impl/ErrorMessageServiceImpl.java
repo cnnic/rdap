@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.restfulwhois.rdap.core.bean.ErrorMessage;
+import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.restfulwhois.rdap.core.service.ErrorMessageService;
 import org.restfulwhois.rdap.dao.ErrorMessageDao;
 import org.slf4j.Logger;

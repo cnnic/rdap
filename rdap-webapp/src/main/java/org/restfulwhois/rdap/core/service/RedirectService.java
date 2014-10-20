@@ -33,8 +33,8 @@ package org.restfulwhois.rdap.core.service;
 import java.util.List;
 
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.bean.QueryParam;
-import org.restfulwhois.rdap.core.bean.RedirectResponse;
+import org.restfulwhois.rdap.core.model.RedirectResponse;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 
 /**
  * redirect service interface.

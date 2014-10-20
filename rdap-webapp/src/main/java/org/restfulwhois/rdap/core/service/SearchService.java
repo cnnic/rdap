@@ -30,10 +30,10 @@
  */
 package org.restfulwhois.rdap.core.service;
 
-import org.restfulwhois.rdap.core.bean.DomainSearch;
-import org.restfulwhois.rdap.core.bean.EntitySearch;
-import org.restfulwhois.rdap.core.bean.NameserverSearch;
-import org.restfulwhois.rdap.core.bean.QueryParam;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.search.bean.DomainSearch;
+import org.restfulwhois.rdap.search.bean.EntitySearch;
+import org.restfulwhois.rdap.search.bean.NameserverSearch;
 
 /**
  * search service interface.

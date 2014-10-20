@@ -34,14 +34,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.bean.Entity;
-import org.restfulwhois.rdap.core.bean.EntitySearch;
-import org.restfulwhois.rdap.core.bean.Help;
-import org.restfulwhois.rdap.core.bean.QueryParam;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
+import org.restfulwhois.rdap.core.model.Entity;
+import org.restfulwhois.rdap.core.model.Help;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.search.bean.EntitySearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

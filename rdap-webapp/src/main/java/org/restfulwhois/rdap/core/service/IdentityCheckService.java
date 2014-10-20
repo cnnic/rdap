@@ -31,7 +31,7 @@
 
 package org.restfulwhois.rdap.core.service;
 
-import org.restfulwhois.rdap.core.bean.User;
+import org.restfulwhois.rdap.acl.bean.User;
 
 
 /**

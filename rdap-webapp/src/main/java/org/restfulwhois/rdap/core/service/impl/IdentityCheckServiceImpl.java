@@ -31,7 +31,7 @@
 
 package org.restfulwhois.rdap.core.service.impl;
 
-import org.restfulwhois.rdap.core.bean.User;
+import org.restfulwhois.rdap.acl.bean.User;
 import org.restfulwhois.rdap.core.common.util.MD5Encryption;
 import org.restfulwhois.rdap.core.service.IdentityCheckService;
 import org.restfulwhois.rdap.dao.IdentityCheckDao;

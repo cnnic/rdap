@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.service;
 
-import org.restfulwhois.rdap.core.bean.BaseModel;
+import org.restfulwhois.rdap.core.model.BaseModel;
 
 /**
  * RDAP conformance service is used to add rdapConformance to model.
