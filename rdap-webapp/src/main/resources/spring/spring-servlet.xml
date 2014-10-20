@@ -32,6 +32,6 @@
 		</property>
 	</bean>
 	<bean id="exceptionResolver"
-		class="org.restfulwhois.rdap.controller.support.MappingExceptionResolver">
+		class="org.restfulwhois.rdap.core.controller.support.MappingExceptionResolver">
 	</bean>
 </beans>

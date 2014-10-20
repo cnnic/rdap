@@ -39,7 +39,8 @@ import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.restfulwhois.rdap.exception.DecodeException;
+import org.restfulwhois.rdap.core.common.util.DomainUtil;
+import org.restfulwhois.rdap.core.exception.DecodeException;
 
 /**
  * Test for StringUtil.

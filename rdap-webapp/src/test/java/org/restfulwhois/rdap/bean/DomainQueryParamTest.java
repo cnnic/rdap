@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.bean;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.bean.DomainQueryParam;
+import org.restfulwhois.rdap.core.bean.DomainQueryParam;
 
 /**
  * test for DomainQueryParam.

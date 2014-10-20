@@ -34,9 +34,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.bean.ModelType;
-import org.restfulwhois.rdap.bean.Principal;
-import org.restfulwhois.rdap.bean.SecureObject;
+import org.restfulwhois.rdap.core.bean.ModelType;
+import org.restfulwhois.rdap.core.bean.Principal;
+import org.restfulwhois.rdap.core.bean.SecureObject;
 import org.restfulwhois.rdap.dao.AclDao;
 import org.springframework.beans.factory.annotation.Autowired;
 

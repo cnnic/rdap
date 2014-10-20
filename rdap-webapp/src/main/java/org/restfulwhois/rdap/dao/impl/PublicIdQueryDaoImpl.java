@@ -36,8 +36,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.restfulwhois.rdap.bean.ModelType;
-import org.restfulwhois.rdap.bean.PublicId;
+import org.restfulwhois.rdap.core.bean.ModelType;
+import org.restfulwhois.rdap.core.bean.PublicId;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

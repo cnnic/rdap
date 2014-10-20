@@ -39,10 +39,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.restfulwhois.rdap.bean.Link;
-import org.restfulwhois.rdap.bean.ModelType;
-import org.restfulwhois.rdap.bean.Notice;
-import org.restfulwhois.rdap.bean.BaseNotice.NoticeType;
+import org.restfulwhois.rdap.core.bean.Link;
+import org.restfulwhois.rdap.core.bean.ModelType;
+import org.restfulwhois.rdap.core.bean.Notice;
+import org.restfulwhois.rdap.core.bean.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.dao.NoticeDao;
 import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
