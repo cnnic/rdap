@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,48 +28,19 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao.impl;
-
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import org.junit.Test;
-import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.dao.ErrorMessageDao;
-import org.restfulwhois.rdap.core.model.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.util.Assert;
-
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
+package org.restfulwhois.rdap.core.model.base;
 
 /**
- * Test for errorMessage DAO.
+ * This is base custom model, for custom columns.
+ * 
+ * <pre>
+ *      Usage: create new class extending this abstract class, such as:
+ *          public CustomDomain extends BaseCustomModel{...}
+ * </pre>
  * 
  * @author jiashuo
  * 
  */
-@SuppressWarnings("rawtypes")
-public class ErrorMessageDaoTest extends BaseTest {
-    /**
-     * errorMessageDao.
-     */
-    @Autowired
-    @Qualifier("errorMessageDaoImpl")
-    private ErrorMessageDao errorMessageDao;
-
-    /**
-     * test query exist.
-     */
-    @Test
-    @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("errorMessage.xml")
-    public void testQueryExist() {
-        List<ErrorMessage> errorMsgs = errorMessageDao.getAllErrorMessages();
-        Assert.notNull(errorMsgs);
-        assertTrue(errorMsgs.size() > 0);
-    }
+public abstract class BaseCustomModel {
 
 }

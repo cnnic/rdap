@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.service.impl;
+package org.restfulwhois.rdap.redirect.service;
 
 import java.util.List;
 
@@ -37,8 +37,7 @@ import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.core.common.RdapProperties;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
-import org.restfulwhois.rdap.core.service.RedirectService;
-import org.restfulwhois.rdap.dao.RedirectDao;
+import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

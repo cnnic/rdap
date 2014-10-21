@@ -45,6 +45,7 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
+import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.Domain;
 import org.restfulwhois.rdap.core.model.DsData;
 import org.restfulwhois.rdap.core.model.Event;
@@ -55,7 +56,6 @@ import org.restfulwhois.rdap.core.model.Remark;
 import org.restfulwhois.rdap.core.model.SecureDns;
 import org.restfulwhois.rdap.core.model.Variant;
 import org.restfulwhois.rdap.core.model.Variants;
-import org.restfulwhois.rdap.dao.QueryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseTearDown;

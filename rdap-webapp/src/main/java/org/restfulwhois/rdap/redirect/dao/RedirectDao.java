@@ -28,59 +28,37 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao;
+package org.restfulwhois.rdap.redirect.dao;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.core.model.BaseModel;
-import org.restfulwhois.rdap.core.model.ModelType;
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 
 /**
- * query dao interface. Each method return BaseObject, which can be converted to
- * model class by caller.
+ * redirect DAO. Interface to access AutnumRedirectDao DomainRedirectDao
+ * NetworkRedirectDao.
  * 
- * @param <T> object derive from BaseModel.
  * @author jiashuo
  * 
  */
-public interface QueryDao<T extends BaseModel> {
-    /**
-     * query model object.
-     * 
-     * @param queryParam
-     *            query parameter.
-     * @return object, using base class BaseObject.
-     */
-    T query(QueryParam queryParam);
+public interface RedirectDao {
 
     /**
-     * query model list, as nested models of other Model.
-     * 
-     * @param outerObjectId
-     *            id of outer object.
-     * @param outerModelType
-     *            model type of outer object.
-     * @return object list.
-     */
-    List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
-
-    /**
-     * search model list.
+     * query redirect object.
      * 
      * @param queryParam
      *            queryParam.
-     * @return object list.
+     * @return RedirectResponse RedirectResponse.
      */
-    List<T> search(QueryParam queryParam);
+    RedirectResponse query(QueryParam queryParam);
 
     /**
-     * get search count.
+     * save redirect, from bootstraps.
      * 
-     * @param queryParam
-     *            queryParam.
-     * @return queryParam.
+     * @param bootstraps
+     *            bootstraps redirects.
      */
-    Long searchCount(QueryParam queryParam);
-
+    void save(List<Redirect> bootstraps);
 }

@@ -36,8 +36,8 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.acl.bean.Principal;
 import org.restfulwhois.rdap.acl.bean.SecureObject;
+import org.restfulwhois.rdap.acl.dao.AclDao;
 import org.restfulwhois.rdap.core.model.ModelType;
-import org.restfulwhois.rdap.dao.AclDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;

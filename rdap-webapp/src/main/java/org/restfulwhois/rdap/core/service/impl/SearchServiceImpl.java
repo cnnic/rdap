@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.core.common.RdapProperties;
+import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.Domain;
 import org.restfulwhois.rdap.core.model.Entity;
@@ -42,7 +43,6 @@ import org.restfulwhois.rdap.core.model.PageBean;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.restfulwhois.rdap.core.service.AccessControlManager;
 import org.restfulwhois.rdap.core.service.SearchService;
-import org.restfulwhois.rdap.dao.QueryDao;
 import org.restfulwhois.rdap.search.bean.BaseSearchModel;
 import org.restfulwhois.rdap.search.bean.DomainSearch;
 import org.restfulwhois.rdap.search.bean.EntitySearch;

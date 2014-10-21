@@ -39,7 +39,7 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.restfulwhois.rdap.dao.PolicyDao;
+import org.restfulwhois.rdap.policy.dao.PolicyDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

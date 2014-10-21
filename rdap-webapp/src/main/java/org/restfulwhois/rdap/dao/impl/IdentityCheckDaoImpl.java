@@ -37,7 +37,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.restfulwhois.rdap.acl.bean.User;
-import org.restfulwhois.rdap.dao.IdentityCheckDao;
+import org.restfulwhois.rdap.acl.dao.IdentityCheckDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

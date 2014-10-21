@@ -28,24 +28,23 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao;
+package org.restfulwhois.rdap.acl.dao;
 
-import java.util.List;
-
-import org.restfulwhois.rdap.core.model.ErrorMessage;
+import org.restfulwhois.rdap.acl.bean.User;
 
 /**
- * error message DAO.
- * Interface to access ErrorMessageDaoImpl.
- * 
- * @author jiashuo.
- * 
+ * query user identit from database.
+ * Interface to access IndentityCheckDaoImpl.
+ * @author wang
  */
-public interface ErrorMessageDao {
+public interface IdentityCheckDao {
     /**
-     * get all error messages list.
-     * 
-     * @return error messages list.
+     * check the user id to identify the user.
+     * @param userId
+     *      id of user to check.
+     * @return
+     *      object of user.
      */
-    List<ErrorMessage> getAllErrorMessages();
+    User checkUserId(String userId);
+    
 }
