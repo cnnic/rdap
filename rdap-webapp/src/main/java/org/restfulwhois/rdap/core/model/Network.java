@@ -36,6 +36,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
@@ -107,6 +108,7 @@ public class Network extends BaseModel {
     /**
      * network name  cidr.
      */
+    @JsonIgnore
     private String cidr;
     /**
      * the object class name of a particular object.
@@ -437,18 +439,18 @@ public class Network extends BaseModel {
      * 
      * @return objectClassName.
      */
-	public ObjectClassNameEnum getObjectClassName() {
-		return objectClassName;
-	}
-	
-	/**
+    public ObjectClassNameEnum getObjectClassName() {
+        return objectClassName;
+    }
+
+    /**
      * set ObjectClassNameEnum.
      * 
-     * @param objectClassNameEnum
+     * @param objectClassName
      *            objectClassName for set.
      */
-	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
-		this.objectClassName = objectClassName;
-	}
+    public void setObjectClassName(ObjectClassNameEnum objectClassName) {
+        this.objectClassName = objectClassName;
+    }
     
 }

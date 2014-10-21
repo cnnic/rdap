@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import org.restfulwhois.rdap.core.model.Link;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Notice;
@@ -105,7 +106,7 @@ public class NoticeDaoImpl implements NoticeDao {
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.HELP);
         queryAndSetInnerObjects(notices, NoticeType.HELP);
         return notices;
-    }
+    }    
     
     /**
      * query inner objects, and set them to notices.
@@ -198,5 +199,5 @@ public class NoticeDaoImpl implements NoticeDao {
             }
             return result;
         }
-    }
+    }    
 }

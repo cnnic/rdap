@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.restfulwhois.rdap.core.model.Notice;
 
+
 /**
  * notice DAO.
  * Interface to access NoticeDaoImpl.
@@ -54,5 +55,5 @@ public interface NoticeDao {
      *
      * @return notice list.
      */
-    List<Notice> getHelp();
+    List<Notice> getHelp();    
 }
