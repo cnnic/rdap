@@ -42,6 +42,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;

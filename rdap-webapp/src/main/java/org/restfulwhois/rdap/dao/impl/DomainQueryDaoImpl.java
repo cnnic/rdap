@@ -1,4 +1,4 @@
- /*
+/*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
  *
@@ -39,18 +39,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.core.model.BaseModel;
+import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
+import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.Domain;
+import org.restfulwhois.rdap.core.model.Domain.DomainType;
 import org.restfulwhois.rdap.core.model.DomainSearchType;
 import org.restfulwhois.rdap.core.model.Entity;
 import org.restfulwhois.rdap.core.model.Event;
 import org.restfulwhois.rdap.core.model.Link;
-import org.restfulwhois.rdap.core.model.ModelStatus;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Nameserver;
 import org.restfulwhois.rdap.core.model.Network;
@@ -59,19 +58,16 @@ import org.restfulwhois.rdap.core.model.PublicId;
 import org.restfulwhois.rdap.core.model.Remark;
 import org.restfulwhois.rdap.core.model.SecureDns;
 import org.restfulwhois.rdap.core.model.Variants;
-import org.restfulwhois.rdap.core.model.Domain.DomainType;
 import org.restfulwhois.rdap.core.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.queryparam.DomainSearchParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -88,6 +84,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
+    /**
+     * left join domain status SQL.
+     */
+    private static String SQL_LEFT_JOIN_DOMAIN_STATUS =
+            " left outer join RDAP_DOMAIN_STATUS status "
+                    + " on domain.DOMAIN_ID = status.DOMAIN_ID ";
     /**
      * logger.
      */
@@ -187,7 +189,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     public List<Domain> search(QueryParam queryParam) {
         LOGGER.debug("search, queryParam:" + queryParam);
         List<Domain> domains = searchWithoutInnerObjects(queryParam);
-        queryAndSetDomainStatus(domains);
         queryAndSetInnerObjectsWithoutNotice(domains);
         LOGGER.debug("search, domains:" + domains);
         return domains;
@@ -221,54 +222,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         } else {
             return 0L;
         }
-    }
-
-    /**
-     * query and set domain status.
-     * 
-     * @param domains
-     *            domain list.
-     */
-    private void queryAndSetDomainStatus(List<Domain> domains) {
-        List<Long> domainIds = getModelIds(domains);
-        List<ModelStatus> domainStatusList = queryDomainStatus(domainIds);
-        for (ModelStatus status : domainStatusList) {
-            BaseModel obj =
-                    BaseModel.findObjectFromListById(domains, status.getId());
-            if (null == obj) {
-                continue;
-            }
-            Domain domain = (Domain) obj;
-            domain.addStatus(status.getStatus());
-        }
-    }
-
-    /**
-     * query domain status from RDAP_DOMAIN_STATUS with domain id.
-     * 
-     * @param domainIds
-     *            domain id list.
-     * @return domain status list.
-     */
-    private List<ModelStatus> queryDomainStatus(List<Long> domainIds) {
-        if (null == domainIds || domainIds.size() == 0) {
-            return new ArrayList<ModelStatus>();
-        }
-        final String domainsIdsJoinedByComma = StringUtils.join(domainIds, ",");
-        final String sqlTpl =
-                "select * from RDAP_DOMAIN_STATUS where DOMAIN_ID in (%s)";
-        final String sql = String.format(sqlTpl, domainsIdsJoinedByComma);
-        List<ModelStatus> result =
-                jdbcTemplate.query(sql, new RowMapper<ModelStatus>() {
-                    @Override
-                    public ModelStatus mapRow(ResultSet rs, int rowNum)
-                            throws SQLException {
-                        return new ModelStatus(rs.getLong("DOMAIN_ID"), rs
-                                .getString("STATUS"));
-                    }
-
-                });
-        return result;
     }
 
     /**
@@ -375,12 +328,14 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         final int hexCharSize = IpUtil.getHexCharSize(network.getIpVersion());
         String sql =
                 "select d.* "
-                        + " from RDAP_IP ip, RDAP_DOMAIN d"
-                        + " where d.NETWORK_ID = ip.IP_ID"
-                        + " and ip.STARTADDRESS <= ? and ip.ENDADDRESS >= ?"
+                        + " from RDAP_IP ip "
+                        + " inner join RDAP_DOMAIN d "
+                        + " on d.NETWORK_ID = ip.IP_ID "
+                        + SQL_LEFT_JOIN_DOMAIN_STATUS
+                        + " where ip.STARTADDRESS <= ? and ip.ENDADDRESS >= ?"
                         + " and d.TYPE = 'arpa' and ip.version = ? "
-                        + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? ";
-        sql = sql + " order by ip.STARTADDRESS desc,ip.ENDADDRESS,d.DOMAIN_ID limit 1";
+                        + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? "
+                        + " order by ip.STARTADDRESS desc,ip.ENDADDRESS,d.DOMAIN_ID limit 1";
         final String finalSql = sql;
         result = jdbcTemplate.query(new PreparedStatementCreator() {
             @Override
@@ -394,11 +349,10 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 ps.setInt(5, hexCharSize);
                 return ps;
             }
-        }, new DomainResultSetExtractor());
+        }, new DomainWithStatusResultSetExtractor());
         if (null == result || result.size() == 0) {
             return null;
         }
-        queryAndSetDomainStatus(result);
         return result.get(0);
 
     }
@@ -416,9 +370,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         LOGGER.debug("query LDH_NAME with punyName:{}", punyName);
         final String sql =
                 "select * from RDAP_DOMAIN domain "
-                        + " left outer join RDAP_DOMAIN_STATUS status "
-                        + " on domain.DOMAIN_ID = status.DOMAIN_ID "
-                        + " where LDH_NAME= ?  ";
+                        + SQL_LEFT_JOIN_DOMAIN_STATUS + " where LDH_NAME= ?  ";
         List<Domain> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
@@ -433,25 +385,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return null;
         }
         return result.get(0);
-    }
-
-    /**
-     * domain ResultSetExtractor, extract data from ResultSet.
-     * 
-     * @author jiashuo
-     * 
-     */
-    class DomainResultSetExtractor implements ResultSetExtractor<List<Domain>> {
-        @Override
-        public List<Domain> extractData(ResultSet rs) throws SQLException {
-            List<Domain> result = new ArrayList<Domain>();
-            while (rs.next()) {
-                Domain domain = new Domain();
-                extractDomainFromRs(rs, domain);
-                result.add(domain);
-            }
-            return result;
-        }
     }
 
     /**
@@ -662,6 +595,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         final String punyNameLikeClause = super.generateLikeClause(punyName);
         final String sql =
                 "select * from RDAP_DOMAIN domain "
+                        + SQL_LEFT_JOIN_DOMAIN_STATUS
                         + " where LDH_NAME like ? or UNICODE_NAME like ? "
                         + " order by domain.LDH_NAME limit ?,? ";
         final PageBean page = params.getPageBean();
@@ -680,7 +614,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                         ps.setLong(4, page.getMaxRecords());
                         return ps;
                     }
-                }, new DomainResultSetExtractor());
+                }, new DomainWithStatusResultSetExtractor());
         return result;
     }
 
@@ -697,12 +631,13 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         final String punyName = domainQueryParam.getPunyName();
         final String punyNameLikeClause = super.generateLikeClause(punyName);
         final String sql =
-                "select distinct t1.* from  RDAP_DOMAIN t1 inner join "
-                        + " REL_DOMAIN_NAMESERVER t2 on t1.DOMAIN_ID = t2.DOMAIN_ID "
-                        + " inner join RDAP_NAMESERVER t3 on  "
-                        + " t2.NAMESERVER_ID = t3.NAMESERVER_ID "
-                        + " where t3.LDH_NAME LIKE ? "
-                        + " order by LDH_NAME limit ?,? ";
+                "select distinct domain.* from  RDAP_DOMAIN domain inner join "
+                        + " REL_DOMAIN_NAMESERVER rel on domain.DOMAIN_ID = rel.DOMAIN_ID "
+                        + " inner join RDAP_NAMESERVER ns "
+                        + " on rel.NAMESERVER_ID = ns.NAMESERVER_ID "
+                        + SQL_LEFT_JOIN_DOMAIN_STATUS
+                        + " where ns.LDH_NAME LIKE ? "
+                        + " order by domain.LDH_NAME limit ?,? ";
         final PageBean page = params.getPageBean();
         int startPage = page.getCurrentPage() - 1;
         startPage = startPage >= 0 ? startPage : 0;
@@ -718,7 +653,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                         ps.setLong(3, page.getMaxRecords());
                         return ps;
                     }
-                }, new DomainResultSetExtractor());
+                }, new DomainWithStatusResultSetExtractor());
         return result;
     }
 
@@ -741,11 +676,13 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         IpVersion ipVersion = IpUtil.getIpVersionOfIp(ipPrefix);
         final byte[] ipBytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
         final String sql =
-                "SELECT distinct t1.* FROM  RDAP_DOMAIN t1 "
-                        + "INNER JOIN REL_DOMAIN_NAMESERVER t2 "
-                        + "ON t1.DOMAIN_ID = t2.DOMAIN_ID INNER JOIN "
-                        + "RDAP_NAMESERVER_IP t3 ON t2.NAMESERVER_ID = t3.NAMESERVER_ID "
-                        + "where t3.IP = ? order by LDH_NAME limit ?,?";
+                "SELECT distinct domain.* FROM  RDAP_DOMAIN domain "
+                        + " INNER JOIN REL_DOMAIN_NAMESERVER rel "
+                        + " ON domain.DOMAIN_ID = rel.DOMAIN_ID "
+                        + " INNER JOIN RDAP_NAMESERVER_IP nsip "
+                        + " ON rel.NAMESERVER_ID = nsip.NAMESERVER_ID "
+                        + SQL_LEFT_JOIN_DOMAIN_STATUS
+                        + " where nsip.IP = ? order by domain.LDH_NAME limit ?,?";
         result = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
@@ -755,7 +692,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 ps.setLong(3, page.getMaxRecords());
                 return ps;
             }
-        }, new DomainResultSetExtractor());
+        }, new DomainWithStatusResultSetExtractor());
         return result;
     }
 

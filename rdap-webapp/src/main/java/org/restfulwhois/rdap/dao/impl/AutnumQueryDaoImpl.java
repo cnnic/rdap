@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
+import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.Autnum;
 import org.restfulwhois.rdap.core.model.Entity;
 import org.restfulwhois.rdap.core.model.Event;
@@ -48,7 +49,6 @@ import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Remark;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
