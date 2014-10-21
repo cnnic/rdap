@@ -48,8 +48,8 @@ import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
-import org.restfulwhois.rdap.dao.RedirectDao;
 import org.restfulwhois.rdap.dao.impl.redirect.DomainRedirectDao;
+import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

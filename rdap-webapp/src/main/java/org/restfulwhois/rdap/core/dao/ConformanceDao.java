@@ -28,25 +28,23 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao;
+package org.restfulwhois.rdap.core.dao;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 /**
- * policy DAO.
- * Interface to access PolicyDaoImpl.
+ * conformance DAO.
+ * Interface to access ConformanceDaoImpl.
  * 
- * @author weijunkai
+ * @author weijunkai.
  * 
  */
-public interface PolicyDao {
+public interface ConformanceDao {
 
     /**
-     * get all policy map.
-     * first String is object,second one is set of fields.
+     * query all conformance list from database.
      * 
-     * @return map of policy.
+     * @return query list string.
      */
-    Map<String, Set<String>> loadAllPolicyMap();
+    List<String> queryConformance();
 }

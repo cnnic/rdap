@@ -32,10 +32,13 @@ package org.restfulwhois.rdap.core.model;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.core.model.base.BaseCustomModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * base class of all model. Model is designed according to <a
@@ -74,6 +77,16 @@ public class BaseModel {
     private List<Notice> notices;
 
     /**
+     * customModel.
+     * 
+     * <pre>
+     *      Position for Properties in customModel is at last.
+     * </pre>
+     */
+    @JsonUnwrapped
+    private BaseCustomModel customModel;
+
+    /**
      * find object from list by id.
      * 
      * @param baseModelObjects
@@ -103,25 +116,26 @@ public class BaseModel {
     public ModelType getObjectType() {
         return ModelType.BASE;
     }
+
     /**
      * get the uri of object.
      * 
      * @return simple name of class
      */
     @JsonIgnore
-    public QueryUri getUri() {        
-         return QueryUri.BASE;      
+    public QueryUri getUri() {
+        return QueryUri.BASE;
     }
-    
+
     /**
      * get the value of href in the link.
      * 
      * @return string
      */
     public String generateLinkHref() {
-       return getUri().getName() + getHandle();
+        return getUri().getName() + getHandle();
     }
-    
+
     /**
      * get identity of object.
      * 
@@ -216,4 +230,24 @@ public class BaseModel {
     public void setHandle(String handle) {
         this.handle = handle;
     }
+
+    /**
+     * get customModel.
+     * 
+     * @return customModel.
+     */
+    public BaseCustomModel getCustomModel() {
+        return customModel;
+    }
+
+    /**
+     * set customModel.
+     * 
+     * @param customModel
+     *            customModel.
+     */
+    public void setCustomModel(BaseCustomModel customModel) {
+        this.customModel = customModel;
+    }
+
 }

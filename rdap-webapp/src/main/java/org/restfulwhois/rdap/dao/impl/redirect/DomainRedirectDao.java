@@ -42,7 +42,7 @@ import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
-import org.restfulwhois.rdap.dao.RedirectDao;
+import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
