@@ -41,11 +41,11 @@ public enum QueryUri {
     /**
      * 5 main object URI.
      */
-    DOMAIN("domain/"), ENTITY("entity/"), NAMESERVER("nameServer/"),
+    DOMAIN("/domain/"), ENTITY("/entity/"), NAMESERVER("/nameserver/"),
     /**
      * 5 main object URI.
      */
-    AUTNUM("autnum/"), IP("ip/"), BASE("base/");
+    AUTNUM("/autnum/"), IP("/ip/");
    
     /**
      * name of model uri.
