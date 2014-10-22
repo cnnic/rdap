@@ -123,17 +123,19 @@ public class BaseModel {
      * @return simple name of class
      */
     @JsonIgnore
-    public QueryUri getUri() {
-        return QueryUri.BASE;
+    public QueryUri getUri() {        
+        throw new UnsupportedOperationException(
+                "must be inmplemented in sub class if I'am called.");      
     }
-
+    
     /**
      * get the value of href in the link.
      * 
      * @return string
      */
     public String generateLinkHref() {
-        return getUri().getName() + getHandle();
+        throw new UnsupportedOperationException(
+            "must be inmplemented in sub class if I'am called.");
     }
 
     /**
