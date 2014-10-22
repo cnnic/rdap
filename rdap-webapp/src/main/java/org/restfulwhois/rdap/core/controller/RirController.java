@@ -42,6 +42,7 @@ import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Autnum;
 import org.restfulwhois.rdap.core.model.Network;
+import org.restfulwhois.rdap.core.model.QueryUri;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.slf4j.Logger;
@@ -69,11 +70,13 @@ public class RirController extends BaseController {
     /**
      * autnum query URI.
      */
-    private static final String SERVICE_URI_AS_Q = "/autnum/";
+    private static final String SERVICE_URI_AS_Q 
+                   = QueryUri.AUTNUM.getName();
     /**
      * ip query URI.
      */
-    private static final String SERVICE_URI_IP_Q = "/ip/";
+    private static final String SERVICE_URI_IP_Q 
+                   = QueryUri.IP.getName();
 
     /**
      * <pre>

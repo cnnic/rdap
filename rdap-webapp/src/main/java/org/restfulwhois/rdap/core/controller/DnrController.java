@@ -43,6 +43,7 @@ import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Domain;
 import org.restfulwhois.rdap.core.model.DomainSearchType;
 import org.restfulwhois.rdap.core.model.Nameserver;
+import org.restfulwhois.rdap.core.model.QueryUri;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.DomainSearchParam;
 import org.restfulwhois.rdap.core.queryparam.NameserverQueryParam;
@@ -75,11 +76,13 @@ public class DnrController extends BaseController {
     /**
      * nameserver query URI.
      */
-    private static final String SERVICE_URI_NS_Q = "/nameserver/";
+    private static final String SERVICE_URI_NS_Q 
+                    = QueryUri.NAMESERVER.getName();
     /**
      * domain query URI.
      */
-    private static final String SERVICE_URI_DOMAIN_Q = "/domain/";
+    private static final String SERVICE_URI_DOMAIN_Q 
+                   = QueryUri.DOMAIN.getName();
 
     /**
      * 
