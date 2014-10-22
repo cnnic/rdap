@@ -228,7 +228,7 @@ public class DomainUtilTest {
         assertFalse(validateDomainNameIsValidIdna("@a.cn"));
         assertFalse(validateDomainNameIsValidIdna("xn--55qx5d.中国"));
         assertFalse(DomainUtil
-                .validateDomainNameIsValidIdna("xn--55qx5d.中国.cn"));
+                .validateDomainNameIsValidIdna("xn--55qx5d.中国.cn",false));
 
         assertTrue(validateDomainNameIsValidIdna("中国.CN"));
         assertTrue(validateDomainNameIsValidIdna("xn--55QX5D.CN"));
@@ -303,7 +303,7 @@ public class DomainUtilTest {
         } catch (DecodeException e) {
             e.printStackTrace();
         }
-        return DomainUtil.validateDomainNameIsValidIdna(decodeDomain);
+        return DomainUtil.validateDomainNameIsValidIdna(decodeDomain,false);
     }
 
     /**

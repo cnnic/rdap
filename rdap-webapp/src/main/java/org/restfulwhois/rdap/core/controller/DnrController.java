@@ -36,9 +36,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
+import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Domain;
 import org.restfulwhois.rdap.core.model.DomainSearchType;
@@ -118,7 +118,7 @@ public class DnrController extends BaseController {
         String punyDomainName = decodeDomain;
         decodeDomain =
                 DomainUtil.urlDecodeAndReplaceAsciiToLowercase(domainName);
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
+        if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain,false)) {
             return RestResponseUtil.createResponse400();
         }
         decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
@@ -364,7 +364,7 @@ public class DnrController extends BaseController {
         String decodeNS = nsName;
         String punyNSName = decodeNS;
         decodeNS = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(nsName);
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
+        if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS,false)) {
             return RestResponseUtil.createResponse400();
         }
         decodeNS = StringUtil.foldCaseAndNormalization(decodeNS);

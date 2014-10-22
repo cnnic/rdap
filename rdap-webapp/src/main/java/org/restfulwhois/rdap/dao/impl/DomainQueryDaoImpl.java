@@ -237,6 +237,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         for (Domain domain : domains) {
             queryAndSetInnerObjects(domain);
             queryAndSetVariants(domain);
+            queryAndSetInnerNetwork(domain);
         }
     }
 

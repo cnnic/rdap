@@ -194,9 +194,10 @@ public final class DomainUtil {
      * 
      * @param domainName
      *            domain name,ASCII char MUST in lower case.
+     * @param forSearch is for search.            
      * @return true if is valid idna,false if not.
      */
-    public static boolean validateDomainNameIsValidIdna(String domainName) {
+    public static boolean validateDomainNameIsValidIdna(String domainName,boolean forSearch) {
         if (StringUtils.isBlank(domainName) || !domainName.contains(".")) {
             return false;
         }
@@ -206,7 +207,7 @@ public final class DomainUtil {
         if (StringUtils.containsAny(domainName, DISALLOWED_DELIMITERS)) {
             return false;
         }
-        if (!isArpaTldAndLabelIsValid(domainName)) {
+        if (!forSearch && !isArpaTldAndLabelIsValid(domainName)) {
             return false;
         }
         String punyDomainName = domainName;
@@ -264,29 +265,29 @@ public final class DomainUtil {
         }
         // '*' is replaced with no char
         String domainName = searchString.replace(StringUtil.ASTERISK, "");
-        if (validateDomainNameIsValidIdna(domainName)) {
+        if (validateDomainNameIsValidIdna(domainName,true)) {
             return true;
         }
         // '*' is replaced with dot
         domainName =
                 searchString.replace(StringUtil.ASTERISK,
                         StringUtil.TLD_SPLITOR);
-        if (validateDomainNameIsValidIdna(domainName)) {
+        if (validateDomainNameIsValidIdna(domainName,true)) {
             return true;
         }
         // '*' is replaced with a digit or an alphabet, like '1'
         domainName = searchString.replace(StringUtil.ASTERISK, "1");
-        if (validateDomainNameIsValidIdna(domainName)) {
+        if (validateDomainNameIsValidIdna(domainName,true)) {
             return true;
         }
         // '*' means '.' plus letter/digit
         domainName = searchString.replace("*", ".1");
-        if (validateDomainNameIsValidIdna(domainName)) {
+        if (validateDomainNameIsValidIdna(domainName,true)) {
             return true;
         }
         // '*' means [letter/digit][.][letter/digit]
         domainName = searchString.replace("*", "1.1");
-        if (validateDomainNameIsValidIdna(domainName)) {
+        if (validateDomainNameIsValidIdna(domainName,true)) {
             return true;
         }
         return false;
