@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.core.controller;
 
 import org.restfulwhois.rdap.core.controller.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.restfulwhois.rdap.core.service.AccessControlManager;
 import org.restfulwhois.rdap.core.service.QueryService;
 import org.restfulwhois.rdap.core.service.SearchService;
@@ -40,6 +41,7 @@ import org.restfulwhois.rdap.redirect.service.RedirectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -152,5 +154,21 @@ public class BaseController {
      */
     @Autowired
     protected RedirectService redirectService;
+
+    protected ResponseEntity query(QueryParam queryParam) {
+        boolean result = validate(queryParam);
+        if (!result) {
+            // handle error and return.
+        }
+        return doQuery(queryParam);
+    }
+
+    protected ResponseEntity doQuery(QueryParam queryParam) {
+        throw new UnsupportedOperationException();
+    }
+
+    protected boolean validate(QueryParam queryParam) {
+        throw new UnsupportedOperationException();
+    }
 
 }
