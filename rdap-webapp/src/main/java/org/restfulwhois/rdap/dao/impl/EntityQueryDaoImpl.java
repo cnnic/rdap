@@ -40,8 +40,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.core.bean.TruncatedInfo;
 import org.restfulwhois.rdap.core.common.RdapProperties;
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
+import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.common.util.JcardUtil;
 import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.Autnum;
@@ -142,9 +144,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         if (null == entity) {
             return entity;
         }
+        queryAndSetNetworksAndAs(entity);
         queryAndSetInnerObjectsWithoutEntities(entity);
         queryAndSetInnerEntities(entity);
-        queryAndSetNetworksAndAs(entity);
+        //queryAndSetNetworksAndAs(entity);
         return entity;
     }
 
@@ -166,9 +169,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     @Override
     public List<Entity> search(QueryParam queryParam) {
         List<Entity> entities = searchWithoutInnerObjects(queryParam);
-        queryAndSetInnerObjectsWithoutEntities(entities);
-        queryAndSetRoles(entities);
         queryAndSetNetworksAndAs(entities);
+        queryAndSetInnerObjectsWithoutEntities(entities);
+        queryAndSetRoles(entities);        
         queryAndSetInnerEntities(entities);
         return entities;
     }
@@ -288,6 +291,13 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setPublicIds(publicIds);
         List<Remark> remarks =
                 remarkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
+        if (entity.getTruncatedInfo() != null 
+                      && entity.getTruncatedInfo().getResultsTruncated()) {
+             String reasonTypeShortName = entity.getTruncatedInfo()
+                   .getReasonTypeShortName();
+            remarks.add(CustomizeNoticeandRemark
+                        .getRemarkByReasonType(reasonTypeShortName));
+        }
         entity.setRemarks(remarks);
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
@@ -348,6 +358,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         List<Network> networks = entity.getNetworks();
         List<Autnum> autnums = entity.getAutnums();
         int maxInnerObjSize = RdapProperties.getMaxsizeSearch().intValue();
+        TruncatedInfo truncatedInfo = new TruncatedInfo();
         if (null != networks && networks.size() > maxInnerObjSize) {
             LOGGER.debug(
                     "networks exceed max size:{},truncated.max size is {}",
@@ -355,14 +366,20 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             List<Network> truncatedNetworks =
                     networks.subList(0, maxInnerObjSize);
             entity.setNetworks(truncatedNetworks);
-            entity.setResultsTruncated(true);
+            truncatedInfo.setResultsTruncated(true);
+            truncatedInfo.setReasonTypeShortName("excessiveLoad");
+            //entity.setResultsTruncated(true);
+            entity.setTruncatedInfo(truncatedInfo);
         }
         if (null != autnums && autnums.size() > maxInnerObjSize) {
             LOGGER.debug("autnums exceed max size:{},truncated.max size is {}",
                     autnums.size(), maxInnerObjSize);
             List<Autnum> truncatedAutnums = autnums.subList(0, maxInnerObjSize);
             entity.setAutnums(truncatedAutnums);
-            entity.setResultsTruncated(true);
+            truncatedInfo.setResultsTruncated(true);
+            truncatedInfo.setReasonTypeShortName("excessiveLoad");
+            //entity.setResultsTruncated(true);
+            entity.setTruncatedInfo(truncatedInfo);
         }
     }
 

@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,41 +28,35 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao;
+package org.restfulwhois.rdap.core.service;
 
-import java.util.List;
+import java.util.Map;
 
 import org.restfulwhois.rdap.core.model.Notice;
-
+import org.restfulwhois.rdap.core.model.Remark;
 
 /**
- * notice DAO.
- * Interface to access NoticeDaoImpl.
- *
- * @author jiashuo.
- *
+ * notice interface.
+ * 
+ * query notice and remark.
+ * 
+ * used in rdapController initialization.
+ * 
+ * @author zhanyq
+ * 
  */
-public interface NoticeDao {
+public interface NoticeService {
     /**
-     * get all notice list where notice reasonType 
-     *  not in (CustomizeNoticeandRemark.TYPE).
-     *
-     * @return notice list.
+     * get all Notices.
+     * 
+     * @return Notices map,[key:NOTICE+reasonTypeShortName,value:Notice]
      */
-    List<Notice> getAllNotices();
-
-    /**
-     * get help info, as format of notice.
-     *
-     * @return notice list.
-     */
-    List<Notice> getHelp();  
+    Map<String, Notice> getAllNoticesMap();
     
     /**
-     * load  notice list where notice reasonType 
-     * in (CustomizeNoticeandRemark.TYPE).
-     *
-     * @return notice list.
+     * get all Remarks.
+     * 
+     * @return Remarks map,[key:REMARK+reasonTypeShortName,value:Remarks]
      */
-    List<Notice> loadAllNotices();
+    Map<String, Remark> getAllRemarksMap();
 }

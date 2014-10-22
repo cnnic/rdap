@@ -32,37 +32,23 @@ package org.restfulwhois.rdap.dao;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.core.model.Notice;
+import org.restfulwhois.rdap.core.model.Remark;
 
 
 /**
- * notice DAO.
- * Interface to access NoticeDaoImpl.
+ * Remark DAO.
+ * Interface to access RemarkDaoImpl.
  *
- * @author jiashuo.
+ * @author zhanyq.
  *
  */
-public interface NoticeDao {
+public interface RemarkDao {
     /**
-     * get all notice list where notice reasonType 
-     *  not in (CustomizeNoticeandRemark.TYPE).
-     *
-     * @return notice list.
+     * get all remark list.   
+     * @param types
+     *     types
+     * @return remark list.
      */
-    List<Notice> getAllNotices();
-
-    /**
-     * get help info, as format of notice.
-     *
-     * @return notice list.
-     */
-    List<Notice> getHelp();  
-    
-    /**
-     * load  notice list where notice reasonType 
-     * in (CustomizeNoticeandRemark.TYPE).
-     *
-     * @return notice list.
-     */
-    List<Notice> loadAllNotices();
+    List<Remark> loadRemarksByTypes(List<String> types);
+      
 }

@@ -48,6 +48,7 @@ import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -235,7 +236,8 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.resultsTruncated").value(true))
+              //  .andExpect(jsonPath("$.resultsTruncated").value(true))
+                .andExpect(jsonPath("$.notices[0]").exists())
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
                 .andExpect(jsonPath("$.domainSearchResults", hasSize(5)))
@@ -248,7 +250,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
                 .andExpect(jsonPath("$.domainSearchResults", hasSize(2)))
-                .andExpect(jsonPath("$.domainSearchResults",Matchers.hasItem(Matchers.hasKey("handle"))));;
+                .andExpect(jsonPath("$.domainSearchResults",Matchers.hasItem(Matchers.hasKey("handle")))).andDo(MockMvcResultHandlers.print());
     }
 
     /**
