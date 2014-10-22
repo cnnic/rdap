@@ -323,8 +323,10 @@ public class DnrController extends BaseController {
         }
         DomainSearch domainSearch =
                 searchService.searchDomain(domainSearchParam);
-        if (null != domainSearch) {
-            if (domainSearch.getHasNoAuthForAllObjects()) {
+        if (null != domainSearch) {           
+            if (domainSearch.getTruncatedInfo() != null 
+                   && domainSearch.getTruncatedInfo()
+                   .getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domainSearch);
@@ -504,7 +506,10 @@ public class DnrController extends BaseController {
                 searchService.searchNameserver(nsQueryParam);
 
         if (null != nsSearch) {
-            if (nsSearch.getHasNoAuthForAllObjects()) {
+           // if (nsSearch.getHasNoAuthForAllObjects()) {
+            if (nsSearch.getTruncatedInfo() != null 
+                    && nsSearch.getTruncatedInfo()
+                    .getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(nsSearch);

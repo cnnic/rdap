@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.model.Link;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Remark;
@@ -139,13 +141,17 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
      */
     private List<Remark> queryWithoutInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
+        final String typesJoinedByComma = StringUtils.join(
+                CustomizeNoticeandRemark.TYPES, ",");
         final String sql = "select notice.*, description.description "
                 + " from RDAP_NOTICE notice"
                 + " inner join REL_NOTICE_REGISTRATION rel "
                 + " on (rel.NOTICE_ID = notice.NOTICE_ID and rel.REL_ID = ? "
                 + " and rel.REL_OBJECT_TYPE = ? and notice.TYPE=?) "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
-                + " on notice.NOTICE_ID = description.NOTICE_ID";
+                + " on notice.NOTICE_ID = description.NOTICE_ID "
+                + " and notice.REASON_TYPE_SHORT_NAME in ( "
+                + typesJoinedByComma + ")";
         List<Remark> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
@@ -178,6 +184,9 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
                     remark = new Remark();
                     remark.setId(remarkId);
                     remark.setTitle(rs.getString("TITLE"));
+                    remark.setReasonType(rs.getString("REASON_TYPE"));
+                    remark.setReasonTypeShortName(
+                           rs.getString("REASON_TYPE_SHORT_NAME"));
                     remarkMapById.put(remarkId, remark);
                     result.add(remark);
                 }

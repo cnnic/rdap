@@ -39,7 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.model.Link;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Notice;
@@ -49,6 +50,7 @@ import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -84,16 +86,43 @@ public class NoticeDaoImpl implements NoticeDao {
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
     /**
-     * query notice list.
+     * get notice list.
      * 
      * @return list of notice.
      */
     @Override
     public List<Notice> getAllNotices() {
-        LOGGER.debug("getAllNotices.");
+        LOGGER.debug("loadAllNotices.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
         queryAndSetInnerObjects(notices, NoticeType.Notice);
         return notices;
+    }
+    /**
+     * load notice list.
+     * 
+     * @return list of notice.
+     */
+    @Override
+    public List<Notice> loadAllNotices() {
+        LOGGER.debug("getAllNotices.");
+        final String typesJoinedByComma = StringUtils.join(
+              CustomizeNoticeandRemark.TYPES, ",");
+        final String sql = "select notice.*, description.description"
+                + " from RDAP_NOTICE notice "
+                + " left outer join RDAP_NOTICE_DESCRIPTION description "
+                + " on notice.NOTICE_ID = description.NOTICE_ID "
+                + " where notice.TYPE=? and notice.REASON_TYPE_SHORT_NAME in ( "
+              + typesJoinedByComma + ")";
+        List<Notice> result = jdbcTemplate.query(
+                new PreparedStatementCreator() {
+                    public PreparedStatement createPreparedStatement(
+                            Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement(sql);
+                        ps.setString(1, NoticeType.Notice.getName());
+                        return ps;
+                    }
+                }, new NoticeResultSetExtractor());
+        return result;
     }
     /**
      * query help list.
@@ -157,11 +186,14 @@ public class NoticeDaoImpl implements NoticeDao {
      * @return notice list
      */
     private List<Notice> queryWithoutInnerObjects(final NoticeType type) {
+        final String typesJoinedByComma = StringUtils.join(
+                CustomizeNoticeandRemark.TYPES, ",");
         final String sql = "select notice.*, description.description"
                 + " from RDAP_NOTICE notice "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
-                + " on notice.NOTICE_ID = description.NOTICE_ID "
-                + " where notice.TYPE=?";
+                + " on notice.NOTICE_ID = description.NOTICE_ID  where "
+                + " notice.TYPE=? and notice.REASON_TYPE_SHORT_NAME not in ("
+                +  typesJoinedByComma + ")";
         List<Notice> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
@@ -192,6 +224,9 @@ public class NoticeDaoImpl implements NoticeDao {
                     notice = new Notice();
                     notice.setId(noticeId);
                     notice.setTitle(rs.getString("TITLE"));
+                    notice.setReasonType(rs.getString("REASON_TYPE"));
+                    notice.setReasonTypeShortName(
+                       rs.getString("REASON_TYPE_SHORT_NAME"));
                     noticeMapById.put(noticeId, notice);
                     result.add(notice);
                 }

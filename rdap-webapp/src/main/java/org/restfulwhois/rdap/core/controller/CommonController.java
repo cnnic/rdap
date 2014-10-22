@@ -188,7 +188,8 @@ public class CommonController extends BaseController {
         if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
             return RestResponseUtil.createResponse422();
         }
-        if (handleParamName.equals(paramName)) {// fold case when by handle
+        if (handleParamName.equals(paramName)) {
+            // fold case when by handle
             paramValue = StringUtil.foldCaseAndNormalization(paramValue);
         } else {
             paramValue = StringUtil.getNormalization(paramValue);
@@ -198,8 +199,10 @@ public class CommonController extends BaseController {
                 queryParser.parseEntityQueryParam(paramValue, paramName);
         LOGGER.debug("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
-        if (null != result) {
-            if (result.getHasNoAuthForAllObjects()) {
+        if (null != result) {            
+            if (result.getTruncatedInfo() != null 
+                    && result.getTruncatedInfo()
+                    .getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);

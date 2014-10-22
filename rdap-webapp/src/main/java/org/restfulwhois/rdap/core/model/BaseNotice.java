@@ -35,6 +35,9 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * base notice class.
  * 
@@ -91,6 +94,17 @@ public abstract class BaseNotice extends BaseModel {
      * links.
      */
     private List<Link> links;
+    /**
+     * reasonType.
+     */
+    @JsonProperty("type")
+    private String reasonType;
+    
+    /**
+     * reasonTypeShortName.
+     */
+    @JsonIgnore
+    private String reasonTypeShortName;
 
     /**
      * add a description.
@@ -165,6 +179,44 @@ public abstract class BaseNotice extends BaseModel {
         this.links = links;
     }
     
+    /**
+     * get ReasonType of notice.
+     * 
+     * @return a string of reasonType.
+     */
+    public String getReasonType() {
+        return reasonType;
+    }
+    
+    /**
+     * setReasonType of notice.
+     * 
+     * @param reasonType
+     *            a string to set.
+     */
+    public void setReasonType(String reasonType) {
+         this.reasonType = reasonType;
+    }
+
+    /**
+     * get ReasonTypeShortName of notice.
+     * 
+     * @return a string of reasonTypeShortName.
+     */
+    public String getReasonTypeShortName() {
+         return reasonTypeShortName;
+    }
+
+    /**
+     * setReasonTypeShortName of notice.
+     * 
+     * @param reasonTypeShortName
+     *            a string to set.
+     */
+    public void setReasonTypeShortName(String reasonTypeShortName) {
+        this.reasonTypeShortName = reasonTypeShortName;
+    }
+
     @Override
     public ModelType getObjectType() {
         return ModelType.NOTICE;
