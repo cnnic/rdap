@@ -123,30 +123,8 @@ public class RdapProperties {
     /**
      * list for not in tlds.
      */
-    private static List<String> notInTldList;    
-    /**
-     * localServiceUrlPrefix.
-     */
-    private static String localServiceUrlPrefix;
-    
-    /**
-     * get localServiceUrlPrefix.
-     * 
-     * @return localServiceUrlPrefix.
-     */
-    public static String getLocalServiceUrlPrefix() {
-         return localServiceUrlPrefix;
-    }
-    
-    /**
-     * set localerviceUrlPrefix.
-     * 
-     * @param localServiceUrlPrefix
-     *            localServiceUrlPrefix.
-     */
-    public static void setLocalServiceUrlPrefix(String localServiceUrlPrefix) {
-        RdapProperties.localServiceUrlPrefix = localServiceUrlPrefix;
-    }
+    private static List<String> notInTldList;   
+   
 
     /**
      * clear 'in' and 'not in' tlds in memory,used for reload tlds.
