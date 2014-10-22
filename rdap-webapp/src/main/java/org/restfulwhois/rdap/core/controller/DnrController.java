@@ -36,13 +36,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
+import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Domain;
 import org.restfulwhois.rdap.core.model.DomainSearchType;
 import org.restfulwhois.rdap.core.model.Nameserver;
+import org.restfulwhois.rdap.core.model.QueryUri;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.DomainSearchParam;
 import org.restfulwhois.rdap.core.queryparam.NameserverQueryParam;
@@ -75,11 +76,13 @@ public class DnrController extends BaseController {
     /**
      * nameserver query URI.
      */
-    private static final String SERVICE_URI_NS_Q = "/nameserver/";
+    private static final String SERVICE_URI_NS_Q 
+                    = QueryUri.NAMESERVER.getName();
     /**
      * domain query URI.
      */
-    private static final String SERVICE_URI_DOMAIN_Q = "/domain/";
+    private static final String SERVICE_URI_DOMAIN_Q 
+                   = QueryUri.DOMAIN.getName();
 
     /**
      * 
@@ -118,7 +121,7 @@ public class DnrController extends BaseController {
         String punyDomainName = decodeDomain;
         decodeDomain =
                 DomainUtil.urlDecodeAndReplaceAsciiToLowercase(domainName);
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain)) {
+        if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain,false)) {
             return RestResponseUtil.createResponse400();
         }
         decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
@@ -366,7 +369,7 @@ public class DnrController extends BaseController {
         String decodeNS = nsName;
         String punyNSName = decodeNS;
         decodeNS = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(nsName);
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS)) {
+        if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS,false)) {
             return RestResponseUtil.createResponse400();
         }
         decodeNS = StringUtil.foldCaseAndNormalization(decodeNS);

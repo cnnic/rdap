@@ -77,6 +77,9 @@ public class IpV4 {
         if (StringUtils.isBlank(cidr)) {
             return false;
         }
+        if (hasPrefixZero(cidr)) {
+            return false;
+        }
         cidr = addDefaultMaskIfNotExist(cidr);
         try {
             new SubnetUtils(cidr);
@@ -84,6 +87,25 @@ public class IpV4 {
             return false;
         }
         return true;
+    }
+
+    /**
+     * check if ip has prefix 0, eg: 01.1.1.1, this is invalid.
+     * 
+     * @param cidr
+     *            cidr.
+     * @return true if has prefix 0, false if not.
+     */
+    private static boolean hasPrefixZero(String cidr) {
+        String ip = StringUtils.substringBefore(cidr, "/");
+        String[] splits = StringUtils.split(ip,".");
+        for (String split : splits) {
+            if (StringUtils.startsWith(split, "0")
+                    && StringUtils.length(split) > 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static String addDefaultMaskIfNotExist(String cidr) {

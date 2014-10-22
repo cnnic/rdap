@@ -237,6 +237,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         for (Domain domain : domains) {
             queryAndSetInnerObjects(domain);
             queryAndSetVariants(domain);
+            queryAndSetInnerNetwork(domain);
         }
     }
 
@@ -327,15 +328,15 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Domain> result = null;
         final int hexCharSize = IpUtil.getHexCharSize(network.getIpVersion());
         String sql =
-                "select d.* "
+                "select domain.*,status.* "
                         + " from RDAP_IP ip "
-                        + " inner join RDAP_DOMAIN d "
-                        + " on d.NETWORK_ID = ip.IP_ID "
+                        + " inner join RDAP_DOMAIN domain "
+                        + " on domain.NETWORK_ID = ip.IP_ID "
                         + SQL_LEFT_JOIN_DOMAIN_STATUS
                         + " where ip.STARTADDRESS <= ? and ip.ENDADDRESS >= ?"
-                        + " and d.TYPE = 'arpa' and ip.version = ? "
+                        + " and domain.TYPE = 'arpa' and ip.version = ? "
                         + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? "
-                        + " order by ip.STARTADDRESS desc,ip.ENDADDRESS,d.DOMAIN_ID limit 1";
+                        + " order by ip.STARTADDRESS desc,ip.ENDADDRESS,domain.DOMAIN_ID limit 1";
         final String finalSql = sql;
         result = jdbcTemplate.query(new PreparedStatementCreator() {
             @Override
@@ -631,7 +632,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         final String punyName = domainQueryParam.getPunyName();
         final String punyNameLikeClause = super.generateLikeClause(punyName);
         final String sql =
-                "select distinct domain.* from  RDAP_DOMAIN domain inner join "
+                "select distinct domain.*,status.* from  RDAP_DOMAIN domain inner join "
                         + " REL_DOMAIN_NAMESERVER rel on domain.DOMAIN_ID = rel.DOMAIN_ID "
                         + " inner join RDAP_NAMESERVER ns "
                         + " on rel.NAMESERVER_ID = ns.NAMESERVER_ID "
@@ -676,7 +677,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         IpVersion ipVersion = IpUtil.getIpVersionOfIp(ipPrefix);
         final byte[] ipBytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
         final String sql =
-                "SELECT distinct domain.* FROM  RDAP_DOMAIN domain "
+                "SELECT distinct domain.*,status.* FROM  RDAP_DOMAIN domain "
                         + " INNER JOIN REL_DOMAIN_NAMESERVER rel "
                         + " ON domain.DOMAIN_ID = rel.DOMAIN_ID "
                         + " INNER JOIN RDAP_NAMESERVER_IP nsip "

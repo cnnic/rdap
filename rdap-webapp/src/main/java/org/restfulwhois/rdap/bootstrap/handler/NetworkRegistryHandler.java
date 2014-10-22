@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.bootstrap.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bootstrap.bean.NetworkRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
@@ -83,25 +82,15 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
                     registryUrls);
             return redirects;
         }
-        QueryParam queryParam = queryParser.parseIpQueryParam(key, ipVersion);
-        networkRedirect.setNetworkQueryParam((NetworkQueryParam) queryParam);
-        redirects.add(networkRedirect);
-        return redirects;
-    }
-
-    /**
-     * validate key.
-     * 
-     * @param key
-     *            key.
-     * @return true if valid, false if not.
-     */
-    private boolean validateKey(String key) {
-        if (StringUtils.isBlank(key)
-                || !StringUtils.contains(key, CIDR_SEPARATOR)) {
-            return false;
+        try{
+            QueryParam queryParam = queryParser.parseIpQueryParam(key, ipVersion);
+            networkRedirect.setNetworkQueryParam((NetworkQueryParam) queryParam);
+            redirects.add(networkRedirect);
+        }catch(Exception e){
+            logger.error("ignore this key/urls:{},{}. Invalid network:{}", key,
+                    registryUrls);
         }
-        return true;
+        return redirects;
     }
 
 }

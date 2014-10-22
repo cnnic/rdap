@@ -38,10 +38,10 @@ import javax.xml.bind.DatatypeConverter;
 import org.junit.Test;
 import org.junit.internal.ArrayComparisonFailure;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
+import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.IpV4;
 import org.restfulwhois.rdap.core.common.util.IpV6;
 import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 
 import com.googlecode.ipv6.IPv6Address;
 
@@ -53,6 +53,23 @@ import com.googlecode.ipv6.IPv6Address;
  */
 @SuppressWarnings("rawtypes")
 public class IpUtilTest {
+    
+    @Test
+    public void test_validate_IPV4() {
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp("1.0.0.0");
+        assertEquals(IpVersion.V4, ipVersion);
+        ipVersion = IpUtil.getIpVersionOfIp("01.0.0.0");
+        assertEquals(IpVersion.INVALID, ipVersion);
+        ipVersion = IpUtil.getIpVersionOfIp("001.0.0.0");
+        assertEquals(IpVersion.INVALID, ipVersion);
+        ipVersion = IpUtil.getIpVersionOfIp("00.0.0.0");
+        assertEquals(IpVersion.INVALID, ipVersion);
+        ipVersion = IpUtil.getIpVersionOfIp("0.01.0.0");
+        assertEquals(IpVersion.INVALID, ipVersion);
+        ipVersion = IpUtil.getIpVersionOfIp("0.0.0.01");
+        assertEquals(IpVersion.INVALID, ipVersion);
+    }
+    
     @Test
     public void test_toByteArray_IPV4() {
         String ip = "218.241.111.11";
@@ -60,7 +77,7 @@ public class IpUtilTest {
         String hex =
                 DatatypeConverter.printHexBinary(IpUtil.ipToByteArray(ip,
                         ipVersion));
-        System.err.println("0x" + hex);
+//        System.err.println("0x" + hex);
     }
 
     @Test
@@ -70,7 +87,7 @@ public class IpUtilTest {
         String hex =
                 DatatypeConverter.printHexBinary(IpUtil.ipToByteArray(ip,
                         ipVersion));
-        System.err.println("0x" + hex);
+//        System.err.println("0x" + hex);
     }
 
     @Test
@@ -81,11 +98,11 @@ public class IpUtilTest {
         String hex1 =
                 DatatypeConverter.printHexBinary(networkInBytes
                         .getStartAddress());
-        System.err.println("0x" + hex1);
+//        System.err.println("0x" + hex1);
         String hex2 =
                 DatatypeConverter
                         .printHexBinary(networkInBytes.getEndAddress());
-        System.err.println("0x" + hex2);
+//        System.err.println("0x" + hex2);
     }
 
     @Test
@@ -155,7 +172,7 @@ public class IpUtilTest {
         String ipString = IpUtil.toString(bytes, ipVersion);
         // assertEquals("1.255.255.255", ipString);
         String hex1 = DatatypeConverter.printHexBinary(bytes);
-        System.err.println("0x" + hex1);
+//        System.err.println("0x" + hex1);
     }
 
     @Test
@@ -167,11 +184,11 @@ public class IpUtilTest {
         String hex1 =
                 DatatypeConverter.printHexBinary(networkInBytes
                         .getStartAddress());
-        System.err.println("0x" + hex1);
+//        System.err.println("0x" + hex1);
         String hex2 =
                 DatatypeConverter
                         .printHexBinary(networkInBytes.getEndAddress());
-        System.err.println("0x" + hex2);
+        // System.err.println("0x" + hex2);
         assertEquals(IpVersion.V4, networkInBytes.getIpVersion());
     }
 
