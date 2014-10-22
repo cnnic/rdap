@@ -28,23 +28,82 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao;
+package org.restfulwhois.rdap.redirect.service;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.core.model.RedirectResponse;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
+
 /**
- * conformance DAO.
- * Interface to access ConformanceDaoImpl.
+ * redirect service interface.
  * 
- * @author weijunkai.
+ * provide methods: is the own url or redirect to domain/AS/IP url.
+ * 
+ * @author jiashuo
  * 
  */
-public interface ConformanceDao {
+public interface RedirectService {
 
     /**
-     * query all conformance list from database.
+     * check if redirect response is valid.
      * 
-     * @return query list string.
+     * @param redirect
+     *            for respose of redirect.
+     * @return true if valid, false if not.
      */
-    List<String> queryConformance();
+    boolean isValidRedirect(RedirectResponse redirect);
+
+    /**
+     * query domain by domain name.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return RedirectResponse RedirectResponse.
+     */
+    RedirectResponse queryDomain(QueryParam queryParam);
+
+    /**
+     * query autnm.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return RedirectResponse RedirectResponse.
+     */
+    RedirectResponse queryAutnum(QueryParam queryParam);
+
+    /**
+     * query Ip.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return RedirectResponse RedirectResponse.
+     */
+    RedirectResponse queryIp(QueryParam queryParam);
+
+    /**
+     * save domain redirects.
+     * 
+     * @param redirects
+     *            redirects.
+     */
+    void saveDomainRedirect(List<Redirect> redirects);
+
+    /**
+     * save network redirects.
+     * 
+     * @param redirects
+     *            redirects.
+     */
+    void saveNetworkRedirect(List<Redirect> redirects);
+
+    /**
+     * save as number redirects.
+     * 
+     * @param redirects
+     *            redirects.
+     */
+    void saveAutnumRedirect(List<Redirect> redirects);
+
 }

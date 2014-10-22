@@ -28,37 +28,28 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao;
+package org.restfulwhois.rdap.acl.dao;
 
-import java.util.List;
-
-import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.model.RedirectResponse;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.acl.bean.Principal;
+import org.restfulwhois.rdap.acl.bean.SecureObject;
 
 /**
- * redirect DAO. Interface to access AutnumRedirectDao DomainRedirectDao
- * NetworkRedirectDao.
- * 
+ * Access Control List entry dao.
+ * Interface to access AclDaoImpl.
+ *
  * @author jiashuo
- * 
+ *
  */
-public interface RedirectDao {
-
+public interface AclDao {
     /**
-     * query redirect object.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return RedirectResponse RedirectResponse.
+     * check if principal has access entry to secureObject.
+     *
+     * @param principal
+     *            principal.
+     * @param secureObject
+     *            secureObject.
+     * @return true if has,false if not.
      */
-    RedirectResponse query(QueryParam queryParam);
+    boolean hasEntry(Principal principal, SecureObject secureObject);
 
-    /**
-     * save redirect, from bootstraps.
-     * 
-     * @param bootstraps
-     *            bootstraps redirects.
-     */
-    void save(List<Redirect> bootstraps);
 }

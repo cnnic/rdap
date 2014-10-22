@@ -39,24 +39,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
+import org.restfulwhois.rdap.core.dao.QueryDao;
+import org.restfulwhois.rdap.core.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.model.Link;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Notice;
-import org.restfulwhois.rdap.core.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.dao.NoticeDao;
-import org.restfulwhois.rdap.dao.QueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
+import org.apache.commons.lang.StringUtils;
 /**
  * notice query DAO select notice object from RDAP_NOTICE.
  * <p>

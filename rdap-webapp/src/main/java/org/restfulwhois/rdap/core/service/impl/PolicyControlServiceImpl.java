@@ -42,7 +42,7 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.service.PolicyControlService;
-import org.restfulwhois.rdap.dao.PolicyDao;
+import org.restfulwhois.rdap.policy.dao.PolicyDao;
 import org.restfulwhois.rdap.search.bean.BaseSearchModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

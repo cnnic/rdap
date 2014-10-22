@@ -28,82 +28,24 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.service;
+package org.restfulwhois.rdap.core.dao;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.model.RedirectResponse;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.model.ErrorMessage;
 
 /**
- * redirect service interface.
+ * error message DAO.
+ * Interface to access ErrorMessageDaoImpl.
  * 
- * provide methods: is the own url or redirect to domain/AS/IP url.
- * 
- * @author jiashuo
+ * @author jiashuo.
  * 
  */
-public interface RedirectService {
-
+public interface ErrorMessageDao {
     /**
-     * check if redirect response is valid.
+     * get all error messages list.
      * 
-     * @param redirect
-     *            for respose of redirect.
-     * @return true if valid, false if not.
+     * @return error messages list.
      */
-    boolean isValidRedirect(RedirectResponse redirect);
-
-    /**
-     * query domain by domain name.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return RedirectResponse RedirectResponse.
-     */
-    RedirectResponse queryDomain(QueryParam queryParam);
-
-    /**
-     * query autnm.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return RedirectResponse RedirectResponse.
-     */
-    RedirectResponse queryAutnum(QueryParam queryParam);
-
-    /**
-     * query Ip.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return RedirectResponse RedirectResponse.
-     */
-    RedirectResponse queryIp(QueryParam queryParam);
-
-    /**
-     * save domain redirects.
-     * 
-     * @param redirects
-     *            redirects.
-     */
-    void saveDomainRedirect(List<Redirect> redirects);
-
-    /**
-     * save network redirects.
-     * 
-     * @param redirects
-     *            redirects.
-     */
-    void saveNetworkRedirect(List<Redirect> redirects);
-
-    /**
-     * save as number redirects.
-     * 
-     * @param redirects
-     *            redirects.
-     */
-    void saveAutnumRedirect(List<Redirect> redirects);
-
+    List<ErrorMessage> getAllErrorMessages();
 }

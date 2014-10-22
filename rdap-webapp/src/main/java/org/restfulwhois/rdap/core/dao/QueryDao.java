@@ -28,23 +28,60 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao;
+package org.restfulwhois.rdap.core.dao;
 
-import org.restfulwhois.rdap.acl.bean.User;
+import java.util.List;
+
+import org.restfulwhois.rdap.core.model.BaseModel;
+import org.restfulwhois.rdap.core.model.ModelType;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 
 /**
- * query user identit from database.
- * Interface to access IndentityCheckDaoImpl.
- * @author wang
+ * query dao interface. Each method return object of BaseModel, which can be
+ * converted to concrete model by caller.
+ * 
+ * @param <T>
+ *            object deriving from BaseModel.
+ * @author jiashuo
+ * 
  */
-public interface IdentityCheckDao {
+public interface QueryDao<T extends BaseModel> {
     /**
-     * check the user id to identify the user.
-     * @param userId
-     *      id of user to check.
-     * @return
-     *      object of user.
+     * query model object.
+     * 
+     * @param queryParam
+     *            query parameter.
+     * @return object, using base class BaseObject.
      */
-    User checkUserId(String userId);
-    
+    T query(QueryParam queryParam);
+
+    /**
+     * query model list, as nested models of other Model.
+     * 
+     * @param outerObjectId
+     *            id of outer object.
+     * @param outerModelType
+     *            model type of outer object.
+     * @return object list.
+     */
+    List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
+
+    /**
+     * search model list.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return object list.
+     */
+    List<T> search(QueryParam queryParam);
+
+    /**
+     * get search count.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return queryParam.
+     */
+    Long searchCount(QueryParam queryParam);
+
 }

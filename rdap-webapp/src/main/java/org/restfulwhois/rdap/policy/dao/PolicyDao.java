@@ -28,28 +28,25 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.dao;
+package org.restfulwhois.rdap.policy.dao;
 
-import org.restfulwhois.rdap.acl.bean.Principal;
-import org.restfulwhois.rdap.acl.bean.SecureObject;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Access Control List entry dao.
- * Interface to access AclDaoImpl.
- *
- * @author jiashuo
- *
+ * policy DAO.
+ * Interface to access PolicyDaoImpl.
+ * 
+ * @author weijunkai
+ * 
  */
-public interface AclDao {
-    /**
-     * check if principal has access entry to secureObject.
-     *
-     * @param principal
-     *            principal.
-     * @param secureObject
-     *            secureObject.
-     * @return true if has,false if not.
-     */
-    boolean hasEntry(Principal principal, SecureObject secureObject);
+public interface PolicyDao {
 
+    /**
+     * get all policy map.
+     * first String is object,second one is set of fields.
+     * 
+     * @return map of policy.
+     */
+    Map<String, Set<String>> loadAllPolicyMap();
 }
