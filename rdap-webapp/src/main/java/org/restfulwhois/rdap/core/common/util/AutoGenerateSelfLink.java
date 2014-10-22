@@ -60,10 +60,12 @@ import org.restfulwhois.rdap.core.model.Link;
          Link link = new Link();
          link.setRel("self");
          link.setType("application/rdap+json");
-         String value = RdapProperties.getLocalServiceUrl()            
-            + object.generateLinkHref();        
-         link.setValue(value);
-         link.setHref(value);
+         String value = RdapProperties.getLocalServiceUrlPrefix()            
+            + RdapProperties.getLocalServiceUrl() 
+            + object.generateLinkHref();
+         String encodeValue = StringUtil.urlEncode(value);
+         link.setValue(encodeValue);
+         link.setHref(encodeValue);
          return link;
     }  
 }

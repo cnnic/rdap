@@ -123,31 +123,29 @@ public class RdapProperties {
     /**
      * list for not in tlds.
      */
-    private static List<String> notInTldList;
+    private static List<String> notInTldList;    
     /**
-     * access control for inner object for search.
+     * localServiceUrlPrefix.
      */
-    private static boolean accessControlForInnerObjectForSearch;
+    private static String localServiceUrlPrefix;
     
     /**
-     * get accessControlForInnerObjectForSearch.
+     * get localServiceUrlPrefix.
      * 
-     * @return accessControlForInnerObjectForSearch.
+     * @return localServiceUrlPrefix.
      */
-    public static boolean getAccessControlForInnerObjectForSearch() {
-         return accessControlForInnerObjectForSearch;
+    public static String getLocalServiceUrlPrefix() {
+         return localServiceUrlPrefix;
     }
     
     /**
-     * set accessControlForInnerObjectForSearch.
+     * set localerviceUrlPrefix.
      * 
-     * @param accessControlForInnerObjectForSearch
-     *            accessControlForInnerObjectForSearch.
+     * @param localServiceUrlPrefix
+     *            localServiceUrlPrefix.
      */
-    public static void setAccessControlForInnerObjectForSearch(
-           boolean accessControlForInnerObjectForSearch) {
-        RdapProperties.accessControlForInnerObjectForSearch = 
-                   accessControlForInnerObjectForSearch;
+    public static void setLocalServiceUrlPrefix(String localServiceUrlPrefix) {
+        RdapProperties.localServiceUrlPrefix = localServiceUrlPrefix;
     }
 
     /**
