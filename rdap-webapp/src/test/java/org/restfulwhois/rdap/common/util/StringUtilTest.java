@@ -38,10 +38,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.Normalizer;
-import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -177,29 +174,24 @@ public class StringUtilTest extends BaseTest {
      */
     @Test
     public void testParseTldsToListIfTldListIsNull() {
-        assertThat(StringUtil.parseSeparatedStringToListIfListIsNull("cn", null),
+        assertThat(
+                StringUtil.parseSeparatedStringToListIfListIsNull("cn", null),
                 CoreMatchers.hasItems("cn"));
-        assertThat(
-                StringUtil.parseSeparatedStringToListIfListIsNull("edu.cn;cn", null),
-                CoreMatchers.hasItems("cn", "edu.cn"));
-        assertThat(
-                StringUtil.parseSeparatedStringToListIfListIsNull("cn;edu.cn", null),
-                CoreMatchers.hasItems("cn", "edu.cn"));
-        assertThat(
-                StringUtil.parseSeparatedStringToListIfListIsNull("cn;edu.cn;", null),
-                CoreMatchers.hasItems("cn", "edu.cn"));
-        assertThat(
-                StringUtil.parseSeparatedStringToListIfListIsNull(";cn;edu.cn;", null),
-                CoreMatchers.hasItems("cn", "edu.cn"));
-        assertThat(
-                StringUtil.parseSeparatedStringToListIfListIsNull(";cn;edu.cn", null),
-                CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(StringUtil.parseSeparatedStringToListIfListIsNull(
+                "edu.cn;cn", null), CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(StringUtil.parseSeparatedStringToListIfListIsNull(
+                "cn;edu.cn", null), CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(StringUtil.parseSeparatedStringToListIfListIsNull(
+                "cn;edu.cn;", null), CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(StringUtil.parseSeparatedStringToListIfListIsNull(
+                ";cn;edu.cn;", null), CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(StringUtil.parseSeparatedStringToListIfListIsNull(
+                ";cn;edu.cn", null), CoreMatchers.hasItems("cn", "edu.cn"));
         List<String> tldList = new ArrayList<String>();
         tldList.add("cn");
         tldList.add("edu.cn");
-        assertThat(
-                StringUtil.parseSeparatedStringToListIfListIsNull("com.cn", tldList),
-                CoreMatchers.hasItems("cn", "edu.cn"));
+        assertThat(StringUtil.parseSeparatedStringToListIfListIsNull("com.cn",
+                tldList), CoreMatchers.hasItems("cn", "edu.cn"));
     }
 
     /**
@@ -264,20 +256,26 @@ public class StringUtilTest extends BaseTest {
                 StringUtil.getNormalization("ａ"));
     }
 
-    /**
-     * test encoded URL.
-     * 
-     * @throws UnsupportedEncodingException
-     */
     @Test
-    public void testEncodedURL() throws UnsupportedEncodingException {
-        String qEncode = URLEncoder.encode("中文。中国", "UTF-8");
-        String expectURL =
-                "http://cwhois.cnnic.cn/whois?inputfield=value&entity=domain&value="
-                        + qEncode;
-        String encodedURL = expectURL;
-        String result = StringUtil.urlEncode(encodedURL);
+    public void test_encodedURL() throws UnsupportedEncodingException {
+        String url = "http://cnnic.cn:8301/rdap/entity/";
+        String param = "中文。中国";
+        String qEncode = URLEncoder.encode(param, "UTF-8");
+        String expectURL = url + qEncode;
+        String result = StringUtil.urlEncode(url + param);
         assertEquals(expectURL, result);
+    }
+
+    @Test
+    public void test_encodedURL_with_space()
+            throws UnsupportedEncodingException {
+        String url = "http://cnnic.cn:8301/rdap/entity/";
+        String param = "中文  中国";
+        String qEncode = URLEncoder.encode(param, "UTF-8");
+        String result = StringUtil.urlEncode(url + param);
+        assertEquals(
+                "http://cnnic.cn:8301/rdap/entity/%E4%B8%AD%E6%96%87%20%20%E4%B8%AD%E5%9B%BD",
+                result);
     }
 
     /**
@@ -307,10 +305,8 @@ public class StringUtilTest extends BaseTest {
         String decodedURL = "http://网络中心.中国/链接1\\a?a=b#c=d";
         String encodeURL = URLEncoder.encode(decodedURL, "UTF-8");
         String expectURL =
-                "http://%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%BF%83.%E4%B8%AD%E5%9B%BD/%E9%93%BE%E6%8E%A51%5Ca?a=b#c=d";
+                "http://%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%BF%83.%E4%B8%AD%E5%9B%BD/%E9%93%BE%E6%8E%A51%5Ca?a=b%23c%3Dd";
         String result = StringUtil.urlEncode(decodedURL);
-        assertEquals(expectURL, result);
-        result = StringUtil.urlEncode(encodeURL);
         assertEquals(expectURL, result);
     }
 
@@ -325,131 +321,130 @@ public class StringUtilTest extends BaseTest {
         assertEquals(-1L, StringUtil.parseUnsignedLong("18446744073709551615"));
         assertEquals(-4L, StringUtil.parseUnsignedLong("18446744073709551612"));
     }
-    
+
     /**
-     * test foldCase,get unicode from 
+     * test foldCase,get unicode from
      * http://www.unicode.org/Public/3.2-Update/CaseFolding-3.2.0.txt.
      */
     @Test
     public void testFoldCase() {
-        //full case
+        // full case
         final String strTLD = ".cn";
-        
+
         char ch = 0x00DF;
         String strNew = "ss" + strTLD;
         String strOrg = String.valueOf(ch);
         String strFold = StringUtil.foldCase(strOrg) + strTLD;
-        assertEquals(strNew,strFold);
-        
-        strNew = "i" + strTLD;
-        strOrg = String.valueOf((char)0x0049) + strTLD;
-        strFold = StringUtil.foldCase(strOrg);
-        assertEquals(strNew,strFold);
-        
-        String strNew1 = String.valueOf((char)0x0069);
-        String strNew2 = String.valueOf((char)0x0307);
-        strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x0130) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x02BC);
-        strNew2 = String.valueOf((char)0x006E);
-        strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x0149) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x006A);
-        strNew2 = String.valueOf((char)0x030C);
-        strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x01F0) + strTLD;
-        strFold = StringUtil.foldCase(strOrg);
-        assertEquals(strNew,strFold);
-        
-        int intFold = 0x0390;
-        strNew1 = String.valueOf((char)0x03B9);
-        strNew2 = String.valueOf((char)0x0308);
-        String strNew3 = String.valueOf((char)0x0301);
-        strNew = strNew1 + strNew2 + strNew3 + strTLD;
-        strOrg = String.valueOf((char)intFold) + strTLD;
-        strFold = StringUtil.foldCase(strOrg);
-        assertEquals(strNew,strFold);
+        assertEquals(strNew, strFold);
 
-        
-        strNew1 = String.valueOf((char)0x03C5);
-        strNew2 = String.valueOf((char)0x0308);
-        strNew3 = String.valueOf((char)0x0301);
-        strNew = strNew1 + strNew2 + strNew3 + strTLD;
-        strOrg = String.valueOf((char)0x03B0) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x0565);
-        strNew2 = String.valueOf((char)0x0582);
-        strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x0587) + strTLD;
+        strNew = "i" + strTLD;
+        strOrg = String.valueOf((char) 0x0049) + strTLD;
         strFold = StringUtil.foldCase(strOrg);
-        assertEquals(strNew,strFold);
-        
-        strNew1 = String.valueOf((char)0x0068);
-        strNew2 = String.valueOf((char)0x0331);
+        assertEquals(strNew, strFold);
+
+        String strNew1 = String.valueOf((char) 0x0069);
+        String strNew2 = String.valueOf((char) 0x0307);
         strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x1E96) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x0074);
-        strNew2 = String.valueOf((char)0x0308);
+        strOrg = String.valueOf((char) 0x0130) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x02BC);
+        strNew2 = String.valueOf((char) 0x006E);
         strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x1E97) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x0077);
-        strNew2 = String.valueOf((char)0x030A);
+        strOrg = String.valueOf((char) 0x0149) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x006A);
+        strNew2 = String.valueOf((char) 0x030C);
         strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x1E98) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x0079);
-        strNew2 = String.valueOf((char)0x030A);
-        strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x1E99) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x0061);
-        strNew2 = String.valueOf((char)0x02BE);
-        strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x1E9A) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x03C5);
-        strNew2 = String.valueOf((char)0x0313);
-        strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x1F50) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x03C5);
-        strNew2 = String.valueOf((char)0x0313);
-        strNew3 = String.valueOf((char)0x0300);
+        strOrg = String.valueOf((char) 0x01F0) + strTLD;
+        strFold = StringUtil.foldCase(strOrg);
+        assertEquals(strNew, strFold);
+
+        int intFold = 0x0390;
+        strNew1 = String.valueOf((char) 0x03B9);
+        strNew2 = String.valueOf((char) 0x0308);
+        String strNew3 = String.valueOf((char) 0x0301);
         strNew = strNew1 + strNew2 + strNew3 + strTLD;
-        strOrg = String.valueOf((char)0x1F52) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x03C5);
-        strNew2 = String.valueOf((char)0x0313);
-        strNew3 = String.valueOf((char)0x0301);
+        strOrg = String.valueOf((char) intFold) + strTLD;
+        strFold = StringUtil.foldCase(strOrg);
+        assertEquals(strNew, strFold);
+
+        strNew1 = String.valueOf((char) 0x03C5);
+        strNew2 = String.valueOf((char) 0x0308);
+        strNew3 = String.valueOf((char) 0x0301);
         strNew = strNew1 + strNew2 + strNew3 + strTLD;
-        strOrg = String.valueOf((char)0x1F54) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x03C5);
-        strNew2 = String.valueOf((char)0x0313);
-        strNew3 = String.valueOf((char)0x0342);
-        strNew = strNew1 + strNew2 + strNew3 + strTLD;
-        strOrg = String.valueOf((char)0x1F56) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
-        
-        strNew1 = String.valueOf((char)0x1f00);
-        strNew2 = String.valueOf((char)0x03b9);
+        strOrg = String.valueOf((char) 0x03B0) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x0565);
+        strNew2 = String.valueOf((char) 0x0582);
         strNew = strNew1 + strNew2 + strTLD;
-        strOrg = String.valueOf((char)0x1F88) + strTLD;
-        assertEquals(strNew,StringUtil.foldCase(strOrg));
+        strOrg = String.valueOf((char) 0x0587) + strTLD;
+        strFold = StringUtil.foldCase(strOrg);
+        assertEquals(strNew, strFold);
+
+        strNew1 = String.valueOf((char) 0x0068);
+        strNew2 = String.valueOf((char) 0x0331);
+        strNew = strNew1 + strNew2 + strTLD;
+        strOrg = String.valueOf((char) 0x1E96) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x0074);
+        strNew2 = String.valueOf((char) 0x0308);
+        strNew = strNew1 + strNew2 + strTLD;
+        strOrg = String.valueOf((char) 0x1E97) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x0077);
+        strNew2 = String.valueOf((char) 0x030A);
+        strNew = strNew1 + strNew2 + strTLD;
+        strOrg = String.valueOf((char) 0x1E98) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x0079);
+        strNew2 = String.valueOf((char) 0x030A);
+        strNew = strNew1 + strNew2 + strTLD;
+        strOrg = String.valueOf((char) 0x1E99) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x0061);
+        strNew2 = String.valueOf((char) 0x02BE);
+        strNew = strNew1 + strNew2 + strTLD;
+        strOrg = String.valueOf((char) 0x1E9A) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x03C5);
+        strNew2 = String.valueOf((char) 0x0313);
+        strNew = strNew1 + strNew2 + strTLD;
+        strOrg = String.valueOf((char) 0x1F50) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x03C5);
+        strNew2 = String.valueOf((char) 0x0313);
+        strNew3 = String.valueOf((char) 0x0300);
+        strNew = strNew1 + strNew2 + strNew3 + strTLD;
+        strOrg = String.valueOf((char) 0x1F52) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x03C5);
+        strNew2 = String.valueOf((char) 0x0313);
+        strNew3 = String.valueOf((char) 0x0301);
+        strNew = strNew1 + strNew2 + strNew3 + strTLD;
+        strOrg = String.valueOf((char) 0x1F54) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x03C5);
+        strNew2 = String.valueOf((char) 0x0313);
+        strNew3 = String.valueOf((char) 0x0342);
+        strNew = strNew1 + strNew2 + strNew3 + strTLD;
+        strOrg = String.valueOf((char) 0x1F56) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
+
+        strNew1 = String.valueOf((char) 0x1f00);
+        strNew2 = String.valueOf((char) 0x03b9);
+        strNew = strNew1 + strNew2 + strTLD;
+        strOrg = String.valueOf((char) 0x1F88) + strTLD;
+        assertEquals(strNew, StringUtil.foldCase(strOrg));
     }
 }
