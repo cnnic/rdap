@@ -112,7 +112,7 @@ public class ResponseDecorator {
         if (null == model) {
             return;
         }   
-        List<Notice> notices = noticeDao.getAllNotices();       
+        List<Notice> notices = noticeDao.getNoticesNoTruncated();       
         if (model instanceof BaseSearchModel<?> && ((BaseSearchModel<?>) model)
              .getTruncatedInfo().getResultsTruncated()) {
             BaseSearchModel<?> baseSearchModel 

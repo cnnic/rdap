@@ -69,7 +69,7 @@ public class NoticeQueryDaoTest extends BaseTest {
     @DatabaseTearDown("teardown.xml")
     @DatabaseSetup(value = "notice.xml")
     public void testGetAllNotices() {
-        List<Notice> notices = noticeDaoImpl.getAllNotices();
+        List<Notice> notices = noticeDaoImpl.getNoticesNoTruncated();
         Long noticeId = 1L;
         assertNotNull(notices);
         assertTrue(notices.size() > 0);

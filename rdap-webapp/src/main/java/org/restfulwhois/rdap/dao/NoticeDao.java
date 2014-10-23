@@ -45,11 +45,11 @@ import org.restfulwhois.rdap.core.model.Notice;
 public interface NoticeDao {
     /**
      * get all notice list where notice reasonType 
-     *  not in (CustomizeNoticeandRemark.TYPE).
+     *  not in (TYPE).
      *
      * @return notice list.
      */
-    List<Notice> getAllNotices();
+    List<Notice> getNoticesNoTruncated();
 
     /**
      * get help info, as format of notice.
@@ -60,9 +60,9 @@ public interface NoticeDao {
     
     /**
      * load  notice list where notice reasonType 
-     * in (CustomizeNoticeandRemark.TYPE).
+     * in (TYPE).
      *
      * @return notice list.
      */
-    List<Notice> loadAllNotices();
+    List<Notice> loadNoticesForTruncated();
 }
