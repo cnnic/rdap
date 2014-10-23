@@ -31,16 +31,13 @@
 package org.restfulwhois.rdap.core.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.util.AutnumValidator;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
+import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.exception.DecodeException;
-import org.restfulwhois.rdap.core.model.Autnum;
 import org.restfulwhois.rdap.core.model.Network;
 import org.restfulwhois.rdap.core.model.QueryUri;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
@@ -55,80 +52,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Controller for RIR.
+ * Controller for network query.
  * 
  * @author jiashuo
  * 
  */
 @Controller
-public class RirController extends BaseController {
+public class NetworkController extends BaseController {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(RirController.class);
-    /**
-     * autnum query URI.
-     */
-    private static final String SERVICE_URI_AS_Q 
-                   = QueryUri.AUTNUM.getName();
-    /**
-     * ip query URI.
-     */
-    private static final String SERVICE_URI_IP_Q 
-                   = QueryUri.IP.getName();
-
-    /**
-     * <pre>
-     * query autnum.
-     * URI:/autnum/{autnum}
-     * 
-     * First query autnum in local registry, if not exist, then query 
-     * for redirect.
-     *   
-     * This service is under permission control, @see AccessControlManager.
-     * This service is under policy control, @see PolicyControlService.
-     * 
-     * </pre>
-     * 
-     * @param autnum
-     *            an AS Plain autonomous system number [RFC5396].
-     * @param request
-     *            HttpServletRequest.
-     * @param response
-     *            HttpServletResponse
-     * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
-    public ResponseEntity queryAs(@PathVariable String autnum,
-            HttpServletRequest request, HttpServletResponse response)
-            throws DecodeException {
-        LOGGER.debug("query autnum:" + autnum);
-        autnum = queryParser.getLastSplitInURI(request);
-        if (!AutnumValidator.isValidAutnum(autnum)) {
-            return RestResponseUtil.createResponse400();
-        }
-        QueryParam queryParam = queryParser.parseQueryParam(autnum);
-        Autnum result = queryService.queryAutnum(queryParam);
-        if (null != result) {
-            if (!accessControlManager.hasPermission(result)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(result);
-            return RestResponseUtil.createResponse200(result);
-        }
-        LOGGER.debug("query redirect autnum :{}", queryParam);
-        RedirectResponse redirect = redirectService.queryAutnum(queryParam);
-        if (redirectService.isValidRedirect(redirect)) {
-            String redirectUrl =
-                    StringUtil.generateEncodedRedirectURL(autnum,
-                            SERVICE_URI_AS_Q, redirect.getUrl());
-            return RestResponseUtil.createResponse301(redirectUrl);
-        }
-        return RestResponseUtil.createResponse404();
-    }
+            .getLogger(NetworkController.class);
 
     /**
      * <pre>
@@ -219,10 +154,11 @@ public class RirController extends BaseController {
         if (redirectService.isValidRedirect(redirect)) {
             String redirectUrl =
                     StringUtil.generateEncodedRedirectURL(cidr,
-                            SERVICE_URI_IP_Q, redirect.getUrl());
+                            QueryUri.IP.getName(), redirect.getUrl());
             return RestResponseUtil.createResponse301(redirectUrl);
         }
         LOGGER.debug("   redirect network not found:{}", queryParam);
         return RestResponseUtil.createResponse404();
     }
+
 }

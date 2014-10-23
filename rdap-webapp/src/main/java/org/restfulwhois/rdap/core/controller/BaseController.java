@@ -45,7 +45,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 /**
- * This is the central class in this package.
+ * Bbase controller.
  * <p>
  * 
  * <pre>
