@@ -103,7 +103,7 @@ public class NoticeDaoImpl implements NoticeDao {
      */
     @Override
     public List<Notice> loadAllNotices() {
-        LOGGER.debug("getAllNotices.");
+        LOGGER.debug("loadAllNotices.");
         final String typesJoinedByComma = StringUtils.join(
                              TruncatedInfo.TYPES, ",");
         final String sql = "select notice.*, description.description"
@@ -191,9 +191,9 @@ public class NoticeDaoImpl implements NoticeDao {
                 + " from RDAP_NOTICE notice "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
                 + " on notice.NOTICE_ID = description.NOTICE_ID  where "
-                + " notice.TYPE=? and notice.REASON_TYPE_SHORT_NAME not in ("
+                + " notice.TYPE=? and ( notice.REASON_TYPE_SHORT_NAME not in ("
                 +  typesJoinedByComma 
-                +  " ) or notice.REASON_TYPE_SHORT_NAME is null";
+                +  " ) or notice.REASON_TYPE_SHORT_NAME is null)";
         List<Notice> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
