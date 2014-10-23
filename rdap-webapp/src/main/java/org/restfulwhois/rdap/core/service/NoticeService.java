@@ -28,43 +28,35 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.common.util;
+package org.restfulwhois.rdap.core.service;
 
-import org.restfulwhois.rdap.core.common.RdapProperties;
-import org.restfulwhois.rdap.core.model.BaseModel;
-import org.restfulwhois.rdap.core.model.Link;
+import java.util.Map;
 
- /**
- * Auto generate link property for object
- * <p>
- * This class contains methods to generate link
- * property generateSelfLink.
- *  
- *  @author zhanyq
+import org.restfulwhois.rdap.core.model.Notice;
+import org.restfulwhois.rdap.core.model.Remark;
+
+/**
+ * notice interface.
+ * 
+ * query notice and remark.
+ * 
+ * used in rdapController initialization.
+ * 
+ * @author zhanyq
+ * 
  */
- public final class AutoGenerateSelfLink {
+public interface NoticeService {
     /**
-     * private constructor.
+     * get all Notices.
+     * 
+     * @return Notices map,[key:NOTICE+reasonTypeShortName,value:Notice]
      */
-    private AutoGenerateSelfLink() {
-        super();
-    }
+    Map<String, Notice> getAllNoticesMap();
     
     /**
-     * auto generate Link property.
-     * @param  object
-     *     object
-     * @return link
+     * get all Remarks.
+     * 
+     * @return Remarks map,[key:REMARK+reasonTypeShortName,value:Remarks]
      */
-    public static Link generateSelfLink(BaseModel object) {
-         Link link = new Link();
-         link.setRel("self");
-         link.setType("application/rdap+json");
-         String value = RdapProperties.getLocalServiceUrl() 
-            + object.generateLinkHref();
-         String encodeValue = StringUtil.urlEncode(value);
-         link.setValue(encodeValue);
-         link.setHref(encodeValue);
-         return link;
-    }  
+    Map<String, Remark> getAllRemarksMap();
 }

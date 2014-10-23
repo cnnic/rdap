@@ -32,9 +32,11 @@ package org.restfulwhois.rdap.search.bean;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.core.bean.TruncatedInfo;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.ModelType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -53,53 +55,31 @@ public class BaseSearchModel<T extends BaseModel> extends BaseModel {
     private List<T> searchResults;
 
     /**
-     * 'resultsTruncated' used where a single object has been returned and data
+     * 'truncatedInfo' used where a single object has been returned and data
      * in that object has been truncated.
-     */
-    private Boolean resultsTruncated = null;
+     */  
+    @JsonIgnore
+    private TruncatedInfo truncatedInfo;
+
 
     /**
-     * has no access to all objects, and should return HTTP 403 code.
-     */
-    private Boolean hasNoAuthForAllObjects = false;
-
-    /**
-     * get resultsTruncated.
+     * get truncatedInfo.
      * 
-     * @return resultsTruncated.
-     */
-    public Boolean getResultsTruncated() {
-        return resultsTruncated;
+     * @return truncatedInfo.
+     */    
+    public TruncatedInfo getTruncatedInfo() {
+        return truncatedInfo;
     }
 
     /**
-     * set resultsTruncated.
+     * set truncatedInfo.
      * 
-     * @param resultsTruncated
-     *            resultsTruncated.
-     */
-    public void setResultsTruncated(Boolean resultsTruncated) {
-        this.resultsTruncated = resultsTruncated;
-    }
-
-    /**
-     * get hasNoAuthForAllObjects.
-     * 
-     * @return hasNoAuthForAllObjects.
-     */
-    public Boolean getHasNoAuthForAllObjects() {
-        return hasNoAuthForAllObjects;
-    }
-
-    /**
-     * set hasNoAuthForAllObjects.
-     * 
-     * @param hasNoAuthForAllObjects
-     *            hasNoAuthForAllObjects.
-     */
-    public void setHasNoAuthForAllObjects(Boolean hasNoAuthForAllObjects) {
-        this.hasNoAuthForAllObjects = hasNoAuthForAllObjects;
-    }
+     * @param truncatedInfo
+     *            truncatedInfo.
+     */   
+    public void setTruncatedInfo(TruncatedInfo truncatedInfo) {
+        this.truncatedInfo = truncatedInfo;
+    }    
 
     /**
      * get searchResults.

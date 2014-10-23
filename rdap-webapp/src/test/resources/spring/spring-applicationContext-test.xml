@@ -18,8 +18,7 @@
 		<property name="minSecondsAccessIntervalAnonymous" value="${minSecondsAccessIntervalAnonymous}" />
 		<property name="minSecondsAccessIntervalAuthed" value="${minSecondsAccessIntervalAuthed}" />
 		<property name="ipWhiteListForAccessInterval" value="${ipWhiteListForAccessInterval}" />
-		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />
-		<property name="localServiceUrlPrefix" value="${localServiceUrlPrefix}" />    		
+		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />		  		
 	</bean>
 	
 	<import resource="classpath:spring/spring-serviceContext.xml" />

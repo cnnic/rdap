@@ -33,7 +33,10 @@ package org.restfulwhois.rdap.core.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.restfulwhois.rdap.core.bean.TruncatedInfo;
 import org.restfulwhois.rdap.core.common.RdapProperties;
+
+import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.Domain;
@@ -122,19 +125,23 @@ public class SearchServiceImpl implements SearchService {
         page.setRecordsCount(totalCount.intValue());
         queryParam.setPageBean(page);
         boolean gotEnoughResults = false;
+        TruncatedInfo truncatedInfo = new TruncatedInfo();
         do {
             List<T> objects = queryDao.search(queryParam);
             for (T object : objects) {
                 if (authedObjects.size() < RdapProperties.getMaxsizeSearch()
-                        && accessControlManager.hasPermission(object)) {                   
+                        && accessControlManager.hasPermission(object)) {
                     authedObjects.add(object);
                 }
                 if (accessControlManager.hasPermission(object)) {
                     totalAuthedObjectSize++;
+                } else {
+                     truncatedInfo.setTruncatedReasonForAuth();
                 }
                 if (authedObjects.size() == RdapProperties.getMaxsizeSearch()
                         && totalAuthedObjectSize > authedObjects.size()) {
                     gotEnoughResults = true;
+                    truncatedInfo.setTruncatedReasonForExload();
                     break;
                 }
             }
@@ -143,12 +150,13 @@ public class SearchServiceImpl implements SearchService {
         // && authedDomains.size() < RdapProperties.getMaxsizeSearch()
         );
         BaseSearchModel<T> searchResult = new BaseSearchModel<T>();
-        if (totalAuthedObjectSize > authedObjects.size()) {
+        /*if (totalAuthedObjectSize > authedObjects.size()) {
             searchResult.setResultsTruncated(true);
+        }*/
+        if (authedObjects.size() == 0) {            
+            truncatedInfo.setHasNoAuthForAllObjects(true);
         }
-        if (authedObjects.size() == 0) {
-            searchResult.setHasNoAuthForAllObjects(true);
-        }
+        searchResult.setTruncatedInfo(truncatedInfo);
         searchResult.setSearchResults(authedObjects);
         
         LOGGER.debug("search result " + searchResult);

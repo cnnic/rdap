@@ -39,11 +39,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.core.bean.TruncatedInfo;
 import org.restfulwhois.rdap.core.dao.QueryDao;
+import org.restfulwhois.rdap.core.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.model.Link;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Remark;
-import org.restfulwhois.rdap.core.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -138,14 +140,14 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
      * @return remark list.
      */
     private List<Remark> queryWithoutInnerObjects(final Long outerObjectId,
-            final ModelType outerModelType) {
+            final ModelType outerModelType) {       
         final String sql = "select notice.*, description.description "
                 + " from RDAP_NOTICE notice"
                 + " inner join REL_NOTICE_REGISTRATION rel "
                 + " on (rel.NOTICE_ID = notice.NOTICE_ID and rel.REL_ID = ? "
                 + " and rel.REL_OBJECT_TYPE = ? and notice.TYPE=?) "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
-                + " on notice.NOTICE_ID = description.NOTICE_ID";
+                + " on notice.NOTICE_ID = description.NOTICE_ID ";
         List<Remark> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(
@@ -159,6 +161,34 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
                 }, new RemarkResultSetExtractor());
         return result;
     }
+    /**
+     * get all remark list.   
+     *
+     * @return remark list.
+     */
+    public List<Remark> loadRemarksByTypes() {
+        LOGGER.debug("loadRemarksByTypes, types:{},");
+        final String typesJoinedByComma = StringUtils.join(
+                  TruncatedInfo.TYPES, ",");
+        final String sql = "select notice.*, description.description"
+             + " from RDAP_NOTICE notice "
+             + " left outer join RDAP_NOTICE_DESCRIPTION description "
+             + " on notice.NOTICE_ID = description.NOTICE_ID "
+             + " where notice.TYPE=? and notice.REASON_TYPE_SHORT_NAME in ( "
+             + typesJoinedByComma + ")";
+        List<Remark> result = jdbcTemplate.query(
+                new PreparedStatementCreator() {
+                    public PreparedStatement createPreparedStatement(
+                            Connection connection) throws SQLException {
+                       PreparedStatement ps = connection.prepareStatement(sql);
+                       ps.setString(1, NoticeType.REMARK.getName());
+                       return ps;
+                   }
+                }, new RemarkResultSetExtractor());
+        LOGGER.debug("queryAsInnerObjects, result:{}", result);
+        return result;       
+                 
+   }
 
     /**
      * remark ResultSetExtractor, extract data from ResultSet.
@@ -178,6 +208,9 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
                     remark = new Remark();
                     remark.setId(remarkId);
                     remark.setTitle(rs.getString("TITLE"));
+                    remark.setReasonType(rs.getString("REASON_TYPE"));
+                    remark.setReasonTypeShortName(
+                           rs.getString("REASON_TYPE_SHORT_NAME"));
                     remarkMapById.put(remarkId, remark);
                     result.add(remark);
                 }
