@@ -34,13 +34,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.model.Notice;
 import org.restfulwhois.rdap.core.model.Remark;
 import org.restfulwhois.rdap.core.service.NoticeService;
 import org.restfulwhois.rdap.dao.NoticeDao;
-import org.restfulwhois.rdap.dao.RemarkDao;
 import org.restfulwhois.rdap.dao.impl.RemarkQueryDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
