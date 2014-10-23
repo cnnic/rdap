@@ -30,10 +30,15 @@
  */
 package org.restfulwhois.rdap.core.service.impl;
 
+import java.util.List;
+
+import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.model.BaseModel;
+import org.restfulwhois.rdap.core.model.Notice;
 import org.restfulwhois.rdap.core.service.PolicyControlService;
 import org.restfulwhois.rdap.core.service.RdapConformanceService;
 import org.restfulwhois.rdap.dao.NoticeDao;
+import org.restfulwhois.rdap.search.bean.BaseSearchModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,8 +111,18 @@ public class ResponseDecorator {
         LOGGER.debug("addNotices:" + model);
         if (null == model) {
             return;
+        }   
+        List<Notice> notices = noticeDao.getAllNotices();       
+        if (model instanceof BaseSearchModel<?> && ((BaseSearchModel<?>) model)
+             .getTruncatedInfo().getResultsTruncated()) {
+            BaseSearchModel<?> baseSearchModel 
+                = (BaseSearchModel<?>) model;
+            String reasonTypeShortName = baseSearchModel.getTruncatedInfo()
+                   .getReasonTypeShortName();
+            notices.add(CustomizeNoticeandRemark
+                    .getNoticeByReasonType(reasonTypeShortName));
         }
-        model.setNotices(noticeDao.getAllNotices());
+        model.setNotices(notices);
         LOGGER.debug("addNotices end");
     }
     /**

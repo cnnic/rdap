@@ -120,7 +120,9 @@ public class EntitySearchController extends BaseController {
         LOGGER.debug("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
-            if (result.getHasNoAuthForAllObjects()) {
+           if (result.getTruncatedInfo() != null 
+                    && result.getTruncatedInfo()
+                    .getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);

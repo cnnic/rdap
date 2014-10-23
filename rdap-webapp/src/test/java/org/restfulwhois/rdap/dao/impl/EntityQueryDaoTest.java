@@ -211,22 +211,24 @@ public class EntityQueryDaoTest extends BaseTest {
         List<Autnum> autnums = entity.getAutnums();
         Assert.notNull(autnums);
         assertEquals(4, autnums.size());
-        assertNull(entity.getResultsTruncated());
+        assertNull(entity.getNotices());
+        assertNull(entity.getTruncatedInfo());
         // not truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         entity =
                 entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
-        assertNull(entity.getResultsTruncated());
+        assertNull(entity.getNotices());
+        assertNull(entity.getTruncatedInfo());
         // truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 3L);
         entity =
                 entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
-        assertTrue(entity.getResultsTruncated());
+        assertTrue(entity.getTruncatedInfo().getResultsTruncated());
         // truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 2L);
         entity =
                 entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
-        assertTrue(entity.getResultsTruncated());
+        assertTrue(entity.getTruncatedInfo().getResultsTruncated());
     }
 
     /**
