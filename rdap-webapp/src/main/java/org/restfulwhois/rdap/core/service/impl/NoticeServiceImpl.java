@@ -80,7 +80,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public Map<String, Notice> getAllNoticesMap() {
         LOGGER.debug("getAllNoticeMap");
-        List<Notice> notices = noticeDao.getAllNotices();
+        List<Notice> notices = noticeDao.loadNoticesForTruncated();
         Map<String, Notice> noticeMap 
             = new HashMap<String, Notice>();
         for (Notice notice : notices) {      
