@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.core.model.Remark;
 import org.restfulwhois.rdap.core.service.NoticeService;
 import org.restfulwhois.rdap.dao.NoticeDao;
 import org.restfulwhois.rdap.dao.RemarkDao;
+import org.restfulwhois.rdap.dao.impl.RemarkQueryDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +69,10 @@ public class NoticeServiceImpl implements NoticeService {
     private NoticeDao noticeDao;
     
     /**
-     * RemarkDao.
+     * remarkQueryDao.
      */
-    @Autowired    
-    private RemarkDao remarkDao;
+    @Autowired
+    private RemarkQueryDaoImpl remarkQueryDao;
 
     /**
      * getAllNoticeMap.
@@ -100,8 +101,8 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public Map<String, Remark> getAllRemarksMap() {
         LOGGER.debug("getAllRemarksMap");         
-        List<Remark> remarks = remarkDao
-               .loadRemarksByTypes(CustomizeNoticeandRemark.TYPES);
+        List<Remark> remarks = remarkQueryDao
+               .loadRemarksByTypes();
        Map<String, Remark> remarkMap 
             = new HashMap<String, Remark>();
         for (Remark remark : remarks) {      

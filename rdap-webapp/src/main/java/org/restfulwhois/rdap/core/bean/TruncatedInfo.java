@@ -30,6 +30,10 @@
  */
 package org.restfulwhois.rdap.core.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -58,6 +62,25 @@ public class TruncatedInfo {
      * in that object has been truncated.
      */
     private String reasonTypeShortName;
+    
+    /**
+     * reasonType authorization.
+     */
+    public static final String REASONTYPE_AUTH = "authorization";
+    
+    /**
+     * reasonType excessiveLoad.
+     */
+    public static final String REASONTYPE_EXLOAD = "excessiveLoad";
+    /**
+     * reason type list.
+     */
+    public static final List<String> TYPES = new ArrayList<String>();
+    
+    static {
+        TYPES.add("'" + REASONTYPE_EXLOAD + "'");
+        TYPES.add("'" + REASONTYPE_AUTH + "'");
+    }
 
     /**
      * get resultsTruncated.
@@ -114,6 +137,24 @@ public class TruncatedInfo {
      */
     public void setReasonTypeShortName(String reasonTypeShortName) {
         this.reasonTypeShortName = reasonTypeShortName;
-    }    
+    }   
+    
+    /**
+     * set TruncatedReasonForAuth.
+     *     
+     */
+    public void setTruncatedReasonForAuth() {
+        this.reasonTypeShortName = REASONTYPE_AUTH;
+        this.resultsTruncated = true;
+    }
+    
+    /**
+     * set TruncatedReasonForExload.
+     *     
+     */
+    public void setTruncatedReasonForExload() {
+        this.reasonTypeShortName = REASONTYPE_EXLOAD;
+        this.resultsTruncated = true;
+    } 
     
 }

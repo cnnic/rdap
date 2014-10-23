@@ -250,7 +250,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.domainSearchResults").exists())
                 .andExpect(jsonPath("$.domainSearchResults").isArray())
                 .andExpect(jsonPath("$.domainSearchResults", hasSize(2)))
-                .andExpect(jsonPath("$.domainSearchResults",Matchers.hasItem(Matchers.hasKey("handle")))).andDo(MockMvcResultHandlers.print());
+                .andExpect(jsonPath("$.domainSearchResults",Matchers.hasItem(Matchers.hasKey("handle"))));
     }
 
     /**

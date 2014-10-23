@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.restfulwhois.rdap.core.bean.TruncatedInfo;
 import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.BaseNotice.NoticeType;
@@ -54,7 +55,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
-
 import org.apache.commons.lang.StringUtils;
 /**
  * notice query DAO select notice object from RDAP_NOTICE.
@@ -91,7 +91,7 @@ public class NoticeDaoImpl implements NoticeDao {
      */
     @Override
     public List<Notice> getAllNotices() {
-        LOGGER.debug("loadAllNotices.");
+        LOGGER.debug("getAllNotices.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
         queryAndSetInnerObjects(notices, NoticeType.Notice);
         return notices;
@@ -105,7 +105,7 @@ public class NoticeDaoImpl implements NoticeDao {
     public List<Notice> loadAllNotices() {
         LOGGER.debug("getAllNotices.");
         final String typesJoinedByComma = StringUtils.join(
-              CustomizeNoticeandRemark.TYPES, ",");
+                             TruncatedInfo.TYPES, ",");
         final String sql = "select notice.*, description.description"
                 + " from RDAP_NOTICE notice "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
@@ -186,13 +186,14 @@ public class NoticeDaoImpl implements NoticeDao {
      */
     private List<Notice> queryWithoutInnerObjects(final NoticeType type) {
         final String typesJoinedByComma = StringUtils.join(
-                CustomizeNoticeandRemark.TYPES, ",");
+                TruncatedInfo.TYPES, ",");
         final String sql = "select notice.*, description.description"
                 + " from RDAP_NOTICE notice "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
                 + " on notice.NOTICE_ID = description.NOTICE_ID  where "
                 + " notice.TYPE=? and notice.REASON_TYPE_SHORT_NAME not in ("
-                +  typesJoinedByComma + ")";
+                +  typesJoinedByComma 
+                +  " ) or notice.REASON_TYPE_SHORT_NAME is null";
         List<Notice> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(

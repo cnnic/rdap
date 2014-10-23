@@ -64,26 +64,8 @@ public class CustomizeNoticeandRemark {
      * Remarks map,must be init before call. 
      * getRemarkByReasonType()
      */
-    private static Map<String, Remark> remarksMap = null;
+    private static Map<String, Remark> remarksMap = null;    
     
-    /**
-     * reasonType authorization.
-     */
-    public static final String REASONTYPE_AUTH = "authorization";
-    
-    /**
-     * reasonType excessiveLoad.
-     */
-    public static final String REASONTYPE_EXLOAD = "excessiveLoad";
-    /**
-     * reason type list.
-     */
-    public static final List<String> TYPES = new ArrayList<String>();
-    
-    static {
-        TYPES.add("'" + REASONTYPE_EXLOAD + "'");
-        TYPES.add("'" + REASONTYPE_AUTH + "'");
-    }
     
     /**
      * error message service.

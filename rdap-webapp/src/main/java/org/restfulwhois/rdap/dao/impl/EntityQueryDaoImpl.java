@@ -366,9 +366,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             List<Network> truncatedNetworks =
                     networks.subList(0, maxInnerObjSize);
             entity.setNetworks(truncatedNetworks);
-            truncatedInfo.setResultsTruncated(true);
-            truncatedInfo.setReasonTypeShortName("excessiveLoad");
-            //entity.setResultsTruncated(true);
+            truncatedInfo.setTruncatedReasonForExload();
             entity.setTruncatedInfo(truncatedInfo);
         }
         if (null != autnums && autnums.size() > maxInnerObjSize) {
@@ -376,9 +374,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                     autnums.size(), maxInnerObjSize);
             List<Autnum> truncatedAutnums = autnums.subList(0, maxInnerObjSize);
             entity.setAutnums(truncatedAutnums);
-            truncatedInfo.setResultsTruncated(true);
-            truncatedInfo.setReasonTypeShortName("excessiveLoad");
-            //entity.setResultsTruncated(true);
+            truncatedInfo.setTruncatedReasonForExload();
             entity.setTruncatedInfo(truncatedInfo);
         }
     }

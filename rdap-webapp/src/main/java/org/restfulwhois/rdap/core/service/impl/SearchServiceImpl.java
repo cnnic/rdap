@@ -136,16 +136,12 @@ public class SearchServiceImpl implements SearchService {
                 if (accessControlManager.hasPermission(object)) {
                     totalAuthedObjectSize++;
                 } else {
-                    truncatedInfo.setResultsTruncated(true);
-                    truncatedInfo.setReasonTypeShortName(
-                                  CustomizeNoticeandRemark.REASONTYPE_AUTH);
+                     truncatedInfo.setTruncatedReasonForAuth();
                 }
                 if (authedObjects.size() == RdapProperties.getMaxsizeSearch()
                         && totalAuthedObjectSize > authedObjects.size()) {
                     gotEnoughResults = true;
-                    truncatedInfo.setResultsTruncated(true);
-                    truncatedInfo.setReasonTypeShortName(
-                                 CustomizeNoticeandRemark.REASONTYPE_EXLOAD);
+                    truncatedInfo.setTruncatedReasonForExload();
                     break;
                 }
             }

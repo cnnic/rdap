@@ -31,114 +31,35 @@
 package org.restfulwhois.rdap.core.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
-import org.restfulwhois.rdap.core.model.Entity;
-import org.restfulwhois.rdap.core.model.Help;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.restfulwhois.rdap.search.bean.EntitySearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Controller for both DNR and RIR.
+ * Controller for entity search.
  * 
  * @author jiashuo
  * 
  */
 @Controller
-public class CommonController extends BaseController {
+public class EntitySearchController extends BaseController {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(CommonController.class);
-
-    /**
-     * <pre>
-     * Query help.
-     * URI:/help.
-     * This service is not under permission control.
-     * This service is not under policy control.
-     * 
-     * </pre>
-     * 
-     * @param request
-     *            HttpServletRequest.
-     * @param response
-     *            HttpServletResponse
-     * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = "/help", method = RequestMethod.GET)
-    public ResponseEntity queryHelp(HttpServletRequest request,
-            HttpServletResponse response) throws DecodeException {
-        String lastSpliInURI = queryParser.getLastSplitInURI(request);
-        if (!"help".equals(lastSpliInURI)) {
-            return RestResponseUtil.createResponse400();
-        }
-        Help result = queryService.queryHelp(queryParser.parseQueryParam(""));
-        if (null != result) {
-            // No permission control
-            responseDecorator.decorateResponseForHelp(result);
-            return RestResponseUtil.createResponse200(result);
-        }
-        return RestResponseUtil.createResponse404();
-    }
-
-    /**
-     * <pre>
-     * query entity.
-     * Uri:/entity/{handle}.
-     * This service is under permission control, @see AccessControlManager.
-     * This service is under policy control, @see PolicyControlService.
-     * 
-     * </pre>
-     * 
-     * @param handle
-     *            entity handle.
-     * @param request
-     *            HttpServletRequest.
-     * @param response
-     *            HttpServletResponse
-     * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
-     *             DecodeException.
-     */
-    @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
-    public ResponseEntity queryEntity(@PathVariable String handle,
-            HttpServletRequest request, HttpServletResponse response)
-            throws DecodeException {
-        LOGGER.debug("query entity,handle:" + handle);
-        handle = queryParser.getLastSplitInURI(request);
-        handle = StringUtils.trim(handle);
-        if (!StringUtil.isValidEntityHandleOrName(handle)) {
-            return RestResponseUtil.createResponse400();
-        }
-        handle = StringUtil.foldCaseAndNormalization(handle);
-        Entity result =
-                queryService.queryEntity(queryParser.parseQueryParam(handle));
-        if (null != result) {
-            if (!accessControlManager.hasPermission(result)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(result);
-            return RestResponseUtil.createResponse200(result);
-        }
-        return RestResponseUtil.createResponse404();
-    }
+            .getLogger(EntitySearchController.class);
 
     /**
      * <pre>
@@ -188,8 +109,7 @@ public class CommonController extends BaseController {
         if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
             return RestResponseUtil.createResponse422();
         }
-        if (handleParamName.equals(paramName)) {
-            // fold case when by handle
+        if (handleParamName.equals(paramName)) {// fold case when by handle
             paramValue = StringUtil.foldCaseAndNormalization(paramValue);
         } else {
             paramValue = StringUtil.getNormalization(paramValue);
@@ -199,8 +119,8 @@ public class CommonController extends BaseController {
                 queryParser.parseEntityQueryParam(paramValue, paramName);
         LOGGER.debug("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
-        if (null != result) {            
-            if (result.getTruncatedInfo() != null 
+        if (null != result) {
+           if (result.getTruncatedInfo() != null 
                     && result.getTruncatedInfo()
                     .getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
@@ -209,16 +129,6 @@ public class CommonController extends BaseController {
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();
-    }
-
-    /**
-     * other invalid query uri will response 400 error.
-     * 
-     * @return JSON formated result,with HTTP code.
-     */
-    @RequestMapping(value = "/**")
-    public ResponseEntity error400() {
-        return RestResponseUtil.createResponse400();
     }
 
 }
