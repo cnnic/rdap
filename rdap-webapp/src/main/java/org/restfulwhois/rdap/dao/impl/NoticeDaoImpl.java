@@ -90,7 +90,7 @@ public class NoticeDaoImpl implements NoticeDao {
      * @return list of notice.
      */
     @Override
-    public List<Notice> getAllNotices() {
+    public List<Notice> getNoticesNoTruncated() {
         LOGGER.debug("getAllNotices.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
         queryAndSetInnerObjects(notices, NoticeType.Notice);
@@ -102,7 +102,7 @@ public class NoticeDaoImpl implements NoticeDao {
      * @return list of notice.
      */
     @Override
-    public List<Notice> loadAllNotices() {
+    public List<Notice> loadNoticesForTruncated() {
         LOGGER.debug("loadAllNotices.");
         final String typesJoinedByComma = StringUtils.join(
                              TruncatedInfo.TYPES, ",");
