@@ -30,6 +30,8 @@
  */
 package org.restfulwhois.rdap.core.controller;
 
+import java.util.List;
+
 import org.restfulwhois.rdap.core.controller.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
@@ -37,6 +39,8 @@ import org.restfulwhois.rdap.core.service.AccessControlManager;
 import org.restfulwhois.rdap.core.service.QueryService;
 import org.restfulwhois.rdap.core.service.SearchService;
 import org.restfulwhois.rdap.core.service.impl.ResponseDecorator;
+import org.restfulwhois.rdap.core.validation.ValidationResult;
+import org.restfulwhois.rdap.core.validation.Validator;
 import org.restfulwhois.rdap.redirect.service.RedirectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,6 +126,8 @@ public class BaseController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(BaseController.class);
+
+    private List<Validator> validators;
     /**
      * query service.
      */
@@ -155,20 +161,45 @@ public class BaseController {
     @Autowired
     protected RedirectService redirectService;
 
+    /**
+     * query.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return ResponseEntity.
+     */
     protected ResponseEntity query(QueryParam queryParam) {
-        boolean result = validate(queryParam);
-        if (!result) {
+        ValidationResult result = validate(queryParam);
+        if (result.hasError()) {
             // handle error and return.
         }
         return doQuery(queryParam);
     }
 
+    /**
+     * do query.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return ResponseEntity.
+     */
     protected ResponseEntity doQuery(QueryParam queryParam) {
         throw new UnsupportedOperationException();
     }
 
-    protected boolean validate(QueryParam queryParam) {
-        throw new UnsupportedOperationException();
+    /**
+     * validate.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return ValidationResult.
+     */
+    protected ValidationResult validate(QueryParam queryParam) {
+        ValidationResult validationResult = new ValidationResult();
+        for (Validator validator : validators) {
+            validator.validate(queryParam, validationResult);
+        }
+        return validationResult;
     }
 
 }
