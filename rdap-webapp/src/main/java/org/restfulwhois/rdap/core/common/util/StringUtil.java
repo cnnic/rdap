@@ -31,9 +31,6 @@
 
 package org.restfulwhois.rdap.core.common.util;
 
-import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
@@ -43,6 +40,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.ibm.icu.lang.UCharacter;
 
@@ -295,12 +294,9 @@ public final class StringUtil {
         }
         String result = str;
         try {
-            String decodedURL = URLDecoder.decode(str, CHAR_SET_UTF8);
-            decodedURL =
-                    decodedURL.replaceAll("\\\\",
-                            URLEncoder.encode("\\", CHAR_SET_UTF8));
-            URI uri = new URI(decodedURL);
-            result = uri.toASCIIString();
+            UriComponents uriComponents =
+                    UriComponentsBuilder.fromHttpUrl(str).build();
+            return uriComponents.encode().toUriString();
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
