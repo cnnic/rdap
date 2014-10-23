@@ -80,7 +80,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
-        assertTrue(entitySearch.getResultsTruncated());
+        assertTrue(entitySearch.getTruncatedInfo().getResultsTruncated());
         // resultsTruncated = true, batch=max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 5L);
@@ -89,7 +89,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
-        assertTrue(entitySearch.getResultsTruncated());
+        assertTrue(entitySearch.getTruncatedInfo().getResultsTruncated());
         // resultsTruncated = true, batch>max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 6L);
@@ -98,7 +98,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
-        assertTrue(entitySearch.getResultsTruncated());
+        assertTrue(entitySearch.getTruncatedInfo().getResultsTruncated());
         // no resultsTruncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 6L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
@@ -107,7 +107,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(5L, entitySearch.getEntitySearchResults().size());
-        assertNull(entitySearch.getResultsTruncated());
+        assertTrue(!entitySearch.getTruncatedInfo().getResultsTruncated());
     }
     
     /**
@@ -129,7 +129,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
         assertEquals(5L, domainSearch.getDomainSearchResults().size());
-        assertTrue(domainSearch.getResultsTruncated());
+        assertTrue(domainSearch.getTruncatedInfo().getResultsTruncated());
         // resultsTruncated = true, batch=max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 5L);
@@ -137,7 +137,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
         assertEquals(5L, domainSearch.getDomainSearchResults().size());
-        assertTrue(domainSearch.getResultsTruncated());
+        assertTrue(domainSearch.getTruncatedInfo().getResultsTruncated());
         // resultsTruncated = true, batch>max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 6L);
@@ -145,7 +145,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
         assertEquals(5L, domainSearch.getDomainSearchResults().size());
-        assertTrue(domainSearch.getResultsTruncated());
+        assertTrue(domainSearch.getTruncatedInfo().getResultsTruncated());
         // no resultsTruncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 6L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
@@ -153,7 +153,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
         assertEquals(6L, domainSearch.getDomainSearchResults().size());
-        assertNull(domainSearch.getResultsTruncated());
+        assertEquals("authorization",domainSearch.getTruncatedInfo().getReasonTypeShortName());        
     }
     
     /**
@@ -177,7 +177,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeHigh, nsSearch.getNameserverSearchResults().size());
-        assertTrue(nsSearch.getResultsTruncated());
+        assertTrue(nsSearch.getTruncatedInfo().getResultsTruncated());
         // resultsTruncated = true, batch=max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", sizeLow);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", sizeLow);
@@ -186,7 +186,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeLow, nsSearch.getNameserverSearchResults().size());
-        assertTrue(nsSearch.getResultsTruncated());
+        assertTrue(nsSearch.getTruncatedInfo().getResultsTruncated());
         // resultsTruncated = true, batch>max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", sizeLow);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", sizeHigh);
@@ -195,7 +195,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeLow, nsSearch.getNameserverSearchResults().size());
-        assertTrue(nsSearch.getResultsTruncated());
+        assertTrue(nsSearch.getTruncatedInfo().getResultsTruncated());
         // no resultsTruncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", sizeLimit);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", sizeLow);
@@ -204,7 +204,7 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeLimit, nsSearch.getNameserverSearchResults().size());
-        assertNull(nsSearch.getResultsTruncated());
+        assertEquals("authorization",nsSearch.getTruncatedInfo().getReasonTypeShortName());
     }
     
 }

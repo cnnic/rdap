@@ -44,7 +44,8 @@ import org.restfulwhois.rdap.core.model.Notice;
  */
 public interface NoticeDao {
     /**
-     * get all notice list.
+     * get all notice list where notice reasonType 
+     *  not in (CustomizeNoticeandRemark.TYPE).
      *
      * @return notice list.
      */
@@ -55,5 +56,13 @@ public interface NoticeDao {
      *
      * @return notice list.
      */
-    List<Notice> getHelp();    
+    List<Notice> getHelp();  
+    
+    /**
+     * load  notice list where notice reasonType 
+     * in (CustomizeNoticeandRemark.TYPE).
+     *
+     * @return notice list.
+     */
+    List<Notice> loadAllNotices();
 }

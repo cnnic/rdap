@@ -160,7 +160,9 @@ public class NameserverSearchController extends BaseDnrController {
         NameserverSearch nsSearch =
                 searchService.searchNameserver(nsQueryParam);
         if (null != nsSearch) {
-            if (nsSearch.getHasNoAuthForAllObjects()) {
+            if (nsSearch.getTruncatedInfo() != null 
+                    && nsSearch.getTruncatedInfo()
+                    .getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(nsSearch);

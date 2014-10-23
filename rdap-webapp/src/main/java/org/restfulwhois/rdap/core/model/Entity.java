@@ -36,6 +36,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.restfulwhois.rdap.core.bean.TruncatedInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -99,10 +100,11 @@ public class Entity extends BaseModel {
     private String port43;
 
     /**
-     * 'resultsTruncated' used where a single object has been returned and data
+     * 'truncatedInfo' used where a single object has been returned and data
      * in that object has been truncated.
-     */
-    private Boolean resultsTruncated = null;
+     */    
+    @JsonIgnore
+    private TruncatedInfo truncatedInfo;
 
     /**
      * an array of IP network objects.
@@ -604,22 +606,22 @@ public class Entity extends BaseModel {
     }
 
     /**
-     * get resultsTruncated.
+     * get truncatedInfo.
      * 
-     * @return resultsTruncated.
+     * @return truncatedInfo.
      */
-    public Boolean getResultsTruncated() {
-        return resultsTruncated;
+    public TruncatedInfo getTruncatedInfo() {
+        return truncatedInfo;
     }
 
     /**
-     * set resultsTruncated.
+     * set truncatedInfo.
      * 
-     * @param resultsTruncated
-     *            resultsTruncated.
+     * @param truncatedInfo
+     *            truncatedInfo.
      */
-    public void setResultsTruncated(Boolean resultsTruncated) {
-        this.resultsTruncated = resultsTruncated;
+    public void setTruncatedInfo(TruncatedInfo truncatedInfo) {
+        this.truncatedInfo = truncatedInfo;
     }
     
     /**
@@ -627,18 +629,18 @@ public class Entity extends BaseModel {
      * 
      * @return objectClassName.
      */
-	public ObjectClassNameEnum getObjectClassName() {
-		return objectClassName;
-	}
-	
-	/**
+    public ObjectClassNameEnum getObjectClassName() {
+         return objectClassName;
+    }
+
+    /**
      * set ObjectClassNameEnum.
      * 
-     * @param objectClassNameEnum
+     * @param objectClassName
      *            objectClassName for set.
      */
-	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
-		this.objectClassName = objectClassName;
-	}
+    public void setObjectClassName(ObjectClassNameEnum objectClassName) {
+         this.objectClassName = objectClassName;
+    }
 
 }

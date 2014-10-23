@@ -202,7 +202,9 @@ public class DomainSearchController extends BaseDnrController {
         DomainSearch domainSearch =
                 searchService.searchDomain(domainSearchParam);
         if (null != domainSearch) {
-            if (domainSearch.getHasNoAuthForAllObjects()) {
+            if (domainSearch.getTruncatedInfo() != null 
+                    && domainSearch.getTruncatedInfo()
+                    .getHasNoAuthForAllObjects()) { 
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domainSearch);

@@ -230,7 +230,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.resultsTruncated").value(true))
+                //.andExpect(jsonPath("$.resultsTruncated").value(true))
                 .andExpect(jsonPath("$.nameserverSearchResults").exists())
                 .andExpect(jsonPath("$.nameserverSearchResults").isArray())
                 .andExpect(
