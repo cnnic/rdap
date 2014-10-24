@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.core.service.impl;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.core.bean.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.Notice;
@@ -112,15 +113,18 @@ public class ResponseDecorator {
         if (null == model) {
             return;
         }   
-        List<Notice> notices = noticeDao.getNoticesNoTruncated();       
+        List<Notice> notices = noticeDao.getNoticesNoTruncated();
+        //add truncated notice
         if (model instanceof BaseSearchModel<?> && ((BaseSearchModel<?>) model)
              .getTruncatedInfo().getResultsTruncated()) {
             BaseSearchModel<?> baseSearchModel 
-                = (BaseSearchModel<?>) model;
-            String reasonTypeShortName = baseSearchModel.getTruncatedInfo()
-                   .getReasonTypeShortName();
-            notices.add(CustomizeNoticeandRemark
-                    .getNoticeByReasonType(reasonTypeShortName));
+                = (BaseSearchModel<?>) model;          
+            List <TruncateReason> truncateReasons = baseSearchModel
+                   .getTruncatedInfo().getTruncateReasons();
+            for (TruncateReason truncateReason: truncateReasons) {
+                 notices.add(CustomizeNoticeandRemark
+                        .getNoticeByReasonType(truncateReason.getName()));
+            }            
         }
         model.setNotices(notices);
         LOGGER.debug("addNotices end");
