@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.core.bean.TruncatedInfo;
+import org.restfulwhois.rdap.core.bean.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.common.RdapProperties;
-
 import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.BaseModel;
@@ -118,8 +118,7 @@ public class SearchServiceImpl implements SearchService {
         if (totalCount == 0) {
             return null;
         }
-        List<T> authedObjects = new ArrayList<T>();
-        Long totalAuthedObjectSize = 0L;
+        List<T> authedObjects = new ArrayList<T>();       
         PageBean page = new PageBean();
         page.setMaxRecords(RdapProperties.getBatchsizeSearch().intValue());
         page.setRecordsCount(totalCount.intValue());
@@ -129,30 +128,26 @@ public class SearchServiceImpl implements SearchService {
         do {
             List<T> objects = queryDao.search(queryParam);
             for (T object : objects) {
+                if (authedObjects.size() == RdapProperties.getMaxsizeSearch()) {
+                    gotEnoughResults = true;                    
+                    truncatedInfo.addTruncate(
+                        TruncateReason.TRUNCATEREASON_EXLOAD);
+                    break;
+                }
                 if (authedObjects.size() < RdapProperties.getMaxsizeSearch()
                         && accessControlManager.hasPermission(object)) {
                     authedObjects.add(object);
                 }
-                if (accessControlManager.hasPermission(object)) {
-                    totalAuthedObjectSize++;
-                } else {
-                     truncatedInfo.setTruncatedReasonForAuth();
-                }
-                if (authedObjects.size() == RdapProperties.getMaxsizeSearch()
-                        && totalAuthedObjectSize > authedObjects.size()) {
-                    gotEnoughResults = true;
-                    truncatedInfo.setTruncatedReasonForExload();
-                    break;
-                }
+                if (!accessControlManager.hasPermission(object)) {
+                     truncatedInfo.addTruncate(
+                            TruncateReason.TRUNCATEREASON_AUTH);
+                }                
             }
             page.incrementCurrentPage();
         } while (page.isNotLastPage() && !gotEnoughResults
         // && authedDomains.size() < RdapProperties.getMaxsizeSearch()
         );
-        BaseSearchModel<T> searchResult = new BaseSearchModel<T>();
-        /*if (totalAuthedObjectSize > authedObjects.size()) {
-            searchResult.setResultsTruncated(true);
-        }*/
+        BaseSearchModel<T> searchResult = new BaseSearchModel<T>();        
         if (authedObjects.size() == 0) {            
             truncatedInfo.setHasNoAuthForAllObjects(true);
         }

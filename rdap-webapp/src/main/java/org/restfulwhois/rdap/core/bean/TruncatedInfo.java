@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.core.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -45,7 +44,46 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(value = {"resultsTruncated", "hasNoAuthForAllObjects",
         "reasonTypeShortName" })
-public class TruncatedInfo {    
+public class TruncatedInfo {  
+
+    /**
+     * TruncatedReason enum.
+     * 
+     * @author jiashuo
+     * 
+     */
+      public enum TruncateReason {
+        /**
+         * two  reason.
+         */
+       TRUNCATEREASON_AUTH("authorization"), TRUNCATEREASON_EXLOAD(
+               "excessiveLoad");
+        /**
+         * type name.
+         */
+        private String name;
+
+        /**
+         * NoticeType.
+         * 
+         * @param name
+         *            a string of type.
+         */
+        private TruncateReason(String name) {
+            this.name = name;
+        }
+
+        /**
+         * getName.
+         * 
+         * @return a string to get.
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
+
     /**
      * 'resultsTruncated' used where a single object has been returned and data
      * in that object has been truncated.
@@ -61,25 +99,27 @@ public class TruncatedInfo {
      * the reason of a single object has been returned and data
      * in that object has been truncated.
      */
-    private String reasonTypeShortName;
+   // private String reasonTypeShortName;
+    
+    private List<TruncateReason> truncateReasons;
     
     /**
      * reasonType authorization.
      */
-    public static final String REASONTYPE_AUTH = "authorization";
+   // public static final String REASONTYPE_AUTH = "authorization";
     
     /**
      * reasonType excessiveLoad.
      */
-    public static final String REASONTYPE_EXLOAD = "excessiveLoad";
+   // public static final String REASONTYPE_EXLOAD = "excessiveLoad";
     /**
      * reason type list.
      */
     public static final List<String> TYPES = new ArrayList<String>();
     
     static {
-        TYPES.add("'" + REASONTYPE_EXLOAD + "'");
-        TYPES.add("'" + REASONTYPE_AUTH + "'");
+        TYPES.add("'" + TruncateReason.TRUNCATEREASON_AUTH.getName() + "'");
+        TYPES.add("'" + TruncateReason.TRUNCATEREASON_EXLOAD.getName() + "'");
     }
 
     /**
@@ -121,40 +161,48 @@ public class TruncatedInfo {
     }   
 
     /**
-     * get reasonTypeShortName.
+     * get truncateReasons.
      * 
-     * @return reasonTypeShortName.
+     * @return truncateReasons.
      */
-    public String getReasonTypeShortName() {
-          return reasonTypeShortName;
+    public List<TruncateReason> getTruncateReasons() {
+          return truncateReasons;
     }
 
     /**
-     * set reasonTypeShortName.
+     * set truncateReasons.
      * 
-     * @param reasonTypeShortName
-     *            reasonTypeShortName.
+     * @param truncateReasons
+     *            truncateReasons.
      */
-    public void setReasonTypeShortName(String reasonTypeShortName) {
-        this.reasonTypeShortName = reasonTypeShortName;
+    public void setTruncateReasons(List<TruncateReason> truncateReasons) {
+        this.truncateReasons = truncateReasons;
     }   
     
     /**
      * set TruncatedReasonForAuth.
      *     
      */
-    public void setTruncatedReasonForAuth() {
-        this.reasonTypeShortName = REASONTYPE_AUTH;
-        this.resultsTruncated = true;
-    }
+   /* public void setTruncatedReasonForAuth() {
+        this.reasonTypeShortName = REASONTYPE_AUTH;       
+    }*/
     
     /**
-     * set TruncatedReasonForExload.
+     * add truncateReason.
+     * @param truncateReason
+     *  truncateReason.
      *     
-     */
-    public void setTruncatedReasonForExload() {
-        this.reasonTypeShortName = REASONTYPE_EXLOAD;
-        this.resultsTruncated = true;
-    } 
+     */   
+    
+    public void addTruncate(TruncateReason truncateReason) {
+        if (null == this.truncateReasons) {
+            this.truncateReasons = new ArrayList<TruncateReason>();
+        }
+        if (!this.truncateReasons.contains(truncateReason)) {
+            this.truncateReasons.add(truncateReason);
+            this.resultsTruncated = true;
+        }
+        
+    }
     
 }

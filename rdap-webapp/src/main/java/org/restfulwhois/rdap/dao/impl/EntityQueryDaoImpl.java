@@ -41,6 +41,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.bean.TruncatedInfo;
+import org.restfulwhois.rdap.core.bean.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.common.RdapProperties;
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
@@ -293,10 +294,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                 remarkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
         if (entity.getTruncatedInfo() != null 
                       && entity.getTruncatedInfo().getResultsTruncated()) {
-             String reasonTypeShortName = entity.getTruncatedInfo()
-                   .getReasonTypeShortName();
-            remarks.add(CustomizeNoticeandRemark
-                        .getRemarkByReasonType(reasonTypeShortName));
+             List <TruncateReason> truncateReasons = entity
+                    .getTruncatedInfo().getTruncateReasons();
+            for (TruncateReason truncateReason : truncateReasons) {
+                  remarks.add(CustomizeNoticeandRemark
+                          .getRemarkByReasonType(truncateReason.getName()));
+            }  
         }
         entity.setRemarks(remarks);
         List<Link> links =
@@ -366,7 +369,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             List<Network> truncatedNetworks =
                     networks.subList(0, maxInnerObjSize);
             entity.setNetworks(truncatedNetworks);
-            truncatedInfo.setTruncatedReasonForExload();
+            truncatedInfo.addTruncate(TruncateReason.TRUNCATEREASON_EXLOAD);
             entity.setTruncatedInfo(truncatedInfo);
         }
         if (null != autnums && autnums.size() > maxInnerObjSize) {
@@ -374,7 +377,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                     autnums.size(), maxInnerObjSize);
             List<Autnum> truncatedAutnums = autnums.subList(0, maxInnerObjSize);
             entity.setAutnums(truncatedAutnums);
-            truncatedInfo.setTruncatedReasonForExload();
+            truncatedInfo.addTruncate(TruncateReason.TRUNCATEREASON_EXLOAD);
             entity.setTruncatedInfo(truncatedInfo);
         }
     }

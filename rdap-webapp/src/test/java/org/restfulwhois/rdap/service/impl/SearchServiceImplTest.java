@@ -152,8 +152,7 @@ public class SearchServiceImplTest extends BaseTest {
         domainSearch = searchService.searchDomain(domainSearchParam);
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
-        assertEquals(6L, domainSearch.getDomainSearchResults().size());
-        assertEquals("authorization",domainSearch.getTruncatedInfo().getReasonTypeShortName());        
+        assertEquals(6L, domainSearch.getDomainSearchResults().size());                
     }
     
     /**
@@ -204,7 +203,6 @@ public class SearchServiceImplTest extends BaseTest {
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeLimit, nsSearch.getNameserverSearchResults().size());
-        assertEquals("authorization",nsSearch.getTruncatedInfo().getReasonTypeShortName());
     }
     
 }
