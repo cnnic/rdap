@@ -36,6 +36,7 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
@@ -73,7 +74,7 @@ public class QueryParserTest extends BaseTest {
     @Test
     public void testParseQ() {
         String q = "3";
-        QueryParam queryParam = queryParser.parseQueryParam(q);
+        QueryParam queryParam = QueryParamHelper.buildQueryParam(q);
         assertNotNull(queryParam);
         assertEquals(q, queryParam.getQ());
     }

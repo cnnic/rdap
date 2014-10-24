@@ -93,6 +93,22 @@ public final class IpUtil {
     }
 
     /**
+     * parse IP from ip str.
+     * 
+     * @param ip
+     *            ip str.
+     * @param ipVersion
+     *            ip version.
+     * @return IpInBytes.
+     */
+    public static IpInBytes parseIp(String ip, IpVersion ipVersion) {
+        if (ipVersion.isNotValidIp()) {
+            return null;
+        }
+        return new IpInBytes(ipVersion, ipToByteArray(ip, ipVersion));
+    }
+
+    /**
      * get hex char size.
      * 
      * @return hex char size.

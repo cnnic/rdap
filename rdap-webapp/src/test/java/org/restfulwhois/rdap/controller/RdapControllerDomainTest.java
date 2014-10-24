@@ -68,7 +68,7 @@ public class RdapControllerDomainTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
-    
+
     /**
      * output json.
      */
@@ -156,9 +156,7 @@ public class RdapControllerDomainTest extends BaseTest {
             String expectedLdhName, String expectedUnicodeName)
             throws Exception {
         mockMvc.perform(
-                get(
-                        URI_DOMAIN_Q
-                                + StringUtil.urlEncode(queryDomainName))
+                get(URI_DOMAIN_Q + StringUtil.urlEncode(queryDomainName))
                         .accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -191,15 +189,14 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.remarks[0].links[0].href").exists())
                 .andExpect(jsonPath("$.remarks[0].links[0].type").exists())
                 .andExpect(
-                        jsonPath("$.remarks[0].links[0].type").value(
-                                rdapJson))
+                        jsonPath("$.remarks[0].links[0].type").value(rdapJson))
                 // links.
                 .andExpect(
                         jsonPath("$.links[0].hreflang").value(
                                 CoreMatchers.hasItems("en", "zh")))
                 .andExpect(jsonPath("$.links[0].title").exists())
-                //objectClassName
-                 .andExpect(jsonPath("$.objectClassName").value("domain"))
+                // objectClassName
+                .andExpect(jsonPath("$.objectClassName").value("domain"))
 
         ;
     }
@@ -215,10 +212,8 @@ public class RdapControllerDomainTest extends BaseTest {
     private void commonQueryNonExistDomain(String queryDomainName)
             throws Exception {
         mockMvc.perform(
-                get(
-                        URI_DOMAIN_Q
-                                + StringUtil.urlEncode(queryDomainName))
-                        .accept(MediaType.parseMediaType(rdapJson)))
+                get(URI_DOMAIN_Q + queryDomainName).accept(
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404))
@@ -237,9 +232,7 @@ public class RdapControllerDomainTest extends BaseTest {
      */
     private void commonQueryInvalidDomain(String domainName) throws Exception {
         mockMvc.perform(
-                get(
-                        URI_DOMAIN_Q
-                                + StringUtil.urlEncode(domainName)).accept(
+                get(URI_DOMAIN_Q + StringUtil.urlEncode(domainName)).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))

@@ -34,12 +34,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.queryparam.DomainQueryParam;
-import org.restfulwhois.rdap.core.queryparam.DomainSearchParam;
 import org.restfulwhois.rdap.core.queryparam.EntityQueryParam;
-import org.restfulwhois.rdap.core.queryparam.NameserverQueryParam;
 import org.restfulwhois.rdap.core.queryparam.NetworkQueryParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.slf4j.Logger;
@@ -51,7 +48,8 @@ import org.springframework.stereotype.Component;
  * 
  * <p>
  * Methods parseQueryParam and parseXxxQueryParam, is called to generate
- * {@link org.restfulwhois.rdap.core.queryparam.QueryParam} before query service.
+ * {@link org.restfulwhois.rdap.core.queryparam.QueryParam} before query
+ * service.
  * 
  * @author jiashuo
  * 
@@ -64,17 +62,6 @@ public class QueryParser {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(QueryParser.class);
-
-    /**
-     * generate QueryParam.
-     * 
-     * @param q
-     *            query string.
-     * @return QueryParam.
-     */
-    public QueryParam parseQueryParam(String q) {
-        return new QueryParam(q);
-    }
 
     /**
      * generate DomainQueryParam.
@@ -91,34 +78,6 @@ public class QueryParser {
     }
 
     /**
-     * generate DomainSearchParam.
-     * 
-     * @param domainName
-     *            domain name.
-     * @param punyDomainName
-     *            domain puny name.
-     * @return QueryParam.
-     */
-    public QueryParam parseDomainSearchParam(String domainName,
-            String punyDomainName) {
-        return new DomainSearchParam(domainName, punyDomainName);
-    }
-
-    /**
-     * generate NameserverQueryParam.
-     * 
-     * @param nsName
-     *            nameserver name.
-     * @param punyNSName
-     *            nameserver puny name.
-     * @return QueryParam.
-     */
-    public QueryParam
-            parseNameserverQueryParam(String nsName, String punyNSName) {
-        return new NameserverQueryParam(nsName, punyNSName);
-    }
-
-    /**
      * generate IpQueryParam.
      * 
      * @param ipVersion
@@ -131,9 +90,15 @@ public class QueryParser {
      *            v4 or v6.
      * @return QueryParam.
      */
-    public QueryParam parseIpQueryParam(String cidr, IpVersion ipVersion) {
-        NetworkQueryParam param = new NetworkQueryParam(cidr, ipVersion);
-        return param;
+    public QueryParam parseIpQueryParam(String cidr) {
+        NetworkQueryParam queryParam = new NetworkQueryParam(cidr);
+        try {
+            queryParam.fillParam();
+        } catch (Exception e) {
+            LOGGER.error("parseIpQueryParam error:{}", e);
+            return null;
+        }
+        return queryParam;
     }
 
     /**

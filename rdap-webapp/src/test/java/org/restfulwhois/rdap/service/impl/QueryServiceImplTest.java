@@ -41,6 +41,7 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.common.RdapProperties;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.core.model.Autnum;
@@ -109,7 +110,7 @@ public class QueryServiceImplTest extends BaseTest {
     public void testQueryEntity() {
         String handle = "h1";
         Entity entity =
-                queryService.queryEntity(queryParser.parseQueryParam(handle));
+                queryService.queryEntity(QueryParamHelper.buildQueryParam(handle));
         Assert.notNull(entity);
         assertEquals(handle, entity.getHandle());
         assertEquals("individual", entity.getKind());
@@ -131,7 +132,7 @@ public class QueryServiceImplTest extends BaseTest {
         String autnumStr = "1";
         Autnum autnum =
                 queryService
-                        .queryAutnum(queryParser.parseQueryParam(autnumStr));
+                        .queryAutnum(QueryParamHelper.buildQueryParam(autnumStr));
         Assert.notNull(autnum);
         assertEquals(autnum.getId(), Long.valueOf(autnumStr));
         assertEquals(autnum.getCountry(), "zh");

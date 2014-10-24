@@ -32,20 +32,41 @@ package org.restfulwhois.rdap.core.queryparam;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.restfulwhois.rdap.core.model.DomainSearchType;
 
 /**
  * base search parameter bean.
  * 
- * @author xuyao
+ * @author jiashuo
  * 
  */
-public class DomainSearchParam extends QueryParam {
+public abstract class DomainSearchParam extends QueryParam {
+
+    /**
+     * construnction.
+     */
+    public DomainSearchParam() {
+        super();
+    }
+
+    /**
+     * check if support type.
+     * 
+     * @param searchType
+     *            searchType.
+     * @return true if support, false if not.
+     */
+    public boolean supportSearchType(DomainSearchType searchType) {
+        return false;
+    }
 
     /**
      * constructor.
      * 
-     * @param q search string.
-     * @param punyName domain puny name.
+     * @param q
+     *            search string.
+     * @param punyName
+     *            domain puny name.
      */
     public DomainSearchParam(String q, String punyName) {
         super(q);
@@ -104,13 +125,13 @@ public class DomainSearchParam extends QueryParam {
         }
         return fullTld;
     }
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this).append(getQ()).append(punyName)
                 .toString();
     }
-    
+
     /**
      * search by domain name, nsLdhName, nsIp.
      */
@@ -128,11 +149,11 @@ public class DomainSearchParam extends QueryParam {
     /**
      * set method for SearchByParam.
      * 
-     *  @param searchByParam
-     *               searchByParam.
+     * @param searchByParam
+     *            searchByParam.
      */
     public void setSearchByParam(String searchByParam) {
         this.searchByParam = searchByParam;
     }
-    
+
 }

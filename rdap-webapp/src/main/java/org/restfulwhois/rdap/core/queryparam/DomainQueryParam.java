@@ -30,8 +30,15 @@
  */
 package org.restfulwhois.rdap.core.queryparam;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.restfulwhois.rdap.core.common.util.DomainUtil;
+import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.core.validation.validator.DomainNameValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * base query parameter bean.
@@ -40,6 +47,51 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * 
  */
 public class DomainQueryParam extends QueryParam {
+    /**
+     * DOMAIN_NAME_VALIDATOR.
+     */
+    private static final DomainNameValidator DOMAIN_NAME_VALIDATOR =
+            new DomainNameValidator();
+    /**
+     * logger.
+     */
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+    @Override
+    protected void initValidators() {
+        addValidator(DOMAIN_NAME_VALIDATOR);
+    }
+
+    /**
+     * construction.
+     * 
+     * @param request
+     *            request.
+     */
+    public DomainQueryParam(HttpServletRequest request) {
+        super(request);
+    }
+
+    @Override
+    public void fillParam() throws Exception {
+        String domainName = getLastSplitInURI(getRequest());
+        super.setOriginalQ(domainName);
+        String decodeDomain =
+                DomainUtil.urlDecodeAndReplaceAsciiToLowercase(domainName);
+        super.setQ(decodeDomain);
+    }
+
+    @Override
+    public void convertParam() throws Exception {
+        String decodeDomain = getQ();
+        decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
+        LOGGER.debug("after foldCaseAndNormalization: {}", decodeDomain);
+        // long lable exception
+        String punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
+        decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
+        super.setQ(decodeDomain);
+        setPunyName(punyDomainName);
+    }
 
     /**
      * constructor.
@@ -106,11 +158,11 @@ public class DomainQueryParam extends QueryParam {
         }
         return fullTld;
     }
-    
+
     @Override
     public String toString() {
         return new ToStringBuilder(this).append(getQ()).append(punyName)
                 .toString();
     }
-    
+
 }

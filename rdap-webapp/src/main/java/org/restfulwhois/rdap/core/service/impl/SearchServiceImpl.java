@@ -36,7 +36,6 @@ import java.util.List;
 import org.restfulwhois.rdap.core.bean.TruncatedInfo;
 import org.restfulwhois.rdap.core.bean.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.common.RdapProperties;
-import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.Domain;
@@ -47,9 +46,9 @@ import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.restfulwhois.rdap.core.service.AccessControlManager;
 import org.restfulwhois.rdap.core.service.SearchService;
 import org.restfulwhois.rdap.search.bean.BaseSearchModel;
-import org.restfulwhois.rdap.search.bean.DomainSearch;
-import org.restfulwhois.rdap.search.bean.EntitySearch;
-import org.restfulwhois.rdap.search.bean.NameserverSearch;
+import org.restfulwhois.rdap.search.domain.bean.DomainSearch;
+import org.restfulwhois.rdap.search.entity.bean.EntitySearch;
+import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -77,13 +76,13 @@ public class SearchServiceImpl implements SearchService {
      * domain dao.
      */
     @Autowired
-    private QueryDao<Domain> domainDao;
+    private QueryDao<Domain> domainSearchDao;
 
     /**
      * nameserver dao.
      */
     @Autowired
-    private QueryDao<Nameserver> nameserverDao;
+    private QueryDao<Nameserver> nameserverSearchDao;
     /**
      * access control manager.
      */
@@ -94,26 +93,26 @@ public class SearchServiceImpl implements SearchService {
      * entity dao.
      */
     @Autowired
-    private QueryDao<Entity> entityDao;
+    private QueryDao<Entity> entitySearchDao;
 
     /**
      * common search.
      * 
      * @param queryParam
      *            queryParam.
-     * @param queryDao
-     *            queryDao.
+     * @param searchDao
+     *            searchDao.
      * @param <T>
      *            model in the base search.
      * @return BaseSearchModel.
      */
     private <T extends BaseModel> BaseSearchModel<T> search(
-            QueryParam queryParam, QueryDao<T> queryDao) {
+            QueryParam queryParam, QueryDao<T> searchDao) {
         
         LOGGER.debug("search QueryParam:" + queryParam 
-                                + ",QueryDao:" + queryDao);
+                                + ",QueryDao:" + searchDao);
         
-        Long totalCount = queryDao.searchCount(queryParam);
+        Long totalCount = searchDao.searchCount(queryParam);
         LOGGER.debug("search count is " + totalCount);
         if (totalCount == 0) {
             return null;
@@ -126,7 +125,7 @@ public class SearchServiceImpl implements SearchService {
         boolean gotEnoughResults = false;
         TruncatedInfo truncatedInfo = new TruncatedInfo();
         do {
-            List<T> objects = queryDao.search(queryParam);
+            List<T> objects = searchDao.search(queryParam);
             for (T object : objects) {
                 if (authedObjects.size() == RdapProperties.getMaxsizeSearch()) {
                     gotEnoughResults = true;                    
@@ -168,7 +167,7 @@ public class SearchServiceImpl implements SearchService {
     public DomainSearch searchDomain(QueryParam queryParam) {
         LOGGER.debug("searchDomain QueryParam:" + queryParam);
         BaseSearchModel<Domain> searchResult = this.search(queryParam,
-                domainDao);
+                domainSearchDao);
         LOGGER.debug("searchDomain searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
@@ -190,7 +189,7 @@ public class SearchServiceImpl implements SearchService {
     public NameserverSearch searchNameserver(QueryParam queryParam) {
         LOGGER.debug("searchNameserver QueryParam:" + queryParam);
         BaseSearchModel<Nameserver> searchResult = this.search(queryParam,
-                nameserverDao);
+                nameserverSearchDao);
         LOGGER.debug("searchNameserver searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
@@ -213,7 +212,7 @@ public class SearchServiceImpl implements SearchService {
     public EntitySearch searchEntity(QueryParam queryParam) {
         LOGGER.debug("searchEntity QueryParam:" + queryParam);
         BaseSearchModel<Entity> searchResult = this.search(queryParam,
-                entityDao);
+                entitySearchDao);
         LOGGER.debug("searchEntity searchResult:" + searchResult);
         if (null == searchResult) {
             return null;

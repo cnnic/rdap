@@ -30,47 +30,23 @@
  */
 package org.restfulwhois.rdap.core.queryparam;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * base query parameter bean.
  * 
  * @author weijunkai
+ * @author jiashuo
  * 
  */
-public class NameserverQueryParam extends DomainQueryParam {
+abstract public class NameserverQueryParam extends DomainQueryParam {
 
     /**
-     * constructor.
-     * 
-     * @param q
-     *            for query string.
-     * @param punyName
-     *            nameserver puny name.
+     * construction.
+     * @param request
      */
-    public NameserverQueryParam(String q, String punyName) {
-        super(q, punyName);
+    public NameserverQueryParam(HttpServletRequest request) {
+        super(request);
     }
 
-    /**
-     * isSearchByIp for ipSearch.
-     */
-    private boolean isSearchByIp = false;
-
-    /**
-     * getIsSearchByIp.
-     * 
-     * @return bool flag.
-     */
-    public boolean getIsSearchByIp() {
-        return isSearchByIp;
-    }
-
-    /**
-     * setIsSearchByIp .
-     * 
-     * @param isSearchByIp
-     *            boolean.
-     */
-    public void setIsSearchByIp(boolean isSearchByIp) {
-        this.isSearchByIp = isSearchByIp;
-    }
 }

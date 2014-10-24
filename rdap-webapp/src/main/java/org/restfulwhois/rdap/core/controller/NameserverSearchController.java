@@ -30,20 +30,24 @@
  */
 package org.restfulwhois.rdap.core.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
-import org.restfulwhois.rdap.core.queryparam.NameserverQueryParam;
-import org.restfulwhois.rdap.search.bean.NameserverSearch;
+import org.restfulwhois.rdap.core.model.NameserverSearchType;
+import org.restfulwhois.rdap.core.queryparam.NameserverSearchByIpParam;
+import org.restfulwhois.rdap.core.queryparam.NameserverSearchByNameParam;
+import org.restfulwhois.rdap.core.queryparam.NameserverSearchParam;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +68,48 @@ public class NameserverSearchController extends BaseDnrController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverSearchController.class);
+    private static List<NameserverSearchParam> searchParams =
+            new ArrayList<NameserverSearchParam>();
+    static {
+        searchParams.add(new NameserverSearchByNameParam());
+        searchParams.add(new NameserverSearchByIpParam());
+    }
+
+    private NameserverSearchParam
+            createNsSearchParam(HttpServletRequest request) {
+        NameserverSearchType searchType = parseSearchType(request);
+        if (null == searchType) {
+            return null;
+        }
+        for (NameserverSearchParam domainSearchParam : searchParams) {
+            if (domainSearchParam.supportSearchType(searchType)) {
+                NameserverSearchParam result =
+                        BeanUtils.instantiate(domainSearchParam.getClass());
+                result.setRequest(request);
+                return result;
+            }
+        }
+        return null;
+    }
+
+    public NameserverSearchType parseSearchType(HttpServletRequest request) {
+        try {
+            String lastSpliInURI = QueryParam.getLastSplitInURI(request);
+            if (!"nameservers".equals(lastSpliInURI)) {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        final String[] allSearchType = NameserverSearchType.valuesOfString();
+        String paramName = QueryParam.getFirstParameter(request, allSearchType);
+        if (StringUtils.isBlank(paramName)) {
+            return null;
+        }
+        NameserverSearchType searchType =
+                NameserverSearchType.getByName(paramName);
+        return searchType;
+    }
 
     /**
      * 
@@ -97,72 +143,20 @@ public class NameserverSearchController extends BaseDnrController {
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response)
             throws DecodeException {
-        String lastSpliInURI = queryParser.getLastSplitInURI(request);
-        if (!"nameservers".equals(lastSpliInURI)) {
+        NameserverSearchParam nsSearchParam = createNsSearchParam(request);
+        if (null == nsSearchParam) {
             return RestResponseUtil.createResponse400();
         }
-        final String strIp = "ip";
-        final String strName = "name";
-        NameserverQueryParam nsQueryParam = null;
-        final String[] strParamOrg = {
-                strIp, strName };
-        String nameParam = queryParser.getFirstParameter(request, strParamOrg);
-        if (StringUtils.isBlank(nameParam)) {
-            return RestResponseUtil.createResponse400();
-        }
-        if (0 == nameParam.compareTo(strIp)) {
-            // search by IP
-            name = queryParser.getParameter(request, strIp);
-            // checkIP
-            IpVersion ipVersion = IpUtil.getIpVersionOfIp(name);
-            if (ipVersion.isNotValidIp()) {
-                return RestResponseUtil.createResponse400();
-            }
-            name = StringUtils.lowerCase(name);
-            nsQueryParam =
-                    (NameserverQueryParam) queryParser
-                            .parseNameserverQueryParam(name, name);
-            nsQueryParam.setIsSearchByIp(true);
-        } else if (0 == nameParam.compareTo(strName)) {
-            // search by name
-            name = queryParser.getParameter(request, strName);
-            String decodeNameserver = name;
+        return super.query(nsSearchParam);
 
-            try {
-                decodeNameserver = DomainUtil.iso8859Decode(name);
-                decodeNameserver =
-                        DomainUtil
-                                .urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
-            } catch (Exception e) {
-                return RestResponseUtil.createResponse400();
-            }
-            if (StringUtils.isBlank(decodeNameserver)) {
-                return RestResponseUtil.createResponse400();
-            }
-            if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
-                return RestResponseUtil.createResponse422();
-            }
-            if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
-                return RestResponseUtil.createResponse400();
-            }
-            decodeNameserver =
-                    StringUtil.foldCaseAndNormalization(decodeNameserver);
-            decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
+    }
 
-            nsQueryParam =
-                    (NameserverQueryParam) queryParser
-                            .parseNameserverQueryParam(decodeNameserver,
-                                    decodeNameserver);
-            nsQueryParam.setIsSearchByIp(false);
-        } else {
-            return RestResponseUtil.createResponse400();
-        }
-        NameserverSearch nsSearch =
-                searchService.searchNameserver(nsQueryParam);
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
+        NameserverSearch nsSearch = searchService.searchNameserver(queryParam);
         if (null != nsSearch) {
-            if (nsSearch.getTruncatedInfo() != null 
-                    && nsSearch.getTruncatedInfo()
-                    .getHasNoAuthForAllObjects()) {
+            if (nsSearch.getTruncatedInfo() != null
+                    && nsSearch.getTruncatedInfo().getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(nsSearch);

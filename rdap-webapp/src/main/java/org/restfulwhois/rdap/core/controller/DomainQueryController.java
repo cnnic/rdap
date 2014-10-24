@@ -32,10 +32,10 @@ package org.restfulwhois.rdap.core.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
+import org.restfulwhois.rdap.core.model.Domain;
+import org.restfulwhois.rdap.core.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,30 +92,38 @@ public class DomainQueryController extends BaseDnrController {
     @ResponseBody
     public ResponseEntity queryDomain(@PathVariable String domainName,
             HttpServletRequest request) throws DecodeException {
-        domainName = queryParser.getLastSplitInURI(request);
-        String decodeDomain = domainName;
-        String punyDomainName = decodeDomain;
-        decodeDomain =
-                DomainUtil.urlDecodeAndReplaceAsciiToLowercase(domainName);
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeDomain, false)) {
-            return RestResponseUtil.createResponse400();
-        }
-        decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
-        LOGGER.debug("after foldCaseAndNormalization: {}", decodeDomain);
-        try {
-            // long lable exception
-            punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
-        } catch (Exception e) {
-            return RestResponseUtil.createResponse400();
-        }
-        decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
+        QueryParam queryParam = new DomainQueryParam(request);
+        return super.query(queryParam);
+    }
 
-        QueryParam queryParam =
-                queryParser.parseDomainQueryParam(decodeDomain, punyDomainName);
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryDomainInThisRegistry(queryParam);
         }
-        return queryRedirectDomainOrNs(queryParam, domainName);
+        return queryRedirectDomainOrNs(queryParam, queryParam.getOriginalQ());
+    }
+
+    /**
+     * query domain in this registry.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return ResponseEntity.
+     */
+    protected ResponseEntity queryDomainInThisRegistry(QueryParam queryParam) {
+        LOGGER.debug("   queryDomainInThisRegistry:{}", queryParam);
+        Domain domain = queryService.queryDomain(queryParam);
+        if (null != domain) {
+            LOGGER.debug("   found domain:{}", queryParam);
+            if (!accessControlManager.hasPermission(domain)) {
+                return RestResponseUtil.createResponse403();
+            }
+            responseDecorator.decorateResponse(domain);
+            return RestResponseUtil.createResponse200(domain);
+        }
+        LOGGER.debug("   domain not found,return 404. {}", queryParam);
+        return RestResponseUtil.createResponse404();
     }
 
 }

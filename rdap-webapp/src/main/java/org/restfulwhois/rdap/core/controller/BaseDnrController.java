@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.core.controller;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
-import org.restfulwhois.rdap.core.model.Domain;
 import org.restfulwhois.rdap.core.model.QueryUri;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.NameserverQueryParam;
@@ -81,28 +80,6 @@ public class BaseDnrController extends BaseController {
             return RestResponseUtil.createResponse301(redirectUrl);
         }
         LOGGER.debug("   redirect not found.{},return 404.", queryParam);
-        return RestResponseUtil.createResponse404();
-    }
-
-    /**
-     * query domain in this registry.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return ResponseEntity.
-     */
-    protected ResponseEntity queryDomainInThisRegistry(QueryParam queryParam) {
-        LOGGER.debug("   queryDomainInThisRegistry:{}", queryParam);
-        Domain domain = queryService.queryDomain(queryParam);
-        if (null != domain) {
-            LOGGER.debug("   found domain:{}", queryParam);
-            if (!accessControlManager.hasPermission(domain)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(domain);
-            return RestResponseUtil.createResponse200(domain);
-        }
-        LOGGER.debug("   domain not found,return 404. {}", queryParam);
         return RestResponseUtil.createResponse404();
     }
 

@@ -38,6 +38,7 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.Autnum;
@@ -76,7 +77,7 @@ public class AutnumQueryDaoTest extends BaseTest {
     public void testQueryExistAutnum() {
         String autnumStr = "1";
         Autnum autnum =
-                autnumQueryDao.query(queryParser.parseQueryParam(autnumStr));
+                autnumQueryDao.query(QueryParamHelper.buildQueryParam(autnumStr));
         Assert.notNull(autnum);
         assertEquals(autnum.getId(), Long.valueOf(autnumStr));
         assertEquals(autnum.getCountry(), "zh");
@@ -98,8 +99,7 @@ public class AutnumQueryDaoTest extends BaseTest {
     public void testQueryNonExistAutnum() {
         String nonExistAutnumStr = "1000";
         Autnum autnum =
-                autnumQueryDao.query(queryParser
-                        .parseQueryParam(nonExistAutnumStr));
+                autnumQueryDao.query(QueryParamHelper.buildQueryParam(nonExistAutnumStr));
         Assert.isNull(autnum);
     }
 }

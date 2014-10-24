@@ -30,8 +30,7 @@
  */
 package org.restfulwhois.rdap.core.controller;
 
-import java.util.List;
-
+import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.controller.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
@@ -39,8 +38,9 @@ import org.restfulwhois.rdap.core.service.AccessControlManager;
 import org.restfulwhois.rdap.core.service.QueryService;
 import org.restfulwhois.rdap.core.service.SearchService;
 import org.restfulwhois.rdap.core.service.impl.ResponseDecorator;
+import org.restfulwhois.rdap.core.validation.HttpValidationError;
+import org.restfulwhois.rdap.core.validation.ValidationError;
 import org.restfulwhois.rdap.core.validation.ValidationResult;
-import org.restfulwhois.rdap.core.validation.Validator;
 import org.restfulwhois.rdap.redirect.service.RedirectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +127,6 @@ public class BaseController {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(BaseController.class);
 
-    private List<Validator> validators;
     /**
      * query service.
      */
@@ -169,11 +168,32 @@ public class BaseController {
      * @return ResponseEntity.
      */
     protected ResponseEntity query(QueryParam queryParam) {
-        ValidationResult result = validate(queryParam);
+        try {
+            queryParam.fillParam();
+        } catch (Exception e) {
+            return RestResponseUtil.createResponse400();
+        }
+        ValidationResult result = validateParam(queryParam);
         if (result.hasError()) {
             // handle error and return.
+            return handleError(result);
+        }
+        try {
+            queryParam.convertParam();
+        } catch (Exception e) {
+            return RestResponseUtil.createResponse400();
         }
         return doQuery(queryParam);
+    }
+
+    private ResponseEntity handleError(ValidationResult result) {
+        ValidationError error = result.getFirstError();
+        if (null != error) {
+            HttpValidationError httpError = (HttpValidationError) error;
+            return RestResponseUtil.createCommonErrorResponse(httpError
+                    .getStatusCode());
+        }
+        return RestResponseUtil.createResponse400();
     }
 
     /**
@@ -194,11 +214,8 @@ public class BaseController {
      *            queryParam.
      * @return ValidationResult.
      */
-    protected ValidationResult validate(QueryParam queryParam) {
-        ValidationResult validationResult = new ValidationResult();
-        for (Validator validator : validators) {
-            validator.validate(queryParam, validationResult);
-        }
+    protected ValidationResult validateParam(QueryParam queryParam) {
+        ValidationResult validationResult = queryParam.validate();
         return validationResult;
     }
 

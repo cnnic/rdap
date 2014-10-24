@@ -40,8 +40,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.dao.QueryDao;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.ModelType;
@@ -166,7 +166,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      *            query string.
      * @return string.
      */
-    protected String generateLikeClause(String q) {
+    public static String generateLikeClause(String q) {
         if (StringUtils.isBlank(q)) {
             return q;
         }

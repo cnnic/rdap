@@ -36,6 +36,7 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.controller.support.QueryParser;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
@@ -76,19 +77,19 @@ public class AutnumRedirectDaoTest extends BaseTest {
     public void testQueryExist() {
         // min
         String autnumStr = "1";
-        QueryParam queryParam = queryParser.parseQueryParam(autnumStr);
+        QueryParam queryParam = QueryParamHelper.buildQueryParam(autnumStr);
         RedirectResponse redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         // middle
         autnumStr = "50";
-        queryParam = queryParser.parseQueryParam(autnumStr);
+        queryParam = QueryParamHelper.buildQueryParam(autnumStr);
         redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
         // max
         autnumStr = "100";
-        queryParam = queryParser.parseQueryParam(autnumStr);
+        queryParam = QueryParamHelper.buildQueryParam(autnumStr);
         redirect = redirectDao.query(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
@@ -102,11 +103,11 @@ public class AutnumRedirectDaoTest extends BaseTest {
     @DatabaseSetup("autnum-redirect.xml")
     public void testQueryNotExist() {
         String autnumStr = "0";
-        QueryParam queryParam = queryParser.parseQueryParam(autnumStr);
+        QueryParam queryParam = QueryParamHelper.buildQueryParam(autnumStr);
         RedirectResponse redirect = redirectDao.query(queryParam);
         assertNull(redirect);
         autnumStr = "101";
-        queryParam = queryParser.parseQueryParam(autnumStr);
+        queryParam = QueryParamHelper.buildQueryParam(autnumStr);
         redirect = redirectDao.query(queryParam);
         assertNull(redirect);
     }

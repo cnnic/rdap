@@ -33,11 +33,11 @@ package org.restfulwhois.rdap.core.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Entity;
+import org.restfulwhois.rdap.core.queryparam.EntityQueryParam;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -84,14 +84,14 @@ public class EntityQueryController extends BaseController {
             HttpServletRequest request, HttpServletResponse response)
             throws DecodeException {
         LOGGER.debug("query entity,handle:" + handle);
-        handle = queryParser.getLastSplitInURI(request);
-        handle = StringUtils.trim(handle);
-        if (!StringUtil.isValidEntityHandleOrName(handle)) {
-            return RestResponseUtil.createResponse400();
-        }
-        handle = StringUtil.foldCaseAndNormalization(handle);
-        Entity result =
-                queryService.queryEntity(queryParser.parseQueryParam(handle));
+        EntityQueryParam entityQueryParam = new EntityQueryParam(request);
+        return super.query(entityQueryParam);
+    }
+
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
+        EntityQueryParam entityQueryParam = (EntityQueryParam) queryParam;
+        Entity result = queryService.queryEntity(entityQueryParam);
         if (null != result) {
             if (!accessControlManager.hasPermission(result)) {
                 return RestResponseUtil.createResponse403();

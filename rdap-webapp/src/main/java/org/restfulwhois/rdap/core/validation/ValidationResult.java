@@ -63,4 +63,11 @@ public class ValidationResult {
     public boolean hasError() {
         return errors.size() > 0;
     }
+
+    public ValidationError getFirstError() {
+        if (!hasError()) {
+            return null;
+        }
+        return errors.get(0);
+    }
 }

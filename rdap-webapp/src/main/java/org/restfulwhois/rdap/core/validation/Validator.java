@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.core.validation;
 
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 
@@ -78,6 +79,6 @@ public interface Validator {
      *            {@code null})
      * @see ValidationUtils
      */
-    void validate(Object target, ValidationResult validationResult);
+    void validate(QueryParam queryParam, ValidationResult validationResult);
 
 }
