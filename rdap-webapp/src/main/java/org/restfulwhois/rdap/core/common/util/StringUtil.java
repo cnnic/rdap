@@ -295,7 +295,7 @@ public final class StringUtil {
         String result = str;
         try {
             UriComponents uriComponents =
-                    UriComponentsBuilder.fromHttpUrl(str).build();
+                    UriComponentsBuilder.fromUriString(str).build();
             return uriComponents.encode().toUriString();
         } catch (Exception e) {
             LOGGER.error(e.getMessage());

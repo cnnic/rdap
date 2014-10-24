@@ -271,11 +271,18 @@ public class StringUtilTest extends BaseTest {
             throws UnsupportedEncodingException {
         String url = "http://cnnic.cn:8301/rdap/entity/";
         String param = "中文  中国";
-        String qEncode = URLEncoder.encode(param, "UTF-8");
         String result = StringUtil.urlEncode(url + param);
         assertEquals(
                 "http://cnnic.cn:8301/rdap/entity/%E4%B8%AD%E6%96%87%20%20%E4%B8%AD%E5%9B%BD",
                 result);
+    }
+
+    @Test
+    public void test_encodedURL_with_special_char()
+            throws UnsupportedEncodingException {
+        String url = "http://cnnic.cn:8301/rdap/entity?a=b#c=d";
+        String result = StringUtil.urlEncode(url);
+        assertEquals("http://cnnic.cn:8301/rdap/entity?a=b#c=d", result);
     }
 
     /**
@@ -303,9 +310,8 @@ public class StringUtilTest extends BaseTest {
     @Test
     public void testDecodedURLForIDN() throws UnsupportedEncodingException {
         String decodedURL = "http://网络中心.中国/链接1\\a?a=b#c=d";
-        String encodeURL = URLEncoder.encode(decodedURL, "UTF-8");
         String expectURL =
-                "http://%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%BF%83.%E4%B8%AD%E5%9B%BD/%E9%93%BE%E6%8E%A51%5Ca?a=b%23c%3Dd";
+                "http://%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%BF%83.%E4%B8%AD%E5%9B%BD/%E9%93%BE%E6%8E%A51%5Ca?a=b#c=d";
         String result = StringUtil.urlEncode(decodedURL);
         assertEquals(expectURL, result);
     }
