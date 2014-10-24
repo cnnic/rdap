@@ -37,6 +37,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * base notice class.
@@ -44,6 +45,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author jiashuo
  * 
  */
+@JsonPropertyOrder({
+    "title", "type", "description", "links" })
 public abstract class BaseNotice extends BaseModel {
 
     /**
