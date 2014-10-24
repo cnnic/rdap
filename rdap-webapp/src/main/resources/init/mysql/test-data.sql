@@ -19,16 +19,10 @@ INSERT INTO `RDAP_AUTNUM_REDIRECT` (`AS_REDIRECT_ID`,`START_AUTNUM`,`END_AUTNUM`
 INSERT INTO `RDAP_AUTNUM_STATUS` (`AS_STATUS_ID`,`AS_ID`,`STATUS`) VALUES (1,1,'validated'),(2,2,'transfer prohibited'),(3,3,'private'),(4,4,'associated'),(5,5,'active'),(6,6,'pending update');
 
 #
-# Data for table "RDAP_CONFORMANCE"
-#
-
-INSERT INTO `RDAP_CONFORMANCE` (`CONFORMANCE_ID`,`RDAP_CONFORMANCE`) VALUES (1,'rdap_level_0');
-
-#
 # Data for table "RDAP_DOMAIN"
 #
 
-INSERT INTO `RDAP_DOMAIN` (`DOMAIN_ID`,`HANDLE`,`LDH_NAME`,`UNICODE_NAME`,`PORT43`,`LANG`,`TYPE`,`NETWORK_ID`) VALUES (1,'dt-1','xn--123123.cn','xn--123123.cn','example.com','en','dnr',NULL),(2,'dt-2','cnnic.cn','cnnic.cn','whois.example.cn','en','dnr',NULL),(3,'dt-3','xn--fiqa61au8b7zsevnm8ak20mc4a87e.cn','中国互联网络信息中心.cn','cnnic.cn','en','dnr',NULL),(4,'dt-4','xn--elaaaa.xn--fiqs8s','ȅȅȅȅ.中国','cnnic.cn','en','dnr',NULL),(5,'dt-5','xn--fiq8iy4u6s7b8bb.cn','中国互联网.cn','whois.example.cn','en','dnr',NULL),(6,'dt-6','example.cn','example.cn','whois.example.cn','en','dnr',NULL),(7,'dt-7','xn--0zwm56d.xn--fiqs8s','测试.中国','cnnic.cn','en','dnr',NULL),(8,'dt-8','xn--1231234.cn','xn--1231234.cn','cnnic.cn','en','dnr',NULL),(9,'dt-9','0.0.cn','0.0.cn','cnnic.cn','en','dnr',NULL),(10,'dt-10','0.1.cn','0.1.cn','cnnic.cn','en','dnr',NULL),(11,'dt-11','xn--fiqa61au8b7zsevnm8ak20mc4a87e.xn--fiqs8s','中国互联网络信息中心.中国','cnnic.cn','en','dnr',NULL);
+INSERT INTO `RDAP_DOMAIN` (`DOMAIN_ID`,`HANDLE`,`LDH_NAME`,`UNICODE_NAME`,`PORT43`,`LANG`,`TYPE`,`NETWORK_ID`) VALUES (1,'dt-1','xn--123123.cn','xn--123123.cn','example.com','en','dnr',NULL),(2,'dt-2','cnnic.cn','cnnic.cn','whois.example.cn','en','dnr',NULL),(3,'dt-3','xn--fiqa61au8b7zsevnm8ak20mc4a87e.cn','中国互联网络信息中心.cn','cnnic.cn','en','dnr',NULL),(4,'dt-4','xn--elaaaa.xn--fiqs8s','ȅȅȅȅ.中国','cnnic.cn','en','dnr',NULL),(5,'dt-5','xn--fiq8iy4u6s7b8bb.cn','中国互联网.cn','whois.example.cn','en','dnr',NULL),(6,'dt-6','example.cn','example.cn','whois.example.cn','en','dnr',NULL),(7,'dt-7','xn--0zwm56d.xn--fiqs8s','测试.中国','cnnic.cn','en','dnr',NULL),(8,'dt-8','xn--1231234.cn','xn--1231234.cn','cnnic.cn','en','dnr',NULL),(9,'dt-9','0.0.cn','0.0.cn','cnnic.cn','en','dnr',NULL),(10,'dt-10','0.1.cn','0.1.cn','cnnic.cn','en','dnr',NULL),(11,'dt-11','xn--fiqa61au8b7zsevnm8ak20mc4a87e.xn--fiqs8s','中国互联网络信息中心.中国','cnnic.cn','en','dnr',NULL),(12,'dt-arpa-v4','111.241.218.in-addr.arpa','111.241.218.in-addr.arpa','example.com','en','arpa',2),(13,'dt-arpa-v6','F.F.F.F.F.F.F.F.F.F.F.F.F.1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.ip6.arpa','F.F.F.F.F.F.F.F.F.F.F.F.F.1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.ip6.arpa','example.com','en','arpa',7);
 
 #
 # Data for table "RDAP_DOMAIN_REDIRECT"
@@ -61,12 +55,6 @@ INSERT INTO `RDAP_ENTITY` (`ENTITY_ID`,`HANDLE`,`KIND`,`FN`,`EMAIL`,`TITLE`,`ORG
 INSERT INTO `RDAP_ENTITY_STATUS` (`ENTITY_STATUS_ID`,`ENTITY_ID`,`STATUS`) VALUES (1,1,'active'),(2,2,'delete prohibited'),(3,3,'active'),(4,4,'active'),(5,5,'active');
 
 #
-# Data for table "RDAP_ERRORMESSAGE"
-#
-
-INSERT INTO `RDAP_ERRORMESSAGE` (`ERROR_ID`,`ERROR_CODE`,`TITLE`,`DESCRIPTION`,`LANG`) VALUES (1,400,'BAD REQUEST','BAD REQUEST','en'),(2,404,'NOT FOUND','NOT FOUND','en'),(3,500,'INTERNAL SERVER ERROR','INTERNAL SERVER ERROR','en'),(4,405,'METHOD NOT ALLOWED','METHOD NOT ALLOWED','en'),(5,415,'UNSUPPORTED MEDIA TYPE','UNSUPPORTED MEDIA TYPE','en'),(6,422,'UNPROCESSABLE ENTITY','UNPROCESSABLE ENTITY','en'),(7,401,'Unauthorized','Unauthorized','en'),(8,403,'Forbidden','Forbidden','en'),(9,509,'Bandwidth Limit Exceeded','Bandwidth Limit Exceeded','en'),(10,429,'Too Many Requests','Too Many Requests','en');
-
-#
 # Data for table "RDAP_EVENT"
 #
 
@@ -97,13 +85,13 @@ INSERT INTO `RDAP_IDENTITY_USER` (`USER_ID`,`USER_NAME`,`USER_PWD`) VALUES (0,'c
 # Data for table "RDAP_IP"
 #
 
-INSERT INTO `RDAP_IP` (`IP_ID`,`HANDLE`,`STARTLOWADDRESS`,`STARTHIGHADDRESS`,`ENDLOWADDRESS`,`ENDHIGHADDRESS`,`VERSION`,`NAME`,`TYPE`,`COUNTRY`,`PARENT_HANDLE`,`LANG`,`PORT43`) VALUES (1,'218.241.111.1-v4',3673255681,0,3673255681,0,'v4','cnnic-1','DIRECT ALLOCATION','CN','218.241.111.1/24-v4','en','whois.cnnic.cn'),(2,'218.241.111.1/24-v4',3673255680,NULL,3673255935,NULL,'v4','cnnic-2','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn'),(3,'218.0.0.3-v4',3657433091,NULL,3657433091,NULL,'v4','cnnic-3','DIRECT ALLOCATION','CN',NULL,'en','whois.cnnic.cn'),(4,'218.241.0.0-218.241.0.3-v4',3673227264,0,3673227267,0,'v4','cnnic-4','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn'),(5,'111.255.0.0-111.255.255.255-v4',1878982656,0,1879048191,0,'v4','cnnic-5','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn'),(6,'3000:0DB8:0000:0000:0000:0000:1428:0000-v6',338165760,3458779597745684480,338165760,3458779597745684480,'v6','cnnic-6','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn'),(7,'3000:0000:0000:001F:FFFF:FFFF:FFFF:0000-3000:0000:0000:001F:FFFF:FFFF:FFFF:FFFF',18446744073709486080,3458764513820540959,18446744073709551615,3458764513820540959,'v6','cnnic-7','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn');
+INSERT INTO `RDAP_IP` (`IP_ID`,`HANDLE`,`ENDADDRESS`,`STARTADDRESS`,`VERSION`,`NAME`,`TYPE`,`COUNTRY`,`PARENT_HANDLE`,`LANG`,`PORT43`,`CIDR`) VALUES (1,'218.241.111.1-v4',X'DAF16F01',X'DAF16F01','v4','cnnic-1','DIRECT ALLOCATION','CN','218.241.111.1/24-v4','en','whois.cnnic.cn','218.241.111.1/32'),(2,'218.241.111.1/24-v4',X'DAF16FFF',X'DAF16F00','v4','cnnic-2','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','218.241.111.1/24'),(3,'218.0.0.3-v4',X'DA000003',X'DA000003','v4','cnnic-3','DIRECT ALLOCATION','CN',NULL,'en','whois.cnnic.cn','218.0.0.3/32'),(4,'218.241.0.0-218.241.0.3-v4','','','v4','cnnic-4','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn',''),(5,'111.255.0.0-111.255.255.255-v4',X'6FFFFFFF',X'6FFF0000','v4','cnnic-5','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','111.255.0.0/16'),(6,'3000:0DB8:0000:0000:0000:0000:1428:0000-v6',X'30000DB8000000000000000014280000',X'30000DB8000000000000000014280000','v6','cnnic-6','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','3000:0DB8:0000:0000:0000:0000:1428:0000/128'),(7,'3000:0000:0000:001F:FFFF:FFFF:FFFF:0000-3000:0000:0000:001F:FFFF:FFFF:FFFF:FFFF',X'300000000000001FFFFFFFFFFFFFFFFF',X'300000000000001FFFFFFFFFFFFF0000','v6','cnnic-7','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','3000:0000:0000:001F:FFFF:FFFF:FFFF:0000/112');
 
 #
 # Data for table "RDAP_IP_REDIRECT"
 #
 
-INSERT INTO `RDAP_IP_REDIRECT` (`RDAP_IP_REDIRECT_ID`,`STARTLOWADDRESS`,`ENDHIGHADDRESS`,`STARTHIGHADDRESS`,`ENDLOWADDRESS`,`REDIRECT_URL`,`VERSION`) VALUES (1,0,3458784528368140288,3458784528368140288,65535,'https://whois.cn/rdap/.well-known/rdap','v6'),(2,3724541952,NULL,NULL,3741319167,'https://whois.cn/rdap/.well-known/rdap','v4');
+INSERT INTO `RDAP_IP_REDIRECT` (`RDAP_IP_REDIRECT_ID`,`ENDADDRESS`,`STARTADDRESS`,`REDIRECT_URL`,`VERSION`) VALUES (1,X'100000000000001FFFFFFFFFFFFFFFFF',X'100000000000001FFFFFFFFFFFFF0000','https://whois.cn/rdap/.well-known/rdap','v6'),(2,X'7BFFFFFF',X'7BFF0000','https://whois.cn/rdap/.well-known/rdap','v4');
 
 #
 # Data for table "RDAP_IP_STATUS"
@@ -145,7 +133,7 @@ INSERT INTO `RDAP_NAMESERVER` (`NAMESERVER_ID`,`HANDLE`,`LDH_NAME`,`UNICODE_NAME
 # Data for table "RDAP_NAMESERVER_IP"
 #
 
-INSERT INTO `RDAP_NAMESERVER_IP` (`NAMESERVER_IP_ID`,`NAMESERVER_ID`,`IP_HIGH`,`IP_LOW`,`VERSION`) VALUES (1,1,NULL,3673255776,'v4'),(2,2,NULL,3673255776,'v4'),(3,3,NULL,318767109,'v4'),(4,4,2306139568115548160,2260596444381562,'v6'),(5,5,2306139568115548160,2260596444381562,'v6');
+INSERT INTO `RDAP_NAMESERVER_IP` (`NAMESERVER_IP_ID`,`NAMESERVER_ID`,`IP`,`VERSION`) VALUES (1,1,X'DAF16F01','v4'),(2,2,X'DAF16F60','v4'),(3,3,X'DAF16F01','v4'),(4,4,X'30000DB8000000000000000014280000','v6'),(5,5,X'30000DB8000000000000000014280000','v6');
 
 #
 # Data for table "RDAP_NAMESERVER_STATUS"
@@ -157,13 +145,13 @@ INSERT INTO `RDAP_NAMESERVER_STATUS` (`NAMESERVER_STATUS_ID`,`NAMESERVER_ID`,`ST
 # Data for table "RDAP_NOTICE"
 #
 
-INSERT INTO `RDAP_NOTICE` (`NOTICE_ID`,`TYPE`,`TITLE`) VALUES (1,'notice','the notices for response'),(2,'remark','the remarks title'),(3,'help','this is help test');
+INSERT INTO `RDAP_NOTICE` (`NOTICE_ID`,`TYPE`,`TITLE`,`REASON_TYPE`,`REASON_TYPE_SHORT_NAME`) VALUES (1,'notice','the notices for response',NULL,NULL),(2,'remark','the remarks title',NULL,NULL),(3,'help','this is help test',NULL,NULL),(4,'notice','Search Policy','result set truncated due to excessive load','excessiveLoad'),(5,'notice','Search Policy','result set truncated due to authorization','authorization'),(6,'remark','Data Policy','object truncated due to excessive load','excessiveLoad');
 
 #
 # Data for table "RDAP_NOTICE_DESCRIPTION"
 #
 
-INSERT INTO `RDAP_NOTICE_DESCRIPTION` (`NOTICE_DESC_ID`,`NOTICE_ID`,`DESCRIPTION`) VALUES (1,1,'Service subject to The Registry of the CNNIC.'),(2,1,'Copyright (c) 2020 CNNIC'),(3,2,'remarks_description'),(4,3,'the description of help');
+INSERT INTO `RDAP_NOTICE_DESCRIPTION` (`NOTICE_DESC_ID`,`NOTICE_ID`,`DESCRIPTION`) VALUES (1,1,'Service subject to The Registry of the CNNIC.'),(2,1,'Copyright (c) 2020 CNNIC'),(3,2,'remarks_description'),(4,3,'the description of help'),(7,4,'The list of results does not contain all results due to excessively heavy load on the server.'),(8,5,'The list of results does not contain all results due to lack of authorization.'),(9,5,'This may indicate to some clients that proper authorization will yield a longer result set.'),(10,6,'The object does not contain all data due to excessively heavy load on the server.');
 
 #
 # Data for table "RDAP_POLICY"

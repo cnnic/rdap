@@ -1,12 +1,10 @@
-DROP DATABASE IF EXISTS `rdap`;
-CREATE DATABASE `rdap` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_croatian_ci */;
+CREATE DATABASE `rdap;
 USE `rdap`;
 
 #
 # Source for table "RDAP_AUTNUM"
 #
 
-DROP TABLE IF EXISTS `RDAP_AUTNUM`;
 CREATE TABLE `RDAP_AUTNUM` (
   `AS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `HANDLE` varchar(100) COLLATE utf8_bin NOT NULL,
@@ -26,7 +24,6 @@ CREATE TABLE `RDAP_AUTNUM` (
 # Source for table "RDAP_AUTNUM_REDIRECT"
 #
 
-DROP TABLE IF EXISTS `RDAP_AUTNUM_REDIRECT`;
 CREATE TABLE `RDAP_AUTNUM_REDIRECT` (
   `AS_REDIRECT_ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `START_AUTNUM` int(11) unsigned NOT NULL DEFAULT '0',
@@ -39,7 +36,6 @@ CREATE TABLE `RDAP_AUTNUM_REDIRECT` (
 # Source for table "RDAP_AUTNUM_STATUS"
 #
 
-DROP TABLE IF EXISTS `RDAP_AUTNUM_STATUS`;
 CREATE TABLE `RDAP_AUTNUM_STATUS` (
   `AS_STATUS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `AS_ID` int(10) NOT NULL,
@@ -53,7 +49,6 @@ CREATE TABLE `RDAP_AUTNUM_STATUS` (
 # Source for table "RDAP_CONFORMANCE"
 #
 
-DROP TABLE IF EXISTS `RDAP_CONFORMANCE`;
 CREATE TABLE `RDAP_CONFORMANCE` (
   `CONFORMANCE_ID` int(10) unsigned NOT NULL,
   `RDAP_CONFORMANCE` varchar(2048) COLLATE utf8_bin NOT NULL,
@@ -64,7 +59,6 @@ CREATE TABLE `RDAP_CONFORMANCE` (
 # Source for table "RDAP_DOMAIN"
 #
 
-DROP TABLE IF EXISTS `RDAP_DOMAIN`;
 CREATE TABLE `RDAP_DOMAIN` (
   `DOMAIN_ID` int(10) NOT NULL AUTO_INCREMENT,
   `HANDLE` varchar(100) COLLATE utf8_bin NOT NULL,
@@ -78,13 +72,12 @@ CREATE TABLE `RDAP_DOMAIN` (
   UNIQUE KEY `UK_DOMAIN_HANDLE` (`HANDLE`) USING BTREE,
   KEY `IDX_DOMAIN_LDH_NAME` (`LDH_NAME`) USING BTREE,
   KEY `IDX_DOMAIN_UNICODE_NAME` (`UNICODE_NAME`(255)) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='The domain object class represents a DNS name and point of delegation.  For RIRs these delegation points are in the reverse DNS tree, whereas for DNRs these delegation points are in the forward DNS tree. In both cases, the high level structure of the domain object class consists of information about the domain registration, nameserver information related to the domain name, and entities related to the domain name (e.g. registrant information, contacts, etc.). Reference to <a href="http://tools.ietf.org/ht';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='The domain object class represents a DNS name and point of delegation.  For RIRs these delegation points are in the reverse DNS tree, whereas for DNRs these delegation points are in the forward DNS tree. In both cases, the high level structure of the domain object class consists of information about the domain registration, nameserver information related to the domain name, and entities related to the domain name (e.g. registrant information, contacts, etc.). Reference to <a href="http://tools.ietf.org/ht';
 
 #
 # Source for table "RDAP_DOMAIN_REDIRECT"
 #
 
-DROP TABLE IF EXISTS `RDAP_DOMAIN_REDIRECT`;
 CREATE TABLE `RDAP_DOMAIN_REDIRECT` (
   `RDAP_DOMAIN_REDIRECT_ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `REDIRECT_TLD` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -96,7 +89,6 @@ CREATE TABLE `RDAP_DOMAIN_REDIRECT` (
 # Source for table "RDAP_DOMAIN_STATUS"
 #
 
-DROP TABLE IF EXISTS `RDAP_DOMAIN_STATUS`;
 CREATE TABLE `RDAP_DOMAIN_STATUS` (
   `DOMAIN_STATUS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `DOMAIN_ID` int(10) NOT NULL,
@@ -110,7 +102,6 @@ CREATE TABLE `RDAP_DOMAIN_STATUS` (
 # Source for table "RDAP_DSDATA"
 #
 
-DROP TABLE IF EXISTS `RDAP_DSDATA`;
 CREATE TABLE `RDAP_DSDATA` (
   `DSDATA_ID` int(10) NOT NULL AUTO_INCREMENT,
   `KEY_TAG` int(5) NOT NULL,
@@ -124,7 +115,6 @@ CREATE TABLE `RDAP_DSDATA` (
 # Source for table "RDAP_ENTITY"
 #
 
-DROP TABLE IF EXISTS `RDAP_ENTITY`;
 CREATE TABLE `RDAP_ENTITY` (
   `ENTITY_ID` int(10) NOT NULL AUTO_INCREMENT,
   `HANDLE` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -145,7 +135,6 @@ CREATE TABLE `RDAP_ENTITY` (
 # Source for table "RDAP_ENTITY_STATUS"
 #
 
-DROP TABLE IF EXISTS `RDAP_ENTITY_STATUS`;
 CREATE TABLE `RDAP_ENTITY_STATUS` (
   `ENTITY_STATUS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `ENTITY_ID` int(10) NOT NULL,
@@ -159,7 +148,6 @@ CREATE TABLE `RDAP_ENTITY_STATUS` (
 # Source for table "RDAP_ERRORMESSAGE"
 #
 
-DROP TABLE IF EXISTS `RDAP_ERRORMESSAGE`;
 CREATE TABLE `RDAP_ERRORMESSAGE` (
   `ERROR_ID` int(10) NOT NULL AUTO_INCREMENT,
   `ERROR_CODE` int(10) NOT NULL,
@@ -174,7 +162,6 @@ CREATE TABLE `RDAP_ERRORMESSAGE` (
 # Source for table "RDAP_EVENT"
 #
 
-DROP TABLE IF EXISTS `RDAP_EVENT`;
 CREATE TABLE `RDAP_EVENT` (
   `EVENT_ID` int(10) NOT NULL AUTO_INCREMENT,
   `EVENT_ACTION` varchar(15) COLLATE utf8_bin NOT NULL,
@@ -188,7 +175,6 @@ CREATE TABLE `RDAP_EVENT` (
 # Source for table "RDAP_IDENTITY_ACL"
 #
 
-DROP TABLE IF EXISTS `RDAP_IDENTITY_ACL`;
 CREATE TABLE `RDAP_IDENTITY_ACL` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `OBJECT_TYPE` varchar(64) COLLATE utf8_bin NOT NULL,
@@ -201,7 +187,6 @@ CREATE TABLE `RDAP_IDENTITY_ACL` (
 # Source for table "RDAP_IDENTITY_ROLE"
 #
 
-DROP TABLE IF EXISTS `RDAP_IDENTITY_ROLE`;
 CREATE TABLE `RDAP_IDENTITY_ROLE` (
   `ROLE_ID` int(10) NOT NULL,
   `ROLE_NAME` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -213,7 +198,6 @@ CREATE TABLE `RDAP_IDENTITY_ROLE` (
 # Source for table "RDAP_IDENTITY_USER"
 #
 
-DROP TABLE IF EXISTS `RDAP_IDENTITY_USER`;
 CREATE TABLE `RDAP_IDENTITY_USER` (
   `USER_ID` int(10) NOT NULL,
   `USER_NAME` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
@@ -226,7 +210,6 @@ CREATE TABLE `RDAP_IDENTITY_USER` (
 # Source for table "RDAP_IDENTITY_USER_REL_ROLE"
 #
 
-DROP TABLE IF EXISTS `RDAP_IDENTITY_USER_REL_ROLE`;
 CREATE TABLE `RDAP_IDENTITY_USER_REL_ROLE` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `USER_ID` int(10) NOT NULL,
@@ -240,37 +223,31 @@ CREATE TABLE `RDAP_IDENTITY_USER_REL_ROLE` (
 # Source for table "RDAP_IP"
 #
 
-DROP TABLE IF EXISTS `RDAP_IP`;
 CREATE TABLE `RDAP_IP` (
   `IP_ID` int(10) NOT NULL AUTO_INCREMENT,
   `HANDLE` varchar(100) COLLATE utf8_bin NOT NULL,
-  `STARTLOWADDRESS` bigint(20) unsigned DEFAULT NULL,
-  `STARTHIGHADDRESS` bigint(20) unsigned DEFAULT NULL,
-  `ENDLOWADDRESS` bigint(20) unsigned DEFAULT NULL,
-  `ENDHIGHADDRESS` bigint(20) unsigned DEFAULT NULL,
-  `VERSION` varchar(2) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT 'not null, value: v4/v6',
+  `ENDADDRESS` varbinary(16) NOT NULL,
+  `STARTADDRESS` varbinary(16) NOT NULL,
+  `VERSION` varchar(2) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT 'not null, value: v4/v6',
   `NAME` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   `TYPE` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   `COUNTRY` varchar(2) COLLATE utf8_bin DEFAULT NULL,
   `PARENT_HANDLE` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   `LANG` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `PORT43` varchar(4096) COLLATE utf8_bin DEFAULT NULL,
+  `CIDR` varchar(100) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`IP_ID`),
-  UNIQUE KEY `UK_IP_HANDLE` (`HANDLE`) USING BTREE,
-  KEY `IDX_IP_STARTLOWADDRESS` (`STARTLOWADDRESS`,`STARTHIGHADDRESS`,`ENDLOWADDRESS`,`ENDHIGHADDRESS`) USING BTREE
+  UNIQUE KEY `UK_IP_HANDLE` (`HANDLE`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT=' The IP Network object class models IP network registrations found in RIRs and is the expected response for the "/ip" query as defined by [I-D.ietf-weirds-rdap-query].  There is no equivalent object class for DNRs.  The high level structure of the IP network object class consists of information about the network registration and entities related to the IP network (e.g. registrant information, contacts, etc...). Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-37">IP';
 
 #
 # Source for table "RDAP_IP_REDIRECT"
 #
 
-DROP TABLE IF EXISTS `RDAP_IP_REDIRECT`;
 CREATE TABLE `RDAP_IP_REDIRECT` (
   `RDAP_IP_REDIRECT_ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `STARTLOWADDRESS` bigint(20) unsigned DEFAULT NULL,
-  `ENDHIGHADDRESS` bigint(20) unsigned DEFAULT NULL,
-  `STARTHIGHADDRESS` bigint(20) unsigned DEFAULT NULL,
-  `ENDLOWADDRESS` bigint(20) unsigned DEFAULT NULL,
+  `ENDADDRESS` varbinary(16) NOT NULL,
+  `STARTADDRESS` varbinary(16) NOT NULL,
   `REDIRECT_URL` varchar(4096) COLLATE utf8_bin NOT NULL,
   `VERSION` varchar(2) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT 'not null, value: v4/v6',
   PRIMARY KEY (`RDAP_IP_REDIRECT_ID`)
@@ -280,7 +257,6 @@ CREATE TABLE `RDAP_IP_REDIRECT` (
 # Source for table "RDAP_IP_STATUS"
 #
 
-DROP TABLE IF EXISTS `RDAP_IP_STATUS`;
 CREATE TABLE `RDAP_IP_STATUS` (
   `IP_STATUS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `IP_ID` int(10) NOT NULL,
@@ -294,7 +270,6 @@ CREATE TABLE `RDAP_IP_STATUS` (
 # Source for table "RDAP_KEYDATA"
 #
 
-DROP TABLE IF EXISTS `RDAP_KEYDATA`;
 CREATE TABLE `RDAP_KEYDATA` (
   `KEYDATA_ID` int(10) NOT NULL AUTO_INCREMENT,
   `FLAGS` int(3) NOT NULL,
@@ -308,7 +283,6 @@ CREATE TABLE `RDAP_KEYDATA` (
 # Source for table "RDAP_LINK"
 #
 
-DROP TABLE IF EXISTS `RDAP_LINK`;
 CREATE TABLE `RDAP_LINK` (
   `LINK_ID` int(10) NOT NULL AUTO_INCREMENT,
   `VALUE` varchar(4098) COLLATE utf8_bin NOT NULL,
@@ -323,7 +297,6 @@ CREATE TABLE `RDAP_LINK` (
 # Source for table "RDAP_LINK_HREFLANG"
 #
 
-DROP TABLE IF EXISTS `RDAP_LINK_HREFLANG`;
 CREATE TABLE `RDAP_LINK_HREFLANG` (
   `HREFLANG_ID` int(10) NOT NULL AUTO_INCREMENT,
   `LINK_ID` int(10) NOT NULL,
@@ -337,7 +310,6 @@ CREATE TABLE `RDAP_LINK_HREFLANG` (
 # Source for table "RDAP_LINK_TITLE"
 #
 
-DROP TABLE IF EXISTS `RDAP_LINK_TITLE`;
 CREATE TABLE `RDAP_LINK_TITLE` (
   `TITLE_ID` int(10) NOT NULL AUTO_INCREMENT,
   `LINK_ID` int(10) NOT NULL,
@@ -351,7 +323,6 @@ CREATE TABLE `RDAP_LINK_TITLE` (
 # Source for table "RDAP_NAMESERVER"
 #
 
-DROP TABLE IF EXISTS `RDAP_NAMESERVER`;
 CREATE TABLE `RDAP_NAMESERVER` (
   `NAMESERVER_ID` int(10) NOT NULL AUTO_INCREMENT,
   `HANDLE` varchar(100) COLLATE utf8_bin DEFAULT NULL,
@@ -369,16 +340,13 @@ CREATE TABLE `RDAP_NAMESERVER` (
 # Source for table "RDAP_NAMESERVER_IP"
 #
 
-DROP TABLE IF EXISTS `RDAP_NAMESERVER_IP`;
 CREATE TABLE `RDAP_NAMESERVER_IP` (
   `NAMESERVER_IP_ID` int(10) NOT NULL AUTO_INCREMENT,
   `NAMESERVER_ID` int(10) NOT NULL,
-  `IP_HIGH` bigint(20) unsigned DEFAULT NULL,
-  `IP_LOW` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `IP` varbinary(16) NOT NULL,
   `VERSION` varchar(2) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`NAMESERVER_IP_ID`),
   KEY `IDX_NAMESERVER_IP_NAMESERVER_ID` (`NAMESERVER_ID`) USING BTREE,
-  KEY `IDX_NAMESERVER_IP_IP` (`IP_LOW`,`IP_HIGH`) USING BTREE,
   CONSTRAINT `FK_RDAP_NAMESERVER_IP_NAMESERVER_ID` FOREIGN KEY (`NAMESERVER_ID`) REFERENCES `RDAP_NAMESERVER` (`NAMESERVER_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='nameserver ip, NOT RDAP IP object, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#section-6.2">Nameserver</a>';
 
@@ -386,7 +354,6 @@ CREATE TABLE `RDAP_NAMESERVER_IP` (
 # Source for table "RDAP_NAMESERVER_STATUS"
 #
 
-DROP TABLE IF EXISTS `RDAP_NAMESERVER_STATUS`;
 CREATE TABLE `RDAP_NAMESERVER_STATUS` (
   `NAMESERVER_STATUS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `NAMESERVER_ID` int(10) NOT NULL,
@@ -400,19 +367,19 @@ CREATE TABLE `RDAP_NAMESERVER_STATUS` (
 # Source for table "RDAP_NOTICE"
 #
 
-DROP TABLE IF EXISTS `RDAP_NOTICE`;
 CREATE TABLE `RDAP_NOTICE` (
   `NOTICE_ID` int(10) NOT NULL AUTO_INCREMENT,
   `TYPE` varchar(6) COLLATE utf8_bin NOT NULL,
   `TITLE` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `REASON_TYPE` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `REASON_TYPE_SHORT_NAME` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`NOTICE_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='The "notices", "help" and "remarks" data structures take the same form.  The "notices" structure denotes information about the service providing RDAP information, whereas the "remarks" structure denotes information about the object class, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-9">Notices And Remarks</a>';
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='The "notices", "help" and "remarks" data structures take the same form.  The "notices" structure denotes information about the service providing RDAP information, whereas the "remarks" structure denotes information about the object class, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-9">Notices And Remarks</a>';
 
 #
 # Source for table "RDAP_NOTICE_DESCRIPTION"
 #
 
-DROP TABLE IF EXISTS `RDAP_NOTICE_DESCRIPTION`;
 CREATE TABLE `RDAP_NOTICE_DESCRIPTION` (
   `NOTICE_DESC_ID` int(10) NOT NULL AUTO_INCREMENT,
   `NOTICE_ID` int(10) NOT NULL,
@@ -420,13 +387,12 @@ CREATE TABLE `RDAP_NOTICE_DESCRIPTION` (
   PRIMARY KEY (`NOTICE_DESC_ID`),
   KEY `IDX_NOTICE_DESCRIPTION_NOTICE_ID` (`NOTICE_ID`) USING BTREE,
   CONSTRAINT `FK_RDAP_NOTICE_DESCRIPTION_NOTICE_ID` FOREIGN KEY (`NOTICE_ID`) REFERENCES `RDAP_NOTICE` (`NOTICE_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Description for notice\r\nemark for registration objecthelp, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-9">Notices And Remarks</a>';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Description for notice\r\nemark for registration objecthelp, reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-9">Notices And Remarks</a>';
 
 #
 # Source for table "RDAP_POLICY"
 #
 
-DROP TABLE IF EXISTS `RDAP_POLICY`;
 CREATE TABLE `RDAP_POLICY` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `OBJECT_TYPE` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
@@ -438,7 +404,6 @@ CREATE TABLE `RDAP_POLICY` (
 # Source for table "RDAP_PUBLICID"
 #
 
-DROP TABLE IF EXISTS `RDAP_PUBLICID`;
 CREATE TABLE `RDAP_PUBLICID` (
   `PUBLIC_ID` int(10) NOT NULL AUTO_INCREMENT,
   `IDENTIFIER` varchar(256) COLLATE utf8_bin NOT NULL,
@@ -450,7 +415,6 @@ CREATE TABLE `RDAP_PUBLICID` (
 # Source for table "RDAP_SECUREDNS"
 #
 
-DROP TABLE IF EXISTS `RDAP_SECUREDNS`;
 CREATE TABLE `RDAP_SECUREDNS` (
   `SECUREDNS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `ZONE_SIGNED` tinyint(1) DEFAULT NULL,
@@ -465,7 +429,6 @@ CREATE TABLE `RDAP_SECUREDNS` (
 # Source for table "RDAP_VARIANT"
 #
 
-DROP TABLE IF EXISTS `RDAP_VARIANT`;
 CREATE TABLE `RDAP_VARIANT` (
   `VARIANT_ID` int(10) NOT NULL AUTO_INCREMENT,
   `LDH_NAME` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -478,7 +441,6 @@ CREATE TABLE `RDAP_VARIANT` (
 # Source for table "RDAP_VCARD_ADR"
 #
 
-DROP TABLE IF EXISTS `RDAP_VCARD_ADR`;
 CREATE TABLE `RDAP_VCARD_ADR` (
   `ADR_ID` int(10) NOT NULL AUTO_INCREMENT,
   `POST_BOX` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
@@ -500,7 +462,6 @@ CREATE TABLE `RDAP_VCARD_ADR` (
 # Source for table "RDAP_VCARD_TEL"
 #
 
-DROP TABLE IF EXISTS `RDAP_VCARD_TEL`;
 CREATE TABLE `RDAP_VCARD_TEL` (
   `TEL_ID` int(10) NOT NULL AUTO_INCREMENT,
   `TYPE` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '; joined value. eg: home;work;text;voice;fax;cell;video;pager;textphone',
@@ -517,7 +478,6 @@ CREATE TABLE `RDAP_VCARD_TEL` (
 # Source for table "REL_DOMAIN_NAMESERVER"
 #
 
-DROP TABLE IF EXISTS `REL_DOMAIN_NAMESERVER`;
 CREATE TABLE `REL_DOMAIN_NAMESERVER` (
   `REL_DOMAIN_NS_ID` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
   `DOMAIN_ID` int(10) NOT NULL,
@@ -532,7 +492,6 @@ CREATE TABLE `REL_DOMAIN_NAMESERVER` (
 # Source for table "REL_DOMAIN_VARIANT"
 #
 
-DROP TABLE IF EXISTS `REL_DOMAIN_VARIANT`;
 CREATE TABLE `REL_DOMAIN_VARIANT` (
   `REL_VARIANT_ID` int(10) NOT NULL AUTO_INCREMENT,
   `DOMAIN_ID` int(10) NOT NULL,
@@ -549,7 +508,6 @@ CREATE TABLE `REL_DOMAIN_VARIANT` (
 # Source for table "REL_ENTITY_REGISTRATION"
 #
 
-DROP TABLE IF EXISTS `REL_ENTITY_REGISTRATION`;
 CREATE TABLE `REL_ENTITY_REGISTRATION` (
   `REL_ENTITY_ID` int(10) NOT NULL AUTO_INCREMENT,
   `REL_ID` int(10) NOT NULL,
@@ -566,7 +524,6 @@ CREATE TABLE `REL_ENTITY_REGISTRATION` (
 # Source for table "REL_EVENT_REGISTRATION"
 #
 
-DROP TABLE IF EXISTS `REL_EVENT_REGISTRATION`;
 CREATE TABLE `REL_EVENT_REGISTRATION` (
   `REL_EVENT_ID` int(10) NOT NULL AUTO_INCREMENT,
   `REL_ID` int(10) NOT NULL,
@@ -582,7 +539,6 @@ CREATE TABLE `REL_EVENT_REGISTRATION` (
 # Source for table "REL_LINK_OBJECT"
 #
 
-DROP TABLE IF EXISTS `REL_LINK_OBJECT`;
 CREATE TABLE `REL_LINK_OBJECT` (
   `REL_LINK_ID` int(10) NOT NULL AUTO_INCREMENT,
   `REL_ID` int(10) NOT NULL,
@@ -598,7 +554,6 @@ CREATE TABLE `REL_LINK_OBJECT` (
 # Source for table "REL_NOTICE_REGISTRATION"
 #
 
-DROP TABLE IF EXISTS `REL_NOTICE_REGISTRATION`;
 CREATE TABLE `REL_NOTICE_REGISTRATION` (
   `REL_NOTICE_ID` int(10) NOT NULL AUTO_INCREMENT,
   `REL_ID` int(10) NOT NULL,
@@ -614,7 +569,6 @@ CREATE TABLE `REL_NOTICE_REGISTRATION` (
 # Source for table "REL_PUBLICID_REGISTRATION"
 #
 
-DROP TABLE IF EXISTS `REL_PUBLICID_REGISTRATION`;
 CREATE TABLE `REL_PUBLICID_REGISTRATION` (
   `REL_PUBLICID_ID` int(10) NOT NULL AUTO_INCREMENT,
   `REL_ID` int(10) NOT NULL,
@@ -630,7 +584,6 @@ CREATE TABLE `REL_PUBLICID_REGISTRATION` (
 # Source for table "REL_SECUREDNS_DSKEY"
 #
 
-DROP TABLE IF EXISTS `REL_SECUREDNS_DSKEY`;
 CREATE TABLE `REL_SECUREDNS_DSKEY` (
   `REL_SECUREDNS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `SECUREDNS_ID` int(10) NOT NULL,
