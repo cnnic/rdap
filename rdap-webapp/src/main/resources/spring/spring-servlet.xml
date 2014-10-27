@@ -6,6 +6,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd ">
+	<context:component-scan base-package="org.restfulwhois.rdap" />
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
 		<property name="useDefaultSuffixPattern" value="false" />
@@ -19,7 +20,6 @@
 			</list>
 		</property>
 	</bean>
-	<context:component-scan base-package="cn.cnnic.rdap" />
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
 	<bean id="jsonConverter"
@@ -32,6 +32,6 @@
 		</property>
 	</bean>
 	<bean id="exceptionResolver"
-		class="cn.cnnic.rdap.controller.support.MappingExceptionResolver">
+		class="org.restfulwhois.rdap.core.controller.support.MappingExceptionResolver">
 	</bean>
 </beans>

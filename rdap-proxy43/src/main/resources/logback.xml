@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="stdoutAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{150}
+				- %msg%n
+			</Pattern>
+		</encoder>
+	</appender>
+	<appender name="fileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>logs/proxy43_access.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>%d{yyyy-MM-dd}.proxy43_access.%i.log
+			</fileNamePattern>
+			<maxHistory>20</maxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="stdoutAppender" />
+		<appender-ref ref="fileAppender" />
+	</root>
+	<logger name="org.restfulwhois.rdap" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="stdoutAppender" />
+		<appender-ref ref="fileAppender" />
+	</logger>
+</configuration> 

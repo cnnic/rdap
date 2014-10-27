@@ -16,7 +16,7 @@
 	</listener>
 	<filter>
 		<filter-name>FilterChainProxy</filter-name>
-		<filter-class>cn.cnnic.rdap.controller.support.FilterChainProxy</filter-class>
+		<filter-class>org.restfulwhois.rdap.core.controller.support.FilterChainProxy</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>FilterChainProxy</filter-name>
