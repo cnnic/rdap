@@ -2,8 +2,6 @@
 
 Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.
 
-( Build Files mentioned in this content, eg 'rdap.war' or '*.sql', has two versions: 'release version' is the default version, and  'developing version' is the newest version in deveoping. MUST always use files with the same version. )
-
 1. Install JDK6, or higher version. (Skip this step if already installed)
    
    [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html), or higher verison.
@@ -27,7 +25,7 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 4. Get war file 'rdap.war'. 
 
    There are two methods to get war file
-   * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK6. ([For developing version](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war))
+   * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK6. 
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  Make a dir used to download source code and build, which is called 'WORK_DIR'
@@ -65,8 +63,6 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
 		```
       *  Download [init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-schema.sql) [init-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-data.sql) and [test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/test-data.sql) . 
-      
-      	(For developing version: [init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/dev/rdap-webapp/src/main/resources/init/mysql/init-schema.sql) [init-data.sql](https://raw.githubusercontent.com/cnnic/rdap/dev/rdap-webapp/src/main/resources/init/mysql/init-data.sql) and [test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/dev/rdap-webapp/src/main/resources/init/mysql/test-data.sql)).
       
       	Execute: 
       
