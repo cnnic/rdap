@@ -25,7 +25,7 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 4. Get war file 'rdap.war'. 
 
    There are two methods to get war file
-   * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK6.
+   * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK6. ([For developing version](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war))
    * Build war file from source
       *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
       *  Make a dir used to download source code and build, which is called 'WORK_DIR'
@@ -62,7 +62,11 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 		[in Windows, open command prompt window and execute command:]
 			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
 		```
-      *  Download [init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-schema.sql) [init-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-data.sql) and [test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/test-data.sql). Execute: 
+      *  Download [init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-schema.sql) [init-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-data.sql) and [test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/test-data.sql) . 
+      
+      	(For developing version: [init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/dev/rdap-webapp/src/main/resources/init/mysql/init-schema.sql) [init-data.sql](https://raw.githubusercontent.com/cnnic/rdap/dev/rdap-webapp/src/main/resources/init/mysql/init-data.sql) and [test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/dev/rdap-webapp/src/main/resources/init/mysql/test-data.sql)).
+      
+      	Execute: 
       
 	   	```
 		DROP DATABASE IF EXISTS `rdap`;
