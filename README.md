@@ -2,6 +2,8 @@
 
 Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.
 
+(Files mentioned in this content, eg 'rdap.war' or '*.sql', has two versions: 'release version' is the default version, and  'developing version' is the newest version in deveop. MUST always use files with the same version. )
+
 1. Install JDK6, or higher version. (Skip this step if already installed)
    
    [Download JDK6] (http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html) ,  [Install JDK6](http://www.oracle.com/technetwork/java/javase/install-142943.html), or higher verison.
