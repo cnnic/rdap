@@ -30,8 +30,8 @@
  */
 package org.restfulwhois.rdap.port43.server;
 
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * @author jiashuo
  * 
  */
-public final class ShutdownClientHandler extends ChannelHandlerAdapter {
+public final class ShutdownClientHandler extends SimpleChannelInboundHandler {
     /**
      * logger.
      */
@@ -69,6 +69,12 @@ public final class ShutdownClientHandler extends ChannelHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
             throws Exception {
         LOGGER.info("can't connect server:{}", cause);
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg)
+            throws Exception {
+        
     }
 
 }

@@ -74,7 +74,7 @@ public final class ManageServerHandler extends
         super.channelActive(ctx);
     }
 
-    @Override
+//    @Override
     protected void messageReceived(ChannelHandlerContext ctx, String msg)
             throws Exception {
         LOGGER.info("receive manage cmd:{}", msg);
@@ -90,6 +90,12 @@ public final class ManageServerHandler extends
         LOGGER.info("do shutdown server end.");
         future.addListener(ChannelFutureListener.CLOSE).channel().close();
         LOGGER.info("shutdown manage server end.");
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext arg0, String arg1)
+            throws Exception {
+        messageReceived(arg0,arg1);
     }
 
 }
