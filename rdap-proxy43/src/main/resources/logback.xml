@@ -34,4 +34,9 @@
 		<appender-ref ref="stdoutAppender" />
 		<appender-ref ref="fileAppender" />
 	</logger>
+	<logger name="io.netty" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="stdoutAppender" />
+		<appender-ref ref="fileAppender" />
+	</logger>
 </configuration> 

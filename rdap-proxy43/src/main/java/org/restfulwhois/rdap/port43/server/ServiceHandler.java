@@ -73,7 +73,7 @@ public class ServiceHandler extends SimpleChannelInboundHandler<String> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
     }
 
-    @Override
+//    @Override
     public void messageReceived(ChannelHandlerContext ctx, String request) {
         InetSocketAddress socketAddress =
                 (InetSocketAddress) ctx.channel().remoteAddress();
@@ -125,5 +125,11 @@ public class ServiceHandler extends SimpleChannelInboundHandler<String> {
         ctx.writeAndFlush(ManageServerInitializer.LINE_DELIMITER);
         // Close the connection.
         future.addListener(ChannelFutureListener.CLOSE);
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext arg0, String arg1)
+            throws Exception {
+        messageReceived(arg0,arg1);
     }
 }
