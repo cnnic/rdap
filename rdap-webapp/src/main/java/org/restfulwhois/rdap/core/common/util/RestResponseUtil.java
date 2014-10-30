@@ -284,6 +284,15 @@ public class RestResponseUtil {
     public static ResponseEntity<ErrorMessage> createResponse509() {
         return createCommonErrorResponse(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
     }
+    
+    /**
+     * create response with HTTP status code 501.
+     * 
+     * @return ResponseEntity.
+     */
+    public static ResponseEntity<ErrorMessage> createResponse501() {
+        return createCommonErrorResponse(HttpStatus.NOT_IMPLEMENTED);
+    }
 
     /**
      * create error response.

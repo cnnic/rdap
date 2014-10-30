@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.core.common;
 import java.util.List;
 
 import org.restfulwhois.rdap.core.common.util.StringUtil;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 /**
  * This class contains variables.
@@ -123,8 +122,15 @@ public class RdapProperties {
     /**
      * list for not in tlds.
      */
-    private static List<String> notInTldList;   
-   
+    private static List<String> notInTldList;
+    /**
+     * list for not implemented object types,splited by ';'.
+     */
+    private static String notImplementedObjectTypes;
+    /**
+     * list for not implemented object types.
+     */
+    private static List<String> notImplementedTypeList;
 
     /**
      * clear 'in' and 'not in' tlds in memory,used for reload tlds.
@@ -132,6 +138,18 @@ public class RdapProperties {
     public static void clearTldsInMemory() {
         RdapProperties.inTldList = null;
         RdapProperties.notInTldList = null;
+        RdapProperties.notImplementedTypeList = null;
+    }
+    /**
+     * get in-tlds in this registry.
+     * 
+     * @return tld list.
+     */
+    public static List<String> getNotImplementedTypeList() {
+        RdapProperties.notImplementedTypeList =
+                StringUtil.parseSeparatedStringToListIfListIsNull(
+                		notImplementedObjectTypes, notImplementedTypeList);
+        return RdapProperties.notImplementedTypeList;
     }
 
     /**
@@ -449,6 +467,23 @@ public class RdapProperties {
             String bootstrapRegistryUriForIpv6) {
         RdapProperties.bootstrapRegistryUriForIpv6 =
                 bootstrapRegistryUriForIpv6;
+    }
+    /**
+     * get notImplementedTypes.
+     * 
+     * @return notImplementedTypes.
+     */
+    public static String getNotImplementedObjectTypes() {
+        return notImplementedObjectTypes;
+    }
+    /**
+     * set notImplementedType.
+     * 
+     * @param notImplementedType
+     *            notImplementedType.
+     */
+    public static void setNotImplementedObjectTypes(String notImplementedType) {
+         RdapProperties.notImplementedObjectTypes = notImplementedType;
     }
 
 }

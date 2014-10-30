@@ -31,20 +31,18 @@
 package org.restfulwhois.rdap.core.controller.support;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.core.common.util.DecodeUriUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.util.WebUtils;
 
 /**
  * This filter is used to invalid URI.
@@ -94,23 +92,9 @@ public class InvalidUriFilter implements RdapFilter {
      */
     @Override
     public boolean preProcess(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
-        decodeServletPathForSpringUrlMapping(request);
-        String path = request.getRequestURI();
-        LOGGER.info("request URI: {} ", path);
-        if (StringUtils.isBlank(path) || "/".equals(path)) {
-            writeError400Response(response);
-            return false;
-        }
-        String decodeUri = StringUtils.EMPTY;
-        String uri = path.substring(request.getContextPath().length());
-        if (StringUtils.isBlank(uri)) {
-            writeError400Response(response);
-            return false;
-        }
-        try {
-            decodeUri = urlDecode(uri);
-        } catch (Exception e) {
+            HttpServletResponse response) throws Exception {       
+        String decodeUri = DecodeUriUtil.decodeUri(request);
+        if (StringUtils.isBlank(decodeUri)) {
             writeError400Response(response);
             return false;
         }
@@ -173,30 +157,7 @@ public class InvalidUriFilter implements RdapFilter {
         }
         return false;
     }
-
-    /**
-     * decode servletPath with UTF-8 for spring url mapping.
-     * 
-     * @param request
-     *            HttpServletRequest.
-     * @throws UnsupportedEncodingException
-     *             UnsupportedEncodingException.
-     */
-    private void
-            decodeServletPathForSpringUrlMapping(HttpServletRequest request)
-                    throws UnsupportedEncodingException {
-        request.setCharacterEncoding(StringUtil.CHAR_SET_ISO8859);
-        String servletPath = request.getServletPath();
-        if (StringUtils.isNotBlank(servletPath)) {
-            String decodedPath =
-                    new String(
-                            servletPath.getBytes(StringUtil.CHAR_SET_ISO8859),
-                            StringUtil.CHAR_SET_UTF8);
-            request.setAttribute(WebUtils.INCLUDE_SERVLET_PATH_ATTRIBUTE,
-                    decodedPath);
-        }
-    }
-
+   
     /**
      * write error 400 response.
      * 
@@ -211,23 +172,7 @@ public class InvalidUriFilter implements RdapFilter {
                 RestResponseUtil.createResponse400();
         FilterHelper.writeResponse(responseEntity, response);
     }
-
-    /**
-     * decode url with UTF-8.
-     * 
-     * @param str
-     *            URL.
-     * @return decoded URL.
-     * @throws UnsupportedEncodingException
-     *             UnsupportedEncodingException.
-     */
-    private String urlDecode(String str) throws UnsupportedEncodingException {
-        if (StringUtils.isBlank(str)) {
-            return str;
-        }
-        return URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
-    }
-
+    
     /**
      * do post process.
      * 

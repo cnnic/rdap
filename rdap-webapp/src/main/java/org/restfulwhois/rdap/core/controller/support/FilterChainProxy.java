@@ -57,6 +57,7 @@ public class FilterChainProxy implements Filter {
         filters.add(new AuthenticationFilter());
         filters.add(new RateLimitFilter());
         filters.add(new HttpRequestFilter());
+        filters.add(new NotImplementedFilter());
         filters.add(new InvalidUriFilter());
         LOGGER.debug("init RDAP filters end.");
     }
