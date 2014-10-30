@@ -30,8 +30,6 @@
  */
 package org.restfulwhois.rdap.core.common.util;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
