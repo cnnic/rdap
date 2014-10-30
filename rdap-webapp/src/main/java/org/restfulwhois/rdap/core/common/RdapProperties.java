@@ -141,14 +141,14 @@ public class RdapProperties {
         RdapProperties.notImplementedTypeList = null;
     }
     /**
-     * get in-tlds in this registry.
+     * get implemented object Type list.
      * 
-     * @return tld list.
+     * @return implemented object Type list.
      */
     public static List<String> getNotImplementedTypeList() {
         RdapProperties.notImplementedTypeList =
                 StringUtil.parseSeparatedStringToListIfListIsNull(
-                		notImplementedObjectTypes, notImplementedTypeList);
+                      notImplementedObjectTypes, notImplementedTypeList);
         return RdapProperties.notImplementedTypeList;
     }
 
