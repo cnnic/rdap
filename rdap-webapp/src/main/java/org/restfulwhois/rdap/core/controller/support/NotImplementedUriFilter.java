@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.RdapProperties;
-import org.restfulwhois.rdap.core.common.util.DecodeUriUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.slf4j.Logger;
@@ -24,17 +23,17 @@ import org.springframework.http.ResponseEntity;
  * @author zhanyq
  * 
  */
-public class NotImplementedFilter implements RdapFilter {
+public class NotImplementedUriFilter implements RdapFilter {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(NotImplementedFilter.class);
+            .getLogger(NotImplementedUriFilter.class);
 
     /**
      * constructor.
      */
-    public NotImplementedFilter() {
+    public NotImplementedUriFilter() {
         super();
         LOGGER.debug("init RDAP filter:{}", this.getName());
     }
@@ -53,15 +52,11 @@ public class NotImplementedFilter implements RdapFilter {
      */
     @Override
     public boolean preProcess(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
-        String decodeUri = DecodeUriUtil.decodeUri(request);
-        if (StringUtils.isBlank(decodeUri)) {
-            ResponseEntity<ErrorMessage> responseEntity =
-                    RestResponseUtil.createResponse400();
-            FilterHelper.writeResponse(responseEntity, response);
-             return false;
-        }
-        if (containNotImplementedType(decodeUri)) {
+            HttpServletResponse response) throws Exception {       
+        String path = request.getRequestURI();
+        LOGGER.info("request URI: {} ", path);           
+        String uri = path.substring(request.getContextPath().length());      
+        if (containNotImplementedType(uri)) {
             ResponseEntity<ErrorMessage> responseEntity =
                     RestResponseUtil.createResponse501();
             FilterHelper.writeResponse(responseEntity, response);
@@ -72,20 +67,18 @@ public class NotImplementedFilter implements RdapFilter {
     /**
      * check if decodeUri contain not implemented object types.
      * 
-     * @param decodeUri
+     * @param uri
      *            decodeUri.
      * @return true if contain, false if not.
      */
-    private boolean containNotImplementedType(String decodeUri) {
-        if (StringUtils.isBlank(decodeUri)) {
-            return false;
-        }
-        String substringBeforeLast =
-              StringUtils.substringBeforeLast(decodeUri, "/");
-        List<String> notImplType = RdapProperties.getNotImplementedTypeList();
-        if (notImplType.contains(substringBeforeLast)) {
-            return true;
-        }        
+    public boolean containNotImplementedType(String uri) {        
+        List<String> notImplObjectTypesList = RdapProperties
+             .getNotImplementedTypeList();
+        for (String notImplObjectType :notImplObjectTypesList) {
+            if (uri.startsWith(notImplObjectType)) {
+                return true;             
+            }
+        }       
         return false;
     }
    

@@ -32,7 +32,6 @@ package org.restfulwhois.rdap.core.controller.support;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,37 +43,30 @@ import org.restfulwhois.rdap.core.model.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.WebUtils;
 
 /**
- * This filter is used to invalid URI.
+ * This filter is used to decode URI exception.
  * <p>
  * Some URI can be seized by spring URL mapping, these URI is validated by this
  * filter pre spring mapping.
- * <p>
- * Now it validates:
+ * decode uri exception and  URI can not be Empty.
+ * <p> 
  * 
- * <pre>
- *      URI can not be Empty;
- *      URI can not contain '\';
- *      URI can not contain '//';
- *      URI can not contain invalid space;
- *      If media type in 'Accept' header is 'application/rdap+json';
- * </pre>
- * 
- * @author jiashuo
+ * @author zhanyq
  * 
  */
-public class InvalidUriFilter implements RdapFilter {
+public class DecodeUriForSpringMvc implements RdapFilter {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(InvalidUriFilter.class);
+            .getLogger(DecodeUriForSpringMvc.class);
 
     /**
      * constructor.
      */
-    public InvalidUriFilter() {
+    public DecodeUriForSpringMvc() {
         super();
         LOGGER.debug("init RDAP filter:{}", this.getName());
     }
@@ -93,75 +85,43 @@ public class InvalidUriFilter implements RdapFilter {
      */
     @Override
     public boolean preProcess(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {  
+            HttpServletResponse response) throws Exception {   
+        decodeServletPathForSpringUrlMapping(request);
         String path = request.getRequestURI();
         LOGGER.info("request URI: {} ", path);
-        String decodeUri = StringUtils.EMPTY;
+        if (StringUtils.isBlank(path) || "/".equals(path)) {
+            writeError400Response(response);
+            return false;
+        }        
         String uri = path.substring(request.getContextPath().length());
-        try {
-            decodeUri = urlDecode(uri);
-        } catch (Exception e) {
+        if (StringUtils.isBlank(uri)) {
             writeError400Response(response);
             return false;
-        }
-        if (decodeUri.contains("\\")) {
-            writeError400Response(response);
-            return false;
-        }
-        if (decodeUri.contains("//")) { // || decodeUri.contains("ip/::/")) {
-            writeError400Response(response);
-            return false;
-        }
-        if (containInvalidSpace(decodeUri)) {
-            writeError400Response(response);
-            return false;
-        }
-        if (pathContainInvalidChar(decodeUri)) {
-            writeError400Response(response);
-            return false;
-        }
-        if (!"/".equals(decodeUri)) {
-            String uriWithoutPrefixSlash = StringUtils.substring(decodeUri, 1);
-            if (uriWithoutPrefixSlash.endsWith("/.")) {
-                writeError400Response(response);
-                return false;
-            }
-        }
+        }       
         return true;
     }
 
     /**
-     * check if decodeUri path section contain invalid space.
+     * decode servletPath with UTF-8 for spring url mapping.
      * 
-     * @param decodeUri
-     *            decodeUri.
-     * @return true if contain, false if not.
+     * @param request
+     *            HttpServletRequest.
+     * @throws UnsupportedEncodingException
+     *             UnsupportedEncodingException.
      */
-    private boolean pathContainInvalidChar(String decodeUri) {
-        String substringBeforeLast =
-                StringUtils.substringBeforeLast(decodeUri, "/");
-        return StringUtil.containNonAsciiPrintableChars(substringBeforeLast);
-    }
-
-    /**
-     * check if decodeUri contain invalid space.
-     * 
-     * @param decodeUri
-     *            decodeUri.
-     * @return true if contain, false if not.
-     */
-    private boolean containInvalidSpace(String decodeUri) {
-        if (StringUtils.isBlank(decodeUri)) {
-            return false;
+    private static void
+            decodeServletPathForSpringUrlMapping(HttpServletRequest request)
+                    throws UnsupportedEncodingException {
+        request.setCharacterEncoding(StringUtil.CHAR_SET_ISO8859);
+        String servletPath = request.getServletPath();
+        if (StringUtils.isNotBlank(servletPath)) {
+            String decodedPath =
+                    new String(
+                            servletPath.getBytes(StringUtil.CHAR_SET_ISO8859),
+                            StringUtil.CHAR_SET_UTF8);
+            request.setAttribute(WebUtils.INCLUDE_SERVLET_PATH_ATTRIBUTE,
+                    decodedPath);
         }
-        if (StringUtils.startsWith(decodeUri, "/entity/")) {
-            return false;
-        }
-        if (StringUtils.contains(decodeUri, "/ ")
-                || StringUtils.endsWith(decodeUri, StringUtil.SPACE)) {
-            return true;
-        }
-        return false;
     }
    
     /**
@@ -195,23 +155,7 @@ public class InvalidUriFilter implements RdapFilter {
             HttpServletResponse response) throws Exception {
         return true;
     }
-    
-    /**
-     * decode url with UTF-8.
-     * 
-     * @param str
-     *            URL.
-     * @return decoded URL.
-     * @throws UnsupportedEncodingException
-     *             UnsupportedEncodingException.
-     */
-    private static String urlDecode(String str) 
-                   throws UnsupportedEncodingException {
-        if (StringUtils.isBlank(str)) {
-            return str;
-        }
-        return URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
-    }
+
     /**
      * @return this class name.
      */
