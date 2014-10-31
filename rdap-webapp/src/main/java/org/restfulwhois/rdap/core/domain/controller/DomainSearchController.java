@@ -47,9 +47,11 @@ import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByDomainNamePara
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsIpParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsLdhNameParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
+import org.restfulwhois.rdap.core.domain.service.DomainSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +72,13 @@ public class DomainSearchController extends BaseDnrController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainSearchController.class);
+    
+    /**
+     * search service.
+     */
+    @Autowired
+    protected DomainSearchService searchService;
+    
     /**
      * all possible search params.
      * <p>

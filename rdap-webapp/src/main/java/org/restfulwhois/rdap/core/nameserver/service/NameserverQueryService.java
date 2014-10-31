@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,44 +28,37 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.common.validation;
+package org.restfulwhois.rdap.core.nameserver.service;
 
-import org.springframework.http.HttpStatus;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 
 /**
- * HttpValidationError.
+ * query service interface.
+ * 
+ * query Domain/IP/AS/Name server/entity/help and is the query object in own
+ * registry
  * 
  * @author jiashuo
  * 
  */
-public class HttpValidationError implements ValidationError {
-    private HttpStatus statusCode;
+public interface NameserverQueryService {
 
-    private HttpValidationError(HttpStatus statusCode) {
-        super();
-        this.statusCode = statusCode;
-    }
+    /**
+     * query nameserver.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return Nameserver for the result.
+     */
+    Nameserver queryNameserver(QueryParam queryParam);
 
-    public static ValidationError build400Error() {
-        return new HttpValidationError(HttpStatus.BAD_REQUEST);
-    }
-
-    public static ValidationError build422Error() {
-        return new HttpValidationError(HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-
-    public HttpStatus getStatusCode() {
-        return statusCode;
-    }
-
-    @Override
-    public String getCode() {
-        return statusCode.name();
-    }
-
-    @Override
-    public String getMessage() {
-        return statusCode.getReasonPhrase();
-    }
-
+    /**
+     * check tld is in this registry.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return true if is,false if not.
+     */
+    boolean tldInThisRegistry(QueryParam queryParam);
 }

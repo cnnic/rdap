@@ -28,71 +28,66 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.filters;
+package org.restfulwhois.rdap.search.domain.service;
 
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
-import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
+import org.restfulwhois.rdap.core.domain.model.Domain;
+import org.restfulwhois.rdap.core.domain.model.DomainSearch;
+import org.restfulwhois.rdap.core.domain.service.DomainSearchService;
+import org.restfulwhois.rdap.search.service.AbstractSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * This class is used to parse request, and get parameter from url.
+ * search service implementation.
  * 
- * <p>
- * Methods parseQueryParam and parseXxxQueryParam, is called to generate
- * {@link org.restfulwhois.rdap.core.common.support.QueryParam} before query
- * service.
+ * RdapController's searching for domain/NS/IP/entity .etc .
+ * 
+ * The result list is paged by 'batchsizeSearch' property.
  * 
  * @author jiashuo
  * 
  */
-@Component
-public class QueryParser {
-
+@Service
+public class DomainSearchServiceImpl extends AbstractSearchService implements
+        DomainSearchService {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(QueryParser.class);
+            .getLogger(DomainSearchServiceImpl.class);
+    /**
+     * domain dao.
+     */
+    @Autowired
+    private QueryDao<Domain> domainSearchDao;
 
     /**
-     * generate DomainQueryParam.
+     * search domain.
      * 
-     * @param domainName
-     *            domain name.
-     * @param punyDomainName
-     *            domain puny name.
-     * @return QueryParam.
+     * @param queryParam
+     *            param for domain.
+     * @return domain search result.
      */
-    public QueryParam parseDomainQueryParam(String domainName,
-            String punyDomainName) {
-        return new DomainQueryParam(domainName, punyDomainName);
-    }
-
-    /**
-     * generate IpQueryParam.
-     * 
-     * @param ipVersion
-     * 
-     * @param ipAddr
-     *            ip Address.
-     * @param numMask
-     *            mask for ip.
-     * @param ipVersion
-     *            v4 or v6.
-     * @return QueryParam.
-     */
-    public QueryParam parseIpQueryParam(String cidr) {
-        NetworkQueryParam queryParam = new NetworkQueryParam(cidr);
-        try {
-            queryParam.fillParam();
-        } catch (Exception e) {
-            LOGGER.error("parseIpQueryParam error:{}", e);
+    @Override
+    public DomainSearch searchDomain(QueryParam queryParam) {
+        LOGGER.debug("searchDomain QueryParam:" + queryParam);
+        BaseSearchModel<Domain> searchResult =
+                this.search(queryParam, domainSearchDao);
+        LOGGER.debug("searchDomain searchResult:" + searchResult);
+        if (null == searchResult) {
             return null;
         }
-        return queryParam;
+        DomainSearch domainSearch = new DomainSearch();
+        BeanUtils.copyProperties(searchResult, domainSearch);
+        domainSearch.setDomainSearchResults(searchResult.getSearchResults());
+        LOGGER.debug("searchDomain domainSearch:" + domainSearch);
+        return domainSearch;
     }
 
 }

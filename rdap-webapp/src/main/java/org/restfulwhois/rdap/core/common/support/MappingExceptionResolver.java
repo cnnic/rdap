@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.filters;
+package org.restfulwhois.rdap.core.common.support;
 
 import java.io.IOException;
 

@@ -47,7 +47,6 @@ import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.bootstrap.bean.AutnumRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.filters.QueryParser;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,12 +69,6 @@ public class AutnumRedirectDaoForBootstrapTest extends BaseTest {
     @Autowired
     @Qualifier("autnumRedirectDao")
     private RedirectDao redirectDao;
-
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
 
     /**
      * testSync_1add_2delete.

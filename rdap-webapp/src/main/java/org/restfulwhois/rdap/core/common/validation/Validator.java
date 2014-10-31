@@ -32,7 +32,6 @@ package org.restfulwhois.rdap.core.common.validation;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 
 /**
  * Validator.
@@ -65,19 +64,18 @@ public interface Validator {
     boolean supports(Class<?> clazz);
 
     /**
-     * Validate the supplied {@code target} object, which must be of a
+     * Validate the supplied {@code queryParam} object, which must be of a
      * {@link Class} for which the {@link #supports(Class)} method typically has
      * (or would) return {@code true}.
      * <p>
-     * The supplied {@link Errors errors} instance can be used to report any
-     * resulting validation errors.
+     * The supplied {@link ValidationResult validationResult} instance can be
+     * used to report any resulting validation errors.
      * 
-     * @param target
-     *            the object that is to be validated (can be {@code null})
+     * @param queryParam
+     *            the queryParam that is to be validated (can be {@code null})
      * @param validationResult
      *            contextual state about the validation process (never
      *            {@code null})
-     * @see ValidationUtils
      */
     void validate(QueryParam queryParam, ValidationResult validationResult);
 

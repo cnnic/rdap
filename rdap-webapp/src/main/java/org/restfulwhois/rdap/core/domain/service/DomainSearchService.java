@@ -28,29 +28,26 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.entity.service;
+package org.restfulwhois.rdap.core.domain.service;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.domain.model.DomainSearch;
 
 /**
- * query service interface.
+ * search service interface.
  * 
- * query Domain/IP/AS/Name server/entity/help and is the query object in own
- * registry
+ * search object list of domain/name server/entity.
  * 
  * @author jiashuo
  * 
  */
-public interface EntityService {
-
+public interface DomainSearchService {
     /**
-     * query entity.
+     * search domain by domain name.
      * 
      * @param queryParam
      *            queryParam.
-     * @return Entity.
+     * @return domain list.
      */
-    Entity queryEntity(QueryParam queryParam);
-
+    DomainSearch searchDomain(QueryParam queryParam);
 }

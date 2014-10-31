@@ -46,10 +46,12 @@ import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchByIpParam;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchByNameParam;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchParam;
+import org.restfulwhois.rdap.core.nameserver.service.NameserverSearchService;
 import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,13 +72,31 @@ public class NameserverSearchController extends BaseDnrController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverSearchController.class);
+    /**
+     * search service.
+     */
+    @Autowired
+    protected NameserverSearchService searchService;
+    /**
+     * searchParams.
+     */
     private static List<NameserverSearchParam> searchParams =
             new ArrayList<NameserverSearchParam>();
+    /**
+     * init params.
+     */
     static {
         searchParams.add(new NameserverSearchByNameParam());
         searchParams.add(new NameserverSearchByIpParam());
     }
 
+    /**
+     * createNsSearchParam.
+     * 
+     * @param request
+     *            request.
+     * @return NameserverSearchParam.
+     */
     private NameserverSearchParam
             createNsSearchParam(HttpServletRequest request) {
         NameserverSearchType searchType = parseSearchType(request);
@@ -94,6 +114,13 @@ public class NameserverSearchController extends BaseDnrController {
         return null;
     }
 
+    /**
+     * parseSearchType.
+     * 
+     * @param request
+     *            request.
+     * @return NameserverSearchType.
+     */
     public NameserverSearchType parseSearchType(HttpServletRequest request) {
         try {
             String lastSpliInURI = RequestUtil.getLastSplitInURI(request);
@@ -104,7 +131,8 @@ public class NameserverSearchController extends BaseDnrController {
             return null;
         }
         final String[] allSearchType = NameserverSearchType.valuesOfString();
-        String paramName = RequestUtil.getFirstParameter(request, allSearchType);
+        String paramName =
+                RequestUtil.getFirstParameter(request, allSearchType);
         if (StringUtils.isBlank(paramName)) {
             return null;
         }

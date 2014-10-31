@@ -41,8 +41,6 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.filters.QueryParser;
-import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * NetworkRegistryHandlerTest.
@@ -126,7 +124,6 @@ public class NetworkRegistryHandlerTest {
      */
     @Before
     public void init() {
-        ReflectionTestUtils.setField(handler, "queryParser", new QueryParser());
     }
 
 }

@@ -38,7 +38,7 @@ import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.filters.QueryParser;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.service.RedirectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +54,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class RedirectServiceImplTest extends BaseTest {
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
     /**
      * RedirectService.
      */
@@ -76,8 +71,8 @@ public class RedirectServiceImplTest extends BaseTest {
         String domainName = "cnnic.cn";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         RedirectResponse redirect =
-                redirectService.queryDomain(queryParser.parseDomainQueryParam(
-                        domainName, punyDomainName));
+                redirectService.queryDomain(DomainQueryParam
+                        .generateQueryParam(domainName, punyDomainName));
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
     }

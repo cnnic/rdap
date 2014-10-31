@@ -42,7 +42,6 @@ import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.common.dao.QueryDao;
 import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.filters.QueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
@@ -57,11 +56,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class AutnumQueryDaoTest extends BaseTest {
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
     /**
      * autnumQueryDao.
      */

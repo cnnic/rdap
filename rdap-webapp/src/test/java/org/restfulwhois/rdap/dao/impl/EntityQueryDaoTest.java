@@ -54,7 +54,6 @@ import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
 import org.restfulwhois.rdap.core.entity.model.EntityTel;
 import org.restfulwhois.rdap.core.ip.model.Network;
-import org.restfulwhois.rdap.filters.QueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.Assert;
@@ -70,11 +69,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class EntityQueryDaoTest extends BaseTest {
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
     /**
      * domainQueryDao.
      */

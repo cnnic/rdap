@@ -47,7 +47,6 @@ import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
-import org.restfulwhois.rdap.filters.QueryParser;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,12 +70,6 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
     private RedirectDao redirectDao;
 
     /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
-
-    /**
      * testSync_v4.
      * 
      * @throws DataSetException
@@ -87,7 +80,8 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
     public void testSync_v4() throws DataSetException {
         super.databaseSetupWithBinaryColumns("network-redirect-v4-sync.xml");
         IpVersion versionV4 = IpVersion.V4;
-        QueryParam queryParam = queryParser.parseIpQueryParam("1.0.0.0/8");
+        QueryParam queryParam =
+                NetworkQueryParam.generateQueryParam("1.0.0.0/8");
         RedirectResponse redirectResponse = redirectDao.query(queryParam);
         assertNotNull(redirectResponse);
         assertEquals("http://cnnic.cn/rdap", redirectResponse.getUrl());
@@ -101,7 +95,7 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
         urls.add("REDIRECT_URL_1_UPDATED_2");
         NetworkRedirect redirect = new NetworkRedirect(urls);
         NetworkQueryParam networkQueryParam =
-                (NetworkQueryParam) queryParser.parseIpQueryParam("1.0.0.0/8");
+                NetworkQueryParam.generateQueryParam("1.0.0.0/8");
         redirect.setNetworkQueryParam(networkQueryParam);
         bootstraps.add(redirect);
         redirectDao.save(bootstraps);
@@ -142,7 +136,7 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
         super.databaseSetupWithBinaryColumns("network-redirect-v6-sync.xml");
         IpVersion versionV6 = IpVersion.V6;
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:1/96");
+                NetworkQueryParam.generateQueryParam("0:0:0:0:2001:6a8:0:1/96");
         RedirectResponse redirectResponse = redirectDao.query(queryParam);
         assertNotNull(redirectResponse);
         assertEquals("http://cnnic.cn/rdap", redirectResponse.getUrl());
@@ -156,8 +150,7 @@ public class NetworkRedirectDaoForBootstrapTest extends BaseTest {
         urls.add("REDIRECT_URL_1_UPDATED_2");
         NetworkRedirect redirect = new NetworkRedirect(urls);
         NetworkQueryParam networkQueryParam =
-                (NetworkQueryParam) queryParser
-                        .parseIpQueryParam("0:0:0:0:2001:6a8::/96");
+                NetworkQueryParam.generateQueryParam("0:0:0:0:2001:6a8::/96");
         redirect.setNetworkQueryParam(networkQueryParam);
         bootstraps.add(redirect);
         redirectDao.save(bootstraps);

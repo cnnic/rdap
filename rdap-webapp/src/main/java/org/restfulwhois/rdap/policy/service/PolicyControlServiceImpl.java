@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.service.impl;
+package org.restfulwhois.rdap.policy.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -42,7 +42,7 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.service.PolicyControlService;
+import org.restfulwhois.rdap.core.common.service.PolicyControlService;
 import org.restfulwhois.rdap.policy.dao.PolicyDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,18 +81,19 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      */
     private static Map<String, Set<String>> mapPolicy = null;
 
-    @Override
     public Map<String, Set<String>> loadPolicyFieldsByMap() {
         return mapPolicy;
     }
 
     @Override
-    public void initAllPolicyByMap() {
+    public void init() {
         mapPolicy = policyDao.loadAllPolicyMap();
         return;
     }
 
-    @Override
+    /**
+     * clear policy.
+     */
     public void clearPolicy() {
         mapPolicy.clear();
         mapPolicy = null;
@@ -125,7 +126,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      * @return string of method.
      */
     private String trucateStringFromMethod(String strMethod) {
-        
+
         final String strSet = "set";
         final String strGet = "get";
         final String strIs = "is";
@@ -142,8 +143,8 @@ public class PolicyControlServiceImpl implements PolicyControlService {
         String strMethodField = strMethod.substring(posAfterSet);
         String strFieldFirstLetter = strMethodField.substring(0, 1);
         String strReplace = StringUtils.lowerCase(strFieldFirstLetter);
-        strMethodField = strMethodField.replaceFirst(strFieldFirstLetter,
-                strReplace);
+        strMethodField =
+                strMethodField.replaceFirst(strFieldFirstLetter, strReplace);
 
         return strMethodField;
     }
@@ -209,8 +210,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
         }
         String strObjType = null;
         if (objModel.getClass().getSuperclass() == BaseModel.class
-                || objModel.getClass().getSuperclass()
-                    == BaseSearchModel.class) {
+                || objModel.getClass().getSuperclass() == BaseSearchModel.class) {
             strObjType = getModelString(objModel);
         }
         if (strObjType == null) {
@@ -218,8 +218,8 @@ public class PolicyControlServiceImpl implements PolicyControlService {
         }
         Set<String> setFields = mapObjFields.get(strObjType);
 
-        Method[] allMethods = ReflectionUtils.getUniqueDeclaredMethods(objModel
-                .getClass());
+        Method[] allMethods =
+                ReflectionUtils.getUniqueDeclaredMethods(objModel.getClass());
         for (Method mthd : allMethods) {
             String strMethod = mthd.getName();
             String strMethodField = trucateStringFromMethod(strMethod);
@@ -266,7 +266,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      *            object to set.
      */
     private void setInnerListPolicy(final Object object) {
-        
+
         List<?> listObjs = (List<?>) object;
         if (listObjs != null) {
             for (int iObj = 0; iObj < listObjs.size(); ++iObj) {

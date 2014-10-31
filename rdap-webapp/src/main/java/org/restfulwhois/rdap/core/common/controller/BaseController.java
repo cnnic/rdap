@@ -30,16 +30,14 @@
  */
 package org.restfulwhois.rdap.core.common.controller;
 
+import org.restfulwhois.rdap.core.common.service.AccessControlManager;
+import org.restfulwhois.rdap.core.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.ResponseDecorator;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.validation.HttpValidationError;
 import org.restfulwhois.rdap.core.common.validation.ValidationError;
 import org.restfulwhois.rdap.core.common.validation.ValidationResult;
-import org.restfulwhois.rdap.core.service.AccessControlManager;
-import org.restfulwhois.rdap.core.service.SearchService;
-import org.restfulwhois.rdap.filters.MappingExceptionResolver;
-import org.restfulwhois.rdap.filters.QueryParser;
 import org.restfulwhois.rdap.redirect.service.RedirectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,16 +125,6 @@ public class BaseController {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(BaseController.class);
 
-    /**
-     * search service.
-     */
-    @Autowired
-    protected SearchService searchService;
-    /**
-     * query parser.
-     */
-    @Autowired
-    protected QueryParser queryParser;
     /**
      * response decorator.
      */

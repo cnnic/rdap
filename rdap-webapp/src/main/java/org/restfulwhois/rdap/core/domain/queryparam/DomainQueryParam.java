@@ -58,6 +58,25 @@ public class DomainQueryParam extends QueryParam {
      */
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
+    /**
+     * domain puny name.
+     */
+    private String punyName;
+
+    /**
+     * generateQueryParam
+     * 
+     * @param domainName
+     *            domainName.
+     * @param punyDomainName
+     *            punyDomainName.
+     * @return DomainQueryParam.
+     */
+    public static DomainQueryParam generateQueryParam(String domainName,
+            String punyDomainName) {
+        return new DomainQueryParam(domainName, punyDomainName);
+    }
+
     @Override
     protected void initValidators() {
         addValidator(DOMAIN_NAME_VALIDATOR);
@@ -106,11 +125,6 @@ public class DomainQueryParam extends QueryParam {
         super(q);
         this.punyName = punyName;
     }
-
-    /**
-     * domain puny name.
-     */
-    private String punyName;
 
     /**
      * get punyName.

@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.service.impl.ConnectionControlService;
 import org.restfulwhois.rdap.filters.AuthenticationFilter;
-import org.restfulwhois.rdap.filters.DecodeUriForSpringMvc;
+import org.restfulwhois.rdap.filters.DecodeUriForSpringFilter;
 import org.restfulwhois.rdap.filters.HttpRequestFilter;
 import org.restfulwhois.rdap.filters.InvalidUriFilter;
 import org.restfulwhois.rdap.filters.NotImplementedUriFilter;
 import org.restfulwhois.rdap.filters.RateLimitFilter;
+import org.restfulwhois.rdap.filters.service.ConnectionControlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +63,7 @@ public class FilterChainProxy implements Filter {
         filters.add(new AuthenticationFilter());
         filters.add(new RateLimitFilter());
         filters.add(new HttpRequestFilter());
-        filters.add(new DecodeUriForSpringMvc());
+        filters.add(new DecodeUriForSpringFilter());
         filters.add(new NotImplementedUriFilter());
         filters.add(new InvalidUriFilter());
         LOGGER.debug("init RDAP filters end.");

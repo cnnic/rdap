@@ -39,7 +39,6 @@ import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.filters.QueryParser;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,12 +60,6 @@ public class NetworkRedirectDaoTest extends BaseTest {
     @Autowired
     @Qualifier("networkRedirectDao")
     private RedirectDao redirectDao;
-
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
 
     /**
      * test query exist v4.

@@ -10,7 +10,7 @@ import org.restfulwhois.rdap.core.common.filter.FilterHelper;
 import org.restfulwhois.rdap.core.common.filter.RdapFilter;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.service.impl.ConnectionControlService;
+import org.restfulwhois.rdap.filters.service.ConnectionControlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

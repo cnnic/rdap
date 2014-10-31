@@ -28,26 +28,53 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
+package org.restfulwhois.rdap.core.entity.service.impl;
 
-package org.restfulwhois.rdap.core.service;
-
-import org.restfulwhois.rdap.acl.bean.User;
-
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.entity.service.EntityQueryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * check user authorization by user id and password.
+ * query service implementation.
  * 
- * @author wang
+ * RdapController's main query service for querying or searching.
+ * 
+ * Provide the all tlds to be supported
+ * 
+ * Requirement from http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
+ * 
+ * @author jiashuo
+ * 
  */
-public interface IdentityCheckService {
+@Service
+public class EntityQueryServiceImpl implements EntityQueryService {
+
     /**
-     * check user authorization by user Id and password.
-     * 
-     * @param userId
-     *            user identity.
-     * @param userPwd
-     *            user password.
-     * @return user or null.
+     * logger.
      */
-    User identityCheckService(final String userId, final String userPwd);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(EntityQueryServiceImpl.class);
+
+    /**
+     * entityQueryDao.
+     */
+    @Autowired
+    private QueryDao<Entity> entityQueryDao;
+
+    /**
+     * query entity by queryParam.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return entity.
+     */
+    @Override
+    public Entity queryEntity(QueryParam queryParam) {
+        return entityQueryDao.query(queryParam);
+    }
 }

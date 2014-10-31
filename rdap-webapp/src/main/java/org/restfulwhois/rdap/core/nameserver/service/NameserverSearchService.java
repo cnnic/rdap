@@ -28,53 +28,26 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.entity.service.impl;
+package org.restfulwhois.rdap.core.nameserver.service;
 
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.entity.service.EntityService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
 
 /**
- * query service implementation.
- * 
- * RdapController's main query service for querying or searching.
- * 
- * Provide the all tlds to be supported
- * 
- * Requirement from http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
+ * nameserver search service interface.
  * 
  * @author jiashuo
  * 
  */
-@Service
-public class EntityServiceImpl implements EntityService {
+public interface NameserverSearchService {
 
     /**
-     * logger.
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(EntityServiceImpl.class);
-
-    /**
-     * entityQueryDao.
-     */
-    @Autowired
-    private QueryDao<Entity> entityQueryDao;
-
-    /**
-     * query entity by queryParam.
+     * search nameserver by name.
      * 
      * @param queryParam
      *            queryParam.
-     * @return entity.
+     * @return NameserverSearch.
      */
-    @Override
-    public Entity queryEntity(QueryParam queryParam) {
-        return entityQueryDao.query(queryParam);
-    }
+    NameserverSearch searchNameserver(QueryParam queryParam);
+
 }

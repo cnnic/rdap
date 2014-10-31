@@ -39,8 +39,6 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
-import org.restfulwhois.rdap.filters.QueryParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -51,16 +49,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public abstract class NetworkRegistryHandler extends RegistryHandler {
-    /**
-     * query parser.
-     */
-    @Autowired
-    private QueryParser queryParser;
-
-    /**
-     * CIDR separator.
-     */
-    private static final String CIDR_SEPARATOR = "/";
 
     @Override
     void saveRedirects(List<Redirect> redirects) {
@@ -83,7 +71,7 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
             return redirects;
         }
         try {
-            QueryParam queryParam = queryParser.parseIpQueryParam(key);
+            QueryParam queryParam = NetworkQueryParam.generateQueryParam(key);
             if (null == queryParam) {
                 logger.error(
                         "ignore this key/urls:{},{}. generate networkQueryParam error:{}",

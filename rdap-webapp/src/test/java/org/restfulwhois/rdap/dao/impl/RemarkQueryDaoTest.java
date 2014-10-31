@@ -44,8 +44,6 @@ import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.core.common.model.Link;
 import org.restfulwhois.rdap.core.common.model.Remark;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.dao.impl.RemarkQueryDaoImpl;
-import org.restfulwhois.rdap.filters.QueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -59,11 +57,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class RemarkQueryDaoTest extends BaseTest {
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
     /**
      * remarkQueryDao.
      */
