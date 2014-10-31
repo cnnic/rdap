@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.filters.QueryParser;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +62,6 @@ public class DomainRedirectDaoTest extends BaseTest {
     private RedirectDao redirectDao;
 
     /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
-
-    /**
      * test query exist.
      */
     @Test
@@ -77,8 +71,8 @@ public class DomainRedirectDaoTest extends BaseTest {
         String domainName = "cnnic.cn";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         RedirectResponse redirect =
-                redirectDao.query(queryParser.parseDomainQueryParam(domainName,
-                        punyDomainName));
+                redirectDao.query(DomainQueryParam.generateQueryParam(
+                        domainName, punyDomainName));
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
     }
@@ -94,15 +88,15 @@ public class DomainRedirectDaoTest extends BaseTest {
         String domainName = "cnnic.c'n";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         RedirectResponse redirect =
-                redirectDao.query(queryParser.parseDomainQueryParam(domainName,
-                        punyDomainName));
+                redirectDao.query(DomainQueryParam.generateQueryParam(
+                        domainName, punyDomainName));
         assertNull(redirect);
         // with "
         domainName = "cnnic.c'n";
         punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         redirect =
-                redirectDao.query(queryParser.parseDomainQueryParam(domainName,
-                        punyDomainName));
+                redirectDao.query(DomainQueryParam.generateQueryParam(
+                        domainName, punyDomainName));
         assertNull(redirect);
     }
 
@@ -116,8 +110,8 @@ public class DomainRedirectDaoTest extends BaseTest {
         String domainName = "baidu.com";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         RedirectResponse redirect =
-                redirectDao.query(queryParser.parseDomainQueryParam(domainName,
-                        punyDomainName));
+                redirectDao.query(DomainQueryParam.generateQueryParam(
+                        domainName, punyDomainName));
         assertNull(redirect);
     }
 

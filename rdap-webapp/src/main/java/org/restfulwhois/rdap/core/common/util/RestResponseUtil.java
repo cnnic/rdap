@@ -38,8 +38,8 @@ import javax.annotation.PostConstruct;
 
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.service.ErrorMessageService;
+import org.restfulwhois.rdap.core.common.service.PolicyControlService;
 import org.restfulwhois.rdap.core.common.support.ResponseDecorator;
-import org.restfulwhois.rdap.core.service.PolicyControlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -105,7 +105,7 @@ public class RestResponseUtil {
      * init policy service.
      */
     public static void initPolicyService() {
-        policyService.initAllPolicyByMap();
+        policyService.init();
     }
 
     /**

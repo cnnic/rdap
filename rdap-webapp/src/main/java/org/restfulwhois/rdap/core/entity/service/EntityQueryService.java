@@ -28,64 +28,29 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.filters;
+package org.restfulwhois.rdap.core.entity.service;
 
-import org.restfulwhois.rdap.acl.bean.Principal;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.entity.model.Entity;
 
 /**
- * This class is used to hold principal for each request.
- * <p>
- * Principal is maintains in {@link java.lang.ThreadLocal} variable.
- * <p>
- * PrincipalHolder.setPrincipal() is typically used when a request is comming,
- * and PrincipalHolder.remove() is used after response is send to client.
- * <p>
+ * query service interface.
+ * 
+ * query Domain/IP/AS/Name server/entity/help and is the query object in own
+ * registry
  * 
  * @author jiashuo
  * 
  */
-public final class PrincipalHolder {
+public interface EntityQueryService {
 
     /**
-     * default constructor.
-     */
-    private PrincipalHolder() {
-        super();
-    }
-
-    /**
-     * thread local principal.
-     */
-    private static final ThreadLocal<Principal> PRINCIPAL =
-            new ThreadLocal<Principal>();
-
-    /**
-     * set principal.
+     * query entity.
      * 
-     * @param auth
-     *            principal.
+     * @param queryParam
+     *            queryParam.
+     * @return Entity.
      */
-    public static void setPrincipal(Principal auth) {
-        PRINCIPAL.set(auth);
-    }
-
-    /**
-     * remove principal.
-     */
-    public static void remove() {
-        PRINCIPAL.remove();
-    }
-
-    /**
-     * get principal.
-     * 
-     * @return principal.
-     */
-    public static Principal getPrincipal() {
-        if (null == PRINCIPAL.get()) {
-            return Principal.getAnonymousPrincipal();
-        }
-        return PRINCIPAL.get();
-    }
+    Entity queryEntity(QueryParam queryParam);
 
 }

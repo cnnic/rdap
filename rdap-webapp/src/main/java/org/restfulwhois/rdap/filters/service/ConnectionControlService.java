@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.service.impl;
+package org.restfulwhois.rdap.filters.service;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,8 +38,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
-import org.restfulwhois.rdap.filters.PrincipalHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

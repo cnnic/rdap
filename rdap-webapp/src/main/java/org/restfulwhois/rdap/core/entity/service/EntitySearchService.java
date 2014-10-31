@@ -28,37 +28,24 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.domain.service;
+package org.restfulwhois.rdap.core.entity.service;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.domain.model.Domain;
+import org.restfulwhois.rdap.search.entity.bean.EntitySearch;
 
 /**
- * query service interface.
+ * search service interface.
  * 
- * query Domain/IP/AS/Name server/entity/help
- * and is the query object in own registry 
+ * search object list of domain/name server/entity.
  * 
  * @author jiashuo
  * 
  */
-public interface DomainService {
+public interface EntitySearchService {
     /**
-     * query domain by domain name.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return domain object.
+     * search entity by handle or name.
+     * @param queryParam queryParam.
+     * @return DomainSearch.
      */
-    Domain queryDomain(QueryParam queryParam);
-    
-    /**
-     * check tld is in this registry.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return true if is,false if not.
-     */
-    boolean tldInThisRegistry(QueryParam queryParam);
-    
+    EntitySearch searchEntity(QueryParam queryParam);
 }

@@ -39,7 +39,7 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.queryparam.EntityQueryParam;
-import org.restfulwhois.rdap.core.entity.service.EntityService;
+import org.restfulwhois.rdap.core.entity.service.EntityQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class EntityQueryController extends BaseController {
      * query service.
      */
     @Autowired
-    protected EntityService queryService;
+    protected EntityQueryService queryService;
     /**
      * <pre>
      * query entity.

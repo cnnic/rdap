@@ -37,7 +37,7 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
-import org.restfulwhois.rdap.core.domain.service.DomainService;
+import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class DomainQueryController extends BaseDnrController {
      * query service.
      */
     @Autowired
-    protected DomainService queryService;
+    protected DomainQueryService queryService;
 
     /**
      * 

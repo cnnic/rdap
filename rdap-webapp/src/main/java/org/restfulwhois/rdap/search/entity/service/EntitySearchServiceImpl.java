@@ -28,42 +28,66 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.service;
+package org.restfulwhois.rdap.search.entity.service;
 
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.domain.model.DomainSearch;
+import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.entity.service.EntitySearchService;
 import org.restfulwhois.rdap.search.entity.bean.EntitySearch;
-import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
+import org.restfulwhois.rdap.search.service.AbstractSearchService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * search service interface.
+ * search service implementation.
  * 
- * search object list of domain/name server/entity.
+ * RdapController's searching for domain/NS/IP/entity .etc .
+ * 
+ * The result list is paged by 'batchsizeSearch' property.
  * 
  * @author jiashuo
  * 
  */
-public interface SearchService {
+@Service
+public class EntitySearchServiceImpl extends AbstractSearchService implements
+        EntitySearchService {
     /**
-     * search domain by domain name.
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(EntitySearchServiceImpl.class);
+
+    /**
+     * entity dao.
+     */
+    @Autowired
+    private QueryDao<Entity> entitySearchDao;
+
+    /**
+     * search entity.
      * 
      * @param queryParam
-     *            queryParam.
-     * @return domain list.
+     *            param for entity.
+     * @return entity search result.
      */
-    DomainSearch searchDomain(QueryParam queryParam);
-    /**
-     * search nameserver by name.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return NameserverSearch.
-     */
-    NameserverSearch searchNameserver(QueryParam queryParam);
-    /**
-     * search entity by handle or name.
-     * @param queryParam queryParam.
-     * @return DomainSearch.
-     */
-    EntitySearch searchEntity(QueryParam queryParam);
+    @Override
+    public EntitySearch searchEntity(QueryParam queryParam) {
+        LOGGER.debug("searchEntity QueryParam:" + queryParam);
+        BaseSearchModel<Entity> searchResult =
+                this.search(queryParam, entitySearchDao);
+        LOGGER.debug("searchEntity searchResult:" + searchResult);
+        if (null == searchResult) {
+            return null;
+        }
+        EntitySearch entitySearch = new EntitySearch();
+        BeanUtils.copyProperties(searchResult, entitySearch);
+        entitySearch.setEntitySearchResults(searchResult.getSearchResults());
+        LOGGER.debug("searchEntity entitySearch:" + entitySearch);
+        return entitySearch;
+    }
 }

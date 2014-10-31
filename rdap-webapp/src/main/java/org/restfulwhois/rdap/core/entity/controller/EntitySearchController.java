@@ -45,10 +45,12 @@ import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByFnParam;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByHandleParam;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchParam;
+import org.restfulwhois.rdap.core.entity.service.EntitySearchService;
 import org.restfulwhois.rdap.search.entity.bean.EntitySearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,15 +70,34 @@ public class EntitySearchController extends BaseController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EntitySearchController.class);
+
+    /**
+     * search service.
+     */
+    @Autowired
+    protected EntitySearchService searchService;
+
+    /**
+     * searchParams.
+     */
     private static List<EntitySearchParam> searchParams =
             new ArrayList<EntitySearchParam>();
+    /**
+     * init params.
+     */
     static {
         searchParams.add(new EntitySearchByHandleParam());
         searchParams.add(new EntitySearchByFnParam());
     }
 
-    private EntitySearchParam
-            createSearchParam(HttpServletRequest request) {
+    /**
+     * create param.
+     * 
+     * @param request
+     *            request.
+     * @return searchParam.
+     */
+    private EntitySearchParam createSearchParam(HttpServletRequest request) {
         EntitySearchType searchType = parseSearchType(request);
         if (null == searchType) {
             return null;
@@ -92,6 +113,13 @@ public class EntitySearchController extends BaseController {
         return null;
     }
 
+    /**
+     * parseSearchType.
+     * 
+     * @param request
+     *            request.
+     * @return searchType.
+     */
     public EntitySearchType parseSearchType(HttpServletRequest request) {
         try {
             String lastSpliInURI = RequestUtil.getLastSplitInURI(request);
@@ -102,7 +130,8 @@ public class EntitySearchController extends BaseController {
             return null;
         }
         final String[] allSearchType = EntitySearchType.valuesOfString();
-        String paramName = RequestUtil.getFirstParameter(request, allSearchType);
+        String paramName =
+                RequestUtil.getFirstParameter(request, allSearchType);
         if (StringUtils.isBlank(paramName)) {
             return null;
         }

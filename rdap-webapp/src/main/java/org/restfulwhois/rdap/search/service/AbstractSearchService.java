@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.service.impl;
+package org.restfulwhois.rdap.search.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,64 +36,37 @@ import java.util.List;
 import org.restfulwhois.rdap.core.common.dao.QueryDao;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.core.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.common.support.PageBean;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
-import org.restfulwhois.rdap.core.domain.model.Domain;
-import org.restfulwhois.rdap.core.domain.model.DomainSearch;
-import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
-import org.restfulwhois.rdap.core.service.AccessControlManager;
-import org.restfulwhois.rdap.core.service.SearchService;
-import org.restfulwhois.rdap.search.entity.bean.EntitySearch;
-import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * search service implementation.
+ * abstract search service.
  * 
- * RdapController's searching for domain/NS/IP/entity .etc .
- * 
- * The result list is paged by 'batchsizeSearch' property.
+ * searching for domain/NS/entity.
  * 
  * @author jiashuo
  * 
  */
 @Service
-public class SearchServiceImpl implements SearchService {
+abstract public class AbstractSearchService {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(SearchServiceImpl.class);
-    /**
-     * domain dao.
-     */
-    @Autowired
-    private QueryDao<Domain> domainSearchDao;
-
-    /**
-     * nameserver dao.
-     */
-    @Autowired
-    private QueryDao<Nameserver> nameserverSearchDao;
+            .getLogger(AbstractSearchService.class);
     /**
      * access control manager.
      */
     @Autowired
     private AccessControlManager accessControlManager;
-
-    /**
-     * entity dao.
-     */
-    @Autowired
-    private QueryDao<Entity> entitySearchDao;
 
     /**
      * common search.
@@ -106,7 +79,7 @@ public class SearchServiceImpl implements SearchService {
      *            model in the base search.
      * @return BaseSearchModel.
      */
-    private <T extends BaseModel> BaseSearchModel<T> search(
+    protected <T extends BaseModel> BaseSearchModel<T> search(
             QueryParam queryParam, QueryDao<T> searchDao) {
 
         LOGGER.debug("search QueryParam:" + queryParam + ",QueryDao:"
@@ -157,73 +130,4 @@ public class SearchServiceImpl implements SearchService {
         return searchResult;
     }
 
-    /**
-     * search domain.
-     * 
-     * @param queryParam
-     *            param for domain.
-     * @return domain search result.
-     */
-    @Override
-    public DomainSearch searchDomain(QueryParam queryParam) {
-        LOGGER.debug("searchDomain QueryParam:" + queryParam);
-        BaseSearchModel<Domain> searchResult =
-                this.search(queryParam, domainSearchDao);
-        LOGGER.debug("searchDomain searchResult:" + searchResult);
-        if (null == searchResult) {
-            return null;
-        }
-        DomainSearch domainSearch = new DomainSearch();
-        BeanUtils.copyProperties(searchResult, domainSearch);
-        domainSearch.setDomainSearchResults(searchResult.getSearchResults());
-        LOGGER.debug("searchDomain domainSearch:" + domainSearch);
-        return domainSearch;
-    }
-
-    /**
-     * search nameserver.
-     * 
-     * @param queryParam
-     *            param for nameserver.
-     * @return nameserver search result.
-     */
-    @Override
-    public NameserverSearch searchNameserver(QueryParam queryParam) {
-        LOGGER.debug("searchNameserver QueryParam:" + queryParam);
-        BaseSearchModel<Nameserver> searchResult =
-                this.search(queryParam, nameserverSearchDao);
-        LOGGER.debug("searchNameserver searchResult:" + searchResult);
-        if (null == searchResult) {
-            return null;
-        }
-        NameserverSearch nameserverSearch = new NameserverSearch();
-        BeanUtils.copyProperties(searchResult, nameserverSearch);
-        nameserverSearch.setNameserverSearchResults(searchResult
-                .getSearchResults());
-        LOGGER.debug("searchNameserver nameserverSearch:" + nameserverSearch);
-        return nameserverSearch;
-    }
-
-    /**
-     * search entity.
-     * 
-     * @param queryParam
-     *            param for entity.
-     * @return entity search result.
-     */
-    @Override
-    public EntitySearch searchEntity(QueryParam queryParam) {
-        LOGGER.debug("searchEntity QueryParam:" + queryParam);
-        BaseSearchModel<Entity> searchResult =
-                this.search(queryParam, entitySearchDao);
-        LOGGER.debug("searchEntity searchResult:" + searchResult);
-        if (null == searchResult) {
-            return null;
-        }
-        EntitySearch entitySearch = new EntitySearch();
-        BeanUtils.copyProperties(searchResult, entitySearch);
-        entitySearch.setEntitySearchResults(searchResult.getSearchResults());
-        LOGGER.debug("searchEntity entitySearch:" + entitySearch);
-        return entitySearch;
-    }
 }

@@ -40,8 +40,6 @@ import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.RequestUtil;
-import org.restfulwhois.rdap.filters.QueryParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
@@ -52,8 +50,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
  */
 @SuppressWarnings("rawtypes")
 public class QueryParserTest extends BaseTest {
-    @Autowired
-    private QueryParser queryParser;
 
     /**
      * test valid autnum of one number

@@ -40,10 +40,11 @@ import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.domain.model.DomainSearch;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByDomainNameParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
+import org.restfulwhois.rdap.core.domain.service.DomainSearchService;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByHandleParam;
+import org.restfulwhois.rdap.core.entity.service.EntitySearchService;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchByNameParam;
-import org.restfulwhois.rdap.core.service.SearchService;
-import org.restfulwhois.rdap.filters.QueryParser;
+import org.restfulwhois.rdap.core.nameserver.service.NameserverSearchService;
 import org.restfulwhois.rdap.search.entity.bean.EntitySearch;
 import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for SearchService.
+ * Test for NameserverSearchService.
  * 
  * @author jiashuo
  * 
@@ -61,9 +62,11 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class SearchServiceImplTest extends BaseTest {
     @Autowired
-    private QueryParser queryParser;
+    private DomainSearchService domainSearchService;
     @Autowired
-    private SearchService searchService;
+    private NameserverSearchService nameserverSearchService;
+    @Autowired
+    private EntitySearchService entitySearchService;
 
     /**
      * test search domain.
@@ -81,7 +84,8 @@ public class SearchServiceImplTest extends BaseTest {
         // resultsTruncated = true, batch<max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
-        EntitySearch entitySearch = searchService.searchEntity(queryParam);
+        EntitySearch entitySearch =
+                entitySearchService.searchEntity(queryParam);
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
@@ -89,7 +93,7 @@ public class SearchServiceImplTest extends BaseTest {
         // resultsTruncated = true, batch=max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 5L);
-        entitySearch = searchService.searchEntity(queryParam);
+        entitySearch = entitySearchService.searchEntity(queryParam);
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
@@ -97,8 +101,7 @@ public class SearchServiceImplTest extends BaseTest {
         // resultsTruncated = true, batch>max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 6L);
-        entitySearch =
-                searchService.searchEntity(queryParam);
+        entitySearch = entitySearchService.searchEntity(queryParam);
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(4L, entitySearch.getEntitySearchResults().size());
@@ -106,8 +109,7 @@ public class SearchServiceImplTest extends BaseTest {
         // no resultsTruncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 6L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
-        entitySearch =
-                searchService.searchEntity(queryParam);
+        entitySearch = entitySearchService.searchEntity(queryParam);
         assertNotNull(entitySearch);
         assertNotNull(entitySearch.getEntitySearchResults());
         assertEquals(5L, entitySearch.getEntitySearchResults().size());
@@ -131,7 +133,7 @@ public class SearchServiceImplTest extends BaseTest {
                 new DomainSearchByDomainNameParam();
         domainSearchParam.setPunyName(domainName);
         DomainSearch domainSearch =
-                searchService.searchDomain(domainSearchParam);
+                domainSearchService.searchDomain(domainSearchParam);
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
         assertEquals(5L, domainSearch.getDomainSearchResults().size());
@@ -139,7 +141,7 @@ public class SearchServiceImplTest extends BaseTest {
         // resultsTruncated = true, batch=max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 5L);
-        domainSearch = searchService.searchDomain(domainSearchParam);
+        domainSearch = domainSearchService.searchDomain(domainSearchParam);
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
         assertEquals(5L, domainSearch.getDomainSearchResults().size());
@@ -147,7 +149,7 @@ public class SearchServiceImplTest extends BaseTest {
         // resultsTruncated = true, batch>max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 6L);
-        domainSearch = searchService.searchDomain(domainSearchParam);
+        domainSearch = domainSearchService.searchDomain(domainSearchParam);
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
         assertEquals(5L, domainSearch.getDomainSearchResults().size());
@@ -155,7 +157,7 @@ public class SearchServiceImplTest extends BaseTest {
         // no resultsTruncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 6L);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", 3L);
-        domainSearch = searchService.searchDomain(domainSearchParam);
+        domainSearch = domainSearchService.searchDomain(domainSearchParam);
         assertNotNull(domainSearch);
         assertNotNull(domainSearch.getDomainSearchResults());
         assertEquals(6L, domainSearch.getDomainSearchResults().size());
@@ -181,7 +183,8 @@ public class SearchServiceImplTest extends BaseTest {
         // resultsTruncated = true, batch<max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", sizeHigh);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", sizeLow);
-        NameserverSearch nsSearch = searchService.searchNameserver(queryParam);
+        NameserverSearch nsSearch =
+                nameserverSearchService.searchNameserver(queryParam);
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeHigh, nsSearch.getNameserverSearchResults().size());
@@ -189,7 +192,7 @@ public class SearchServiceImplTest extends BaseTest {
         // resultsTruncated = true, batch=max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", sizeLow);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", sizeLow);
-        nsSearch = searchService.searchNameserver(queryParam);
+        nsSearch = nameserverSearchService.searchNameserver(queryParam);
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeLow, nsSearch.getNameserverSearchResults().size());
@@ -197,7 +200,7 @@ public class SearchServiceImplTest extends BaseTest {
         // resultsTruncated = true, batch>max
         ReflectionTestUtils.setField(prop, "maxsizeSearch", sizeLow);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", sizeHigh);
-        nsSearch = searchService.searchNameserver(queryParam);
+        nsSearch = nameserverSearchService.searchNameserver(queryParam);
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeLow, nsSearch.getNameserverSearchResults().size());
@@ -205,7 +208,7 @@ public class SearchServiceImplTest extends BaseTest {
         // no resultsTruncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", sizeLimit);
         ReflectionTestUtils.setField(prop, "batchsizeSearch", sizeLow);
-        nsSearch = searchService.searchNameserver(queryParam);
+        nsSearch = nameserverSearchService.searchNameserver(queryParam);
         assertNotNull(nsSearch);
         assertNotNull(nsSearch.getNameserverSearchResults());
         assertEquals(sizeLimit, nsSearch.getNameserverSearchResults().size());

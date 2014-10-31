@@ -51,7 +51,7 @@ import org.restfulwhois.rdap.bootstrap.handler.NetworkV4RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV6RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.registry.DataProvider;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.filters.QueryParser;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.impl.AutnumRedirectDao;
 import org.restfulwhois.rdap.redirect.dao.impl.DomainRedirectDao;
@@ -113,11 +113,6 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     @Autowired
     private AutnumRegistryHandler autnumRegistryHandler;
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
 
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
@@ -331,7 +326,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void afterAssertDomainResult() {
         QueryParam parseDomainQueryParam =
-                queryParser.parseDomainQueryParam("cnnic.cn", "cnnic.cn");
+                DomainQueryParam.generateQueryParam("cnnic.cn", "cnnic.cn");
         // sync
         List<Redirect> bootstraps = new ArrayList<Redirect>();
         List<String> urls = new ArrayList<String>();
@@ -352,7 +347,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void beforeAssertDomain() {
         QueryParam parseDomainQueryParam =
-                queryParser.parseDomainQueryParam("cnnic.cn", "cnnic.cn");
+                DomainQueryParam.generateQueryParam("cnnic.cn", "cnnic.cn");
         RedirectResponse redirectResponse =
                 domainRedirectDao.query(parseDomainQueryParam);
         assertNotNull(redirectResponse);

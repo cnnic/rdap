@@ -29,12 +29,12 @@
  * DAMAGE.
  */
 
-package org.restfulwhois.rdap.core.service.impl;
+package org.restfulwhois.rdap.authenticate.service.impl;
 
 import org.restfulwhois.rdap.acl.bean.User;
 import org.restfulwhois.rdap.acl.dao.IdentityCheckDao;
+import org.restfulwhois.rdap.authenticate.service.IdentityCheckService;
 import org.restfulwhois.rdap.core.common.util.MD5Encryption;
-import org.restfulwhois.rdap.core.service.IdentityCheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

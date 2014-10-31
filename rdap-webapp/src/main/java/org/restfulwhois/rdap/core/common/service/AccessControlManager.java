@@ -28,44 +28,26 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.common.validation;
+package org.restfulwhois.rdap.core.common.service;
 
-import org.springframework.http.HttpStatus;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 
 /**
- * HttpValidationError.
+ * Access Control Manager.
+ * 
+ * According to Access Control List
  * 
  * @author jiashuo
  * 
  */
-public class HttpValidationError implements ValidationError {
-    private HttpStatus statusCode;
-
-    private HttpValidationError(HttpStatus statusCode) {
-        super();
-        this.statusCode = statusCode;
-    }
-
-    public static ValidationError build400Error() {
-        return new HttpValidationError(HttpStatus.BAD_REQUEST);
-    }
-
-    public static ValidationError build422Error() {
-        return new HttpValidationError(HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-
-    public HttpStatus getStatusCode() {
-        return statusCode;
-    }
-
-    @Override
-    public String getCode() {
-        return statusCode.name();
-    }
-
-    @Override
-    public String getMessage() {
-        return statusCode.getReasonPhrase();
-    }
-
+public interface AccessControlManager {
+    /**
+     * check if current request user has permission for model object.
+     * 
+     * @param object
+     *            secure object.
+     * @return true if has permission,false if not.
+     */
+    boolean hasPermission(BaseModel object);   
+    
 }

@@ -70,6 +70,24 @@ public class NetworkQueryParam extends QueryParam {
         super.setOriginalQ(q);
     }
 
+    /**
+     * generateQueryParam
+     * 
+     * @param cidr
+     *            cidr.
+     * @return QueryParam.
+     */
+    public static NetworkQueryParam generateQueryParam(String cidr) {
+        NetworkQueryParam queryParam = new NetworkQueryParam(cidr);
+        try {
+            queryParam.fillParam();
+        } catch (Exception e) {
+            LOGGER.error("parseIpQueryParam error:{}", e);
+            return null;
+        }
+        return queryParam;
+    }
+
     @Override
     protected void initValidators() {
         super.addValidator(new NetworkQueryValidator());

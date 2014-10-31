@@ -31,9 +31,9 @@
 package org.restfulwhois.rdap.core.nameserver.service.impl;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.domain.service.DomainService;
+import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
-import org.restfulwhois.rdap.core.nameserver.service.NameserverService;
+import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;
 import org.restfulwhois.rdap.dao.impl.NameserverQueryDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +53,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
-public class NameserverServiceImpl implements NameserverService {
+public class NameserverServiceImpl implements NameserverQueryService {
 
     /**
      * logger.
@@ -70,7 +70,7 @@ public class NameserverServiceImpl implements NameserverService {
      * nameserver DAO.
      */
     @Autowired
-    private DomainService domainService;
+    private DomainQueryService domainService;
 
     /**
      * query name server by NS queryParam.

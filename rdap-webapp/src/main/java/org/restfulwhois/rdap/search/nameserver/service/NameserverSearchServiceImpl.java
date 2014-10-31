@@ -28,65 +28,64 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.service.impl;
+package org.restfulwhois.rdap.search.nameserver.service;
 
-import org.restfulwhois.rdap.acl.bean.Principal;
-import org.restfulwhois.rdap.acl.bean.SecureObject;
-import org.restfulwhois.rdap.acl.dao.AclDao;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.service.AccessControlManager;
-import org.restfulwhois.rdap.filters.PrincipalHolder;
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
+import org.restfulwhois.rdap.core.nameserver.service.NameserverSearchService;
+import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
+import org.restfulwhois.rdap.search.service.AbstractSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-
 
 /**
- * AccessControlManager implementation.
- * 
- * Requirement from  
- * http://tools.ietf.org/html/draft-ietf-weirds-rdap-sec-06#section-3.2 .
- * 
- * Provide authorization to user and its access object, 
- * according to Access Control List.
+ * NS search service implementation.
  * 
  * @author jiashuo
  * 
  */
 @Service
-public class AccessControlManagerImpl implements AccessControlManager {
+public class NameserverSearchServiceImpl extends AbstractSearchService
+        implements NameserverSearchService {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(AccessControlManagerImpl.class);    
-    
+            .getLogger(NameserverSearchServiceImpl.class);
+
     /**
-     * acl dao.
+     * nameserver dao.
      */
     @Autowired
-    private AclDao aclDao;
-    
+    private QueryDao<Nameserver> nameserverSearchDao;
+
     /**
-     * Is a model permitted for querying.
+     * search nameserver.
      * 
-     * @param object
-     *            param for object to be queried.
-     * @return boolean.
-     */   
+     * @param queryParam
+     *            param for nameserver.
+     * @return nameserver search result.
+     */
     @Override
-    public boolean hasPermission(BaseModel object) {
-        Assert.notNull(object);
-        Assert.notNull(object.getId());
-        Assert.notNull(object.getObjectType());
-        
-        LOGGER.debug("hasPermission:" + object);
-        Principal principal = PrincipalHolder.getPrincipal();
-        SecureObject secureObject = new SecureObject(object.getId(), object
-                .getObjectType().getName());
-        return aclDao.hasEntry(principal, secureObject);
-    }  
+    public NameserverSearch searchNameserver(QueryParam queryParam) {
+        LOGGER.debug("searchNameserver QueryParam:" + queryParam);
+        BaseSearchModel<Nameserver> searchResult =
+                this.search(queryParam, nameserverSearchDao);
+        LOGGER.debug("searchNameserver searchResult:" + searchResult);
+        if (null == searchResult) {
+            return null;
+        }
+        NameserverSearch nameserverSearch = new NameserverSearch();
+        BeanUtils.copyProperties(searchResult, nameserverSearch);
+        nameserverSearch.setNameserverSearchResults(searchResult
+                .getSearchResults());
+        LOGGER.debug("searchNameserver nameserverSearch:" + nameserverSearch);
+        return nameserverSearch;
+    }
+
 }

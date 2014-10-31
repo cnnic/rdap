@@ -28,42 +28,37 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.service;
+package org.restfulwhois.rdap.core.domain.service;
 
-import java.util.Map;
-import java.util.Set;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.domain.model.Domain;
 
 /**
- * policy control interface.
+ * query service interface.
  * 
- * load policy and apply policy.
+ * query Domain/IP/AS/Name server/entity/help
+ * and is the query object in own registry 
  * 
- * @author weijunkai
+ * @author jiashuo
  * 
  */
-public interface PolicyControlService {
+public interface DomainQueryService {
     /**
-     * load policy by map from database.
+     * query domain by domain name.
      * 
-     * @return Map<String,Set<String>>,[key:modelType,value:hiddenColumnName]
+     * @param queryParam
+     *            queryParam.
+     * @return domain object.
      */
-    Map<String, Set<String>> loadPolicyFieldsByMap();
-
+    Domain queryDomain(QueryParam queryParam);
+    
     /**
-     * set policy by map from database.
-     */
-    void initAllPolicyByMap();
-
-    /**
-     * clear all Policy.
-     */
-    void clearPolicy();
-
-    /**
-     * apply the policy for object.
+     * check tld is in this registry.
      * 
-     * @param objModel
-     *            the object to set.
+     * @param queryParam
+     *            queryParam.
+     * @return true if is,false if not.
      */
-    void applyPolicy(final Object objModel);
+    boolean tldInThisRegistry(QueryParam queryParam);
+    
 }

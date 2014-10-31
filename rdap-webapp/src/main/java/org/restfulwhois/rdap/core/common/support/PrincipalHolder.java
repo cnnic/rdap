@@ -28,37 +28,64 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.nameserver.service;
+package org.restfulwhois.rdap.core.common.support;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
+import org.restfulwhois.rdap.acl.bean.Principal;
 
 /**
- * query service interface.
- * 
- * query Domain/IP/AS/Name server/entity/help and is the query object in own
- * registry
+ * This class is used to hold principal for each request.
+ * <p>
+ * Principal is maintains in {@link java.lang.ThreadLocal} variable.
+ * <p>
+ * PrincipalHolder.setPrincipal() is typically used when a request is comming,
+ * and PrincipalHolder.remove() is used after response is send to client.
+ * <p>
  * 
  * @author jiashuo
  * 
  */
-public interface NameserverService {
+public final class PrincipalHolder {
 
     /**
-     * query nameserver.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return Nameserver for the result.
+     * default constructor.
      */
-    Nameserver queryNameserver(QueryParam queryParam);
+    private PrincipalHolder() {
+        super();
+    }
 
     /**
-     * check tld is in this registry.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return true if is,false if not.
+     * thread local principal.
      */
-    boolean tldInThisRegistry(QueryParam queryParam);
+    private static final ThreadLocal<Principal> PRINCIPAL =
+            new ThreadLocal<Principal>();
+
+    /**
+     * set principal.
+     * 
+     * @param auth
+     *            principal.
+     */
+    public static void setPrincipal(Principal auth) {
+        PRINCIPAL.set(auth);
+    }
+
+    /**
+     * remove principal.
+     */
+    public static void remove() {
+        PRINCIPAL.remove();
+    }
+
+    /**
+     * get principal.
+     * 
+     * @return principal.
+     */
+    public static Principal getPrincipal() {
+        if (null == PRINCIPAL.get()) {
+            return Principal.getAnonymousPrincipal();
+        }
+        return PRINCIPAL.get();
+    }
+
 }

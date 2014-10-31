@@ -58,17 +58,17 @@ import org.springframework.web.util.WebUtils;
  * @author zhanyq
  * 
  */
-public class DecodeUriForSpringMvc implements RdapFilter {
+public class DecodeUriForSpringFilter implements RdapFilter {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(DecodeUriForSpringMvc.class);
+            .getLogger(DecodeUriForSpringFilter.class);
 
     /**
      * constructor.
      */
-    public DecodeUriForSpringMvc() {
+    public DecodeUriForSpringFilter() {
         super();
         LOGGER.debug("init RDAP filter:{}", this.getName());
     }

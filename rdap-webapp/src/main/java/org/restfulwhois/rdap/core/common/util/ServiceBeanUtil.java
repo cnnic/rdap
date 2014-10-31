@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.common.util;
 
-import org.restfulwhois.rdap.core.service.IdentityCheckService;
+import org.restfulwhois.rdap.authenticate.service.IdentityCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

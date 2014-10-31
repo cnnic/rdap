@@ -55,7 +55,7 @@ import org.restfulwhois.rdap.core.common.model.Variant;
 import org.restfulwhois.rdap.core.common.model.Variants;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.domain.model.Domain;
-import org.restfulwhois.rdap.filters.QueryParser;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -68,11 +68,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class DomainQueryDaoTest extends BaseTest {
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
     /**
      * domainQueryDao.
      */
@@ -88,7 +83,7 @@ public class DomainQueryDaoTest extends BaseTest {
         String domainName = "cnnic.cn";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         domainName, punyDomainName));
         assertNotNull(domain);
         assertEquals("1", domain.getHandle());
@@ -195,7 +190,7 @@ public class DomainQueryDaoTest extends BaseTest {
         String unicodeName = "清华大学.中国";
         String punyDomainName = DomainUtil.geneDomainPunyName(unicodeName);
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         unicodeName, punyDomainName));
         assertNotNull(domain);
         assertEquals("2", domain.getHandle());
@@ -217,7 +212,7 @@ public class DomainQueryDaoTest extends BaseTest {
         String domainName = "cnnic";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         domainName, punyDomainName));
         assertNull(domain);
     }
@@ -237,8 +232,9 @@ public class DomainQueryDaoTest extends BaseTest {
                     Exception {
         String domainName = "1.0.0.in-addr.arpa";
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         domainName, domainName));
+
         assertNotNull(domain);
     }
 
@@ -252,7 +248,7 @@ public class DomainQueryDaoTest extends BaseTest {
                 "2.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
 
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         domainName, domainName));
         assertNull(domain);
     }
@@ -268,7 +264,7 @@ public class DomainQueryDaoTest extends BaseTest {
                 "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa";
 
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         domainName, domainName));
         assertNotNull(domain);
     }
@@ -278,7 +274,7 @@ public class DomainQueryDaoTest extends BaseTest {
     public void testQueryArpaIpv6_3() {
         String domainName = "f.f.f.ip6.arpa";
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         domainName, domainName));
         assertNotNull(domain);
     }
@@ -290,7 +286,7 @@ public class DomainQueryDaoTest extends BaseTest {
         String domainName =
                 "f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.ip6.arpa";
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         domainName, domainName));
         assertNotNull(domain);
     }
@@ -304,7 +300,7 @@ public class DomainQueryDaoTest extends BaseTest {
         String domainName = "10.in-addr.arpa";
 
         Domain domain =
-                domainQueryDao.query(queryParser.parseDomainQueryParam(
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
                         domainName, domainName));
         assertNull(domain);
     }
@@ -313,6 +309,5 @@ public class DomainQueryDaoTest extends BaseTest {
     public void before() throws Exception {
         databaseSetupWithBinaryColumns("domain.xml");
     }
-    
-}
 
+}

@@ -39,7 +39,7 @@ import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
-import org.restfulwhois.rdap.core.domain.service.DomainService;
+import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
 import org.restfulwhois.rdap.dao.impl.DomainQueryDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,13 +60,13 @@ import org.springframework.util.CollectionUtils;
  * 
  */
 @Service
-public class DomainServiceImpl implements DomainService {
+public class DomainQueryServiceImpl implements DomainQueryService {
 
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(DomainServiceImpl.class);
+            .getLogger(DomainQueryServiceImpl.class);
 
     /**
      * domain DAO.
