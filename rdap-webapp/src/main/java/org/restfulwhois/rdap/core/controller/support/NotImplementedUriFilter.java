@@ -72,10 +72,10 @@ public class NotImplementedUriFilter implements RdapFilter {
      * @return true if contain, false if not.
      */
     public boolean containNotImplementedType(String uri) {        
-        List<String> notImplObjectTypesList = RdapProperties
-             .getNotImplementedTypeList();
-        for (String notImplObjectType :notImplObjectTypesList) {
-            if (uri.startsWith(notImplObjectType)) {
+        List<String> notImplementedUriList = RdapProperties
+             .getNotImplementedUriList();
+        for (String notImplementedUri :notImplementedUriList) {
+            if (uri.startsWith(notImplementedUri)) {
                 return true;             
             }
         }       
