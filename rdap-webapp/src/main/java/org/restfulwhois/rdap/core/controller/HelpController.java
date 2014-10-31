@@ -33,10 +33,10 @@ package org.restfulwhois.rdap.core.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Help;
+import org.restfulwhois.rdap.core.queryparam.HelpQueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -82,7 +82,7 @@ public class HelpController extends BaseController {
         if (!"help".equals(lastSpliInURI)) {
             return RestResponseUtil.createResponse400();
         }
-        Help result = queryService.queryHelp(QueryParamHelper.buildQueryParam(""));
+        Help result = queryService.queryHelp(new HelpQueryParam(""));
         if (null != result) {
             // No permission control
             responseDecorator.decorateResponseForHelp(result);
