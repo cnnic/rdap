@@ -40,7 +40,7 @@ import org.restfulwhois.rdap.bootstrap.bean.BootstrapEntry;
 import org.restfulwhois.rdap.bootstrap.bean.BootstrapRegistries;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
 import org.restfulwhois.rdap.bootstrap.registry.DataProvider;
-import org.restfulwhois.rdap.core.common.RdapProperties;
+import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.redirect.service.RedirectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

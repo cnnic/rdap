@@ -37,12 +37,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.dao.QueryDao;
-import org.restfulwhois.rdap.core.model.Event;
-import org.restfulwhois.rdap.core.model.KeyData;
-import org.restfulwhois.rdap.core.model.Link;
-import org.restfulwhois.rdap.core.model.ModelType;
-import org.restfulwhois.rdap.core.model.SecureDns.SecureDNSRType;
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.Event;
+import org.restfulwhois.rdap.core.common.model.KeyData;
+import org.restfulwhois.rdap.core.common.model.Link;
+import org.restfulwhois.rdap.core.common.model.SecureDns.SecureDNSRType;
+import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

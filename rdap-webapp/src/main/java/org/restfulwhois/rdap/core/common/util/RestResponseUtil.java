@@ -36,10 +36,10 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.restfulwhois.rdap.core.model.ErrorMessage;
-import org.restfulwhois.rdap.core.service.ErrorMessageService;
+import org.restfulwhois.rdap.core.common.model.ErrorMessage;
+import org.restfulwhois.rdap.core.common.service.ErrorMessageService;
+import org.restfulwhois.rdap.core.common.support.ResponseDecorator;
 import org.restfulwhois.rdap.core.service.PolicyControlService;
-import org.restfulwhois.rdap.core.service.impl.ResponseDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

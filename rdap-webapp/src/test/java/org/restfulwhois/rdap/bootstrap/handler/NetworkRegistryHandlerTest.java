@@ -41,7 +41,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
+import org.restfulwhois.rdap.filters.QueryParser;
 import org.springframework.test.util.ReflectionTestUtils;
 
 /**

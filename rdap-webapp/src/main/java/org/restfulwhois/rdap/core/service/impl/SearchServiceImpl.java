@@ -33,20 +33,20 @@ package org.restfulwhois.rdap.core.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.bean.TruncatedInfo;
-import org.restfulwhois.rdap.core.bean.TruncatedInfo.TruncateReason;
-import org.restfulwhois.rdap.core.common.RdapProperties;
-import org.restfulwhois.rdap.core.dao.QueryDao;
-import org.restfulwhois.rdap.core.model.BaseModel;
-import org.restfulwhois.rdap.core.model.Domain;
-import org.restfulwhois.rdap.core.model.Entity;
-import org.restfulwhois.rdap.core.model.Nameserver;
-import org.restfulwhois.rdap.core.model.PageBean;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.core.common.support.PageBean;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
+import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
+import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.core.domain.model.Domain;
+import org.restfulwhois.rdap.core.domain.model.DomainSearch;
+import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.service.AccessControlManager;
 import org.restfulwhois.rdap.core.service.SearchService;
-import org.restfulwhois.rdap.search.bean.BaseSearchModel;
-import org.restfulwhois.rdap.search.domain.bean.DomainSearch;
 import org.restfulwhois.rdap.search.entity.bean.EntitySearch;
 import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
 import org.slf4j.Logger;
@@ -59,9 +59,9 @@ import org.springframework.stereotype.Service;
  * search service implementation.
  * 
  * RdapController's searching for domain/NS/IP/entity .etc .
- *  
+ * 
  * The result list is paged by 'batchsizeSearch' property.
- *  
+ * 
  * @author jiashuo
  * 
  */
@@ -88,7 +88,7 @@ public class SearchServiceImpl implements SearchService {
      */
     @Autowired
     private AccessControlManager accessControlManager;
-    
+
     /**
      * entity dao.
      */
@@ -108,16 +108,16 @@ public class SearchServiceImpl implements SearchService {
      */
     private <T extends BaseModel> BaseSearchModel<T> search(
             QueryParam queryParam, QueryDao<T> searchDao) {
-        
-        LOGGER.debug("search QueryParam:" + queryParam 
-                                + ",QueryDao:" + searchDao);
-        
+
+        LOGGER.debug("search QueryParam:" + queryParam + ",QueryDao:"
+                + searchDao);
+
         Long totalCount = searchDao.searchCount(queryParam);
         LOGGER.debug("search count is " + totalCount);
         if (totalCount == 0) {
             return null;
         }
-        List<T> authedObjects = new ArrayList<T>();       
+        List<T> authedObjects = new ArrayList<T>();
         PageBean page = new PageBean();
         page.setMaxRecords(RdapProperties.getBatchsizeSearch().intValue());
         page.setRecordsCount(totalCount.intValue());
@@ -128,9 +128,9 @@ public class SearchServiceImpl implements SearchService {
             List<T> objects = searchDao.search(queryParam);
             for (T object : objects) {
                 if (authedObjects.size() == RdapProperties.getMaxsizeSearch()) {
-                    gotEnoughResults = true;                    
-                    truncatedInfo.addTruncate(
-                        TruncateReason.TRUNCATEREASON_EXLOAD);
+                    gotEnoughResults = true;
+                    truncatedInfo
+                            .addTruncate(TruncateReason.TRUNCATEREASON_EXLOAD);
                     break;
                 }
                 if (authedObjects.size() < RdapProperties.getMaxsizeSearch()
@@ -138,24 +138,25 @@ public class SearchServiceImpl implements SearchService {
                     authedObjects.add(object);
                 }
                 if (!accessControlManager.hasPermission(object)) {
-                     truncatedInfo.addTruncate(
-                            TruncateReason.TRUNCATEREASON_AUTH);
-                }                
+                    truncatedInfo
+                            .addTruncate(TruncateReason.TRUNCATEREASON_AUTH);
+                }
             }
             page.incrementCurrentPage();
         } while (page.isNotLastPage() && !gotEnoughResults
         // && authedDomains.size() < RdapProperties.getMaxsizeSearch()
         );
-        BaseSearchModel<T> searchResult = new BaseSearchModel<T>();        
-        if (authedObjects.size() == 0) {            
+        BaseSearchModel<T> searchResult = new BaseSearchModel<T>();
+        if (authedObjects.size() == 0) {
             truncatedInfo.setHasNoAuthForAllObjects(true);
         }
         searchResult.setTruncatedInfo(truncatedInfo);
         searchResult.setSearchResults(authedObjects);
-        
+
         LOGGER.debug("search result " + searchResult);
         return searchResult;
     }
+
     /**
      * search domain.
      * 
@@ -166,8 +167,8 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public DomainSearch searchDomain(QueryParam queryParam) {
         LOGGER.debug("searchDomain QueryParam:" + queryParam);
-        BaseSearchModel<Domain> searchResult = this.search(queryParam,
-                domainSearchDao);
+        BaseSearchModel<Domain> searchResult =
+                this.search(queryParam, domainSearchDao);
         LOGGER.debug("searchDomain searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
@@ -178,6 +179,7 @@ public class SearchServiceImpl implements SearchService {
         LOGGER.debug("searchDomain domainSearch:" + domainSearch);
         return domainSearch;
     }
+
     /**
      * search nameserver.
      * 
@@ -188,8 +190,8 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public NameserverSearch searchNameserver(QueryParam queryParam) {
         LOGGER.debug("searchNameserver QueryParam:" + queryParam);
-        BaseSearchModel<Nameserver> searchResult = this.search(queryParam,
-                nameserverSearchDao);
+        BaseSearchModel<Nameserver> searchResult =
+                this.search(queryParam, nameserverSearchDao);
         LOGGER.debug("searchNameserver searchResult:" + searchResult);
         if (null == searchResult) {
             return null;
@@ -201,18 +203,19 @@ public class SearchServiceImpl implements SearchService {
         LOGGER.debug("searchNameserver nameserverSearch:" + nameserverSearch);
         return nameserverSearch;
     }
+
     /**
      * search entity.
      * 
      * @param queryParam
      *            param for entity.
      * @return entity search result.
-     */    
+     */
     @Override
     public EntitySearch searchEntity(QueryParam queryParam) {
         LOGGER.debug("searchEntity QueryParam:" + queryParam);
-        BaseSearchModel<Entity> searchResult = this.search(queryParam,
-                entitySearchDao);
+        BaseSearchModel<Entity> searchResult =
+                this.search(queryParam, entitySearchDao);
         LOGGER.debug("searchEntity searchResult:" + searchResult);
         if (null == searchResult) {
             return null;

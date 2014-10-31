@@ -40,9 +40,9 @@ import org.hamcrest.core.IsNot;
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
 import org.restfulwhois.rdap.core.common.util.JcardUtil;
-import org.restfulwhois.rdap.core.model.Entity;
-import org.restfulwhois.rdap.core.model.EntityAddress;
-import org.restfulwhois.rdap.core.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.entity.model.EntityAddress;
+import org.restfulwhois.rdap.core.entity.model.EntityTel;
 
 import ezvcard.Ezvcard;
 import ezvcard.Ezvcard.ParserChainJsonString;

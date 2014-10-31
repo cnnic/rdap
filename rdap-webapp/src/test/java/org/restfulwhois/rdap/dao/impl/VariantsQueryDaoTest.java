@@ -38,10 +38,10 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.dao.QueryDao;
-import org.restfulwhois.rdap.core.model.ModelType;
-import org.restfulwhois.rdap.core.model.Variant;
-import org.restfulwhois.rdap.core.model.Variants;
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.Variant;
+import org.restfulwhois.rdap.core.common.model.Variants;
+import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;

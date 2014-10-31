@@ -36,7 +36,7 @@ import java.net.IDN;
 import java.net.URLDecoder;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.exception.DecodeException;
+import org.restfulwhois.rdap.core.common.exception.DecodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

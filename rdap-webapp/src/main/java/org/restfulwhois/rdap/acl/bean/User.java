@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.acl.bean;
 
-import org.restfulwhois.rdap.core.model.BaseModel;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 
 /**
  * rdap user object.

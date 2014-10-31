@@ -1,0 +1,253 @@
+2014-10-28 16:36:53,921 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:36:53,925 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:36:53,926 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:36:53,926 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:36:53,926 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:36:53,926 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:36:53,927 [main] INFO  o.r.rdap.port43.server.Main 84 - command:start
+2014-10-28 16:36:53,981 [main] INFO  i.n.util.internal.PlatformDependent 101 - Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+2014-10-28 16:36:54,180 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0xfd688724] REGISTERED
+2014-10-28 16:36:54,185 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0xfd688724] BIND: 0.0.0.0/0.0.0.0:43
+2014-10-28 16:36:54,186 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x98987b71] REGISTERED
+2014-10-28 16:36:54,187 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x98987b71] BIND: 0.0.0.0/0.0.0.0:9999
+2014-10-28 16:36:54,188 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0xfd688724, /0.0.0.0:43] ACTIVE
+2014-10-28 16:36:54,188 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x98987b71, /0.0.0.0:9999] ACTIVE
+2014-10-28 16:37:26,840 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0xfd688724, /0.0.0.0:43] RECEIVED: [id: 0x51ac5d54, /127.0.0.1:62543 => /127.0.0.1:43]
+2014-10-28 16:37:30,094 [nioEventLoopGroup-3-1] INFO  o.r.r.port43.server.ServiceHandler 81 - clientAddress:127.0.0.1
+2014-10-28 16:37:30,101 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 88 - initial command handler...
+2014-10-28 16:37:30,104 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 120 - receive query:cnnic.cn
+2014-10-28 16:37:30,115 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.CommandParser 109 - agruments is less than 2
+2014-10-28 16:37:30,118 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.DomainQueryHandler 78 - request for RDAP server URI:domain/cnnic.cn
+2014-10-28 16:37:48,703 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:37:48,707 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:37:48,708 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:37:48,708 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:37:48,708 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:37:48,708 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:37:48,709 [main] INFO  o.r.rdap.port43.server.Main 84 - command:shutdown
+2014-10-28 16:37:48,709 [main] INFO  o.r.rdap.port43.server.Main 105 - shutdownServer
+2014-10-28 16:37:48,750 [main] INFO  i.n.util.internal.PlatformDependent 101 - Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+2014-10-28 16:37:48,900 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c] REGISTERED
+2014-10-28 16:37:48,901 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c] CONNECT: /127.0.0.1:9999
+2014-10-28 16:37:48,903 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x98987b71, /0.0.0.0:9999] RECEIVED: [id: 0xc109bee8, /127.0.0.1:62567 => /127.0.0.1:9999]
+2014-10-28 16:37:48,905 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c, /127.0.0.1:62567 => /127.0.0.1:9999] ACTIVE
+2014-10-28 16:37:48,906 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 55 - send command:shutdown
+2014-10-28 16:37:48,916 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c, /127.0.0.1:62567 => /127.0.0.1:9999] WRITE: 8B
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |
++--------+-------------------------------------------------+----------------+
+|00000000| 73 68 75 74 64 6f 77 6e                         |shutdown        |
++--------+-------------------------------------------------+----------------+
+2014-10-28 16:37:48,918 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c, /127.0.0.1:62567 => /127.0.0.1:9999] FLUSH
+2014-10-28 16:37:48,919 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c, /127.0.0.1:62567 => /127.0.0.1:9999] WRITE: 1B
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |
++--------+-------------------------------------------------+----------------+
+|00000000| 0a                                              |.               |
++--------+-------------------------------------------------+----------------+
+2014-10-28 16:37:48,919 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c, /127.0.0.1:62567 => /127.0.0.1:9999] FLUSH
+2014-10-28 16:37:48,919 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 80 - receive manage cmd:shutdown
+2014-10-28 16:37:48,920 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 88 - do shutdown server ...
+2014-10-28 16:37:48,921 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 133 - doShutdown begin...
+2014-10-28 16:37:48,921 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@d480ea
+2014-10-28 16:37:48,921 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c, /127.0.0.1:62567 => /127.0.0.1:9999] RECEIVED: 28B
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |
++--------+-------------------------------------------------+----------------+
+|00000000| 73 68 75 74 64 6f 77 6e 20 73 65 72 76 65 72 20 |shutdown server |
+|00000010| 73 75 63 63 65 73 73 66 75 6c 2e 0a             |successful..    |
++--------+-------------------------------------------------+----------------+
+2014-10-28 16:37:48,922 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 63 - shutdown client...
+2014-10-28 16:37:48,922 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0xfd688724, /0.0.0.0:43] CLOSE
+2014-10-28 16:37:48,922 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0xfd688724, /0.0.0.0:43] UNREGISTERED
+2014-10-28 16:37:48,923 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@aea710
+2014-10-28 16:37:48,923 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 65 - shutdown client end.
+2014-10-28 16:37:48,924 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 138 - shutdown rate limit IP map clear timer...
+2014-10-28 16:37:48,924 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x98987b71, /0.0.0.0:9999] CLOSE
+2014-10-28 16:37:48,924 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 140 - doShutdown end.
+2014-10-28 16:37:48,924 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x98987b71, /0.0.0.0:9999] UNREGISTERED
+2014-10-28 16:37:48,925 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 90 - do shutdown server end.
+2014-10-28 16:37:48,926 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 92 - shutdown manage server end.
+62567 :> /127.0.0.1:9999] INACTIVE
+2014-10-28 16:37:48,926 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x9621123c, /127.0.0.1:62567 :> /127.0.0.1:9999] UNREGISTERED
+2014-10-28 16:38:13,673 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:38:13,679 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:38:13,679 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:38:13,680 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:38:13,680 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:38:13,680 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:38:13,681 [main] INFO  o.r.rdap.port43.server.Main 84 - command:start
+2014-10-28 16:38:13,704 [main] INFO  i.n.util.internal.PlatformDependent 101 - Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+2014-10-28 16:38:13,877 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x1e05326f] REGISTERED
+2014-10-28 16:38:13,881 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x1e05326f] BIND: 0.0.0.0/0.0.0.0:43
+2014-10-28 16:38:13,882 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x8662c006] REGISTERED
+2014-10-28 16:38:13,883 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x8662c006] BIND: 0.0.0.0/0.0.0.0:9999
+2014-10-28 16:38:13,883 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x1e05326f, /0.0.0.0:43] ACTIVE
+2014-10-28 16:38:13,884 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x8662c006, /0.0.0.0:9999] ACTIVE
+2014-10-28 16:38:16,602 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x1e05326f, /0.0.0.0:43] RECEIVED: [id: 0xf34d13b7, /127.0.0.1:62597 => /127.0.0.1:43]
+2014-10-28 16:38:20,708 [nioEventLoopGroup-3-1] INFO  o.r.r.port43.server.ServiceHandler 81 - clientAddress:127.0.0.1
+2014-10-28 16:38:20,716 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 88 - initial command handler...
+2014-10-28 16:38:20,719 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 120 - receive query:种
+2014-10-28 16:38:20,767 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.CommandParser 109 - agruments is less than 2
+2014-10-28 16:38:20,770 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.DomainQueryHandler 78 - request for RDAP server URI:domain/%E7%A7%8D
+2014-10-28 16:38:24,314 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x1e05326f, /0.0.0.0:43] RECEIVED: [id: 0x7072b917, /127.0.0.1:62604 => /127.0.0.1:43]
+2014-10-28 16:38:30,518 [nioEventLoopGroup-3-2] INFO  o.r.r.port43.server.ServiceHandler 81 - clientAddress:127.0.0.1
+2014-10-28 16:38:30,518 [nioEventLoopGroup-3-2] INFO  o.r.rdap.port43.service.ProxyService 120 - receive query:218.241.111.0
+2014-10-28 16:38:30,519 [nioEventLoopGroup-3-2] INFO  o.r.r.p.s.command.CommandParser 109 - agruments is less than 2
+2014-10-28 16:38:35,046 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x1e05326f, /0.0.0.0:43] RECEIVED: [id: 0x539c1687, /127.0.0.1:62609 => /127.0.0.1:43]
+2014-10-28 16:38:37,422 [nioEventLoopGroup-3-3] INFO  o.r.r.port43.server.ServiceHandler 81 - clientAddress:127.0.0.1
+2014-10-28 16:38:37,423 [nioEventLoopGroup-3-3] INFO  o.r.rdap.port43.service.ProxyService 120 - receive query:cnnic.cn
+2014-10-28 16:38:37,423 [nioEventLoopGroup-3-3] INFO  o.r.r.p.s.command.CommandParser 109 - agruments is less than 2
+2014-10-28 16:38:37,425 [nioEventLoopGroup-3-3] INFO  o.r.r.p.s.command.DomainQueryHandler 78 - request for RDAP server URI:domain/cnnic.cn
+2014-10-28 16:38:48,467 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:38:48,471 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:38:48,472 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:38:48,472 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:38:48,472 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:38:48,472 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:38:48,473 [main] INFO  o.r.rdap.port43.server.Main 84 - command:shutdown
+2014-10-28 16:38:48,473 [main] INFO  o.r.rdap.port43.server.Main 105 - shutdownServer
+2014-10-28 16:38:48,514 [main] INFO  i.n.util.internal.PlatformDependent 101 - Your platform does not provide complete low-level API for accessing direct buffers reliably. Unless explicitly requested, heap buffer will always be preferred to avoid potential system unstability.
+2014-10-28 16:38:48,665 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0] REGISTERED
+2014-10-28 16:38:48,667 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0] CONNECT: /127.0.0.1:9999
+2014-10-28 16:38:48,668 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x8662c006, /0.0.0.0:9999] RECEIVED: [id: 0x43cc8f06, /127.0.0.1:62631 => /127.0.0.1:9999]
+2014-10-28 16:38:48,671 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0, /127.0.0.1:62631 => /127.0.0.1:9999] ACTIVE
+2014-10-28 16:38:48,671 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 55 - send command:shutdown
+2014-10-28 16:38:48,681 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0, /127.0.0.1:62631 => /127.0.0.1:9999] WRITE: 8B
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |
++--------+-------------------------------------------------+----------------+
+|00000000| 73 68 75 74 64 6f 77 6e                         |shutdown        |
++--------+-------------------------------------------------+----------------+
+2014-10-28 16:38:48,683 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0, /127.0.0.1:62631 => /127.0.0.1:9999] FLUSH
+2014-10-28 16:38:48,683 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0, /127.0.0.1:62631 => /127.0.0.1:9999] WRITE: 1B
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |
++--------+-------------------------------------------------+----------------+
+|00000000| 0a                                              |.               |
++--------+-------------------------------------------------+----------------+
+2014-10-28 16:38:48,684 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0, /127.0.0.1:62631 => /127.0.0.1:9999] FLUSH
+2014-10-28 16:38:48,684 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 80 - receive manage cmd:shutdown
+2014-10-28 16:38:48,685 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 88 - do shutdown server ...
+2014-10-28 16:38:48,685 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 133 - doShutdown begin...
+2014-10-28 16:38:48,686 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@1afb0c7
+D: 28B
+         +-------------------------------------------------+
+         |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f |
++--------+-------------------------------------------------+----------------+
+|00000000| 73 68 75 74 64 6f 77 6e 20 73 65 72 76 65 72 20 |shutdown server |
+|00000010| 73 75 63 63 65 73 73 66 75 6c 2e 0a             |successful..    |
++--------+-------------------------------------------------+----------------+
+2014-10-28 16:38:48,686 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 63 - shutdown client...
+2014-10-28 16:38:48,687 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x1e05326f, /0.0.0.0:43] CLOSE
+2014-10-28 16:38:48,687 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x1e05326f, /0.0.0.0:43] UNREGISTERED
+2014-10-28 16:38:48,688 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@2515
+2014-10-28 16:38:48,688 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 65 - shutdown client end.
+2014-10-28 16:38:48,688 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 138 - shutdown rate limit IP map clear timer...
+2014-10-28 16:38:48,690 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0, /127.0.0.1:62631 :> /127.0.0.1:9999] INACTIVE
+2014-10-28 16:38:48,690 [nioEventLoopGroup-2-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x52b529f0, /127.0.0.1:62631 :> /127.0.0.1:9999] UNREGISTERED
+2014-10-28 16:38:48,689 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x8662c006, /0.0.0.0:9999] CLOSE
+2014-10-28 16:38:48,689 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 140 - doShutdown end.
+2014-10-28 16:38:48,692 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 90 - do shutdown server end.
+2014-10-28 16:38:48,691 [nioEventLoopGroup-4-1] INFO  i.n.handler.logging.LoggingHandler 101 - [id: 0x8662c006, /0.0.0.0:9999] UNREGISTERED
+2014-10-28 16:38:48,692 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 92 - shutdown manage server end.
+2014-10-28 16:39:51,655 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:39:51,659 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:39:51,659 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:39:51,660 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:39:51,660 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:39:51,660 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:39:51,661 [main] INFO  o.r.rdap.port43.server.Main 84 - command:start
+2014-10-28 16:39:57,840 [nioEventLoopGroup-3-1] INFO  o.r.r.port43.server.ServiceHandler 81 - clientAddress:127.0.0.1
+2014-10-28 16:39:57,848 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 88 - initial command handler...
+2014-10-28 16:39:57,851 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 120 - receive query:cnnic.cn
+2014-10-28 16:39:57,861 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.CommandParser 109 - agruments is less than 2
+2014-10-28 16:39:57,863 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.DomainQueryHandler 78 - request for RDAP server URI:domain/cnnic.cn
+2014-10-28 16:40:06,629 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:40:06,634 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:40:06,634 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:40:06,635 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:40:06,635 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:40:06,635 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:40:06,636 [main] INFO  o.r.rdap.port43.server.Main 84 - command:shutdown
+2014-10-28 16:40:06,636 [main] INFO  o.r.rdap.port43.server.Main 105 - shutdownServer
+2014-10-28 16:40:06,833 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 55 - send command:shutdown
+2014-10-28 16:40:06,845 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 80 - receive manage cmd:shutdown
+2014-10-28 16:40:06,846 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 88 - do shutdown server ...
+2014-10-28 16:40:06,846 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 133 - doShutdown begin...
+2014-10-28 16:40:06,847 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@425743
+2014-10-28 16:40:06,847 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 63 - shutdown client...
+2014-10-28 16:40:06,849 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 65 - shutdown client end.
+2014-10-28 16:40:06,849 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@1aacd5f
+2014-10-28 16:40:06,850 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 138 - shutdown rate limit IP map clear timer...
+2014-10-28 16:40:06,850 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 140 - doShutdown end.
+2014-10-28 16:40:06,851 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 90 - do shutdown server end.
+2014-10-28 16:40:06,851 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 92 - shutdown manage server end.
+2014-10-28 16:41:52,208 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:41:52,212 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:41:52,212 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:41:52,213 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:41:52,213 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:41:52,213 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:41:52,213 [main] INFO  o.r.rdap.port43.server.Main 84 - command:start
+2014-10-28 16:41:58,063 [nioEventLoopGroup-3-1] INFO  o.r.r.port43.server.ServiceHandler 81 - clientAddress:127.0.0.1
+2014-10-28 16:41:58,070 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 88 - initial command handler...
+2014-10-28 16:41:58,074 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 120 - receive query:cnnic.cn
+2014-10-28 16:41:58,084 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.CommandParser 109 - agruments is less than 2
+2014-10-28 16:41:58,087 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.DomainQueryHandler 78 - request for RDAP server URI:domain/cnnic.cn
+2014-10-28 16:42:02,776 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:42:02,780 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:42:02,781 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:42:02,781 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:42:02,781 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:42:02,781 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:42:02,782 [main] INFO  o.r.rdap.port43.server.Main 84 - command:shutdown
+2014-10-28 16:42:02,782 [main] INFO  o.r.rdap.port43.server.Main 105 - shutdownServer
+2014-10-28 16:42:02,974 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 55 - send command:shutdown
+2014-10-28 16:42:02,989 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 80 - receive manage cmd:shutdown
+2014-10-28 16:42:02,990 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 88 - do shutdown server ...
+2014-10-28 16:42:02,990 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 133 - doShutdown begin...
+2014-10-28 16:42:02,991 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@883357
+2014-10-28 16:42:02,991 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 63 - shutdown client...
+2014-10-28 16:42:02,993 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 65 - shutdown client end.
+2014-10-28 16:42:02,993 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@56b93a
+2014-10-28 16:42:02,994 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 138 - shutdown rate limit IP map clear timer...
+2014-10-28 16:42:02,994 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 140 - doShutdown end.
+2014-10-28 16:42:02,994 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 90 - do shutdown server end.
+2014-10-28 16:42:02,995 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 92 - shutdown manage server end.
+2014-10-28 16:46:14,965 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:46:14,969 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:46:14,969 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:46:14,969 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:46:14,970 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:46:14,970 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:46:14,970 [main] INFO  o.r.rdap.port43.server.Main 84 - command:start
+2014-10-28 16:46:25,979 [nioEventLoopGroup-3-1] INFO  o.r.r.port43.server.ServiceHandler 81 - clientAddress:127.0.0.1
+2014-10-28 16:46:25,986 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 88 - initial command handler...
+2014-10-28 16:46:25,989 [nioEventLoopGroup-3-1] INFO  o.r.rdap.port43.service.ProxyService 120 - receive query:.cn
+2014-10-28 16:46:25,999 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.CommandParser 109 - agruments is less than 2
+2014-10-28 16:46:26,002 [nioEventLoopGroup-3-1] INFO  o.r.r.p.s.command.DomainQueryHandler 78 - request for RDAP server URI:domain/.cn
+2014-10-28 16:46:32,647 [nioEventLoopGroup-3-2] INFO  o.r.r.port43.server.ServiceHandler 81 - clientAddress:127.0.0.1
+2014-10-28 16:46:32,648 [nioEventLoopGroup-3-2] INFO  o.r.rdap.port43.service.ProxyService 120 - receive query:cnnic.cn
+2014-10-28 16:46:32,648 [nioEventLoopGroup-3-2] INFO  o.r.r.p.s.command.CommandParser 109 - agruments is less than 2
+2014-10-28 16:46:32,650 [nioEventLoopGroup-3-2] INFO  o.r.r.p.s.command.DomainQueryHandler 78 - request for RDAP server URI:domain/cnnic.cn
+2014-10-28 16:46:37,935 [main] INFO  o.r.rdap.port43.util.RdapProperties 67 - load properties from file:proxy43.properties
+2014-10-28 16:46:37,939 [main] INFO  o.r.rdap.port43.util.RdapProperties 104 - set rdapServerBaseUrl:http://218.241.106.149:8301/rdap/
+2014-10-28 16:46:37,940 [main] INFO  o.r.rdap.port43.util.RdapProperties 144 - set servicePort:43
+2014-10-28 16:46:37,940 [main] INFO  o.r.rdap.port43.util.RdapProperties 133 - set managePort:9999
+2014-10-28 16:46:37,940 [main] INFO  o.r.rdap.port43.util.RdapProperties 165 - set minSecondsAccessInterval:1000
+2014-10-28 16:46:37,940 [main] INFO  o.r.rdap.port43.util.RdapProperties 185 - set responseFormater:org.restfulwhois.rdap.port43.service.format.TextFormater
+2014-10-28 16:46:37,941 [main] INFO  o.r.rdap.port43.server.Main 84 - command:shutdown
+2014-10-28 16:46:37,941 [main] INFO  o.r.rdap.port43.server.Main 105 - shutdownServer
+2014-10-28 16:46:38,084 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 55 - send command:shutdown
+2014-10-28 16:46:38,092 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 80 - receive manage cmd:shutdown
+2014-10-28 16:46:38,093 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 88 - do shutdown server ...
+2014-10-28 16:46:38,093 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 133 - doShutdown begin...
+2014-10-28 16:46:38,093 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@883357
+2014-10-28 16:46:38,094 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 63 - shutdown client...
+2014-10-28 16:46:38,095 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 135 - shutdown server org.restfulwhois.rdap.port43.server.Server@16d8196
+2014-10-28 16:46:38,096 [nioEventLoopGroup-2-1] INFO  o.r.r.p.server.ShutdownClientHandler 65 - shutdown client end.
+2014-10-28 16:46:38,096 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 138 - shutdown rate limit IP map clear timer...
+2014-10-28 16:46:38,096 [nioEventLoopGroup-5-1] INFO  o.r.rdap.port43.server.Main 140 - doShutdown end.
+2014-10-28 16:46:38,097 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 90 - do shutdown server end.
+2014-10-28 16:46:38,097 [nioEventLoopGroup-5-1] INFO  o.r.r.p.server.ManageServerHandler 92 - shutdown manage server end.
