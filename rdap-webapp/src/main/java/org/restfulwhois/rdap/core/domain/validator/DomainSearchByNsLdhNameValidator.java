@@ -37,20 +37,19 @@ import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.common.validation.HttpValidationError;
 import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.restfulwhois.rdap.core.common.validation.Validator;
-import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByDomainNameParam;
-import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchByNameParam;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsLdhNameParam;
 
 /**
+ * DomainSearchByNsLdhNameValidator.
  * 
  * @author jiashuo
  * 
  */
-public class DomainSearchByDomainNameValidator implements Validator {
+public class DomainSearchByNsLdhNameValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.equals(DomainSearchByDomainNameParam.class)
-                || clazz.equals(NameserverSearchByNameParam.class);
+        return clazz.equals(DomainSearchByNsLdhNameParam.class);
     }
 
     @Override
@@ -62,6 +61,9 @@ public class DomainSearchByDomainNameValidator implements Validator {
         }
         if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
             validationResult.addError(HttpValidationError.build422Error());
+        }
+        if (!DomainUtil.validateSearchLdnName(decodeDomain)) {
+            validationResult.addError(HttpValidationError.build400Error());
         }
         if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
             validationResult.addError(HttpValidationError.build400Error());

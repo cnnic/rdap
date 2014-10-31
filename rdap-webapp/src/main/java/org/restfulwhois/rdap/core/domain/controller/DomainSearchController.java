@@ -45,7 +45,7 @@ import org.restfulwhois.rdap.core.domain.model.DomainSearch;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByDomainNameParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsIpParam;
-import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsNameParam;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsLdhNameParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +83,7 @@ public class DomainSearchController extends BaseDnrController {
      */
     static {
         searchParams.add(new DomainSearchByDomainNameParam());
-        searchParams.add(new DomainSearchByNsNameParam());
+        searchParams.add(new DomainSearchByNsLdhNameParam());
         searchParams.add(new DomainSearchByNsIpParam());
     }
 

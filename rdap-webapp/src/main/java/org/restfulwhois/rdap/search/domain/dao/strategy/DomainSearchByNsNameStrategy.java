@@ -38,7 +38,7 @@ import java.util.List;
 import org.restfulwhois.rdap.core.common.support.PageBean;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.model.Domain;
-import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsNameParam;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsLdhNameParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
 import org.restfulwhois.rdap.dao.impl.DomainQueryDaoImpl;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class DomainSearchByNsNameStrategy extends AbstractDomainSearchStrategy {
 
     @Override
     public boolean support(QueryParam queryParam) {
-        return queryParam instanceof DomainSearchByNsNameParam;
+        return queryParam instanceof DomainSearchByNsLdhNameParam;
     }
 
     @Override

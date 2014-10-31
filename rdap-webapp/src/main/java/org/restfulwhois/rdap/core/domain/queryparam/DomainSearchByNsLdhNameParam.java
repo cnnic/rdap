@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.core.domain.queryparam;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
-import org.restfulwhois.rdap.core.domain.validator.DomainSearchByDomainNameValidator;
+import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsLdhNameValidator;
 
 /**
  * base search parameter bean.
@@ -41,12 +41,12 @@ import org.restfulwhois.rdap.core.domain.validator.DomainSearchByDomainNameValid
  * @author jiashuo
  * 
  */
-public class DomainSearchByNsNameParam extends DomainSearchParam {
+public class DomainSearchByNsLdhNameParam extends DomainSearchParam {
 
     /**
      * construction.
      */
-    public DomainSearchByNsNameParam() {
+    public DomainSearchByNsLdhNameParam() {
         super();
     }
 
@@ -57,7 +57,7 @@ public class DomainSearchByNsNameParam extends DomainSearchParam {
 
     @Override
     protected void initValidators() {
-        super.addValidator(new DomainSearchByDomainNameValidator());
+        super.addValidator(new DomainSearchByNsLdhNameValidator());
     }
 
     @Override
