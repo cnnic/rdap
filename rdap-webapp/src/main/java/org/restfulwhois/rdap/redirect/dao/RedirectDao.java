@@ -33,8 +33,8 @@ package org.restfulwhois.rdap.redirect.dao;
 import java.util.List;
 
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.model.RedirectResponse;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 
 /**
  * redirect DAO. Interface to access AutnumRedirectDao DomainRedirectDao

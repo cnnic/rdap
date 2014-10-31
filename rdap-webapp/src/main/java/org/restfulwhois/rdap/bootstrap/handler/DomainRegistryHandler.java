@@ -36,7 +36,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bootstrap.bean.DomainRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.common.RdapProperties;
+import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.springframework.stereotype.Service;
 
 /**

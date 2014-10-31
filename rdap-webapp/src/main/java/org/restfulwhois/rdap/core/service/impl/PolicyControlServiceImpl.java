@@ -39,11 +39,11 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.model.BaseModel;
-import org.restfulwhois.rdap.core.model.ModelType;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.core.service.PolicyControlService;
 import org.restfulwhois.rdap.policy.dao.PolicyDao;
-import org.restfulwhois.rdap.search.bean.BaseSearchModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

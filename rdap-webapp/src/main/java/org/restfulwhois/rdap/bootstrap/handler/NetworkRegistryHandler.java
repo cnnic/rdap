@@ -35,11 +35,11 @@ import java.util.List;
 
 import org.restfulwhois.rdap.bootstrap.bean.NetworkRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.queryparam.NetworkQueryParam;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
+import org.restfulwhois.rdap.filters.QueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -32,8 +32,8 @@ package org.restfulwhois.rdap.search.dao;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.core.model.BaseModel;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**

@@ -50,12 +50,12 @@ import org.restfulwhois.rdap.bootstrap.handler.DomainRegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV4RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV6RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.registry.DataProvider;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.model.RedirectResponse;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
-import org.restfulwhois.rdap.dao.impl.redirect.AutnumRedirectDao;
-import org.restfulwhois.rdap.dao.impl.redirect.DomainRedirectDao;
-import org.restfulwhois.rdap.dao.impl.redirect.NetworkRedirectDao;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.filters.QueryParser;
+import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
+import org.restfulwhois.rdap.redirect.dao.impl.AutnumRedirectDao;
+import org.restfulwhois.rdap.redirect.dao.impl.DomainRedirectDao;
+import org.restfulwhois.rdap.redirect.dao.impl.NetworkRedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 

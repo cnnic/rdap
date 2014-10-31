@@ -36,8 +36,8 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.dao.ErrorMessageDao;
-import org.restfulwhois.rdap.core.model.ErrorMessage;
+import org.restfulwhois.rdap.core.common.dao.ErrorMessageDao;
+import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;

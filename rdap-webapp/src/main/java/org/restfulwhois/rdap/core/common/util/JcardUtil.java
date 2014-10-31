@@ -33,9 +33,9 @@ package org.restfulwhois.rdap.core.common.util;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.model.Entity;
-import org.restfulwhois.rdap.core.model.EntityAddress;
-import org.restfulwhois.rdap.core.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.entity.model.EntityAddress;
+import org.restfulwhois.rdap.core.entity.model.EntityTel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

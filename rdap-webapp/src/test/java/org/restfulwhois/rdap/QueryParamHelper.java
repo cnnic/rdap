@@ -1,7 +1,7 @@
 package org.restfulwhois.rdap;
 
-import org.restfulwhois.rdap.core.queryparam.NetworkQueryParam;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
 
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and

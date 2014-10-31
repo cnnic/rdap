@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.service;
 
-import org.restfulwhois.rdap.core.model.BaseModel;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 
 /**
  * Access Control Manager.

@@ -37,9 +37,10 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.QueryParamHelper;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.exception.DecodeException;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.common.exception.DecodeException;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.util.RequestUtil;
+import org.restfulwhois.rdap.filters.QueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -63,7 +64,7 @@ public class QueryParserTest extends BaseTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("", "");
         request.setRequestURI("/domain/cnnic.cn%1a");
-        String paramV = queryParser.getLastSplitInURI(request);
+        String paramV = RequestUtil.getLastSplitInURI(request);
         assertNotNull(paramV);
         assertEquals("cnnic.cn", paramV);
     }
@@ -93,14 +94,14 @@ public class QueryParserTest extends BaseTest {
          */
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter(paramName, paramValue1);
-        assertEquals(paramValue1, queryParser.getParameter(request, paramName));
+        assertEquals(paramValue1, RequestUtil.getParameter(request, paramName));
         /**
          * two params
          */
         request = new MockHttpServletRequest();
         request.addParameter(paramName, paramValue1);
         request.addParameter(paramName, paramValue2);
-        assertEquals(paramValue1, queryParser.getParameter(request, paramName));
+        assertEquals(paramValue1, RequestUtil.getParameter(request, paramName));
         /**
          * three params
          */
@@ -108,12 +109,12 @@ public class QueryParserTest extends BaseTest {
         request.addParameter(paramName, paramValue1);
         request.addParameter(paramName, paramValue2);
         request.addParameter(paramName, paramValue3);
-        assertEquals(paramValue1, queryParser.getParameter(request, paramName));
+        assertEquals(paramValue1, RequestUtil.getParameter(request, paramName));
         /**
          * none param
          */
         request = new MockHttpServletRequest();
-        assertNull(queryParser.getParameter(request, paramName));
+        assertNull(RequestUtil.getParameter(request, paramName));
     }
 
 }

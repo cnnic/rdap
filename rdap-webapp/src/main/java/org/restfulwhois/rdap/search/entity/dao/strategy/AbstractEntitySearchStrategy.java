@@ -37,9 +37,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.model.Entity;
-import org.restfulwhois.rdap.core.model.PageBean;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.common.support.PageBean;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.dao.impl.EntityQueryDaoImpl;
 import org.restfulwhois.rdap.search.dao.SearchStrategy;

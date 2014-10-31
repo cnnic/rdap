@@ -9,7 +9,7 @@
 	<context:property-placeholder location="classpath:*.properties" />
 	<bean
 		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
-	<bean id="rdapProperties" class="org.restfulwhois.rdap.core.common.RdapProperties">
+	<bean id="rdapProperties" class="org.restfulwhois.rdap.core.common.util.RdapProperties">
 		<property name="localServiceUrl" value="${localServiceUrl}" />
 		<property name="maxsizeSearch" value="${maxsizeSearch}" />
 		<property name="batchsizeSearch" value="${batchsizeSearch}" />

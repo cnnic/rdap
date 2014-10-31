@@ -32,9 +32,9 @@ package org.restfulwhois.rdap.search.entity.dao.strategy;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.core.model.Entity;
-import org.restfulwhois.rdap.core.queryparam.EntitySearchByFnParam;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByFnParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;

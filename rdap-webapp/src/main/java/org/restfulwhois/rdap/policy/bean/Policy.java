@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.policy.bean;
 
-import org.restfulwhois.rdap.core.model.BaseModel;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 
 /**
  * denotes information about the service providing RDAP information.

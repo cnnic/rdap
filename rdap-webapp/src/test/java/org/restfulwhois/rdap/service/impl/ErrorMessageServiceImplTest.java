@@ -37,16 +37,16 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.model.ErrorMessage;
-import org.restfulwhois.rdap.core.service.ErrorMessageService;
+import org.restfulwhois.rdap.core.common.model.ErrorMessage;
+import org.restfulwhois.rdap.core.common.service.ErrorMessageService;
+import org.restfulwhois.rdap.filters.QueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for QueryServiceImpl.
+ * Test for NameserverServiceImpl.
  * 
  * @author jiashuo
  * 

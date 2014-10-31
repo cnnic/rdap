@@ -38,8 +38,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.RdapProperties;
-import org.restfulwhois.rdap.core.controller.support.PrincipalHolder;
+import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.filters.PrincipalHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

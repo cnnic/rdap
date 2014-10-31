@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.bootstrap.bean;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.restfulwhois.rdap.core.queryparam.NetworkQueryParam;
+import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
 
 /**
  * This registry contains IP prefix entries, specified in CIDR format and
