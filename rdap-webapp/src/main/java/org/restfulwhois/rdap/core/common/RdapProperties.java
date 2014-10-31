@@ -124,13 +124,13 @@ public class RdapProperties {
      */
     private static List<String> notInTldList;
     /**
-     * list for not implemented object types,splited by ';'.
+     * list for not implemented uri,splited by ';'.
      */
-    private static String notImplementedObjectTypes;
+    private static String notImplementedUri;
     /**
-     * list for not implemented object types.
+     * list for not implemented uri types.
      */
-    private static List<String> notImplementedTypeList;
+    private static List<String> notImplementedUriList;
 
     /**
      * clear 'in' and 'not in' tlds in memory,used for reload tlds.
@@ -138,18 +138,18 @@ public class RdapProperties {
     public static void clearTldsInMemory() {
         RdapProperties.inTldList = null;
         RdapProperties.notInTldList = null;
-        RdapProperties.notImplementedTypeList = null;
+        RdapProperties.notImplementedUriList = null;
     }
     /**
      * get implemented object Type list.
      * 
      * @return implemented object Type list.
      */
-    public static List<String> getNotImplementedTypeList() {
-        RdapProperties.notImplementedTypeList =
+    public static List<String> getNotImplementedUriList() {
+        RdapProperties.notImplementedUriList =
                 StringUtil.parseSeparatedStringToListIfListIsNull(
-                      notImplementedObjectTypes, notImplementedTypeList);
-        return RdapProperties.notImplementedTypeList;
+                     notImplementedUri, notImplementedUriList);
+        return RdapProperties.notImplementedUriList;
     }
 
     /**
@@ -469,21 +469,21 @@ public class RdapProperties {
                 bootstrapRegistryUriForIpv6;
     }
     /**
-     * get notImplementedTypes.
+     * get notImplementedUri.
      * 
-     * @return notImplementedTypes.
+     * @return notImplementedUri.
      */
-    public static String getNotImplementedObjectTypes() {
-        return notImplementedObjectTypes;
+    public static String getNotImplementedUri() {
+        return notImplementedUri;
     }
     /**
-     * set notImplementedType.
+     * set notImplementedUri.
      * 
-     * @param notImplementedType
-     *            notImplementedType.
+     * @param notImplementedUri
+     *            notImplementedUri.
      */
-    public static void setNotImplementedObjectTypes(String notImplementedType) {
-         RdapProperties.notImplementedObjectTypes = notImplementedType;
+    public static void setNotImplementedUri(String notImplementedUri) {
+         RdapProperties.notImplementedUri = notImplementedUri;
     }
 
 }
