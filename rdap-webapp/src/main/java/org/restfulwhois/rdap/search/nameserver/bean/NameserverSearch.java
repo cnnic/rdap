@@ -28,40 +28,42 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.restfulwhois.rdap.search.bean;
+package org.restfulwhois.rdap.search.nameserver.bean;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.core.model.Domain;
+import org.restfulwhois.rdap.core.model.Nameserver;
+import org.restfulwhois.rdap.search.bean.BaseSearchModel;
 
 /**
- * domain search model.
+ * nameserver search model.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-public class DomainSearch extends BaseSearchModel<Domain> {
+public class NameserverSearch extends BaseSearchModel<Nameserver> {
     /**
-     * domain list.
+     * nameserver list.
      */
-    private List<Domain> domainSearchResults;
+    private List<Nameserver> nameserverSearchResults;
 
     /**
-     * get domainSearchResults.
+     * get nameserverSearchResults.
      * 
-     * @return domainSearchResults.
+     * @return nameserverSearchResults.
      */
-    public List<Domain> getDomainSearchResults() {
-        return domainSearchResults;
+    public List<Nameserver> getNameserverSearchResults() {
+        return nameserverSearchResults;
     }
 
     /**
-     * set domainSearchResults.
+     * set nameserverSearchResults.
      * 
-     * @param domainSearchResults
-     *            domainSearchResults.
+     * @param nameserverSearchResults
+     *            nameserverSearchResults.
      */
-    public void setDomainSearchResults(List<Domain> domainSearchResults) {
-        this.domainSearchResults = domainSearchResults;
+    public void setNameserverSearchResults(
+            List<Nameserver> nameserverSearchResults) {
+        this.nameserverSearchResults = nameserverSearchResults;
     }
 }

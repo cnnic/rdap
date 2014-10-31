@@ -29,11 +29,45 @@
  * DAMAGE.
  */
 package org.restfulwhois.rdap.core.validation;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
+ * Validation result.
  * 
  * @author jiashuo
- *
+ * 
  */
 public class ValidationResult {
+    /**
+     * errors.
+     */
+    private List<ValidationError> errors = new ArrayList<ValidationError>();
 
+    /**
+     * add error.
+     * 
+     * @param error
+     *            error.
+     */
+    public void addError(ValidationError error) {
+        errors.add(error);
+    }
+
+    /**
+     * check if has error.
+     * 
+     * @return true if has error, false if not.
+     */
+    public boolean hasError() {
+        return errors.size() > 0;
+    }
+
+    public ValidationError getFirstError() {
+        if (!hasError()) {
+            return null;
+        }
+        return errors.get(0);
+    }
 }

@@ -33,13 +33,13 @@ package org.restfulwhois.rdap.core.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.core.common.util.AutnumValidator;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Autnum;
 import org.restfulwhois.rdap.core.model.QueryUri;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
+import org.restfulwhois.rdap.core.queryparam.AsQueryParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,11 +91,12 @@ public class AsController extends BaseController {
             HttpServletRequest request, HttpServletResponse response)
             throws DecodeException {
         LOGGER.debug("query autnum:" + autnum);
-        autnum = queryParser.getLastSplitInURI(request);
-        if (!AutnumValidator.isValidAutnum(autnum)) {
-            return RestResponseUtil.createResponse400();
-        }
-        QueryParam queryParam = queryParser.parseQueryParam(autnum);
+        QueryParam queryParam = new AsQueryParam(request);
+        return super.query(queryParam);
+    }
+
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
         Autnum result = queryService.queryAutnum(queryParam);
         if (null != result) {
             if (!accessControlManager.hasPermission(result)) {
@@ -108,7 +109,8 @@ public class AsController extends BaseController {
         RedirectResponse redirect = redirectService.queryAutnum(queryParam);
         if (redirectService.isValidRedirect(redirect)) {
             String redirectUrl =
-                    StringUtil.generateEncodedRedirectURL(autnum,
+                    StringUtil.generateEncodedRedirectURL(
+                            queryParam.getOriginalQ(),
                             QueryUri.AUTNUM.getName(), redirect.getUrl());
             return RestResponseUtil.createResponse301(redirectUrl);
         }

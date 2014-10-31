@@ -30,30 +30,33 @@
  */
 package org.restfulwhois.rdap.core.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * search type enum.
  * 
- *  @return by name, nsLdhName, nsIP.
+ * @return by name, nsLdhName, nsIP.
  */
 public enum DomainSearchType {
 
     /**
      * name type.
      */
-     NAME("name"),
+    NAME("name"),
     /**
      * nsLdhName type.
      */
-     NSLDHNAME("nsLdhName"),
+    NSLDHNAME("nsLdhName"),
     /**
      * nsIp type.
      */
-     NSIP("nsIp");
+    NSIP("nsIp");
 
     /**
      * name of model type.
      */
-     private String name;
+    private String name;
 
     /**
      * constructor.
@@ -61,17 +64,31 @@ public enum DomainSearchType {
      * @param name
      *            name.
      */
-     private DomainSearchType(String name) {
-         this.name = name;
-     }
-     
-     /**
-      * value of model type.
-      * @return name
-      */
-     public String value() {
-         return name;
-     }
+    private DomainSearchType(String name) {
+        this.name = name;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public static String[] valuesOfString() {
+        DomainSearchType[] types = values();
+        List<String> result = new ArrayList<String>();
+        for (DomainSearchType type : types) {
+            result.add(type.name);
+        }
+        return result.toArray(new String[0]);
+    }
+
+    public static DomainSearchType getByName(String name) {
+        DomainSearchType[] queryTypes = DomainSearchType.values();
+        for (DomainSearchType type : queryTypes) {
+            if (type.getName().equals(name)) {
+                return type;
+            }
+        }
+        return null;
+    }
 
 }

@@ -82,11 +82,18 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
                     registryUrls);
             return redirects;
         }
-        try{
-            QueryParam queryParam = queryParser.parseIpQueryParam(key, ipVersion);
-            networkRedirect.setNetworkQueryParam((NetworkQueryParam) queryParam);
+        try {
+            QueryParam queryParam = queryParser.parseIpQueryParam(key);
+            if (null == queryParam) {
+                logger.error(
+                        "ignore this key/urls:{},{}. generate networkQueryParam error:{}",
+                        key, registryUrls);
+                return redirects;
+            }
+            networkRedirect
+                    .setNetworkQueryParam((NetworkQueryParam) queryParam);
             redirects.add(networkRedirect);
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("ignore this key/urls:{},{}. Invalid network:{}", key,
                     registryUrls);
         }

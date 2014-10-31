@@ -30,10 +30,12 @@
  */
 package org.restfulwhois.rdap.core.validation;
 
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 
 /**
+ * Validator.
  * 
  * @author jiashuo
  * 
@@ -72,11 +74,11 @@ public interface Validator {
      * 
      * @param target
      *            the object that is to be validated (can be {@code null})
-     * @param errors
+     * @param validationResult
      *            contextual state about the validation process (never
      *            {@code null})
      * @see ValidationUtils
      */
-    void validate(Object target, Errors errors);
+    void validate(QueryParam queryParam, ValidationResult validationResult);
 
 }

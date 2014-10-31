@@ -30,21 +30,25 @@
  */
 package org.restfulwhois.rdap.core.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.DomainSearchType;
+import org.restfulwhois.rdap.core.queryparam.DomainSearchByDomainNameParam;
+import org.restfulwhois.rdap.core.queryparam.DomainSearchByNsIpParam;
+import org.restfulwhois.rdap.core.queryparam.DomainSearchByNsNameParam;
 import org.restfulwhois.rdap.core.queryparam.DomainSearchParam;
-import org.restfulwhois.rdap.search.bean.DomainSearch;
+import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.search.domain.bean.DomainSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,6 +69,48 @@ public class DomainSearchController extends BaseDnrController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainSearchController.class);
+    private static List<DomainSearchParam> searchParams =
+            new ArrayList<DomainSearchParam>();
+    static {
+        searchParams.add(new DomainSearchByDomainNameParam());
+        searchParams.add(new DomainSearchByNsNameParam());
+        searchParams.add(new DomainSearchByNsIpParam());
+    }
+
+    private DomainSearchParam
+            createDomainSearchParam(HttpServletRequest request) {
+        DomainSearchType searchType = parseSearchType(request);
+        if (null == searchType) {
+            return null;
+        }
+        for (DomainSearchParam domainSearchParam : searchParams) {
+            if (domainSearchParam.supportSearchType(searchType)) {
+                DomainSearchParam result =
+                        BeanUtils.instantiate(domainSearchParam.getClass());
+                result.setRequest(request);
+                return result;
+            }
+        }
+        return null;
+    }
+
+    public DomainSearchType parseSearchType(HttpServletRequest request) {
+        try {
+            String lastSpliInURI = QueryParam.getLastSplitInURI(request);
+            if (!"domains".equals(lastSpliInURI)) {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        final String[] allSearchType = DomainSearchType.valuesOfString();
+        String paramName = QueryParam.getFirstParameter(request, allSearchType);
+        if (StringUtils.isBlank(paramName)) {
+            return null;
+        }
+        DomainSearchType searchType = DomainSearchType.getByName(paramName);
+        return searchType;
+    }
 
     /**
      * <pre>
@@ -97,114 +143,20 @@ public class DomainSearchController extends BaseDnrController {
             @RequestParam(required = false) String name,
             HttpServletRequest request, HttpServletResponse response)
             throws DecodeException {
-        String lastSpliInURI = queryParser.getLastSplitInURI(request);
-        if (!"domains".equals(lastSpliInURI)) {
+        DomainSearchParam domainSearchParam = createDomainSearchParam(request);
+        if (null == domainSearchParam) {
             return RestResponseUtil.createResponse400();
         }
-        String decodeDomain = "";
-        final String[] strParamOrg =
-                {
-                        DomainSearchType.NAME.value(),
-                        DomainSearchType.NSLDHNAME.value(),
-                        DomainSearchType.NSIP.value() };
-        String nameParam = queryParser.getFirstParameter(request, strParamOrg);
-        DomainSearchParam domainSearchParam;
-        if (StringUtils.isBlank(nameParam)) {
-            return RestResponseUtil.createResponse400();
-        }
+        return super.query(domainSearchParam);
+    }
 
-        if (0 == nameParam.compareTo(DomainSearchType.NAME.value())) {
-            // search by domain name
-            name =
-                    queryParser.getParameter(request,
-                            DomainSearchType.NAME.value());
-            decodeDomain = name;
-            try {
-                decodeDomain = DomainUtil.iso8859Decode(name);
-                decodeDomain =
-                        DomainUtil
-                                .urlDecodeAndReplaceAsciiToLowercase(decodeDomain);
-            } catch (Exception e) {
-                return RestResponseUtil.createResponse400();
-            }
-            if (StringUtils.isBlank(decodeDomain)) {
-                return RestResponseUtil.createResponse400();
-            }
-            if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
-                return RestResponseUtil.createResponse422();
-            }
-            if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
-                return RestResponseUtil.createResponse400();
-            }
-            decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
-            decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
-            domainSearchParam =
-                    (DomainSearchParam) queryParser.parseDomainSearchParam(
-                            decodeDomain, decodeDomain);
-            // set search by domain name
-            domainSearchParam.setSearchByParam(DomainSearchType.NAME.value());
-        } else if (0 == nameParam.compareTo(DomainSearchType.NSLDHNAME.value())) {
-            // search by nsLdhName
-            name =
-                    queryParser.getParameter(request,
-                            DomainSearchType.NSLDHNAME.value());
-            // search by name
-            String decodeNameserver = name;
-            try {
-                decodeNameserver = DomainUtil.iso8859Decode(name);
-                decodeNameserver =
-                        DomainUtil
-                                .urlDecodeAndReplaceAsciiToLowercase(decodeNameserver);
-            } catch (Exception e) {
-                return RestResponseUtil.createResponse400();
-            }
-            if (StringUtils.isBlank(decodeNameserver)) {
-                return RestResponseUtil.createResponse400();
-            }
-            if (!StringUtil.checkIsValidSearchPattern(decodeNameserver)) {
-                return RestResponseUtil.createResponse422();
-            }
-            if (!DomainUtil.validateSearchLdnName(decodeNameserver)) {
-                return RestResponseUtil.createResponse400();
-            }
-            if (!DomainUtil.validateSearchStringIsValidIdna(decodeNameserver)) {
-                return RestResponseUtil.createResponse400();
-            }
-            decodeNameserver =
-                    StringUtil.foldCaseAndNormalization(decodeNameserver);
-            decodeNameserver = DomainUtil.deleteLastPoint(decodeNameserver);
-            domainSearchParam =
-                    (DomainSearchParam) queryParser.parseDomainSearchParam(
-                            decodeNameserver, decodeNameserver);
-            // set search by strNsLdhName
-            domainSearchParam.setSearchByParam(DomainSearchType.NSLDHNAME
-                    .value());
-
-        } else if (0 == nameParam.compareTo(DomainSearchType.NSIP.value())) {
-            // search by nsIp
-            name =
-                    queryParser.getParameter(request,
-                            DomainSearchType.NSIP.value());
-            // checkIP
-            IpVersion ipVersion = IpUtil.getIpVersionOfIp(name);
-            if (ipVersion.isNotValidIp()) {
-                return RestResponseUtil.createResponse400();
-            }
-            name = StringUtils.lowerCase(name);
-            domainSearchParam =
-                    (DomainSearchParam) queryParser.parseDomainSearchParam(
-                            name, name);
-            // set search by strNsLdhName
-            domainSearchParam.setSearchByParam(DomainSearchType.NSIP.value());
-        } else {
-            return RestResponseUtil.createResponse400();
-        }
-        DomainSearch domainSearch =
-                searchService.searchDomain(domainSearchParam);
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
+        DomainSearch domainSearch = searchService.searchDomain(queryParam);
         if (null != domainSearch) {
-            if (domainSearch.getTruncatedInfo() != null 
+            if (domainSearch.getTruncatedInfo() != null
                     && domainSearch.getTruncatedInfo()
-                    .getHasNoAuthForAllObjects()) { 
+                            .getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(domainSearch);

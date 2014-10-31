@@ -32,8 +32,9 @@ package org.restfulwhois.rdap.core.queryparam;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
+import org.restfulwhois.rdap.core.validation.validator.NetworkQueryValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,22 +66,49 @@ public class NetworkQueryParam extends QueryParam {
      */
     public NetworkQueryParam(String q) {
         super(q);
+        super.setOriginalQ(q);
     }
 
-    public NetworkQueryParam(String cidr, IpVersion ipVersion) {
-        super(cidr);
-        networkInBytes = IpUtil.parseNetwork(cidr, ipVersion);
+    @Override
+    protected void initValidators() {
+        super.addValidator(new NetworkQueryValidator());
     }
 
+    @Override
+    public void fillParam() throws Exception {
+        this.parseFromNetworkStr(getQ());
+    }
+
+    @Override
+    public void convertParam() throws Exception {
+    }
+
+    /**
+     * parseFromNetworkStr.
+     * 
+     * @param networkStr
+     *            networkStr.
+     */
     private void parseFromNetworkStr(String networkStr) {
         IpVersion ipVersion = IpUtil.getIpVersionOfNetwork(networkStr);
         networkInBytes = IpUtil.parseNetwork(networkStr, ipVersion);
     }
 
+    /**
+     * get networkInBytes.
+     * 
+     * @return networkInBytes.
+     */
     public NetworkInBytes getNetworkInBytes() {
         return networkInBytes;
     }
 
+    /**
+     * set networkInBytes.
+     * 
+     * @param networkInBytes
+     *            networkInBytes.
+     */
     public void setNetworkInBytes(NetworkInBytes networkInBytes) {
         this.networkInBytes = networkInBytes;
     }

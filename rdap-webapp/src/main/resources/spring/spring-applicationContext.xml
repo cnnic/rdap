@@ -30,4 +30,5 @@
 	</bean>
 	<import resource="classpath:spring/spring-serviceContext.xml" />
 	<import resource="classpath:spring/spring-timer.xml" />
+	<import resource="classpath:spring/spring-search.xml" />
 </beans>

@@ -30,7 +30,12 @@
  */
 package org.restfulwhois.rdap.core.queryparam;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.core.validation.validator.EntityQueryValidator;
 
 /**
  * entity query parameter bean.
@@ -40,6 +45,16 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 public class EntityQueryParam extends QueryParam {
     /**
+     * construction.
+     * 
+     * @param request
+     *            request.
+     */
+    public EntityQueryParam(HttpServletRequest request) {
+        super(request);
+    }
+
+    /**
      * default constructor.
      * 
      * @param q
@@ -47,6 +62,25 @@ public class EntityQueryParam extends QueryParam {
      */
     public EntityQueryParam(String q) {
         super(q);
+    }
+
+    @Override
+    protected void initValidators() {
+        addValidator(new EntityQueryValidator());
+    }
+
+    @Override
+    public void fillParam() throws Exception {
+        String handle = getLastSplitInURI(getRequest());
+        handle = StringUtils.trim(handle);
+        super.setOriginalQ(handle);
+        super.setQ(handle);
+    }
+
+    @Override
+    public void convertParam() throws Exception {
+        String handle = StringUtil.foldCaseAndNormalization(getQ());
+        super.setQ(handle);
     }
 
     /**

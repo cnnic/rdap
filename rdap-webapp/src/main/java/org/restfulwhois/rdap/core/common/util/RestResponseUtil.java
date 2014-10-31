@@ -301,7 +301,7 @@ public class RestResponseUtil {
      *            HttpStatus of error message
      * @return ResponseEntity
      */
-    private static ResponseEntity<ErrorMessage> createCommonErrorResponse(
+    public static ResponseEntity<ErrorMessage> createCommonErrorResponse(
             HttpStatus errorStatus) {
         ErrorMessage errorMessage =
                 getErrorMessageByErrorCode(errorStatus.toString());

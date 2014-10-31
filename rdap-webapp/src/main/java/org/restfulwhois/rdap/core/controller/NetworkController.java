@@ -32,15 +32,14 @@ package org.restfulwhois.rdap.core.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Network;
 import org.restfulwhois.rdap.core.model.QueryUri;
 import org.restfulwhois.rdap.core.model.RedirectResponse;
+import org.restfulwhois.rdap.core.queryparam.NetworkQueryParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,15 +131,13 @@ public class NetworkController extends BaseController {
      * @return ResponseEntity ResponseEntity.
      */
     private ResponseEntity doQueryIp(String cidr) {
-        if (StringUtils.isBlank(cidr)) {
-            return RestResponseUtil.createResponse400();
-        }
         cidr = IpUtil.addNetworkMaskIfNotContainsMask(cidr);
-        IpVersion ipVersion = IpUtil.getIpVersionOfNetwork(cidr);
-        if (ipVersion.isNotValidIp()) {
-            return RestResponseUtil.createResponse400();
-        }
-        QueryParam queryParam = queryParser.parseIpQueryParam(cidr, ipVersion);
+        NetworkQueryParam queryParam = new NetworkQueryParam(cidr);
+        return super.query(queryParam);
+    }
+
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
         Network ip = queryService.queryIp(queryParam);
         if (null != ip) {
             if (!accessControlManager.hasPermission(ip)) {
@@ -153,8 +150,9 @@ public class NetworkController extends BaseController {
         RedirectResponse redirect = redirectService.queryIp(queryParam);
         if (redirectService.isValidRedirect(redirect)) {
             String redirectUrl =
-                    StringUtil.generateEncodedRedirectURL(cidr,
-                            QueryUri.IP.getName(), redirect.getUrl());
+                    StringUtil.generateEncodedRedirectURL(
+                            queryParam.getOriginalQ(), QueryUri.IP.getName(),
+                            redirect.getUrl());
             return RestResponseUtil.createResponse301(redirectUrl);
         }
         LOGGER.debug("   redirect network not found:{}", queryParam);

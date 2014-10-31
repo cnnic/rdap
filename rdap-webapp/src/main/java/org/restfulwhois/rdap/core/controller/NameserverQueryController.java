@@ -32,11 +32,10 @@ package org.restfulwhois.rdap.core.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
 import org.restfulwhois.rdap.core.model.Nameserver;
+import org.restfulwhois.rdap.core.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,29 +86,16 @@ public class NameserverQueryController extends BaseDnrController {
     @ResponseBody
     public ResponseEntity queryNameserver(@PathVariable String nsName,
             HttpServletRequest request) throws DecodeException {
-        nsName = queryParser.getLastSplitInURI(request);
-        String decodeNS = nsName;
-        String punyNSName = decodeNS;
-        decodeNS = DomainUtil.urlDecodeAndReplaceAsciiToLowercase(nsName);
-        if (!DomainUtil.validateDomainNameIsValidIdna(decodeNS, false)) {
-            return RestResponseUtil.createResponse400();
-        }
-        decodeNS = StringUtil.foldCaseAndNormalization(decodeNS);
-        LOGGER.debug("after foldCaseAndNormalization: {}", decodeNS);
-        try {
-            // long lable exception
-            punyNSName = DomainUtil.geneDomainPunyName(decodeNS);
-        } catch (Exception e) {
-            return RestResponseUtil.createResponse400();
-        }
-        decodeNS = DomainUtil.deleteLastPoint(decodeNS);
+        QueryParam queryParam = new DomainQueryParam(request);
+        return super.query(queryParam);
+    }
 
-        QueryParam queryParam =
-                queryParser.parseNameserverQueryParam(decodeNS, punyNSName);
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryNsInThisRegistry(queryParam);
         }
-        return queryRedirectDomainOrNs(queryParam, nsName);
+        return queryRedirectDomainOrNs(queryParam, queryParam.getOriginalQ());
     }
 
     /**

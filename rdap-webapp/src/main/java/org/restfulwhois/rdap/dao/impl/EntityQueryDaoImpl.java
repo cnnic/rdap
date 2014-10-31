@@ -47,6 +47,7 @@ import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.common.util.JcardUtil;
 import org.restfulwhois.rdap.core.dao.QueryDao;
+import org.restfulwhois.rdap.core.dao.SearchDao;
 import org.restfulwhois.rdap.core.model.Autnum;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.Entity;
@@ -58,10 +59,8 @@ import org.restfulwhois.rdap.core.model.Link;
 import org.restfulwhois.rdap.core.model.ModelStatus;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Network;
-import org.restfulwhois.rdap.core.model.PageBean;
 import org.restfulwhois.rdap.core.model.PublicId;
 import org.restfulwhois.rdap.core.model.Remark;
-import org.restfulwhois.rdap.core.queryparam.EntityQueryParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
@@ -139,6 +138,10 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     @Autowired
     private EntityAddressDao entityAddressDao;
 
+    @Autowired
+    @Qualifier("entitySearchDaoImpl")
+    private SearchDao<Entity> searchDao;
+
     @Override
     public Entity query(QueryParam queryParam) {
         Entity entity = queryWithoutInnerObjects(queryParam);
@@ -179,23 +182,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
 
     @Override
     public Long searchCount(QueryParam queryParam) {
-        EntityQueryParam entityQueryParam = (EntityQueryParam) queryParam;
-        final String q = entityQueryParam.getQ();
-        final String paramName = entityQueryParam.getSearchParamName();
-        final String qLikeClause = super.generateLikeClause(q);
-        final String sql =
-                "select count(1) as COUNT from RDAP_ENTITY "
-                        + " where " + paramName + " like ? ";
-        Long entityCount = jdbcTemplate.query(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(
-                    Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ps.setString(1, qLikeClause);
-                return ps;
-            }
-        }, new CountResultSetExtractor());
-        return entityCount;
+        return searchDao.searchCount(queryParam);
     }
     
     /**
@@ -480,7 +467,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      * @throws SQLException
      *             SQLException.
      */
-    private void extractEntityFromRs(ResultSet rs, Entity entity)
+    public static void extractEntityFromRs(ResultSet rs, Entity entity)
             throws SQLException {
         entity.setId(rs.getLong("ENTITY_ID"));
         entity.setHandle(rs.getString("HANDLE"));
@@ -521,25 +508,6 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         }
     }
     
-    /**
-     * EntityResultSetExtractor extract entity from result set.
-     * @author jiashuo
-     *
-     */
-    class EntityResultSetExtractor implements
-        ResultSetExtractor<List<Entity>> {
-        @Override
-        public List<Entity> extractData(ResultSet rs) throws SQLException {
-            List<Entity> result = new ArrayList<Entity>();
-            while (rs.next()) {
-                Entity entity = new Entity();
-                result.add(entity);
-                extractEntityFromRs(rs, entity);
-            }
-            return result;
-        }
-    }
-
     /**
      * query and set status to entity.
      * 
@@ -649,53 +617,13 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     }
 
     /**
-     * count the number of result set.
-     * @author jiashuo
-     * 
-     */
-    class CountResultSetExtractor implements ResultSetExtractor<Long> {
-        @Override
-        public Long extractData(ResultSet rs) throws SQLException {
-            Long result = 0L;
-            if (rs.next()) {
-                result = rs.getLong("COUNT");
-            }
-            return result;
-        }
-    }
-
-    /**
      * search entity from RDAP_ENTITY, without inner objects.
      * 
      * @param params
      *            query parameter include entity's name.
      * @return entity list which will be filled with data.
      */
-    private List<Entity> searchWithoutInnerObjects(final QueryParam params) {
-        EntityQueryParam entityQueryParam = (EntityQueryParam) params;
-        final String q = entityQueryParam.getQ();
-        final String paramName = entityQueryParam.getSearchParamName();
-        final String qLikeClause = super.generateLikeClause(q);
-        final String sql =
-                "select * from RDAP_ENTITY entity "
-                        + " where " + paramName + " like ? "
-                        + " order by entity.HANDLE limit ?,? ";
-        final PageBean page = params.getPageBean();
-        int startPage = page.getCurrentPage() - 1;
-        startPage = startPage >= 0 ? startPage : 0;
-        final long startRow = startPage * page.getMaxRecords();
-        List<Entity> result =
-                jdbcTemplate.query(new PreparedStatementCreator() {
-                    @Override
-                    public PreparedStatement createPreparedStatement(
-                            Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement(sql);
-                        ps.setString(1, qLikeClause);
-                        ps.setLong(2, startRow);
-                        ps.setLong(3, page.getMaxRecords());
-                        return ps;
-                    }
-                }, new EntityResultSetExtractor());
-        return result;
+    private List<Entity> searchWithoutInnerObjects(final QueryParam queryParam) {
+        return searchDao.search(queryParam);
     }
 }

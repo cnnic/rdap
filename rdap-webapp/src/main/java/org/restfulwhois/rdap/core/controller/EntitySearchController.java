@@ -30,17 +30,23 @@
  */
 package org.restfulwhois.rdap.core.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.exception.DecodeException;
+import org.restfulwhois.rdap.core.model.EntitySearchType;
+import org.restfulwhois.rdap.core.queryparam.EntitySearchByFnParam;
+import org.restfulwhois.rdap.core.queryparam.EntitySearchByHandleParam;
+import org.restfulwhois.rdap.core.queryparam.EntitySearchParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
-import org.restfulwhois.rdap.search.bean.EntitySearch;
+import org.restfulwhois.rdap.search.entity.bean.EntitySearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +66,47 @@ public class EntitySearchController extends BaseController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EntitySearchController.class);
+    private static List<EntitySearchParam> searchParams =
+            new ArrayList<EntitySearchParam>();
+    static {
+        searchParams.add(new EntitySearchByHandleParam());
+        searchParams.add(new EntitySearchByFnParam());
+    }
+
+    private EntitySearchParam
+            createSearchParam(HttpServletRequest request) {
+        EntitySearchType searchType = parseSearchType(request);
+        if (null == searchType) {
+            return null;
+        }
+        for (EntitySearchParam domainSearchParam : searchParams) {
+            if (domainSearchParam.supportSearchType(searchType)) {
+                EntitySearchParam result =
+                        BeanUtils.instantiate(domainSearchParam.getClass());
+                result.setRequest(request);
+                return result;
+            }
+        }
+        return null;
+    }
+
+    public EntitySearchType parseSearchType(HttpServletRequest request) {
+        try {
+            String lastSpliInURI = QueryParam.getLastSplitInURI(request);
+            if (!"entities".equals(lastSpliInURI)) {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        final String[] allSearchType = EntitySearchType.valuesOfString();
+        String paramName = QueryParam.getFirstParameter(request, allSearchType);
+        if (StringUtils.isBlank(paramName)) {
+            return null;
+        }
+        EntitySearchType searchType = EntitySearchType.getByName(paramName);
+        return searchType;
+    }
 
     /**
      * <pre>
@@ -90,39 +137,17 @@ public class EntitySearchController extends BaseController {
                     @RequestParam(required = false) String handle,
                     HttpServletRequest request) throws DecodeException {
         LOGGER.debug("search entities.fn:{},handle:{}", fn, handle);
-        String lastSpliInURI = queryParser.getLastSplitInURI(request);
-        if (!"entities".equals(lastSpliInURI)) {
-            return RestResponseUtil.createResponse400();
-        }
-        final String fnParamName = "fn";
-        final String handleParamName = "handle";
-        String paramName = queryParser.getFirstParameter(request, new String[] {
-                fnParamName, handleParamName });
-        if (StringUtils.isBlank(paramName)) {
-            return RestResponseUtil.createResponse400();
-        }
-        String paramValue = queryParser.getParameter(request, paramName);
-        paramValue = DomainUtil.iso8859Decode(paramValue);
-        if (!StringUtil.isValidEntityHandleOrName(paramValue)) {
-            return RestResponseUtil.createResponse400();
-        }
-        if (!StringUtil.checkIsValidSearchPattern(paramValue)) {
-            return RestResponseUtil.createResponse422();
-        }
-        if (handleParamName.equals(paramName)) {// fold case when by handle
-            paramValue = StringUtil.foldCaseAndNormalization(paramValue);
-        } else {
-            paramValue = StringUtil.getNormalization(paramValue);
-        }
-        paramValue = StringUtils.trim(paramValue);
-        QueryParam queryParam =
-                queryParser.parseEntityQueryParam(paramValue, paramName);
+        EntitySearchParam entitySearchParam = createSearchParam(request);
+        return super.query(entitySearchParam);
+    }
+
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
         LOGGER.debug("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
-           if (result.getTruncatedInfo() != null 
-                    && result.getTruncatedInfo()
-                    .getHasNoAuthForAllObjects()) {
+            if (result.getTruncatedInfo() != null
+                    && result.getTruncatedInfo().getHasNoAuthForAllObjects()) {
                 return RestResponseUtil.createResponse403();
             }
             responseDecorator.decorateResponse(result);

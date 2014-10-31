@@ -41,9 +41,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.dao.QueryDao;
+import org.restfulwhois.rdap.core.dao.SearchDao;
 import org.restfulwhois.rdap.core.model.BaseModel;
 import org.restfulwhois.rdap.core.model.Entity;
 import org.restfulwhois.rdap.core.model.Event;
@@ -52,9 +51,8 @@ import org.restfulwhois.rdap.core.model.Link;
 import org.restfulwhois.rdap.core.model.ModelStatus;
 import org.restfulwhois.rdap.core.model.ModelType;
 import org.restfulwhois.rdap.core.model.Nameserver;
-import org.restfulwhois.rdap.core.model.PageBean;
 import org.restfulwhois.rdap.core.model.Remark;
-import org.restfulwhois.rdap.core.queryparam.NameserverQueryParam;
+import org.restfulwhois.rdap.core.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.queryparam.QueryParam;
 import org.restfulwhois.rdap.dao.AbstractQueryDao;
 import org.slf4j.Logger;
@@ -113,6 +111,10 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     @Autowired
     private QueryDao<Entity> entityQueryDao;
+
+    @Autowired
+    @Qualifier("nameserverSearchDaoImpl")
+    private SearchDao<Nameserver> searchDao;
 
     /**
      * query nameserver object as inner objects,and get the list of nameserver.
@@ -224,7 +226,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * @return nameserver object
      */
     private Nameserver queryWithoutInnerObjects(QueryParam queryParam) {
-        NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
+        DomainQueryParam nsQueryParam = (DomainQueryParam) queryParam;
         final String punyName = nsQueryParam.getPunyName();
         final String sql =
                 "select * from RDAP_NAMESERVER ns "
@@ -330,51 +332,10 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
 
     @Override
     public Long searchCount(QueryParam queryParam) {
-        NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
-        if (nsQueryParam == null) {
+        if (queryParam == null) {
             return 0L;
         }
-        boolean isSearchByIp = nsQueryParam.getIsSearchByIp();
-        Long recordsCount = 0L;
-        if (isSearchByIp) {
-            IpVersion ipVersion = IpUtil.getIpVersionOfIp(nsQueryParam.getQ());
-            if (ipVersion.isNotValidIp()) {
-                return 0L;
-            }
-            final String sql =
-                    "select count(1) as COUNT from RDAP_NAMESERVER_IP "
-                            + " where IP = ? ";
-            final byte[] ipInBytes =
-                    IpUtil.ipToByteArray(nsQueryParam.getQ(), ipVersion);
-            recordsCount = jdbcTemplate.query(new PreparedStatementCreator() {
-                public PreparedStatement createPreparedStatement(
-                        Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setBytes(1, ipInBytes);
-                    return ps;
-                }
-            }, new CountResultSetExtractor());
-        } else {
-            final String nameserver = nsQueryParam.getQ();
-            final String punyName = nsQueryParam.getPunyName();
-            final String nameserverLikeClause =
-                    super.generateLikeClause(nameserver);
-            final String punyNameLikeClause =
-                    super.generateLikeClause(punyName);
-            final String sql =
-                    "select count(1) as COUNT from RDAP_NAMESERVER "
-                            + " where LDH_NAME like ? or UNICODE_NAME like ? ";
-            recordsCount = jdbcTemplate.query(new PreparedStatementCreator() {
-                public PreparedStatement createPreparedStatement(
-                        Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setString(1, punyNameLikeClause);
-                    ps.setString(2, nameserverLikeClause);
-                    return ps;
-                }
-            }, new CountResultSetExtractor());
-        }
-        return recordsCount;
+        return searchDao.searchCount(queryParam);
     }
 
     /**
@@ -389,57 +350,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      */
     private List<Nameserver> searchWithoutInnerObjects(
             final QueryParam queryParam) {
-        NameserverQueryParam nsQueryParam = (NameserverQueryParam) queryParam;
-        boolean isSearchByIp = nsQueryParam.getIsSearchByIp();
-        List<Nameserver> result = null;
-        final PageBean page = queryParam.getPageBean();
-        int startPage = page.getCurrentPage() - 1;
-        startPage = startPage >= 0 ? startPage : 0;
-        final long startRow = startPage * page.getMaxRecords();
-        if (isSearchByIp) {
-            IpVersion ipVersion = IpUtil.getIpVersionOfIp(nsQueryParam.getQ());
-            if (ipVersion.isNotValidIp()) {
-                return result;
-            }
-            final byte[] ipInBytes =
-                    IpUtil.ipToByteArray(nsQueryParam.getQ(), ipVersion);
-            final String sql =
-                    "select * from RDAP_NAMESERVER ns,RDAP_NAMESERVER_IP ip"
-                            + " where ns.NAMESERVER_ID=ip.NAMESERVER_ID and "
-                            + " IP = ? order by ns.LDH_NAME limit ?,? ";
-            result = jdbcTemplate.query(new PreparedStatementCreator() {
-                public PreparedStatement createPreparedStatement(
-                        Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setBytes(1, ipInBytes);
-                    ps.setLong(2, startRow);
-                    ps.setLong(3, page.getMaxRecords());
-                    return ps;
-                }
-            }, new NameserverResultSetExtractor());
-        } else {
-            final String nsName = nsQueryParam.getQ();
-            final String punyName = nsQueryParam.getPunyName();
-            final String nsNameLikeClause = super.generateLikeClause(nsName);
-            final String punyNameLikeClause =
-                    super.generateLikeClause(punyName);
-            final String sql =
-                    "select * from RDAP_NAMESERVER ns "
-                            + " where LDH_NAME like ? or UNICODE_NAME like ?"
-                            + " order by ns.LDH_NAME limit ?,? ";
-            result = jdbcTemplate.query(new PreparedStatementCreator() {
-                public PreparedStatement createPreparedStatement(
-                        Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql);
-                    ps.setString(1, punyNameLikeClause);
-                    ps.setString(2, nsNameLikeClause);
-                    ps.setLong(3, startRow);
-                    ps.setLong(4, page.getMaxRecords());
-                    return ps;
-                }
-            }, new NameserverResultSetExtractor());
-        }
-        return result;
+        return searchDao.search(queryParam);
     }
 
     /**
@@ -472,31 +383,14 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
      * @throws SQLException
      *             SQLException.
      */
-    private void extractNameserverFromRs(ResultSet rs, Nameserver nameserver)
-            throws SQLException {
+    public static void extractNameserverFromRs(ResultSet rs,
+            Nameserver nameserver) throws SQLException {
         nameserver.setId(rs.getLong("NAMESERVER_ID"));
         nameserver.setHandle(rs.getString("HANDLE"));
         nameserver.setLdhName(rs.getString("LDH_NAME"));
         nameserver.setUnicodeName(rs.getString("UNICODE_NAME"));
         nameserver.setPort43(rs.getString("PORT43"));
         nameserver.setLang(rs.getString("LANG"));
-    }
-
-    /**
-     * count the number of resultSet.
-     * 
-     * @author weijunkai
-     * 
-     */
-    class CountResultSetExtractor implements ResultSetExtractor<Long> {
-        @Override
-        public Long extractData(ResultSet rs) throws SQLException {
-            Long result = 0L;
-            if (rs.next()) {
-                result = rs.getLong("COUNT");
-            }
-            return result;
-        }
     }
 
     /**
