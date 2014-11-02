@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.timer;
+package org.restfulwhois.rdap.filters.timer;
 
 import java.util.Timer;
 import java.util.TimerTask;
