@@ -63,8 +63,8 @@ public class Link extends BaseModel {
     private List<String> hreflang;
     /**
      * title of link.
-     */
-    private List<String> title;
+     */   
+    private String title;
     /**
      * media of link.
      */
@@ -88,22 +88,6 @@ public class Link extends BaseModel {
             this.hreflang = new ArrayList<String>();
         }
         this.hreflang.add(hreflangStr);
-    }
-
-    /**
-     * add a title.
-     * 
-     * @param titleStr
-     *            string of tile.
-     */
-    public void addTitle(String titleStr) {
-        if (StringUtils.isBlank(titleStr)) {
-            return;
-        }
-        if (null == this.title) {
-            this.title = new ArrayList<String>();
-        }
-        this.title.add(titleStr);
     }
 
     /**
@@ -187,8 +171,8 @@ public class Link extends BaseModel {
      * get title of link.
      * 
      * @return a list of string.
-     */
-    public List<String> getTitle() {
+     */    
+    public String getTitle() {
         return title;
     }
 
@@ -196,12 +180,11 @@ public class Link extends BaseModel {
      * set title of link.
      * 
      * @param title
-     *            a list string of title.
-     */
-    public void setTitle(List<String> title) {
+     *            a  string of title.
+     */   
+    public void setTitle(String title) {
         this.title = title;
     }
-
     /**
      * get media of link.
      * 

@@ -76,10 +76,7 @@ public class LinkQueryDaoTest extends BaseTest {
         Link link = links.get(0);
         assertNotNull(link);
         assertEquals(link.getValue(), "http://example.com/context_uri");
-        List<String> titleList = link.getTitle();
-        assertNotNull(titleList);
-        assertThat(titleList,
-                CoreMatchers.hasItems("Title1 of Link1", "Title2 of Link1"));
+        assertEquals(link.getTitle(), "Title1 of Link1");        
         List<String> hreflangList = link.getHreflang();
         assertThat(hreflangList, CoreMatchers.hasItems("en", "zh"));
     }
