@@ -1,5 +1,5 @@
 /**
- * acl.
+ * access control.
  * @author jiashuo
  *
  */

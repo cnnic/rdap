@@ -31,9 +31,9 @@
 package org.restfulwhois.rdap.core.ip.service.impl;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.ip.dao.impl.NetworkQueryDaoImpl;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.restfulwhois.rdap.core.ip.service.IpService;
-import org.restfulwhois.rdap.dao.impl.NetworkQueryDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

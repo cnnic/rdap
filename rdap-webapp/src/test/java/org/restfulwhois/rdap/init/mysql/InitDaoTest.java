@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.init.mysql;
 
+import org.restfulwhois.rdap.init.dao.InitDao;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
