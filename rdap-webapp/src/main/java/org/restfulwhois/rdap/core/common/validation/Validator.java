@@ -34,7 +34,7 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.springframework.validation.Errors;
 
 /**
- * Validator.
+ * validate query parameters.
  * 
  * @author jiashuo
  * 

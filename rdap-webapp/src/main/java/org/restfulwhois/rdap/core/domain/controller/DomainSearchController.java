@@ -72,13 +72,13 @@ public class DomainSearchController extends BaseDnrController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainSearchController.class);
-    
+
     /**
      * search service.
      */
     @Autowired
     protected DomainSearchService searchService;
-    
+
     /**
      * all possible search params.
      * <p>
@@ -97,9 +97,11 @@ public class DomainSearchController extends BaseDnrController {
     }
 
     /**
+     * createDomainSearchParam.
      * 
      * @param request
-     * @return
+     *            request.
+     * @return DomainSearchParam.
      */
     private DomainSearchParam
             createDomainSearchParam(HttpServletRequest request) {
@@ -128,7 +130,8 @@ public class DomainSearchController extends BaseDnrController {
             return null;
         }
         final String[] allSearchType = DomainSearchType.valuesOfString();
-        String paramName = RequestUtil.getFirstParameter(request, allSearchType);
+        String paramName =
+                RequestUtil.getFirstParameter(request, allSearchType);
         if (StringUtils.isBlank(paramName)) {
             return null;
         }

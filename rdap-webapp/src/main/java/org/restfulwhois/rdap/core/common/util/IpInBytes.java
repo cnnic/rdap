@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.core.common.util;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 
 /**
- * IpInBytes.
+ * This is used for wrap IP query parameters.
  * 
  * @author jiashuo
  * 
@@ -45,10 +45,18 @@ public class IpInBytes {
      */
     private IpVersion ipVersion;
     /**
-     * startAddress byte value.
+     * bytes value.
      */
     private byte[] bytes;
 
+    /**
+     * constructor.
+     * 
+     * @param ipVersion
+     *            ipVersion.
+     * @param bytes
+     *            bytes.
+     */
     public IpInBytes(IpVersion ipVersion, byte[] bytes) {
         super();
         this.ipVersion = ipVersion;
@@ -83,10 +91,21 @@ public class IpInBytes {
         this.ipVersion = ipVersion;
     }
 
+    /**
+     * get bytes.
+     * 
+     * @return bytes.
+     */
     public byte[] getBytes() {
         return bytes;
     }
 
+    /**
+     * set bytes.
+     * 
+     * @param bytes
+     *            bytes.
+     */
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
     }

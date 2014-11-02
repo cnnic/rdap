@@ -31,13 +31,13 @@
 package org.restfulwhois.rdap.core.common.support;
 
 /**
- * model uri.
+ * query URI.
  * 
  * @author zhanyq
  * 
  */
 public enum QueryUri {
-  
+
     /**
      * 5 main object URI.
      */
@@ -46,7 +46,7 @@ public enum QueryUri {
      * 5 main object URI.
      */
     AUTNUM("/autnum/"), IP("/ip/");
-   
+
     /**
      * name of model uri.
      */

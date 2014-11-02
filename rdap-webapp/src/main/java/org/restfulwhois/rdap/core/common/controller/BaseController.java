@@ -144,7 +144,7 @@ public class BaseController {
     protected RedirectService redirectService;
 
     /**
-     * Query method.
+     * Query template method.
      * 
      * <pre>
      * All sub classes should call this method for query.

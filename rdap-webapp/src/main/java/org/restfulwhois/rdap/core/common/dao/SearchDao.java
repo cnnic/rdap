@@ -36,6 +36,7 @@ import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 
 /**
+ * SearchDao.
  * 
  * @author jiashuo
  * 

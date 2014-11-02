@@ -34,34 +34,30 @@ import java.util.List;
 
 import org.restfulwhois.rdap.core.common.model.Notice;
 
-
 /**
  * notice DAO.
- * Interface to access NoticeDaoImpl.
- *
+ * 
  * @author jiashuo.
- *
+ * 
  */
 public interface NoticeDao {
     /**
-     * get all notice list where notice reasonType 
-     *  not in (TYPE).
-     *
+     * get all notice list where notice reasonType not in (TYPE).
+     * 
      * @return notice list.
      */
     List<Notice> getNoticesNoTruncated();
 
     /**
      * get help info, as format of notice.
-     *
+     * 
      * @return notice list.
      */
-    List<Notice> getHelp();  
-    
+    List<Notice> getHelp();
+
     /**
-     * load  notice list where notice reasonType 
-     * in (TYPE).
-     *
+     * load notice list where notice reasonType in (TYPE).
+     * 
      * @return notice list.
      */
     List<Notice> loadNoticesForTruncated();

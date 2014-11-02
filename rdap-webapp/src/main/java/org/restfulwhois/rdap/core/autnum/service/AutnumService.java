@@ -36,20 +36,18 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 /**
  * query service interface.
  * 
- * query Domain/IP/AS/Name server/entity/help and is the query object in own
- * registry
- * 
  * @author jiashuo
  * 
  */
 public interface AutnumService {
 
     /**
-     * query autnm.
+     * query autnum.
      * 
      * @param queryParam
      *            queryParam.
      * @return autnum autnum.
      */
     Autnum queryAutnum(QueryParam queryParam);
+
 }

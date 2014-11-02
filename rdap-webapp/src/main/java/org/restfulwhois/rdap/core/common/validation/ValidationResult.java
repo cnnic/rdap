@@ -64,6 +64,11 @@ public class ValidationResult {
         return errors.size() > 0;
     }
 
+    /**
+     * getFirstError.
+     * 
+     * @return ValidationError.
+     */
     public ValidationError getFirstError() {
         if (!hasError()) {
             return null;

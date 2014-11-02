@@ -32,8 +32,6 @@ package org.restfulwhois.rdap.core.common.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-
-
 /**
  * ObjectClassNameEnum.
  * 
@@ -41,12 +39,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * 
  */
 public enum ObjectClassNameEnum {
-	/**
+    /**
      * 5 main object Class Name.
      */
     DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameserver"), AUTNUM(
             "autnum"), IP("ip network");
-    
+
     /**
      * name of ObjectClassNameEnum.
      */
@@ -55,13 +53,14 @@ public enum ObjectClassNameEnum {
     /**
      * constructor.
      * 
-     * @param name.
-     *            
+     * @param name
+     *            .
+     * 
      */
     private ObjectClassNameEnum(String name) {
         this.name = name;
-    }   
-    
+    }
+
     /**
      * get ObjectClassNameEnum name.
      * 

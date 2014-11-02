@@ -42,12 +42,6 @@ import org.springframework.stereotype.Service;
 /**
  * query service implementation.
  * 
- * RdapController's main query service for querying or searching.
- * 
- * Provide the all tlds to be supported
- * 
- * Requirement from http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
- * 
  * @author jiashuo
  * 
  */
@@ -77,4 +71,5 @@ public class AutnumServiceImpl implements AutnumService {
     public Autnum queryAutnum(QueryParam queryParam) {
         return autnumQueryDao.query(queryParam);
     }
+
 }

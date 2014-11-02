@@ -37,11 +37,14 @@ import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 
 /**
- * query dao interface. Each method return object of BaseModel, which can be
- * converted to concrete model by caller.
+ * query dao interface.
+ * <p>
+ * each method return object of BaseModel, which can be converted to concrete
+ * model by caller.
+ * </p>
  * 
  * @param <T>
- *            object deriving from BaseModel.
+ *            object driving from BaseModel.
  * @author jiashuo
  * 
  */
