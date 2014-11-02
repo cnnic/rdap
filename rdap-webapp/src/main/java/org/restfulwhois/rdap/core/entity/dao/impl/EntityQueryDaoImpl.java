@@ -56,12 +56,12 @@ import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
-import org.restfulwhois.rdap.core.common.util.JcardUtil;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
 import org.restfulwhois.rdap.core.entity.model.EntityRole;
 import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.jcard.Jcard;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -255,7 +255,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setTelephones(telephones);
         List<EntityAddress> addresses = entityAddressDao.query(entity);
         entity.setAddresses(addresses);
-        entity.setVcardArray(JcardUtil.toJcardString(entity));
+        entity.setVcardArray(Jcard.build(entity).toJSON());
     }
 
     /**

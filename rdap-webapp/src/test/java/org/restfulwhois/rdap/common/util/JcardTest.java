@@ -39,10 +39,10 @@ import java.util.List;
 import org.hamcrest.core.IsNot;
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
-import org.restfulwhois.rdap.core.common.util.JcardUtil;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
 import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.jcard.Jcard;
 
 import ezvcard.Ezvcard;
 import ezvcard.Ezvcard.ParserChainJsonString;
@@ -51,18 +51,17 @@ import ezvcard.property.Kind;
 
 /**
  * Test for Jcard util.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
-public class JcardUtilTest {
+public class JcardTest {
     /**
      * test toJcardString.
      */
     @Test
     public void testToJcardString() {
         Entity entity = null;
-        JcardUtil.toJcardString(entity);
         entity = new Entity();
         entity.setFn("Jonathan Doe");
         entity.setKind(Kind.INDIVIDUAL);
@@ -92,19 +91,19 @@ public class JcardUtilTest {
         entity.setOrg("org");
         entity.setUrl("http://www.acme-co.com");
         entity.setLang("zh_CN");
-        String jcardString = JcardUtil.toJcardString(entity);
+        String jcardString = Jcard.build(entity).toJSON();
         ParserChainJsonString e = Ezvcard.parseJson(jcardString);
         List<VCard> list = e.all();
         System.err.println(Ezvcard.write(list.get(0)).prodId(false).go());
         assertNotNull(jcardString);
-        assertThat(jcardString, new StringContains("zh_CN")); 
+        assertThat(jcardString, new StringContains("zh_CN"));
         // invalid lang also can work
         entity.setLang("invalid_lang_value");
-        jcardString = JcardUtil.toJcardString(entity);
+        jcardString = Jcard.build(entity).toJSON();
         assertNotNull(jcardString);
-        assertThat(jcardString, new StringContains("invalid_lang_value")); 
+        assertThat(jcardString, new StringContains("invalid_lang_value"));
     }
-    
+
     @Test
     public void testTel() {
         Entity entity = new Entity();
@@ -142,15 +141,15 @@ public class JcardUtilTest {
         entityTel.setGlobalNumber(" +9981-().");
         entityTel.setExtNumber("998-()");
         entity.setTelephones(telephones);
-        String jcardString = JcardUtil.toJcardString(entity);
+        String jcardString = Jcard.build(entity).toJSON();
         assertNotNull(jcardString);
-        assertThat(jcardString, new StringContains("+9981-().")); 
-        assertThat(jcardString, new StringContains("998-()")); 
-        assertThat(jcardString, new IsNot(new StringContains("+9981+-()."))); 
-        assertThat(jcardString, new IsNot(new StringContains("+0981+-()."))); 
-        assertThat(jcardString, new IsNot(new StringContains("+998-()"))); 
-        assertThat(jcardString, new IsNot(new StringContains("a9981-()."))); 
-        assertThat(jcardString, new IsNot(new StringContains("@#-()."))); 
-        assertThat(jcardString, new IsNot(new StringContains(" +9981-()."))); 
+        assertThat(jcardString, new StringContains("+9981-()."));
+        assertThat(jcardString, new StringContains("998-()"));
+        assertThat(jcardString, new IsNot(new StringContains("+9981+-().")));
+        assertThat(jcardString, new IsNot(new StringContains("+0981+-().")));
+        assertThat(jcardString, new IsNot(new StringContains("+998-()")));
+        assertThat(jcardString, new IsNot(new StringContains("a9981-().")));
+        assertThat(jcardString, new IsNot(new StringContains("@#-().")));
+        assertThat(jcardString, new IsNot(new StringContains(" +9981-().")));
     }
 }
