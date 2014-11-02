@@ -36,7 +36,7 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.model.DomainSearch;
 import org.restfulwhois.rdap.core.domain.service.DomainSearchService;
-import org.restfulwhois.rdap.search.service.AbstractSearchService;
+import org.restfulwhois.rdap.search.common.service.AbstractSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
