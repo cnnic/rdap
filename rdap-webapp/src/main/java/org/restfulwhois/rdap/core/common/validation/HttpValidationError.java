@@ -39,21 +39,45 @@ import org.springframework.http.HttpStatus;
  * 
  */
 public class HttpValidationError implements ValidationError {
+    /**
+     * statusCode.
+     */
     private HttpStatus statusCode;
 
+    /**
+     * constructor.
+     * 
+     * @param statusCode
+     *            statusCode.
+     */
     private HttpValidationError(HttpStatus statusCode) {
         super();
         this.statusCode = statusCode;
     }
 
+    /**
+     * build400Error.
+     * 
+     * @return ValidationError.
+     */
     public static ValidationError build400Error() {
         return new HttpValidationError(HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * build422Error.
+     * 
+     * @return build422Error.
+     */
     public static ValidationError build422Error() {
         return new HttpValidationError(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
+    /**
+     * statusCode.
+     * 
+     * @return statusCode.
+     */
     public HttpStatus getStatusCode() {
         return statusCode;
     }

@@ -38,6 +38,7 @@ import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.restfulwhois.rdap.core.common.validation.Validator;
 
 /**
+ * AsValidator.
  * 
  * @author jiashuo
  * 

@@ -37,7 +37,7 @@ import org.restfulwhois.rdap.acl.bean.Principal;
  * <p>
  * Principal is maintains in {@link java.lang.ThreadLocal} variable.
  * <p>
- * PrincipalHolder.setPrincipal() is typically used when a request is comming,
+ * PrincipalHolder.setPrincipal() is typically used when a request is coming,
  * and PrincipalHolder.remove() is used after response is send to client.
  * <p>
  * 

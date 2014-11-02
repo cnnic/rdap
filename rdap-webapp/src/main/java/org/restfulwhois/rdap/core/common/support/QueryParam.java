@@ -43,7 +43,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * base query parameter bean.
+ * This is the base query parameter bean.
+ * <p>
+ * sub class should be used for query service.
+ * </p>
  * 
  * @author jiashuo
  * 
@@ -57,32 +60,38 @@ public abstract class QueryParam {
             .getLogger(QueryParam.class);
 
     /**
-     * request.
+     * used to fill HTTP parameters into this QueryParam.
      */
     private HttpServletRequest request;
 
     /**
-     * validators.
+     * validate query parameters.
+     * <p>
+     * MUST initialize this when create QueryParam.
+     * </p>
      */
     private List<Validator> validators = new ArrayList<Validator>();
 
     /**
-     * originalQ.
+     * original query parameter, and never changed after assigned.
      */
     private String originalQ;
 
     /**
-     * primitive query parameter.
+     * 'q' is query parameter used for query. It is assigned by convertParam().
      */
     private String q;
 
     /**
-     * page for search.
+     * for search.
      */
     private PageBean pageBean;
 
     /**
-     * init validators.
+     * initialize validators.
+     * <p>
+     * this method MUST be called when QueryParam initialized.
+     * </p>
      */
     abstract protected void initValidators();
 
@@ -97,7 +106,7 @@ public abstract class QueryParam {
     }
 
     /**
-     * fill param.
+     * fill parameters from HTTP request into QueryParam's q.
      * 
      * @throws Exception
      *             Exception.
@@ -105,7 +114,7 @@ public abstract class QueryParam {
     abstract public void fillParam() throws Exception;
 
     /**
-     * convert param.
+     * convert parameters from HTTP request.
      * 
      * @throws Exception
      *             Exception.
@@ -224,7 +233,11 @@ public abstract class QueryParam {
     }
 
     /**
-     * validate.
+     * validate parameters.
+     * <p>
+     * erros will be filled into validationResult if at least one validator is
+     * failed.
+     * </p>
      * 
      * @return ValidationResult.
      */

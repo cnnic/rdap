@@ -37,25 +37,21 @@ import org.restfulwhois.rdap.core.autnum.validator.AsValidator;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 
 /**
- * entity query parameter bean.
+ * autnum query parameter bean.
  * 
  * @author jiashuo
  * 
  */
 public class AsQueryParam extends QueryParam {
 
+    /**
+     * constructor.
+     * 
+     * @param request
+     *            request.
+     */
     public AsQueryParam(HttpServletRequest request) {
         super(request);
-    }
-
-    /**
-     * default constructor.
-     * 
-     * @param q
-     *            query string.
-     */
-    public AsQueryParam(String q) {
-        super(q);
     }
 
     @Override
@@ -74,47 +70,9 @@ public class AsQueryParam extends QueryParam {
     public void convertParam() throws Exception {
     }
 
-    /**
-     * constructor.
-     * 
-     * @param q
-     *            query string.
-     * @param searchParamName
-     *            searchParamName.
-     */
-    public AsQueryParam(String q, String searchParamName) {
-        super(q);
-        this.searchParamName = searchParamName;
-    }
-
-    /**
-     * searchParamName.
-     */
-    private String searchParamName;
-
-    /**
-     * get searchParamName.
-     * 
-     * @return searchParamName.
-     */
-    public String getSearchParamName() {
-        return searchParamName;
-    }
-
-    /**
-     * set searchParamName.
-     * 
-     * @param searchParamName
-     *            searchParamName.
-     */
-    public void setSearchParamName(String searchParamName) {
-        this.searchParamName = searchParamName;
-    }
-
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append(searchParamName).append(getQ())
-                .toString();
+        return new ToStringBuilder(this).append(getQ()).toString();
     }
 
 }

@@ -36,7 +36,7 @@ import java.util.Map;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * page bean for paging.
+ * bean for paging.
  * 
  * @author jiashuo
  * 

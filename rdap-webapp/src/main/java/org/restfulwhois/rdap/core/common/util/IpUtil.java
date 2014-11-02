@@ -93,12 +93,12 @@ public final class IpUtil {
     }
 
     /**
-     * parse IP from ip str.
+     * parse IP from IP str.
      * 
      * @param ip
-     *            ip str.
+     *            IP str.
      * @param ipVersion
-     *            ip version.
+     *            IP version.
      * @return IpInBytes.
      */
     public static IpInBytes parseIp(String ip, IpVersion ipVersion) {
@@ -126,7 +126,7 @@ public final class IpUtil {
      * get IP version of CIDR str.
      * 
      * @param cidr
-     *            ip str.
+     *            IP str.
      * @return IP version.
      */
     public static IpVersion getIpVersionOfNetwork(String cidr) {
@@ -147,7 +147,7 @@ public final class IpUtil {
      * @param cidr
      *            CIDR str.
      * @param ipVersion
-     *            ip version.
+     *            IP version.
      * @return NetworkInBytes.
      */
     public static NetworkInBytes parseNetwork(String cidr, IpVersion ipVersion) {
