@@ -71,99 +71,10 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
     public List<Link> queryAsInnerObjects(final Long outerObjectId,
             final ModelType outerModelType) {
         List<Link> linksWithHreflang = queryLinkWithHreflang(outerObjectId,
-                outerModelType);
-        List<Long> linksIds = getModelIds(linksWithHreflang);
-        List<LinkTitle> linksTitle = queryLinksTitle(linksIds);
-        List<Link> result = setTitleToLinks(linksWithHreflang, linksTitle);
-        return result;
+                outerModelType);        
+        return linksWithHreflang;
     }
-
-    /**
-     * set title to links. This method will modify links.
-     * 
-     * @param links
-     *            link list will be filled with title
-     * @param linksTitle
-     *            link title will be set to link
-     * @return modified link list
-     */
-    private List<Link> setTitleToLinks(List<Link> links,
-            List<LinkTitle> linksTitle) {
-        if (null == links || null == linksTitle || linksTitle.size() == 0) {
-            return links;
-        }
-        for (LinkTitle linkTitle : linksTitle) {
-            setTitleToLink(linkTitle, links);
-        }
-        return links;
-    }
-
-    /**
-     * set title to link. This method will modify link.
-     * 
-     * @param linkTitle
-     *            link title
-     * @param links
-     *            link list
-     */
-    private void setTitleToLink(LinkTitle linkTitle, List<Link> links) {
-        if (null == links) {
-            return;
-        }
-        Link link = findLinkFromListById(linkTitle.getLinkId(), links);
-        if (null != link) {
-            link.addTitle(linkTitle.getTitle());
-        }
-    }
-
-    /**
-     * find link from link list by link id.
-     * 
-     * @param linkId
-     *            link id
-     * @param links
-     *            link list
-     * @return link if find, null if not
-     */
-    private Link findLinkFromListById(Long linkId, List<Link> links) {
-        if (null == links || null == linkId) {
-            return null;
-        }
-        for (Link link : links) {
-            if (linkId.equals(link.getId())) {
-                return link;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * query link's title from RDAP_LINK_TITLE by link id.
-     * 
-     * @param linksIds
-     *            link id list.
-     * @return link title list.
-     */
-    private List<LinkTitle> queryLinksTitle(List<Long> linksIds) {
-        if (null == linksIds || linksIds.size() == 0) {
-            return new ArrayList<LinkTitle>();
-        }
-        final String linksIdsJoinedByComma = StringUtils.join(linksIds, ",");
-        final String sqlTpl = 
-                "select * from RDAP_LINK_TITLE where LINK_ID in (%s)";
-        final String sql = String.format(sqlTpl, linksIdsJoinedByComma);
-        List<LinkTitle> result = jdbcTemplate.query(sql,
-                new RowMapper<LinkTitle>() {
-                    @Override
-                    public LinkTitle mapRow(ResultSet rs, int rowNum)
-                            throws SQLException {
-                        return new LinkTitle(rs.getLong("LINK_ID"), rs
-                                .getString("TITLE"));
-                    }
-
-                });
-        return result;
-    }
+   
 
     /**
      * query link with hreflang as inner objects for outer object.
@@ -217,6 +128,7 @@ public class LinkQueryDaoImpl extends AbstractQueryDao<Link> {
                     link.setHref(rs.getString("HREF"));
                     link.setMedia(rs.getString("MEDIA"));
                     link.setType(rs.getString("TYPE"));
+                    link.setTitle(rs.getString("TITLE"));
                     result.add(link);
                     encodeUriAndSetToLink(link);
                     mapById.put(linkId, link);
