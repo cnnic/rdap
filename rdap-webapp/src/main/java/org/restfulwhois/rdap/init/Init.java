@@ -31,7 +31,7 @@
 package org.restfulwhois.rdap.init;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.init.mysql.InitDao;
+import org.restfulwhois.rdap.init.dao.InitDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

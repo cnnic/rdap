@@ -73,7 +73,7 @@
 
 	<bean id="initContext" class="org.restfulwhois.rdap.init.InitContext">
 	</bean>
-	<bean id="initDao" class="org.restfulwhois.rdap.init.mysql.InitDao">
+	<bean id="initDao" class="org.restfulwhois.rdap.init.dao.InitDao">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 		<property name="dataSource" ref="dataSource" />
 		<property name="initContext" ref="initContext" />

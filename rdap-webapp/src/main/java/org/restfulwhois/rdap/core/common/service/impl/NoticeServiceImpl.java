@@ -35,11 +35,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.restfulwhois.rdap.core.common.dao.NoticeDao;
+import org.restfulwhois.rdap.core.common.dao.impl.RemarkQueryDaoImpl;
 import org.restfulwhois.rdap.core.common.model.Notice;
 import org.restfulwhois.rdap.core.common.model.Remark;
 import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.common.service.NoticeService;
-import org.restfulwhois.rdap.dao.impl.RemarkQueryDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

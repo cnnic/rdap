@@ -32,9 +32,9 @@ package org.restfulwhois.rdap.core.nameserver.service.impl;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
+import org.restfulwhois.rdap.core.nameserver.dao.impl.NameserverQueryDaoImpl;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;
-import org.restfulwhois.rdap.dao.impl.NameserverQueryDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
