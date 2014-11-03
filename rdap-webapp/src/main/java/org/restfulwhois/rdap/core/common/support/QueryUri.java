@@ -45,8 +45,15 @@ public enum QueryUri {
     /**
      * 5 main object URI.
      */
-    AUTNUM("/autnum/"), IP("/ip/");
-
+    AUTNUM("/autnum/"), IP("/ip/"),
+    /**
+     * search.
+     */
+    DOMAINS("/domains"), ENTITIES("/entities"), NAMESERVERS("/nameservers"),
+    /**
+     * help.
+     */
+    HELP("/help");
     /**
      * name of model uri.
      */
@@ -60,23 +67,6 @@ public enum QueryUri {
      */
     private QueryUri(String name) {
         this.name = name;
-    }
-
-    /**
-     * get model uri be name.
-     * 
-     * @param name
-     *            name.
-     * @return model ModelUri.
-     */
-    public static QueryUri getModelUri(String name) {
-        QueryUri[] modelUris = QueryUri.values();
-        for (QueryUri modelUri : modelUris) {
-            if (modelUri.getName().equals(name)) {
-                return modelUri;
-            }
-        }
-        return null;
     }
 
     /**

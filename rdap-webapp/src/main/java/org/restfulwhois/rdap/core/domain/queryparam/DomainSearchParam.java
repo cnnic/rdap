@@ -33,6 +33,7 @@ package org.restfulwhois.rdap.core.domain.queryparam;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 
 /**
@@ -155,6 +156,11 @@ public abstract class DomainSearchParam extends QueryParam {
      */
     public void setSearchByParam(String searchByParam) {
         this.searchByParam = searchByParam;
+    }
+    
+    @Override
+    public QueryUri getQueryUri() {
+        return QueryUri.DOMAINS;
     }
 
 }

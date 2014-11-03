@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.core.nameserver.queryparam;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 
 /**
@@ -41,7 +42,7 @@ import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
  * @author jiashuo
  * 
  */
-abstract public class NameserverQueryParam extends DomainQueryParam {
+public class NameserverQueryParam extends DomainQueryParam {
 
     /**
      * construction.
@@ -49,6 +50,11 @@ abstract public class NameserverQueryParam extends DomainQueryParam {
      */
     public NameserverQueryParam(HttpServletRequest request) {
         super(request);
+    }
+    
+    @Override
+    public QueryUri getQueryUri() {
+        return QueryUri.NAMESERVER;
     }
 
 }

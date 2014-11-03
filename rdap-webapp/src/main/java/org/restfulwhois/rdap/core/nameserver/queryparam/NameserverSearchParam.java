@@ -33,6 +33,7 @@ package org.restfulwhois.rdap.core.nameserver.queryparam;
 import javax.servlet.http.HttpServletRequest;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 
 /**
@@ -97,4 +98,10 @@ public abstract class NameserverSearchParam extends QueryParam {
     public void setPunyName(String punyName) {
         this.punyName = punyName;
     }
+
+    @Override
+    public QueryUri getQueryUri() {
+        return QueryUri.NAMESERVERS;
+    }
+    
 }

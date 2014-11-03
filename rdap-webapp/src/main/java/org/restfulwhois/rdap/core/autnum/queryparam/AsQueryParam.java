@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.autnum.validator.AsValidator;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryUri;
 
 /**
  * autnum query parameter bean.
@@ -73,6 +74,11 @@ public class AsQueryParam extends QueryParam {
     @Override
     public String toString() {
         return new ToStringBuilder(this).append(getQ()).toString();
+    }
+
+    @Override
+    public QueryUri getQueryUri() {
+        return QueryUri.AUTNUM;
     }
 
 }

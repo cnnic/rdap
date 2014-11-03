@@ -1,6 +1,7 @@
 package org.restfulwhois.rdap;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
 
 /*
@@ -79,6 +80,11 @@ class TestQueryParam extends QueryParam {
     @Override
     public void convertParam() throws Exception {
         
+    }
+
+    @Override
+    public QueryUri getQueryUri() {
+        return null;
     }
 
 }
