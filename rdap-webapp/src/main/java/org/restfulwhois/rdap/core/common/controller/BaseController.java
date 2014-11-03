@@ -30,8 +30,16 @@
  */
 package org.restfulwhois.rdap.core.common.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.SimpleFormatter;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.common.support.MappingExceptionResolver;
+import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.ResponseDecorator;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
@@ -144,12 +152,49 @@ public class BaseController {
     protected RedirectService redirectService;
 
     /**
+     * Query  method and write log.
+     * 
+     * <pre>
+     * All sub classes should call this method for query.  
+     * Note:queryParam.convertParam() 
+     * can throw any Exception, and these exceptions will handled 
+     * as HTTP 400 error.    
+     * </pre>
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return ResponseEntity.
+     */
+    protected ResponseEntity query(QueryParam queryParam) {        
+        String queryIp = "";        
+        if (queryParam.getRequest() != null) {
+            queryIp = queryParam.getRequest().getRemoteAddr();
+        }       
+        Date queryStart = new Date();
+        ResponseEntity responseEntity = null;        
+        LOGGER.info("query ip:{};query user:{}.query start time:"
+           + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(queryStart),
+           queryIp, PrincipalHolder.getPrincipal().getId());   
+        try {
+            queryParam.fillParam();           
+            responseEntity = queryTemplate(queryParam);
+        } catch (Exception e) {            
+            responseEntity = RestResponseUtil.createResponse400();
+        } 
+        LOGGER.info("query object and param:{}.", queryParam);
+        long usedTime = (new Date()).getTime() -  queryStart.getTime();
+        LOGGER.info("query used time:{}ms;responseCode:{}.", 
+             usedTime, responseEntity.getStatusCode());
+        return responseEntity;
+    }
+    
+    /**
      * Query template method.
      * 
      * <pre>
      * All sub classes should call this method for query.
      * 
-     * Note: queryParam.fillParam() and queryParam.convertParam() 
+     * Note:queryParam.convertParam() 
      * can throw any Exception, and these exceptions will handled 
      * as HTTP 400 error.
      * </pre>
@@ -157,13 +202,8 @@ public class BaseController {
      * @param queryParam
      *            queryParam.
      * @return ResponseEntity.
-     */
-    protected ResponseEntity query(QueryParam queryParam) {
-        try {
-            queryParam.fillParam();
-        } catch (Exception e) {
-            return RestResponseUtil.createResponse400();
-        }
+     */    
+    protected ResponseEntity queryTemplate(QueryParam queryParam) {        
         ValidationResult result = validateParam(queryParam);
         if (result.hasError()) {
             return handleError(result);

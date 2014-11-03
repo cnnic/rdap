@@ -28,4 +28,20 @@
 		<level value="DEBUG" />
 		<appender-ref ref="STDOUT" />
 	</logger>
+	<property name="logDir" value="../../logs" /> 
+	<appender name="queryAppender"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/performance.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logDir}/performance-%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{150} - %msg%n
+            </Pattern>
+        </encoder>
+    </appender> 
+    <logger name="org.restfulwhois.rdap.core.common.controller"  additivity="false">
+           <level value="DEBUG" />
+          <appender-ref ref="queryAppender" />
+    </logger>
 </configuration> 
