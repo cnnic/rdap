@@ -36,8 +36,8 @@ import org.restfulwhois.rdap.core.common.exception.DecodeException;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.domain.controller.BaseDnrController;
-import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
+import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverQueryParam;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +67,7 @@ public class NameserverQueryController extends BaseDnrController {
      */
     @Autowired
     protected NameserverQueryService queryService;
+
     /**
      * <pre>
      * query nameserver by nameserver name.
@@ -93,7 +94,7 @@ public class NameserverQueryController extends BaseDnrController {
     @ResponseBody
     public ResponseEntity queryNameserver(@PathVariable String nsName,
             HttpServletRequest request) throws DecodeException {
-        QueryParam queryParam = new DomainQueryParam(request);
+        QueryParam queryParam = new NameserverQueryParam(request);
         return super.query(queryParam);
     }
 

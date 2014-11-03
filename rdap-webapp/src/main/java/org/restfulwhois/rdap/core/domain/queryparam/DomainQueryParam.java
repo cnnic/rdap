@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.domain.validator.DomainNameValidator;
@@ -82,6 +83,11 @@ public class DomainQueryParam extends QueryParam {
         addValidator(DOMAIN_NAME_VALIDATOR);
     }
 
+    @Override
+    public QueryUri getQueryUri() {
+        return QueryUri.DOMAIN;
+    }
+    
     /**
      * construction.
      * 

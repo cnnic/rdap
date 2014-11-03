@@ -33,10 +33,8 @@ package org.restfulwhois.rdap.core.domain.controller;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.controller.BaseController;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
-import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverQueryParam;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,14 +68,10 @@ public class BaseDnrController extends BaseController {
             String paramName) {
         LOGGER.debug("   queryRedirectDomainOrNs:{}", queryParam);
         RedirectResponse redirect = redirectService.queryDomain(queryParam);
-        String servicePartUri = QueryUri.DOMAIN.getName();
-        if (queryParam instanceof NameserverQueryParam) {
-            servicePartUri = QueryUri.NAMESERVER.getName();
-        }
         if (null != redirect && StringUtils.isNotBlank(redirect.getUrl())) {
             String redirectUrl =
-                    StringUtil.generateEncodedRedirectURL(paramName,
-                            servicePartUri, redirect.getUrl());
+                    StringUtil.generateEncodedRedirectURL(paramName, queryParam
+                            .getQueryUri().getName(), redirect.getUrl());
             return RestResponseUtil.createResponse301(redirectUrl);
         }
         LOGGER.debug("   redirect not found.{},return 404.", queryParam);

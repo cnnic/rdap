@@ -31,6 +31,7 @@
 package org.restfulwhois.rdap.core.help.queryparam;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryUri;
 
 /**
  * help query parameter bean.
@@ -60,6 +61,11 @@ public class HelpQueryParam extends QueryParam {
 
     @Override
     public void convertParam() throws Exception {
+    }
+
+    @Override
+    public QueryUri getQueryUri() {
+        return QueryUri.HELP;
     }
 
 }

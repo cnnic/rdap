@@ -36,6 +36,7 @@ import org.restfulwhois.rdap.core.common.validation.HttpValidationError;
 import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.restfulwhois.rdap.core.common.validation.Validator;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
+import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverQueryParam;
 
 /**
  * 
@@ -46,7 +47,8 @@ public class DomainNameValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.equals(DomainQueryParam.class);
+        return clazz.equals(DomainQueryParam.class)
+                || clazz.equals(NameserverQueryParam.class);
     }
 
     @Override

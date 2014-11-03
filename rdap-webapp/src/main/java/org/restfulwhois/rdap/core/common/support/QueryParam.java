@@ -86,6 +86,12 @@ public abstract class QueryParam {
      * for search.
      */
     private PageBean pageBean;
+    
+    /**
+     * getQueryUri.
+     * @return QueryUri.
+     */
+    abstract public QueryUri getQueryUri(); 
 
     /**
      * initialize validators.

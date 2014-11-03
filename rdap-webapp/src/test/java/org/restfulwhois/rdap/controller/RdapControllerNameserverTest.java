@@ -107,11 +107,11 @@ public class RdapControllerNameserverTest extends BaseTest {
     @Test
     public void testQueryNonExistNS() throws Exception {
         RestResponseUtil.initErrorMessages();
-//        commonQueryNonExistNS("1cnnic.cn");
-//        commonQueryNonExistNS("cnnic.com.cn");
-//        commonQueryNonExistNS("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
+        commonQueryNonExistNS("1cnnic.cn");
+        commonQueryNonExistNS("cnnic.com.cn");
+        commonQueryNonExistNS("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
         commonQueryNonExistNS("%CF%83%CE%B5%CE%B9%CF%81%CE%AC%CF%84%CE%AC%CE%BE%CE%B7%CF%83%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CF%89%CE%BD%CF%83%CF%8D%CE%BD%CE%B8%CE%B5%CF%83%CE%B7%CF%85%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B9%CE%BA%CE%BF%CF%8D%CF%83%CF%85%CE%BC%CE%B2%CE%BF%CF%85%CE%BB%CE%AF%CE%BF%CF%85%CE%BF%CF%85%CE%BF%CF%85%CE%BF.bnnhg");
-//        commonQueryNonExistNS("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
+        commonQueryNonExistNS("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
     }
 
     /**
@@ -182,7 +182,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     private void commonQueryInvalidNS(String nsName) throws Exception {
         mockMvc.perform(
-                get(URI_NS_Q + StringUtil.urlEncode(nsName)).accept(
+                get(URI_NS_Q + nsName).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
