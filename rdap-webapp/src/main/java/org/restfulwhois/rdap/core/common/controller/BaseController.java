@@ -32,11 +32,7 @@ package org.restfulwhois.rdap.core.common.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.SimpleFormatter;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
