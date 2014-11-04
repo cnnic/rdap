@@ -29,7 +29,7 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 	<property name="logDir" value="../../logs" /> 
-	<appender name="queryAppender"
+	<appender name="performanceLogAppender"
         class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logDir}/performance.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -42,6 +42,6 @@
     </appender> 
     <logger name="org.restfulwhois.rdap.core.common.controller"  additivity="false">
            <level value="DEBUG" />
-          <appender-ref ref="queryAppender" />
+          <appender-ref ref="performanceLogAppender" />
     </logger>
 </configuration> 

@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.common.controller;
 
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 import org.restfulwhois.rdap.core.common.service.AccessControlManager;
@@ -151,32 +151,19 @@ public class BaseController {
      * Query  method and write log.
      * 
      * <pre>
-     * All sub classes should call this method for query.  
-     * Note:queryParam.convertParam() 
-     * can throw any Exception, and these exceptions will handled 
-     * as HTTP 400 error.    
+     * All sub classes should call this method for query.       
      * </pre>
      * 
      * @param queryParam
      *            queryParam.
      * @return ResponseEntity.
      */
-    protected ResponseEntity query(QueryParam queryParam) {        
-        String queryIp = "";        
-        if (queryParam.getRequest() != null) {
-            queryIp = queryParam.getRequest().getRemoteAddr();
-        }       
+    protected ResponseEntity query(QueryParam queryParam) {       
         Date queryStart = new Date();
-        ResponseEntity responseEntity = null;        
-        LOGGER.info("query ip:{};query user:{}.query start time:"
-           + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(queryStart),
-           queryIp, PrincipalHolder.getPrincipal().getId());   
-        try {
-            queryParam.fillParam();           
-            responseEntity = queryTemplate(queryParam);
-        } catch (Exception e) {            
-            responseEntity = RestResponseUtil.createResponse400();
-        } 
+        LOGGER.info("query ip:{};query user:{}.", 
+              queryParam.getRemoteAddr(), 
+              PrincipalHolder.getPrincipal().getId());                  
+        ResponseEntity  responseEntity = queryTemplate(queryParam);        
         LOGGER.info("query object and param:{}.", queryParam);
         long usedTime = (new Date()).getTime() -  queryStart.getTime();
         LOGGER.info("query used time:{}ms;responseCode:{}.", 
@@ -190,7 +177,7 @@ public class BaseController {
      * <pre>
      * All sub classes should call this method for query.
      * 
-     * Note:queryParam.convertParam() 
+     * Note:queryParam.convertParam()  and queryParam.convertParam() 
      * can throw any Exception, and these exceptions will handled 
      * as HTTP 400 error.
      * </pre>
@@ -199,7 +186,12 @@ public class BaseController {
      *            queryParam.
      * @return ResponseEntity.
      */    
-    protected ResponseEntity queryTemplate(QueryParam queryParam) {        
+    protected ResponseEntity queryTemplate(QueryParam queryParam) {
+        try {
+            queryParam.fillParam();
+        } catch (Exception e) {            
+            return RestResponseUtil.createResponse400();
+        }
         ValidationResult result = validateParam(queryParam);
         if (result.hasError()) {
             return handleError(result);
