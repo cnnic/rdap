@@ -72,6 +72,7 @@ public class NetworkController extends BaseController {
      */
     @Autowired
     protected IpService queryService;
+
     /**
      * <pre>
      * query ip by ip and mask.
@@ -100,7 +101,7 @@ public class NetworkController extends BaseController {
             throws DecodeException {
         ipAddr = RequestUtil.getLastSecondSplitInURI(request);
         mask = RequestUtil.getLastSplitInURI(request);
-        return doQueryIp(ipAddr + "/" + mask);
+        return doQueryIp(request, ipAddr + "/" + mask);
     }
 
     /**
@@ -126,11 +127,14 @@ public class NetworkController extends BaseController {
     public ResponseEntity queryIp(@PathVariable String ipAddr,
             HttpServletRequest request) throws DecodeException {
         ipAddr = RequestUtil.getLastSplitInURI(request);
-        return doQueryIp(ipAddr);
+        return doQueryIp(request, ipAddr);
     }
 
     /**
      * do query IP.
+     * 
+     * @param request
+     *            request.
      * 
      * @param cidr
      *            CIDR.
@@ -138,9 +142,9 @@ public class NetworkController extends BaseController {
      *            originQueryParam.
      * @return ResponseEntity ResponseEntity.
      */
-    private ResponseEntity doQueryIp(String cidr) {
+    private ResponseEntity doQueryIp(HttpServletRequest request, String cidr) {
         cidr = IpUtil.addNetworkMaskIfNotContainsMask(cidr);
-        NetworkQueryParam queryParam = new NetworkQueryParam(cidr);
+        NetworkQueryParam queryParam = new NetworkQueryParam(request, cidr);
         return super.query(queryParam);
     }
 
