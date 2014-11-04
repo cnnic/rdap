@@ -30,6 +30,8 @@
  */
 package org.restfulwhois.rdap.core.ip.queryparam;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
@@ -63,12 +65,26 @@ public class NetworkQueryParam extends QueryParam {
     /**
      * constructor.
      * 
-     * @param q
+     * @param request
+     *            request.
+     * @param cidr
+     *            cidr.
+     */
+    public NetworkQueryParam(HttpServletRequest request, String cidr) {
+        super(request);
+        super.setOriginalQ(cidr);
+        super.setQ(cidr);
+    }
+
+    /**
+     * constructor.
+     * 
+     * @param cidr
      *            q.
      */
-    public NetworkQueryParam(String q) {
-        super(q);
-        super.setOriginalQ(q);
+    public NetworkQueryParam(String cidr) {
+        super(cidr);
+        super.setOriginalQ(cidr);
     }
 
     /**
