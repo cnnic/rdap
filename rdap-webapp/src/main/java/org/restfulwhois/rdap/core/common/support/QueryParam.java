@@ -35,6 +35,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
 import org.restfulwhois.rdap.core.common.util.RequestUtil;
 import org.restfulwhois.rdap.core.common.validation.ValidationResult;
@@ -313,5 +314,18 @@ public abstract class QueryParam {
     protected String getParameter(HttpServletRequest request, String name) {
         return RequestUtil.getParameter(request, name);
     }
+    
+    /**
+     * get remote query ip. 
+     *            
+     * @return string  remote query ip.
+     */
+    public String getRemoteAddr() {
+       if (this.request != null) {
+           return request.getRemoteAddr();
+       }
+       return "";
+    } 
+
 
 }
