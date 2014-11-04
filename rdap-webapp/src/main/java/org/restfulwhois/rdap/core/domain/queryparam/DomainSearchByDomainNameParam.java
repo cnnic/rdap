@@ -68,6 +68,7 @@ public class DomainSearchByDomainNameParam extends DomainSearchParam {
         decodeDomain = DomainUtil.iso8859Decode(domainName);
         decodeDomain =
                 DomainUtil.urlDecodeAndReplaceAsciiToLowercase(decodeDomain);
+        decodeDomain = StringUtil.getNormalization(decodeDomain);
         setQ(decodeDomain);
         setPunyName(decodeDomain);
     }
@@ -75,7 +76,7 @@ public class DomainSearchByDomainNameParam extends DomainSearchParam {
     @Override
     public void convertParam() throws Exception {
         String decodeDomain = getQ();
-        decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
+        decodeDomain = StringUtil.foldCase(decodeDomain);
         decodeDomain = DomainUtil.deleteLastPoint(decodeDomain);
         setQ(decodeDomain);
         setPunyName(decodeDomain);

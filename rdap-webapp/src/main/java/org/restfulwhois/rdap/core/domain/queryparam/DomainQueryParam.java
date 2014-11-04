@@ -104,13 +104,14 @@ public class DomainQueryParam extends QueryParam {
         super.setOriginalQ(domainName);
         String decodeDomain =
                 DomainUtil.urlDecodeAndReplaceAsciiToLowercase(domainName);
+        decodeDomain = StringUtil.getNormalization(decodeDomain);
         super.setQ(decodeDomain);
     }
 
     @Override
     public void convertParam() throws Exception {
         String decodeDomain = getQ();
-        decodeDomain = StringUtil.foldCaseAndNormalization(decodeDomain);
+        decodeDomain = StringUtil.foldCase(decodeDomain);
         LOGGER.debug("after foldCaseAndNormalization: {}", decodeDomain);
         // long lable exception
         String punyDomainName = DomainUtil.geneDomainPunyName(decodeDomain);
