@@ -31,8 +31,6 @@
 package org.restfulwhois.rdap.core.common.controller;
 
 
-import java.util.Date;
-
 import org.restfulwhois.rdap.core.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
@@ -154,18 +152,17 @@ public class BaseController {
      * All sub classes should call this method for query.       
      * </pre>
      * 
-     * @param queryParam
-     *            queryParam.
+     * @param queryParam     *            queryParam.
      * @return ResponseEntity.
      */
     protected ResponseEntity query(QueryParam queryParam) {       
-        Date queryStart = new Date();
+        long queryStart = System.currentTimeMillis();
         LOGGER.info("query ip:{};query user:{}.", 
               queryParam.getRemoteAddr(), 
               PrincipalHolder.getPrincipal().getId());                  
         ResponseEntity  responseEntity = queryTemplate(queryParam);        
         LOGGER.info("query object and param:{}.", queryParam);
-        long usedTime = (new Date()).getTime() -  queryStart.getTime();
+        long usedTime = System.currentTimeMillis() -  queryStart;
         LOGGER.info("query used time:{}ms;responseCode:{}.", 
              usedTime, responseEntity.getStatusCode());
         return responseEntity;
