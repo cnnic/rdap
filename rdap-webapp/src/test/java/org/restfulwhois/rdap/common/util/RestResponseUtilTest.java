@@ -207,4 +207,15 @@ public class RestResponseUtilTest extends BaseTest {
                 HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
         checkAllowOriginHeader(result);
     }
+    /**
+     * test create ResponseEntity with HTTP code 501.
+     */
+    @Test
+    public void testCreateResponse501() {
+        ResponseEntity result = RestResponseUtil.createResponse501();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(),
+                HttpStatus.NOT_IMPLEMENTED);
+        checkAllowOriginHeader(result);
+    }
 }
