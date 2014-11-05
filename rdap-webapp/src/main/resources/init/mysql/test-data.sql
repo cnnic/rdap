@@ -1,10 +1,6 @@
 
 USE `rdap`;
 
-#
-# Data for table "RDAP_AUTNUM"
-#
-
 INSERT INTO `RDAP_AUTNUM` (`AS_ID`,`HANDLE`,`START_AUTNUM`,`END_AUTNUM`,`NAME`,`TYPE`,`COUNTRY`,`LANG`,`PORT43`) VALUES (1,'as-1',62464,63487,'as-1:62464~63487','DIRECT ALLOCATION','CN','en','cnnic.cn'),(2,'as-2',1,19,'as-2:1~19','DIRECT ALLOCATION','CN','en','cnnic.cn'),(3,'as-3',9981,9981,'as-3:9981','DIRECT ALLOCATION','CN','en','cnnic.cn'),(4,'as-4',31,31,'as-4:31','DIRECT ALLOCATION','CN','en','cnnic.cn'),(5,'as-5',20,30,'as-5:20~30','DIRECT ALLOCATION','CN','en','cnnic.cn'),(6,'as-6',167295,167295,'as-6:167295','DIRECT ALLOCATION','CN','en','cnnic.cn');
 
 #
@@ -65,7 +61,7 @@ INSERT INTO `RDAP_ENTITY_STATUS` (`ENTITY_STATUS_ID`,`ENTITY_ID`,`STATUS`) VALUE
 # Data for table "RDAP_ERRORMESSAGE"
 #
 
-INSERT INTO `RDAP_ERRORMESSAGE` (`ERROR_ID`,`ERROR_CODE`,`TITLE`,`DESCRIPTION`,`LANG`) VALUES (1,400,'BAD REQUEST','BAD REQUEST','en'),(2,404,'NOT FOUND','NOT FOUND','en'),(3,500,'INTERNAL SERVER ERROR','INTERNAL SERVER ERROR','en'),(4,405,'METHOD NOT ALLOWED','METHOD NOT ALLOWED','en'),(5,415,'UNSUPPORTED MEDIA TYPE','UNSUPPORTED MEDIA TYPE','en'),(6,422,'UNPROCESSABLE ENTITY','UNPROCESSABLE ENTITY','en'),(7,401,'Unauthorized','Unauthorized','en'),(8,403,'Forbidden','Forbidden','en'),(9,509,'Bandwidth Limit Exceeded','Bandwidth Limit Exceeded','en'),(10,429,'Too Many Requests','Too Many Requests','en');
+INSERT INTO `RDAP_ERRORMESSAGE` (`ERROR_ID`,`ERROR_CODE`,`TITLE`,`DESCRIPTION`,`LANG`) VALUES (1,400,'BAD REQUEST','BAD REQUEST','en'),(2,404,'NOT FOUND','NOT FOUND','en'),(3,500,'INTERNAL SERVER ERROR','INTERNAL SERVER ERROR','en'),(4,405,'METHOD NOT ALLOWED','METHOD NOT ALLOWED','en'),(5,415,'UNSUPPORTED MEDIA TYPE','UNSUPPORTED MEDIA TYPE','en'),(6,422,'UNPROCESSABLE ENTITY','UNPROCESSABLE ENTITY','en'),(7,401,'Unauthorized','Unauthorized','en'),(8,403,'Forbidden','Forbidden','en'),(9,509,'Bandwidth Limit Exceeded','Bandwidth Limit Exceeded','en'),(10,429,'Too Many Requests','Too Many Requests','en'),(11,501,'Not Implemented','Not Implemented','en'),(12,301,'Moved Permanently','Moved Permanently','en');
 
 #
 # Data for table "RDAP_EVENT"
@@ -122,13 +118,13 @@ INSERT INTO `RDAP_KEYDATA` (`KEYDATA_ID`,`FLAGS`,`PROTOCOL`,`PUBLIC_KEY`,`ALGORI
 # Data for table "RDAP_LINK"
 #
 
-INSERT INTO `RDAP_LINK` (`LINK_ID`,`VALUE`,`REL`,`HREF`,`MEDIA`,`TYPE`,`TITLE`) VALUES (3,'https://github.com/cnnic/rdap/wiki/api-doc','alternate','https://github.com/cnnic/rdap/wiki/api-doc',NULL,'text/html','link title');
+INSERT INTO `RDAP_LINK` (`LINK_ID`,`VALUE`,`REL`,`HREF`,`MEDIA`,`TYPE`,`TITLE`) VALUES (1,'https://github.com/cnnic/rdap/wiki/api-doc','alternate','https://github.com/cnnic/rdap/wiki/api-doc','screen','application/rdap+json','the title of the notice'),(2,'https://github.com/cnnic/rdap/wiki/api-doc','alternate','https://github.com/cnnic/rdap/wiki/api-doc','screen','application/rdap+json','link title'),(3,'https://github.com/cnnic/rdap/wiki/api-doc','alternate','https://github.com/cnnic/rdap/wiki/api-doc',NULL,'text/html','help link title');
 
 #
 # Data for table "RDAP_LINK_HREFLANG"
 #
 
-INSERT INTO `RDAP_LINK_HREFLANG` (`HREFLANG_ID`,`LINK_ID`,`HREFLANG`) VALUES (3,3,'en');
+INSERT INTO `RDAP_LINK_HREFLANG` (`HREFLANG_ID`,`LINK_ID`,`HREFLANG`) VALUES (1,1,'en'),(2,2,'en'),(3,3,'en');
 
 #
 # Data for table "RDAP_NAMESERVER"
@@ -199,7 +195,7 @@ INSERT INTO `RDAP_VCARD_TEL` (`TEL_ID`,`TYPE`,`GLOBAL_NUMBER`,`EXT_NUMBER`,`ENTI
 # Data for table "REL_DOMAIN_NAMESERVER"
 #
 
-INSERT INTO `REL_DOMAIN_NAMESERVER` (`REL_DOMAIN_NS_ID`,`DOMAIN_ID`,`NAMESERVER_ID`) VALUES (1,2,1),(2,2,2),(3,1,2),(4,1,5),(5,11,1),(6,3,1),(7,4,1),(8,5,1),(9,6,1),(11,7,1),(12,8,1),(13,9,1),(14,10,1),(15,2,2),(16,3,2),(17,4,2);
+INSERT INTO `REL_DOMAIN_NAMESERVER` (`REL_DOMAIN_NS_ID`,`DOMAIN_ID`,`NAMESERVER_ID`) VALUES (1,2,1),(2,2,2),(3,1,2),(4,1,5),(5,11,1),(6,3,1),(7,4,1),(8,5,1),(9,6,1),(11,7,1),(12,8,1),(13,9,1),(14,10,1),(15,2,2),(16,3,2),(17,4,2),(18,3,3),(19,2,3);
 
 #
 # Data for table "REL_DOMAIN_VARIANT"
@@ -211,31 +207,31 @@ INSERT INTO `REL_DOMAIN_VARIANT` (`REL_VARIANT_ID`,`DOMAIN_ID`,`VARIANT_TYPE`,`V
 # Data for table "REL_ENTITY_REGISTRATION"
 #
 
-INSERT INTO `REL_ENTITY_REGISTRATION` (`REL_ENTITY_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`ENTITY_ID`,`ENTITY_ROLE`) VALUES (1,1,'arpa',1,'registrant'),(2,2,'domain',2,'billing'),(3,1,'autnum',1,'noc'),(4,1,'ip',3,'technical'),(5,1,'nameServer',4,'administrative'),(6,1,'entity',5,'sponsor');
+INSERT INTO `REL_ENTITY_REGISTRATION` (`REL_ENTITY_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`ENTITY_ID`,`ENTITY_ROLE`) VALUES (2,2,'domain',2,'billing'),(3,1,'autnum',1,'noc'),(4,1,'ip',3,'technical'),(5,1,'nameServer',4,'administrative'),(6,1,'entity',5,'sponsor');
 
 #
 # Data for table "REL_EVENT_REGISTRATION"
 #
 
-INSERT INTO `REL_EVENT_REGISTRATION` (`REL_EVENT_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`EVENT_ID`) VALUES (1,1,'arpa',1),(2,2,'domain',2),(3,1,'ip',3),(4,1,'autnum',4),(5,1,'entity',1),(6,2,'entity',1),(7,1,'nameServer',5);
+INSERT INTO `REL_EVENT_REGISTRATION` (`REL_EVENT_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`EVENT_ID`) VALUES (2,2,'domain',2),(3,1,'ip',3),(4,1,'autnum',4),(5,1,'entity',1),(6,2,'entity',1),(7,1,'nameServer',5);
 
 #
 # Data for table "REL_LINK_OBJECT"
 #
 
-INSERT INTO `REL_LINK_OBJECT` (`REL_LINK_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`LINK_ID`) VALUES (3,3,'help',3);
+INSERT INTO `REL_LINK_OBJECT` (`REL_LINK_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`LINK_ID`) VALUES (1,1,'notice',1),(2,2,'remark',2),(3,3,'help',3),(50,5,'notice',3);
 
 #
 # Data for table "REL_NOTICE_REGISTRATION"
 #
 
-INSERT INTO `REL_NOTICE_REGISTRATION` (`REL_NOTICE_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`NOTICE_ID`) VALUES (1,1,'arpa',2),(2,2,'domain',2),(3,1,'autnum',2),(4,1,'nameServer',2),(5,1,'entity',2),(6,1,'ip',2);
+INSERT INTO `REL_NOTICE_REGISTRATION` (`REL_NOTICE_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`NOTICE_ID`) VALUES (2,2,'domain',2),(3,1,'autnum',2),(4,1,'nameServer',2),(5,1,'entity',2),(6,1,'ip',2);
 
 #
 # Data for table "REL_PUBLICID_REGISTRATION"
 #
 
-INSERT INTO `REL_PUBLICID_REGISTRATION` (`REL_PUBLICID_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`PUBLIC_ID`) VALUES (1,1,'arpa',1),(2,2,'domain',2),(3,1,'entity',1);
+INSERT INTO `REL_PUBLICID_REGISTRATION` (`REL_PUBLICID_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`PUBLIC_ID`) VALUES (2,2,'domain',2),(3,1,'entity',1);
 
 #
 # Data for table "REL_SECUREDNS_DSKEY"
