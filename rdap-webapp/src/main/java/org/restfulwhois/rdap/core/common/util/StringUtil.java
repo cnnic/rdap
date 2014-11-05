@@ -230,7 +230,7 @@ public final class StringUtil {
      * StringUtil.checkIsValidSearchPattern("")        = false
      * StringUtil.checkIsValidSearchPattern(" ")       = false
      * StringUtil.checkIsValidSearchPattern("*")       = false
-     * StringUtil.checkIsValidSearchPattern("*bob")    = false
+     * StringUtil.checkIsValidSearchPattern("*bob")    = true
      * StringUtil.checkIsValidSearchPattern("*bob*")   = false
      * </pre>
      * 
@@ -242,7 +242,7 @@ public final class StringUtil {
         if (StringUtils.isBlank(str)) {
             return false;
         }
-        if (ASTERISK.equals(str) || str.startsWith(ASTERISK)) {
+        if (ASTERISK.equals(str)) {
             return false;
         }
         return containsAtMostOnce(str, ASTERISK);

@@ -48,7 +48,6 @@ import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -95,10 +94,13 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         RestResponseUtil.initErrorMessages();
         List<String> q422List = new ArrayList<String>();
         q422List.add("*");
-        q422List.add("*cn");
-        q422List.add("*.cn");
+//        q422List.add("*cn");
+//        q422List.add("*.cn");
         q422List.add("*cn*");
         q422List.add("1**.bnnhg");
+        List<String> q404List = new ArrayList<String>();
+        q404List.add("*cn");
+        q404List.add("*.cn");
         List<String> q400List = new ArrayList<String>();
         q400List.add("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο*.bnnhg");
         q400List.add("%CF*.bnnhg");
@@ -121,6 +123,14 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                     .andExpect(status().isUnprocessableEntity())
                     .andExpect(content().contentType(rdapJson))
                     .andExpect(jsonPath("$.errorCode").value(422));
+        }
+        for (String q : q404List) {
+            mockMvc.perform(
+                    get(DOMAIN_SEARCH_URI +"?name=" + encodeWithIso8859(q)).accept(
+                            MediaType.parseMediaType(rdapJson)))
+                            .andExpect(status().isNotFound())
+                            .andExpect(content().contentType(rdapJson))
+                            .andExpect(jsonPath("$.errorCode").value(404));
         }
         for (String q : q400List) {
             mockMvc.perform(

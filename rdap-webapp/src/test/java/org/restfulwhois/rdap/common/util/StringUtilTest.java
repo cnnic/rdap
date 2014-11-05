@@ -235,7 +235,7 @@ public class StringUtilTest extends BaseTest {
         assertTrue(StringUtil.checkIsValidSearchPattern("bob"));
         assertTrue(StringUtil.checkIsValidSearchPattern(" bob "));
         assertFalse(StringUtil.checkIsValidSearchPattern("*"));
-        assertFalse(StringUtil.checkIsValidSearchPattern("*abc"));
+        assertTrue(StringUtil.checkIsValidSearchPattern("*abc"));
         assertFalse(StringUtil.checkIsValidSearchPattern("*abc*"));
         assertFalse(StringUtil.checkIsValidSearchPattern("a*b*"));
         assertFalse(StringUtil.checkIsValidSearchPattern("a*b*c"));
