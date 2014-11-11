@@ -84,6 +84,16 @@ public final class IpUtil {
      * Radix 10 .
      */
     public static final int RADIX_DECIMAL = 10;
+    /**
+     * hex char size for v4.
+     */
+    private static final int hexCharSizeV4 = IpUtil
+            .getHexCharSize(IpVersion.V4);
+    /**
+     * hex char size for v6.
+     */
+    private static final int hexCharSizeV6 = IpUtil
+            .getHexCharSize(IpVersion.V6);
 
     /**
      * default constructor.
@@ -349,6 +359,45 @@ public final class IpUtil {
             cidr = cidr + "/128";
         }
         return cidr;
+    }
+
+    /**
+     * generate network range sql: v4 is 8, v6 is 32.
+     * 
+     * @param ipColumnName
+     *            ipColumnName.
+     * @param ipVersionColumnName
+     *            ipVersionColumnName.
+     * @return sql.
+     */
+    public static String generateNetworkRangeSql(String ipColumnName,
+            String ipVersionColumnName) {
+        String conditionTpl = "LENGTH(HEX(%s))= %s and %s='%s'";
+        String conditionV4 =
+                String.format(conditionTpl, ipColumnName, hexCharSizeV4,
+                        ipVersionColumnName, IpVersion.V4.getName());
+        String conditionV6 =
+                String.format(conditionTpl, ipColumnName, hexCharSizeV6,
+                        ipVersionColumnName, IpVersion.V6.getName());
+        return "(" + conditionV4 + " or " + conditionV6 + ")";
+    }
+
+    /**
+     * generate network version sql: v4 or v6 .
+     * 
+     * @param ipVersionColumnName
+     *            ipVersionColumnName.
+     * @return sql.
+     */
+    public static String generateNetworkVersionSql(String ipVersionColumnName) {
+        String conditionTpl = "%s='%s'";
+        String conditionV4 =
+                String.format(conditionTpl, ipVersionColumnName,
+                        IpVersion.V4.getName());
+        String conditionV6 =
+                String.format(conditionTpl, ipVersionColumnName,
+                        IpVersion.V6.getName());
+        return "(" + conditionV4 + " or " + conditionV6 + ")";
     }
 
     /**

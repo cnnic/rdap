@@ -41,12 +41,17 @@ import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.stereotype.Repository;
 
 /**
+ * DomainSearchDaoImpl.
  * 
  * @author jiashuo
  * 
  */
 @Repository
 public class DomainSearchDaoImpl extends AbstractSearchDao<Domain> {
+
+    /**
+     * domainSearchStrategyList.
+     */
     @Resource(name = "domainSearchStrategyList")
     private List<SearchStrategy<Domain>> domainSearchStrategyList;
 
@@ -68,6 +73,13 @@ public class DomainSearchDaoImpl extends AbstractSearchDao<Domain> {
         return null;
     }
 
+    /**
+     * getSearchStrategy.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return SearchStrategy.
+     */
     private SearchStrategy<Domain> getSearchStrategy(QueryParam queryParam) {
         for (SearchStrategy<Domain> strategy : domainSearchStrategyList) {
             if (strategy.support(queryParam)) {

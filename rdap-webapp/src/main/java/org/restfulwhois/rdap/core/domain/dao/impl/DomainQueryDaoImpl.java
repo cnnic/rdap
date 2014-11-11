@@ -167,14 +167,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         if (domainQueryParam.isRirDomain()) {
             Domain domain = queryArpaWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
-            queryAndSetInnerNetwork(domain);
             LOGGER.debug("query, domain:" + domain);
             return domain;
         } else {
             // LDH domain for DNR
             Domain domain = queryDomainWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
-            queryAndSetVariants(domain);
             LOGGER.debug("query, domain:" + domain);
             return domain;
         }
@@ -191,7 +189,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     public List<Domain> search(QueryParam queryParam) {
         LOGGER.debug("search, queryParam:" + queryParam);
         List<Domain> domains = searchWithoutInnerObjects(queryParam);
-        queryAndSetInnerObjectsWithoutNotice(domains);
+        queryAndSetInnerObjects(domains);
         LOGGER.debug("search, domains:" + domains);
         return domains;
     }
@@ -217,14 +215,12 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * @param domains
      *            domain list.
      */
-    private void queryAndSetInnerObjectsWithoutNotice(List<Domain> domains) {
+    private void queryAndSetInnerObjects(List<Domain> domains) {
         if (null == domains) {
             return;
         }
         for (Domain domain : domains) {
             queryAndSetInnerObjects(domain);
-            queryAndSetVariants(domain);
-            queryAndSetInnerNetwork(domain);
         }
     }
 
@@ -262,6 +258,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Entity> entities =
                 entityQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEntities(entities);
+        queryAndSetVariants(domain);
+        queryAndSetInnerNetwork(domain);
     }
 
     /**
@@ -271,7 +269,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      *            domain object which will be filled with variants.
      */
     private void queryAndSetVariants(Domain domain) {
-        if (null == domain) {
+        if (null == domain || !domain.isDnrDomain()) {
             return;
         }
         List<Variants> variants =

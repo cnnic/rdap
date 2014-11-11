@@ -31,6 +31,7 @@
 package org.restfulwhois.rdap.search.domain.service;
 
 import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.dao.SearchDao;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.model.Domain;
@@ -41,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -67,6 +69,10 @@ public class DomainSearchServiceImpl extends AbstractSearchService implements
     @Autowired
     private QueryDao<Domain> domainSearchDao;
 
+    @Autowired
+    @Qualifier("domainSearchDaoImpl")
+    private SearchDao<Domain> searchDao;
+    
     /**
      * search domain.
      * 
