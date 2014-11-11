@@ -104,8 +104,13 @@ public class SecureDnsQueryDaoImpl extends AbstractQueryDao<SecureDns> {
         return result;
     }
 
-    @Override
-    public void queryAndSetInnerObjects(List<SecureDns> secureDnsList) {
+    /**
+     * query and set inner objects for SecureDNS list.
+     * 
+     * @param secureDnsList
+     *            secureDnsList.
+     */
+    private void queryAndSetInnerObjects(List<SecureDns> secureDnsList) {
         if (null == secureDnsList || secureDnsList.size() == 0) {
             return;
         }

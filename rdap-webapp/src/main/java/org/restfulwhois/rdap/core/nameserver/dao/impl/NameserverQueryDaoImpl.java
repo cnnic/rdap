@@ -308,12 +308,10 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     @Override
-    public List<Nameserver> search(QueryParam queryParam) {
-        List<Nameserver> nameservers = searchWithoutInnerObjects(queryParam);
+    public void queryAndSetInnerObjectsForSearch(List<Nameserver> nameservers) {
         queryAndSetNameserverStatus(nameservers);
         queryAndSetInnerObjects(nameservers);
         queryAndSetEntities(nameservers);
-        return nameservers;
     }
 
     /**
@@ -329,14 +327,6 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         for (Nameserver nameserver : nameservers) {
             queryAndSetEntities(nameserver);
         }
-    }
-
-    @Override
-    public Long searchCount(QueryParam queryParam) {
-        if (queryParam == null) {
-            return 0L;
-        }
-        return searchDao.searchCount(queryParam);
     }
 
     /**
@@ -394,8 +384,13 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         nameserver.setLang(rs.getString("LANG"));
     }
 
-    @Override
-    public void queryAndSetInnerObjects(List<Nameserver> nameservers) {
+    /**
+     * query inner objects of nameserver,and set fill them to nameserver.
+     * 
+     * @param nameservers
+     *            nameservers list.
+     */
+    private void queryAndSetInnerObjects(List<Nameserver> nameservers) {
         if (null == nameservers) {
             return;
         }

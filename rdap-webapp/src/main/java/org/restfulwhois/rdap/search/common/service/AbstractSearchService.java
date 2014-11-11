@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.search.common.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.dao.SearchDao;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.service.AccessControlManager;
@@ -80,7 +80,7 @@ abstract public class AbstractSearchService {
      * @return BaseSearchModel.
      */
     protected <T extends BaseModel> BaseSearchModel<T> search(
-            QueryParam queryParam, QueryDao<T> searchDao) {
+            QueryParam queryParam, SearchDao<T> searchDao) {
 
         LOGGER.debug("search QueryParam:" + queryParam + ",QueryDao:"
                 + searchDao);

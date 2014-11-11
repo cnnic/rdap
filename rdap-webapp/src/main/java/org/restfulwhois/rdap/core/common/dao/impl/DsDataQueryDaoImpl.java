@@ -104,8 +104,13 @@ public class DsDataQueryDaoImpl extends AbstractQueryDao<DsData> {
         return dsDataList;
     }
 
-    @Override
-    public void queryAndSetInnerObjects(List<DsData> dsDataList) {
+    /**
+     * query inner objects for dsData list.
+     * 
+     * @param dsDataList
+     *          dsData list which will be filled with inner objects one by one.
+     */
+    private void queryAndSetInnerObjects(List<DsData> dsDataList) {
         if (null == dsDataList || dsDataList.size() == 0) {
             return;
         }

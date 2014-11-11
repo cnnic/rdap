@@ -55,14 +55,6 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 public abstract class AbstractEntitySearchStrategy implements
         SearchStrategy<Entity> {
 
-    /**
-     * searchCount.
-     * 
-     * @param queryParam
-     * @param jdbcTemplate
-     * @param searchColumnName
-     * @return
-     */
     protected Long searchCount(QueryParam queryParam,
             JdbcTemplate jdbcTemplate, final String searchColumnName) {
         final String q = queryParam.getQ();
@@ -82,14 +74,6 @@ public abstract class AbstractEntitySearchStrategy implements
         return entityCount;
     }
 
-    /**
-     * search.
-     * 
-     * @param queryParam
-     * @param jdbcTemplate
-     * @param searchColumnName
-     * @return
-     */
     protected List<Entity> search(QueryParam queryParam,
             JdbcTemplate jdbcTemplate, String searchColumnName) {
         final String q = queryParam.getQ();

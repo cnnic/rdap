@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.search.entity.service;
 
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.dao.SearchDao;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.entity.model.Entity;
@@ -62,11 +62,8 @@ public class EntitySearchServiceImpl extends AbstractSearchService implements
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EntitySearchServiceImpl.class);
 
-    /**
-     * entity dao.
-     */
     @Autowired
-    private QueryDao<Entity> entitySearchDao;
+    private SearchDao<Entity> searchDao;
 
     /**
      * search entity.
@@ -79,7 +76,7 @@ public class EntitySearchServiceImpl extends AbstractSearchService implements
     public EntitySearch searchEntity(QueryParam queryParam) {
         LOGGER.debug("searchEntity QueryParam:" + queryParam);
         BaseSearchModel<Entity> searchResult =
-                this.search(queryParam, entitySearchDao);
+                this.search(queryParam, searchDao);
         LOGGER.debug("searchEntity searchResult:" + searchResult);
         if (null == searchResult) {
             return null;

@@ -89,8 +89,13 @@ public class EventQueryDaoImpl extends AbstractQueryDao<Event> {
         return events;
     }
 
-    @Override
-    public void queryAndSetInnerObjects(List<Event> events) {
+    /**
+     * query inner objects, and set it to event.
+     * 
+     * @param events
+     *        the event list which will be set.
+     */
+    private void queryAndSetInnerObjects(List<Event> events) {
         if (null == events || events.size() == 0) {
             return;
         }

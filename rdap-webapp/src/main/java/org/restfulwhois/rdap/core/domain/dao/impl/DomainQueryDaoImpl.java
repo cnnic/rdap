@@ -177,40 +177,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return domain;
         }
     }
-
-    /**
-     * search DNR domain.
-     * 
-     * @param queryParam
-     *            QueryParam.
-     * @return domain list .
-     */
+    
     @Override
-    public List<Domain> search(QueryParam queryParam) {
-        LOGGER.debug("search, queryParam:" + queryParam);
-        List<Domain> domains = searchWithoutInnerObjects(queryParam);
-        queryAndSetInnerObjects(domains);
-        LOGGER.debug("search, domains:" + domains);
-        return domains;
-    }
-
-    /**
-     * search domain count.
-     * <p>
-     * select the counter number of domain from database.
-     * 
-     * @param queryParam
-     *            QueryParam.
-     * @return domain count.
-     */
-    @Override
-    public Long searchCount(QueryParam queryParam) {
-        LOGGER.debug("searchCount, queryParam:" + queryParam);
-        return searchDao.searchCount(queryParam);
-    }
-
-    @Override
-    public void queryAndSetInnerObjects(List<Domain> domains) {
+    public void queryAndSetInnerObjectsForSearch(List<Domain> domains) {
         if (null == domains) {
             return;
         }

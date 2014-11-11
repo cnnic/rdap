@@ -162,8 +162,13 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
         return autnums;
     }
 
-    @Override
-    public void queryAndSetInnerObjects(List<Autnum> autnums) {
+    /**
+     * query inner objects of autnums,and set them to autnum.
+     * 
+     * @param autnums
+     *            autnums.
+     */
+    private void queryAndSetInnerObjects(List<Autnum> autnums) {
         if (null == autnums) {
             return;
         }

@@ -88,8 +88,13 @@ public class KeyDataQueryDaoImpl extends AbstractQueryDao<KeyData> {
         return keyDataList;
     }
 
-    @Override
-    public void queryAndSetInnerObjects(List<KeyData> keyDataList) {
+    /**
+     * query inner objects, and set them to keyData list.
+     * 
+     * @param keyDataList
+     *            keyData list which will be set with inner objects.
+     */
+    private void queryAndSetInnerObjects(List<KeyData> keyDataList) {
         if (null == keyDataList || keyDataList.size() == 0) {
             return;
         }

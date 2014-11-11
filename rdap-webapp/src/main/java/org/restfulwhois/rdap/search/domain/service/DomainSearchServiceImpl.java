@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.search.domain.service;
 
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
 import org.restfulwhois.rdap.core.common.dao.SearchDao;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
@@ -42,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -63,14 +61,8 @@ public class DomainSearchServiceImpl extends AbstractSearchService implements
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainSearchServiceImpl.class);
-    /**
-     * domain dao.
-     */
-    @Autowired
-    private QueryDao<Domain> domainSearchDao;
 
     @Autowired
-    @Qualifier("domainSearchDaoImpl")
     private SearchDao<Domain> searchDao;
     
     /**
@@ -84,7 +76,7 @@ public class DomainSearchServiceImpl extends AbstractSearchService implements
     public DomainSearch searchDomain(QueryParam queryParam) {
         LOGGER.debug("searchDomain QueryParam:" + queryParam);
         BaseSearchModel<Domain> searchResult =
-                this.search(queryParam, domainSearchDao);
+                this.search(queryParam, searchDao);
         LOGGER.debug("searchDomain searchResult:" + searchResult);
         if (null == searchResult) {
             return null;

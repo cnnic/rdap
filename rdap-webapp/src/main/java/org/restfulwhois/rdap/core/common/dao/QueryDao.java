@@ -70,29 +70,11 @@ public interface QueryDao<T extends BaseModel> {
     List<T> queryAsInnerObjects(Long outerObjectId, ModelType outerModelType);
 
     /**
-     * query and set inner objects for result.
+     * query and set inner objects for search result.
      * 
      * @param result
      *            query result.
      */
-    void queryAndSetInnerObjects(List<T> result);
-
-    /**
-     * search model list.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return object list.
-     */
-    List<T> search(QueryParam queryParam);
-
-    /**
-     * get search count.
-     * 
-     * @param queryParam
-     *            queryParam.
-     * @return queryParam.
-     */
-    Long searchCount(QueryParam queryParam);
+    void queryAndSetInnerObjectsForSearch(List<T> result);
 
 }
