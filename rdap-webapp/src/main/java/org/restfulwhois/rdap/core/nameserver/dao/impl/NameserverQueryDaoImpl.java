@@ -394,13 +394,8 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         nameserver.setLang(rs.getString("LANG"));
     }
 
-    /**
-     * query inner objects of nameserver,and set fill them to nameserver.
-     * 
-     * @param nameservers
-     *            nameservers list.
-     */
-    private void queryAndSetInnerObjects(List<Nameserver> nameservers) {
+    @Override
+    public void queryAndSetInnerObjects(List<Nameserver> nameservers) {
         if (null == nameservers) {
             return;
         }

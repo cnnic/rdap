@@ -209,13 +209,8 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
         return result;
     }
 
-    /**
-     * query and set inner objects for network.
-     * 
-     * @param networks
-     *            networks which will be set.
-     */
-    private void queryAndSetInnerObjects(List<Network> networks) {
+    @Override
+    public void queryAndSetInnerObjects(List<Network> networks) {
         if (null == networks) {
             return;
         }

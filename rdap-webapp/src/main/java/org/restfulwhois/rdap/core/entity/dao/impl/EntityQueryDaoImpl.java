@@ -179,6 +179,14 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         queryAndSetInnerEntities(entities);
         return entities;
     }
+    
+    @Override
+    public void queryAndSetInnerObjects(List<Entity> entities){
+        queryAndSetNetworksAndAs(entities);
+        queryAndSetInnerObjectsWithoutEntities(entities);
+        queryAndSetRoles(entities);       
+        queryAndSetInnerEntities(entities);
+    }
 
     @Override
     public Long searchCount(QueryParam queryParam) {

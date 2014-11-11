@@ -42,9 +42,9 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.common.model.Link;
 import org.restfulwhois.rdap.core.common.model.Remark;
-import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
 import org.slf4j.Logger;
@@ -100,13 +100,8 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
         return remarks;
     }
 
-    /**
-     * query inner objects, and set them to remarks.
-     * 
-     * @param remarks
-     *            remark list.
-     */
-    private void queryAndSetInnerObjects(List<Remark> remarks) {
+    @Override
+    public void queryAndSetInnerObjects(List<Remark> remarks) {
         if (null == remarks || remarks.size() == 0) {
             return;
         }

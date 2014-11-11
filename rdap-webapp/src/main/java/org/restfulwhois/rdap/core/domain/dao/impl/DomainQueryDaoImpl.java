@@ -209,13 +209,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         return searchDao.searchCount(queryParam);
     }
 
-    /**
-     * query inner objects of domain,and set them to domain object.
-     * 
-     * @param domains
-     *            domain list.
-     */
-    private void queryAndSetInnerObjects(List<Domain> domains) {
+    @Override
+    public void queryAndSetInnerObjects(List<Domain> domains) {
         if (null == domains) {
             return;
         }

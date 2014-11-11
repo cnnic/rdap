@@ -114,6 +114,12 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
+    
+    @Override
+    public void queryAndSetInnerObjects(List<T> result) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
     /**
      * search results, object list of T .
      * 
