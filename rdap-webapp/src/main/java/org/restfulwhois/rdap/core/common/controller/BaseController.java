@@ -156,12 +156,13 @@ public class BaseController {
      * @return ResponseEntity.
      */
     protected ResponseEntity query(QueryParam queryParam) {       
-        long queryStart = System.currentTimeMillis();
-        LOGGER.info("query ip:{};query user:{}.", 
-              queryParam.getRemoteAddr(), 
-              PrincipalHolder.getPrincipal().getId());                  
-        ResponseEntity  responseEntity = queryTemplate(queryParam);        
-        LOGGER.info("query object and param:{}.", queryParam);
+        long queryStart = System.currentTimeMillis();                      
+        ResponseEntity  responseEntity = queryTemplate(queryParam);
+        String remoteAddr = queryParam != null ?
+                 queryParam.getRemoteAddr() : "";
+        LOGGER.info("query ip:{};query user:{}; query object and param:{}."
+              + queryParam, remoteAddr, 
+              PrincipalHolder.getPrincipal().getId());
         long usedTime = System.currentTimeMillis() -  queryStart;
         LOGGER.info("query used time:{}ms;responseCode:{}.", 
              usedTime, responseEntity.getStatusCode());
