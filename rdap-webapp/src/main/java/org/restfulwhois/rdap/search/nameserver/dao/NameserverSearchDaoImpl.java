@@ -51,11 +51,13 @@ public class NameserverSearchDaoImpl extends AbstractSearchDao<Nameserver> {
     private List<SearchStrategy<Nameserver>> nameserverSearchStrategyList;
 
     @Override
-    public List search(QueryParam queryParam) {
+    public List<Nameserver> search(QueryParam queryParam) {
         SearchStrategy<Nameserver> strategy =
                 this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            return strategy.search(queryParam, jdbcTemplate);
+            List<Nameserver> result = strategy.search(queryParam, jdbcTemplate);
+            queryDao.queryAndSetInnerObjectsForSearch(result);
+            return result;
         }
         return null;
     }

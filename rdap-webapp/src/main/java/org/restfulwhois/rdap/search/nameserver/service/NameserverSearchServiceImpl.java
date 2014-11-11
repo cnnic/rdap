@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.search.nameserver.service;
 
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.dao.SearchDao;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
@@ -58,11 +58,8 @@ public class NameserverSearchServiceImpl extends AbstractSearchService
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverSearchServiceImpl.class);
 
-    /**
-     * nameserver dao.
-     */
     @Autowired
-    private QueryDao<Nameserver> nameserverSearchDao;
+    private SearchDao<Nameserver> searchDao;
 
     /**
      * search nameserver.
@@ -75,7 +72,7 @@ public class NameserverSearchServiceImpl extends AbstractSearchService
     public NameserverSearch searchNameserver(QueryParam queryParam) {
         LOGGER.debug("searchNameserver QueryParam:" + queryParam);
         BaseSearchModel<Nameserver> searchResult =
-                this.search(queryParam, nameserverSearchDao);
+                this.search(queryParam, searchDao);
         LOGGER.debug("searchNameserver searchResult:" + searchResult);
         if (null == searchResult) {
             return null;

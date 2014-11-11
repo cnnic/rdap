@@ -169,22 +169,15 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         queryAndSetInnerObjectsWithoutEntities(entities);
         return entities;
     }
-
+    
     @Override
-    public List<Entity> search(QueryParam queryParam) {
-        List<Entity> entities = searchWithoutInnerObjects(queryParam);
+    public void queryAndSetInnerObjectsForSearch(List<Entity> entities) {
         queryAndSetNetworksAndAs(entities);
         queryAndSetInnerObjectsWithoutEntities(entities);
         queryAndSetRoles(entities);        
         queryAndSetInnerEntities(entities);
-        return entities;
     }
 
-    @Override
-    public Long searchCount(QueryParam queryParam) {
-        return searchDao.searchCount(queryParam);
-    }
-    
     /**
      * query and set inner entities.
      * @param entities entities which will be set to entity.

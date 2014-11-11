@@ -54,7 +54,9 @@ public class EntitySearchDaoImpl extends AbstractSearchDao<Entity> {
     public List<Entity> search(QueryParam queryParam) {
         SearchStrategy<Entity> strategy = this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            return strategy.search(queryParam, jdbcTemplate);
+            List<Entity> result = strategy.search(queryParam, jdbcTemplate);
+            queryDao.queryAndSetInnerObjectsForSearch(result);
+            return result;
         }
         return null;
     }

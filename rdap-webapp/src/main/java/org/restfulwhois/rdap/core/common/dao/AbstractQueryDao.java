@@ -42,8 +42,6 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,16 +67,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(AbstractQueryDao.class);
-    /**
-     * hex char size for v4.
-     */
-    private static final int hexCharSizeV4 = IpUtil
-            .getHexCharSize(IpVersion.V4);
-    /**
-     * hex char size for v6.
-     */
-    private static final int hexCharSizeV6 = IpUtil
-            .getHexCharSize(IpVersion.V6);
+
     /**
      * %:used for SQL 'like' clause.
      */
@@ -125,35 +114,10 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-    /**
-     * search results, object list of T .
-     * 
-     * @param queryParam
-     *            search string.
-     * @return List<T>
-     *            here is an abstract method.
-     * 
-     * @throws UnsupportedOperationException.
-     *             
-     */
+    
+    
     @Override
-    public List<T> search(QueryParam queryParam) {
-        throw new UnsupportedOperationException(
-                "must be implemented in sub class if I'am called.");
-    }
-    /**
-     * get count of search results.
-     * 
-     * @param queryParam
-     *            search string.
-     * @return Long
-     *            here is an abstract method.
-     * 
-     * @throws UnsupportedOperationException.
-     *             
-     */
-    @Override
-    public Long searchCount(QueryParam queryParam) {
+    public void queryAndSetInnerObjectsForSearch(List<T> result) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
@@ -231,42 +195,4 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
         return intVal;
     }
     
-    /**
-     * generate network range sql: v4 is 8, v6 is 32.
-     * 
-     * @param ipColumnName
-     *            ipColumnName.
-     * @param ipVersionColumnName
-     *            ipVersionColumnName.
-     * @return sql.
-     */
-    protected String generateNetworkRangeSql(String ipColumnName,
-            String ipVersionColumnName) {
-        String conditionTpl = "LENGTH(HEX(%s))= %s and %s='%s'";
-        String conditionV4 =
-                String.format(conditionTpl, ipColumnName, hexCharSizeV4,
-                        ipVersionColumnName, IpVersion.V4.getName());
-        String conditionV6 =
-                String.format(conditionTpl, ipColumnName, hexCharSizeV6,
-                        ipVersionColumnName, IpVersion.V6.getName());
-        return "(" + conditionV4 + " or " + conditionV6 + ")";
-    }
-    
-    /**
-     * generate network version sql: v4 or v6 .
-     * 
-     * @param ipVersionColumnName
-     *            ipVersionColumnName.
-     * @return sql.
-     */
-    protected static String generateNetworkVersionSql(String ipVersionColumnName) {
-        String conditionTpl = "%s='%s'";
-        String conditionV4 =
-                String.format(conditionTpl, ipVersionColumnName,
-                        IpVersion.V4.getName());
-        String conditionV6 =
-                String.format(conditionTpl, ipVersionColumnName,
-                        IpVersion.V6.getName());
-        return "(" + conditionV4 + " or " + conditionV6 + ")";
-    }
 }

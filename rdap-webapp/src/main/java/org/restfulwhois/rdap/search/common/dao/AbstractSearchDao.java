@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.search.common.dao;
 
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
 import org.restfulwhois.rdap.core.common.dao.SearchDao;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.slf4j.Logger;
@@ -55,4 +56,10 @@ public abstract class AbstractSearchDao<T extends BaseModel> implements
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
+    
+    /**
+     * query DAO.
+     */
+    @Autowired
+    protected QueryDao<T> queryDao;
 }

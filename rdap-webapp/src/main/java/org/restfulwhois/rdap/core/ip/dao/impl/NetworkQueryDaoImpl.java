@@ -49,8 +49,8 @@ import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.domain.dao.impl.DomainQueryDaoImpl;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.ip.model.Network;
@@ -241,11 +241,11 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                         + " status.IP_ID where rel.ENTITY_ID = ? "
                         + " and REL_OBJECT_TYPE=? "
                         + " and "
-                        + super.generateNetworkRangeSql("STARTADDRESS",
+                        + IpUtil.generateNetworkRangeSql("STARTADDRESS",
                                 "VERSION")
                         + " and "
-                        + super.generateNetworkRangeSql("ENDADDRESS", "VERSION")
-                        + " order by ip.HANDLE ";
+                        + IpUtil.generateNetworkRangeSql("ENDADDRESS",
+                                "VERSION") + " order by ip.HANDLE ";
         List<Network> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
@@ -377,7 +377,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                         + ipTableName
                         + " where STARTADDRESS<=? && ENDADDRESS>=? && VERSION = ?"
                         + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? "
-                        + " && " + generateNetworkVersionSql("VERSION")
+                        + " && " + IpUtil.generateNetworkVersionSql("VERSION")
                         + " order by STARTADDRESS desc,ENDADDRESS limit 1";
         final String finalSql = sql;
         PreparedStatementCreator pstatCreator = new PreparedStatementCreator() {

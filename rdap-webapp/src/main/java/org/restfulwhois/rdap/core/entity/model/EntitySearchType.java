@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * search type enum.
+ * search type.
  * 
  * @return by name, nsLdhName, nsIP.
  */
@@ -64,10 +64,20 @@ public enum EntitySearchType {
         this.name = name;
     }
 
+    /**
+     * get name.
+     * 
+     * @return name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * valuesOfString.
+     * 
+     * @return all values in string.
+     */
     public static String[] valuesOfString() {
         EntitySearchType[] types = values();
         List<String> result = new ArrayList<String>();
@@ -77,6 +87,13 @@ public enum EntitySearchType {
         return result.toArray(new String[0]);
     }
 
+    /**
+     * getByName.
+     * 
+     * @param name
+     *            name.
+     * @return EntitySearchType.
+     */
     public static EntitySearchType getByName(String name) {
         EntitySearchType[] queryTypes = EntitySearchType.values();
         for (EntitySearchType type : queryTypes) {
