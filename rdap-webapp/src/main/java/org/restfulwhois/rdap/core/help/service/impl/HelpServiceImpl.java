@@ -75,8 +75,9 @@ public class HelpServiceImpl implements HelpService {
      */
     @Override
     public Help queryHelp(QueryParam queryParam) {
-        // construct a help object and fill it in decorator
-        return new Help();
+        Help help = new Help();
+        help.setNotices(noticeDao.getHelp());
+        return help;
     }
 
 }

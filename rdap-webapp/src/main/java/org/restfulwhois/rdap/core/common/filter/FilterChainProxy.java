@@ -13,21 +13,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.core.common.model.ErrorMessage;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.filters.AuthenticationFilter;
-import org.restfulwhois.rdap.filters.DecodeUriForSpringFilter;
-import org.restfulwhois.rdap.filters.HttpRequestFilter;
-import org.restfulwhois.rdap.filters.InvalidUriFilter;
-import org.restfulwhois.rdap.filters.NotImplementedUriFilter;
-import org.restfulwhois.rdap.filters.RateLimitFilter;
-import org.restfulwhois.rdap.filters.service.ConnectionControlService;
+import org.restfulwhois.rdap.filters.httpFilter.AuthenticationFilter;
+import org.restfulwhois.rdap.filters.httpFilter.ConcurrentQueryCountFilter;
+import org.restfulwhois.rdap.filters.httpFilter.DecodeUriForSpringFilter;
+import org.restfulwhois.rdap.filters.httpFilter.HttpRequestFilter;
+import org.restfulwhois.rdap.filters.httpFilter.InvalidUriFilter;
+import org.restfulwhois.rdap.filters.httpFilter.NotImplementedUriFilter;
+import org.restfulwhois.rdap.filters.httpFilter.RateLimitFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 
 /**
- * The FilterChainProxy is used to do filter for all {@link RdapFilter}.
+ * The FilterChainProxy is used to do filter for all {@link HttpFilter}.
  * <p>
  * All RDAP filters must be initialized in static block below. And filters list
  * are ordered.
@@ -52,14 +49,15 @@ public class FilterChainProxy implements Filter {
     /**
      * all filters.
      */
-    private static List<RdapFilter> filters;
+    private static List<HttpFilter> filters;
 
     /**
      * init filters when class loading.
      */
     static {
         LOGGER.debug("init RDAP filters ...");
-        filters = new ArrayList<RdapFilter>();
+        filters = new ArrayList<HttpFilter>();
+        filters.add(new ConcurrentQueryCountFilter());
         filters.add(new AuthenticationFilter());
         filters.add(new RateLimitFilter());
         filters.add(new HttpRequestFilter());
@@ -70,7 +68,7 @@ public class FilterChainProxy implements Filter {
     }
 
     /**
-     * destructor .
+     * destroy.
      */
     @Override
     public void destroy() {
@@ -83,16 +81,12 @@ public class FilterChainProxy implements Filter {
      * before call service method, and then call postProcess for each filters.
      * Filter chain will stop whenever these methods fail.
      * 
-     * <p>
-     * Concurrent query count must be decreased for each request, WHENEVER the
-     * filter is success or fail.
-     * 
      * @param req
      *            request.
      * @param res
      *            response.
      * @param chain
-     *            filterchain.
+     *            filter chain.
      * @throws IOException
      *             Exception.
      * @throws ServletException
@@ -104,32 +98,43 @@ public class FilterChainProxy implements Filter {
         LOGGER.debug("begin pre filter ...");
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        if (ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax()) {
-            ConnectionControlService.decrementAndGetCurrentQueryCount();
-            writeError509Response(response);
-            return;
+        try {
+            boolean success = safePreProcess(request, response);
+            if (!success) {
+                LOGGER.error("some pre filter failed, not process service.");
+                return;
+            }
+            safeDoService(chain, request, response);
+            LOGGER.debug("begin post filter ...");
+        } catch (Exception e) {
+            LOGGER.error("safeDoService error:", e);
+        } finally {
+            boolean success = safePostProcess(request, response);
+            LOGGER.debug("end post filter, are all success?:{}", success);
         }
-        boolean success = preProcess(request, response);
-        LOGGER.debug("end pre filter, are all success?:{}", success);
-        if (!success) {
-            LOGGER.error("some pre filter fail, not process service.");
-            ConnectionControlService.decrementAndGetCurrentQueryCount();
-            return;
-        }
+    }
+
+    /**
+     * safe do service.
+     * 
+     * @param chain
+     *            chain.
+     * @param request
+     *            request.
+     * @param response
+     *            response.
+     */
+    private void safeDoService(FilterChain chain, HttpServletRequest request,
+            HttpServletResponse response) {
         try {
             chain.doFilter(request, response);
         } catch (Exception e) {
             LOGGER.error("chain.doFilter error:{}" + e.getMessage());
         }
-        LOGGER.debug("begin post filter ...");
-        success = postProcess(request, response);
-        LOGGER.debug("end post filter, are all success?:{}", success);
-        ConnectionControlService.decrementAndGetCurrentQueryCount();
     }
 
     /**
-     * post process service method.
+     * safe do post process.
      * 
      * @param request
      *            request.
@@ -138,9 +143,9 @@ public class FilterChainProxy implements Filter {
      * @return true if success processed,and can do service operation; false if
      *         not.
      */
-    private boolean postProcess(HttpServletRequest request,
+    private boolean safePostProcess(HttpServletRequest request,
             HttpServletResponse response) {
-        for (RdapFilter filter : filters) {
+        for (HttpFilter filter : filters) {
             LOGGER.debug("call postProcess for:{}", filter.getName());
             try {
                 if (!filter.postProcess(request, response)) {
@@ -155,7 +160,7 @@ public class FilterChainProxy implements Filter {
     }
 
     /**
-     * pre process service method.
+     * safe do pre process.
      * 
      * @param request
      *            request.
@@ -164,9 +169,9 @@ public class FilterChainProxy implements Filter {
      * @return true if success processed,and can do service operation; false if
      *         not.
      */
-    private boolean preProcess(HttpServletRequest request,
+    private boolean safePreProcess(HttpServletRequest request,
             HttpServletResponse response) {
-        for (RdapFilter filter : filters) {
+        for (HttpFilter filter : filters) {
             LOGGER.debug("call preProcess for:{}", filter.getName());
             try {
                 if (!filter.preProcess(request, response)) {
@@ -190,21 +195,6 @@ public class FilterChainProxy implements Filter {
      */
     @Override
     public void init(FilterConfig config) throws ServletException {
-    }
-
-    /**
-     * write 509 error.
-     * 
-     * @param response
-     *            response.
-     * @throws IOException
-     *             IOException.
-     */
-    private void writeError509Response(HttpServletResponse response)
-            throws IOException {
-        ResponseEntity<ErrorMessage> responseEntity =
-                RestResponseUtil.createResponse509();
-        FilterHelper.writeResponse(responseEntity, response);
     }
 
 }

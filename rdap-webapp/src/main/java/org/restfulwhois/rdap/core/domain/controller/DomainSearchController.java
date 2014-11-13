@@ -181,12 +181,6 @@ public class DomainSearchController extends BaseDnrController {
     protected ResponseEntity doQuery(QueryParam queryParam) {
         DomainSearch domainSearch = searchService.searchDomain(queryParam);
         if (null != domainSearch) {
-            if (domainSearch.getTruncatedInfo() != null
-                    && domainSearch.getTruncatedInfo()
-                            .getHasNoAuthForAllObjects()) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(domainSearch);
             return RestResponseUtil.createResponse200(domainSearch);
         }
 

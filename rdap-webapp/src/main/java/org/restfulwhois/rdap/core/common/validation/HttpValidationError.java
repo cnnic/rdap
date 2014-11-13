@@ -63,6 +63,14 @@ public class HttpValidationError implements ValidationError {
     public static ValidationError build400Error() {
         return new HttpValidationError(HttpStatus.BAD_REQUEST);
     }
+    /**
+     * build403Error.
+     * 
+     * @return ValidationError.
+     */
+    public static ValidationError build403Error() {
+        return new HttpValidationError(HttpStatus.FORBIDDEN);
+    }
 
     /**
      * build422Error.

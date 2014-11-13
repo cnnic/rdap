@@ -30,12 +30,15 @@
  */
 package org.restfulwhois.rdap.core.common.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import org.restfulwhois.rdap.core.common.filter.QueryFilter;
+import org.restfulwhois.rdap.core.common.filter.QueryFilterManager;
 import org.restfulwhois.rdap.core.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.ResponseDecorator;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.validation.HttpValidationError;
 import org.restfulwhois.rdap.core.common.validation.ValidationError;
@@ -128,12 +131,6 @@ public class BaseController {
             .getLogger(BaseController.class);
 
     /**
-     * response decorator.
-     */
-    @Autowired
-    protected ResponseDecorator responseDecorator;
-
-    /**
      * access control manager.
      */
     @Autowired
@@ -146,30 +143,37 @@ public class BaseController {
     protected RedirectService redirectService;
 
     /**
-     * Query  method and write log.
+     * queryFilterManager.
+     */
+    @Autowired
+    private QueryFilterManager queryFilterManager;
+
+    /**
+     * Query method and write log.
      * 
      * <pre>
-     * All sub classes should call this method for query.       
+     * All sub classes should call this method for query.
      * </pre>
      * 
-     * @param queryParam     *            queryParam.
+     * @param queryParam
+     *            * queryParam.
      * @return ResponseEntity.
      */
-    protected ResponseEntity query(QueryParam queryParam) { 
+    protected ResponseEntity query(QueryParam queryParam) {
         if (queryParam == null) {
             return RestResponseUtil.createResponse400();
         }
         long queryStart = System.currentTimeMillis();
-        ResponseEntity  responseEntity = queryTemplate(queryParam);
+        ResponseEntity responseEntity = queryTemplate(queryParam);
         LOGGER.info("query ip:{};query user:{}; query object and param:{}."
-              + queryParam, queryParam.getRemoteAddr(), 
-              PrincipalHolder.getPrincipal().getId());
-        long usedTime = System.currentTimeMillis() -  queryStart;
-        LOGGER.info("query used time:{}ms;responseCode:{}.", 
-             usedTime, responseEntity.getStatusCode());
+                + queryParam, queryParam.getRemoteAddr(), PrincipalHolder
+                .getPrincipal().getId());
+        long usedTime = System.currentTimeMillis() - queryStart;
+        LOGGER.info("query used time:{}ms;responseCode:{}.", usedTime,
+                responseEntity.getStatusCode());
         return responseEntity;
     }
-    
+
     /**
      * Query template method.
      * 
@@ -184,23 +188,42 @@ public class BaseController {
      * @param queryParam
      *            queryParam.
      * @return ResponseEntity.
-     */    
+     */
     protected ResponseEntity queryTemplate(QueryParam queryParam) {
         try {
             queryParam.fillParam();
-        } catch (Exception e) {            
+        } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
-        ValidationResult result = validateParam(queryParam);
-        if (result.hasError()) {
-            return handleError(result);
+        ValidationResult preParamVResult =
+                queryFilterManager.preParamValidate(queryParam,
+                        getQueryFilters());
+        if (null != preParamVResult && preParamVResult.hasError()) {
+            return handleError(preParamVResult);
+        }
+        ValidationResult validateResult = validateParam(queryParam);
+        if (validateResult.hasError()) {
+            return handleError(validateResult);
+        }
+        ValidationResult postParamVResult =
+                queryFilterManager.postParamValidate(queryParam,
+                        getQueryFilters());
+        if (null != postParamVResult && postParamVResult.hasError()) {
+            return handleError(postParamVResult);
         }
         try {
             queryParam.convertParam();
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
-        return doQuery(queryParam);
+        ResponseEntity result = doQuery(queryParam);
+        ValidationResult postQueryResult =
+                queryFilterManager.postQuery(queryParam, result,
+                        getQueryFilters());
+        if (null != postQueryResult && postQueryResult.hasError()) {
+            return handleError(postQueryResult);
+        }
+        return result;
     }
 
     /**
@@ -248,6 +271,15 @@ public class BaseController {
     protected ValidationResult validateParam(QueryParam queryParam) {
         ValidationResult validationResult = queryParam.validate();
         return validationResult;
+    }
+
+    /**
+     * get query filters.
+     * 
+     * @return service filters.
+     */
+    protected List<QueryFilter> getQueryFilters() {
+        return new ArrayList<QueryFilter>();
     }
 
 }

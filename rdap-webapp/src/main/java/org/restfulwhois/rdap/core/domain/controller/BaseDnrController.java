@@ -30,8 +30,13 @@
  */
 package org.restfulwhois.rdap.core.domain.controller;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.controller.BaseController;
+import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
@@ -55,6 +60,14 @@ public class BaseDnrController extends BaseController {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(BaseDnrController.class);
 
+    @Resource(name = "commonServiceFilters")
+    private List<QueryFilter> serviceFilters;
+
+    @Override
+    protected List<QueryFilter> getQueryFilters() {
+        return serviceFilters;
+    }
+    
     /**
      * query redirect domain or nameserver.
      * 

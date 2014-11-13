@@ -118,10 +118,6 @@ public class NameserverQueryController extends BaseDnrController {
         Nameserver ns = queryService.queryNameserver(queryParam);
         if (null != ns) {
             LOGGER.debug("   found ns:{}", queryParam);
-            if (!accessControlManager.hasPermission(ns)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(ns);
             return RestResponseUtil.createResponse200(ns);
         }
         LOGGER.debug("   ns not found,return 404. {}", queryParam);

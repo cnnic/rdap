@@ -165,4 +165,26 @@ public class RdapControllerEntityTest extends BaseTest {
                 .andExpect(jsonPath("$.errorCode").value(400));
     }
 
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(
+            value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        super.databaseSetupWithBinaryColumns("entity.xml");
+        String autnumStr = "h1";
+        query403(autnumStr);
+    }
+
+    private void query403(String q) throws Exception {
+        mockMvc.perform(
+                get(URI_ENTITY_Q + q)
+                        .accept(MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
+
+    }
+
 }
