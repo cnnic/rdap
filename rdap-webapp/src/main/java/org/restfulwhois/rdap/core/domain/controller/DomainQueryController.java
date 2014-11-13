@@ -123,10 +123,6 @@ public class DomainQueryController extends BaseDnrController {
         Domain domain = queryService.queryDomain(queryParam);
         if (null != domain) {
             LOGGER.debug("   found domain:{}", queryParam);
-            if (!accessControlManager.hasPermission(domain)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(domain);
             return RestResponseUtil.createResponse200(domain);
         }
         LOGGER.debug("   domain not found,return 404. {}", queryParam);

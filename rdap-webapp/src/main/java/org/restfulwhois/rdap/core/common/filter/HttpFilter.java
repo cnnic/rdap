@@ -53,7 +53,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author jiashuo
  * 
  */
-public interface RdapFilter {
+public interface HttpFilter {
     /**
      * do pre process.
      * 

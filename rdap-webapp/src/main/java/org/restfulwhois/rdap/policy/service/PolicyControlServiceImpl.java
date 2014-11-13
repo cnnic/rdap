@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
@@ -85,6 +87,7 @@ public class PolicyControlServiceImpl implements PolicyControlService {
         return mapPolicy;
     }
 
+    @PostConstruct
     @Override
     public void init() {
         mapPolicy = policyDao.loadAllPolicyMap();

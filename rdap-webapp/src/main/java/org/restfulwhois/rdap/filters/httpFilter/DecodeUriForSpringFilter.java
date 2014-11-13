@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.filters;
+package org.restfulwhois.rdap.filters.httpFilter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.filter.FilterHelper;
-import org.restfulwhois.rdap.core.common.filter.RdapFilter;
+import org.restfulwhois.rdap.core.common.filter.HttpFilter;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
@@ -58,7 +58,7 @@ import org.springframework.web.util.WebUtils;
  * @author zhanyq
  * 
  */
-public class DecodeUriForSpringFilter implements RdapFilter {
+public class DecodeUriForSpringFilter implements HttpFilter {
     /**
      * logger.
      */

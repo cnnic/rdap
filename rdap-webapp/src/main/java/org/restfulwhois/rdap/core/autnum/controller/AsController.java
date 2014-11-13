@@ -30,6 +30,9 @@
  */
 package org.restfulwhois.rdap.core.autnum.controller;
 
+import java.util.List;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,6 +41,7 @@ import org.restfulwhois.rdap.core.autnum.queryparam.AsQueryParam;
 import org.restfulwhois.rdap.core.autnum.service.AutnumService;
 import org.restfulwhois.rdap.core.common.controller.BaseController;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
+import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
@@ -70,6 +74,15 @@ public class AsController extends BaseController {
      */
     @Autowired
     protected AutnumService queryService;
+
+    @Resource(name = "commonServiceFilters")
+    private List<QueryFilter> serviceFilters;
+
+    @Override
+    protected List<QueryFilter> getQueryFilters() {
+        return serviceFilters;
+    }
+    
     /**
      * <pre>
      * query autnum.
@@ -106,10 +119,6 @@ public class AsController extends BaseController {
     protected ResponseEntity doQuery(QueryParam queryParam) {
         Autnum result = queryService.queryAutnum(queryParam);
         if (null != result) {
-            if (!accessControlManager.hasPermission(result)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
         LOGGER.debug("query redirect autnum :{}", queryParam);

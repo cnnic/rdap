@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.filters;
+package org.restfulwhois.rdap.filters.httpFilter;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import org.restfulwhois.rdap.acl.bean.Principal;
 import org.restfulwhois.rdap.acl.bean.User;
 import org.restfulwhois.rdap.authenticate.service.IdentityCheckService;
 import org.restfulwhois.rdap.core.common.filter.FilterHelper;
-import org.restfulwhois.rdap.core.common.filter.RdapFilter;
+import org.restfulwhois.rdap.core.common.filter.HttpFilter;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
@@ -36,7 +36,7 @@ import sun.misc.BASE64Decoder;
  * @author jiashuo
  * 
  */
-public class AuthenticationFilter implements RdapFilter {
+public class AuthenticationFilter implements HttpFilter {
     /**
      * logger.
      */

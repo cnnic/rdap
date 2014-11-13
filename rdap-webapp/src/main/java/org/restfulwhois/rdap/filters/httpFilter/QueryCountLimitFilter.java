@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.filters;
+package org.restfulwhois.rdap.filters.httpFilter;
 
 import java.io.IOException;
 
@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.restfulwhois.rdap.core.common.filter.FilterChainProxy;
 import org.restfulwhois.rdap.core.common.filter.FilterHelper;
-import org.restfulwhois.rdap.core.common.filter.RdapFilter;
+import org.restfulwhois.rdap.core.common.filter.HttpFilter;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.filters.service.ConnectionControlService;
+import org.restfulwhois.rdap.filters.httpFilter.service.ConnectionControlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import org.springframework.http.ResponseEntity;
  * 
  */
 @Deprecated
-public class QueryCountLimitFilter implements RdapFilter {
+public class QueryCountLimitFilter implements HttpFilter {
 
     /**
      * logger.

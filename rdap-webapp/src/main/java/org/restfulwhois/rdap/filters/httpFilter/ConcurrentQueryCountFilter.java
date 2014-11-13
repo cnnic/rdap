@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.filters;
+package org.restfulwhois.rdap.filters.httpFilter;
 
 import java.io.IOException;
 
@@ -6,39 +6,37 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.restfulwhois.rdap.core.common.filter.FilterHelper;
-import org.restfulwhois.rdap.core.common.filter.RdapFilter;
+import org.restfulwhois.rdap.core.common.filter.HttpFilter;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.filters.service.ConnectionControlService;
+import org.restfulwhois.rdap.filters.httpFilter.service.ConnectionControlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 
 /**
- * This class is used to limit access rate.
+ * This class is used to control concurrent connection count.
  * <p>
- * Rate limit is done by compareing the time interval between two request for
- * each IP address.
+ * This filter will increase concurrent connection count before query service,
+ * and MUST　decrease concurrent connection count before query service.
  * <p>
- * This filter is validate before query service, and do nothing in postProcess.
- * <p>
- * If exceed rate limit, it will return HTTP 429 error.
+ * If exceed max concurrent connection count, it will return HTTP 509 error.
  * 
  * @author jiashuo
  * 
  */
-public class RateLimitFilter implements RdapFilter {
+public class ConcurrentQueryCountFilter implements HttpFilter {
 
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(RateLimitFilter.class);
+            .getLogger(ConcurrentQueryCountFilter.class);
 
     /**
      * constructor.
      */
-    public RateLimitFilter() {
+    public ConcurrentQueryCountFilter() {
         super();
         LOGGER.debug("init RDAP filter:{}", this.getName());
     }
@@ -58,28 +56,12 @@ public class RateLimitFilter implements RdapFilter {
     @Override
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        String remoteAddr = request.getRemoteAddr();
-        if (ConnectionControlService.exceedRateLimit(remoteAddr)) {
-            LOGGER.debug("exceedRateLimit,return 429 error.");
-            this.writeError429Response(response);
+        if (ConnectionControlService
+                .incrementConcurrentQCountAndCheckIfExceedMax()) {
+            writeError509Response(response);
             return false;
         }
         return true;
-    }
-
-    /**
-     * write 429 error.
-     * 
-     * @param response
-     *            response.
-     * @throws IOException
-     *             IOException.
-     */
-    private void writeError429Response(HttpServletResponse response)
-            throws IOException {
-        ResponseEntity<ErrorMessage> responseEntity =
-                RestResponseUtil.createResponse429();
-        FilterHelper.writeResponse(responseEntity, response);
     }
 
     /**
@@ -104,6 +86,22 @@ public class RateLimitFilter implements RdapFilter {
     @Override
     public boolean postProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+        ConnectionControlService.decrementAndGetCurrentQueryCount();
         return true;
+    }
+
+    /**
+     * write 509 error.
+     * 
+     * @param response
+     *            response.
+     * @throws IOException
+     *             IOException.
+     */
+    private void writeError509Response(HttpServletResponse response)
+            throws IOException {
+        ResponseEntity<ErrorMessage> responseEntity =
+                RestResponseUtil.createResponse509();
+        FilterHelper.writeResponse(responseEntity, response);
     }
 }

@@ -17,7 +17,15 @@
 	<!-- nameServer -->
 	<RDAP_IDENTITY_ACL ID='2' OBJECT_TYPE='nameServer'
 		OBJECT_ID='1' ROLE_ID='1' />
+	<RDAP_IDENTITY_ACL ID='3' OBJECT_TYPE='nameServer'
+		OBJECT_ID='11' ROLE_ID='1' />
 	<!-- autnum -->
-	<RDAP_IDENTITY_ACL ID='3' OBJECT_TYPE='autnum'
+	<RDAP_IDENTITY_ACL ID='4' OBJECT_TYPE='autnum'
+		OBJECT_ID='1' ROLE_ID='1' />
+	<!-- entity -->
+	<RDAP_IDENTITY_ACL ID='5' OBJECT_TYPE='entity'
+		OBJECT_ID='1' ROLE_ID='1' />
+	<!-- network -->
+	<RDAP_IDENTITY_ACL ID='6' OBJECT_TYPE='ip'
 		OBJECT_ID='1' ROLE_ID='1' />
 </dataset>

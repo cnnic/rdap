@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.filters;
+package org.restfulwhois.rdap.filters.httpFilter;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.filter.FilterHelper;
-import org.restfulwhois.rdap.core.common.filter.RdapFilter;
+import org.restfulwhois.rdap.core.common.filter.HttpFilter;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
@@ -25,7 +25,7 @@ import org.springframework.http.ResponseEntity;
  * @author zhanyq
  * 
  */
-public class NotImplementedUriFilter implements RdapFilter {
+public class NotImplementedUriFilter implements HttpFilter {
     /**
      * logger.
      */

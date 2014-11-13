@@ -38,12 +38,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -70,7 +72,7 @@ public class RdapControllerIpTest extends BaseTest {
      * ip query URI.
      */
     final private String URI_IP = "/ip/";
-    
+
     /**
      * output json.
      */
@@ -126,8 +128,8 @@ public class RdapControllerIpTest extends BaseTest {
     private void commonQueryExistIP(String queryIP, String lang)
             throws Exception {
         mockMvc.perform(
-                get(URI_IP + queryIP).accept(
-                        MediaType.parseMediaType(rdapJson)))
+                get(URI_IP + queryIP)
+                        .accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.lang").value(lang))
@@ -164,8 +166,7 @@ public class RdapControllerIpTest extends BaseTest {
     private void commonQueryNonExistIP(String ipAddr) throws Exception {
         final int numNotFound = 404;
         mockMvc.perform(
-                get(URI_IP + ipAddr).accept(
-                        MediaType.parseMediaType(rdapJson)))
+                get(URI_IP + ipAddr).accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(numNotFound))
@@ -203,8 +204,7 @@ public class RdapControllerIpTest extends BaseTest {
     private void commonQueryInvalidIP(String ipName) throws Exception {
         final int numInvalid = 400;
         mockMvc.perform(
-                get(URI_IP + ipName).accept(
-                        MediaType.parseMediaType(rdapJson)))
+                get(URI_IP + ipName).accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(numInvalid))
@@ -212,4 +212,26 @@ public class RdapControllerIpTest extends BaseTest {
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))
                 .andExpect(jsonPath("$.description").value("BAD REQUEST"));
     }
+
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(
+            value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        super.databaseSetupWithBinaryColumns("ip-query.xml");
+        String ip = "0:0:0:0:2001:6a8::";
+        query403(ip);
+    }
+
+    private void query403(String q) throws Exception {
+        mockMvc.perform(
+                get(URI_IP + q).accept(MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
+
+    }
+
 }

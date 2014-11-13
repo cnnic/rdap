@@ -56,17 +56,17 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class RdapControllerAutnumTest extends BaseTest {
-    
+
     /**
      * as query URI.
      */
     public static final String URI_AS = "/autnum/";
-    
+
     @Autowired
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
-    
+
     /**
      * output json.
      */
@@ -84,7 +84,8 @@ public class RdapControllerAutnumTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
+    @DatabaseSetup(
+            value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnumWithRdapAndJson() throws Exception {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
@@ -106,7 +107,8 @@ public class RdapControllerAutnumTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    @DatabaseSetup(value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
+    @DatabaseSetup(
+            value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnum() throws Exception {
         RestResponseUtil.initErrorMessages();
         String autnumStr = "1";
@@ -155,6 +157,27 @@ public class RdapControllerAutnumTest extends BaseTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400));
+    }
+
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(value = {
+            "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml",
+            "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        String autnumStr = "1";
+        query403(autnumStr);
+    }
+
+    private void query403(String q) throws Exception {
+        mockMvc.perform(
+                get(URI_AS + q).accept(MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
+
     }
 
 }

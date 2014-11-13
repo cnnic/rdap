@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.filters.service;
+package org.restfulwhois.rdap.filters.httpFilter.service;
 
 import java.util.Collections;
 import java.util.HashMap;

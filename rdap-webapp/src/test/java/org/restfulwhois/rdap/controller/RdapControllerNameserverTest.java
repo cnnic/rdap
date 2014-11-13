@@ -47,6 +47,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -87,8 +88,8 @@ public class RdapControllerNameserverTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryExistNameserver() throws Exception {
         super.databaseSetupWithBinaryColumns("nameserverTest.xml");
-        RestResponseUtil.initErrorMessages();
-        RestResponseUtil.initConformanceService();
+//        RestResponseUtil.initErrorMessages();
+//        RestResponseUtil.initConformanceService();
         String nsName = "ns.cnnic.cn";
         String nsChineseLDH = "ns.清华大学.cn";
         String nsLangEn = "en";
@@ -192,4 +193,26 @@ public class RdapControllerNameserverTest extends BaseTest {
                 .andExpect(jsonPath("$.description").value("BAD REQUEST"));
 
     }
+
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(
+            value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        super.databaseSetupWithBinaryColumns("nameserverTest.xml");
+        String nameserver = "ns.cnnic.cn";
+        query403(nameserver);
+    }
+
+    private void query403(String q) throws Exception {
+        mockMvc.perform(
+                get(URI_NS_Q + q).accept(MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
+
+    }
+
 }

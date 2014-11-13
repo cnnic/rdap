@@ -13,18 +13,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.filters.AuthenticationFilter;
-import org.restfulwhois.rdap.filters.ConcurrentQueryCountFilter;
-import org.restfulwhois.rdap.filters.DecodeUriForSpringFilter;
-import org.restfulwhois.rdap.filters.HttpRequestFilter;
-import org.restfulwhois.rdap.filters.InvalidUriFilter;
-import org.restfulwhois.rdap.filters.NotImplementedUriFilter;
-import org.restfulwhois.rdap.filters.RateLimitFilter;
+import org.restfulwhois.rdap.filters.httpFilter.AuthenticationFilter;
+import org.restfulwhois.rdap.filters.httpFilter.ConcurrentQueryCountFilter;
+import org.restfulwhois.rdap.filters.httpFilter.DecodeUriForSpringFilter;
+import org.restfulwhois.rdap.filters.httpFilter.HttpRequestFilter;
+import org.restfulwhois.rdap.filters.httpFilter.InvalidUriFilter;
+import org.restfulwhois.rdap.filters.httpFilter.NotImplementedUriFilter;
+import org.restfulwhois.rdap.filters.httpFilter.RateLimitFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The FilterChainProxy is used to do filter for all {@link RdapFilter}.
+ * The FilterChainProxy is used to do filter for all {@link HttpFilter}.
  * <p>
  * All RDAP filters must be initialized in static block below. And filters list
  * are ordered.
@@ -49,14 +49,14 @@ public class FilterChainProxy implements Filter {
     /**
      * all filters.
      */
-    private static List<RdapFilter> filters;
+    private static List<HttpFilter> filters;
 
     /**
      * init filters when class loading.
      */
     static {
         LOGGER.debug("init RDAP filters ...");
-        filters = new ArrayList<RdapFilter>();
+        filters = new ArrayList<HttpFilter>();
         filters.add(new ConcurrentQueryCountFilter());
         filters.add(new AuthenticationFilter());
         filters.add(new RateLimitFilter());
@@ -145,7 +145,7 @@ public class FilterChainProxy implements Filter {
      */
     private boolean safePostProcess(HttpServletRequest request,
             HttpServletResponse response) {
-        for (RdapFilter filter : filters) {
+        for (HttpFilter filter : filters) {
             LOGGER.debug("call postProcess for:{}", filter.getName());
             try {
                 if (!filter.postProcess(request, response)) {
@@ -171,7 +171,7 @@ public class FilterChainProxy implements Filter {
      */
     private boolean safePreProcess(HttpServletRequest request,
             HttpServletResponse response) {
-        for (RdapFilter filter : filters) {
+        for (HttpFilter filter : filters) {
             LOGGER.debug("call preProcess for:{}", filter.getName());
             try {
                 if (!filter.preProcess(request, response)) {

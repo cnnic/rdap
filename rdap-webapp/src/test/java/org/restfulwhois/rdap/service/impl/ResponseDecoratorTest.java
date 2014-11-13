@@ -34,13 +34,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
-import org.restfulwhois.rdap.core.common.service.RdapConformanceService;
-import org.restfulwhois.rdap.core.common.support.ResponseDecorator;
+import org.restfulwhois.rdap.core.common.filter.QueryFilter;
+import org.restfulwhois.rdap.core.common.filter.QueryFilterManager;
+import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -54,27 +60,31 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class ResponseDecoratorTest extends BaseTest {
+    /**
+     * queryFilterManager.
+     */
     @Autowired
-    private ResponseDecorator responseDecorator;
-    
-    @Autowired
-	private RdapConformanceService rdapConformanceService;
+    private QueryFilterManager queryFilterManager;
+
+    @Resource(name = "errorMessageServiceFilters")
+    private List<QueryFilter> serviceFilters;
 
     /**
-     * test query exist autnum
+     * test query exist autnum.
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-	@DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/rdapConformance.xml")
-    public void testSetRdapConformanceToAutnum() {
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/rdapConformance.xml")
+    public
+            void testSetRdapConformanceToAutnum() {
         Autnum autnum = new Autnum();
         Assert.notNull(autnum);
         assertNull(autnum.getRdapConformance());
-        rdapConformanceService.initRdapConformance();
-        responseDecorator.decorateResponse(autnum);
+        ResponseEntity responseEntity =
+                RestResponseUtil.createResponse200(autnum);
+        queryFilterManager.postQuery(null, responseEntity, serviceFilters);
         assertNotNull(autnum.getRdapConformance());
-        assertThat(autnum.getRdapConformance(),
-                CoreMatchers.notNullValue());
+        assertThat(autnum.getRdapConformance(), CoreMatchers.notNullValue());
     }
-    
+
 }

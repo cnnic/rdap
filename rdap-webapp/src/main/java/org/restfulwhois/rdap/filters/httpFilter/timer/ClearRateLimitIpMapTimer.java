@@ -1,11 +1,11 @@
-package org.restfulwhois.rdap.filters.timer;
+package org.restfulwhois.rdap.filters.httpFilter.timer;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
 
-import org.restfulwhois.rdap.filters.service.ConnectionControlService;
+import org.restfulwhois.rdap.filters.httpFilter.service.ConnectionControlService;
 import org.springframework.stereotype.Component;
 
 /**

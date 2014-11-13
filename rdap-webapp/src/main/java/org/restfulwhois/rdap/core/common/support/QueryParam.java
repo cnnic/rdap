@@ -35,7 +35,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
 import org.restfulwhois.rdap.core.common.util.RequestUtil;
 import org.restfulwhois.rdap.core.common.validation.ValidationResult;

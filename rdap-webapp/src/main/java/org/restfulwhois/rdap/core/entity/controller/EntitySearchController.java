@@ -33,11 +33,13 @@ package org.restfulwhois.rdap.core.entity.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.controller.BaseController;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
+import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.RequestUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
@@ -76,6 +78,14 @@ public class EntitySearchController extends BaseController {
      */
     @Autowired
     protected EntitySearchService searchService;
+
+    @Resource(name = "commonServiceFilters")
+    private List<QueryFilter> serviceFilters;
+
+    @Override
+    protected List<QueryFilter> getQueryFilters() {
+        return serviceFilters;
+    }
 
     /**
      * searchParams.
@@ -177,11 +187,6 @@ public class EntitySearchController extends BaseController {
         LOGGER.debug("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
-            if (result.getTruncatedInfo() != null
-                    && result.getTruncatedInfo().getHasNoAuthForAllObjects()) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(result);
             return RestResponseUtil.createResponse200(result);
         }
         return RestResponseUtil.createResponse404();
