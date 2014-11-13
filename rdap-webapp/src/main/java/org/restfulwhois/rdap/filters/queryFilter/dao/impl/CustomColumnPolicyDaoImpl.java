@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.policy.dao.impl;
+package org.restfulwhois.rdap.filters.queryFilter.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +39,7 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.restfulwhois.rdap.policy.dao.PolicyDao;
+import org.restfulwhois.rdap.filters.queryFilter.dao.CustomColumnPolicyDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +57,13 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class PolicyDaoImpl implements PolicyDao {
+public class CustomColumnPolicyDaoImpl implements CustomColumnPolicyDao {
     
     /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(PolicyDaoImpl.class);
+            .getLogger(CustomColumnPolicyDaoImpl.class);
     
     /**
      * jdbcTemplate.

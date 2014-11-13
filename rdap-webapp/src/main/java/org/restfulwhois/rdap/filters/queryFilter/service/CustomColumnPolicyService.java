@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.policy.service;
+package org.restfulwhois.rdap.filters.queryFilter.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -44,8 +44,7 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.service.PolicyControlService;
-import org.restfulwhois.rdap.policy.dao.PolicyDao;
+import org.restfulwhois.rdap.filters.queryFilter.dao.CustomColumnPolicyDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,19 +63,19 @@ import org.springframework.util.ReflectionUtils;
  * 
  */
 @Service
-public class PolicyControlServiceImpl implements PolicyControlService {
+public class CustomColumnPolicyService {
 
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(PolicyControlServiceImpl.class);
+            .getLogger(CustomColumnPolicyService.class);
 
     /**
-     * PolicyDao.
+     * CustomColumnPolicyDao.
      */
     @Autowired
-    private PolicyDao policyDao;
+    private CustomColumnPolicyDao policyDao;
 
     /**
      * the static map of policy.
@@ -88,7 +87,6 @@ public class PolicyControlServiceImpl implements PolicyControlService {
     }
 
     @PostConstruct
-    @Override
     public void init() {
         mapPolicy = policyDao.loadAllPolicyMap();
         return;
@@ -202,7 +200,6 @@ public class PolicyControlServiceImpl implements PolicyControlService {
      * @param objModel
      *            model of object.
      */
-    @Override
     public void applyPolicy(final Object objModel) {
         if (objModel == null) {
             return;

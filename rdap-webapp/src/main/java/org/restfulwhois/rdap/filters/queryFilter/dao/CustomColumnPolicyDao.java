@@ -28,61 +28,25 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.policy.bean;
+package org.restfulwhois.rdap.filters.queryFilter.dao;
 
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * denotes information about the service providing RDAP information.
+ * policy DAO.
+ * Interface to access CustomColumnPolicyDaoImpl.
  * 
  * @author weijunkai
  * 
  */
-public class Policy extends BaseModel {
-    /**
-     * title.
-     */
-    private String modelType;
-    /**
-     * description.
-     */
-    private String hideColumn;
+public interface CustomColumnPolicyDao {
 
     /**
-     * set the modelType for policy.
+     * get all policy map.
+     * first String is object,second one is set of fields.
      * 
-     * @param modelType
-     *            object modelType.
+     * @return map of policy.
      */
-    public void setModelType(String modelType) {
-        this.modelType = modelType;
-    }
-
-    /**
-     * get the modelType of object.
-     * 
-     * @return modelType string.
-     */
-    public String getModelType() {
-        return modelType;
-    }
-
-    /**
-     * set the hidden column according policy.
-     * 
-     * @param hideColumn
-     *            the column which will be hidden.
-     */
-    public void setHideColumn(String hideColumn) {
-        this.hideColumn = hideColumn;
-    }
-
-    /**
-     * get the hidden column according policy.
-     * 
-     * @return hiddenColumn String.
-     */
-    public String getHideColumn() {
-        return hideColumn;
-    }
+    Map<String, Set<String>> loadAllPolicyMap();
 }

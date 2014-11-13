@@ -46,12 +46,11 @@ import org.restfulwhois.rdap.core.common.model.Remark;
 import org.restfulwhois.rdap.core.common.model.SecureDns;
 import org.restfulwhois.rdap.core.common.model.Variant;
 import org.restfulwhois.rdap.core.common.model.Variants;
-import org.restfulwhois.rdap.core.common.service.PolicyControlService;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.ip.model.IPAddress;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
-import org.restfulwhois.rdap.policy.service.PolicyControlServiceImpl;
+import org.restfulwhois.rdap.filters.queryFilter.service.CustomColumnPolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -66,7 +65,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class PolicyServiceImplTest extends BaseTest {
     @Autowired
-    private PolicyControlService policyService;
+    private CustomColumnPolicyService customColumnPolicyService;
 
     /**
      * test policy.
@@ -75,7 +74,7 @@ public class PolicyServiceImplTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/policy.xml")
     public void testSetPolicyOneWrap() {
-        policyService.init();
+        customColumnPolicyService.init();
 
         Nameserver ns = new Nameserver();
         final Long id = 1L;
@@ -139,7 +138,7 @@ public class PolicyServiceImplTest extends BaseTest {
         final String port43 = "port43";
         ns.setPort43(port43);
 
-        policyService.applyPolicy(ns);
+        customColumnPolicyService.applyPolicy(ns);
 
         assertNotNull(ns);
         assertEquals(ns.getLdhName(), null);
@@ -164,9 +163,7 @@ public class PolicyServiceImplTest extends BaseTest {
     }
 
     private void clearPolicy() {
-        PolicyControlServiceImpl policyServiceImpl =
-                (PolicyControlServiceImpl) policyService;
-        policyServiceImpl.clearPolicy();
+        customColumnPolicyService.clearPolicy();
     }
 
     @Test
@@ -174,7 +171,7 @@ public class PolicyServiceImplTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/policyTwoWrap.xml")
     public
             void testSetPolicyMultiWrap() {
-        policyService.init();
+        customColumnPolicyService.init();
 
         Domain domain = setDomainValue(null);
         applyPolicyMultiWrapDomain(domain);
@@ -193,7 +190,7 @@ public class PolicyServiceImplTest extends BaseTest {
      *            object to apply policy.
      */
     private void applyPolicySingleWrapDomain(Domain domain) {
-        policyService.applyPolicy(domain);
+        customColumnPolicyService.applyPolicy(domain);
         assertEquals(domain.getNameservers(), null);
         assertEquals(domain.getVariants(), null);
         assertEquals(domain.getSecureDns(), null);
@@ -207,7 +204,7 @@ public class PolicyServiceImplTest extends BaseTest {
      *            object to apply policy.
      */
     private void applyPolicySingleWrapEntity(Entity entity) {
-        policyService.applyPolicy(entity);
+        customColumnPolicyService.applyPolicy(entity);
         assertNotNull(entity);
         assertEquals(entity.getAsEventActor(), null);
         assertEquals(entity.getEntities(), null);
@@ -220,7 +217,7 @@ public class PolicyServiceImplTest extends BaseTest {
      *            object to apply policy.
      */
     private void applyPolicyMutliWrapEntity(Entity entity) {
-        policyService.applyPolicy(entity);
+        customColumnPolicyService.applyPolicy(entity);
         List<Event> asEventActor = entity.getAsEventActor();
         assertNotNull(entity);
         for (Event event : asEventActor) {
@@ -329,7 +326,7 @@ public class PolicyServiceImplTest extends BaseTest {
      */
     private void applyPolicyMultiWrapDomain(Domain domain) {
 
-        policyService.applyPolicy(domain);
+        customColumnPolicyService.applyPolicy(domain);
         assertNotNull(domain);
 
         SecureDns secureDns = domain.getSecureDns();

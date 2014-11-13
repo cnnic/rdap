@@ -10,7 +10,7 @@
 		<ref bean="accessControlQueryFilter" />
 		<ref bean="rdapConformanceQueryFilter" />
 		<ref bean="noticeQueryFilter" />
-		<ref bean="customColumnPolicyControlQueryFilter" />
+		<ref bean="customColumnPolicyQueryFilter" />
 	</util:list>
 	<util:list id="errorMessageServiceFilters">
 		<ref bean="rdapConformanceQueryFilter" />

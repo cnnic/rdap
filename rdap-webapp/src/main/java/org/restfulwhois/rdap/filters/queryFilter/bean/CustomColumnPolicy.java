@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,42 +28,61 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.filters.queryFilter;
+package org.restfulwhois.rdap.filters.queryFilter.bean;
 
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.restfulwhois.rdap.core.common.service.PolicyControlService;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.validation.ValidationResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 
 /**
- * CustomColumnPolicyControlQueryFilter.
+ * denotes information about the service providing RDAP information.
  * 
- * @author jiashuo
+ * @author weijunkai
  * 
  */
-@Component
-public class CustomColumnPolicyControlQueryFilter implements QueryFilter {
-    @Autowired
-    private PolicyControlService policyControlService;
+public class CustomColumnPolicy extends BaseModel {
+    /**
+     * title.
+     */
+    private String modelType;
+    /**
+     * description.
+     */
+    private String hideColumn;
 
-    @Override
-    public ValidationResult preParamValidate(QueryParam queryParam) {
-        return null;
+    /**
+     * set the modelType for policy.
+     * 
+     * @param modelType
+     *            object modelType.
+     */
+    public void setModelType(String modelType) {
+        this.modelType = modelType;
     }
 
-    @Override
-    public ValidationResult postParamValidate(QueryParam queryParam) {
-        return null;
+    /**
+     * get the modelType of object.
+     * 
+     * @return modelType string.
+     */
+    public String getModelType() {
+        return modelType;
     }
 
-    @Override
-    public ValidationResult postQuery(QueryParam queryParam,
-            ResponseEntity responseEntity) {
-        policyControlService.applyPolicy(responseEntity);
-        return null;
+    /**
+     * set the hidden column according policy.
+     * 
+     * @param hideColumn
+     *            the column which will be hidden.
+     */
+    public void setHideColumn(String hideColumn) {
+        this.hideColumn = hideColumn;
     }
 
+    /**
+     * get the hidden column according policy.
+     * 
+     * @return hiddenColumn String.
+     */
+    public String getHideColumn() {
+        return hideColumn;
+    }
 }
