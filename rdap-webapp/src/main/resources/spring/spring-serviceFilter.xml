@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	default-lazy-init="false">
+
+	<util:list id="commonServiceFilters">
+		<!-- acl should be first, for performance consideration. -->
+		<ref bean="accessControlQueryFilter" />
+		<ref bean="rdapConformanceQueryFilter" />
+		<ref bean="noticeQueryFilter" />
+		<ref bean="customColumnPolicyQueryFilter" />
+	</util:list>
+	<util:list id="errorMessageServiceFilters">
+		<ref bean="rdapConformanceQueryFilter" />
+		<ref bean="noticeQueryFilter" />
+	</util:list>
+	<util:list id="helpQueryServiceFilters">
+		<ref bean="rdapConformanceQueryFilter" />
+	</util:list>
+</beans>

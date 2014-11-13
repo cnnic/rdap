@@ -95,13 +95,14 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         String nsNameCn = "name=ns.cnnic*";
         String ipParamNamePrefix = "ip=";
         String nsNameIpV4 = ipParamNamePrefix + "218.241.111.11";
-        String nsNameIpV6Full = ipParamNamePrefix + "ffff:ffff:ffff:ffff:0:0:0:ffff";
+        String nsNameIpV6Full =
+                ipParamNamePrefix + "ffff:ffff:ffff:ffff:0:0:0:ffff";
         String nsNameIpV6Omit = ipParamNamePrefix + "ffff:ffff:ffff:ffff::ffff";
         String nsIpV4 = ipParamNamePrefix + "0::0";
         String nsIpZero = ipParamNamePrefix + "::";
         String nsIpV4V6 = ipParamNamePrefix + "::f:f:0.15.0.15";
         String nsBoth1 = nsNameCn + "&" + ipParamNamePrefix + "::f:f:0.15.0.15";
-        String nsBoth2 = ipParamNamePrefix + "::f:f:0.15.0.15" + "&" + nsNameCn;        
+        String nsBoth2 = ipParamNamePrefix + "::f:f:0.15.0.15" + "&" + nsNameCn;
         String nsComplex = "&name=ns.cnni*.cn&ip=::?name=0";
         searchByObject(nsNameCn);
         searchByObject(nsNameIpV4);
@@ -188,7 +189,9 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 .andExpect(
                         jsonPath("$.nameserverSearchResults[0].links[0].title")
                                 .exists())
-                 .andExpect(jsonPath("$.nameserverSearchResults[0].objectClassName").value("nameserver"));
+                .andExpect(
+                        jsonPath("$.nameserverSearchResults[0].objectClassName")
+                                .value("nameserver"));
     }
 
     /**
@@ -207,9 +210,9 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         String nsName = nsHead + "ns.truncated*";
         String nsIpV6 = ipHead + "::ffff:ffff:ffff:fffe";
         String ipHighCase = ipHead + "::FFFF:ffff:FFFF:FFFE";
-//        searchTruncatedNS(nsName);
+        // searchTruncatedNS(nsName);
         searchTruncatedNS(nsIpV6);
-//        searchTruncatedNS(ipHighCase);
+        // searchTruncatedNS(ipHighCase);
     }
 
     /**
@@ -230,7 +233,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                //.andExpect(jsonPath("$.resultsTruncated").value(true))
+                // .andExpect(jsonPath("$.resultsTruncated").value(true))
                 .andExpect(jsonPath("$.nameserverSearchResults").exists())
                 .andExpect(jsonPath("$.nameserverSearchResults").isArray())
                 .andExpect(
@@ -238,7 +241,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                                 hasSize((int) finalSize)))
                 .andExpect(
                         jsonPath("$.nameserverSearchResults",
-                               Matchers.hasItem(Matchers.hasKey("handle"))));
+                                Matchers.hasItem(Matchers.hasKey("handle"))));
     }
 
     /**
@@ -250,7 +253,8 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @Test
     @DatabaseSetup(type = DatabaseOperation.REFRESH,
             value = "classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
-    public void testSearchNonExistNameserver() throws Exception {
+    public
+            void testSearchNonExistNameserver() throws Exception {
         RestResponseUtil.initErrorMessages();
         String nsHead = "name=";
         String ipHead = "ip=";
@@ -323,7 +327,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
         String nsIpWildcardEnd = ipHead + "1.*";
         String nsIpWildcardHead = ipHead + "*.*";
         String nsNameIllegal = nsHead + "";
-        String nsComplex = "&name=&ip=::?name=0";        
+        String nsComplex = "&name=&ip=::?name=0";
         String nsOnlyOne1 = ipHead + "::f:f:0.15.0.15" + "?" + nsNameCn;
         String nsOnlyOne2 = nsNameCn + "?" + ipHead + "::f:f:0.15.0.15";
         seachIllegalNS(nsOnlyOne1);
@@ -354,4 +358,26 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))
                 .andExpect(jsonPath("$.description").value("BAD REQUEST"));
     }
+
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(
+            value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        super.databaseSetupWithBinaryColumns("nameserver-search.xml");
+        String nameserverQ = "name=ns.cnnic1.cn*";
+        search403(nameserverQ);
+    }
+
+    private void search403(String q) throws Exception {
+        mockMvc.perform(
+                get(URI_NS_SEARCH + q).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
+
+    }
+
 }

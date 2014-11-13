@@ -31,15 +31,17 @@
 package org.restfulwhois.rdap.core.common.util;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
+import org.restfulwhois.rdap.core.common.filter.QueryFilter;
+import org.restfulwhois.rdap.core.common.filter.QueryFilterManager;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.restfulwhois.rdap.core.common.service.ErrorMessageService;
-import org.restfulwhois.rdap.core.common.service.PolicyControlService;
-import org.restfulwhois.rdap.core.common.support.ResponseDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -75,14 +77,15 @@ public class RestResponseUtil {
     private static ErrorMessageService errorMessageService;
 
     /**
-     * for response object.
+     * queryFilterManager.
      */
-    private static ResponseDecorator responseDecorator;
+    @Autowired
+    private static QueryFilterManager queryFilterManager;
 
     /**
-     * for policy service.
+     * serviceFilters.
      */
-    private static PolicyControlService policyService;
+    private static List<QueryFilter> serviceFilters;
 
     /**
      * init the error message and policy service.
@@ -90,22 +93,6 @@ public class RestResponseUtil {
     @PostConstruct
     private void init() {
         initErrorMessages();
-        initPolicyService();
-        initConformanceService();
-    }
-
-    /**
-     * init conformance service.
-     */
-    public static void initConformanceService() {
-        responseDecorator.initRdapConformance();
-    }
-
-    /**
-     * init policy service.
-     */
-    public static void initPolicyService() {
-        policyService.init();
     }
 
     /**
@@ -284,7 +271,7 @@ public class RestResponseUtil {
     public static ResponseEntity<ErrorMessage> createResponse509() {
         return createCommonErrorResponse(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
     }
-    
+
     /**
      * create response with HTTP status code 501.
      * 
@@ -305,10 +292,12 @@ public class RestResponseUtil {
             HttpStatus errorStatus) {
         ErrorMessage errorMessage =
                 getErrorMessageByErrorCode(errorStatus.toString());
-        responseDecorator.decorateResponse(errorMessage);
         HttpHeaders headers = generateCrossOriginHeader();
-        return new ResponseEntity<ErrorMessage>(errorMessage, headers,
-                errorStatus);
+        ResponseEntity<ErrorMessage> responseEntity =
+                new ResponseEntity<ErrorMessage>(errorMessage, headers,
+                        errorStatus);
+        queryFilterManager.postQuery(null, responseEntity, serviceFilters);
+        return responseEntity;
     }
 
     /**
@@ -324,9 +313,11 @@ public class RestResponseUtil {
             HttpStatus errorStatus, HttpHeaders responseHeaders) {
         ErrorMessage errorMessage =
                 getErrorMessageByErrorCode(errorStatus.toString());
-        responseDecorator.decorateResponse(errorMessage);
-        return new ResponseEntity<ErrorMessage>(errorMessage, responseHeaders,
-                errorStatus);
+        ResponseEntity<ErrorMessage> responseEntity =
+                new ResponseEntity<ErrorMessage>(errorMessage, responseHeaders,
+                        errorStatus);
+        queryFilterManager.postQuery(null, responseEntity, serviceFilters);
+        return responseEntity;
     }
 
     /**
@@ -340,25 +331,14 @@ public class RestResponseUtil {
         RestResponseUtil.errorMessageService = errorMsgService;
     }
 
-    /**
-     * response object.
-     * 
-     * @param responseDecorator
-     *            response object.
-     */
     @Autowired
-    public void setResponseDecorator(ResponseDecorator responseDecorator) {
-        RestResponseUtil.responseDecorator = responseDecorator;
+    public void setQueryFilterManager(QueryFilterManager queryFilterManager) {
+        RestResponseUtil.queryFilterManager = queryFilterManager;
     }
 
-    /**
-     * policy service.
-     * 
-     * @param policyService
-     *            policy control service.
-     */
-    @Autowired
-    public void setPolicyService(PolicyControlService policyService) {
-        RestResponseUtil.policyService = policyService;
+    @Resource(name = "errorMessageServiceFilters")
+    public void setServiceFilters(List<QueryFilter> serviceFilters) {
+        RestResponseUtil.serviceFilters = serviceFilters;
     }
+
 }

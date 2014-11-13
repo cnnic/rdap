@@ -242,4 +242,33 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.description").value("BAD REQUEST"));
 
     }
+
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(
+            value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        super.databaseSetupWithBinaryColumns("domain.xml");
+        String domainName = "cnnic.cn";
+        query403(domainName);
+    }
+
+    /**
+     * common query invalid domain.
+     * 
+     * @param domainName
+     *            domain name.
+     * @throws Exception
+     *             Exception.
+     */
+    private void query403(String domainName) throws Exception {
+        mockMvc.perform(
+                get(URI_DOMAIN_Q + StringUtil.urlEncode(domainName)).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
+
+    }
 }

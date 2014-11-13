@@ -30,10 +30,14 @@
  */
 package org.restfulwhois.rdap.core.ip.controller;
 
+import java.util.List;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.restfulwhois.rdap.core.common.controller.BaseController;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
+import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
@@ -73,6 +77,14 @@ public class NetworkController extends BaseController {
     @Autowired
     protected IpService queryService;
 
+    @Resource(name = "commonServiceFilters")
+    private List<QueryFilter> serviceFilters;
+
+    @Override
+    protected List<QueryFilter> getQueryFilters() {
+        return serviceFilters;
+    }
+    
     /**
      * <pre>
      * query ip by ip and mask.
@@ -152,10 +164,6 @@ public class NetworkController extends BaseController {
     protected ResponseEntity doQuery(QueryParam queryParam) {
         Network ip = queryService.queryIp(queryParam);
         if (null != ip) {
-            if (!accessControlManager.hasPermission(ip)) {
-                return RestResponseUtil.createResponse403();
-            }
-            responseDecorator.decorateResponse(ip);
             return RestResponseUtil.createResponse200(ip);
         }
         LOGGER.debug("query redirect network :{}", queryParam);

@@ -32,10 +32,11 @@ package org.restfulwhois.rdap.core.common.service.impl;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.restfulwhois.rdap.core.common.dao.ConformanceDao;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.service.RdapConformanceService;
-import org.restfulwhois.rdap.core.common.support.ResponseDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,6 @@ import org.springframework.stereotype.Service;
  * 
  * RdapController's query for rdapConformance.
  * 
- * @see ResponseDecorator
  * @author jiashuo
  * 
  */
@@ -73,6 +73,7 @@ public class RdapConformanceServiceImpl implements RdapConformanceService {
      * initialize rdapConformance service.
      */
     @Override
+    @PostConstruct
     public void initRdapConformance() {
         LOGGER.debug("initRdapConformance");
         rdapConformance = conformanceDao.queryConformance();

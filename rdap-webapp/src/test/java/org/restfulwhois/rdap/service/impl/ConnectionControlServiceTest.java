@@ -35,7 +35,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
-import org.restfulwhois.rdap.filters.service.ConnectionControlService;
+import org.restfulwhois.rdap.filters.httpFilter.service.ConnectionControlService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 /**
