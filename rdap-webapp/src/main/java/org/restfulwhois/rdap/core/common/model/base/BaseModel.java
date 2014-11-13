@@ -84,7 +84,7 @@ public class BaseModel {
      *      Position for Properties in customModel is at last.
      * </pre>
      */
-    @JsonUnwrapped
+    @JsonUnwrapped(prefix = "custom_")
     private BaseCustomModel customModel;
 
     /**
