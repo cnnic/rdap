@@ -21,15 +21,14 @@
 		REL_OBJECT_TYPE="nameServer" EVENT_ID="1" />
 	<!-- links -->
 	<RDAP_LINK LINK_ID="1" VALUE="http://nameserverlink" REL="self"
-		HREF="http://nameserverlink" MEDIA="screen" TYPE="application/json" />
+		HREF="http://nameserverlink" MEDIA="screen" TYPE="application/json" 
+		TITLE="Title1 of Link1"/>
 	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="11"
 		REL_OBJECT_TYPE="nameserver" LINK_ID="1" />
 	<RDAP_LINK_HREFLANG HREFLANG_ID='1' LINK_ID="1"
 		HREFLANG="en" />
 	<RDAP_LINK_HREFLANG HREFLANG_ID='2' LINK_ID="1"
-		HREFLANG="zh" />
-	<RDAP_LINK_TITLE TITLE_ID='1' LINK_ID="1" TITLE="Title1 of Link1" />
-	<RDAP_LINK_TITLE TITLE_ID='2' LINK_ID="1" TITLE="Title2 of Link1" />
+		HREFLANG="zh" />	
 	<!-- remarks -->
 	<RDAP_NOTICE NOTICE_ID="1" TITLE="Terms of Use" TYPE="remark" />
 	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="1"
