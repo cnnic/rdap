@@ -53,6 +53,15 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 @JsonIgnoreProperties(value = {
         "id", "objectType" })
 public class BaseModel {
+
+    /**
+     * this prefix will be added to the front of properties in customModel when
+     * serialized to JSON.
+     * <p>
+     * this value SHOULD end with '_', and NIC name is recommended as start.
+     */
+    public static final String CUSTOM_PROPERTY_PREFIX = "cnnic_";
+
     /**
      * specifications used in the construction of the response.
      */
@@ -76,11 +85,6 @@ public class BaseModel {
      * notice.
      */
     private List<Notice> notices;
-    
-    /**
-     * CUSTOM_PREFIX.
-     */
-    private static final String CUSTOM_PREFIX = "custom_";
 
     /**
      * customModel.
@@ -89,7 +93,7 @@ public class BaseModel {
      *      Position for Properties in customModel is at last.
      * </pre>
      */
-    @JsonUnwrapped(prefix = CUSTOM_PREFIX)
+    @JsonUnwrapped(prefix = CUSTOM_PROPERTY_PREFIX)
     private BaseCustomModel customModel;
 
     /**
@@ -129,11 +133,11 @@ public class BaseModel {
      * @return simple name of class
      */
     @JsonIgnore
-    public QueryUri getUri() {        
+    public QueryUri getUri() {
         throw new UnsupportedOperationException(
-                "must be inmplemented in sub class if I'am called.");      
+                "must be inmplemented in sub class if I'am called.");
     }
-    
+
     /**
      * get the value of href in the link.
      * 
@@ -141,7 +145,7 @@ public class BaseModel {
      */
     public String generateLinkHref() {
         throw new UnsupportedOperationException(
-            "must be inmplemented in sub class if I'am called.");
+                "must be inmplemented in sub class if I'am called.");
     }
 
     /**
