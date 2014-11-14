@@ -40,6 +40,7 @@ import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.restfulwhois.rdap.core.common.validation.Validator;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchParam;
+import org.restfulwhois.rdap.core.help.queryparam.HelpQueryParam;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,8 @@ public class SearchUriValidator implements Validator {
         Class superClazz = clazz.getSuperclass();
         return superClazz.equals(DomainSearchParam.class)
                 || superClazz.equals(NameserverSearchParam.class)
-                || superClazz.equals(EntitySearchParam.class);
+                || superClazz.equals(EntitySearchParam.class)
+                || clazz.equals(HelpQueryParam.class);
     }
 
     @Override

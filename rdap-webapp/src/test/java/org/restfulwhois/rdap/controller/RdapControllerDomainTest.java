@@ -197,7 +197,7 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.links[0].title").exists())
                 // objectClassName
                 .andExpect(jsonPath("$.objectClassName").value("domain"))
-
+                .andExpect(jsonPath("$.rdapConformance").exists())
         ;
     }
 

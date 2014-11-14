@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.restfulwhois.rdap.core.common.controller.BaseController;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
 import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.restfulwhois.rdap.core.common.util.RequestUtil;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.help.model.Help;
 import org.restfulwhois.rdap.core.help.queryparam.HelpQueryParam;
@@ -99,11 +99,12 @@ public class HelpQueryController extends BaseController {
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ResponseEntity queryHelp(HttpServletRequest request,
             HttpServletResponse response) throws DecodeException {
-        String lastSpliInURI = RequestUtil.getLastSplitInURI(request);
-        if (!"help".equals(lastSpliInURI)) {
-            return RestResponseUtil.createResponse400();
-        }
-        Help result = queryService.queryHelp(new HelpQueryParam(""));
+        return super.query(new HelpQueryParam(request));
+    }
+
+    @Override
+    protected ResponseEntity doQuery(QueryParam queryParam) {
+        Help result = queryService.queryHelp(queryParam);
         if (null != result) {
             return RestResponseUtil.createResponse200(result);
         }

@@ -55,6 +55,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.restfulwhois.rdap.acl.bean.Principal;
+import org.restfulwhois.rdap.core.common.service.RdapConformanceService;
 import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
@@ -102,6 +103,9 @@ public abstract class BaseTest {
      * connection.
      */
     private static IDatabaseConnection connection;
+    
+    @Autowired
+    private RdapConformanceService rdapConformanceService;
 
     /**
      * or use BeforeClass.
@@ -136,6 +140,7 @@ public abstract class BaseTest {
     @Before
     public void before() throws Exception {
         resetDefaultMaxSizeSearch();
+        rdapConformanceService.initRdapConformance();
     }
 
     @After

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
+	<!-- rdap conformance -->
+	<RDAP_CONFORMANCE conformance_id="1" rdap_conformance="rdap_level_0" />
+	<!-- error message -->
 	<RDAP_ERRORMESSAGE ERROR_ID="1" ERROR_CODE="400"
 		TITLE="BAD REQUEST" DESCRIPTION="BAD REQUEST" LANG='en' />
 	<RDAP_ERRORMESSAGE ERROR_ID="2" ERROR_CODE="404"
