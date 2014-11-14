@@ -108,7 +108,7 @@ public class DomainQueryController extends BaseDnrController {
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryDomainInThisRegistry(queryParam);
         }
-        return queryRedirectDomainOrNs(queryParam, queryParam.getOriginalQ());
+        return RestResponseUtil.createResponse404();
     }
 
     /**

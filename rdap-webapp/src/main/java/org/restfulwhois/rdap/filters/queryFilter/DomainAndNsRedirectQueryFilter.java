@@ -30,55 +30,61 @@
  */
 package org.restfulwhois.rdap.filters.queryFilter;
 
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.service.RdapConformanceService;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
+import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
+import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchParam;
+import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
- * RdapConformanceQueryFilter.
+ * DomainAndNsRedirectQueryFilter.
  * 
  * @author jiashuo
  * 
  */
 @Component
-public class RdapConformanceQueryFilter implements QueryFilter {
+public class DomainAndNsRedirectQueryFilter extends AbstractRedirectQueryFilter {
+
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(RdapConformanceQueryFilter.class);
+            .getLogger(DomainAndNsRedirectQueryFilter.class);
 
+    /**
+     * query service.
+     */
     @Autowired
-    private RdapConformanceService rdapConformanceService;
+    protected DomainQueryService queryService;
 
     @Override
-    public QueryFilterResult preParamValidate(QueryParam queryParam) {
-        return null;
-    }
-
-    @Override
-    public QueryFilterResult postParamValidate(QueryParam queryParam) {
-        return null;
-    }
-
-    @Override
-    public QueryFilterResult postQuery(QueryParam queryParam,
-            ResponseEntity responseEntity) {
-        Object responseBody = responseEntity.getBody();
-        if (responseBody instanceof BaseModel) {
-            BaseModel model = (BaseModel) responseBody;
-            LOGGER.debug("addRdapConformance begin.");
-            rdapConformanceService.setRdapConformance(model);
-            LOGGER.debug("addRdapConformance end.");
+    protected QueryFilterResult queryRedirect(QueryParam queryParam) {
+        LOGGER.debug("   query redirect for domain/ns :{}", queryParam);
+        if (queryParam instanceof DomainSearchParam
+                || queryParam instanceof NameserverSearchParam) {
+            return null;
         }
-        return null;
+        if (queryService.tldInThisRegistry(queryParam)) {
+            LOGGER.debug("   tld is in this registry, so not query redirect.");
+            return null;
+        }
+        RedirectResponse redirect = redirectService.queryDomain(queryParam);
+        if (!redirectService.isValidRedirect(redirect)) {
+            return null;
+        }
+        String redirectUrl =
+                StringUtil.generateEncodedRedirectURL(
+                        queryParam.getOriginalQ(), queryParam.getQueryUri()
+                                .getName(), redirect.getUrl());
+        return new QueryFilterResult(
+                RestResponseUtil.createResponse301(redirectUrl));
     }
 
 }

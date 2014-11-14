@@ -11,6 +11,28 @@
 		<ref bean="rdapConformanceQueryFilter" />
 		<ref bean="noticeQueryFilter" />
 		<ref bean="customColumnPolicyQueryFilter" />
+		<ref bean="customColumnPolicyQueryFilter" />
+	</util:list>
+	<util:list id="domainOrNsQueryFilters">
+		<ref bean="domainAndNsRedirectQueryFilter" />
+		<ref bean="accessControlQueryFilter" />
+		<ref bean="rdapConformanceQueryFilter" />
+		<ref bean="noticeQueryFilter" />
+		<ref bean="customColumnPolicyQueryFilter" />
+	</util:list>
+	<util:list id="autnumQueryFilters">
+		<ref bean="autnumRedirectQueryFilter" />
+		<ref bean="accessControlQueryFilter" />
+		<ref bean="rdapConformanceQueryFilter" />
+		<ref bean="noticeQueryFilter" />
+		<ref bean="customColumnPolicyQueryFilter" />
+	</util:list>
+	<util:list id="networkQueryFilters">
+		<ref bean="networkRedirectQueryFilter" />
+		<ref bean="accessControlQueryFilter" />
+		<ref bean="rdapConformanceQueryFilter" />
+		<ref bean="noticeQueryFilter" />
+		<ref bean="customColumnPolicyQueryFilter" />
 	</util:list>
 	<util:list id="errorMessageServiceFilters">
 		<ref bean="rdapConformanceQueryFilter" />

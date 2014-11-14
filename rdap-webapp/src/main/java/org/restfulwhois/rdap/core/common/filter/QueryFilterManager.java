@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.core.common.filter;
 import java.util.List;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -52,14 +51,14 @@ public class QueryFilterManager {
      *            queryParam.
      * @param queryFilters
      *            queryFilters.
-     * @return ValidationResult.
+     * @return QueryFilterResult.
      */
-    public ValidationResult preParamValidate(QueryParam queryParam,
+    public QueryFilterResult preParamValidate(QueryParam queryParam,
             List<QueryFilter> queryFilters) {
         for (QueryFilter serviceFilter : queryFilters) {
-            ValidationResult result =
+            QueryFilterResult result =
                     serviceFilter.preParamValidate(queryParam);
-            if (null != result && result.hasError()) {
+            if (null != result && result.hasResult()) {
                 return result;
             }
         }
@@ -73,14 +72,14 @@ public class QueryFilterManager {
      *            queryParam.
      * @param queryFiltersqueryFilters
      *            .
-     * @return ValidationResult.
+     * @return QueryFilterResult.
      */
-    public ValidationResult postParamValidate(QueryParam queryParam,
+    public QueryFilterResult postParamValidate(QueryParam queryParam,
             List<QueryFilter> queryFilters) {
         for (QueryFilter serviceFilter : queryFilters) {
-            ValidationResult result =
+            QueryFilterResult result =
                     serviceFilter.postParamValidate(queryParam);
-            if (null != result && result.hasError()) {
+            if (null != result && result.hasResult()) {
                 return result;
             }
         }
@@ -96,14 +95,14 @@ public class QueryFilterManager {
      *            response.
      * @param queryFilters
      *            queryFilters.
-     * @return ValidationResult.
+     * @return QueryFilterResult.
      */
-    public ValidationResult postQuery(QueryParam queryParam,
+    public QueryFilterResult postQuery(QueryParam queryParam,
             ResponseEntity response, List<QueryFilter> queryFilters) {
         for (QueryFilter serviceFilter : queryFilters) {
-            ValidationResult result =
+            QueryFilterResult result =
                     serviceFilter.postQuery(queryParam, response);
-            if (null != result && result.hasError()) {
+            if (null != result && result.hasResult()) {
                 return result;
             }
         }
