@@ -336,7 +336,7 @@ public class RestResponseUtil {
         RestResponseUtil.queryFilterManager = queryFilterManager;
     }
 
-    @Resource(name = "errorMessageServiceFilters")
+    @Resource(name = "errorMessageQueryFilters")
     public void setServiceFilters(List<QueryFilter> serviceFilters) {
         RestResponseUtil.serviceFilters = serviceFilters;
     }

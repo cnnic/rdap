@@ -71,7 +71,7 @@ public class HelpController extends BaseController {
     @Autowired
     protected HelpService queryService;
 
-    @Resource(name = "helpQueryServiceFilters")
+    @Resource(name = "helpQueryQueryFilters")
     private List<QueryFilter> serviceFilters;
 
     @Override
