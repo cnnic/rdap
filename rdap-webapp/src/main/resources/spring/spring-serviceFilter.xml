@@ -5,7 +5,7 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 	default-lazy-init="false">
 
-	<util:list id="commonServiceFilters">
+	<util:list id="commonQueryFilters">
 		<!-- acl should be first, for performance consideration. -->
 		<ref bean="accessControlQueryFilter" />
 		<ref bean="rdapConformanceQueryFilter" />
