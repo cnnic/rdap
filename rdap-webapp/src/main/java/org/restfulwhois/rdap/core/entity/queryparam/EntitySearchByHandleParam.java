@@ -34,7 +34,6 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
-import org.restfulwhois.rdap.core.entity.validator.EntitySearchValidator;
 
 /**
  * base search parameter bean.
@@ -58,7 +57,7 @@ public class EntitySearchByHandleParam extends EntitySearchParam {
 
     @Override
     protected void initValidators() {
-        super.addValidator(new EntitySearchValidator());
+        super.initValidators();
     }
 
     @Override

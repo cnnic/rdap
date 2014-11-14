@@ -11,7 +11,6 @@
 		<ref bean="rdapConformanceQueryFilter" />
 		<ref bean="noticeQueryFilter" />
 		<ref bean="customColumnPolicyQueryFilter" />
-		<ref bean="customColumnPolicyQueryFilter" />
 	</util:list>
 	<util:list id="domainOrNsQueryFilters">
 		<ref bean="domainAndNsRedirectQueryFilter" />

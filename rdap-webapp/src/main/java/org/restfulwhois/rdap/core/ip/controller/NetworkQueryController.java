@@ -62,12 +62,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  */
 @Controller
-public class NetworkController extends BaseController {
+public class NetworkQueryController extends BaseController {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(NetworkController.class);
+            .getLogger(NetworkQueryController.class);
     /**
      * query service.
      */
@@ -75,11 +75,11 @@ public class NetworkController extends BaseController {
     protected IpService queryService;
 
     @Resource(name = "networkQueryFilters")
-    private List<QueryFilter> serviceFilters;
+    private List<QueryFilter> queryFilters;
 
     @Override
     protected List<QueryFilter> getQueryFilters() {
-        return serviceFilters;
+        return queryFilters;
     }
     
     /**

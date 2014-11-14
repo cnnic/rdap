@@ -74,6 +74,7 @@ public class NameserverSearchByIpParam extends NameserverSearchParam {
 
     @Override
     protected void initValidators() {
+        super.initValidators();
         super.addValidator(new DomainSearchByNsIpValidator());
     }
 

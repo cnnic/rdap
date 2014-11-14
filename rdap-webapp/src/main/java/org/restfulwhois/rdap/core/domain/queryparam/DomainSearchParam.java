@@ -35,6 +35,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
+import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 
 /**
  * base search parameter bean.
@@ -62,6 +63,11 @@ public abstract class DomainSearchParam extends QueryParam {
         return false;
     }
 
+    @Override
+    protected void initValidators() {
+        super.addValidator(new SearchUriValidator());
+    }
+    
     /**
      * constructor.
      * 

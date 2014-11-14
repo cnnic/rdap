@@ -139,6 +139,12 @@ public class RdapControllerDomainSearchTest extends BaseTest {
                     .andExpect(content().contentType(rdapJson))
                     .andExpect(jsonPath("$.errorCode").value(400));
         }
+        mockMvc.perform(// control char.
+                get(DOMAIN_SEARCH_URI + "%1a?name=cnnic.cn").accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(400));
         for (String q : q200List) {// no data, return 404 instead 200.
             mockMvc.perform(
                     get(DOMAIN_SEARCH_URI + "?name=" + encodeWithIso8859(q))

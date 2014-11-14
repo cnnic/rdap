@@ -33,6 +33,7 @@ package org.restfulwhois.rdap.core.entity.queryparam;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
+import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 import org.restfulwhois.rdap.core.entity.validator.EntitySearchValidator;
 
@@ -74,6 +75,7 @@ abstract public class EntitySearchParam extends QueryParam {
 
     @Override
     protected void initValidators() {
+        addValidator(new SearchUriValidator());
         addValidator(new EntitySearchValidator());
     }
 

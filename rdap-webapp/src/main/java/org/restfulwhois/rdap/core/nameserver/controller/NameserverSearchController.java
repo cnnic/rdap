@@ -122,14 +122,6 @@ public class NameserverSearchController extends BaseDnrController {
      * @return NameserverSearchType.
      */
     public NameserverSearchType parseSearchType(HttpServletRequest request) {
-        try {
-            String lastSpliInURI = RequestUtil.getLastSplitInURI(request);
-            if (!"nameservers".equals(lastSpliInURI)) {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
         final String[] allSearchType = NameserverSearchType.valuesOfString();
         String paramName =
                 RequestUtil.getFirstParameter(request, allSearchType);
