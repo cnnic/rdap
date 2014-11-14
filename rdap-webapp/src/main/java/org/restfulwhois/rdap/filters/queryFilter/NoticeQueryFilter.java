@@ -34,13 +34,13 @@ import java.util.List;
 
 import org.restfulwhois.rdap.core.common.dao.NoticeDao;
 import org.restfulwhois.rdap.core.common.filter.QueryFilter;
+import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
 import org.restfulwhois.rdap.core.common.model.Notice;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
-import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,17 +67,17 @@ public class NoticeQueryFilter implements QueryFilter {
     private NoticeDao noticeDao;
 
     @Override
-    public ValidationResult preParamValidate(QueryParam queryParam) {
+    public QueryFilterResult preParamValidate(QueryParam queryParam) {
         return null;
     }
 
     @Override
-    public ValidationResult postParamValidate(QueryParam queryParam) {
+    public QueryFilterResult postParamValidate(QueryParam queryParam) {
         return null;
     }
 
     @Override
-    public ValidationResult postQuery(QueryParam queryParam,
+    public QueryFilterResult postQuery(QueryParam queryParam,
             ResponseEntity responseEntity) {
         Object responseBody = responseEntity.getBody();
         if (responseBody instanceof BaseModel) {

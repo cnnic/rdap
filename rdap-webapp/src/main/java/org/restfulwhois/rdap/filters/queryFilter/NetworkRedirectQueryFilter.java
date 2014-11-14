@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,31 +28,45 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.domain.controller;
+package org.restfulwhois.rdap.filters.queryFilter;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.restfulwhois.rdap.core.common.controller.BaseController;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.springframework.stereotype.Controller;
+import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryUri;
+import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
- * Base Controller for DNR object, such as domain,nameserver.
+ * NetworkRedirectQueryFilter.
  * 
  * @author jiashuo
  * 
  */
-@Controller
-public class BaseDnrController extends BaseController {
-
-    @Resource(name = "domainOrNsQueryFilters")
-    private List<QueryFilter> serviceFilters;
+@Component
+public class NetworkRedirectQueryFilter extends AbstractRedirectQueryFilter {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(NetworkRedirectQueryFilter.class);
 
     @Override
-    protected List<QueryFilter> getQueryFilters() {
-        return serviceFilters;
+    protected QueryFilterResult queryRedirect(QueryParam queryParam) {
+        LOGGER.debug("query redirect network :{}", queryParam);
+        RedirectResponse redirect = redirectService.queryIp(queryParam);
+        if (!redirectService.isValidRedirect(redirect)) {
+            return null;
+        }
+        String redirectUrl =
+                StringUtil.generateEncodedRedirectURL(
+                        queryParam.getOriginalQ(), QueryUri.IP.getName(),
+                        redirect.getUrl());
+        return new QueryFilterResult(
+                RestResponseUtil.createResponse301(redirectUrl));
     }
 
 }

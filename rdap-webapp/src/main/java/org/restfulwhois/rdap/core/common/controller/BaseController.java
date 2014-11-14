@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.filter.QueryFilterManager;
+import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
 import org.restfulwhois.rdap.core.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
@@ -195,21 +196,21 @@ public class BaseController {
         } catch (Exception e) {
             return RestResponseUtil.createResponse400();
         }
-        ValidationResult preParamVResult =
+        QueryFilterResult preParamFilterResult =
                 queryFilterManager.preParamValidate(queryParam,
                         getQueryFilters());
-        if (null != preParamVResult && preParamVResult.hasError()) {
-            return handleError(preParamVResult);
+        if (null != preParamFilterResult && preParamFilterResult.hasResult()) {
+            return preParamFilterResult.getResult();
         }
         ValidationResult validateResult = validateParam(queryParam);
         if (validateResult.hasError()) {
             return handleError(validateResult);
         }
-        ValidationResult postParamVResult =
+        QueryFilterResult postParamFilterResult =
                 queryFilterManager.postParamValidate(queryParam,
                         getQueryFilters());
-        if (null != postParamVResult && postParamVResult.hasError()) {
-            return handleError(postParamVResult);
+        if (null != postParamFilterResult && postParamFilterResult.hasResult()) {
+            return postParamFilterResult.getResult();
         }
         try {
             queryParam.convertParam();
@@ -217,11 +218,11 @@ public class BaseController {
             return RestResponseUtil.createResponse400();
         }
         ResponseEntity result = doQuery(queryParam);
-        ValidationResult postQueryResult =
+        QueryFilterResult postQueryResult =
                 queryFilterManager.postQuery(queryParam, result,
                         getQueryFilters());
-        if (null != postQueryResult && postQueryResult.hasError()) {
-            return handleError(postQueryResult);
+        if (null != postQueryResult && postQueryResult.hasResult()) {
+            return postQueryResult.getResult();
         }
         return result;
     }

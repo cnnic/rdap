@@ -39,15 +39,12 @@ import org.restfulwhois.rdap.core.common.controller.BaseController;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
 import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
 import org.restfulwhois.rdap.core.common.util.RequestUtil;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
 import org.restfulwhois.rdap.core.ip.service.IpService;
-import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +74,7 @@ public class NetworkController extends BaseController {
     @Autowired
     protected IpService queryService;
 
-    @Resource(name = "commonServiceFilters")
+    @Resource(name = "networkQueryFilters")
     private List<QueryFilter> serviceFilters;
 
     @Override
@@ -166,16 +163,6 @@ public class NetworkController extends BaseController {
         if (null != ip) {
             return RestResponseUtil.createResponse200(ip);
         }
-        LOGGER.debug("query redirect network :{}", queryParam);
-        RedirectResponse redirect = redirectService.queryIp(queryParam);
-        if (redirectService.isValidRedirect(redirect)) {
-            String redirectUrl =
-                    StringUtil.generateEncodedRedirectURL(
-                            queryParam.getOriginalQ(), QueryUri.IP.getName(),
-                            redirect.getUrl());
-            return RestResponseUtil.createResponse301(redirectUrl);
-        }
-        LOGGER.debug("   redirect network not found:{}", queryParam);
         return RestResponseUtil.createResponse404();
     }
 

@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,31 +28,48 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.domain.controller;
+package org.restfulwhois.rdap.core.common.filter;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.restfulwhois.rdap.core.common.controller.BaseController;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.springframework.stereotype.Controller;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.springframework.http.ResponseEntity;
 
 /**
- * Base Controller for DNR object, such as domain,nameserver.
+ * Validation result.
  * 
  * @author jiashuo
  * 
  */
-@Controller
-public class BaseDnrController extends BaseController {
+public class QueryFilterResult {
+    /**
+     * ResponseEntity.
+     */
+    private ResponseEntity result;
 
-    @Resource(name = "domainOrNsQueryFilters")
-    private List<QueryFilter> serviceFilters;
+    public QueryFilterResult(ResponseEntity result) {
+        super();
+        this.result = result;
+    }
+
+    /**
+     * hasResult.
+     * 
+     * @return true if has result, false if not.
+     */
+    public boolean hasResult() {
+        return null != result;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public ResponseEntity getResult() {
+        return result;
+    }
 
     @Override
-    protected List<QueryFilter> getQueryFilters() {
-        return serviceFilters;
+    public String toString() {
+        return new ToStringBuilder(this).append(result).toString();
     }
 
 }

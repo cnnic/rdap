@@ -37,9 +37,10 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * error message for HTTP response.
@@ -48,8 +49,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * 
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonPropertyOrder({ "rdapConformance", "notices", "errorCode", "title",
-        "description", "lang" })
+@JsonPropertyOrder({
+        "rdapConformance", "notices", "errorCode", "title", "description",
+        "lang" })
 public class ErrorMessage extends BaseModel {
     /**
      * identity of object.
@@ -67,6 +69,18 @@ public class ErrorMessage extends BaseModel {
      * description of error.
      */
     private List<String> description = new ArrayList<String>();
+
+    /**
+     * equalsByCode.
+     * 
+     * @param errorCode
+     *            errorCode.
+     * @return true if equals, false if not.
+     */
+    @JsonIgnore
+    public boolean equalsByCode(int errorCode) {
+        return errorCode == this.errorCode.intValue();
+    }
 
     /**
      * get null safe ErrorMessage.
@@ -168,7 +182,7 @@ public class ErrorMessage extends BaseModel {
     public void setDescription(List<String> description) {
         this.description = description;
     }
-    
+
     @Override
     public ModelType getObjectType() {
         return ModelType.ERRORMESSAGE;

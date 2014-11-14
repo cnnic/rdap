@@ -79,7 +79,7 @@ public class EntitySearchController extends BaseController {
     @Autowired
     protected EntitySearchService searchService;
 
-    @Resource(name = "commonServiceFilters")
+    @Resource(name = "commonQueryFilters")
     private List<QueryFilter> serviceFilters;
 
     @Override

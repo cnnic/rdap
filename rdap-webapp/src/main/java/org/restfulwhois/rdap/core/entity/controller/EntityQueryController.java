@@ -72,7 +72,7 @@ public class EntityQueryController extends BaseController {
     @Autowired
     protected EntityQueryService queryService;
 
-    @Resource(name = "commonServiceFilters")
+    @Resource(name = "commonQueryFilters")
     private List<QueryFilter> serviceFilters;
 
     @Override
