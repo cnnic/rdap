@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.core.common.filter;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -46,18 +45,18 @@ public interface QueryFilter {
      * 
      * @param queryParam
      *            queryParam.
-     * @return ValidationResult.
+     * @return QueryFilterResult.
      */
-    ValidationResult preParamValidate(QueryParam queryParam);
+    QueryFilterResult preParamValidate(QueryParam queryParam);
 
     /**
      * postParamValidate.
      * 
      * @param queryParam
      *            queryParam.
-     * @return ValidationResult.
+     * @return QueryFilterResult.
      */
-    ValidationResult postParamValidate(QueryParam queryParam);
+    QueryFilterResult postParamValidate(QueryParam queryParam);
 
     /**
      * postQuery.
@@ -66,8 +65,8 @@ public interface QueryFilter {
      *            queryParam.
      * @param responseEntity
      *            responseEntity.
-     * @return ValidationResult.
+     * @return QueryFilterResult.
      */
-    ValidationResult postQuery(QueryParam queryParam,
+    QueryFilterResult postQuery(QueryParam queryParam,
             ResponseEntity responseEntity);
 }

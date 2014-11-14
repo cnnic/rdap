@@ -31,8 +31,8 @@
 package org.restfulwhois.rdap.filters.queryFilter;
 
 import org.restfulwhois.rdap.core.common.filter.QueryFilter;
+import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.restfulwhois.rdap.filters.queryFilter.service.CustomColumnPolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,17 +54,17 @@ public class CustomColumnPolicyQueryFilter implements QueryFilter {
     private CustomColumnPolicyService customColumnPolicyService;
 
     @Override
-    public ValidationResult preParamValidate(QueryParam queryParam) {
+    public QueryFilterResult preParamValidate(QueryParam queryParam) {
         return null;
     }
 
     @Override
-    public ValidationResult postParamValidate(QueryParam queryParam) {
+    public QueryFilterResult postParamValidate(QueryParam queryParam) {
         return null;
     }
 
     @Override
-    public ValidationResult postQuery(QueryParam queryParam,
+    public QueryFilterResult postQuery(QueryParam queryParam,
             ResponseEntity responseEntity) {
         customColumnPolicyService.applyPolicy(responseEntity);
         return null;

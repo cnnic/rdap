@@ -33,26 +33,73 @@ package org.restfulwhois.rdap.filters.queryFilter;
 import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.redirect.service.RedirectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 
 /**
- * AccessControlQueryFilter.
+ * AbstractRedirectQueryFilter.
  * 
  * @author jiashuo
  * 
  */
-@Component
-public class AccessControlQueryFilter implements QueryFilter {
-
+public abstract class AbstractRedirectQueryFilter implements QueryFilter {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(AbstractRedirectQueryFilter.class);
+    /**
+     * redirect service.
+     */
     @Autowired
-    private AccessControlManager accessControlManager;
+    protected RedirectService redirectService;
+
+    @Override
+    public QueryFilterResult postQuery(QueryParam queryParam,
+            ResponseEntity responseEntity) {
+        LOGGER.debug("check if responseBody is 404...");
+        Object responseBody = responseEntity.getBody();
+        if (null == responseBody) {
+            LOGGER.debug("responseBody is null,return and not query redirect.");
+            return null;
+        }
+        if (responseIs404(responseBody)) {
+            LOGGER.debug("responseBody is 404, query redirect...");
+            QueryFilterResult result = queryRedirect(queryParam);
+            LOGGER.debug("query redirect result is :{}", result);
+            return result;
+        }
+        return null;
+    }
+
+    /**
+     * check if response is 404.
+     * 
+     * @param responseBody
+     *            responseBody.
+     * @return true if is 404, false if not.
+     */
+    private boolean responseIs404(Object responseBody) {
+        if (responseBody instanceof ErrorMessage) {
+            ErrorMessage errorMessage = (ErrorMessage) responseBody;
+            if (errorMessage.equalsByCode(HttpStatus.NOT_FOUND.value())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * @param queryParam
+     * @return
+     */
+    abstract protected QueryFilterResult queryRedirect(QueryParam queryParam);
 
     @Override
     public QueryFilterResult preParamValidate(QueryParam queryParam) {
@@ -61,56 +108,6 @@ public class AccessControlQueryFilter implements QueryFilter {
 
     @Override
     public QueryFilterResult postParamValidate(QueryParam queryParam) {
-        return null;
-    }
-
-    @Override
-    public QueryFilterResult postQuery(QueryParam queryParam,
-            ResponseEntity responseEntity) {
-        Object responseBody = responseEntity.getBody();
-        if (null == responseBody) {
-            return null;
-        }
-        if (responseBody instanceof ErrorMessage) {
-            return null;
-        }
-        if (responseBody instanceof BaseSearchModel) {
-            return filterForSearchResult(responseBody);
-        }
-        if (responseBody instanceof BaseModel) {
-            return filterForQueryResult(responseBody);
-        }
-        return null;
-    }
-
-    /**
-     * filterForQueryResult.
-     * 
-     * @param responseBody
-     *            responseBody.
-     * @return QueryFilterResult.
-     */
-    private QueryFilterResult filterForQueryResult(Object responseBody) {
-        BaseModel objectModel = (BaseModel) responseBody;
-        if (!accessControlManager.hasPermission(objectModel)) {
-            return new QueryFilterResult(RestResponseUtil.createResponse403());
-        }
-        return null;
-    }
-
-    /**
-     * filterForSearchResult.
-     * 
-     * @param responseBody
-     *            responseBody.
-     * @return QueryFilterResult.
-     */
-    private QueryFilterResult filterForSearchResult(Object responseBody) {
-        BaseSearchModel searchModel = (BaseSearchModel) responseBody;
-        if (searchModel.getTruncatedInfo() != null
-                && searchModel.getTruncatedInfo().getHasNoAuthForAllObjects()) {
-            return new QueryFilterResult(RestResponseUtil.createResponse403());
-        }
         return null;
     }
 
