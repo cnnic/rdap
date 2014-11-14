@@ -34,11 +34,11 @@
 		<ref bean="noticeQueryFilter" />
 		<ref bean="customColumnPolicyQueryFilter" />
 	</util:list>
-	<util:list id="errorMessageServiceFilters">
+	<util:list id="errorMessageQueryFilters">
 		<ref bean="rdapConformanceQueryFilter" />
 		<ref bean="noticeQueryFilter" />
 	</util:list>
-	<util:list id="helpQueryServiceFilters">
+	<util:list id="helpQueryQueryFilters">
 		<ref bean="rdapConformanceQueryFilter" />
 	</util:list>
 </beans>

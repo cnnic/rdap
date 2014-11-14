@@ -66,7 +66,7 @@ public class ResponseDecoratorTest extends BaseTest {
     @Autowired
     private QueryFilterManager queryFilterManager;
 
-    @Resource(name = "errorMessageServiceFilters")
+    @Resource(name = "errorMessageQueryFilters")
     private List<QueryFilter> serviceFilters;
 
     /**

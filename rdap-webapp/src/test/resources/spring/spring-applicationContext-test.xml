@@ -25,7 +25,7 @@
 	<import resource="classpath:spring/spring-servlet.xml" />
 	<import resource="classpath:spring/spring-timer.xml" />
 	<import resource="classpath:spring/spring-search.xml" />
-	<import resource="classpath:spring/spring-serviceFilter.xml" />
+	<import resource="classpath:spring/spring-queryFilter.xml" />
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
