@@ -73,11 +73,11 @@ public class AsController extends BaseController {
     protected AutnumService queryService;
 
     @Resource(name = "autnumQueryFilters")
-    private List<QueryFilter> serviceFilters;
+    private List<QueryFilter> queryFilters;
 
     @Override
     protected List<QueryFilter> getQueryFilters() {
-        return serviceFilters;
+        return queryFilters;
     }
     
     /**

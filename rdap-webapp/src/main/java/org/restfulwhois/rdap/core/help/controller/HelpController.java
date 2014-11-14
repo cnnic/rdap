@@ -72,11 +72,11 @@ public class HelpController extends BaseController {
     protected HelpService queryService;
 
     @Resource(name = "helpQueryQueryFilters")
-    private List<QueryFilter> serviceFilters;
+    private List<QueryFilter> queryFilters;
 
     @Override
     protected List<QueryFilter> getQueryFilters() {
-        return serviceFilters;
+        return queryFilters;
     }
 
     /**

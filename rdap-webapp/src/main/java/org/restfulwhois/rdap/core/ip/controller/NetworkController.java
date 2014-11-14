@@ -75,11 +75,11 @@ public class NetworkController extends BaseController {
     protected IpService queryService;
 
     @Resource(name = "networkQueryFilters")
-    private List<QueryFilter> serviceFilters;
+    private List<QueryFilter> queryFilters;
 
     @Override
     protected List<QueryFilter> getQueryFilters() {
-        return serviceFilters;
+        return queryFilters;
     }
     
     /**

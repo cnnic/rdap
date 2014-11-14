@@ -48,11 +48,11 @@ import org.springframework.stereotype.Controller;
 public class BaseDnrController extends BaseController {
 
     @Resource(name = "domainOrNsQueryFilters")
-    private List<QueryFilter> serviceFilters;
+    private List<QueryFilter> queryFilters;
 
     @Override
     protected List<QueryFilter> getQueryFilters() {
-        return serviceFilters;
+        return queryFilters;
     }
 
 }
