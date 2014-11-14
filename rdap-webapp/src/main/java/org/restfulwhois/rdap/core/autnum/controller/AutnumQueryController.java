@@ -60,12 +60,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * 
  */
 @Controller
-public class AsController extends BaseController {
+public class AutnumQueryController extends BaseController {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(AsController.class);
+            .getLogger(AutnumQueryController.class);
     /**
      * query service.
      */

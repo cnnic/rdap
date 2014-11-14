@@ -59,12 +59,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * 
  */
 @Controller
-public class HelpController extends BaseController {
+public class HelpQueryController extends BaseController {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(HelpController.class);
+            .getLogger(HelpQueryController.class);
     /**
      * query service.
      */
