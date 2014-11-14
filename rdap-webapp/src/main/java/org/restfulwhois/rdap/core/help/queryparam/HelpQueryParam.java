@@ -30,8 +30,11 @@
  */
 package org.restfulwhois.rdap.core.help.queryparam;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
+import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 
 /**
  * help query parameter bean.
@@ -47,12 +50,13 @@ public class HelpQueryParam extends QueryParam {
      * @param q
      *            query string.
      */
-    public HelpQueryParam(String q) {
-        super(q);
+    public HelpQueryParam(HttpServletRequest request) {
+        super(request);
     }
 
     @Override
     protected void initValidators() {
+        super.addValidator(new SearchUriValidator());
     }
 
     @Override
