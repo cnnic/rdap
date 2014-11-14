@@ -32,9 +32,6 @@ import sun.misc.BASE64Decoder;
  * thread local variable, in PrincipalHolder; And HTTP 401 will be responsed if
  * fail.
  * 
- * @author cnnic
- * @author jiashuo
- * 
  */
 public class AuthenticationFilter implements HttpFilter {
     /**
@@ -66,24 +63,25 @@ public class AuthenticationFilter implements HttpFilter {
     @Override
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        String tempPass = null;
-        tempPass = request.getHeader("authorization");
+        String authorizationStr = null;
+        authorizationStr = request.getHeader("authorization");
 
         Principal principal = Principal.getAnonymousPrincipal();
-        if (StringUtils.isNotBlank(tempPass)) {
+        if (StringUtils.isNotBlank(authorizationStr)) {
             String authBasicPrefix = "Basic ";
-            if (!StringUtils.startsWithIgnoreCase(tempPass, authBasicPrefix)) {
+            if (!StringUtils.startsWithIgnoreCase(authorizationStr,
+                    authBasicPrefix)) {
                 writeError401Response(response);
                 return false;
             }
-            tempPass =
-                    tempPass.substring(authBasicPrefix.length(),
-                            tempPass.length());
+            authorizationStr =
+                    authorizationStr.substring(authBasicPrefix.length(),
+                            authorizationStr.length());
             String tempPassdeCode = "";
             BASE64Decoder decoder = new BASE64Decoder();
 
             try {
-                byte[] b = decoder.decodeBuffer(tempPass);
+                byte[] b = decoder.decodeBuffer(authorizationStr);
                 tempPassdeCode = new String(b);
             } catch (Exception e) {
                 writeError401Response(response);
@@ -106,7 +104,6 @@ public class AuthenticationFilter implements HttpFilter {
             if (null == user) {
                 request.getSession().removeAttribute("SESSION_ATTR_USER_ID");
                 writeError401Response(response);
-                // chain.doFilter(request, response);
                 return false;
             } else {
                 principal = new Principal(user.getUserId());
