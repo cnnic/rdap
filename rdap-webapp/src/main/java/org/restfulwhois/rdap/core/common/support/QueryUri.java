@@ -30,6 +30,9 @@
  */
 package org.restfulwhois.rdap.core.common.support;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
  * query URI.
  * 
@@ -70,6 +73,15 @@ public enum QueryUri {
     }
 
     /**
+     * get name without URI splitter - '/'.
+     * 
+     * @return String.
+     */
+    public String getNameWithoutUriSplitter() {
+        return StringUtils.removeEnd(StringUtils.removeStart(name, "/"), "/");
+    }
+
+    /**
      * get uri name.
      * 
      * @return uri name.
@@ -86,5 +98,10 @@ public enum QueryUri {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(name).toString();
     }
 }

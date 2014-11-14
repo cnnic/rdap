@@ -79,6 +79,9 @@ public class EntitySearchController extends BaseController {
     @Autowired
     protected EntitySearchService searchService;
 
+    /**
+     * serviceFilters.
+     */
     @Resource(name = "commonQueryFilters")
     private List<QueryFilter> serviceFilters;
 
@@ -131,14 +134,6 @@ public class EntitySearchController extends BaseController {
      * @return searchType.
      */
     public EntitySearchType parseSearchType(HttpServletRequest request) {
-        try {
-            String lastSpliInURI = RequestUtil.getLastSplitInURI(request);
-            if (!"entities".equals(lastSpliInURI)) {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
         final String[] allSearchType = EntitySearchType.valuesOfString();
         String paramName =
                 RequestUtil.getFirstParameter(request, allSearchType);

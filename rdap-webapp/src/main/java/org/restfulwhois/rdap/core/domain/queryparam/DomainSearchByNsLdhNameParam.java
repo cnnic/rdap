@@ -57,6 +57,7 @@ public class DomainSearchByNsLdhNameParam extends DomainSearchParam {
 
     @Override
     protected void initValidators() {
+        super.initValidators();
         super.addValidator(new DomainSearchByNsLdhNameValidator());
     }
 

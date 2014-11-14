@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.exception.DecodeException;
+import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,29 @@ public class RequestUtil {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(RequestUtil.class);
+
+    /**
+     * validate last split URI is expectedQueryUri.
+     * 
+     * @param request
+     *            request
+     * @param expectedQueryUri
+     *            expectedQueryUri.
+     * @return true if is expected URI, false if not.
+     */
+    public static boolean validateLastSplitUri(HttpServletRequest request,
+            QueryUri expectedQueryUri) {
+        try {
+            String lastSpliInURI = RequestUtil.getLastSplitInURI(request);
+            if (!expectedQueryUri.getNameWithoutUriSplitter().equals(
+                    lastSpliInURI)) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * get parameter from request,get first if has more than one param.

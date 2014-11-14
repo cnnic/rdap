@@ -120,15 +120,14 @@ public class DomainSearchController extends BaseDnrController {
         return null;
     }
 
+    /**
+     * parseSearchType.
+     * 
+     * @param request
+     *            request.
+     * @return DomainSearchType.
+     */
     public DomainSearchType parseSearchType(HttpServletRequest request) {
-        try {
-            String lastSpliInURI = RequestUtil.getLastSplitInURI(request);
-            if (!"domains".equals(lastSpliInURI)) {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
         final String[] allSearchType = DomainSearchType.valuesOfString();
         String paramName =
                 RequestUtil.getFirstParameter(request, allSearchType);

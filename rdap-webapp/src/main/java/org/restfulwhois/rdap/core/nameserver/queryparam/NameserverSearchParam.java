@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
+import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 
 /**
@@ -59,6 +60,11 @@ public abstract class NameserverSearchParam extends QueryParam {
      */
     public NameserverSearchParam() {
         super();
+    }
+
+    @Override
+    protected void initValidators() {
+        addValidator(new SearchUriValidator());
     }
 
     /**
@@ -103,5 +109,5 @@ public abstract class NameserverSearchParam extends QueryParam {
     public QueryUri getQueryUri() {
         return QueryUri.NAMESERVERS;
     }
-    
+
 }
