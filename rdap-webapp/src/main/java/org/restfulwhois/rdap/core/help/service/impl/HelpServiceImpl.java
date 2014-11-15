@@ -76,7 +76,7 @@ public class HelpServiceImpl implements HelpService {
     @Override
     public Help queryHelp(QueryParam queryParam) {
         Help help = new Help();
-        help.setNotices(noticeDao.getHelp());
+        help.setNotices(noticeDao.queryHelp());
         return help;
     }
 

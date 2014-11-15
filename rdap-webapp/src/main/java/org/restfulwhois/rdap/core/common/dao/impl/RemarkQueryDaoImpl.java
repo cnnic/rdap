@@ -42,11 +42,11 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.common.model.Link;
 import org.restfulwhois.rdap.core.common.model.Remark;
-import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
+import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,7 +169,7 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
     public List<Remark> loadRemarksByTypes() {
         LOGGER.debug("loadRemarksByTypes, types:{},");
         final String typesJoinedByComma = StringUtils.join(
-                  TruncatedInfo.TYPES, ",");
+               TruncateReason.getAllReasonTypes(), ",");
         final String sql = "select notice.*, description.description"
              + " from RDAP_NOTICE notice "
              + " left outer join RDAP_NOTICE_DESCRIPTION description "

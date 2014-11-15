@@ -55,9 +55,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.restfulwhois.rdap.acl.bean.Principal;
+import org.restfulwhois.rdap.core.common.service.NoticeAndRemarkService;
 import org.restfulwhois.rdap.core.common.service.RdapConformanceService;
 import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -106,6 +108,9 @@ public abstract class BaseTest {
     
     @Autowired
     private RdapConformanceService rdapConformanceService;
+    
+    @Autowired
+    private NoticeAndRemarkService noticeAndRemarkService;
 
     /**
      * or use BeforeClass.
@@ -141,6 +146,8 @@ public abstract class BaseTest {
     public void before() throws Exception {
         resetDefaultMaxSizeSearch();
         rdapConformanceService.initRdapConformance();
+        RestResponseUtil.initErrorMessages();
+        noticeAndRemarkService.initNoticeAndRemark();        
     }
 
     @After

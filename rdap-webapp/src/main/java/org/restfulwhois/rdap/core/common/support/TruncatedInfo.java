@@ -33,28 +33,25 @@ package org.restfulwhois.rdap.core.common.support;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 
 /**
- *  the truncated info include resultsTruncated hasNoAuthForAllObjects and  
- *  reasonTypeShortName.
+ *  the class used to describe truncated info.For example :
+ *  truncated reasons, truncated or not, has no access to all objects etc.   
  * 
  * @author zhanyq
  *            
  */
-@JsonIgnoreProperties(value = {"resultsTruncated", "hasNoAuthForAllObjects",
-        "reasonTypeShortName" })
+@JsonIgnoreType
 public class TruncatedInfo {  
 
     /**
-     * TruncatedReason enum.
-     * 
-     * @author jiashuo
+     * TruncatedReason enum.     
      * 
      */
       public enum TruncateReason {
         /**
-         * two  reason.
+         * two reason type.
          */
        TRUNCATEREASON_AUTH("authorization"), TRUNCATEREASON_EXLOAD(
                "excessiveLoad");
@@ -64,7 +61,7 @@ public class TruncatedInfo {
         private String name;
 
         /**
-         * NoticeType.
+         * TruncateReason.
          * 
          * @param name
          *            a string of type.
@@ -80,6 +77,21 @@ public class TruncatedInfo {
          */
         public String getName() {
             return name;
+        }
+        
+        /**
+         * get all reason type.
+         * 
+         * 
+         * @return model ModelType.
+         */
+        public static List<String> getAllReasonTypes() {
+            TruncateReason[] truncateReasons = TruncateReason.values();
+            List<String> reasonTypes = new ArrayList(); 
+            for (TruncateReason truncateReason : truncateReasons) {
+                 reasonTypes.add("'" + truncateReason.getName() + "'");
+            }
+            return reasonTypes;
         }
     }
 
@@ -98,29 +110,8 @@ public class TruncatedInfo {
     /**
      * the reason of a single object has been returned and data
      * in that object has been truncated.
-     */
-   // private String reasonTypeShortName;
-    
-    private List<TruncateReason> truncateReasons;
-    
-    /**
-     * reasonType authorization.
-     */
-   // public static final String REASONTYPE_AUTH = "authorization";
-    
-    /**
-     * reasonType excessiveLoad.
-     */
-   // public static final String REASONTYPE_EXLOAD = "excessiveLoad";
-    /**
-     * reason type list.
-     */
-    public static final List<String> TYPES = new ArrayList<String>();
-    
-    static {
-        TYPES.add("'" + TruncateReason.TRUNCATEREASON_AUTH.getName() + "'");
-        TYPES.add("'" + TruncateReason.TRUNCATEREASON_EXLOAD.getName() + "'");
-    }
+     */   
+    private List<TruncateReason> truncateReasons; 
 
     /**
      * get resultsTruncated.
@@ -177,15 +168,7 @@ public class TruncatedInfo {
      */
     public void setTruncateReasons(List<TruncateReason> truncateReasons) {
         this.truncateReasons = truncateReasons;
-    }   
-    
-    /**
-     * set TruncatedReasonForAuth.
-     *     
-     */
-   /* public void setTruncatedReasonForAuth() {
-        this.reasonTypeShortName = REASONTYPE_AUTH;       
-    }*/
+    }      
     
     /**
      * add truncateReason.

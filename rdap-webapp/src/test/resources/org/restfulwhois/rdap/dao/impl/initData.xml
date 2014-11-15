@@ -47,4 +47,24 @@
         REASON_TYPE_SHORT_NAME='excessiveLoad' />
     <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="114" NOTICE_ID="114" 
         DESCRIPTION="The object does not contain all data due to excessively heavy load on the server." />
+        
+        
+        <!-- notices -->
+    <RDAP_NOTICE NOTICE_ID="115" TITLE="Terms of Use" TYPE="notice" /> 
+    <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="115"
+        NOTICE_ID="115" DESCRIPTION="description1" />
+    <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="116"
+        NOTICE_ID="115" DESCRIPTION="description2" />
+    <!-- notice link -->
+    <RDAP_LINK LINK_ID="1022" VALUE="http://example.com/context_uri"
+        REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+        TYPE="application/json" />
+    <REL_LINK_OBJECT REL_LINK_ID="1022" REL_ID="115"
+        REL_OBJECT_TYPE="notice" LINK_ID="1022" />
+        
+    <RDAP_NOTICE NOTICE_ID="116" TITLE="no use" TYPE="notice" />    
+    <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="211"
+        NOTICE_ID="116" DESCRIPTION="description1" />
+    <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="222"
+        NOTICE_ID="116" DESCRIPTION="description2" />
 </dataset>

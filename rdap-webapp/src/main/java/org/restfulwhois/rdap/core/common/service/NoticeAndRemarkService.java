@@ -30,13 +30,13 @@
  */
 package org.restfulwhois.rdap.core.common.service;
 
-import java.util.Map;
+import java.util.List;
 
 import org.restfulwhois.rdap.core.common.model.Notice;
 import org.restfulwhois.rdap.core.common.model.Remark;
 
 /**
- * notice interface.
+ * notice and remark interface.
  * 
  * query notice and remark.
  * 
@@ -45,18 +45,34 @@ import org.restfulwhois.rdap.core.common.model.Remark;
  * @author zhanyq
  * 
  */
-public interface NoticeService {
+public interface NoticeAndRemarkService {    
     /**
-     * get all Notices.
-     * 
-     * @return Notices map,[key:NOTICE+reasonTypeShortName,value:Notice]
+     * initial notice and remark list.
      */
-    Map<String, Notice> getAllNoticesMap();
+    void initNoticeAndRemark();
     
     /**
-     * get all Remarks.
-     * 
-     * @return Remarks map,[key:REMARK+reasonTypeShortName,value:Remarks]
+     * get notices  for no truncated. 
+     *
+     * @return Notice
      */
-    Map<String, Remark> getAllRemarksMap();
+    List<Notice> getNoticeNoTruncated();
+    
+    /**
+     * get notices by reasonTypeShortName.
+     * 
+     * @param reasonTypeShortName
+     *            reasonTypeShortName
+     * @return Notice
+     */
+    Notice getNoticeByReasonType(String reasonTypeShortName);
+    
+    /**
+     * get Remark by reasonTypeShortName.
+     * 
+     * @param reasonTypeShortName
+     *            reasonTypeShortName
+     * @return Remark
+     */
+    Remark getRemarkByReasonType(String reasonTypeShortName);
 }

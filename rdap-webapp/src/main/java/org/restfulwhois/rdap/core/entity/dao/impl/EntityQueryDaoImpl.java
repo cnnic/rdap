@@ -51,11 +51,11 @@ import org.restfulwhois.rdap.core.common.model.Remark;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.ModelStatus;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
+import org.restfulwhois.rdap.core.common.service.NoticeAndRemarkService;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
-import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
@@ -98,6 +98,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      */
     @Autowired
     private QueryDao<PublicId> publicIdQueryDao;
+    
+    /**
+     * loadNoticeAndRemarkService.
+     */
+    @Autowired
+    private NoticeAndRemarkService noticeAndRemarkService;
     /**
      * remark dao.
      */
@@ -277,7 +283,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
              List <TruncateReason> truncateReasons = entity
                     .getTruncatedInfo().getTruncateReasons();
             for (TruncateReason truncateReason : truncateReasons) {
-                  remarks.add(CustomizeNoticeandRemark
+                  remarks.add(noticeAndRemarkService
                           .getRemarkByReasonType(truncateReason.getName()));
             }  
         }
