@@ -29,11 +29,14 @@
  * DAMAGE.
  */
 package org.restfulwhois.rdap.common.util;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
 import org.restfulwhois.rdap.core.common.model.base.BaseCustomModel;
+import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,52 +49,57 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  */
 public class BaseCustomModelTest {
-	/**
+    /**
      * test prefix.
      */
     @Test
     public void testBasecCustomMode() {
         Entity entity = null;
         entity = new Entity();
-        entity.setPort43("port43");      
-        CustomModel custom = new CustomModel();       
+        entity.setPort43("port43");
+        CustomModel custom = new CustomModel();
         custom.setProtocol("HTTP");
         custom.setDigest(1);
         entity.setCustomModel(custom);
-        ObjectMapper mapper = new ObjectMapper();        
-        // Convert object to JSON string  
+        ObjectMapper mapper = new ObjectMapper();
+        // Convert object to JSON string
         String entityJson = null;
         try {
-            entityJson = mapper.writeValueAsString(entity);            
+            entityJson = mapper.writeValueAsString(entity);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-         
+
         assertNotNull(entityJson);
-        assertThat(entityJson, new StringContains("custom_protocol"));
-        assertThat(entityJson, new StringContains("custom_digest"));
-       
-        
-        
+        assertThat(entityJson, new StringContains(
+                BaseModel.CUSTOM_PROPERTY_PREFIX + "protocol"));
+        assertThat(entityJson, new StringContains(
+                BaseModel.CUSTOM_PROPERTY_PREFIX + "digest"));
+
     }
+
     /**
      * test prefix.
      */
-     class CustomModel extends BaseCustomModel {
+    class CustomModel extends BaseCustomModel {
         private String protocol;
-    	private int digest;
-    	public String getProtocol() {
-			return protocol;
-		}
-		public void setProtocol(String protocol) {
-			this.protocol = protocol;
-		}
-		public int getDigest() {
-			return digest;
-		}
-		public void setDigest(int digest) {
-			this.digest = digest;
-		}
-		
+        private int digest;
+
+        public String getProtocol() {
+            return protocol;
+        }
+
+        public void setProtocol(String protocol) {
+            this.protocol = protocol;
+        }
+
+        public int getDigest() {
+            return digest;
+        }
+
+        public void setDigest(int digest) {
+            this.digest = digest;
+        }
+
     }
 }

@@ -31,7 +31,7 @@
 package org.restfulwhois.rdap.core.common.exception;
 
 /**
- * decode exception.
+ * character decode exception.
  * 
  * @author jiashuo
  * 

@@ -37,7 +37,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
- * QueryFilterManager.
+ * manage query filters.
+ * 
+ * <pre>
+ * QueryFilterResult will be returned whenever at least one filter returns
+ *  not null value.
+ * if all filters returns null, it will return null.
+ * </pre>
  * 
  * @author jiashuo
  * 
@@ -45,7 +51,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class QueryFilterManager {
     /**
-     * preParamValidate.
+     * do before parameter validate.
      * 
      * @param queryParam
      *            queryParam.
@@ -66,7 +72,7 @@ public class QueryFilterManager {
     }
 
     /**
-     * postParamValidate.
+     * do post parameter validate.
      * 
      * @param queryParam
      *            queryParam.
@@ -87,7 +93,7 @@ public class QueryFilterManager {
     }
 
     /**
-     * postQuery.
+     * do post query.
      * 
      * @param queryParam
      *            queryParam.

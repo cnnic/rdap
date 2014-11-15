@@ -83,9 +83,9 @@ public class RestResponseUtil {
     private static QueryFilterManager queryFilterManager;
 
     /**
-     * serviceFilters.
+     * queryFilters.
      */
-    private static List<QueryFilter> serviceFilters;
+    private static List<QueryFilter> queryFilters;
 
     /**
      * init the error message and policy service.
@@ -296,7 +296,7 @@ public class RestResponseUtil {
         ResponseEntity<ErrorMessage> responseEntity =
                 new ResponseEntity<ErrorMessage>(errorMessage, headers,
                         errorStatus);
-        queryFilterManager.postQuery(null, responseEntity, serviceFilters);
+        queryFilterManager.postQuery(null, responseEntity, queryFilters);
         return responseEntity;
     }
 
@@ -316,7 +316,7 @@ public class RestResponseUtil {
         ResponseEntity<ErrorMessage> responseEntity =
                 new ResponseEntity<ErrorMessage>(errorMessage, responseHeaders,
                         errorStatus);
-        queryFilterManager.postQuery(null, responseEntity, serviceFilters);
+        queryFilterManager.postQuery(null, responseEntity, queryFilters);
         return responseEntity;
     }
 
@@ -338,7 +338,7 @@ public class RestResponseUtil {
 
     @Resource(name = "errorMessageQueryFilters")
     public void setServiceFilters(List<QueryFilter> serviceFilters) {
-        RestResponseUtil.serviceFilters = serviceFilters;
+        RestResponseUtil.queryFilters = serviceFilters;
     }
 
 }

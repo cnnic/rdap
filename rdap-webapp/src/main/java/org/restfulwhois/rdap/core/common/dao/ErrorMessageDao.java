@@ -36,16 +36,16 @@ import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 
 /**
  * error message DAO.
- * Interface to access ErrorMessageDaoImpl.
  * 
  * @author jiashuo.
  * 
  */
 public interface ErrorMessageDao {
     /**
-     * get all error messages list.
+     * get all error messages.
      * 
      * @return error messages list.
      */
     List<ErrorMessage> getAllErrorMessages();
+
 }

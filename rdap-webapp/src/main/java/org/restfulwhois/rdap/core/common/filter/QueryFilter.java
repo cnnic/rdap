@@ -34,14 +34,21 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.springframework.http.ResponseEntity;
 
 /**
- * QueryFilter.
+ * filter in query process.
+ * 
+ * <pre>
+ *     All filter method return an object of type QueryFilterResult:
+ *     1.if the return value is null, the query process will continue.
+ *     2.if not null, the query process will intercepted and the ResponseEntity
+ *       in the returned QueryFilterResult object will be returned to caller.
+ * </pre>
  * 
  * @author jiashuo
  * 
  */
 public interface QueryFilter {
     /**
-     * preParamValidate.
+     * do before parameter validate.
      * 
      * @param queryParam
      *            queryParam.
@@ -50,7 +57,7 @@ public interface QueryFilter {
     QueryFilterResult preParamValidate(QueryParam queryParam);
 
     /**
-     * postParamValidate.
+     * do after parameter validate.
      * 
      * @param queryParam
      *            queryParam.
@@ -59,12 +66,12 @@ public interface QueryFilter {
     QueryFilterResult postParamValidate(QueryParam queryParam);
 
     /**
-     * postQuery.
+     * do after query.
      * 
      * @param queryParam
      *            queryParam.
      * @param responseEntity
-     *            responseEntity.
+     *            responseEntity including the query result.
      * @return QueryFilterResult.
      */
     QueryFilterResult postQuery(QueryParam queryParam,
