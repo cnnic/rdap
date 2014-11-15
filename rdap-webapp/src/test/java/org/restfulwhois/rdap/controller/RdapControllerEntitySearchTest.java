@@ -220,4 +220,25 @@ public class RdapControllerEntitySearchTest extends BaseTest {
                 .andExpect(jsonPath("$.errorCode").value(400));
     }
 
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(value = {
+            "classpath:org/restfulwhois/rdap/dao/impl/entity-search.xml",
+            "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        String handle = "truncated1*";
+        search403(handle);
+    }
+
+    private void search403(String q) throws Exception {
+        mockMvc.perform(
+                get(URI_ENTITY_SEARCH + q).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
+
+    }
+
 }

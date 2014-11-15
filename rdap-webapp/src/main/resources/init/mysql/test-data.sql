@@ -1,8 +1,5 @@
-USE `rdap`;
 
-#
-# Data for table "RDAP_AUTNUM"
-#
+USE `rdap`;
 
 INSERT INTO `RDAP_AUTNUM` (`AS_ID`,`HANDLE`,`START_AUTNUM`,`END_AUTNUM`,`NAME`,`TYPE`,`COUNTRY`,`LANG`,`PORT43`) VALUES (1,'as-1',62464,63487,'as-1:62464~63487','DIRECT ALLOCATION','CN','en','cnnic.cn'),(2,'as-2',1,19,'as-2:1~19','DIRECT ALLOCATION','CN','en','cnnic.cn'),(3,'as-3',9981,9981,'as-3:9981','DIRECT ALLOCATION','CN','en','cnnic.cn'),(4,'as-4',31,31,'as-4:31','DIRECT ALLOCATION','CN','en','cnnic.cn'),(5,'as-5',20,30,'as-5:20~30','DIRECT ALLOCATION','CN','en','cnnic.cn'),(6,'as-6',167295,167295,'as-6:167295','DIRECT ALLOCATION','CN','en','cnnic.cn');
 
@@ -17,6 +14,12 @@ INSERT INTO `RDAP_AUTNUM_REDIRECT` (`AS_REDIRECT_ID`,`START_AUTNUM`,`END_AUTNUM`
 #
 
 INSERT INTO `RDAP_AUTNUM_STATUS` (`AS_STATUS_ID`,`AS_ID`,`STATUS`) VALUES (1,1,'validated'),(2,2,'transfer prohibited'),(3,3,'private'),(4,4,'associated'),(5,5,'active'),(6,6,'pending update');
+
+#
+# Data for table "RDAP_CONFORMANCE"
+#
+
+INSERT INTO `RDAP_CONFORMANCE` (`CONFORMANCE_ID`,`RDAP_CONFORMANCE`) VALUES (1,'rdap_level_0');
 
 #
 # Data for table "RDAP_DOMAIN"
@@ -55,6 +58,12 @@ INSERT INTO `RDAP_ENTITY` (`ENTITY_ID`,`HANDLE`,`KIND`,`FN`,`EMAIL`,`TITLE`,`ORG
 INSERT INTO `RDAP_ENTITY_STATUS` (`ENTITY_STATUS_ID`,`ENTITY_ID`,`STATUS`) VALUES (1,1,'active'),(2,2,'delete prohibited'),(3,3,'active'),(4,4,'active'),(5,5,'active');
 
 #
+# Data for table "RDAP_ERRORMESSAGE"
+#
+
+INSERT INTO `RDAP_ERRORMESSAGE` (`ERROR_ID`,`ERROR_CODE`,`TITLE`,`DESCRIPTION`,`LANG`) VALUES (1,400,'BAD REQUEST','BAD REQUEST','en'),(2,404,'NOT FOUND','NOT FOUND','en'),(3,500,'INTERNAL SERVER ERROR','INTERNAL SERVER ERROR','en'),(4,405,'METHOD NOT ALLOWED','METHOD NOT ALLOWED','en'),(5,415,'UNSUPPORTED MEDIA TYPE','UNSUPPORTED MEDIA TYPE','en'),(6,422,'UNPROCESSABLE ENTITY','UNPROCESSABLE ENTITY','en'),(7,401,'Unauthorized','Unauthorized','en'),(8,403,'Forbidden','Forbidden','en'),(9,509,'Bandwidth Limit Exceeded','Bandwidth Limit Exceeded','en'),(10,429,'Too Many Requests','Too Many Requests','en'),(11,501,'Not Implemented','Not Implemented','en'),(12,301,'Moved Permanently','Moved Permanently','en');
+
+#
 # Data for table "RDAP_EVENT"
 #
 
@@ -85,7 +94,7 @@ INSERT INTO `RDAP_IDENTITY_USER` (`USER_ID`,`USER_NAME`,`USER_PWD`) VALUES (0,'c
 # Data for table "RDAP_IP"
 #
 
-INSERT INTO `RDAP_IP` (`IP_ID`,`HANDLE`,`ENDADDRESS`,`STARTADDRESS`,`VERSION`,`NAME`,`TYPE`,`COUNTRY`,`PARENT_HANDLE`,`LANG`,`PORT43`,`CIDR`) VALUES (1,'218.241.111.1-v4',X'DAF16F01',X'DAF16F01','v4','cnnic-1','DIRECT ALLOCATION','CN','218.241.111.1/24-v4','en','whois.cnnic.cn','218.241.111.1/32'),(2,'218.241.111.1/24-v4',X'DAF16FFF',X'DAF16F00','v4','cnnic-2','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','218.241.111.1/24'),(3,'218.0.0.3-v4',X'DA000003',X'DA000003','v4','cnnic-3','DIRECT ALLOCATION','CN',NULL,'en','whois.cnnic.cn','218.0.0.3/32'),(4,'218.241.0.0-218.241.0.3-v4','','','v4','cnnic-4','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn',''),(5,'111.255.0.0-111.255.255.255-v4',X'6FFFFFFF',X'6FFF0000','v4','cnnic-5','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','111.255.0.0/16'),(6,'3000:0DB8:0000:0000:0000:0000:1428:0000-v6',X'30000DB8000000000000000014280000',X'30000DB8000000000000000014280000','v6','cnnic-6','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','3000:0DB8:0000:0000:0000:0000:1428:0000/128'),(7,'3000:0000:0000:001F:FFFF:FFFF:FFFF:0000-3000:0000:0000:001F:FFFF:FFFF:FFFF:FFFF',X'300000000000001FFFFFFFFFFFFFFFFF',X'300000000000001FFFFFFFFFFFFF0000','v6','cnnic-7','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','3000:0000:0000:001F:FFFF:FFFF:FFFF:0000/112');
+INSERT INTO `RDAP_IP` (`IP_ID`,`HANDLE`,`ENDADDRESS`,`STARTADDRESS`,`VERSION`,`NAME`,`TYPE`,`COUNTRY`,`PARENT_HANDLE`,`LANG`,`PORT43`,`CIDR`) VALUES (1,'218.241.111.1-v4',X'DAF16F01',X'DAF16F01','v4','cnnic-1','DIRECT ALLOCATION','CN','218.241.111.1/24-v4','en','whois.cnnic.cn','218.241.111.1/32'),(2,'218.241.111.1/24-v4',X'DAF16FFF',X'DAF16F00','v4','cnnic-2','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','218.241.111.1/24'),(3,'218.0.0.3-v4',X'DA000003',X'DA000003','v4','cnnic-3','DIRECT ALLOCATION','CN',NULL,'en','whois.cnnic.cn','218.0.0.3/32'),(5,'111.255.0.0-111.255.255.255-v4',X'6FFFFFFF',X'6FFF0000','v4','cnnic-5','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','111.255.0.0/16'),(6,'3000:0DB8:0000:0000:0000:0000:1428:0000-v6',X'30000DB8000000000000000014280000',X'30000DB8000000000000000014280000','v6','cnnic-6','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','3000:0DB8:0000:0000:0000:0000:1428:0000/128'),(7,'3000:0000:0000:001F:FFFF:FFFF:FFFF:0000-3000:0000:0000:001F:FFFF:FFFF:FFFF:FFFF',X'300000000000001FFFFFFFFFFFFFFFFF',X'300000000000001FFFFFFFFFFFFF0000','v6','cnnic-7','DIRECT ALLOCATION','CN',NULL,'en','cnnic.cn','3000:0000:0000:001F:FFFF:FFFF:FFFF:0000/112');
 
 #
 # Data for table "RDAP_IP_REDIRECT"
@@ -97,7 +106,7 @@ INSERT INTO `RDAP_IP_REDIRECT` (`RDAP_IP_REDIRECT_ID`,`ENDADDRESS`,`STARTADDRESS
 # Data for table "RDAP_IP_STATUS"
 #
 
-INSERT INTO `RDAP_IP_STATUS` (`IP_STATUS_ID`,`IP_ID`,`STATUS`) VALUES (1,1,'active'),(2,2,'active'),(3,3,'pending update'),(4,4,'pending update'),(5,5,'pending update'),(6,6,'pending update'),(7,7,'delete prohibited');
+INSERT INTO `RDAP_IP_STATUS` (`IP_STATUS_ID`,`IP_ID`,`STATUS`) VALUES (1,1,'active'),(2,2,'active'),(3,3,'pending update'),(5,5,'pending update'),(6,6,'pending update'),(7,7,'delete prohibited');
 
 #
 # Data for table "RDAP_KEYDATA"
@@ -109,19 +118,13 @@ INSERT INTO `RDAP_KEYDATA` (`KEYDATA_ID`,`FLAGS`,`PROTOCOL`,`PUBLIC_KEY`,`ALGORI
 # Data for table "RDAP_LINK"
 #
 
-INSERT INTO `RDAP_LINK` (`LINK_ID`,`VALUE`,`REL`,`HREF`,`MEDIA`,`TYPE`) VALUES (1,'http://rdap.restfulwhois.org/.well-known/rdap/','self','http://rdap.restfulwhois.org/.well-known/rdap/','screen','application/rdap+json'),(2,'http://rdap.restfulwhois.org/.well-known/rdap/','self','http://rdap.restfulwhois.org/.well-known/rdap/','screen','application/rdap+json'),(3,'https://github.com/cnnic/rdap/wiki/api-doc','alternate','https://github.com/cnnic/rdap/wiki/api-doc',NULL,'text/html'),(4,'http://rdap.restfulwhois.org/.well-known/rdap/autnum/62464','self','http://rdap.restfulwhois.org/.well-known/rdap/autnum/63487',NULL,'application/rdap+json'),(5,'http://rdap.restfulwhois.org/.well-known/rdap/autnum/1','self','http://rdap.restfulwhois.org/.well-known/rdap/autnum/19',NULL,'application/rdap+json'),(6,'http://rdap.restfulwhois.org/.well-known/rdap/autnum/9981','self','http://rdap.restfulwhois.org/.well-known/rdap/autnum/9981',NULL,'application/rdap+json'),(7,'http://rdap.restfulwhois.org/.well-known/rdap/domain/111.241.218.in-addr.arpa','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/111.241.218.in-addr.arpa',NULL,'application/rdap+json'),(8,'http://rdap.restfulwhois.org/.well-known/rdap/domain/1.2.3.4.5.6.7.8.9.0.1.2.3.4.5.6.7.8.9.0.1.2.3.4.5.6.7.8.0.0.0.3.ip6.arpa','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/1.2.3.4.5.6.7.8.9.0.1.2.3.4.5.6.7.8.9.0.1.2.3.4.5.6.7.8.0.0.0.3.ip6.arpa',NULL,'application/rdap+json'),(9,'http://rdap.restfulwhois.org/.well-known/rdap/domain/156.in-addr.arpa','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/156.in-addr.arpa',NULL,'application/rdap+json'),(12,'http://rdap.restfulwhois.org/.well-known/rdap/domain/3.0.0.218.in-addr.arpa','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/3.0.0.218.in-addr.arpa',NULL,'application/rdap+json'),(15,'http://rdap.restfulwhois.org/.well-known/rdap/autnum/31','self','http://rdap.restfulwhois.org/.well-known/rdap/autnum/31',NULL,'application/rdap+json'),(16,'http://rdap.restfulwhois.org/.well-known/rdap/autnum/20','self','http://rdap.restfulwhois.org/.well-known/rdap/autnum/30',NULL,'application/rdap+json'),(17,'http://rdap.restfulwhois.org/.well-known/rdap/autnum/167295','self','http://rdap.restfulwhois.org/.well-known/rdap/autnum/167295',NULL,'application/rdap+json'),(18,'http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--123123.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--123123.cn',NULL,'application/rdap+json'),(19,'http://rdap.restfulwhois.org/.well-known/rdap/domain/cnnic.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/cnnic.cn',NULL,'application/rdap+json'),(20,'http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--fiqa61au8b7zsevnm8ak20mc4a87e.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--fiqa61au8b7zsevnm8ak20mc4a87e.cn',NULL,'application/rdap+json'),(21,'http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--elaaaa.xn--fiqs8s','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--elaaaa.xn--fiqs8s',NULL,'application/rdap+json'),(22,'http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--fiq8iy4u6s7b8bb.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--fiq8iy4u6s7b8bb.cn',NULL,'application/rdap+json'),(23,'http://rdap.restfulwhois.org/.well-known/rdap/domain/example.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/example.cn',NULL,'application/rdap+json'),(24,'http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--0zwm56d.xn--fiqs8s','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--0zwm56d.xn--fiqs8s',NULL,'application/rdap+json'),(25,'http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--1231234.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--1231234.cn',NULL,'application/rdap+json'),(26,'http://rdap.restfulwhois.org/.well-known/rdap/domain/0.0.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/0.0.cn',NULL,'application/rdap+json'),(27,'http://rdap.restfulwhois.org/.well-known/rdap/domain/0.1.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/0.1.cn',NULL,'application/rdap+json'),(28,'http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--fiqa61au8b7zsevnm8ak20mc4a87e.xn--fiqs8s','self','http://rdap.restfulwhois.org/.well-known/rdap/domain/xn--fiqa61au8b7zsevnm8ak20mc4a87e.xn--fiqs8s',NULL,'application/rdap+json'),(29,'http://rdap.restfulwhois.org/.well-known/rdap/entity/et-1','self','http://rdap.restfulwhois.org/.well-known/rdap/entity/et-1',NULL,'application/rdap+json'),(30,'http://rdap.restfulwhois.org/.well-known/rdap/entity/et-2','self','http://rdap.restfulwhois.org/.well-known/rdap/entity/et-2',NULL,'application/rdap+json'),(31,'http://rdap.restfulwhois.org/.well-known/rdap/entity/et-3','self','http://rdap.restfulwhois.org/.well-known/rdap/entity/et-3',NULL,'application/rdap+json'),(32,'http://rdap.restfulwhois.org/.well-known/rdap/entity/et-4','self','http://rdap.restfulwhois.org/.well-known/rdap/entity/et-4',NULL,'application/rdap+json'),(33,'http://rdap.restfulwhois.org/.well-known/rdap/entity/et-5','self','http://rdap.restfulwhois.org/.well-known/rdap/entity/et-5',NULL,'application/rdap+json'),(34,'http://rdap.restfulwhois.org/.well-known/rdap/ip/218.241.111.1','self','http://rdap.restfulwhois.org/.well-known/rdap/ip/218.241.111.1',NULL,'application/rdap+json'),(35,'http://rdap.restfulwhois.org/.well-known/rdap/ip/218.241.111.0/24','self','http://rdap.restfulwhois.org/.well-known/rdap/ip/218.241.111.255/24',NULL,'application/rdap+json'),(36,'http://rdap.restfulwhois.org/.well-known/rdap/ip/218.0.0.3','self','http://rdap.restfulwhois.org/.well-known/rdap/ip/218.0.0.3',NULL,'application/rdap+json'),(37,'http://rdap.restfulwhois.org/.well-known/rdap/ip/218.241.0.0/30','self','http://rdap.restfulwhois.org/.well-known/rdap/ip/218.241.0.0/30',NULL,'application/rdap+json'),(38,'http://rdap.restfulwhois.org/.well-known/rdap/ip/111.255.0.0/16','self','http://rdap.restfulwhois.org/.well-known/rdap/ip/111.255.0.0/16',NULL,'application/rdap+json'),(39,'http://rdap.restfulwhois.org/.well-known/rdap/ip/3000:0DB8:0000:0000:0000:0000:1428:0000','self','http://rdap.restfulwhois.org/.well-known/rdap/ip/3000:0DB8:0000:0000:0000:0000:1428:0000',NULL,'application/rdap+json'),(40,'http://rdap.restfulwhois.org/.well-known/rdap/ip/3000:0000:0000:001F:FFFF:FFFF:FFFF:0000/112','self','http://rdap.restfulwhois.org/.well-known/rdap/ip/3000:0000:0000:001F:FFFF:FFFF:FFFF:0000/112',NULL,'application/rdap+json'),(41,'http://rdap.restfulwhois.org/.well-known/rdap/nameserver/xn--1-dr6av31f.xn--0zwm56d.xn--fiqs8s','self','http://rdap.restfulwhois.org/.well-known/rdap/nameserver/xn--1-dr6av31f.xn--0zwm56d.xn--fiqs8s',NULL,'application/rdap+json'),(42,'http://rdap.restfulwhois.org/.well-known/rdap/nameserver/ns1.host.cn','self','http://rdap.restfulwhois.org/.well-known/rdap/nameserver/ns1.host.cn',NULL,'application/rdap+json'),(43,'http://rdap.restfulwhois.org/.well-known/rdap/nameserver/ns1.xn--tiq422d.xn--fiqs8s','self','http://rdap.restfulwhois.org/.well-known/rdap/nameserver/ns1.xn--tiq422d.xn--fiqs8s',NULL,'application/rdap+json'),(44,'http://rdap.restfulwhois.org/.well-known/rdap/nameserver/ns2.xn--tiq422d.xn--fiqs8s','self','http://rdap.restfulwhois.org/.well-known/rdap/nameserver/ns2.xn--tiq422d.xn--fiqs8s',NULL,'application/rdap+json'),(45,'http://rdap.restfulwhois.org/.well-known/rdap/nameserver/xn--tiq422d.xn--0zwm56d.xn--fiqs8s','self','http://rdap.restfulwhois.org/.well-known/rdap/nameserver/xn--tiq422d.xn--0zwm56d.xn--fiqs8s',NULL,'application/rdap+json');
+INSERT INTO `RDAP_LINK` (`LINK_ID`,`VALUE`,`REL`,`HREF`,`MEDIA`,`TYPE`,`TITLE`) VALUES (1,'https://github.com/cnnic/rdap/wiki/api-doc','alternate','https://github.com/cnnic/rdap/wiki/api-doc','screen','application/rdap+json','the title of the notice'),(2,'https://github.com/cnnic/rdap/wiki/api-doc','alternate','https://github.com/cnnic/rdap/wiki/api-doc','screen','application/rdap+json','link title'),(3,'https://github.com/cnnic/rdap/wiki/api-doc','alternate','https://github.com/cnnic/rdap/wiki/api-doc',NULL,'text/html','help link title');
 
 #
 # Data for table "RDAP_LINK_HREFLANG"
 #
 
 INSERT INTO `RDAP_LINK_HREFLANG` (`HREFLANG_ID`,`LINK_ID`,`HREFLANG`) VALUES (1,1,'en'),(2,2,'en'),(3,3,'en');
-
-#
-# Data for table "RDAP_LINK_TITLE"
-#
-
-INSERT INTO `RDAP_LINK_TITLE` (`TITLE_ID`,`LINK_ID`,`TITLE`) VALUES (1,1,'the title of the notice'),(2,2,'link title'),(3,3,'the help title');
 
 #
 # Data for table "RDAP_NAMESERVER"
@@ -192,7 +195,7 @@ INSERT INTO `RDAP_VCARD_TEL` (`TEL_ID`,`TYPE`,`GLOBAL_NUMBER`,`EXT_NUMBER`,`ENTI
 # Data for table "REL_DOMAIN_NAMESERVER"
 #
 
-INSERT INTO `REL_DOMAIN_NAMESERVER` (`REL_DOMAIN_NS_ID`,`DOMAIN_ID`,`NAMESERVER_ID`) VALUES (1,2,1),(2,2,2),(3,1,2),(4,1,5),(5,11,1),(6,3,1),(7,4,1),(8,5,1),(9,6,1),(11,7,1),(12,8,1),(13,9,1),(14,10,1),(15,2,2),(16,3,2),(17,4,2);
+INSERT INTO `REL_DOMAIN_NAMESERVER` (`REL_DOMAIN_NS_ID`,`DOMAIN_ID`,`NAMESERVER_ID`) VALUES (1,2,1),(2,2,2),(3,1,2),(4,1,5),(5,11,1),(6,3,1),(7,4,1),(8,5,1),(9,6,1),(11,7,1),(12,8,1),(13,9,1),(14,10,1),(15,2,2),(16,3,2),(17,4,2),(18,3,3),(19,2,3);
 
 #
 # Data for table "REL_DOMAIN_VARIANT"
@@ -204,31 +207,31 @@ INSERT INTO `REL_DOMAIN_VARIANT` (`REL_VARIANT_ID`,`DOMAIN_ID`,`VARIANT_TYPE`,`V
 # Data for table "REL_ENTITY_REGISTRATION"
 #
 
-INSERT INTO `REL_ENTITY_REGISTRATION` (`REL_ENTITY_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`ENTITY_ID`,`ENTITY_ROLE`) VALUES (1,1,'arpa',1,'registrant'),(2,2,'domain',2,'billing'),(3,1,'autnum',1,'noc'),(4,1,'ip',3,'technical'),(5,1,'nameServer',4,'administrative'),(6,1,'entity',5,'sponsor');
+INSERT INTO `REL_ENTITY_REGISTRATION` (`REL_ENTITY_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`ENTITY_ID`,`ENTITY_ROLE`) VALUES (2,2,'domain',2,'billing'),(3,1,'autnum',1,'noc'),(4,1,'ip',3,'technical'),(5,1,'nameServer',4,'administrative'),(6,1,'entity',5,'sponsor');
 
 #
 # Data for table "REL_EVENT_REGISTRATION"
 #
 
-INSERT INTO `REL_EVENT_REGISTRATION` (`REL_EVENT_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`EVENT_ID`) VALUES (1,1,'arpa',1),(2,2,'domain',2),(3,1,'ip',3),(4,1,'autnum',4),(5,1,'entity',1),(6,2,'entity',1),(7,1,'nameServer',5);
+INSERT INTO `REL_EVENT_REGISTRATION` (`REL_EVENT_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`EVENT_ID`) VALUES (2,2,'domain',2),(3,1,'ip',3),(4,1,'autnum',4),(5,1,'entity',1),(6,2,'entity',1),(7,1,'nameServer',5);
 
 #
 # Data for table "REL_LINK_OBJECT"
 #
 
-INSERT INTO `REL_LINK_OBJECT` (`REL_LINK_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`LINK_ID`) VALUES (1,1,'notice',1),(2,2,'remark',2),(3,3,'help',3),(4,1,'autnum',4),(5,2,'autnum',5),(6,3,'autnum',6),(7,1,'arpa',7),(8,2,'arpa',8),(9,3,'arpa',9),(11,4,'arpa',12),(15,4,'autnum',15),(16,5,'autnum',16),(17,6,'autnum',17),(18,1,'domain',18),(19,2,'domain',19),(20,3,'domain',20),(21,4,'domain',21),(22,5,'domain',22),(23,6,'domain',23),(24,7,'domain',24),(25,8,'domain',25),(26,9,'domain',26),(27,10,'domain',27),(28,11,'domain',28),(29,1,'entity',29),(30,2,'entity',30),(31,3,'entity',31),(32,4,'entity',32),(33,5,'entity',33),(34,1,'ip',34),(35,2,'ip',35),(36,3,'ip',36),(37,4,'ip',37),(38,5,'ip',38),(39,6,'ip',39),(40,7,'ip',40),(41,1,'nameServer',41),(42,2,'nameServer',42),(43,3,'nameServer',43),(44,4,'nameServer',44),(45,5,'nameServer',45);
+INSERT INTO `REL_LINK_OBJECT` (`REL_LINK_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`LINK_ID`) VALUES (1,1,'notice',1),(2,2,'remark',2),(3,3,'help',3),(50,5,'notice',3);
 
 #
 # Data for table "REL_NOTICE_REGISTRATION"
 #
 
-INSERT INTO `REL_NOTICE_REGISTRATION` (`REL_NOTICE_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`NOTICE_ID`) VALUES (1,1,'arpa',2),(2,2,'domain',2),(3,1,'autnum',2),(4,1,'nameServer',2),(5,1,'entity',2),(6,1,'ip',2);
+INSERT INTO `REL_NOTICE_REGISTRATION` (`REL_NOTICE_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`NOTICE_ID`) VALUES (2,2,'domain',2),(3,1,'autnum',2),(4,1,'nameServer',2),(5,1,'entity',2),(6,1,'ip',2);
 
 #
 # Data for table "REL_PUBLICID_REGISTRATION"
 #
 
-INSERT INTO `REL_PUBLICID_REGISTRATION` (`REL_PUBLICID_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`PUBLIC_ID`) VALUES (1,1,'arpa',1),(2,2,'domain',2),(3,1,'entity',1);
+INSERT INTO `REL_PUBLICID_REGISTRATION` (`REL_PUBLICID_ID`,`REL_ID`,`REL_OBJECT_TYPE`,`PUBLIC_ID`) VALUES (2,2,'domain',2),(3,1,'entity',1);
 
 #
 # Data for table "REL_SECUREDNS_DSKEY"

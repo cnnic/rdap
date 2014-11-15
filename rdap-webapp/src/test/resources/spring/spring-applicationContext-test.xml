@@ -9,7 +9,7 @@
 	<context:property-placeholder location="classpath:*.properties" />
 	<bean
 		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
-	<bean id="rdapProperties" class="org.restfulwhois.rdap.core.common.RdapProperties">
+	<bean id="rdapProperties" class="org.restfulwhois.rdap.core.common.util.RdapProperties">
 		<property name="localServiceUrl" value="${localServiceUrl}" />
 		<property name="maxsizeSearch" value="${maxsizeSearch}" />
 		<property name="batchsizeSearch" value="${batchsizeSearch}" />
@@ -24,6 +24,8 @@
 	<import resource="classpath:spring/spring-serviceContext.xml" />
 	<import resource="classpath:spring/spring-servlet.xml" />
 	<import resource="classpath:spring/spring-timer.xml" />
+	<import resource="classpath:spring/spring-search.xml" />
+	<import resource="classpath:spring/spring-queryFilter.xml" />
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />

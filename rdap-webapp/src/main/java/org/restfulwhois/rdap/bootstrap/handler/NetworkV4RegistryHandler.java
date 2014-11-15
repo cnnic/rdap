@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.bootstrap.handler;
 
-import org.restfulwhois.rdap.core.common.RdapProperties;
+import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.springframework.stereotype.Component;
 
 /**

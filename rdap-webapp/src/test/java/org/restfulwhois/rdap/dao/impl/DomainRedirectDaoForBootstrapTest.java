@@ -45,11 +45,11 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.bootstrap.bean.DomainRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.model.RedirectResponse;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
-import org.restfulwhois.rdap.dao.impl.redirect.DomainRedirectDao;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
+import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;
+import org.restfulwhois.rdap.redirect.dao.impl.DomainRedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -78,12 +78,6 @@ public class DomainRedirectDaoForBootstrapTest extends BaseTest {
     private DomainRedirectDao domainRedirectDao;
 
     /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
-
-    /**
      * testSync_1add_2delete.
      * 
      * @throws DataSetException
@@ -93,7 +87,7 @@ public class DomainRedirectDaoForBootstrapTest extends BaseTest {
     @DatabaseSetup("domain-redirect-sync.xml")
     public void testSync_1add_2delete() throws DataSetException {
         QueryParam parseDomainQueryParam =
-                queryParser.parseDomainQueryParam("cnnic.cn", "cnnic.cn");
+                DomainQueryParam.generateQueryParam("cnnic.cn", "cnnic.cn");
         // before sync
         RedirectResponse redirectResponse =
                 redirectDao.query(parseDomainQueryParam);
@@ -133,7 +127,7 @@ public class DomainRedirectDaoForBootstrapTest extends BaseTest {
     @DatabaseSetup("domain-redirect-sync.xml")
     public void testSync_2add_2delete() throws DataSetException {
         QueryParam parseDomainQueryParam =
-                queryParser.parseDomainQueryParam("cnnic.cn", "cnnic.cn");
+                DomainQueryParam.generateQueryParam("cnnic.cn", "cnnic.cn");
         // before sync
         RedirectResponse redirectResponse =
                 redirectDao.query(parseDomainQueryParam);

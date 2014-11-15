@@ -38,7 +38,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.model.Domain;
+import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -205,6 +205,17 @@ public class RestResponseUtilTest extends BaseTest {
         Assert.notNull(result);
         assertEquals(result.getStatusCode(),
                 HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+        checkAllowOriginHeader(result);
+    }
+    /**
+     * test create ResponseEntity with HTTP code 501.
+     */
+    @Test
+    public void testCreateResponse501() {
+        ResponseEntity result = RestResponseUtil.createResponse501();
+        Assert.notNull(result);
+        assertEquals(result.getStatusCode(),
+                HttpStatus.NOT_IMPLEMENTED);
         checkAllowOriginHeader(result);
     }
 }

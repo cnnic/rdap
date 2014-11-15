@@ -35,12 +35,10 @@ import java.util.List;
 
 import org.restfulwhois.rdap.bootstrap.bean.NetworkRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.queryparam.NetworkQueryParam;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
 import org.springframework.stereotype.Component;
 
 /**
@@ -51,16 +49,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public abstract class NetworkRegistryHandler extends RegistryHandler {
-    /**
-     * query parser.
-     */
-    @Autowired
-    private QueryParser queryParser;
-
-    /**
-     * CIDR separator.
-     */
-    private static final String CIDR_SEPARATOR = "/";
 
     @Override
     void saveRedirects(List<Redirect> redirects) {
@@ -82,11 +70,18 @@ public abstract class NetworkRegistryHandler extends RegistryHandler {
                     registryUrls);
             return redirects;
         }
-        try{
-            QueryParam queryParam = queryParser.parseIpQueryParam(key, ipVersion);
-            networkRedirect.setNetworkQueryParam((NetworkQueryParam) queryParam);
+        try {
+            QueryParam queryParam = NetworkQueryParam.generateQueryParam(key);
+            if (null == queryParam) {
+                logger.error(
+                        "ignore this key/urls:{},{}. generate networkQueryParam error:{}",
+                        key, registryUrls);
+                return redirects;
+            }
+            networkRedirect
+                    .setNetworkQueryParam((NetworkQueryParam) queryParam);
             redirects.add(networkRedirect);
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("ignore this key/urls:{},{}. Invalid network:{}", key,
                     registryUrls);
         }

@@ -41,19 +41,19 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.RdapProperties;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.dao.QueryDao;
-import org.restfulwhois.rdap.core.model.Autnum;
-import org.restfulwhois.rdap.core.model.Entity;
-import org.restfulwhois.rdap.core.model.EntityAddress;
-import org.restfulwhois.rdap.core.model.EntityTel;
-import org.restfulwhois.rdap.core.model.Event;
-import org.restfulwhois.rdap.core.model.Link;
-import org.restfulwhois.rdap.core.model.ModelType;
-import org.restfulwhois.rdap.core.model.Network;
-import org.restfulwhois.rdap.core.model.PublicId;
-import org.restfulwhois.rdap.core.model.Remark;
+import org.restfulwhois.rdap.QueryParamHelper;
+import org.restfulwhois.rdap.core.autnum.model.Autnum;
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.Event;
+import org.restfulwhois.rdap.core.common.model.Link;
+import org.restfulwhois.rdap.core.common.model.PublicId;
+import org.restfulwhois.rdap.core.common.model.Remark;
+import org.restfulwhois.rdap.core.common.model.base.ModelType;
+import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.entity.model.EntityAddress;
+import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.ip.model.Network;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.Assert;
@@ -70,11 +70,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class EntityQueryDaoTest extends BaseTest {
     /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
-    /**
      * domainQueryDao.
      */
     @Autowired
@@ -89,7 +84,7 @@ public class EntityQueryDaoTest extends BaseTest {
         super.databaseSetupWithBinaryColumns("entity.xml");
         String entityHandle = "h1";
         Entity entity =
-                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
         assertNotNull(entity);
         assertEquals(entityHandle, entity.getHandle());
         assertEquals("individual", entity.getKind());
@@ -204,7 +199,7 @@ public class EntityQueryDaoTest extends BaseTest {
         // not truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
         Entity entity =
-                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
         List<Network> networks = entity.getNetworks();
         assertNotNull(networks);
         assertEquals(1, networks.size());
@@ -216,18 +211,18 @@ public class EntityQueryDaoTest extends BaseTest {
         // not truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         entity =
-                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
         assertNull(entity.getNotices());
         assertNull(entity.getTruncatedInfo());
         // truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 3L);
         entity =
-                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
         assertTrue(entity.getTruncatedInfo().getResultsTruncated());
         // truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 2L);
         entity =
-                entityQueryDao.query(queryParser.parseQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
         assertTrue(entity.getTruncatedInfo().getResultsTruncated());
     }
 
@@ -251,12 +246,13 @@ public class EntityQueryDaoTest extends BaseTest {
         assertThat(roleList,
                 CoreMatchers.hasItems("registrant", "administrative"));
         // check roles:include all roles
-        Entity entity = entityQueryDao.query(queryParser.parseQueryParam("h1"));
+        Entity entity =
+                entityQueryDao.query(QueryParamHelper.buildQueryParam("h1"));
         assertNotNull(entity);
         roleList = entity.getRoles();
         assertEquals(3, roleList.size());
-        assertThat(roleList, CoreMatchers.hasItems("registrar", "billing",
-                "registrant"));
+        assertThat(roleList,
+                CoreMatchers.hasItems("registrar", "billing", "registrant"));
     }
 
     /**
@@ -267,8 +263,7 @@ public class EntityQueryDaoTest extends BaseTest {
     @DatabaseSetup("entity.xml")
     public void testQueryNotExistEntity() {
         Entity entity =
-                entityQueryDao.query(queryParser
-                        .parseQueryParam("non-exist-entity-handle"));
+                entityQueryDao.query(QueryParamHelper.buildQueryParam("non-exist-entity-handle"));
         assertNull(entity);
     }
 

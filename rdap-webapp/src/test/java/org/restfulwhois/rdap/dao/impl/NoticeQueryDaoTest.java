@@ -40,9 +40,9 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.model.Link;
-import org.restfulwhois.rdap.core.model.Notice;
-import org.restfulwhois.rdap.dao.impl.NoticeDaoImpl;
+import org.restfulwhois.rdap.core.common.dao.impl.NoticeDaoImpl;
+import org.restfulwhois.rdap.core.common.model.Link;
+import org.restfulwhois.rdap.core.common.model.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;

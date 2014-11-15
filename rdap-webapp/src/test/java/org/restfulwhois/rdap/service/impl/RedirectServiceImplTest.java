@@ -35,11 +35,11 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.QueryParamHelper;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.model.RedirectResponse;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
+import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.service.RedirectService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,11 +54,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 @SuppressWarnings("rawtypes")
 public class RedirectServiceImplTest extends BaseTest {
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
     /**
      * RedirectService.
      */
@@ -76,8 +71,8 @@ public class RedirectServiceImplTest extends BaseTest {
         String domainName = "cnnic.cn";
         String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
         RedirectResponse redirect =
-                redirectService.queryDomain(queryParser.parseDomainQueryParam(
-                        domainName, punyDomainName));
+                redirectService.queryDomain(DomainQueryParam
+                        .generateQueryParam(domainName, punyDomainName));
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
     }
@@ -91,7 +86,7 @@ public class RedirectServiceImplTest extends BaseTest {
     public
             void testQueryAutnum() {
         String autnumStr = "1";
-        QueryParam queryParam = queryParser.parseQueryParam(autnumStr);
+        QueryParam queryParam = QueryParamHelper.buildQueryParam(autnumStr);
         RedirectResponse redirect = redirectService.queryAutnum(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
@@ -106,13 +101,12 @@ public class RedirectServiceImplTest extends BaseTest {
             void testQueryNetwork() {
         super.databaseSetupWithBinaryColumns("network-redirect.xml");
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("1.0.0.0/8", IpVersion.V4);
+                QueryParamHelper.generateNetworkParam("1.0.0.0/8");
         RedirectResponse redirect = redirectService.queryIp(queryParam);
         assertNotNull(redirect);
         assertEquals("http://cnnic.cn/rdap", redirect.getUrl());
-        //sub net
-        queryParam =
-                queryParser.parseIpQueryParam("1.0.0.0/10", IpVersion.V4);
+        // sub net
+        queryParam = QueryParamHelper.generateNetworkParam("1.0.0.0/10");
         redirect = redirectService.queryIp(queryParam);
         assertNotNull(redirect);
     }

@@ -47,6 +47,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -81,14 +82,14 @@ public class RdapControllerNameserverTest extends BaseTest {
      * test query exist nameserver.
      * 
      * @throws Exception
-     * 			exception.
+     *             exception.
      */
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryExistNameserver() throws Exception {
         super.databaseSetupWithBinaryColumns("nameserverTest.xml");
-        RestResponseUtil.initErrorMessages();
-    	RestResponseUtil.initConformanceService();
+//        RestResponseUtil.initErrorMessages();
+//        RestResponseUtil.initConformanceService();
         String nsName = "ns.cnnic.cn";
         String nsChineseLDH = "ns.清华大学.cn";
         String nsLangEn = "en";
@@ -96,7 +97,6 @@ public class RdapControllerNameserverTest extends BaseTest {
         String nsNameWithUpperCase = "Ns.cnnic.cn";
         commonQueryExistNS(nsName, nsLangEn);
         commonQueryExistNS(nsNameWithUpperCase, nsLangEn);
-        nsChineseLDH = StringUtil.urlEncode(nsChineseLDH);
         commonQueryExistNS(nsChineseLDH, nsLangZh);
     }
 
@@ -134,14 +134,16 @@ public class RdapControllerNameserverTest extends BaseTest {
      * @param queryNSName
      *            nameserver name.
      * @param lang
-     * 			  language of object.
+     *            language of object.
      * @throws Exception
      *             Exception.
      */
-    private void commonQueryExistNS(String queryNSName, String lang) throws Exception {
+    private void commonQueryExistNS(String queryNSName, String lang)
+            throws Exception {
         mockMvc.perform(
-        		MockMvcRequestBuilders.get(URI_NS_Q + StringUtil.urlEncode(queryNSName))
-        		.accept(MediaType.parseMediaType(rdapJson)))
+                MockMvcRequestBuilders.get(
+                        URI_NS_Q + StringUtil.urlEncode(queryNSName)).accept(
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.lang").value(lang))
@@ -161,7 +163,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     private void commonQueryNonExistNS(String queryDomainName) throws Exception {
         mockMvc.perform(
-                get(URI_NS_Q + StringUtil.urlEncode(queryDomainName)).accept(
+                get(URI_NS_Q + queryDomainName).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -181,7 +183,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     private void commonQueryInvalidNS(String nsName) throws Exception {
         mockMvc.perform(
-                get(URI_NS_Q + StringUtil.urlEncode(nsName)).accept(
+                get(URI_NS_Q + nsName).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
@@ -191,4 +193,26 @@ public class RdapControllerNameserverTest extends BaseTest {
                 .andExpect(jsonPath("$.description").value("BAD REQUEST"));
 
     }
+
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(
+            value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        RestResponseUtil.initErrorMessages();
+        super.databaseSetupWithBinaryColumns("nameserverTest.xml");
+        String nameserver = "ns.cnnic.cn";
+        query403(nameserver);
+    }
+
+    private void query403(String q) throws Exception {
+        mockMvc.perform(
+                get(URI_NS_Q + q).accept(MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
+
+    }
+
 }

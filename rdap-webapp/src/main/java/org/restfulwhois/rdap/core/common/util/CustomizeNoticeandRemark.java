@@ -30,16 +30,14 @@
  */
 package org.restfulwhois.rdap.core.common.util;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.restfulwhois.rdap.core.model.BaseNotice.NoticeType;
-import org.restfulwhois.rdap.core.model.Notice;
-import org.restfulwhois.rdap.core.model.Remark;
-import org.restfulwhois.rdap.core.service.NoticeService;
+import org.restfulwhois.rdap.core.common.model.Notice;
+import org.restfulwhois.rdap.core.common.model.Remark;
+import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
+import org.restfulwhois.rdap.core.common.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

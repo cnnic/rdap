@@ -68,7 +68,7 @@ public class RdapControllerDomainTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
-    
+
     /**
      * output json.
      */
@@ -156,9 +156,7 @@ public class RdapControllerDomainTest extends BaseTest {
             String expectedLdhName, String expectedUnicodeName)
             throws Exception {
         mockMvc.perform(
-                get(
-                        URI_DOMAIN_Q
-                                + StringUtil.urlEncode(queryDomainName))
+                get(URI_DOMAIN_Q + StringUtil.urlEncode(queryDomainName))
                         .accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -191,16 +189,15 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.remarks[0].links[0].href").exists())
                 .andExpect(jsonPath("$.remarks[0].links[0].type").exists())
                 .andExpect(
-                        jsonPath("$.remarks[0].links[0].type").value(
-                                rdapJson))
+                        jsonPath("$.remarks[0].links[0].type").value(rdapJson))
                 // links.
                 .andExpect(
                         jsonPath("$.links[0].hreflang").value(
                                 CoreMatchers.hasItems("en", "zh")))
                 .andExpect(jsonPath("$.links[0].title").exists())
-                //objectClassName
-                 .andExpect(jsonPath("$.objectClassName").value("domain"))
-
+                // objectClassName
+                .andExpect(jsonPath("$.objectClassName").value("domain"))
+                .andExpect(jsonPath("$.rdapConformance").exists())
         ;
     }
 
@@ -215,10 +212,8 @@ public class RdapControllerDomainTest extends BaseTest {
     private void commonQueryNonExistDomain(String queryDomainName)
             throws Exception {
         mockMvc.perform(
-                get(
-                        URI_DOMAIN_Q
-                                + StringUtil.urlEncode(queryDomainName))
-                        .accept(MediaType.parseMediaType(rdapJson)))
+                get(URI_DOMAIN_Q + queryDomainName).accept(
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404))
@@ -237,9 +232,7 @@ public class RdapControllerDomainTest extends BaseTest {
      */
     private void commonQueryInvalidDomain(String domainName) throws Exception {
         mockMvc.perform(
-                get(
-                        URI_DOMAIN_Q
-                                + StringUtil.urlEncode(domainName)).accept(
+                get(URI_DOMAIN_Q + StringUtil.urlEncode(domainName)).accept(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
@@ -247,6 +240,35 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.lang").value("en"))
                 .andExpect(jsonPath("$.title").value("BAD REQUEST"))
                 .andExpect(jsonPath("$.description").value("BAD REQUEST"));
+
+    }
+
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(
+            value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
+    public void testQuery403() throws Exception {
+        super.databaseSetupWithBinaryColumns("domain.xml");
+        String domainName = "cnnic.cn";
+        query403(domainName);
+    }
+
+    /**
+     * common query invalid domain.
+     * 
+     * @param domainName
+     *            domain name.
+     * @throws Exception
+     *             Exception.
+     */
+    private void query403(String domainName) throws Exception {
+        mockMvc.perform(
+                get(URI_DOMAIN_Q + StringUtil.urlEncode(domainName)).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(403))
+                .andExpect(jsonPath("$.lang").value("en"));
 
     }
 }

@@ -43,11 +43,11 @@ import org.dbunit.dataset.ITable;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.bootstrap.bean.AutnumRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.model.RedirectResponse;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,12 +71,6 @@ public class AutnumRedirectDaoForBootstrapTest extends BaseTest {
     private RedirectDao redirectDao;
 
     /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
-
-    /**
      * testSync_1add_2delete.
      * 
      * @throws DataSetException
@@ -86,7 +80,7 @@ public class AutnumRedirectDaoForBootstrapTest extends BaseTest {
     @DatabaseSetup("autnum-redirect-sync.xml")
     public void testSync_1add_2delete() throws DataSetException {
         String autnumStr = "1";
-        QueryParam queryParam = queryParser.parseQueryParam(autnumStr);
+        QueryParam queryParam = QueryParamHelper.buildQueryParam(autnumStr);
         // before sync
         RedirectResponse redirectResponse = redirectDao.query(queryParam);
         assertNotNull(redirectResponse);
@@ -123,7 +117,7 @@ public class AutnumRedirectDaoForBootstrapTest extends BaseTest {
     @DatabaseSetup("autnum-redirect-sync.xml")
     public void testSync_2add_2delete() throws DataSetException {
         String autnumStr = "1";
-        QueryParam queryParam = queryParser.parseQueryParam(autnumStr);
+        QueryParam queryParam = QueryParamHelper.buildQueryParam(autnumStr);
         // before sync
         RedirectResponse redirectResponse = redirectDao.query(queryParam);
         assertNotNull(redirectResponse);

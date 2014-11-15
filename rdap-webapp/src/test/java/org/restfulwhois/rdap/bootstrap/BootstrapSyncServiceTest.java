@@ -39,6 +39,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.bootstrap.bean.Bootstrap;
 import org.restfulwhois.rdap.bootstrap.bean.BootstrapEntry;
 import org.restfulwhois.rdap.bootstrap.bean.BootstrapRegistries;
@@ -49,13 +50,12 @@ import org.restfulwhois.rdap.bootstrap.handler.DomainRegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV4RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV6RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.registry.DataProvider;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.model.RedirectResponse;
-import org.restfulwhois.rdap.core.queryparam.QueryParam;
-import org.restfulwhois.rdap.dao.impl.redirect.AutnumRedirectDao;
-import org.restfulwhois.rdap.dao.impl.redirect.DomainRedirectDao;
-import org.restfulwhois.rdap.dao.impl.redirect.NetworkRedirectDao;
+import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
+import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
+import org.restfulwhois.rdap.redirect.dao.impl.AutnumRedirectDao;
+import org.restfulwhois.rdap.redirect.dao.impl.DomainRedirectDao;
+import org.restfulwhois.rdap.redirect.dao.impl.NetworkRedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -113,11 +113,6 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     @Autowired
     private AutnumRegistryHandler autnumRegistryHandler;
-    /**
-     * queryParser.
-     */
-    @Autowired
-    private QueryParser queryParser;
 
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
@@ -173,7 +168,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      *            expectUrl.
      */
     private void assertAutnum(String expectUrl) {
-        QueryParam queryParam = queryParser.parseQueryParam("1");
+        QueryParam queryParam = QueryParamHelper.buildQueryParam("1");
         RedirectResponse redirectResponse = autnumRedirectDao.query(queryParam);
         assertNotNull(redirectResponse);
         assertEquals(expectUrl, redirectResponse.getUrl());
@@ -187,8 +182,8 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void assertNetworkV6(String expectUrl) {
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("0:0:0:0:2001:6a8:0:0/112",
-                        IpVersion.V6);
+                QueryParamHelper
+                        .generateNetworkParam("0:0:0:0:2001:6a8:0:0/112");
         RedirectResponse redirectResponse =
                 networkRedirectDao.query(queryParam);
         assertNotNull(redirectResponse);
@@ -203,7 +198,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void assertNetworkV4(String expectUrl) {
         QueryParam queryParam =
-                queryParser.parseIpQueryParam("1.0.0.0/8", IpVersion.V4);
+                QueryParamHelper.generateNetworkParam("1.0.0.0/8");
         RedirectResponse redirectResponse =
                 networkRedirectDao.query(queryParam);
         assertNotNull(redirectResponse);
@@ -331,7 +326,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void afterAssertDomainResult() {
         QueryParam parseDomainQueryParam =
-                queryParser.parseDomainQueryParam("cnnic.cn", "cnnic.cn");
+                DomainQueryParam.generateQueryParam("cnnic.cn", "cnnic.cn");
         // sync
         List<Redirect> bootstraps = new ArrayList<Redirect>();
         List<String> urls = new ArrayList<String>();
@@ -352,7 +347,7 @@ public class BootstrapSyncServiceTest extends BaseTest {
      */
     private void beforeAssertDomain() {
         QueryParam parseDomainQueryParam =
-                queryParser.parseDomainQueryParam("cnnic.cn", "cnnic.cn");
+                DomainQueryParam.generateQueryParam("cnnic.cn", "cnnic.cn");
         RedirectResponse redirectResponse =
                 domainRedirectDao.query(parseDomainQueryParam);
         assertNotNull(redirectResponse);

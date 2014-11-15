@@ -41,12 +41,16 @@ import java.util.List;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.RdapProperties;
-import org.restfulwhois.rdap.core.controller.support.QueryParser;
-import org.restfulwhois.rdap.core.model.Autnum;
-import org.restfulwhois.rdap.core.model.Domain;
-import org.restfulwhois.rdap.core.model.Entity;
-import org.restfulwhois.rdap.core.service.QueryService;
+import org.restfulwhois.rdap.QueryParamHelper;
+import org.restfulwhois.rdap.core.autnum.model.Autnum;
+import org.restfulwhois.rdap.core.autnum.service.AutnumService;
+import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.core.domain.model.Domain;
+import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
+import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
+import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.core.entity.service.EntityQueryService;
+import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.Assert;
@@ -55,7 +59,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * Test for QueryServiceImpl.
+ * Test for NameserverServiceImpl.
  * 
  * @author jiashuo
  * 
@@ -63,9 +67,13 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 @SuppressWarnings("rawtypes")
 public class QueryServiceImplTest extends BaseTest {
     @Autowired
-    private QueryParser queryParser;
+    private AutnumService asService;
     @Autowired
-    private QueryService queryService;
+    private DomainQueryService domainService;
+    @Autowired
+    private NameserverQueryService nameserverService;
+    @Autowired
+    private EntityQueryService entityService;
 
     /**
      * test query exist entity.
@@ -78,26 +86,26 @@ public class QueryServiceImplTest extends BaseTest {
         RdapProperties prop = new RdapProperties();
         ReflectionTestUtils.setField(prop, "inTlds", "cn");
         ReflectionTestUtils.setField(prop, "notInTlds", "edu.cn");
-        assertTrue(queryService.tldInThisRegistry(queryParser
-                .parseDomainQueryParam(domainName, domainName)));
+        assertTrue(domainService.tldInThisRegistry(DomainQueryParam
+                .generateQueryParam(domainName, domainName)));
         domainName = "cnnic.edu.cn";
-        assertFalse(queryService.tldInThisRegistry(queryParser
-                .parseDomainQueryParam(domainName, domainName)));
+        assertFalse(domainService.tldInThisRegistry(DomainQueryParam
+                .generateQueryParam(domainName, domainName)));
         domainName = "cnnic.com";
-        assertFalse(queryService.tldInThisRegistry(queryParser
-                .parseDomainQueryParam(domainName, domainName)));
+        assertFalse(domainService.tldInThisRegistry(DomainQueryParam
+                .generateQueryParam(domainName, domainName)));
         // set multi tlds
         ReflectionTestUtils.setField(prop, "inTlds", "cn;org");
         ReflectionTestUtils.setField(prop, "notInTlds", "com;edu.cn");
         domainName = "cnnic.cn";
-        assertTrue(queryService.tldInThisRegistry(queryParser
-                .parseDomainQueryParam(domainName, domainName)));
+        assertTrue(domainService.tldInThisRegistry(DomainQueryParam
+                .generateQueryParam(domainName, domainName)));
         domainName = "cnnic.edu.cn";
-        assertFalse(queryService.tldInThisRegistry(queryParser
-                .parseDomainQueryParam(domainName, domainName)));
+        assertFalse(domainService.tldInThisRegistry(DomainQueryParam
+                .generateQueryParam(domainName, domainName)));
         domainName = "cnnic.com";
-        assertFalse(queryService.tldInThisRegistry(queryParser
-                .parseDomainQueryParam(domainName, domainName)));
+        assertFalse(domainService.tldInThisRegistry(DomainQueryParam
+                .generateQueryParam(domainName, domainName)));
     }
 
     /**
@@ -109,7 +117,8 @@ public class QueryServiceImplTest extends BaseTest {
     public void testQueryEntity() {
         String handle = "h1";
         Entity entity =
-                queryService.queryEntity(queryParser.parseQueryParam(handle));
+                entityService.queryEntity(QueryParamHelper
+                        .buildQueryParam(handle));
         Assert.notNull(entity);
         assertEquals(handle, entity.getHandle());
         assertEquals("individual", entity.getKind());
@@ -130,8 +139,8 @@ public class QueryServiceImplTest extends BaseTest {
     public void testQueryAutnum() {
         String autnumStr = "1";
         Autnum autnum =
-                queryService
-                        .queryAutnum(queryParser.parseQueryParam(autnumStr));
+                asService.queryAutnum(QueryParamHelper
+                        .buildQueryParam(autnumStr));
         Assert.notNull(autnum);
         assertEquals(autnum.getId(), Long.valueOf(autnumStr));
         assertEquals(autnum.getCountry(), "zh");
@@ -151,7 +160,7 @@ public class QueryServiceImplTest extends BaseTest {
         super.databaseSetupWithBinaryColumns("domain.xml");
         String domainName = "cnnic.cn";
         Domain domain =
-                queryService.queryDomain(queryParser.parseDomainQueryParam(
+                domainService.queryDomain(DomainQueryParam.generateQueryParam(
                         domainName, domainName));
         assertNotNull(domain);
     }

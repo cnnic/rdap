@@ -31,7 +31,7 @@
 package org.restfulwhois.rdap.bootstrap.registry;
 
 import org.restfulwhois.rdap.bootstrap.bean.BootstrapRegistries;
-import org.restfulwhois.rdap.core.common.RdapProperties;
+import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

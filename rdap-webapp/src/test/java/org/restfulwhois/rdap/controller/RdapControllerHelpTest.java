@@ -71,7 +71,7 @@ public class RdapControllerHelpTest extends BaseTest {
      * a url string.
      */
     final private String urlPath = "/help";
-    
+
     /**
      * output json.
      */
@@ -95,7 +95,6 @@ public class RdapControllerHelpTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/help-query.xml")
     public void testQueryHelp() throws Exception {
-        
         commonQueryHelp();
     }
 
@@ -109,14 +108,12 @@ public class RdapControllerHelpTest extends BaseTest {
      * @throws Exception
      *             Exception.
      */
-    private void commonQueryHelp()
-            throws Exception {
-        mockMvc.perform(
-                get(urlPath).accept(
-                        MediaType.parseMediaType(rdapJson)))
+    private void commonQueryHelp() throws Exception {
+        mockMvc.perform(get(urlPath).accept(MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.notices").exists());
+                .andExpect(jsonPath("$.notices").exists())
+                .andExpect(jsonPath("$.rdapConformance").exists());
 
     }
 
