@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * base query parameter bean.
+ * domain query parameter bean.
  * 
  * @author jiashuo
  * 
@@ -89,7 +89,7 @@ public class DomainQueryParam extends QueryParam {
     }
     
     /**
-     * construction.
+     * constructor.
      * 
      * @param request
      *            request.

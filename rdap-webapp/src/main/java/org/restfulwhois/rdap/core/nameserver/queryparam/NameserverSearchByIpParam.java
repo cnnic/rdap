@@ -39,7 +39,7 @@ import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsIpValidator;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 
 /**
- * NameserverSearchByIpParam.
+ * nameserver search by IP paramater.
  * 
  * @author jiashuo
  * 
@@ -51,14 +51,14 @@ public class NameserverSearchByIpParam extends NameserverSearchParam {
     private IpInBytes ipInBytes;
 
     /**
-     * construction.
+     * constructor.
      */
     public NameserverSearchByIpParam() {
         super();
     }
 
     /**
-     * construction.
+     * constructor.
      * 
      * @param request
      *            request.

@@ -38,6 +38,7 @@ import org.restfulwhois.rdap.core.common.validation.Validator;
 import org.restfulwhois.rdap.core.entity.queryparam.EntityQueryParam;
 
 /**
+ * entity query validator.
  * 
  * @author jiashuo
  * 

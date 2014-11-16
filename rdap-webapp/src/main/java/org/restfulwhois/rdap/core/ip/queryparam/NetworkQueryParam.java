@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * base query parameter bean.
+ * network query parameter bean.
  * 
  * @author jiashuo
  * @author weijunkai

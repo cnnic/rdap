@@ -40,6 +40,7 @@ import org.restfulwhois.rdap.core.common.validation.Validator;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
 
 /**
+ * network query validator.
  * 
  * @author jiashuo
  * 

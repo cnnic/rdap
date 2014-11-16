@@ -39,6 +39,7 @@ import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByFnParam;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByHandleParam;
 
 /**
+ * entity search validator.
  * 
  * @author jiashuo
  * 

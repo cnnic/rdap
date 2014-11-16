@@ -39,6 +39,7 @@ import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverQueryParam;
 
 /**
+ * domain name validator.
  * 
  * @author jiashuo
  * 

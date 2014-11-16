@@ -72,6 +72,11 @@ public enum DomainSearchType {
         return name;
     }
 
+    /**
+     * get all values string array.
+     * 
+     * @return all values string array.
+     */
     public static String[] valuesOfString() {
         DomainSearchType[] types = values();
         List<String> result = new ArrayList<String>();
@@ -81,6 +86,13 @@ public enum DomainSearchType {
         return result.toArray(new String[0]);
     }
 
+    /**
+     * get by name.
+     * 
+     * @param name
+     *            name string.
+     * @return DomainSearchType.
+     */
     public static DomainSearchType getByName(String name) {
         DomainSearchType[] queryTypes = DomainSearchType.values();
         for (DomainSearchType type : queryTypes) {

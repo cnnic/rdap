@@ -40,6 +40,7 @@ import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsIpParam;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchByIpParam;
 
 /**
+ * domain search by nameserver's IP validator.
  * 
  * @author jiashuo
  * 

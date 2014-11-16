@@ -34,7 +34,7 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.help.model.Help;
 
 /**
- * query service interface.
+ * help query service interface.
  * 
  * query Domain/IP/AS/Name server/entity/help and is the query object in own
  * registry
