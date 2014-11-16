@@ -41,12 +41,10 @@ import java.util.Map;
 
 import org.restfulwhois.rdap.core.common.dao.NoticeDao;
 import org.restfulwhois.rdap.core.common.dao.QueryDao;
+import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.common.model.Link;
 import org.restfulwhois.rdap.core.common.model.Notice;
-import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
-import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +53,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
-import org.apache.commons.lang.StringUtils;
 /**
  * notice query DAO select notice object from RDAP_NOTICE.
  * <p>
@@ -85,52 +82,26 @@ public class NoticeDaoImpl implements NoticeDao {
     @Qualifier("linkQueryDaoImpl")
     private QueryDao<Link> linkQueryDao;
     /**
-     * get notice list.
+     * get all notice list.
      * 
      * @return list of notice.
      */
     @Override
-    public List<Notice> getNoticesNoTruncated() {
-        LOGGER.debug("getAllNotices.");
+    public List<Notice> queryAllNotices() {
+        LOGGER.debug("queryAllNotices.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.Notice);
         queryAndSetInnerObjects(notices, NoticeType.Notice);
         return notices;
     }
-    /**
-     * load notice list.
-     * 
-     * @return list of notice.
-     */
-    @Override
-    public List<Notice> loadNoticesForTruncated() {
-        LOGGER.debug("loadAllNotices.");
-        final String typesJoinedByComma = StringUtils.join(
-                             TruncatedInfo.TYPES, ",");
-        final String sql = "select notice.*, description.description"
-                + " from RDAP_NOTICE notice "
-                + " left outer join RDAP_NOTICE_DESCRIPTION description "
-                + " on notice.NOTICE_ID = description.NOTICE_ID "
-                + " where notice.TYPE=? and notice.REASON_TYPE_SHORT_NAME in ( "
-              + typesJoinedByComma + ")";
-        List<Notice> result = jdbcTemplate.query(
-                new PreparedStatementCreator() {
-                    public PreparedStatement createPreparedStatement(
-                            Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement(sql);
-                        ps.setString(1, NoticeType.Notice.getName());
-                        return ps;
-                    }
-                }, new NoticeResultSetExtractor());
-        return result;
-    }
+    
     /**
      * query help list.
      * 
      * @return list of help.
      */
     @Override
-    public List<Notice> getHelp() {
-        LOGGER.debug("getHelp.");
+    public List<Notice> queryHelp() {
+        LOGGER.debug("queryHelp.");
         List<Notice> notices = queryWithoutInnerObjects(NoticeType.HELP);
         queryAndSetInnerObjects(notices, NoticeType.HELP);
         return notices;
@@ -184,16 +155,12 @@ public class NoticeDaoImpl implements NoticeDao {
      * @param type notice type.
      * @return notice list
      */
-    private List<Notice> queryWithoutInnerObjects(final NoticeType type) {
-        final String typesJoinedByComma = StringUtils.join(
-                TruncatedInfo.TYPES, ",");
+    private List<Notice> queryWithoutInnerObjects(final NoticeType type) {     
         final String sql = "select notice.*, description.description"
                 + " from RDAP_NOTICE notice "
                 + " left outer join RDAP_NOTICE_DESCRIPTION description "
                 + " on notice.NOTICE_ID = description.NOTICE_ID  where "
-                + " notice.TYPE=? and ( notice.REASON_TYPE_SHORT_NAME not in ("
-                +  typesJoinedByComma 
-                +  " ) or notice.REASON_TYPE_SHORT_NAME is null)";
+                + " notice.TYPE=? ";
         List<Notice> result = jdbcTemplate.query(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(

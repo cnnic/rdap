@@ -67,14 +67,14 @@ public class NoticeQueryDaoTest extends BaseTest {
      */
     @Test
     @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup(value = "notice.xml")
+    //@DatabaseSetup(value = "notice.xml")
     public void testGetAllNotices() {
-        List<Notice> notices = noticeDaoImpl.getNoticesNoTruncated();
-        Long noticeId = 1L;
+        List<Notice> notices = noticeDaoImpl.queryAllNotices();
+        Long noticeId = 115L;
         assertNotNull(notices);
         assertTrue(notices.size() > 0);
         for (Notice notice : notices) {
-            if (noticeId.equals(notice.getId())) {
+            if (!noticeId.equals(notice.getId())) {
                 continue;
             }
             assertEquals("Terms of Use", notice.getTitle());

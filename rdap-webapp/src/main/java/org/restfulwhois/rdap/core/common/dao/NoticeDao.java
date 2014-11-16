@@ -42,23 +42,17 @@ import org.restfulwhois.rdap.core.common.model.Notice;
  */
 public interface NoticeDao {
     /**
-     * get all notice list where notice reasonType not in (TYPE).
+     * get all notice list.
      * 
      * @return notice list.
      */
-    List<Notice> getNoticesNoTruncated();
+    List<Notice> queryAllNotices();
 
     /**
      * get help info, as format of notice.
      * 
      * @return notice list.
      */
-    List<Notice> getHelp();
-
-    /**
-     * load notice list where notice reasonType in (TYPE).
-     * 
-     * @return notice list.
-     */
-    List<Notice> loadNoticesForTruncated();
+    List<Notice> queryHelp();
+    
 }
