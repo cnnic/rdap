@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.bootstrap.handler;
 
-import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.bootstrap.BootstrapProperties;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,7 +44,7 @@ public class NetworkV6RegistryHandler extends NetworkRegistryHandler {
 
     @Override
     String getRegistryRelativateUrl() {
-        return RdapProperties.getBootstrapRegistryUriForIpv6();
+        return BootstrapProperties.getBootstrapRegistryUriForIpv6();
     }
 
 }

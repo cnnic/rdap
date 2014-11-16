@@ -7,29 +7,13 @@
 		   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 	default-autowire="byType" default-lazy-init="false">
 	<context:component-scan base-package="org.restfulwhois.rdap" />
-	<context:property-placeholder location="classpath:*.properties" />
-
+	<context:property-placeholder location="classpath:*.properties"
+		ignore-unresolvable="true" />
 	<bean
 		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
-	<bean id="rdapProperties" class="org.restfulwhois.rdap.core.common.util.RdapProperties">
-		<property name="localServiceUrl" value="${localServiceUrl}" />
-		<property name="maxsizeSearch" value="${maxsizeSearch}" />
-		<property name="batchsizeSearch" value="${batchsizeSearch}" />
-		<property name="inTlds" value="${inTlds}" />
-		<property name="notInTlds" value="${notInTlds}" />
-		<property name="minSecondsAccessIntervalAnonymous" value="${minSecondsAccessIntervalAnonymous}" />
-		<property name="minSecondsAccessIntervalAuthed" value="${minSecondsAccessIntervalAuthed}" />
-		<property name="ipWhiteListForAccessInterval" value="${ipWhiteListForAccessInterval}" />
-		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />
-		<property name="bootstrapRegistryBaseUrl" value="${bootstrapRegistryBaseUrl}" />
-		<property name="bootstrapRegistryUriForDomain" value="${bootstrapRegistryUriForDomain}" />
-		<property name="bootstrapRegistryUriForAs" value="${bootstrapRegistryUriForAs}" />
-		<property name="bootstrapRegistryUriForIpv4" value="${bootstrapRegistryUriForIpv4}" />
-		<property name="bootstrapRegistryUriForIpv6" value="${bootstrapRegistryUriForIpv6}" />
-		<property name="notImplementedUri" value="${notImplementedUri}" />			
-	</bean>
+
 	<import resource="classpath:spring/spring-serviceContext.xml" />
-	<import resource="classpath:spring/spring-timer.xml" />
+	<import resource="classpath:spring/spring-bootstrap.xml" />
 	<import resource="classpath:spring/spring-search.xml" />
 	<import resource="classpath:spring/spring-queryFilter.xml" />
 </beans>
