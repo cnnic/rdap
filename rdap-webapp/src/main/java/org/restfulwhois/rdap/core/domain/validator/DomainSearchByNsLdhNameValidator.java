@@ -40,7 +40,7 @@ import org.restfulwhois.rdap.core.common.validation.Validator;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsLdhNameParam;
 
 /**
- * DomainSearchByNsLdhNameValidator.
+ * domain search by nameserver's LDH name validator.
  * 
  * @author jiashuo
  * 

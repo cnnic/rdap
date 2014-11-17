@@ -47,7 +47,7 @@ import org.restfulwhois.rdap.core.entity.validator.EntityQueryValidator;
  */
 public class EntityQueryParam extends QueryParam {
     /**
-     * construction.
+     * constructor.
      * 
      * @param request
      *            request.

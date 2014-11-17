@@ -79,7 +79,7 @@ public class ErrorMessage extends BaseModel {
      */
     @JsonIgnore
     public boolean equalsByCode(int errorCode) {
-        return errorCode == this.errorCode.intValue();
+        return null != this.errorCode && errorCode == this.errorCode.intValue();
     }
 
     /**

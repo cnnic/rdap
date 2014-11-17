@@ -128,7 +128,7 @@ public abstract class QueryParam {
     abstract public void convertParam() throws Exception;
 
     /**
-     * construction.
+     * constructor.
      * 
      * @param request
      *            request.
@@ -178,7 +178,7 @@ public abstract class QueryParam {
     }
 
     /**
-     * default construction.
+     * default constructor.
      * 
      * @param q
      *            query parameter.
@@ -190,7 +190,7 @@ public abstract class QueryParam {
     }
 
     /**
-     * construction.
+     * constructor.
      */
     public QueryParam() {
         initValidators();

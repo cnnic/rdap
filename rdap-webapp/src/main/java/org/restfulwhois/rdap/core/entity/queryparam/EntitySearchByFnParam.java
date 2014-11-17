@@ -36,7 +36,7 @@ import org.restfulwhois.rdap.core.common.util.StringUtil;
 import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 
 /**
- * base search parameter bean.
+ * entity search by fn parameter bean.
  * 
  * @author jiashuo
  * 
@@ -44,7 +44,7 @@ import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 public class EntitySearchByFnParam extends EntitySearchParam {
 
     /**
-     * construction.
+     * constructor.
      */
     public EntitySearchByFnParam() {
         super();

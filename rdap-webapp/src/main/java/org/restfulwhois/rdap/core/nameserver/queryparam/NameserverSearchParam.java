@@ -38,14 +38,14 @@ import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 
 /**
- * NameserverSearchParam
+ * base nameserver search parameter.
  * 
  * @author jiashuo
  */
 public abstract class NameserverSearchParam extends QueryParam {
 
     /**
-     * construction.
+     * constructor.
      * 
      * @param punyName
      *            punyName.
@@ -56,7 +56,7 @@ public abstract class NameserverSearchParam extends QueryParam {
     }
 
     /**
-     * construction.
+     * constructor.
      */
     public NameserverSearchParam() {
         super();
@@ -68,7 +68,7 @@ public abstract class NameserverSearchParam extends QueryParam {
     }
 
     /**
-     * construction.
+     * constructor.
      * 
      * @param request
      *            request.

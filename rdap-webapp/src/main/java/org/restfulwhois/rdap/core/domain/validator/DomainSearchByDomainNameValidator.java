@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByDomainNamePara
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchByNameParam;
 
 /**
+ * domain search by domain name validator.
  * 
  * @author jiashuo
  * 

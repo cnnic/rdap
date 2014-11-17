@@ -44,7 +44,7 @@ import org.restfulwhois.rdap.core.domain.validator.DomainSearchByDomainNameValid
 public class DomainSearchByDomainNameParam extends DomainSearchParam {
 
     /**
-     * construction.
+     * constructor.
      */
     public DomainSearchByDomainNameParam() {
         super();

@@ -38,7 +38,7 @@ import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 import org.restfulwhois.rdap.core.entity.validator.EntitySearchValidator;
 
 /**
- * entity query parameter bean.
+ * base entity search parameter bean.
  * 
  * @author jiashuo
  * 
@@ -57,7 +57,7 @@ abstract public class EntitySearchParam extends QueryParam {
     }
 
     /**
-     * construction.
+     * constructor.
      */
     public EntitySearchParam() {
         super();

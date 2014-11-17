@@ -32,6 +32,8 @@ package org.restfulwhois.rdap.core.common.util;
 
 import java.util.List;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+
 /**
  * This class contains variables.
  * <p>
@@ -46,28 +48,6 @@ import java.util.List;
  * 
  */
 public class RdapProperties {
-
-    /**
-     * bootstrapRegistryBaseUrl.
-     */
-    private static String bootstrapRegistryBaseUrl;
-
-    /**
-     * bootstrapRegistryUriForDomain.
-     */
-    private static String bootstrapRegistryUriForDomain;
-    /**
-     * bootstrapRegistryUriForAs.
-     */
-    private static String bootstrapRegistryUriForAs;
-    /**
-     * bootstrapRegistryUriForIpv4.
-     */
-    private static String bootstrapRegistryUriForIpv4;
-    /**
-     * bootstrapRegistryUriForIpv6.
-     */
-    private static String bootstrapRegistryUriForIpv6;
 
     /**
      * max concurrent count.
@@ -365,107 +345,6 @@ public class RdapProperties {
                 ipWhiteListForAccessInterval;
     }
 
-    /**
-     * get bootstrapRegistryBaseUrl.
-     * 
-     * @return bootstrapRegistryBaseUrl.
-     */
-    public static String getBootstrapRegistryBaseUrl() {
-        return bootstrapRegistryBaseUrl;
-    }
-
-    /**
-     * set bootstrapRegistryBaseUrl.
-     * 
-     * @param bootstrapRegistryBaseUrl
-     *            bootstrapRegistryBaseUrl.
-     */
-    public void setBootstrapRegistryBaseUrl(String bootstrapRegistryBaseUrl) {
-        RdapProperties.bootstrapRegistryBaseUrl = bootstrapRegistryBaseUrl;
-    }
-
-    /**
-     * get bootstrapRegistryUriForDomain.
-     * 
-     * @return bootstrapRegistryUriForDomain.
-     */
-    public static String getBootstrapRegistryUriForDomain() {
-        return bootstrapRegistryUriForDomain;
-    }
-
-    /**
-     * set bootstrapRegistryUriForDomain.
-     * 
-     * @param bootstrapRegistryUriForDomain
-     *            bootstrapRegistryUriForDomain.
-     */
-    public static void setBootstrapRegistryUriForDomain(
-            String bootstrapRegistryUriForDomain) {
-        RdapProperties.bootstrapRegistryUriForDomain =
-                bootstrapRegistryUriForDomain;
-    }
-
-    /**
-     * get bootstrapRegistryUriForAs.
-     * 
-     * @return bootstrapRegistryUriForAs.
-     */
-    public static String getBootstrapRegistryUriForAs() {
-        return bootstrapRegistryUriForAs;
-    }
-
-    /**
-     * set bootstrapRegistryUriForAs.
-     * 
-     * @param bootstrapRegistryUriForAs
-     *            bootstrapRegistryUriForAs.
-     */
-    public static void setBootstrapRegistryUriForAs(
-            String bootstrapRegistryUriForAs) {
-        RdapProperties.bootstrapRegistryUriForAs = bootstrapRegistryUriForAs;
-    }
-
-    /**
-     * get bootstrapRegistryUriForIpv4.
-     * 
-     * @return bootstrapRegistryUriForIpv4.
-     */
-    public static String getBootstrapRegistryUriForIpv4() {
-        return bootstrapRegistryUriForIpv4;
-    }
-
-    /**
-     * set bootstrapRegistryUriForIpv4.
-     * 
-     * @param bootstrapRegistryUriForIpv4
-     *            bootstrapRegistryUriForIpv4.
-     */
-    public static void setBootstrapRegistryUriForIpv4(
-            String bootstrapRegistryUriForIpv4) {
-        RdapProperties.bootstrapRegistryUriForIpv4 =
-                bootstrapRegistryUriForIpv4;
-    }
-
-    /**
-     * get bootstrapRegistryUriForIpv6.
-     * 
-     * @return bootstrapRegistryUriForIpv6.
-     */
-    public static String getBootstrapRegistryUriForIpv6() {
-        return bootstrapRegistryUriForIpv6;
-    }
-
-    /**
-     * set bootstrapRegistryUriForIpv6.
-     * 
-     * @param bootstrapRegistryUriForIpv6
-     *            bootstrapRegistryUriForIpv6.
-     */
-    public static void setBootstrapRegistryUriForIpv6(
-            String bootstrapRegistryUriForIpv6) {
-        RdapProperties.bootstrapRegistryUriForIpv6 =
-                bootstrapRegistryUriForIpv6;
-    }
     /**
      * get notImplementedUri.
      * 

@@ -38,7 +38,7 @@ import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 
 /**
- * base search parameter bean.
+ * base domain search parameter bean.
  * 
  * @author jiashuo
  * 

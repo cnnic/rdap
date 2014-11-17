@@ -34,9 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.bootstrap.BootstrapProperties;
 import org.restfulwhois.rdap.bootstrap.bean.DomainRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.springframework.stereotype.Service;
 
 /**
@@ -50,7 +50,7 @@ public class DomainRegistryHandler extends RegistryHandler {
 
     @Override
     String getRegistryRelativateUrl() {
-        return RdapProperties.getBootstrapRegistryUriForDomain();
+        return BootstrapProperties.getBootstrapRegistryUriForDomain();
     }
 
     @Override

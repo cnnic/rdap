@@ -50,7 +50,7 @@ public class DomainSearchByNsIpParam extends DomainSearchParam {
     private IpInBytes ipInBytes;
 
     /**
-     * construction.
+     * constructor.
      */
     public DomainSearchByNsIpParam() {
         super();

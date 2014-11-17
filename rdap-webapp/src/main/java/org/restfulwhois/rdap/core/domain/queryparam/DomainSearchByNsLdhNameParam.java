@@ -36,7 +36,7 @@ import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsLdhNameValidator;
 
 /**
- * base search parameter bean.
+ * domain search by nameserver LDH name parameter bean.
  * 
  * @author jiashuo
  * 
@@ -44,7 +44,7 @@ import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsLdhNameValida
 public class DomainSearchByNsLdhNameParam extends DomainSearchParam {
 
     /**
-     * construction.
+     * constructor.
      */
     public DomainSearchByNsLdhNameParam() {
         super();

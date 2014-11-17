@@ -36,7 +36,7 @@ import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 
 /**
- * base query parameter bean.
+ * nameserver query parameter bean.
  * 
  * @author weijunkai
  * @author jiashuo
@@ -45,8 +45,8 @@ import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 public class NameserverQueryParam extends DomainQueryParam {
 
     /**
-     * construction.
-     * @param request
+     * constructor.
+     * @param request request.
      */
     public NameserverQueryParam(HttpServletRequest request) {
         super(request);
