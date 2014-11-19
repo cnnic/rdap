@@ -95,6 +95,7 @@ public class JcardTest {
         ParserChainJsonString e = Ezvcard.parseJson(jcardString);
         List<VCard> list = e.all();
         System.err.println(Ezvcard.write(list.get(0)).prodId(false).go());
+        System.err.println(jcardString);
         assertNotNull(jcardString);
         assertThat(jcardString, new StringContains("zh_CN"));
         // invalid lang also can work
