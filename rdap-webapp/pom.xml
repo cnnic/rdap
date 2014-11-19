@@ -31,10 +31,6 @@
 			<version>${dependency.spring.version}</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-				<exclusion>
 					<groupId>aopalliance</groupId>
 					<artifactId>aopalliance</artifactId>
 				</exclusion>
@@ -132,12 +128,6 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.8.3</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- servlet api -->
 		<dependency>
