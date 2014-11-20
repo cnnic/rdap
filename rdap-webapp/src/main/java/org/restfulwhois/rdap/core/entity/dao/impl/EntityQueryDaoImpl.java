@@ -51,7 +51,7 @@ import org.restfulwhois.rdap.core.common.model.Remark;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.ModelStatus;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.service.NoticeAndRemarkService;
+import org.restfulwhois.rdap.core.common.service.RemarkService;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
@@ -98,12 +98,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      */
     @Autowired
     private QueryDao<PublicId> publicIdQueryDao;
-    
+
     /**
-     * loadNoticeAndRemarkService.
+     * remarkService.
      */
     @Autowired
-    private NoticeAndRemarkService noticeAndRemarkService;
+    private RemarkService remarkService;
     /**
      * remark dao.
      */
@@ -157,7 +157,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         queryAndSetNetworksAndAs(entity);
         queryAndSetInnerObjectsWithoutEntities(entity);
         queryAndSetInnerEntities(entity);
-        //queryAndSetNetworksAndAs(entity);
+        // queryAndSetNetworksAndAs(entity);
         return entity;
     }
 
@@ -175,18 +175,20 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         queryAndSetInnerObjectsWithoutEntities(entities);
         return entities;
     }
-    
+
     @Override
     public void queryAndSetInnerObjectsForSearch(List<Entity> entities) {
         queryAndSetNetworksAndAs(entities);
         queryAndSetInnerObjectsWithoutEntities(entities);
-        queryAndSetRoles(entities);        
+        queryAndSetRoles(entities);
         queryAndSetInnerEntities(entities);
     }
 
     /**
      * query and set inner entities.
-     * @param entities entities which will be set to entity.
+     * 
+     * @param entities
+     *            entities which will be set to entity.
      */
     private void queryAndSetInnerEntities(List<Entity> entities) {
         if (null == entities) {
@@ -214,10 +216,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setAutnums(autnums);
         setTruncatedIfTooMuchResult(entity);
     }
-    
+
     /**
      * query and set network and autnum.
-     * @param entities entity list.
+     * 
+     * @param entities
+     *            entity list.
      */
     private void queryAndSetNetworksAndAs(List<Entity> entities) {
         if (null == entities) {
@@ -278,14 +282,13 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setPublicIds(publicIds);
         List<Remark> remarks =
                 remarkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        if (entity.getTruncatedInfo() != null 
-                      && entity.getTruncatedInfo().getResultsTruncated()) {
-             List <TruncateReason> truncateReasons = entity
-                    .getTruncatedInfo().getTruncateReasons();
-            for (TruncateReason truncateReason : truncateReasons) {
-                  remarks.add(noticeAndRemarkService
-                          .getRemarkByReasonType(truncateReason.getName()));
-            }  
+        if (entity.getTruncatedInfo() != null
+                && entity.getTruncatedInfo().getResultsTruncated()) {
+            List<TruncateReason> truncateReasons =
+                    entity.getTruncatedInfo().getTruncateReasons();
+            List<Remark> truncatedRemarks =
+                    remarkService.getTruncatedRemarkByReason(truncateReasons);
+            remarks.addAll(truncatedRemarks);
         }
         entity.setRemarks(remarks);
         List<Link> links =
@@ -506,7 +509,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             return result;
         }
     }
-    
+
     /**
      * query and set status to entity.
      * 
@@ -541,7 +544,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             entity.addStatus(status.getStatus());
         }
     }
-    
+
     /**
      * query and set roles to entity list.
      * 
@@ -589,10 +592,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                 });
         return result;
     }
-    
+
     /**
      * query roles from REL_ENTITY_REGISTRATION by entity id.
-     * @param entityIds entity id list to check.
+     * 
+     * @param entityIds
+     *            entity id list to check.
      * @return entity role list queried from database.
      */
     private List<EntityRole> queryRoles(List<Long> entityIds) {

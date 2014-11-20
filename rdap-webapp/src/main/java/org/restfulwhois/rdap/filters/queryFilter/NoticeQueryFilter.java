@@ -38,7 +38,7 @@ import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
 import org.restfulwhois.rdap.core.common.model.Notice;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.common.service.NoticeAndRemarkService;
+import org.restfulwhois.rdap.core.common.service.NoticeService;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
 import org.slf4j.Logger;
@@ -65,12 +65,12 @@ public class NoticeQueryFilter implements QueryFilter {
      */
     @Autowired
     private NoticeDao noticeDao;
-    
+
     /**
-     * loadNoticeAndRemarkService.
+     * noticeService.
      */
     @Autowired
-    private NoticeAndRemarkService noticeAndRemarkService;
+    private NoticeService noticeService;
 
     @Override
     public QueryFilterResult preParamValidate(QueryParam queryParam) {
@@ -105,8 +105,7 @@ public class NoticeQueryFilter implements QueryFilter {
         if (null == model) {
             return;
         }
-        List<Notice> notices = noticeAndRemarkService
-                .getNoticeNoTruncated();
+        List<Notice> notices = noticeService.getAllNotTruncatedNotice();
         addTruncatedNotice(model, notices);
         model.setNotices(notices);
     }
@@ -126,10 +125,9 @@ public class NoticeQueryFilter implements QueryFilter {
             BaseSearchModel<?> baseSearchModel = (BaseSearchModel<?>) model;
             List<TruncateReason> truncateReasons =
                     baseSearchModel.getTruncatedInfo().getTruncateReasons();
-            for (TruncateReason truncateReason : truncateReasons) {
-                notices.add(noticeAndRemarkService
-                        .getNoticeByReasonType(truncateReason.getName()));
-            }
+            List<Notice> truncatedNotices =
+                    noticeService.getTruncatedNoticeByReason(truncateReasons);
+            notices.addAll(truncatedNotices);
         }
     }
 
