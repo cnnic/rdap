@@ -16,4 +16,5 @@
 	<import resource="classpath:spring/spring-bootstrap.xml" />
 	<import resource="classpath:spring/spring-search.xml" />
 	<import resource="classpath:spring/spring-queryFilter.xml" />
+	<import resource="classpath:spring/spring-initData-notice.xml" />
 </beans>
