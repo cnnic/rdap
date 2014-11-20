@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.filters.queryFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.core.common.dao.NoticeDao;
@@ -105,8 +106,16 @@ public class NoticeQueryFilter implements QueryFilter {
         if (null == model) {
             return;
         }
-        List<Notice> notices = noticeService.getAllNotTruncatedNotice();
-        addTruncatedNotice(model, notices);
+        List<Notice> notices = new ArrayList<Notice>();
+        List<Notice> notTruncatedNotices =
+                noticeService.getAllNotTruncatedNotice();
+        if (null != notTruncatedNotices) {
+            notices.addAll(notTruncatedNotices);
+        }
+        List<Notice> truncatedNotices = getTruncatedNotice(model);
+        if (null != truncatedNotices) {
+            notices.addAll(truncatedNotices);
+        }
         model.setNotices(notices);
     }
 
@@ -117,8 +126,9 @@ public class NoticeQueryFilter implements QueryFilter {
      *            model.
      * @param notices
      *            notices.
+     * @return notice list.
      */
-    private void addTruncatedNotice(BaseModel model, List<Notice> notices) {
+    private List<Notice> getTruncatedNotice(BaseModel model) {
         if (model instanceof BaseSearchModel<?>
                 && ((BaseSearchModel<?>) model).getTruncatedInfo()
                         .getResultsTruncated()) {
@@ -127,8 +137,9 @@ public class NoticeQueryFilter implements QueryFilter {
                     baseSearchModel.getTruncatedInfo().getTruncateReasons();
             List<Notice> truncatedNotices =
                     noticeService.getTruncatedNoticeByReason(truncateReasons);
-            notices.addAll(truncatedNotices);
+            return truncatedNotices;
         }
+        return null;
     }
 
 }
