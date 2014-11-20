@@ -191,9 +191,6 @@ public class NoticeDaoImpl implements NoticeDao {
                     notice = new Notice();
                     notice.setId(noticeId);
                     notice.setTitle(rs.getString("TITLE"));
-                    notice.setReasonType(rs.getString("REASON_TYPE"));
-                    notice.setReasonTypeShortName(
-                       rs.getString("REASON_TYPE_SHORT_NAME"));
                     noticeMapById.put(noticeId, notice);
                     result.add(notice);
                 }

@@ -39,14 +39,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.core.common.dao.QueryDao;
 import org.restfulwhois.rdap.core.common.model.BaseNotice.NoticeType;
 import org.restfulwhois.rdap.core.common.model.Link;
 import org.restfulwhois.rdap.core.common.model.Remark;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,34 +159,6 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
                 }, new RemarkResultSetExtractor());
         return result;
     }
-    /**
-     * get all remark list.   
-     *
-     * @return remark list.
-     */
-    public List<Remark> loadRemarksByTypes() {
-        LOGGER.debug("loadRemarksByTypes, types:{},");
-        final String typesJoinedByComma = StringUtils.join(
-               TruncateReason.getAllReasonTypes(), ",");
-        final String sql = "select notice.*, description.description"
-             + " from RDAP_NOTICE notice "
-             + " left outer join RDAP_NOTICE_DESCRIPTION description "
-             + " on notice.NOTICE_ID = description.NOTICE_ID "
-             + " where notice.TYPE=? and notice.REASON_TYPE_SHORT_NAME in ( "
-             + typesJoinedByComma + ")";
-        List<Remark> result = jdbcTemplate.query(
-                new PreparedStatementCreator() {
-                    public PreparedStatement createPreparedStatement(
-                            Connection connection) throws SQLException {
-                       PreparedStatement ps = connection.prepareStatement(sql);
-                       ps.setString(1, NoticeType.REMARK.getName());
-                       return ps;
-                   }
-                }, new RemarkResultSetExtractor());
-        LOGGER.debug("queryAsInnerObjects, result:{}", result);
-        return result;       
-                 
-   }
 
     /**
      * remark ResultSetExtractor, extract data from ResultSet.
@@ -208,9 +178,6 @@ public class RemarkQueryDaoImpl extends AbstractQueryDao<Remark> {
                     remark = new Remark();
                     remark.setId(remarkId);
                     remark.setTitle(rs.getString("TITLE"));
-                    remark.setReasonType(rs.getString("REASON_TYPE"));
-                    remark.setReasonTypeShortName(
-                           rs.getString("REASON_TYPE_SHORT_NAME"));
                     remarkMapById.put(remarkId, remark);
                     result.add(remark);
                 }

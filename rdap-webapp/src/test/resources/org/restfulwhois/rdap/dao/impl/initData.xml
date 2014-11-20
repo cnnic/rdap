@@ -27,28 +27,6 @@
 		TITLE="TOO MANY REQUESTS" DESCRIPTION="TOO MANY REQUESTS" LANG='en' />
 	<RDAP_ERRORMESSAGE ERROR_ID="11" ERROR_CODE="509"
 		TITLE="TOO MANY CONNECTION" DESCRIPTION="TOO MANY CONNECTION" LANG='en' />
-	<RDAP_NOTICE NOTICE_ID="111" TITLE="result set truncated" TYPE="notice" 
-	    REASON_TYPE='result set truncated due to authorization' 
-	    REASON_TYPE_SHORT_NAME='authorization' />
-	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="111" NOTICE_ID="111" 
-	    DESCRIPTION="The list of results does not contain all results due to lack of authorization" />
-	<RDAP_NOTICE NOTICE_ID="112" TITLE="result set truncated" TYPE="notice" 
-        REASON_TYPE='result set truncated due to excessive load' 
-        REASON_TYPE_SHORT_NAME='excessiveLoad' />
-    <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="112" NOTICE_ID="112" 
-        DESCRIPTION="The list of results does not contain all results due to excessively heavy load on the server." />
-    <RDAP_NOTICE NOTICE_ID="113" TITLE="object truncated" TYPE="remark" 
-        REASON_TYPE='object truncated due to authorization' 
-        REASON_TYPE_SHORT_NAME='authorization' />
-    <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="113" NOTICE_ID="113" 
-        DESCRIPTION="The object does not contain all data due to lack of authorization." />
-    <RDAP_NOTICE NOTICE_ID="114" TITLE="object truncated" TYPE="remark" 
-        REASON_TYPE='object truncated due to excessive load' 
-        REASON_TYPE_SHORT_NAME='excessiveLoad' />
-    <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="114" NOTICE_ID="114" 
-        DESCRIPTION="The object does not contain all data due to excessively heavy load on the server." />
-        
-        
         <!-- notices -->
     <RDAP_NOTICE NOTICE_ID="115" TITLE="Terms of Use" TYPE="notice" /> 
     <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="115"
