@@ -55,7 +55,7 @@ import org.springframework.stereotype.Repository;
  * @author weijunkai
  * 
  */
-@Repository
+//@Repository
 public class ConformanceDaoImpl implements ConformanceDao {
     /**
      * logger.

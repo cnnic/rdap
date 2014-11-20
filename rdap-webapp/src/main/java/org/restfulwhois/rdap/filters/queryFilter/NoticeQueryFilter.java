@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.filters.queryFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.core.common.dao.NoticeDao;
@@ -38,7 +39,7 @@ import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
 import org.restfulwhois.rdap.core.common.model.Notice;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.common.service.NoticeAndRemarkService;
+import org.restfulwhois.rdap.core.common.service.NoticeService;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
 import org.slf4j.Logger;
@@ -65,12 +66,12 @@ public class NoticeQueryFilter implements QueryFilter {
      */
     @Autowired
     private NoticeDao noticeDao;
-    
+
     /**
-     * loadNoticeAndRemarkService.
+     * noticeService.
      */
     @Autowired
-    private NoticeAndRemarkService noticeAndRemarkService;
+    private NoticeService noticeService;
 
     @Override
     public QueryFilterResult preParamValidate(QueryParam queryParam) {
@@ -105,9 +106,16 @@ public class NoticeQueryFilter implements QueryFilter {
         if (null == model) {
             return;
         }
-        List<Notice> notices = noticeAndRemarkService
-                .getNoticeNoTruncated();
-        addTruncatedNotice(model, notices);
+        List<Notice> notices = new ArrayList<Notice>();
+        List<Notice> notTruncatedNotices =
+                noticeService.getAllNotTruncatedNotice();
+        if (null != notTruncatedNotices) {
+            notices.addAll(notTruncatedNotices);
+        }
+        List<Notice> truncatedNotices = getTruncatedNotice(model);
+        if (null != truncatedNotices) {
+            notices.addAll(truncatedNotices);
+        }
         model.setNotices(notices);
     }
 
@@ -118,19 +126,20 @@ public class NoticeQueryFilter implements QueryFilter {
      *            model.
      * @param notices
      *            notices.
+     * @return notice list.
      */
-    private void addTruncatedNotice(BaseModel model, List<Notice> notices) {
+    private List<Notice> getTruncatedNotice(BaseModel model) {
         if (model instanceof BaseSearchModel<?>
                 && ((BaseSearchModel<?>) model).getTruncatedInfo()
                         .getResultsTruncated()) {
             BaseSearchModel<?> baseSearchModel = (BaseSearchModel<?>) model;
             List<TruncateReason> truncateReasons =
                     baseSearchModel.getTruncatedInfo().getTruncateReasons();
-            for (TruncateReason truncateReason : truncateReasons) {
-                notices.add(noticeAndRemarkService
-                        .getNoticeByReasonType(truncateReason.getName()));
-            }
+            List<Notice> truncatedNotices =
+                    noticeService.getTruncatedNoticeByReason(truncateReasons);
+            return truncatedNotices;
         }
+        return null;
     }
 
 }

@@ -13,7 +13,7 @@
 	    	<property name="lang" value="en"></property>
 	    </bean>
 	    <bean class="org.restfulwhois.rdap.core.common.model.ErrorMessage">
-	    	<property name="errorCode" value="401"></property>
+	    	<property name="errorCode" value="404"></property>
 	    	<property name="title" value="NOT FOUND"></property>
 	    	<property name="description" value="NOT FOUND"></property>
 	    	<property name="lang" value="en"></property>
@@ -44,38 +44,38 @@
 	    </bean>
 	     <bean class="org.restfulwhois.rdap.core.common.model.ErrorMessage">
 	    	<property name="errorCode" value="401"></property>
-	    	<property name="title" value="Unauthorized"></property>
-	    	<property name="description" value="Unauthorized"></property>
+	    	<property name="title" value="UNAUTHORIZED"></property>
+	    	<property name="description" value="UNAUTHORIZED"></property>
 	    	<property name="lang" value="en"></property>
 	    </bean>
 	     <bean class="org.restfulwhois.rdap.core.common.model.ErrorMessage">
 	    	<property name="errorCode" value="403"></property>
-	    	<property name="title" value="Forbidden"></property>
-	    	<property name="description" value="Forbidden"></property>
+	    	<property name="title" value="FORBIDDEN"></property>
+	    	<property name="description" value="FORBIDDEN"></property>
 	    	<property name="lang" value="en"></property>
 	    </bean>
 	     <bean class="org.restfulwhois.rdap.core.common.model.ErrorMessage">
 	    	<property name="errorCode" value="509"></property>
-	    	<property name="title" value="Bandwidth Limit Exceeded"></property>
-	    	<property name="description" value="Bandwidth Limit Exceeded"></property>
+	    	<property name="title" value="BANDWIDTH LINIT EXCEEDED"></property>
+	    	<property name="description" value="BANDWIDTH LINIT EXCEEDED"></property>
 	    	<property name="lang" value="en"></property>
 	    </bean>
 	     <bean class="org.restfulwhois.rdap.core.common.model.ErrorMessage">
 	    	<property name="errorCode" value="429"></property>
-	    	<property name="title" value="Too Many Requests"></property>
-	    	<property name="description" value="Too Many Requests"></property>
+	    	<property name="title" value="TOO MANY REQUESTS"></property>
+	    	<property name="description" value="TOO MANY REQUESTS"></property>
 	    	<property name="lang" value="zh"></property>
 	    </bean>
 	     <bean class="org.restfulwhois.rdap.core.common.model.ErrorMessage">
 	    	<property name="errorCode" value="301"></property>
-	    	<property name="title" value="Moved Permanently"></property>
-	    	<property name="description" value="Moved Permanently"></property>
-	    	<property name="lang" value="zh"></property>
+	    	<property name="title" value="MOVED PERMANENTLY"></property>
+	    	<property name="description" value="MOVED PERMANENTLY"></property>
+	    	<property name="lang" value="en"></property>
 	    </bean>
 	     <bean class="org.restfulwhois.rdap.core.common.model.ErrorMessage">
 	    	<property name="errorCode" value="501"></property>
-	    	<property name="title" value="Not Implemented"></property>
-	    	<property name="description" value="Not Implemented"></property>
+	    	<property name="title" value="NOT IMPLEMENTED"></property>
+	    	<property name="description" value="NOT IMPLEMENTED"></property>
 	    	<property name="lang" value="en"></property>
 	    </bean>
 	</util:list>

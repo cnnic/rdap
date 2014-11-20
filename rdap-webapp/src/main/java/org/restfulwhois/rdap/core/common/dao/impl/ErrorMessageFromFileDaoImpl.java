@@ -44,7 +44,7 @@ import org.springframework.stereotype.Repository;
  * @author tianhongqiang
  * 
  */
-//@Repository
+@Repository
 public class ErrorMessageFromFileDaoImpl implements ErrorMessageDao{
 	 /**
      * logger.

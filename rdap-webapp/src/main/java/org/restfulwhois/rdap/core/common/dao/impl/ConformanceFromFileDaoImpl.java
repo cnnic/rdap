@@ -47,7 +47,7 @@ import org.springframework.stereotype.Repository;
  * @author tianhongqiang
  * 
  */
-//@Repository
+@Repository
 public class ConformanceFromFileDaoImpl implements ConformanceDao{
 	
 	 /**
@@ -62,12 +62,10 @@ public class ConformanceFromFileDaoImpl implements ConformanceDao{
 	@Override
 	public List<String> queryConformance() {
 		// TODO Auto-generated method stub
-		System.out.println(rdapConformanceList);
 		 List<String> result = new ArrayList<String>();
-//		 for(int i = 0 ; i < rdapConformanceList.size(); i++){
-//			 RdapConformance mode= rdapConformanceList.get(i);
-//			 result.add(mode.getRdapConformances());
-//		 }
+		 for(int i = 0 ; i < rdapConformanceList.size(); i++){
+			 result.add(rdapConformanceList.get(i));
+		 }
 		return result;
 	}
 
