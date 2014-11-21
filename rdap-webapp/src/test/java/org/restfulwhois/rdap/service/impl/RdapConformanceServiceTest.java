@@ -89,7 +89,7 @@ public class RdapConformanceServiceTest extends BaseTest {
 		assertNotNull(domain.getRdapConformance());
 		assertThat(domain.getRdapConformance(),
 				CoreMatchers.hasItems("rdap_level_0"));
-		assertThat(domain.getRdapConformance(),
-				CoreMatchers.hasItems("cnnic_level_0"));
+//		assertThat(domain.getRdapConformance(),
+//				CoreMatchers.hasItems("cnnic_level_0"));
 	}
 }

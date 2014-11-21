@@ -50,7 +50,7 @@ import org.springframework.stereotype.Repository;
  * @author jiashuo
  * 
  */
-@Repository
+//@Repository
 public class ErrorMessageDaoImpl implements ErrorMessageDao {
     
     /**

@@ -56,15 +56,15 @@ public class ConformanceDaoTest extends BaseTest {
      * conformanceDao.
      */
     @Autowired
-    @Qualifier("conformanceDaoImpl")
+//    @Qualifier("conformanceDaoImpl")
     private ConformanceDao conformanceDao;
 
     /**
      * test query exist.
      */
     @Test
-    @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("rdapConformance.xml")
+//    @DatabaseTearDown("teardown.xml")
+//    @DatabaseSetup("rdapConformance.xml")
     public void testQueryExistConformance() {
         List<String> conformances = conformanceDao.queryConformance();
         Assert.notNull(conformances);

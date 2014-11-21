@@ -57,15 +57,15 @@ public class ErrorMessageDaoTest extends BaseTest {
      * errorMessageDao.
      */
     @Autowired
-    @Qualifier("errorMessageDaoImpl")
+//    @Qualifier("errorMessageDaoImpl")
     private ErrorMessageDao errorMessageDao;
 
     /**
      * test query exist.
      */
     @Test
-    @DatabaseTearDown("teardown.xml")
-    @DatabaseSetup("errorMessage.xml")
+//    @DatabaseTearDown("teardown.xml")
+//    @DatabaseSetup("errorMessage.xml")
     public void testQueryExist() {
         List<ErrorMessage> errorMsgs = errorMessageDao.getAllErrorMessages();
         Assert.notNull(errorMsgs);
