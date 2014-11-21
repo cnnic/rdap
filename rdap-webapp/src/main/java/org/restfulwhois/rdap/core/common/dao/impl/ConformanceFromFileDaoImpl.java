@@ -59,14 +59,18 @@ public class ConformanceFromFileDaoImpl implements ConformanceDao{
 	
 	@Resource(name = "rdapConformanceList")
 	private List<String> rdapConformanceList;
+	/**
+	 * Query rdapConformance data information
+	 * 
+	 *  @return List<String> resultList
+	 */
 	@Override
 	public List<String> queryConformance() {
-		// TODO Auto-generated method stub
-		 List<String> result = new ArrayList<String>();
+		 List<String> resultList = new ArrayList<String>();
 		 for(int i = 0 ; i < rdapConformanceList.size(); i++){
-			 result.add(rdapConformanceList.get(i));
+			 resultList.add(rdapConformanceList.get(i));
 		 }
-		return result;
+		return resultList;
 	}
 
 	

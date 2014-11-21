@@ -7,7 +7,6 @@
 	
 	<util:list id="rdapConformanceList">
 		<value>rdap_level_0</value>
-		<value>cnnic_level_0</value>
 	</util:list>
 	
 </beans>

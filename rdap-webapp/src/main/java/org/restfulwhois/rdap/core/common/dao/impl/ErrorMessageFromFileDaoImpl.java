@@ -54,7 +54,11 @@ public class ErrorMessageFromFileDaoImpl implements ErrorMessageDao{
     
     @Resource(name = "errorMessageList")
     private  List<ErrorMessage> errorMessageList;
-    
+    /**
+	 * Query errorMessages data information
+	 * 
+	 *  @return List<ErrorMessage> errorMessageList
+	 */
 	@Override
 	public List<ErrorMessage> getAllErrorMessages() {
 		return errorMessageList;
