@@ -30,12 +30,12 @@
 	<util:list id="truncatedRemarkList">
 		<bean class="org.restfulwhois.rdap.core.common.model.Remark">
 			<property name="title" value="Data Policy"></property>
-			<property name="description" ref="noticeDescriptionExcessiveLoad"></property>
+			<property name="description" ref="remarkDescriptionExcessiveLoad"></property>
 			<property name="reasonType" value="object truncated due to excessive load"></property>
 			<property name="reasonTypeShortName" value="excessiveLoad"></property>
 		</bean>
 	</util:list>
-	<util:list id="noticeDescriptionExcessiveLoad">
+	<util:list id="remarkDescriptionExcessiveLoad">
 		<value>The object does not contain all data due to excessively heavy load on the server.</value>
 	</util:list>
 </beans>
