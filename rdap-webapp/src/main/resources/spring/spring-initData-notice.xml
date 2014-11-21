@@ -25,6 +25,7 @@
 	</util:list>
 	<util:list id="noticeDescriptionAuth">
 		<value>The list of results does not contain all results due to lack of authorization.</value>
+		<value>This may indicate to some clients that proper authorization will yield a longer result set.</value>
 	</util:list>
 	<!-- truncated remark data -->
 	<util:list id="truncatedRemarkList">
