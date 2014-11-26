@@ -39,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * 
  * @author jiashuo
  * 
  */
@@ -55,11 +54,30 @@ public abstract class AbstractSearchDao<T extends BaseModel> implements
      * errors.
      */
     @Autowired
-    protected JdbcTemplate jdbcTemplate;
-    
+    private JdbcTemplate jdbcTemplate;
+
     /**
      * query DAO.
      */
     @Autowired
-    protected QueryDao<T> queryDao;
+    private QueryDao<T> queryDao;
+
+    /**
+     * get jdbcTemplate.
+     * 
+     * @return jdbcTemplate.
+     */
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
+
+    /**
+     * get queryDao.
+     * 
+     * @return queryDao.
+     */
+    public QueryDao<T> getQueryDao() {
+        return queryDao;
+    }
+
 }

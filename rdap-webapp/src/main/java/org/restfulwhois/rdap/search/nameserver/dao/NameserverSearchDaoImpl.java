@@ -47,6 +47,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class NameserverSearchDaoImpl extends AbstractSearchDao<Nameserver> {
+    /**
+     * nameserverSearchStrategyList.
+     */
     @Resource(name = "nameserverSearchStrategyList")
     private List<SearchStrategy<Nameserver>> nameserverSearchStrategyList;
 
@@ -55,8 +58,9 @@ public class NameserverSearchDaoImpl extends AbstractSearchDao<Nameserver> {
         SearchStrategy<Nameserver> strategy =
                 this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            List<Nameserver> result = strategy.search(queryParam, jdbcTemplate);
-            queryDao.queryAndSetInnerObjectsForSearch(result);
+            List<Nameserver> result =
+                    strategy.search(queryParam, getJdbcTemplate());
+            getQueryDao().queryAndSetInnerObjectsForSearch(result);
             return result;
         }
         return null;
@@ -67,11 +71,18 @@ public class NameserverSearchDaoImpl extends AbstractSearchDao<Nameserver> {
         SearchStrategy<Nameserver> strategy =
                 this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            return strategy.searchCount(queryParam, jdbcTemplate);
+            return strategy.searchCount(queryParam, getJdbcTemplate());
         }
         return null;
     }
 
+    /**
+     * getSearchStrategy.
+     * 
+     * @param queryParam
+     *            getSearchStrategy.
+     * @return SearchStrategy.
+     */
     private SearchStrategy<Nameserver> getSearchStrategy(QueryParam queryParam) {
         for (SearchStrategy<Nameserver> strategy : nameserverSearchStrategyList) {
             if (strategy.support(queryParam)) {

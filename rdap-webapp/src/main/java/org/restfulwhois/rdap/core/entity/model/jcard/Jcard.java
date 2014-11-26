@@ -62,7 +62,7 @@ import ezvcard.VCard;
  * @author jiashuo
  * 
  */
-public class Jcard {
+public final class Jcard {
     /**
      * entity, datasource of VCARD.
      */

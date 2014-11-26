@@ -173,7 +173,7 @@ public class AutnumRedirectDao implements RedirectDao {
         List<Object[]> batchSaveParams = new ArrayList<Object[]>();
         for (Redirect bootstrap : bootstraps) {
             AutnumRedirect autnumRedirect = (AutnumRedirect) bootstrap;
-            batchSaveParams.add(new Object[] { autnumRedirect.getStartAutnum(),
+            batchSaveParams.add(new Object[] {autnumRedirect.getStartAutnum(),
                     autnumRedirect.getEndAutnum(),
                     autnumRedirect.getUrls().get(0) });
         }

@@ -72,6 +72,9 @@ public class AutnumQueryController extends BaseController {
     @Autowired
     protected AutnumService queryService;
 
+    /**
+     * queryFilters.
+     */
     @Resource(name = "autnumQueryFilters")
     private List<QueryFilter> queryFilters;
 
@@ -103,6 +106,7 @@ public class AutnumQueryController extends BaseController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
             HttpServletRequest request, HttpServletResponse response)
@@ -112,6 +116,7 @@ public class AutnumQueryController extends BaseController {
         return super.query(queryParam);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         Autnum result = queryService.queryAutnum(queryParam);

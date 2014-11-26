@@ -44,6 +44,13 @@ import org.restfulwhois.rdap.core.common.util.SubnetUtils.SubnetInfo;
 public class IpV4 {
 
     /**
+     * constructor.
+     */
+    private IpV4() {
+        super();
+    }
+
+    /**
      * dot separator.
      */
     private static final String DOT_SEPARATOR = ".";
@@ -98,7 +105,7 @@ public class IpV4 {
      */
     private static boolean hasPrefixZero(String cidr) {
         String ip = StringUtils.substringBefore(cidr, "/");
-        String[] splits = StringUtils.split(ip,".");
+        String[] splits = StringUtils.split(ip, ".");
         for (String split : splits) {
             if (StringUtils.startsWith(split, "0")
                     && StringUtils.length(split) > 1) {
@@ -108,6 +115,13 @@ public class IpV4 {
         return false;
     }
 
+    /**
+     * addDefaultMaskIfNotExist
+     * 
+     * @param cidr
+     *            addDefaultMaskIfNotExist.
+     * @return cidr.
+     */
     private static String addDefaultMaskIfNotExist(String cidr) {
         if (!StringUtils.contains(cidr, "/")) {
             cidr = cidr + "/32";
@@ -142,6 +156,7 @@ public class IpV4 {
      * parse int IP to byte array.
      * 
      * @param value
+     *            value.
      * @return byte[].
      */
     public static byte[] toByteArray(int value) {

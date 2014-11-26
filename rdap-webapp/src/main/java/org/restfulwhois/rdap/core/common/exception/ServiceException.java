@@ -39,7 +39,7 @@ package org.restfulwhois.rdap.core.common.exception;
 public class ServiceException extends Exception {
 
     /**
-     * serialVersionUID
+     * serialVersionUID.
      */
     private static final long serialVersionUID = 1L;
 

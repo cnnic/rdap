@@ -95,11 +95,13 @@ public abstract class AbstractRedirectQueryFilter implements QueryFilter {
     }
 
     /**
+     * queryRedirect.
      * 
      * @param queryParam
-     * @return
+     *            queryParam.
+     * @return QueryFilterResult
      */
-    abstract protected QueryFilterResult queryRedirect(QueryParam queryParam);
+    protected abstract QueryFilterResult queryRedirect(QueryParam queryParam);
 
     @Override
     public QueryFilterResult preParamValidate(QueryParam queryParam) {

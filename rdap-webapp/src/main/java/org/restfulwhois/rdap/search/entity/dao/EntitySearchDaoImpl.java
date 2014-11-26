@@ -47,6 +47,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class EntitySearchDaoImpl extends AbstractSearchDao<Entity> {
+    /**
+     * entitySearchStrategyList.
+     */
     @Resource(name = "entitySearchStrategyList")
     private List<SearchStrategy<Entity>> entitySearchStrategyList;
 
@@ -54,8 +57,9 @@ public class EntitySearchDaoImpl extends AbstractSearchDao<Entity> {
     public List<Entity> search(QueryParam queryParam) {
         SearchStrategy<Entity> strategy = this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            List<Entity> result = strategy.search(queryParam, jdbcTemplate);
-            queryDao.queryAndSetInnerObjectsForSearch(result);
+            List<Entity> result =
+                    strategy.search(queryParam, getJdbcTemplate());
+            getQueryDao().queryAndSetInnerObjectsForSearch(result);
             return result;
         }
         return null;
@@ -65,11 +69,18 @@ public class EntitySearchDaoImpl extends AbstractSearchDao<Entity> {
     public Long searchCount(QueryParam queryParam) {
         SearchStrategy<Entity> strategy = this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            return strategy.searchCount(queryParam, jdbcTemplate);
+            return strategy.searchCount(queryParam, getJdbcTemplate());
         }
         return null;
     }
 
+    /**
+     * getSearchStrategy.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return SearchStrategy.
+     */
     private SearchStrategy<Entity> getSearchStrategy(QueryParam queryParam) {
         for (SearchStrategy<Entity> strategy : entitySearchStrategyList) {
             if (strategy.support(queryParam)) {

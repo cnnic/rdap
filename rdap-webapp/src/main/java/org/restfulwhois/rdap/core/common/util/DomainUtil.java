@@ -194,10 +194,12 @@ public final class DomainUtil {
      * 
      * @param domainName
      *            domain name,ASCII char MUST in lower case.
-     * @param forSearch is for search.            
+     * @param forSearch
+     *            is for search.
      * @return true if is valid idna,false if not.
      */
-    public static boolean validateDomainNameIsValidIdna(String domainName,boolean forSearch) {
+    public static boolean validateDomainNameIsValidIdna(String domainName,
+            boolean forSearch) {
         if (StringUtils.isBlank(domainName) || !domainName.contains(".")) {
             return false;
         }
@@ -265,29 +267,29 @@ public final class DomainUtil {
         }
         // '*' is replaced with no char
         String domainName = searchString.replace(StringUtil.ASTERISK, "");
-        if (validateDomainNameIsValidIdna(domainName,true)) {
+        if (validateDomainNameIsValidIdna(domainName, true)) {
             return true;
         }
         // '*' is replaced with dot
         domainName =
                 searchString.replace(StringUtil.ASTERISK,
                         StringUtil.TLD_SPLITOR);
-        if (validateDomainNameIsValidIdna(domainName,true)) {
+        if (validateDomainNameIsValidIdna(domainName, true)) {
             return true;
         }
         // '*' is replaced with a digit or an alphabet, like '1'
         domainName = searchString.replace(StringUtil.ASTERISK, "1");
-        if (validateDomainNameIsValidIdna(domainName,true)) {
+        if (validateDomainNameIsValidIdna(domainName, true)) {
             return true;
         }
         // '*' means '.' plus letter/digit
         domainName = searchString.replace("*", ".1");
-        if (validateDomainNameIsValidIdna(domainName,true)) {
+        if (validateDomainNameIsValidIdna(domainName, true)) {
             return true;
         }
         // '*' means [letter/digit][.][letter/digit]
         domainName = searchString.replace("*", "1.1");
-        if (validateDomainNameIsValidIdna(domainName,true)) {
+        if (validateDomainNameIsValidIdna(domainName, true)) {
             return true;
         }
         return false;
@@ -359,6 +361,8 @@ public final class DomainUtil {
      * @param str
      *            string.
      * @return str.
+     * @throws DecodeException
+     *             DecodeException.
      */
     public static String urlDecodeAndReplaceAsciiToLowercase(String str)
             throws DecodeException {
@@ -528,7 +532,7 @@ public final class DomainUtil {
         }
         return isASCII;
     }
-    
+
     /**
      * validate domain search string represent a valid IDNA domain.
      * 
@@ -579,5 +583,5 @@ public final class DomainUtil {
         }
         return false;
     }
-    
+
 }

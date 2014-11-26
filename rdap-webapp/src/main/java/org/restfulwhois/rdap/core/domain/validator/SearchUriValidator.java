@@ -64,6 +64,7 @@ public class SearchUriValidator implements Validator {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(SearchUriValidator.class);
 
+    @SuppressWarnings("rawtypes")
     @Override
     public boolean supports(Class<?> clazz) {
         Class superClazz = clazz.getSuperclass();

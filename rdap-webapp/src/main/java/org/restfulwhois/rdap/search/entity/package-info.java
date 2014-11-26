@@ -1,8 +1,5 @@
 /**
- * 
- */
-/**
- *org.restfulwhois.rdap.search.entity
+ *org.restfulwhois.rdap.search.entity.
  * @author jiashuo
  *
  */

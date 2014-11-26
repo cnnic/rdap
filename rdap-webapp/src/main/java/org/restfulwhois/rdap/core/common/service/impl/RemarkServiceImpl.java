@@ -93,7 +93,7 @@ public class RemarkServiceImpl implements RemarkService {
      * 
      * @param reason
      *            reason.
-     * @param truncatedNoticeList
+     * @param truncatedRemarkList
      *            truncatedNoticeList.
      * @return remark if exist, null if not.
      */
@@ -108,6 +108,12 @@ public class RemarkServiceImpl implements RemarkService {
         return null;
     }
 
+    /**
+     * setTruncatedRemarkList.
+     * 
+     * @param truncatedRemarkList
+     *            setTruncatedRemarkList.
+     */
     @Resource(name = "truncatedRemarkList")
     public void setTruncatedRemarkList(List<Remark> truncatedRemarkList) {
         RemarkServiceImpl.truncatedRemarkList = truncatedRemarkList;

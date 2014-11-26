@@ -54,6 +54,9 @@ public class EntitySearchByFnStrategy extends AbstractEntitySearchStrategy {
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(EntitySearchByFnStrategy.class);
 
+    /**
+     * SEARCH_COLUMN_NAME.
+     */
     private static final String SEARCH_COLUMN_NAME = "FN";
 
     @Override

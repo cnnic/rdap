@@ -62,7 +62,7 @@ public class DomainAndNsRedirectQueryFilter extends AbstractRedirectQueryFilter 
      * query service.
      */
     @Autowired
-    protected DomainQueryService queryService;
+    private DomainQueryService queryService;
 
     @Override
     protected QueryFilterResult queryRedirect(QueryParam queryParam) {

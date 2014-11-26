@@ -94,6 +94,7 @@ public class DomainQueryController extends BaseDnrController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/domain/{domainName}" },
             method = RequestMethod.GET)
     @ResponseBody
@@ -103,6 +104,7 @@ public class DomainQueryController extends BaseDnrController {
         return super.query(queryParam);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         if (queryService.tldInThisRegistry(queryParam)) {
@@ -118,6 +120,7 @@ public class DomainQueryController extends BaseDnrController {
      *            queryParam.
      * @return ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     protected ResponseEntity queryDomainInThisRegistry(QueryParam queryParam) {
         LOGGER.debug("   queryDomainInThisRegistry:{}", queryParam);
         Domain domain = queryService.queryDomain(queryParam);

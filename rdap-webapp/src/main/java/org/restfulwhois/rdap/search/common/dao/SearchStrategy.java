@@ -41,15 +41,38 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * search strategy.
  * 
  * @author jiashuo
- * 
  */
 public interface SearchStrategy<T extends BaseModel> {
 
+    /**
+     * check if support queryParam.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @return boolean
+     */
     boolean support(QueryParam queryParam);
 
+    /**
+     * searchCount.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @param jdbcTemplate
+     *            jdbcTemplate.
+     * @return search count.
+     */
     Long searchCount(QueryParam queryParam, JdbcTemplate jdbcTemplate);
 
+    /**
+     * search.
+     * 
+     * @param queryParam
+     *            queryParam
+     * @param jdbcTemplate
+     *            jdbcTemplate.
+     * @return list.
+     */
     List<T> search(QueryParam queryParam, JdbcTemplate jdbcTemplate);
-
 
 }

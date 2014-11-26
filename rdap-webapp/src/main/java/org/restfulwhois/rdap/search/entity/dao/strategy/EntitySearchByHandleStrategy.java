@@ -54,6 +54,9 @@ public class EntitySearchByHandleStrategy extends AbstractEntitySearchStrategy {
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(EntitySearchByHandleStrategy.class);
 
+    /**
+     * SEARCH_COLUMN_NAME.
+     */
     private static final String SEARCH_COLUMN_NAME = "HANDLE";
 
     @Override

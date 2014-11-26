@@ -37,6 +37,9 @@ package org.restfulwhois.rdap.core.common.model.base;
  * 
  */
 public enum ModelType {
+    /**
+     * base model.
+     */
     BASE("base"),
     /**
      * model type.

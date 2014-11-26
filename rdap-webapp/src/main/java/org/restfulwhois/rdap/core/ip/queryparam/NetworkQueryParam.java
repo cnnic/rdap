@@ -88,7 +88,7 @@ public class NetworkQueryParam extends QueryParam {
     }
 
     /**
-     * generateQueryParam
+     * generateQueryParam.
      * 
      * @param cidr
      *            cidr.

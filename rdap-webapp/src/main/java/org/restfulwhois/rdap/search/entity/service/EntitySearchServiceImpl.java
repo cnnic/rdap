@@ -62,6 +62,9 @@ public class EntitySearchServiceImpl extends AbstractSearchService implements
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EntitySearchServiceImpl.class);
 
+    /**
+     * searchDao.
+     */
     @Autowired
     private SearchDao<Entity> searchDao;
 

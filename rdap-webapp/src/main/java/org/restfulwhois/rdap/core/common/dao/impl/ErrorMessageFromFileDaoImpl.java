@@ -31,37 +31,44 @@
 package org.restfulwhois.rdap.core.common.dao.impl;
 
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.restfulwhois.rdap.core.common.dao.ErrorMessageDao;
 import org.restfulwhois.rdap.core.common.model.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
 /**
- * error message DAO implementation get all error messages from xml
- * while the system is starting.
+ * error message DAO implementation get all error messages from xml while the
+ * system is starting.
  * 
  * @author tianhongqiang
  * 
  */
 @Repository
-public class ErrorMessageFromFileDaoImpl implements ErrorMessageDao{
-	 /**
+public class ErrorMessageFromFileDaoImpl implements ErrorMessageDao {
+    /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(ErrorMessageFromFileDaoImpl.class); 
-    
-    @Resource(name = "errorMessageList")
-    private  List<ErrorMessage> errorMessageList;
+            .getLogger(ErrorMessageFromFileDaoImpl.class);
+
     /**
-	 * Query errorMessages data information
-	 * 
-	 *  @return List<ErrorMessage> errorMessageList
-	 */
-	@Override
-	public List<ErrorMessage> getAllErrorMessages() {
-		return errorMessageList;
-	}
+     * errorMessageList
+     */
+    @Resource(name = "errorMessageList")
+    private List<ErrorMessage> errorMessageList;
+
+    /**
+     * Query errorMessages data information.
+     * 
+     * @return List<ErrorMessage> errorMessageList
+     */
+    @Override
+    public List<ErrorMessage> getAllErrorMessages() {
+        return errorMessageList;
+    }
 
 }

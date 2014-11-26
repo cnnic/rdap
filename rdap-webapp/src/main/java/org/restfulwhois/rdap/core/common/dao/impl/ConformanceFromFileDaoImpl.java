@@ -34,13 +34,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
+
 import org.restfulwhois.rdap.core.common.dao.ConformanceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
 /**
- * conformance query DAO mainly select conformance information 
- * from spring-initData-rdapConformance.xml.
+ * conformance query DAO mainly select conformance information from
+ * spring-initData-rdapConformance.xml.
  * <p>
  * these information will be valid after restart the system.
  * 
@@ -48,30 +50,31 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class ConformanceFromFileDaoImpl implements ConformanceDao{
-	
-	 /**
+public class ConformanceFromFileDaoImpl implements ConformanceDao {
+    /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(ConformanceFromFileDaoImpl.class);    
-    
-	
-	@Resource(name = "rdapConformanceList")
-	private List<String> rdapConformanceList;
-	/**
-	 * Query rdapConformance data information
-	 * 
-	 *  @return List<String> resultList
-	 */
-	@Override
-	public List<String> queryConformance() {
-		 List<String> resultList = new ArrayList<String>();
-		 for(int i = 0 ; i < rdapConformanceList.size(); i++){
-			 resultList.add(rdapConformanceList.get(i));
-		 }
-		return resultList;
-	}
+            .getLogger(ConformanceFromFileDaoImpl.class);
 
-	
+    /**
+     * rdapConformanceList.
+     */
+    @Resource(name = "rdapConformanceList")
+    private List<String> rdapConformanceList;
+
+    /**
+     * Query rdapConformance data information.
+     * 
+     * @return List<String> resultList
+     */
+    @Override
+    public List<String> queryConformance() {
+        List<String> resultList = new ArrayList<String>();
+        for (int i = 0; i < rdapConformanceList.size(); i++) {
+            resultList.add(rdapConformanceList.get(i));
+        }
+        return resultList;
+    }
+
 }

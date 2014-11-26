@@ -38,7 +38,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * 
- * This class describe bootstrap entry structure:
+ * This class describe bootstrap entry structure.
  * 
  * <pre>
  *     ["entry1", "entry2", "entry3"],

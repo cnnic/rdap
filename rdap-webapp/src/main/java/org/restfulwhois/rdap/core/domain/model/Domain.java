@@ -530,7 +530,7 @@ public class Domain extends BaseModel {
     /**
      * set ObjectClassNameEnum.
      * 
-     * @param objectClassNameEnum
+     * @param objectClassName
      *            objectClassName for set.
      */
     public void setObjectClassName(ObjectClassNameEnum objectClassName) {

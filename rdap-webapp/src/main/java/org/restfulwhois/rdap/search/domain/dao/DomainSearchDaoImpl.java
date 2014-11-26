@@ -59,8 +59,9 @@ public class DomainSearchDaoImpl extends AbstractSearchDao<Domain> {
     public List<Domain> search(QueryParam queryParam) {
         SearchStrategy<Domain> strategy = this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            List<Domain> result = strategy.search(queryParam, jdbcTemplate);
-            queryDao.queryAndSetInnerObjectsForSearch(result);
+            List<Domain> result =
+                    strategy.search(queryParam, getJdbcTemplate());
+            getQueryDao().queryAndSetInnerObjectsForSearch(result);
             return result;
         }
         return null;
@@ -70,7 +71,7 @@ public class DomainSearchDaoImpl extends AbstractSearchDao<Domain> {
     public Long searchCount(QueryParam queryParam) {
         SearchStrategy<Domain> strategy = this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            return strategy.searchCount(queryParam, jdbcTemplate);
+            return strategy.searchCount(queryParam, getJdbcTemplate());
         }
         return null;
     }

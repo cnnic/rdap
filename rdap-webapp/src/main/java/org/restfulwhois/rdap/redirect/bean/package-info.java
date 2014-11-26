@@ -1,5 +1,5 @@
 /**
- *org.restfulwhois.rdap.redirect.bean
+ *org.restfulwhois.rdap.redirect.bean.
  * @author jiashuo
  *
  */

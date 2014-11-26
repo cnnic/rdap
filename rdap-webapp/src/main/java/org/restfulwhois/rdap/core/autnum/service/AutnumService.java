@@ -34,7 +34,7 @@ import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 
 /**
- * query service interface.
+ * as query service interface.
  * 
  * @author jiashuo
  * 

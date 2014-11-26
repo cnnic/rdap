@@ -1,5 +1,5 @@
 /**
- *org.restfulwhois.rdap.search.domain.service
+ *org.restfulwhois.rdap.search.domain.service.
  * @author jiashuo
  *
  */

@@ -43,7 +43,7 @@ import org.restfulwhois.rdap.core.entity.validator.EntitySearchValidator;
  * @author jiashuo
  * 
  */
-abstract public class EntitySearchParam extends QueryParam {
+public abstract class EntitySearchParam extends QueryParam {
 
     /**
      * check if support type.

@@ -173,6 +173,7 @@ public class NameserverSearchController extends BaseDnrController {
 
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         NameserverSearch nsSearch = searchService.searchNameserver(queryParam);
