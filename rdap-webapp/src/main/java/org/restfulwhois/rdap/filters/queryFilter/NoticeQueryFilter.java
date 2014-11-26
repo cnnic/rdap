@@ -83,6 +83,7 @@ public class NoticeQueryFilter implements QueryFilter {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public QueryFilterResult postQuery(QueryParam queryParam,
             ResponseEntity responseEntity) {
@@ -124,8 +125,6 @@ public class NoticeQueryFilter implements QueryFilter {
      * 
      * @param model
      *            model.
-     * @param notices
-     *            notices.
      * @return notice list.
      */
     private List<Notice> getTruncatedNotice(BaseModel model) {

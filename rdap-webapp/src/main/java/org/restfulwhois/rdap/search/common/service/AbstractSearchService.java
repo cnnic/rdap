@@ -56,7 +56,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
-abstract public class AbstractSearchService {
+public abstract class AbstractSearchService {
     /**
      * logger.
      */

@@ -82,7 +82,7 @@ public class SubnetUtils {
      */
     private int broadcast = 0;
 
-    /** Whether the broadcast/network address are included in host count */
+    /** Whether the broadcast/network address are included in host count. */
     private boolean inclusiveHostCount = false;
 
     /**
@@ -121,6 +121,7 @@ public class SubnetUtils {
      * {@link SubnetInfo#getAddressCount()} includes the network address and
      * broadcast addresses.
      * 
+     * @return boolean.
      * @since 2.2
      */
     public boolean isInclusiveHostCount() {
@@ -133,6 +134,7 @@ public class SubnetUtils {
      * addresses.
      * 
      * @param inclusiveHostCount
+     *            inclusiveHostCount.
      * @since 2.2
      */
     public void setInclusiveHostCount(boolean inclusiveHostCount) {
@@ -306,7 +308,7 @@ public class SubnetUtils {
 
     /**
      * Return a {@link SubnetInfo} instance that contains subnet-specific
-     * statistics
+     * statistics.
      * 
      * @return new instance
      */
@@ -315,7 +317,7 @@ public class SubnetUtils {
     }
 
     /**
-     * Initialize the internal fields from the supplied CIDR mask
+     * Initialize the internal fields from the supplied CIDR mask.
      * 
      * @param mask
      *            mask.
@@ -339,12 +341,12 @@ public class SubnetUtils {
             // Calculate broadcast address
             broadcast = network | ~(netmask);
         } else {
-            throw new IllegalArgumentException("Could not parse [" + mask + "]");
+            throw new IllegalArgumentException("Can not parse [" + mask + "]");
         }
     }
 
     /**
-     * Convert a dotted decimal format address to a packed integer format
+     * Convert a dotted decimal format address to a packed integer format.
      * 
      * @param address
      *            address.
@@ -362,7 +364,7 @@ public class SubnetUtils {
 
     /**
      * Convenience method to extract the components of a dotted decimal address
-     * and pack into an integer using a regex match
+     * and pack into an integer using a regex match.
      * 
      * @param matcher
      *            matcher.
@@ -378,7 +380,7 @@ public class SubnetUtils {
     }
 
     /**
-     * Convert a packed integer address into a 4-element array
+     * Convert a packed integer address into a 4-element array.
      * 
      * @param val
      *            val.
@@ -393,7 +395,7 @@ public class SubnetUtils {
     }
 
     /**
-     * Convert a 4-element array into dotted decimal format
+     * Convert a 4-element array into dotted decimal format.
      * 
      * @param octets
      *            octets.
@@ -434,7 +436,7 @@ public class SubnetUtils {
 
     /**
      * Count the number of 1-bits in a 32-bit integer using a divide-and-conquer
-     * strategy see Hacker's Delight section 5.1
+     * strategy see Hacker's Delight section 5.1.
      * 
      * @param x
      *            x.

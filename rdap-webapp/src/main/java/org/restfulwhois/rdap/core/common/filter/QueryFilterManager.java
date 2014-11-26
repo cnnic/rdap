@@ -76,7 +76,7 @@ public class QueryFilterManager {
      * 
      * @param queryParam
      *            queryParam.
-     * @param queryFiltersqueryFilters
+     * @param queryFilters queryFilters.
      *            .
      * @return QueryFilterResult.
      */

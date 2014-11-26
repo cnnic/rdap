@@ -82,10 +82,17 @@ public class CustomColumnPolicyService {
      */
     private static Map<String, Set<String>> mapPolicy = null;
 
+    /**
+     * loadPolicyFieldsByMap.
+     * @return map.
+     */
     public Map<String, Set<String>> loadPolicyFieldsByMap() {
         return mapPolicy;
     }
 
+    /**
+     * init.
+     */
     @PostConstruct
     public void init() {
         mapPolicy = policyDao.loadAllPolicyMap();

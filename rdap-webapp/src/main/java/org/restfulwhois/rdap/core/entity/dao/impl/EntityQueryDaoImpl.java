@@ -144,6 +144,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     @Autowired
     private EntityAddressDao entityAddressDao;
 
+    /**
+     * searchDao.
+     */
     @Autowired
     @Qualifier("entitySearchDaoImpl")
     private SearchDao<Entity> searchDao;
@@ -620,14 +623,4 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         return result;
     }
 
-    /**
-     * search entity from RDAP_ENTITY, without inner objects.
-     * 
-     * @param params
-     *            query parameter include entity's name.
-     * @return entity list which will be filled with data.
-     */
-    private List<Entity> searchWithoutInnerObjects(final QueryParam queryParam) {
-        return searchDao.search(queryParam);
-    }
 }

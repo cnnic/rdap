@@ -89,6 +89,7 @@ public class NameserverQueryController extends BaseDnrController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/nameserver/{nsName}" },
             method = RequestMethod.GET)
     @ResponseBody
@@ -98,6 +99,7 @@ public class NameserverQueryController extends BaseDnrController {
         return super.query(queryParam);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         if (queryService.tldInThisRegistry(queryParam)) {
@@ -113,6 +115,7 @@ public class NameserverQueryController extends BaseDnrController {
      *            queryParam.
      * @return ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     private ResponseEntity queryNsInThisRegistry(QueryParam queryParam) {
         LOGGER.debug("   queryNsInThisRegistry:{}", queryParam);
         Nameserver ns = queryService.queryNameserver(queryParam);

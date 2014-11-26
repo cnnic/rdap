@@ -122,6 +122,10 @@ public class NoticeServiceImpl implements NoticeService {
         return null;
     }
 
+    /**
+     * setTruncatedNoticeList.
+     * @param truncatedNoticeList setTruncatedNoticeList.
+     */
     @Resource(name = "truncatedNoticeList")
     public void setTruncatedNoticeList(List<Notice> truncatedNoticeList) {
         NoticeServiceImpl.truncatedNoticeList = truncatedNoticeList;

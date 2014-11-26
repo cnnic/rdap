@@ -77,6 +77,13 @@ public abstract class NameserverSearchParam extends QueryParam {
         super(request);
     }
 
+    /**
+     * supportSearchType.
+     * 
+     * @param searchType
+     *            searchType.
+     * @return boolean.
+     */
     public boolean supportSearchType(NameserverSearchType searchType) {
         return false;
     }

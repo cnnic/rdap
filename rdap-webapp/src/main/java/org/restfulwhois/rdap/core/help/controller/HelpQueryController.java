@@ -44,8 +44,6 @@ import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.help.model.Help;
 import org.restfulwhois.rdap.core.help.queryparam.HelpQueryParam;
 import org.restfulwhois.rdap.core.help.service.HelpService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -61,16 +59,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class HelpQueryController extends BaseController {
     /**
-     * logger.
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(HelpQueryController.class);
-    /**
      * query service.
      */
     @Autowired
     protected HelpService queryService;
 
+    /**
+     * queryFilters.
+     */
     @Resource(name = "helpQueryQueryFilters")
     private List<QueryFilter> queryFilters;
 
@@ -96,12 +92,14 @@ public class HelpQueryController extends BaseController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ResponseEntity queryHelp(HttpServletRequest request,
             HttpServletResponse response) throws DecodeException {
         return super.query(new HelpQueryParam(request));
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         Help result = queryService.queryHelp(queryParam);

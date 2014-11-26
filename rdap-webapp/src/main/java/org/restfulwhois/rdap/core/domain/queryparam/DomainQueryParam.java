@@ -57,7 +57,8 @@ public class DomainQueryParam extends QueryParam {
     /**
      * logger.
      */
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DomainQueryParam.class);
 
     /**
      * domain puny name.
@@ -65,7 +66,7 @@ public class DomainQueryParam extends QueryParam {
     private String punyName;
 
     /**
-     * generateQueryParam
+     * generateQueryParam.
      * 
      * @param domainName
      *            domainName.
@@ -87,7 +88,7 @@ public class DomainQueryParam extends QueryParam {
     public QueryUri getQueryUri() {
         return QueryUri.DOMAIN;
     }
-    
+
     /**
      * constructor.
      * 

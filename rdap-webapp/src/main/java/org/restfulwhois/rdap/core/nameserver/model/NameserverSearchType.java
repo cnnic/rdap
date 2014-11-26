@@ -64,11 +64,20 @@ public enum NameserverSearchType {
         this.name = name;
     }
 
-
+    /**
+     * get name.
+     * 
+     * @return name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * valuesOfString.
+     * 
+     * @return string array.
+     */
     public static String[] valuesOfString() {
         NameserverSearchType[] types = values();
         List<String> result = new ArrayList<String>();
@@ -77,7 +86,14 @@ public enum NameserverSearchType {
         }
         return result.toArray(new String[0]);
     }
-    
+
+    /**
+     * getByName.
+     * 
+     * @param name
+     *            name.
+     * @return NameserverSearchType.
+     */
     public static NameserverSearchType getByName(String name) {
         NameserverSearchType[] queryTypes = NameserverSearchType.values();
         for (NameserverSearchType type : queryTypes) {

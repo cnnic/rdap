@@ -51,6 +51,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccessControlQueryFilter implements QueryFilter {
 
+    /**
+     * accessControlManager.
+     */
     @Autowired
     private AccessControlManager accessControlManager;
 
@@ -64,6 +67,7 @@ public class AccessControlQueryFilter implements QueryFilter {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public QueryFilterResult postQuery(QueryParam queryParam,
             ResponseEntity responseEntity) {

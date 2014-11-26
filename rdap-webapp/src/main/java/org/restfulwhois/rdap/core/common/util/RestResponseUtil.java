@@ -331,11 +331,23 @@ public class RestResponseUtil {
         RestResponseUtil.errorMessageService = errorMsgService;
     }
 
+    /**
+     * setQueryFilterManager.
+     * 
+     * @param queryFilterManager
+     *            queryFilterManager.
+     */
     @Autowired
     public void setQueryFilterManager(QueryFilterManager queryFilterManager) {
         RestResponseUtil.queryFilterManager = queryFilterManager;
     }
 
+    /**
+     * setServiceFilters.
+     * 
+     * @param serviceFilters
+     *            serviceFilters.
+     */
     @Resource(name = "errorMessageQueryFilters")
     public void setServiceFilters(List<QueryFilter> serviceFilters) {
         RestResponseUtil.queryFilters = serviceFilters;

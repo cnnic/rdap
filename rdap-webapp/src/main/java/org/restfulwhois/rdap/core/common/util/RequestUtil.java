@@ -46,6 +46,13 @@ import org.slf4j.LoggerFactory;
  */
 public class RequestUtil {
     /**
+     * constructor.
+     */
+    private RequestUtil() {
+        super();
+    }
+
+    /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory

@@ -55,6 +55,9 @@ public class RdapConformanceQueryFilter implements QueryFilter {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(RdapConformanceQueryFilter.class);
 
+    /**
+     * rdapConformanceService.
+     */
     @Autowired
     private RdapConformanceService rdapConformanceService;
 
@@ -68,6 +71,7 @@ public class RdapConformanceQueryFilter implements QueryFilter {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public QueryFilterResult postQuery(QueryParam queryParam,
             ResponseEntity responseEntity) {

@@ -52,9 +52,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "notices", "objectClassName", "handle", "startAutnum",
-        "endAutnum", "name", "type", "status", "country", "remarks", "links",
-        "events", "entities", "port43", "lang" })
+@JsonPropertyOrder({
+        "rdapConformance", "notices", "objectClassName", "handle",
+        "startAutnum", "endAutnum", "name", "type", "status", "country",
+        "remarks", "links", "events", "entities", "port43", "lang" })
 public class Autnum extends BaseModel {
     /**
      * handle of autnum.
@@ -113,7 +114,7 @@ public class Autnum extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.AUTNUM;
     }
-    
+
     @Override
     public QueryUri getUri() {
         return QueryUri.AUTNUM;
@@ -123,6 +124,7 @@ public class Autnum extends BaseModel {
     public String generateLinkHref() {
         return getUri().getName() + getStartAutnum();
     }
+
     /**
      * add a status string to status list.
      * 
@@ -359,24 +361,24 @@ public class Autnum extends BaseModel {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
-    
+
     /**
      * get ObjectClassNameEnum.
      * 
      * @return objectClassName.
      */
-	public ObjectClassNameEnum getObjectClassName() {
-		return objectClassName;
-	}
-	
-	/**
+    public ObjectClassNameEnum getObjectClassName() {
+        return objectClassName;
+    }
+
+    /**
      * set ObjectClassNameEnum.
      * 
-     * @param objectClassNameEnum
+     * @param objectClassName
      *            objectClassName for set.
      */
-	public void setObjectClassName(ObjectClassNameEnum objectClassName) {
-		this.objectClassName = objectClassName;
-	}
+    public void setObjectClassName(ObjectClassNameEnum objectClassName) {
+        this.objectClassName = objectClassName;
+    }
 
 }

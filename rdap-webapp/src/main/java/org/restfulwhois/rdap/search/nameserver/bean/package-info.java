@@ -1,8 +1,5 @@
 /**
- * 
- */
-/**
- *org.restfulwhois.rdap.search.nameserver.bean
+ *org.restfulwhois.rdap.search.nameserver.bean.
  * @author jiashuo
  *
  */

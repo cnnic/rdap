@@ -47,6 +47,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class BaseDnrController extends BaseController {
 
+    /**
+     * queryFilters.
+     */
     @Resource(name = "domainOrNsQueryFilters")
     private List<QueryFilter> queryFilters;
 

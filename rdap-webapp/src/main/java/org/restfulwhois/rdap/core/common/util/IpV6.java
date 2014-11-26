@@ -42,8 +42,16 @@ import com.googlecode.ipv6.IPv6Network;
  * 
  */
 public class IpV6 {
+    
     /**
-     * max lengh
+     * constructor.
+     */
+    private IpV6() {
+        super();
+    }
+
+    /**
+     * max lengh.
      */
     private static final int MAX_LENGTH_PER_SPLIT = 4;
     /**
@@ -177,10 +185,4 @@ public class IpV6 {
         return iPv6Address.toByteArray();
     }
 
-    public static void main(String[] args) {
-        String[] splits = StringUtils.split("1:1::12345", ":");
-        for (String split : splits) {
-            System.err.println(StringUtils.length(split));
-        }
-    }
 }

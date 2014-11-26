@@ -121,6 +121,8 @@ public final class IpUtil {
     /**
      * get hex char size.
      * 
+     * @param ipVersion
+     *            ipVersion.
      * @return hex char size.
      */
     public static int getHexCharSize(IpVersion ipVersion) {
@@ -209,6 +211,8 @@ public final class IpUtil {
      * 
      * @param ipPrefix
      *            ipPrefix.
+     * @param ipVersion
+     *            ipVersion.
      * @return bytes.
      */
     public static byte[] ipToByteArray(String ipPrefix, IpVersion ipVersion) {

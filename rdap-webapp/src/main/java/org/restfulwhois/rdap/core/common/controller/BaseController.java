@@ -135,13 +135,13 @@ public class BaseController {
      * access control manager.
      */
     @Autowired
-    protected AccessControlManager accessControlManager;
+    private AccessControlManager accessControlManager;
 
     /**
      * redirect service.
      */
     @Autowired
-    protected RedirectService redirectService;
+    private RedirectService redirectService;
 
     /**
      * queryFilterManager.
@@ -160,6 +160,7 @@ public class BaseController {
      *            * queryParam.
      * @return ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     protected ResponseEntity query(QueryParam queryParam) {
         if (queryParam == null) {
             return RestResponseUtil.createResponse400();
@@ -190,6 +191,7 @@ public class BaseController {
      *            queryParam.
      * @return ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     protected ResponseEntity queryTemplate(QueryParam queryParam) {
         try {
             queryParam.fillParam();
@@ -238,6 +240,7 @@ public class BaseController {
      *            result.
      * @return ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     private ResponseEntity handleError(ValidationResult result) {
         ValidationError error = result.getFirstError();
         if (null != error) {
@@ -258,6 +261,7 @@ public class BaseController {
      *            queryParam.
      * @return ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     protected ResponseEntity doQuery(QueryParam queryParam) {
         throw new UnsupportedOperationException();
     }
@@ -281,6 +285,33 @@ public class BaseController {
      */
     protected List<QueryFilter> getQueryFilters() {
         return new ArrayList<QueryFilter>();
+    }
+
+    /**
+     * get accessControlManager.
+     * 
+     * @return accessControlManager.
+     */
+    public AccessControlManager getAccessControlManager() {
+        return accessControlManager;
+    }
+
+    /**
+     * get redirectService.
+     * 
+     * @return redirectService.
+     */
+    public RedirectService getRedirectService() {
+        return redirectService;
+    }
+
+    /**
+     * get queryFilterManager.
+     * 
+     * @return queryFilterManager.
+     */
+    public QueryFilterManager getQueryFilterManager() {
+        return queryFilterManager;
     }
 
 }

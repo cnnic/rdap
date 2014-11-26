@@ -35,8 +35,6 @@ import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
 import org.restfulwhois.rdap.core.nameserver.dao.impl.NameserverQueryDaoImpl;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,12 +52,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class NameserverServiceImpl implements NameserverQueryService {
-
-    /**
-     * logger.
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(NameserverServiceImpl.class);
 
     /**
      * nameserver DAO.

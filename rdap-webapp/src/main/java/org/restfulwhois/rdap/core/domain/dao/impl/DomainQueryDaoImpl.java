@@ -84,7 +84,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     /**
      * left join domain status SQL.
      */
-    public static String SQL_LEFT_JOIN_DOMAIN_STATUS =
+    public static final String SQL_LEFT_JOIN_DOMAIN_STATUS =
             " left outer join RDAP_DOMAIN_STATUS status "
                     + " on domain.DOMAIN_ID = status.DOMAIN_ID ";
     /**
@@ -145,11 +145,13 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Autowired
     private QueryDao<Entity> entityQueryDao;
-    
+
+    /**
+     * searchDao.
+     */
     @Autowired
     @Qualifier("domainSearchDaoImpl")
     private SearchDao<Domain> searchDao;
-
 
     /**
      * query domain (RIR or DNR).
@@ -177,7 +179,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return domain;
         }
     }
-    
+
     @Override
     public void queryAndSetInnerObjectsForSearch(List<Domain> domains) {
         if (null == domains) {
@@ -384,17 +386,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             }
             return result;
         }
-    }
-
-    /**
-     * search domain using punyname or unicodeName, without inner objects.
-     * 
-     * @param params
-     *            query parameter include domain punyname.
-     * @return domain list.
-     */
-    private List<Domain> searchWithoutInnerObjects(final QueryParam queryParam) {
-        return searchDao.search(queryParam);
     }
 
 }

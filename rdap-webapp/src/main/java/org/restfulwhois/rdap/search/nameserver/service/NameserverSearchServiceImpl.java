@@ -58,6 +58,9 @@ public class NameserverSearchServiceImpl extends AbstractSearchService
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverSearchServiceImpl.class);
 
+    /**
+     * searchDao.
+     */
     @Autowired
     private SearchDao<Nameserver> searchDao;
 

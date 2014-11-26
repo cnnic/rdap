@@ -55,6 +55,17 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 public abstract class AbstractEntitySearchStrategy implements
         SearchStrategy<Entity> {
 
+    /**
+     * searchCount.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @param jdbcTemplate
+     *            jdbcTemplate.
+     * @param searchColumnName
+     *            searchColumnName.
+     * @return count.
+     */
     protected Long searchCount(QueryParam queryParam,
             JdbcTemplate jdbcTemplate, final String searchColumnName) {
         final String q = queryParam.getQ();
@@ -74,6 +85,17 @@ public abstract class AbstractEntitySearchStrategy implements
         return entityCount;
     }
 
+    /**
+     * search.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @param jdbcTemplate
+     *            jdbcTemplate.
+     * @param searchColumnName
+     *            searchColumnName.
+     * @return entity list.
+     */
     protected List<Entity> search(QueryParam queryParam,
             JdbcTemplate jdbcTemplate, String searchColumnName) {
         final String q = queryParam.getQ();
@@ -134,6 +156,13 @@ public abstract class AbstractEntitySearchStrategy implements
         }
     }
 
+    /**
+     * searchColumnName.
+     * 
+     * @param q
+     *            q.
+     * @return string.
+     */
     private String generateLikeClause(String q) {
         return AbstractQueryDao.generateLikeClause(q);
     }

@@ -47,7 +47,7 @@ public class HelpQueryParam extends QueryParam {
     /**
      * default constructor.
      * 
-     * @param q
+     * @param request
      *            query string.
      */
     public HelpQueryParam(HttpServletRequest request) {

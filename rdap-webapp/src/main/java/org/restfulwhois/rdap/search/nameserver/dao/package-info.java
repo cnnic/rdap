@@ -1,8 +1,5 @@
 /**
- * 
- */
-/**
- *org.restfulwhois.rdap.search.nameserver.dao
+ *org.restfulwhois.rdap.search.nameserver.dao.
  * @author jiashuo
  *
  */

@@ -72,6 +72,9 @@ public class EntityQueryController extends BaseController {
     @Autowired
     protected EntityQueryService queryService;
 
+    /**
+     * queryFilters.
+     */
     @Resource(name = "commonQueryFilters")
     private List<QueryFilter> queryFilters;
 
@@ -99,6 +102,7 @@ public class EntityQueryController extends BaseController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
     public ResponseEntity queryEntity(@PathVariable String handle,
             HttpServletRequest request, HttpServletResponse response)
@@ -108,6 +112,7 @@ public class EntityQueryController extends BaseController {
         return super.query(entityQueryParam);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         EntityQueryParam entityQueryParam = (EntityQueryParam) queryParam;

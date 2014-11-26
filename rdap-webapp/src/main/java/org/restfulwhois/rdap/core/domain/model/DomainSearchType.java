@@ -68,6 +68,11 @@ public enum DomainSearchType {
         this.name = name;
     }
 
+    /**
+     * get name.
+     * 
+     * @return name.
+     */
     public String getName() {
         return name;
     }

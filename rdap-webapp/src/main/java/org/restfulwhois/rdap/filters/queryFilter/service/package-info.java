@@ -1,5 +1,5 @@
 /**
- *org.restfulwhois.rdap.filters.queryFilter.service
+ *org.restfulwhois.rdap.filters.queryFilter.service.
  * @author jiashuo
  *
  */

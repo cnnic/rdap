@@ -38,7 +38,7 @@ import org.springframework.http.HttpStatus;
  * @author jiashuo
  * 
  */
-public class HttpValidationError implements ValidationError {
+public final class HttpValidationError implements ValidationError {
     /**
      * statusCode.
      */
@@ -63,6 +63,7 @@ public class HttpValidationError implements ValidationError {
     public static ValidationError build400Error() {
         return new HttpValidationError(HttpStatus.BAD_REQUEST);
     }
+
     /**
      * build403Error.
      * 

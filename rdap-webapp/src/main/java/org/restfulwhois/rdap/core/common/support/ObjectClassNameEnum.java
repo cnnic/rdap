@@ -43,7 +43,11 @@ public enum ObjectClassNameEnum {
      * 5 main object Class Name.
      */
     DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameserver"), AUTNUM(
-            "autnum"), IP("ip network");
+            "autnum"),
+    /**
+     * ip network.
+     */
+    IP("ip network");
 
     /**
      * name of ObjectClassNameEnum.

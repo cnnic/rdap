@@ -39,8 +39,6 @@ import org.restfulwhois.rdap.core.common.exception.DecodeException;
 import org.restfulwhois.rdap.core.common.util.RequestUtil;
 import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.restfulwhois.rdap.core.common.validation.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This is the base query parameter bean.
@@ -52,12 +50,6 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public abstract class QueryParam {
-
-    /**
-     * logger.
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(QueryParam.class);
 
     /**
      * used to fill HTTP parameters into this QueryParam.
@@ -86,12 +78,13 @@ public abstract class QueryParam {
      * for search.
      */
     private PageBean pageBean;
-    
+
     /**
      * getQueryUri.
+     * 
      * @return QueryUri.
      */
-    abstract public QueryUri getQueryUri(); 
+    public abstract QueryUri getQueryUri();
 
     /**
      * initialize validators.
@@ -99,7 +92,7 @@ public abstract class QueryParam {
      * this method MUST be called when QueryParam initialized.
      * </p>
      */
-    abstract protected void initValidators();
+    protected abstract void initValidators();
 
     /**
      * add validator.
@@ -117,7 +110,7 @@ public abstract class QueryParam {
      * @throws Exception
      *             Exception.
      */
-    abstract public void fillParam() throws Exception;
+    public abstract void fillParam() throws Exception;
 
     /**
      * convert parameters from HTTP request.
@@ -125,7 +118,7 @@ public abstract class QueryParam {
      * @throws Exception
      *             Exception.
      */
-    abstract public void convertParam() throws Exception;
+    public abstract void convertParam() throws Exception;
 
     /**
      * constructor.
@@ -234,6 +227,11 @@ public abstract class QueryParam {
         this.request = request;
     }
 
+    /**
+     * getValidators.
+     * 
+     * @return Validator list.
+     */
     public List<Validator> getValidators() {
         return validators;
     }
@@ -313,18 +311,17 @@ public abstract class QueryParam {
     protected String getParameter(HttpServletRequest request, String name) {
         return RequestUtil.getParameter(request, name);
     }
-    
+
     /**
-     * get remote query ip. 
-     *            
-     * @return string  remote query ip.
+     * get remote query ip.
+     * 
+     * @return string remote query ip.
      */
     public String getRemoteAddr() {
-       if (this.request != null) {
-           return request.getRemoteAddr();
-       }
-       return "";
-    } 
-
+        if (this.request != null) {
+            return request.getRemoteAddr();
+        }
+        return "";
+    }
 
 }

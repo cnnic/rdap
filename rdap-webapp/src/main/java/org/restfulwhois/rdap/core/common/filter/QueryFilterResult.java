@@ -34,7 +34,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.http.ResponseEntity;
 
 /**
- * Validation result.
+ * query filter result.
+ * <p>
+ * If hasResult() returns true, then caller may return this result and stop the
+ * process; if return false, then caller may continue the process.
  * 
  * @author jiashuo
  * 
@@ -45,6 +48,12 @@ public class QueryFilterResult {
      */
     private ResponseEntity result;
 
+    /**
+     * constructor.
+     * 
+     * @param result
+     *            result.
+     */
     public QueryFilterResult(ResponseEntity result) {
         super();
         this.result = result;
@@ -60,8 +69,9 @@ public class QueryFilterResult {
     }
 
     /**
+     * getResult.
      * 
-     * @return
+     * @return ResponseEntity.
      */
     public ResponseEntity getResult() {
         return result;

@@ -66,13 +66,13 @@ public abstract class RegistryHandler {
      */
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     /**
-     * redirectService
+     * redirectService.
      */
     @Autowired
     protected RedirectService redirectService;
 
     /**
-     * redirectService
+     * redirectService.
      */
     @Autowired
     @Qualifier("restDataProvider")

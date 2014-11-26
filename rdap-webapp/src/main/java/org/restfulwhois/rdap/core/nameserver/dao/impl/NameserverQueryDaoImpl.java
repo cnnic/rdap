@@ -113,6 +113,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     @Autowired
     private QueryDao<Entity> entityQueryDao;
 
+    /**
+     * searchDao.
+     */
     @Autowired
     @Qualifier("nameserverSearchDaoImpl")
     private SearchDao<Nameserver> searchDao;
@@ -327,21 +330,6 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         for (Nameserver nameserver : nameservers) {
             queryAndSetEntities(nameserver);
         }
-    }
-
-    /**
-     * <pre>
-     * search nameservers from RDAP_NAMESERVER, without inner objects.
-     * it can be indexed by ip,or by ldhName.
-     * </pre>
-     * 
-     * @param queryParam
-     *            query parameter of nameserver include index.
-     * @return nameserver list.
-     */
-    private List<Nameserver> searchWithoutInnerObjects(
-            final QueryParam queryParam) {
-        return searchDao.search(queryParam);
     }
 
     /**

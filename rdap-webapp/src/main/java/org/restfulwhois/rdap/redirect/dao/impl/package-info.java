@@ -1,5 +1,5 @@
 /**
- *org.restfulwhois.rdap.redirect.dao.impl
+ *org.restfulwhois.rdap.redirect.dao.impl.
  * @author jiashuo
  *
  */

@@ -62,6 +62,9 @@ public class DomainSearchServiceImpl extends AbstractSearchService implements
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainSearchServiceImpl.class);
 
+    /**
+     * searchDao.
+     */
     @Autowired
     private SearchDao<Domain> searchDao;
     

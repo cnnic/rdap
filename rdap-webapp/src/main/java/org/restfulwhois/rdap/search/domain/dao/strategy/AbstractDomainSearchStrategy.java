@@ -60,7 +60,14 @@ public abstract class AbstractDomainSearchStrategy implements
             return result;
         }
     }
-    
+
+    /**
+     * generateLikeClause.
+     * 
+     * @param q
+     *            q.
+     * @return string.
+     */
     protected String generateLikeClause(String q) {
         return AbstractQueryDao.generateLikeClause(q);
     }
