@@ -265,6 +265,10 @@ public final class DomainUtil {
         if (!forSearch && StringUtils.startsWith(domainName, ACE_PREFIX)) {// resolved.
             return false;
         }
+        if (!forSearch && 2==StringUtils.indexOf(domainName, "--")) {
+            // resolved:startswith ??--
+            return false;
+        }
         return domainName.equals(punyDomainName)
                 || domainNameWithoutLastPoint.equals(punyWithoutLastPoint);
     }
