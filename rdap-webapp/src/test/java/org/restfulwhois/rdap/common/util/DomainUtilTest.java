@@ -229,8 +229,10 @@ public class DomainUtilTest {
         assertFalse(validateDomainNameIsValidIdna("xn--55qx5d.中国"));
         assertFalse(DomainUtil.validateDomainNameIsValidIdna(
                 "xn--55qx5d.中国.cn", false));
-
         assertTrue(validateDomainNameIsValidIdna("中国.CN"));
+        assertFalse(validateDomainNameIsValidIdna("55--123.xn--fiqs8s"));
+        assertTrue(DomainUtil.validateDomainNameIsValidIdna(
+                "55--123.xn--fiqs8s", true));
         assertTrue(validateDomainNameIsValidIdna("xn--55QX5D.CN"));
         assertTrue(validateDomainNameIsValidIdna("xn--55qx5d.cn"));
         // 254,127 lable
@@ -433,6 +435,9 @@ public class DomainUtilTest {
         assertFalse(validateSearchStringIsValidIdna("xn--5us.%E4%B8%AD%E5%9B%BD*"));
         assertFalse(validateSearchStringIsValidIdna("xn--5us.中国*"));
         assertFalse(validateSearchStringIsValidIdna("xn--5us*.qqéa.cn"));
+        // not validate ??-- for search.
+        assertTrue(validateSearchStringIsValidIdna("55--*123.xn--fiqs8s"));
+        assertTrue(validateSearchStringIsValidIdna("5*--123.xn--fiqs8s"));
 
         assertFalse(validateSearchStringIsValidIdna(".好.中国*"));
         assertFalse(validateSearchStringIsValidIdna("12..好.中国*"));
