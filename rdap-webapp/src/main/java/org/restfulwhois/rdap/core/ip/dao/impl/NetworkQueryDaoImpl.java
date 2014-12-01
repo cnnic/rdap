@@ -51,7 +51,7 @@ import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
 import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
-import org.restfulwhois.rdap.core.domain.dao.impl.DomainQueryDaoImpl;
+import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
@@ -110,7 +110,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * domainQueryDao.
      */
     @Autowired
-    private DomainQueryDaoImpl domainQueryDao;
+    private QueryDao<Domain>  domainQueryDao;
 
     /**
      * entityQueryDao.

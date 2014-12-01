@@ -33,6 +33,8 @@ package org.restfulwhois.rdap.core.common.validation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
  * Validation result.
  * 
@@ -74,5 +76,10 @@ public class ValidationResult {
             return null;
         }
         return errors.get(0);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(errors).toString();
     }
 }

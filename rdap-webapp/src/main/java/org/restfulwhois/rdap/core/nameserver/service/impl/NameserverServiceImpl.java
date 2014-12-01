@@ -30,9 +30,9 @@
  */
 package org.restfulwhois.rdap.core.nameserver.service.impl;
 
+import org.restfulwhois.rdap.core.common.dao.QueryDao;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
-import org.restfulwhois.rdap.core.nameserver.dao.impl.NameserverQueryDaoImpl;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class NameserverServiceImpl implements NameserverQueryService {
      * nameserver DAO.
      */
     @Autowired
-    private NameserverQueryDaoImpl nameserverQueryDao;
+    private QueryDao<Nameserver> nameserverQueryDao;
     /**
      * nameserver DAO.
      */

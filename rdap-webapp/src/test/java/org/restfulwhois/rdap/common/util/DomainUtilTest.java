@@ -96,22 +96,23 @@ public class DomainUtilTest {
         inValidArpaDomain.add("cn.ip6.arpa");
         inValidArpaDomain.add(".ip6.arpa");
     }
-    
-    
 
     /**
      * testUrlDecodeAndReplaceAsciiToLowercase.
-     * @throws DecodeException 
+     * 
+     * @throws DecodeException
      * 
      */
     @Test
-    public void testUrlDecodeAndReplaceAsciiToLowercase() throws DecodeException {
-        assertEquals("cnnic.cn", DomainUtil.urlDecodeAndReplaceAsciiToLowercase("Cnnic.cn"));
+    public void testUrlDecodeAndReplaceAsciiToLowercase()
+            throws DecodeException {
+        assertEquals("cnnic.cn",
+                DomainUtil.urlDecodeAndReplaceAsciiToLowercase("Cnnic.cn"));
         assertEquals("cnnic.cn", DomainUtil.replaceAsciiToLowercase("CNNIC.cn"));
         assertEquals("cnnic.cn", DomainUtil.replaceAsciiToLowercase("CNNIC.CN"));
         assertEquals("中国.cn", DomainUtil.replaceAsciiToLowercase("中国.CN"));
     }
-        
+
     /**
      * testReplaceAsciiToLowercase.
      * 
@@ -123,14 +124,13 @@ public class DomainUtilTest {
         assertEquals("cnnic.cn", DomainUtil.replaceAsciiToLowercase("CNNIC.CN"));
         assertEquals("中国.cn", DomainUtil.replaceAsciiToLowercase("中国.CN"));
     }
-    
-        
-        /**
-         * test isArpaTldAndLabelIsValid.
-         * 
-         */
-        @Test
-        public void testIsArpaTldAndLabelIsValid() {
+
+    /**
+     * test isArpaTldAndLabelIsValid.
+     * 
+     */
+    @Test
+    public void testIsArpaTldAndLabelIsValid() {
 
         assertTrue(DomainUtil
                 .isArpaTldAndLabelIsValid("1.1.1.d.a.c.a.0.ip6.arpa"));
@@ -227,8 +227,8 @@ public class DomainUtilTest {
         assertFalse(validateDomainNameIsValidIdna("a@.cn"));
         assertFalse(validateDomainNameIsValidIdna("@a.cn"));
         assertFalse(validateDomainNameIsValidIdna("xn--55qx5d.中国"));
-        assertFalse(DomainUtil
-                .validateDomainNameIsValidIdna("xn--55qx5d.中国.cn",false));
+        assertFalse(DomainUtil.validateDomainNameIsValidIdna(
+                "xn--55qx5d.中国.cn", false));
 
         assertTrue(validateDomainNameIsValidIdna("中国.CN"));
         assertTrue(validateDomainNameIsValidIdna("xn--55QX5D.CN"));
@@ -251,13 +251,14 @@ public class DomainUtilTest {
         assertFalse(validateDomainNameIsValidIdna("σειράτάξησυπουργείωνΣύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
 
         assertFalse(validateDomainNameIsValidIdna("xn--.bnnhg"));
-        assertTrue(validateDomainNameIsValidIdna("xn--1.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("xn--1.bnnhg"));
         assertTrue(validateDomainNameIsValidIdna("σειράτάξησυπουργείωνσύνθεσηυπουργικούσυμβουλίουουουο.bnnhg"));
         assertTrue(validateDomainNameIsValidIdna("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg"));
 
         assertFalse(validateDomainNameIsValidIdna("xnxnhopefullynonexisting<*"));
         assertTrue(validateDomainNameIsValidIdna("xn--4xA.bnnhg"));
-        assertTrue(validateDomainNameIsValidIdna("xn--7wA.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("xn--7wA.bnnhg"));
+        assertFalse(validateDomainNameIsValidIdna("xn--7warambrecmdctfmhlrtrmbpyjdccaaahkrgl4chlip9bclcgddbb4ooioa.bnnhg"));
         assertTrue(validateDomainNameIsValidIdna("σ.bnnhg"));
         assertTrue(validateDomainNameIsValidIdna("ς.bnnhg"));
         assertTrue(validateDomainNameIsValidIdna("ß.bnnhg"));
@@ -303,7 +304,7 @@ public class DomainUtilTest {
         } catch (DecodeException e) {
             e.printStackTrace();
         }
-        return DomainUtil.validateDomainNameIsValidIdna(decodeDomain,false);
+        return DomainUtil.validateDomainNameIsValidIdna(decodeDomain, false);
     }
 
     /**
@@ -515,7 +516,7 @@ public class DomainUtilTest {
         String result = DomainUtil.geneDomainPunyName("xn--fiq228c.xn--fiqs8s");
         assertEquals("xn--fiq228c.xn--fiqs8s", result);
     }
-    
+
     /**
      * test generate puny name for unicode domain.
      * 
