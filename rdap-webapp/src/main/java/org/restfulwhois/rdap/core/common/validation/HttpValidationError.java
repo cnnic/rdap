@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.core.common.validation;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -99,6 +100,11 @@ public final class HttpValidationError implements ValidationError {
     @Override
     public String getMessage() {
         return statusCode.getReasonPhrase();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(statusCode).toString();
     }
 
 }

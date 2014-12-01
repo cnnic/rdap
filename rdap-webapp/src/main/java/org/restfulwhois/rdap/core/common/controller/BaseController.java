@@ -36,7 +36,6 @@ import java.util.List;
 import org.restfulwhois.rdap.core.common.filter.QueryFilter;
 import org.restfulwhois.rdap.core.common.filter.QueryFilterManager;
 import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
-import org.restfulwhois.rdap.core.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.core.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
@@ -44,7 +43,6 @@ import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.common.validation.HttpValidationError;
 import org.restfulwhois.rdap.core.common.validation.ValidationError;
 import org.restfulwhois.rdap.core.common.validation.ValidationResult;
-import org.restfulwhois.rdap.redirect.service.RedirectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,18 +130,6 @@ public class BaseController {
             .getLogger(BaseController.class);
 
     /**
-     * access control manager.
-     */
-    @Autowired
-    private AccessControlManager accessControlManager;
-
-    /**
-     * redirect service.
-     */
-    @Autowired
-    private RedirectService redirectService;
-
-    /**
      * queryFilterManager.
      */
     @Autowired
@@ -196,6 +182,7 @@ public class BaseController {
         try {
             queryParam.fillParam();
         } catch (Exception e) {
+            LOGGER.warn("fillParam error:{}", e);
             return RestResponseUtil.createResponse400();
         }
         QueryFilterResult preParamFilterResult =
@@ -217,6 +204,7 @@ public class BaseController {
         try {
             queryParam.convertParam();
         } catch (Exception e) {
+            LOGGER.warn("convertParam error:{}", e);
             return RestResponseUtil.createResponse400();
         }
         ResponseEntity result = doQuery(queryParam);
@@ -248,6 +236,9 @@ public class BaseController {
             return RestResponseUtil.createCommonErrorResponse(httpError
                     .getStatusCode());
         }
+        LOGGER.warn(
+                "can't found error when handleError,for ValidationResult:{}",
+                result);
         return RestResponseUtil.createResponse400();
     }
 
@@ -284,25 +275,8 @@ public class BaseController {
      * @return service filters.
      */
     protected List<QueryFilter> getQueryFilters() {
+        LOGGER.warn("MAYBE you have forgot to initialize queryFilters!");
         return new ArrayList<QueryFilter>();
-    }
-
-    /**
-     * get accessControlManager.
-     * 
-     * @return accessControlManager.
-     */
-    public AccessControlManager getAccessControlManager() {
-        return accessControlManager;
-    }
-
-    /**
-     * get redirectService.
-     * 
-     * @return redirectService.
-     */
-    public RedirectService getRedirectService() {
-        return redirectService;
     }
 
     /**

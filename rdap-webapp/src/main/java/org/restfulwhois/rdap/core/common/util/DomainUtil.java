@@ -229,8 +229,8 @@ public final class DomainUtil {
         if (splits.length > MAX_DOMAIN_LABEL) {
             return false;
         }
-        if (domainName.equals(punyDomainName)
-                || domainNameWithoutLastPoint.equals(punyWithoutLastPoint)) {
+        if (nonReservedAsciiDomain(domainName, punyDomainName,
+                punyWithoutLastPoint, domainNameWithoutLastPoint, forSearch)) {
             // all ASCII lable
             return isLdh(domainName);
         }
@@ -242,6 +242,31 @@ public final class DomainUtil {
         // return false;
         // }
         return IdnaUtil.isValidIdn(domainName);
+    }
+
+    /**
+     * check if is not-resolved-ascii domain.
+     * 
+     * @param domainName
+     *            domainName.
+     * @param punyDomainName
+     *            punyDomainName.
+     * @param punyWithoutLastPoint
+     *            punyWithoutLastPoint.
+     * @param domainNameWithoutLastPoint
+     *            domainNameWithoutLastPoint.
+     * @param forSearch
+     *            forSearch.
+     * @return true if is not-resolved-ascii domain.
+     */
+    private static boolean nonReservedAsciiDomain(String domainName,
+            String punyDomainName, String punyWithoutLastPoint,
+            String domainNameWithoutLastPoint, boolean forSearch) {
+        if (!forSearch && StringUtils.startsWith(domainName, ACE_PREFIX)) {// resolved.
+            return false;
+        }
+        return domainName.equals(punyDomainName)
+                || domainNameWithoutLastPoint.equals(punyWithoutLastPoint);
     }
 
     /**
