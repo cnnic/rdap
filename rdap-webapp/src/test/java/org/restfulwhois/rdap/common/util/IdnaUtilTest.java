@@ -44,6 +44,25 @@ import org.restfulwhois.rdap.core.common.util.IdnaUtil;
  */
 @SuppressWarnings("rawtypes")
 public class IdnaUtilTest {
+    
+    @Test
+    public void test_checkIfValidALabelDomain() {
+        assertTrue(IdnaUtil.checkIfValidALabelDomain("中国"));
+        assertTrue(IdnaUtil.checkIfValidALabelDomain("xn--fiqs8s"));
+        assertTrue(IdnaUtil.checkIfValidALabelDomain("xn--fiqs8s.cn"));
+        assertTrue(IdnaUtil.checkIfValidALabelDomain("xn--fiqs8s.中国"));
+        assertTrue(IdnaUtil.checkIfValidALabelDomain("123"));
+        assertTrue(IdnaUtil.checkIfValidALabelDomain("123.xn--fiqs8s"));
+        assertTrue(IdnaUtil.checkIfValidALabelDomain("中国.xn--fiqs8s"));
+        
+        assertFalse(IdnaUtil.checkIfValidALabelDomain("xn--123"));
+        assertFalse(IdnaUtil.checkIfValidALabelDomain("123.xn--123"));
+        assertFalse(IdnaUtil.checkIfValidALabelDomain("xn--123.cn"));
+        assertFalse(IdnaUtil.checkIfValidALabelDomain("xn--123.中国"));
+        assertFalse(IdnaUtil.checkIfValidALabelDomain("xn--123*"));
+        assertFalse(IdnaUtil.checkIfValidALabelDomain("55--123"));
+    }
+    
     /**
      * test isValidIdn.
      * 

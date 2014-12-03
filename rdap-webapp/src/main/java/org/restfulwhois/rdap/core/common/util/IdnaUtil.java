@@ -51,6 +51,11 @@ import com.vgrs.xcode.util.XcodeException;
  * 
  */
 public final class IdnaUtil {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(IdnaUtil.class);
 
     /**
      * default constructor.
@@ -73,6 +78,26 @@ public final class IdnaUtil {
             idna = new Idna(new Punycode(), true, true);
         } catch (XcodeException e) {
             logger.error("Idna init failed :" + e);
+        }
+    }
+
+    /**
+     * checkIfValidALabelDomain.
+     * 
+     * @param aLabelDomain
+     *            aLabelDomain.
+     * @return true if is, false if not.
+     */
+    public static boolean checkIfValidALabelDomain(String aLabelDomain) {
+        if (StringUtils.isBlank(aLabelDomain)) {
+            return false;
+        }
+        try {
+            toUnicode(aLabelDomain);
+            return true;
+        } catch (XcodeException e) {
+            LOGGER.warn("toUnicode failed :" + e);
+            return false;
         }
     }
 

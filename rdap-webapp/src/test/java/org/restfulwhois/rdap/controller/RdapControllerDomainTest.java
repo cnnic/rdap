@@ -134,7 +134,9 @@ public class RdapControllerDomainTest extends BaseTest {
         commonQueryInvalidDomain("@.cn");
         commonQueryInvalidDomain("a@.cn");
         commonQueryInvalidDomain("@a.cn");
+        commonQueryInvalidDomain("xn--123.cn");
         commonQueryInvalidDomain("xn--55qx5d.中国");
+        commonQueryInvalidDomain("中国.xn--55qx5d");
         commonQueryInvalidDomain("xn--55qx5d.中国.cn");
         commonQueryInvalidDomain("xn--caf%C3%A9s.com");
         commonQueryInvalidDomain("xn--cafés.com");
