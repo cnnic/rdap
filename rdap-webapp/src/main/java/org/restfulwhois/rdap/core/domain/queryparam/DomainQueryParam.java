@@ -38,6 +38,8 @@ import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.core.common.validation.Validator;
+import org.restfulwhois.rdap.core.domain.validator.DomainNameAlabelValidator;
 import org.restfulwhois.rdap.core.domain.validator.DomainNameValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +56,11 @@ public class DomainQueryParam extends QueryParam {
      */
     private static final DomainNameValidator DOMAIN_NAME_VALIDATOR =
             new DomainNameValidator();
+    /**
+     * DOMAIN_NAME_ALABEL_VALIDATOR.
+     */
+    private static final Validator DOMAIN_NAME_ALABEL_VALIDATOR = 
+            new DomainNameAlabelValidator();
     /**
      * logger.
      */
@@ -81,6 +88,7 @@ public class DomainQueryParam extends QueryParam {
 
     @Override
     protected void initValidators() {
+        addValidator(DOMAIN_NAME_ALABEL_VALIDATOR);
         addValidator(DOMAIN_NAME_VALIDATOR);
     }
 
