@@ -41,7 +41,7 @@ import org.hamcrest.core.StringContains;
 import org.junit.Test;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
-import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.EntityTelephone;
 import org.restfulwhois.rdap.core.entity.model.jcard.Jcard;
 
 import ezvcard.Ezvcard;
@@ -78,13 +78,12 @@ public class JcardTest {
         address.setPostalCode("12345");
         address.setCountry("USA");
         entity.setAddresses(addresses);
-        List<EntityTel> telephones = new ArrayList<EntityTel>();
-        EntityTel entityTel = new EntityTel();
+        List<EntityTelephone> telephones = new ArrayList<EntityTelephone>();
+        EntityTelephone entityTel = new EntityTelephone();
         telephones.add(entityTel);
         entityTel.setPref(1);
-        entityTel.setTypes("home;text");
-        entityTel.setGlobalNumber("+9981-().");
-        entityTel.setExtNumber("998-()");
+        telephones.add(EntityTelephone.buildTextTel("+9981-().", "998-()")
+                .addTelephoneTypes("home;text"));
         entity.setTelephones(telephones);
         entity.setEmail("johndoe@hotmail.com");
         entity.setTitle("CEO");
@@ -108,39 +107,24 @@ public class JcardTest {
     @Test
     public void testTel() {
         Entity entity = new Entity();
-        List<EntityTel> telephones = new ArrayList<EntityTel>();
-        EntityTel entityTel = new EntityTel();
+        List<EntityTelephone> telephones = new ArrayList<EntityTelephone>();
+        EntityTelephone entityTel = new EntityTelephone();
         // valid tel
         telephones.add(entityTel);
         entityTel.setPref(1);
-        entityTel.setTypes("home;text");
-        entityTel.setGlobalNumber("+9981-().");
-        entityTel.setExtNumber("998-()");
-        // invalid tel
-        entityTel = new EntityTel();
-        telephones.add(entityTel);
-        entityTel.setGlobalNumber("+0981+-().");
-        entityTel.setExtNumber("998-()");
-        // invalid tel
-        entityTel = new EntityTel();
-        telephones.add(entityTel);
-        entityTel.setGlobalNumber("+9981+-().");
-        entityTel.setExtNumber("+998-()");
-        // invalid tel
-        entityTel = new EntityTel();
-        telephones.add(entityTel);
-        entityTel.setGlobalNumber("a9981-().");
-        entityTel.setExtNumber("998-()");
-        // invalid tel
-        entityTel = new EntityTel();
-        telephones.add(entityTel);
-        entityTel.setGlobalNumber("@#-().");
-        entityTel.setExtNumber("998-()");
-        // invalid tel
-        entityTel = new EntityTel();
-        telephones.add(entityTel);
-        entityTel.setGlobalNumber(" +9981-().");
-        entityTel.setExtNumber("998-()");
+        String telTypeStrs = "home;text";
+        telephones.add(EntityTelephone.buildTextTel("+9981-().", "998-()")
+                .addTelephoneTypes(telTypeStrs));
+        telephones.add(EntityTelephone.buildTextTel("+0981+-().", "998-()")
+                .addTelephoneTypes(telTypeStrs));
+        telephones.add(EntityTelephone.buildTextTel("+9981+-().", "+998-()")
+                .addTelephoneTypes(telTypeStrs));
+        telephones.add(EntityTelephone.buildTextTel("a9981-().", "998-()")
+                .addTelephoneTypes(telTypeStrs));
+        telephones.add(EntityTelephone.buildTextTel("@#-().", "998-()")
+                .addTelephoneTypes(telTypeStrs));
+        telephones.add(EntityTelephone.buildTextTel(" +9981-().", "998-()")
+                .addTelephoneTypes(telTypeStrs));
         entity.setTelephones(telephones);
         String jcardString = Jcard.build(entity).toJSON();
         assertNotNull(jcardString);

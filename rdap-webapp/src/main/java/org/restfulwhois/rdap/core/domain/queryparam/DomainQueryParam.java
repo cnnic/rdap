@@ -180,10 +180,11 @@ public class DomainQueryParam extends QueryParam {
      * @return tld tld.
      */
     public String getFullPunyTld() {
-        if (StringUtils.isBlank(punyName)) {
+        String punyDomainName = DomainUtil.safeGeneDomainPunyName(super.getQ());
+        if (StringUtils.isBlank(punyDomainName)) {
             return null;
         }
-        String fullTld = StringUtils.substringAfter(punyName, ".");
+        String fullTld = StringUtils.substringAfter(punyDomainName, ".");
         if (StringUtils.isBlank(fullTld)) {
             return ".";
         }

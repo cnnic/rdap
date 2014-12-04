@@ -60,7 +60,7 @@ import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
 import org.restfulwhois.rdap.core.entity.model.EntityRole;
-import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.EntityTelephone;
 import org.restfulwhois.rdap.core.entity.model.jcard.Jcard;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.slf4j.Logger;
@@ -257,7 +257,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      *            entity object.
      */
     private void convertAndSetVcardArray(Entity entity) {
-        List<EntityTel> telephones = entityTelDao.query(entity);
+        List<EntityTelephone> telephones = entityTelDao.query(entity);
         entity.setTelephones(telephones);
         List<EntityAddress> addresses = entityAddressDao.query(entity);
         entity.setAddresses(addresses);

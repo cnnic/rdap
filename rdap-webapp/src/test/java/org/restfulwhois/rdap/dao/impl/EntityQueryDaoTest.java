@@ -52,7 +52,7 @@ import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
-import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.EntityTelephone;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -60,6 +60,8 @@ import org.springframework.util.Assert;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+
+import ezvcard.parameter.TelephoneType;
 
 /**
  * Test for entity DAO.
@@ -84,7 +86,8 @@ public class EntityQueryDaoTest extends BaseTest {
         super.databaseSetupWithBinaryColumns("entity.xml");
         String entityHandle = "h1";
         Entity entity =
-                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper
+                        .buildQueryParam(entityHandle));
         assertNotNull(entity);
         assertEquals(entityHandle, entity.getHandle());
         assertEquals("individual", entity.getKind());
@@ -103,13 +106,14 @@ public class EntityQueryDaoTest extends BaseTest {
         assertThat(roleList,
                 CoreMatchers.hasItems("registrant", "administrative"));
         // telephones
-        List<EntityTel> telephones = entity.getTelephones();
+        List<EntityTelephone> telephones = entity.getTelephones();
         assertNotNull(telephones);
         assertEquals(2, telephones.size());
-        EntityTel tel = telephones.get(0);
+        EntityTelephone tel = telephones.get(0);
         assertNotNull(tel);
-        assertEquals("home;voice", tel.getTypes());
-        assertEquals("+1-555-555-1234", tel.getGlobalNumber());
+        assertThat(tel.getTypes(), CoreMatchers.hasItems(TelephoneType.TEXT,
+                TelephoneType.HOME, TelephoneType.VOICE));
+        assertEquals("+1-555-555-1234", tel.getNumber());
         assertEquals("1234", tel.getExtNumber());
         // addresses
         List<EntityAddress> addresses = entity.getAddresses();
@@ -199,7 +203,8 @@ public class EntityQueryDaoTest extends BaseTest {
         // not truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 5L);
         Entity entity =
-                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper
+                        .buildQueryParam(entityHandle));
         List<Network> networks = entity.getNetworks();
         assertNotNull(networks);
         assertEquals(1, networks.size());
@@ -211,18 +216,21 @@ public class EntityQueryDaoTest extends BaseTest {
         // not truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 4L);
         entity =
-                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper
+                        .buildQueryParam(entityHandle));
         assertNull(entity.getNotices());
         assertNull(entity.getTruncatedInfo());
         // truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 3L);
         entity =
-                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper
+                        .buildQueryParam(entityHandle));
         assertTrue(entity.getTruncatedInfo().getResultsTruncated());
         // truncated
         ReflectionTestUtils.setField(prop, "maxsizeSearch", 2L);
         entity =
-                entityQueryDao.query(QueryParamHelper.buildQueryParam(entityHandle));
+                entityQueryDao.query(QueryParamHelper
+                        .buildQueryParam(entityHandle));
         assertTrue(entity.getTruncatedInfo().getResultsTruncated());
     }
 
@@ -263,7 +271,8 @@ public class EntityQueryDaoTest extends BaseTest {
     @DatabaseSetup("entity.xml")
     public void testQueryNotExistEntity() {
         Entity entity =
-                entityQueryDao.query(QueryParamHelper.buildQueryParam("non-exist-entity-handle"));
+                entityQueryDao.query(QueryParamHelper
+                        .buildQueryParam("non-exist-entity-handle"));
         assertNull(entity);
     }
 

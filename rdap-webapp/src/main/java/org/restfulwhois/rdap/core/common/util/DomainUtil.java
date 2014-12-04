@@ -369,6 +369,22 @@ public final class DomainUtil {
         }
         return resultStr;
     }
+    
+    /**
+     * safeGeneDomainPunyName.
+     * 
+     * @param domainName
+     *            domainName.
+     * @return punyname.
+     */
+    public static String safeGeneDomainPunyName(String domainName) {
+        try {
+            return geneDomainPunyName(domainName);
+        } catch (Exception e) {
+            LOGGER.warn("safeGeneDomainPunyName error:{}", e);
+        }
+        return null;
+    }
 
     /**
      * generate domain puny name.
