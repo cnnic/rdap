@@ -34,7 +34,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.EntityTelephone;
 import org.restfulwhois.rdap.core.entity.model.jcard.JcardPropertyConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,22 +72,15 @@ public class JcardTelephoneConverter implements JcardPropertyConverter {
      *            entity.
      */
     private void addTelsToVcard(VCard vcard, Entity entity) {
-        List<EntityTel> telList = entity.getTelephones();
+        List<EntityTelephone> telList = entity.getTelephones();
         if (null == telList) {
             return;
         }
-        for (EntityTel tel : telList) {
-            if (StringUtils.isBlank(tel.getGlobalNumber())) {
+        for (EntityTelephone tel : telList) {
+            if (tel.isEmpty()) {
                 continue;
             }
-            TelUri uri = safeBuildTelUri(tel);
-            if (null == uri) {
-                continue;
-            }
-            Telephone telephone = new Telephone(uri);
-            addTelephoneTypes(tel.getTypes(), telephone);
-            addPref(tel, telephone);
-            vcard.addTelephoneNumber(telephone);
+            addTelephoneToVcard(tel, vcard);
         }
     }
 
@@ -99,7 +92,7 @@ public class JcardTelephoneConverter implements JcardPropertyConverter {
      * @param telephone
      *            telephone.
      */
-    private void addPref(EntityTel tel, Telephone telephone) {
+    private void addPref(EntityTelephone tel, Telephone telephone) {
         if (null == tel.getPref()) {
             return;
         }
@@ -116,40 +109,28 @@ public class JcardTelephoneConverter implements JcardPropertyConverter {
      * 
      * @param tel
      *            tel.
-     * @return TelUri if tel number is valid, return null if not.
+     * @param vcard
+     * @return TelUri list if tel number is valid, return null if not.
      */
-    private TelUri safeBuildTelUri(EntityTel tel) {
+    private void addTelephoneToVcard(EntityTelephone tel, VCard vcard) {
+        if (tel.isEmpty()) {
+            return;
+        }
         try {
-            Builder telBuilder = new TelUri.Builder(tel.getGlobalNumber());
+            Builder telBuilder = new TelUri.Builder(tel.getNumber());
             if (StringUtils.isNotBlank(tel.getExtNumber())) {
                 telBuilder.extension(tel.getExtNumber());
             }
-            return telBuilder.build();
+            TelUri telUri = telBuilder.build();
+            Telephone telephone = new Telephone(telUri);
+            for (TelephoneType type : tel.getTypes()) {
+                telephone.addType(type);
+            }
+            addPref(tel, telephone);
+            vcard.addTelephoneNumber(telephone);
         } catch (Exception e) {
-            LOGGER.error("buildTelUri error:{} tel:{}", e.getMessage(), tel);
-        }
-        return null;
-    }
-
-    /**
-     * add telephone types to telephone.
-     * 
-     * @param types
-     *            types.
-     * @param telephone
-     *            telephone.
-     */
-    private void addTelephoneTypes(String types, Telephone telephone) {
-        if (StringUtils.isBlank(types)) {
-            return;
-        }
-        String[] typeStrArray = StringUtils.split(types, ";");
-        if (null == typeStrArray) {
-            return;
-        }
-        for (String typeStr : typeStrArray) {
-            TelephoneType telType = TelephoneType.get(typeStr);
-            telephone.addType(telType);
+            LOGGER.error("addFaxTelToVcard error:{} tel:{}", e.getMessage(),
+                    tel);
         }
     }
 

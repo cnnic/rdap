@@ -108,6 +108,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     @Test
     public void testQueryNonExistNS() throws Exception {
         RestResponseUtil.initErrorMessages();
+        commonQueryNonExistNS("a.notInThisRegistry");
         commonQueryNonExistNS("1cnnic.cn");
         commonQueryNonExistNS("cnnic.com.cn");
         commonQueryNonExistNS("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
@@ -124,7 +125,6 @@ public class RdapControllerNameserverTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryInvalidNS() throws Exception {
         RestResponseUtil.initErrorMessages();
-        commonQueryInvalidNS("123");
         commonQueryInvalidNS("c nnic.cn");
     }
 

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
@@ -59,9 +58,10 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
  * @author jiashuo
  * 
  */
-@JsonPropertyOrder({"rdapConformance", "notices", "objectClassName", "handle", "vcardArray",
-        "roles", "publicIds", "entities", "remarks", "links", "events",
-        "asEventActor", "status", "port43", "networks", "autnums",
+@JsonPropertyOrder({
+        "rdapConformance", "notices", "objectClassName", "handle",
+        "vcardArray", "roles", "publicIds", "entities", "remarks", "links",
+        "events", "asEventActor", "status", "port43", "networks", "autnums",
         "resultsTruncated" })
 public class Entity extends BaseModel {
     /**
@@ -110,9 +110,9 @@ public class Entity extends BaseModel {
     private String port43;
 
     /**
-     * 'truncatedInfo' used where a single object has been returned and data
-     * in that object has been truncated.
-     */    
+     * 'truncatedInfo' used where a single object has been returned and data in
+     * that object has been truncated.
+     */
     @JsonIgnore
     private TruncatedInfo truncatedInfo;
 
@@ -134,7 +134,7 @@ public class Entity extends BaseModel {
      * telephones.
      */
     @JsonIgnore
-    private List<EntityTel> telephones;
+    private List<EntityTelephone> telephones;
     /**
      * kind.
      */
@@ -165,13 +165,13 @@ public class Entity extends BaseModel {
      */
     @JsonIgnore
     private String url;
-    
+
     /**
      * lang.
      */
     @JsonIgnore
     private String lang;
-    
+
     /**
      * the object class name of a particular object.
      */
@@ -181,7 +181,7 @@ public class Entity extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.ENTITY;
     }
-    
+
     @Override
     public QueryUri getUri() {
         return QueryUri.ENTITY;
@@ -191,6 +191,7 @@ public class Entity extends BaseModel {
     public String generateLinkHref() {
         return getUri().getName() + getHandle();
     }
+
     /**
      * add a status string to status list.
      * 
@@ -601,7 +602,7 @@ public class Entity extends BaseModel {
      * 
      * @return telephones.
      */
-    public List<EntityTel> getTelephones() {
+    public List<EntityTelephone> getTelephones() {
         return telephones;
     }
 
@@ -611,7 +612,7 @@ public class Entity extends BaseModel {
      * @param telephones
      *            telephones.
      */
-    public void setTelephones(List<EntityTel> telephones) {
+    public void setTelephones(List<EntityTelephone> telephones) {
         this.telephones = telephones;
     }
 
@@ -633,14 +634,14 @@ public class Entity extends BaseModel {
     public void setTruncatedInfo(TruncatedInfo truncatedInfo) {
         this.truncatedInfo = truncatedInfo;
     }
-    
+
     /**
      * get ObjectClassNameEnum.
      * 
      * @return objectClassName.
      */
     public ObjectClassNameEnum getObjectClassName() {
-         return objectClassName;
+        return objectClassName;
     }
 
     /**
@@ -650,7 +651,7 @@ public class Entity extends BaseModel {
      *            objectClassName for set.
      */
     public void setObjectClassName(ObjectClassNameEnum objectClassName) {
-         this.objectClassName = objectClassName;
+        this.objectClassName = objectClassName;
     }
 
 }

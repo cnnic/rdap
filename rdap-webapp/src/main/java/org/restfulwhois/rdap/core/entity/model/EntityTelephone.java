@@ -30,8 +30,14 @@
  */
 package org.restfulwhois.rdap.core.entity.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+
+import ezvcard.parameter.TelephoneType;
 
 /**
  * telephone number of entity.
@@ -39,52 +45,106 @@ import org.restfulwhois.rdap.core.common.model.base.BaseModel;
  * @author jiashuo
  * 
  */
-public class EntityTel extends BaseModel {
-
-    /**
-     * entity id.
-     */
-    private Long entityId;
+public class EntityTelephone extends BaseModel {
     /**
      * pref.
      */
     private Integer pref;
     /**
-     * tel types,splited by ';'.
+     * tel type.
      */
-    private String types;
+    private List<TelephoneType> types = new ArrayList<TelephoneType>();
     /**
      * globalNumber,eg:+1-555-555-1234.
      */
-    private String globalNumber;
+    private String number;
     /**
      * ext number,eg:102.
      */
     private String extNumber;
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append(globalNumber).append(extNumber)
-                .append(pref).toString();
+    /**
+     * addTelephoneTypes.
+     * 
+     * @param typesStr
+     *            types Str, split by ';'.
+     */
+    public EntityTelephone addTelephoneTypes(String typesStr) {
+        if (StringUtils.isBlank(typesStr)) {
+            return this;
+        }
+        String[] typeSplitStrArray = StringUtils.split(typesStr, ";");
+        for (String typeSplit : typeSplitStrArray) {
+            addTelephoneType(typeSplit);
+        }
+        return this;
     }
 
     /**
-     * get entityId.
+     * addTelephoneType.
      * 
-     * @return entityId.
+     * @param typeStr
+     *            typeStr.
      */
-    public Long getEntityId() {
-        return entityId;
+    public EntityTelephone addTelephoneType(String typeStr) {
+        if (StringUtils.isBlank(typeStr)) {
+            return this;
+        }
+        TelephoneType type = TelephoneType.find(typeStr);
+        if (null == type) {
+            return this;
+        }
+        getTypes().add(type);
+        return this;
     }
 
     /**
-     * set entityId.
+     * build text tel.
      * 
-     * @param entityId
-     *            entityId.
+     * @param number
+     * @param extNumber
+     * @return
      */
-    public void setEntityId(Long entityId) {
-        this.entityId = entityId;
+    public static EntityTelephone buildTextTel(String number, String extNumber) {
+        EntityTelephone tel = build(number, extNumber);
+        tel.getTypes().add(TelephoneType.TEXT);
+        return tel;
+    }
+
+    /**
+     * build fax tel.
+     * 
+     * @param number
+     * @param extNumber
+     * @return
+     */
+    public static EntityTelephone buildFaxTel(String number, String extNumber) {
+        EntityTelephone tel = build(number, extNumber);
+        tel.getTypes().add(TelephoneType.FAX);
+        return tel;
+    }
+
+    /**
+     * build tel.
+     * 
+     * @param number
+     * @param extNumber
+     * @return
+     */
+    public static EntityTelephone build(String number, String extNumber) {
+        EntityTelephone tel = new EntityTelephone();
+        tel.number = number;
+        tel.extNumber = extNumber;
+        return tel;
+    }
+
+    /**
+     * check if is empty.
+     * 
+     * @return true if is empty, false if not.
+     */
+    public boolean isEmpty() {
+        return StringUtils.isBlank(number);
     }
 
     /**
@@ -107,11 +167,11 @@ public class EntityTel extends BaseModel {
     }
 
     /**
-     * get types.
+     * getTypes.
      * 
      * @return types.
      */
-    public String getTypes() {
+    public List<TelephoneType> getTypes() {
         return types;
     }
 
@@ -121,27 +181,27 @@ public class EntityTel extends BaseModel {
      * @param types
      *            types.
      */
-    public void setTypes(String types) {
+    public void setTypes(List<TelephoneType> types) {
         this.types = types;
     }
 
     /**
-     * get globalNumber.
+     * get number.
      * 
-     * @return globalNumber.
+     * @return number.
      */
-    public String getGlobalNumber() {
-        return globalNumber;
+    public String getNumber() {
+        return number;
     }
 
     /**
-     * set globalNumber.
+     * set number..
      * 
-     * @param globalNumber
-     *            globalNumber.
+     * @param number
+     *            number.
      */
-    public void setGlobalNumber(String globalNumber) {
-        this.globalNumber = globalNumber;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     /**
@@ -163,5 +223,10 @@ public class EntityTel extends BaseModel {
         this.extNumber = extNumber;
     }
 
-}
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(number).append(extNumber)
+                .append(pref).toString();
+    }
 
+}

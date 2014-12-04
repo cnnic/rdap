@@ -39,7 +39,7 @@ import java.util.List;
 
 import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.EntityTelephone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,19 +49,20 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 /**
- * entity telephone query DAO select entity telephone from RDAP_VCARD_TEL.
- * it is an object belonged to entity,and use query method as interface.
+ * entity telephone query DAO select entity telephone from RDAP_VCARD_TEL. it is
+ * an object belonged to entity,and use query method as interface.
+ * 
  * @author jiashuo
  * 
  */
 @Repository
-public class EntityTelDao extends AbstractQueryDao<EntityTel> {
-    
+public class EntityTelDao extends AbstractQueryDao<EntityTelephone> {
+
     /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(EntityTelDao.class);   
+            .getLogger(EntityTelDao.class);
     /**
      * jdbcTemplate.
      */
@@ -75,12 +76,12 @@ public class EntityTelDao extends AbstractQueryDao<EntityTel> {
      *            entity object.
      * @return EntityTel EntityTel list.
      */
-    public List<EntityTel> query(final Entity entity) {
+    public List<EntityTelephone> query(final Entity entity) {
         if (null == entity || null == entity.getId()) {
             return null;
         }
         final String sql = "select * from RDAP_VCARD_TEL where ENTITY_ID = ?";
-        List<EntityTel> result =
+        List<EntityTelephone> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
                     public PreparedStatement createPreparedStatement(
@@ -89,7 +90,7 @@ public class EntityTelDao extends AbstractQueryDao<EntityTel> {
                         ps.setLong(1, entity.getId());
                         return ps;
                     }
-                }, new EntityTelResultSetExtractor());
+                }, new EntityTelephoneResultSetExtractor());
         return result;
     }
 
@@ -99,15 +100,15 @@ public class EntityTelDao extends AbstractQueryDao<EntityTel> {
      * @author jiashuo
      * 
      */
-    class EntityTelResultSetExtractor implements
-            ResultSetExtractor<List<EntityTel>> {
+    class EntityTelephoneResultSetExtractor implements
+            ResultSetExtractor<List<EntityTelephone>> {
         @Override
-        public List<EntityTel> extractData(ResultSet rs) throws SQLException {
-            List<EntityTel> result = new ArrayList<EntityTel>();
+        public List<EntityTelephone> extractData(ResultSet rs)
+                throws SQLException {
+            List<EntityTelephone> result = new ArrayList<EntityTelephone>();
             while (rs.next()) {
-                EntityTel entityTel = new EntityTel();
-                extractEntityTelFromRs(rs, entityTel);
-                result.add(entityTel);
+                EntityTelephone tel = extractEntityTelFromRs(rs);
+                result.add(tel);
             }
             return result;
         }
@@ -120,17 +121,18 @@ public class EntityTelDao extends AbstractQueryDao<EntityTel> {
      *            ResultSet.
      * @param entityTel
      *            entityTel.
+     * @return EntityTelephone EntityTelephone.
      * @throws SQLException
      *             SQLException.
      */
-    private void extractEntityTelFromRs(ResultSet rs, EntityTel entityTel)
+    private EntityTelephone extractEntityTelFromRs(ResultSet rs)
             throws SQLException {
-        entityTel.setId(rs.getLong("TEL_ID"));
-        entityTel.setEntityId(rs.getLong("ENTITY_ID"));
-        entityTel.setTypes(rs.getString("TYPE"));
-        entityTel.setGlobalNumber(rs.getString("GLOBAL_NUMBER"));
-        entityTel.setExtNumber(rs.getString("EXT_NUMBER"));
-        entityTel.setPref(getIntegerFromRs(rs, "PREF"));
+        EntityTelephone telephone =
+                EntityTelephone.buildTextTel(rs.getString("GLOBAL_NUMBER"),
+                        rs.getString("EXT_NUMBER"));
+        telephone.addTelephoneTypes(rs.getString("TYPE"));
+        telephone.setPref(getIntegerFromRs(rs, "PREF"));
+        return telephone;
     }
-
+    
 }
