@@ -1,4 +1,4 @@
-### Install Instruction
+### rdap-webapp Install
 
 Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.
 
