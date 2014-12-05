@@ -51,13 +51,9 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
    
    This step will create database called 'rdap', and create schema, and you can insert test data into it. 
 
-   There are two methods to init, if you are familiar with Mysql, you may use the first method, and if not you should use second.
-   
-   * Use init tool to init
+   This step will use database info in jdbc.properties you haved configured before.
      
-     This step will use database info in jdbc.properties you haved configured before.
-     
-     WARN: this step will DROP database of 'jdbc.url.dbName' if it is existing, and then recreate it.
+   WARN: this step will DROP database of 'jdbc.url.dbName' if it is existing, and then recreate it.
 	   
 		```
    		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
