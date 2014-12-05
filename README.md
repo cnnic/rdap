@@ -52,30 +52,7 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
    This step will create database called 'rdap', and create schema, and you can insert test data into it. 
 
    There are two methods to init, if you are familiar with Mysql, you may use the first method, and if not you should use second.
-   * Use Mysql client to init
-      *  Login mysql server use mysql client, $MYSQL_USERNAME must be replaced by real Mysql username.
-     
-		```
-		cd $MYSQL_HOME     #$MYSQL_HOME must be replaced by real Mysql home dir
-		[in Linux/OS X, open a shell and execute command:]
-	   		mysql -h127.0.0.1 -u$MYSQL_USERNAME  -p
-		[in Windows, open command prompt window and execute command:]
-			mysql.exe -h127.0.0.1 -u$MYSQL_USERNAME  -p	
-		```
-      *  Download [init-schema.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-schema.sql) [init-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/init-data.sql) and [test-data.sql](https://raw.githubusercontent.com/cnnic/rdap/master/rdap-webapp/src/main/resources/init/mysql/test-data.sql) . 
-      
-      	Execute: 
-      
-	   	```
-		DROP DATABASE IF EXISTS `rdap`;
-		CREATE DATABASE `rdap` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
-		use `rdap`;
-	   	source init-schema.sql;    # init database schema
-		source init-data.sql;	  #init base data 
-
-		[If you want load some test data, execute following command:]
-		source test-data.sql;    #insert test data
-	   	```
+   
    * Use init tool to init
      
      This step will use database info in jdbc.properties you haved configured before.
