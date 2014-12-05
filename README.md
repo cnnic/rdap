@@ -67,7 +67,7 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 		```
 	It's ok if response contains 'rdapConformance'. 
 	
-### Port43 Install
+### rdap-port43 Install
 [Port43 Install](https://github.com/cnnic/rdap/wiki/Port43-install-&-usage)
 ### Api Doc
 [Api Doc](https://github.com/cnnic/rdap/wiki/Api-Doc)
