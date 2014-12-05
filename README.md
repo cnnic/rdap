@@ -26,21 +26,8 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 
    There are two methods to get war file
    * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK6. 
-   * Build war file from source
-      *  [Install maven3] (http://maven.apache.org/download.cgi#Installation) or higer version
-      *  Make a dir used to download source code and build, which is called 'WORK_DIR'
-      *  [Download source zip file](https://github.com/cnnic/rdap/archive/dev.zip), unzip it to $WORK_DIR
-      *  Build project:
-		```
-		[in Linux/OS X, open a shell and execute command:]
-			cd $WORK_DIR/rdap-dev/rdap-webapp		# $WORK_DIR must be replaced by real dir
-			mvn package -Dmaven.test.skip=true	# mvn must in system variable. Option '-Dmaven.compiler.target' can be used for higher jdk version, such as '-Dmaven.compiler.target=1.7' for jdk7
-		[in Windows7 or Windows8, open command prompt window and execute command:]
-			cd $WORK_DIR/rdap-dev/rdap-webapp		# $WORK_DIR must be replaced by real dir
-			mvn.bat package -Dmaven.test.skip=true # mvn.bat must in system variable
-		(target/rdap.war  is the build war file)
-	
-		```
+   * [Build war file from source](https://github.com/cnnic/rdap/wiki/install-Build-war-file-from-source)
+
 5. Deploy rdap.war to tomcat.
    * Create folder 'rdap' in dir $TOMCAT_HOME/webapps/
    * Unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
