@@ -64,7 +64,7 @@
 	    	<property name="errorCode" value="429"></property>
 	    	<property name="title" value="TOO MANY REQUESTS"></property>
 	    	<property name="description" value="TOO MANY REQUESTS"></property>
-	    	<property name="lang" value="zh"></property>
+	    	<property name="lang" value="en"></property>
 	    </bean>
 	     <bean class="org.restfulwhois.rdap.core.common.model.ErrorMessage">
 	    	<property name="errorCode" value="301"></property>
