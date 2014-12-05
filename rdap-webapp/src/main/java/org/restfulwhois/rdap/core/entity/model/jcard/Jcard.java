@@ -129,6 +129,9 @@ public final class Jcard {
         for (JcardPropertyConverter converter : converters) {
             converter.convertAndSetProperty(vcard, entity);
         }
+        if (!vcard.iterator().hasNext()) {
+            return null;
+        }
         return this.writeJSON(vcard);
     }
 
