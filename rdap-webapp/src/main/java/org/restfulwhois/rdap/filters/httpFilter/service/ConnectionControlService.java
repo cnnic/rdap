@@ -111,9 +111,6 @@ public final class ConnectionControlService {
             return false;
         }
         LOGGER.debug("check exceedRateLimit, ip:{}", ip);
-        if (StringUtils.isBlank(ip)) {
-            return false;
-        }
         if (isInIpWhiteList(ip)) {
             return false;
         }
@@ -155,6 +152,9 @@ public final class ConnectionControlService {
     private static boolean isInIpWhiteList(String ip) {
         LOGGER.debug("ip white list:{}", IP_WHITE_LIST_FOR_ACCESS_INTERVAL);
         LOGGER.debug("check ip:{}", ip);
+        if (StringUtils.isBlank(ip)) {
+            return false;
+        }
         List<String> whiteList = IP_WHITE_LIST_FOR_ACCESS_INTERVAL;
         if (null != whiteList && whiteList.contains(ip)) {
             return true;
@@ -188,11 +188,17 @@ public final class ConnectionControlService {
      * increment concurrent query count, and check if exceed max count.MUST call
      * decrementAndGetCurrentQueryCount after query.
      * 
+     * @param ip
+     * 
      * @return true if exceed, false if not.
      */
-    public static boolean incrementConcurrentQCountAndCheckIfExceedMax() {
+    public static boolean
+            incrementConcurrentQCountAndCheckIfExceedMax(String ip) {
         LOGGER.debug("incrementConcurrentQCountAndCheckIfExceedMax.");
         if (isConcurrentCountNotLimit()) {
+            return false;
+        }
+        if (isInIpWhiteList(ip)) {
             return false;
         }
         int count = CONCURRENT_Q_COUNT.getAndIncrement();
@@ -207,10 +213,15 @@ public final class ConnectionControlService {
 
     /**
      * decrement current query count.
+     * 
+     * @param ip
      */
-    public static void decrementAndGetCurrentQueryCount() {
+    public static void decrementAndGetCurrentQueryCount(String ip) {
         LOGGER.debug("decrementAndGetCurrentQueryCount.");
         if (isConcurrentCountNotLimit()) {
+            return;
+        }
+        if (isInIpWhiteList(ip)) {
             return;
         }
         int count = CONCURRENT_Q_COUNT.decrementAndGet();

@@ -56,8 +56,9 @@ public class ConcurrentQueryCountFilter implements HttpFilter {
     @Override
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+        String ip = request.getRemoteAddr();
         if (ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax()) {
+                .incrementConcurrentQCountAndCheckIfExceedMax(ip)) {
             writeError509Response(response);
             return false;
         }
@@ -86,7 +87,8 @@ public class ConcurrentQueryCountFilter implements HttpFilter {
     @Override
     public boolean postProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        ConnectionControlService.decrementAndGetCurrentQueryCount();
+        String ip = request.getRemoteAddr();
+        ConnectionControlService.decrementAndGetCurrentQueryCount(ip);
         return true;
     }
 

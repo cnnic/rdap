@@ -34,6 +34,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.filters.httpFilter.service.ConnectionControlService;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -44,7 +45,7 @@ import org.springframework.test.util.ReflectionTestUtils;
  * @author jiashuo
  * 
  */
-public class ConnectionControlServiceTest {
+public class ConnectionControlServiceTest extends BaseTest{
 
     /**
      * test incrementConcurrentQCountAndCheckIfExceedMax.
@@ -55,20 +56,20 @@ public class ConnectionControlServiceTest {
         RdapProperties prop = new RdapProperties();
         ReflectionTestUtils.setField(prop, "maxConcurrentCount", 3);
         assertFalse(ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax());
+                .incrementConcurrentQCountAndCheckIfExceedMax(""));
         assertFalse(ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax());
+                .incrementConcurrentQCountAndCheckIfExceedMax(""));
         assertFalse(ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax());
+                .incrementConcurrentQCountAndCheckIfExceedMax(""));
         assertTrue(ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax());
-        ConnectionControlService.decrementAndGetCurrentQueryCount();
+                .incrementConcurrentQCountAndCheckIfExceedMax(""));
+        ConnectionControlService.decrementAndGetCurrentQueryCount("");
         assertTrue(ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax());
-        ConnectionControlService.decrementAndGetCurrentQueryCount();
-        ConnectionControlService.decrementAndGetCurrentQueryCount();
+                .incrementConcurrentQCountAndCheckIfExceedMax(""));
+        ConnectionControlService.decrementAndGetCurrentQueryCount("");
+        ConnectionControlService.decrementAndGetCurrentQueryCount("");
         assertFalse(ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax());
+                .incrementConcurrentQCountAndCheckIfExceedMax(""));
 
     }
 
@@ -93,8 +94,8 @@ public class ConnectionControlServiceTest {
         // set conf to 1s
         ReflectionTestUtils.setField(prop, "minSecondsAccessIntervalAnonymous",
                 1000L);
-        //this will fail because of clear timer!
-//        assertTrue(ConnectionControlService.exceedRateLimit(clientIp));
+        // this will fail because of clear timer!
+        // assertTrue(ConnectionControlService.exceedRateLimit(clientIp));
 
     }
 
