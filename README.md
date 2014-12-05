@@ -26,7 +26,7 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 
    There are two methods to get war file
    * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK6. 
-   * [Build war file from source](https://github.com/cnnic/rdap/wiki/install-Build-war-file-from-source)
+   * [Build war file from source](https://github.com/cnnic/rdap/wiki/%5Binstall%5DBuild-war-file-from-source)
 
 5. Deploy rdap.war to tomcat.
    * Create folder 'rdap' in dir $TOMCAT_HOME/webapps/
