@@ -31,8 +31,8 @@ Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS
 5. Deploy rdap.war to tomcat.
    * Create folder 'rdap' in dir $TOMCAT_HOME/webapps/
    * Unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
-   * Edit database configuration file $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/jdbc.properties, [see here](https://github.com/cnnic/rdap/wiki/jdbc.properties)
-   * Edit global configuration file $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/rdap.properties, [see here](https://github.com/cnnic/rdap/wiki/rdap.properties)
+   * Edit database configuration file [jdbc.properties](https://github.com/cnnic/rdap/wiki/jdbc.properties)
+   * Edit global configuration file [rdap.properties](https://github.com/cnnic/rdap/wiki/rdap.properties)
 
 6. Init database. 
    
