@@ -32,11 +32,9 @@ package org.restfulwhois.rdap.dao.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.core.entity.dao.impl.EntityTelDao;
@@ -46,8 +44,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-
-import ezvcard.parameter.TelephoneType;
 
 /**
  * Test for entity DAO.
@@ -76,8 +72,7 @@ public class EntityTelDaoTest extends BaseTest {
         assertNotNull(telephones);
         assertEquals(telephones.size(), 2);
         EntityTelephone tel = telephones.get(0);
-        assertThat(tel.getTypes(), CoreMatchers.hasItems(TelephoneType.TEXT,
-                TelephoneType.HOME, TelephoneType.VOICE));
+        assertEquals("home;voice", tel.getTypes());
         assertEquals("+1-555-555-1234", tel.getNumber());
         assertEquals("1234", tel.getExtNumber());
         assertEquals(Integer.valueOf(1), tel.getPref());

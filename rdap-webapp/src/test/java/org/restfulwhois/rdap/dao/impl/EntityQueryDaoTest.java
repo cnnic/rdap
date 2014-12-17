@@ -61,8 +61,6 @@ import org.springframework.util.Assert;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
-import ezvcard.parameter.TelephoneType;
-
 /**
  * Test for entity DAO.
  * 
@@ -111,8 +109,7 @@ public class EntityQueryDaoTest extends BaseTest {
         assertEquals(2, telephones.size());
         EntityTelephone tel = telephones.get(0);
         assertNotNull(tel);
-        assertThat(tel.getTypes(), CoreMatchers.hasItems(TelephoneType.TEXT,
-                TelephoneType.HOME, TelephoneType.VOICE));
+        assertEquals(tel.getTypes(), "home;voice");
         assertEquals("+1-555-555-1234", tel.getNumber());
         assertEquals("1234", tel.getExtNumber());
         // addresses
