@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.core.common.validation;
 
 import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.springframework.validation.Errors;
 
 /**
  * validate query parameters.
@@ -42,24 +41,13 @@ import org.springframework.validation.Errors;
 public interface Validator {
 
     /**
-     * Can this {@link Validator} {@link #validate(Object, Errors) validate}
-     * instances of the supplied {@code clazz}?
+     * Can this {@link Validator} instances of the supplied {@code clazz}?
      * <p>
-     * This method is <i>typically</i> implemented like so:
-     * 
-     * <pre class="code">
-     * return Foo.class.isAssignableFrom(clazz);
-     * </pre>
-     * 
-     * (Where {@code Foo} is the class (or superclass) of the actual object
-     * instance that is to be {@link #validate(Object, Errors) validated}.)
-     * 
      * @param clazz
      *            the {@link Class} that this {@link Validator} is being asked
-     *            if it can {@link #validate(Object, Errors) validate}
-     * @return {@code true} if this {@link Validator} can indeed
-     *         {@link #validate(Object, Errors) validate} instances of the
-     *         supplied {@code clazz}
+     *            if it can {@link #validate(Object, ValidationResult) validate}
+     * @return {@code true} if this {@link Validator} can validate instances
+     *            of the supplied {@code clazz}
      */
     boolean supports(Class<?> clazz);
 

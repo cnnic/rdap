@@ -82,8 +82,7 @@ public class JcardTest {
         EntityTelephone entityTel = new EntityTelephone();
         telephones.add(entityTel);
         entityTel.setPref(1);
-        telephones.add(EntityTelephone.buildTextTel("+9981-().", "998-()")
-                .addTelephoneTypes("home;text"));
+        telephones.add(EntityTelephone.buildTextTel("+9981-().", "998-()"));
         entity.setTelephones(telephones);
         entity.setEmail("johndoe@hotmail.com");
         entity.setTitle("CEO");
@@ -113,18 +112,12 @@ public class JcardTest {
         telephones.add(entityTel);
         entityTel.setPref(1);
         String telTypeStrs = "home;text";
-        telephones.add(EntityTelephone.buildTextTel("+9981-().", "998-()")
-                .addTelephoneTypes(telTypeStrs));
-        telephones.add(EntityTelephone.buildTextTel("+0981+-().", "998-()")
-                .addTelephoneTypes(telTypeStrs));
-        telephones.add(EntityTelephone.buildTextTel("+9981+-().", "+998-()")
-                .addTelephoneTypes(telTypeStrs));
-        telephones.add(EntityTelephone.buildTextTel("a9981-().", "998-()")
-                .addTelephoneTypes(telTypeStrs));
-        telephones.add(EntityTelephone.buildTextTel("@#-().", "998-()")
-                .addTelephoneTypes(telTypeStrs));
-        telephones.add(EntityTelephone.buildTextTel(" +9981-().", "998-()")
-                .addTelephoneTypes(telTypeStrs));
+        telephones.add(EntityTelephone.buildTextTel("+9981-().", "998-()"));
+        telephones.add(EntityTelephone.buildTextTel("+0981+-().", "998-()"));
+        telephones.add(EntityTelephone.buildTextTel("+9981+-().", "+998-()"));
+        telephones.add(EntityTelephone.buildTextTel("a9981-().", "998-()"));
+        telephones.add(EntityTelephone.buildTextTel("@#-().", "998-()"));
+        telephones.add(EntityTelephone.buildTextTel(" +9981-().", "998-()"));
         entity.setTelephones(telephones);
         String jcardString = Jcard.build(entity).toJSON();
         assertNotNull(jcardString);

@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.stereotype.Repository;
 
 /**
+ * nameserver search DAO.
  * 
  * @author jiashuo
  * 

@@ -130,7 +130,7 @@ public class EntityTelDao extends AbstractQueryDao<EntityTelephone> {
         EntityTelephone telephone =
                 EntityTelephone.buildTextTel(rs.getString("GLOBAL_NUMBER"),
                         rs.getString("EXT_NUMBER"));
-        telephone.addTelephoneTypes(rs.getString("TYPE"));
+        telephone.setTypes(rs.getString("TYPE"));
         telephone.setPref(getIntegerFromRs(rs, "PREF"));
         return telephone;
     }

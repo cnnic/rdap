@@ -48,6 +48,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Repository;
 
 /**
+ * search domain by name.
  * 
  * @author jiashuo
  * 

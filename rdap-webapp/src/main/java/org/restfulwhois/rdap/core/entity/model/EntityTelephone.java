@@ -30,9 +30,6 @@
  */
 package org.restfulwhois.rdap.core.entity.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
@@ -51,9 +48,9 @@ public class EntityTelephone extends BaseModel {
      */
     private Integer pref;
     /**
-     * tel type.
+     * tel type.splitted by ';'.
      */
-    private List<TelephoneType> types = new ArrayList<TelephoneType>();
+    private String types;
     /**
      * globalNumber,eg:+1-555-555-1234.
      */
@@ -64,41 +61,6 @@ public class EntityTelephone extends BaseModel {
     private String extNumber;
 
     /**
-     * addTelephoneTypes.
-     * 
-     * @param typesStr
-     *            types Str, split by ';'.
-     */
-    public EntityTelephone addTelephoneTypes(String typesStr) {
-        if (StringUtils.isBlank(typesStr)) {
-            return this;
-        }
-        String[] typeSplitStrArray = StringUtils.split(typesStr, ";");
-        for (String typeSplit : typeSplitStrArray) {
-            addTelephoneType(typeSplit);
-        }
-        return this;
-    }
-
-    /**
-     * addTelephoneType.
-     * 
-     * @param typeStr
-     *            typeStr.
-     */
-    public EntityTelephone addTelephoneType(String typeStr) {
-        if (StringUtils.isBlank(typeStr)) {
-            return this;
-        }
-        TelephoneType type = TelephoneType.find(typeStr);
-        if (null == type) {
-            return this;
-        }
-        getTypes().add(type);
-        return this;
-    }
-
-    /**
      * build text tel.
      * 
      * @param number
@@ -107,7 +69,7 @@ public class EntityTelephone extends BaseModel {
      */
     public static EntityTelephone buildTextTel(String number, String extNumber) {
         EntityTelephone tel = build(number, extNumber);
-        tel.getTypes().add(TelephoneType.TEXT);
+        tel.setTypes(TelephoneType.TEXT.getValue());
         return tel;
     }
 
@@ -120,7 +82,7 @@ public class EntityTelephone extends BaseModel {
      */
     public static EntityTelephone buildFaxTel(String number, String extNumber) {
         EntityTelephone tel = build(number, extNumber);
-        tel.getTypes().add(TelephoneType.FAX);
+        tel.setTypes(TelephoneType.FAX.getValue());
         return tel;
     }
 
@@ -171,7 +133,7 @@ public class EntityTelephone extends BaseModel {
      * 
      * @return types.
      */
-    public List<TelephoneType> getTypes() {
+    public String getTypes() {
         return types;
     }
 
@@ -181,7 +143,7 @@ public class EntityTelephone extends BaseModel {
      * @param types
      *            types.
      */
-    public void setTypes(List<TelephoneType> types) {
+    public void setTypes(String types) {
         this.types = types;
     }
 

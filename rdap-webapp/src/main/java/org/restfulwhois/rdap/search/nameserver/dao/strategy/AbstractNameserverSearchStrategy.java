@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 /**
+ * abstract nameserver search strategy.
  * 
  * @author jiashuo
  * 

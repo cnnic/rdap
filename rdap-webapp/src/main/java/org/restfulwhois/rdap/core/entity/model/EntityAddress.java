@@ -50,7 +50,7 @@ public class EntityAddress extends BaseModel {
     private Integer pref;
 
     /**
-     * address types.
+     * address types.splitted by ';'.
      */
     private String types;
     /**

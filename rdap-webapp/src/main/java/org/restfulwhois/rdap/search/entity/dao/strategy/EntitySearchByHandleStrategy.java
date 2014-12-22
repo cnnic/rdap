@@ -41,6 +41,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 /**
+ * search entity by handle.
  * 
  * @author jiashuo
  * 

@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.stereotype.Repository;
 
 /**
+ * entity search DAO.
  * 
  * @author jiashuo
  * 

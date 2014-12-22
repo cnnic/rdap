@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.core.entity.model.jcard.jcardconverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -123,7 +124,8 @@ public class JcardTelephoneConverter implements JcardPropertyConverter {
             }
             TelUri telUri = telBuilder.build();
             Telephone telephone = new Telephone(telUri);
-            for (TelephoneType type : tel.getTypes()) {
+            List<TelephoneType> types = parseTelephoneTypes(tel.getTypes());
+            for (TelephoneType type : types) {
                 telephone.addType(type);
             }
             addPref(tel, telephone);
@@ -132,6 +134,25 @@ public class JcardTelephoneConverter implements JcardPropertyConverter {
             LOGGER.error("addFaxTelToVcard error:{} tel:{}", e.getMessage(),
                     tel);
         }
+    }
+
+    /**
+     * parseTelephoneTypes.
+     * 
+     * @param typesStr
+     *            types String, split by ';'.
+     * @return TelephoneType list.
+     */
+    private List<TelephoneType> parseTelephoneTypes(String typesStr) {
+        List<TelephoneType> types = new ArrayList<TelephoneType>();
+        String[] typeSplitStrArray = StringUtils.split(typesStr, ";");
+        for (String typeSplit : typeSplitStrArray) {
+            TelephoneType type = TelephoneType.find(typeSplit);
+            if (null != type) {
+                types.add(type);
+            }
+        }
+        return types;
     }
 
 }

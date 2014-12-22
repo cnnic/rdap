@@ -48,6 +48,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 /**
+ * abstract entity search strategy.
  * 
  * @author jiashuo
  * 
@@ -86,7 +87,7 @@ public abstract class AbstractEntitySearchStrategy implements
     }
 
     /**
-     * search.
+     * search entities.
      * 
      * @param queryParam
      *            queryParam.
