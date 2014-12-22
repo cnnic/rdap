@@ -50,6 +50,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Repository;
 
 /**
+ * search domain by NS IP.
  * 
  * @author jiashuo
  * 

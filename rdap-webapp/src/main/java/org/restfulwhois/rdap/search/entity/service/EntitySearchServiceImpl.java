@@ -46,7 +46,7 @@ import org.springframework.stereotype.Service;
 /**
  * search service implementation.
  * 
- * RdapController's searching for domain/NS/IP/entity .etc .
+ * RdapController's searching for domain/NS/IP/entity. etc .
  * 
  * The result list is paged by 'batchsizeSearch' property.
  * 

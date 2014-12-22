@@ -44,7 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * NS search service implementation.
+ * nameserver search service implementation.
  * 
  * @author jiashuo
  * 

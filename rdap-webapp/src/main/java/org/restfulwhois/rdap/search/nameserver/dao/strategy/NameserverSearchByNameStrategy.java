@@ -46,6 +46,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Repository;
 
 /**
+ * search nameserver by name.
  * 
  * @author jiashuo
  * 
