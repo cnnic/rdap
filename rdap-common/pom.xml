@@ -4,13 +4,13 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.restfulwhois.rdap.common.model</groupId>
+		<groupId>org.restfulwhois.rdap</groupId>
 		<artifactId>rdap</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>${rdap.version}</version>
 	</parent>
 	<groupId>org.restfulwhois.rdap.common.model.common</groupId>
 	<artifactId>rdap-common</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>${rdap.version}</version>
 	<name>rdap-common</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -57,4 +57,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+	</build>
 </project>
