@@ -5,9 +5,12 @@
 	<groupId>org.restfulwhois.rdap</groupId>
 	<artifactId>rdap</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>${rdap.version}</version>
 	<name>rdap</name>
 	<url>http://maven.apache.org</url>
+	<properties>
+		<rdap.version>0.1-SNAPSHOT</rdap.version>
+	</properties>
 	<modules>
 		<module>rdap-webapp</module>
 		<module>rdap-proxy43</module>
