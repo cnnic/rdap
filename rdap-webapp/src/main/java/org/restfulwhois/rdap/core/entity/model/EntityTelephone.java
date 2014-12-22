@@ -34,8 +34,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 
-import ezvcard.parameter.TelephoneType;
-
 /**
  * telephone number of entity.
  * 
@@ -68,32 +66,6 @@ public class EntityTelephone extends BaseModel {
      * @return
      */
     public static EntityTelephone buildTextTel(String number, String extNumber) {
-        EntityTelephone tel = build(number, extNumber);
-        tel.setTypes(TelephoneType.TEXT.getValue());
-        return tel;
-    }
-
-    /**
-     * build fax tel.
-     * 
-     * @param number
-     * @param extNumber
-     * @return
-     */
-    public static EntityTelephone buildFaxTel(String number, String extNumber) {
-        EntityTelephone tel = build(number, extNumber);
-        tel.setTypes(TelephoneType.FAX.getValue());
-        return tel;
-    }
-
-    /**
-     * build tel.
-     * 
-     * @param number
-     * @param extNumber
-     * @return
-     */
-    public static EntityTelephone build(String number, String extNumber) {
         EntityTelephone tel = new EntityTelephone();
         tel.number = number;
         tel.extNumber = extNumber;

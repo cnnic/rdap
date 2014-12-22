@@ -38,7 +38,7 @@ import java.util.List;
 import org.restfulwhois.rdap.core.common.support.PageBean;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.IpVersion;
 import org.restfulwhois.rdap.core.domain.dao.impl.DomainQueryDaoImpl;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsIpParam;

@@ -41,7 +41,7 @@ import org.restfulwhois.rdap.core.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.core.common.support.ObjectClassNameEnum;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.IpVersion;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

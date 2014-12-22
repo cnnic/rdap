@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.core.ip.validator;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.IpVersion;
 import org.restfulwhois.rdap.core.common.validation.HttpValidationError;
 import org.restfulwhois.rdap.core.common.validation.ValidationResult;
 import org.restfulwhois.rdap.core.common.validation.Validator;

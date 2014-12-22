@@ -41,11 +41,11 @@ import org.apache.commons.lang.StringUtils;
  * @author jiashuo
  * 
  */
-public final class AutnumValidator {
+public final class AutnumUtil {
     /**
      * private constructor.
      */
-    private AutnumValidator() {
+    private AutnumUtil() {
         super();
     }
 

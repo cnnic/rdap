@@ -30,83 +30,90 @@
  */
 package org.restfulwhois.rdap.core.common.util;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * This is used for wrap IP query parameters.
+ * IpVersion.
  * 
  * @author jiashuo
  * 
  */
-public class IpInBytes {
+public enum IpVersion {
+    /**
+     * The representation of IPv4 addresses in this document uses the
+     * dotted-decimal notation described in [RFC1166]. The representation of
+     * IPv6 addresses in this document follow the forms outlined in
+     * [RFC5952].
+     */
+    INVALID("invalid"), V4("v4"), V6("v6");
+    /**
+     * a string signifying the IP protocol version of the network: "v4"
+     * signifying an IPv4 network, "v6" signifying an IPv6 network.
+     */
+    private String name;
 
     /**
-     * version of IP.
-     */
-    private IpVersion ipVersion;
-    /**
-     * bytes value.
-     */
-    private byte[] bytes;
-
-    /**
-     * constructor.
+     * check if is ipv6.
      * 
-     * @param ipVersion
-     *            ipVersion.
-     * @param bytes
-     *            bytes.
+     * @return true if is, false if not.
      */
-    public IpInBytes(IpVersion ipVersion, byte[] bytes) {
-        super();
-        this.ipVersion = ipVersion;
-        this.bytes = bytes;
+    public boolean isV4() {
+        return V4.equals(this);
     }
 
     /**
-     * get startAddress as string.
+     * check if is ipv6.
      * 
-     * @return startAddress string.
+     * @return true if is, false if not.
      */
-    public String getAsString() {
-        return IpUtil.toString(bytes, ipVersion);
+    public boolean isV6() {
+        return V6.equals(this);
     }
 
     /**
-     * get ipVersion.
+     * check if is invalid.
      * 
-     * @return ipVersion.
+     * @return true if is invalid, false if not.
      */
-    public IpVersion getIpVersion() {
-        return ipVersion;
+    public boolean isNotValidIp() {
+        return INVALID.equals(this);
     }
 
     /**
-     * set ipVersion.
+     * default constructor.
      * 
-     * @param ipVersion
-     *            ipVersion.
+     * @param name
+     *            ip version name.
      */
-    public void setIpVersion(IpVersion ipVersion) {
-        this.ipVersion = ipVersion;
+    private IpVersion(String name) {
+        this.name = name;
     }
 
     /**
-     * get bytes.
+     * get name.
      * 
-     * @return bytes.
+     * @return name.
      */
-    public byte[] getBytes() {
-        return bytes;
+    @JsonValue
+    public String getName() {
+        return name;
     }
 
     /**
-     * set bytes.
+     * get IpVersion by name.
      * 
-     * @param bytes
-     *            bytes.
+     * @param name
+     *            name.
+     * @return IpVersion if name is valid, null if not
      */
-    public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
+    public static IpVersion getIpVersion(String name) {
+        IpVersion[] ipVersions = IpVersion.values();
+        for (IpVersion ipVersion : ipVersions) {
+            if (ipVersion.getName().equalsIgnoreCase(name)) {
+                return ipVersion;
+            }
+        }
+        return null;
     }
 
 }

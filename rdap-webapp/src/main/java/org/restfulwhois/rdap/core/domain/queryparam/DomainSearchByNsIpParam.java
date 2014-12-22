@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.core.domain.queryparam;
 
 import org.restfulwhois.rdap.core.common.util.IpInBytes;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.IpVersion;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsIpValidator;
 

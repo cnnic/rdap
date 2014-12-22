@@ -36,7 +36,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.support.QueryUri;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.IpVersion;
 import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.ip.validator.NetworkQueryValidator;
 import org.slf4j.Logger;

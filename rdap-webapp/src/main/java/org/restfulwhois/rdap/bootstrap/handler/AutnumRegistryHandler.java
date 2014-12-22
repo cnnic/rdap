@@ -38,7 +38,7 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bootstrap.BootstrapProperties;
 import org.restfulwhois.rdap.bootstrap.bean.AutnumRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.common.util.AutnumValidator;
+import org.restfulwhois.rdap.core.common.util.AutnumUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -120,8 +120,8 @@ public class AutnumRegistryHandler extends RegistryHandler {
                     endAs);
             return false;
         }
-        if (!AutnumValidator.isValidAutnum(startAs + "")
-                || !AutnumValidator.isValidAutnum(endAs + "")) {
+        if (!AutnumUtil.isValidAutnum(startAs + "")
+                || !AutnumUtil.isValidAutnum(endAs + "")) {
             logger.error("{},{} are invalid formated as number.", startAs,
                     endAs);
             return false;

@@ -49,7 +49,7 @@ import org.restfulwhois.rdap.core.common.model.base.ModelType;
 import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.IpVersion;
 import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.entity.model.Entity;
