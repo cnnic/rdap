@@ -111,13 +111,16 @@ public class JcardTest {
         // valid tel
         telephones.add(entityTel);
         entityTel.setPref(1);
-        String telTypeStrs = "home;text";
         telephones.add(EntityTelephone.buildTextTel("+9981-().", "998-()"));
         telephones.add(EntityTelephone.buildTextTel("+0981+-().", "998-()"));
         telephones.add(EntityTelephone.buildTextTel("+9981+-().", "+998-()"));
         telephones.add(EntityTelephone.buildTextTel("a9981-().", "998-()"));
         telephones.add(EntityTelephone.buildTextTel("@#-().", "998-()"));
         telephones.add(EntityTelephone.buildTextTel(" +9981-().", "998-()"));
+        String telTypeStrs = "home;text";
+        for(EntityTelephone tel:telephones){
+            tel.setTypes(telTypeStrs);
+        }
         entity.setTelephones(telephones);
         String jcardString = Jcard.build(entity).toJSON();
         assertNotNull(jcardString);

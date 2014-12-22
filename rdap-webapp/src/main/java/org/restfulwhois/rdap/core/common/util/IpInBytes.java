@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.core.common.util;
 
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
 
 /**
  * This is used for wrap IP query parameters.

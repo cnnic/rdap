@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.restfulwhois.rdap.core.common.util.IpInBytes;
 import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.core.common.util.IpVersion;
 import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsIpValidator;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 

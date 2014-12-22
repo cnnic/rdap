@@ -34,7 +34,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.core.common.util.AutnumValidator;
+import org.restfulwhois.rdap.core.common.util.AutnumUtil;
 
 /**
  * Test for RestResponseUtil
@@ -51,7 +51,7 @@ public class AutnumValidatorTest {
 	@Test
 	public void testValidAutnumOfOneNum() {
 		String validAutnum = "3";
-		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
+		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class AutnumValidatorTest {
 	@Test
 	public void testValidAutnumOfTwoNum() {
 		String validAutnum = "13";
-		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
+		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class AutnumValidatorTest {
 	@Test
 	public void testValidAutnumOfTenNum() {
 		String validAutnum = "1234567890";
-		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
+		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class AutnumValidatorTest {
 	@Test
 	public void testValidAutnumOfMin() {
 		String validAutnum = "0";
-		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
+		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class AutnumValidatorTest {
 	@Test
 	public void testValidAutnumOfMax() {
 		String validAutnum = "4294967295";
-		assertTrue(AutnumValidator.isValidAutnum(validAutnum));
+		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class AutnumValidatorTest {
 	@Test
 	public void testInValidAutnumOfNegativeNum() {
 		String validAutnum = "-13";
-		assertFalse(AutnumValidator.isValidAutnum(validAutnum));
+		assertFalse(AutnumUtil.isValidAutnum(validAutnum));
 	}
 	/**
 	 * test invalid autnum of negative num
@@ -104,6 +104,6 @@ public class AutnumValidatorTest {
 	@Test
 	public void testInValidAutnumOfLargeNum() {
 		String validAutnum = "4294967296";
-		assertFalse(AutnumValidator.isValidAutnum(validAutnum));
+		assertFalse(AutnumUtil.isValidAutnum(validAutnum));
 	}
 }

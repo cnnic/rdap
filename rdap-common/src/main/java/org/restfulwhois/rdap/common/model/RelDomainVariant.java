@@ -28,60 +28,61 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.common.util;
 
-import org.apache.commons.lang.StringUtils;
+package org.restfulwhois.rdap.common.model;
 
 /**
- * <a href='http://www.iana.org/assignments/as-numbers/as-numbers.xhtml'> As
- * Number</a> validator.
- * <p>
- * Not check resolved number.
+ * relation between domain and variant.
  * 
  * @author jiashuo
  * 
  */
-public final class AutnumValidator {
+public class RelDomainVariant {
+
     /**
-     * private constructor.
+     * variant id.
      */
-    private AutnumValidator() {
-        super();
+    private Long variantId;
+    /**
+     * variant type.
+     */
+    private String variantType;
+
+    /**
+     * get variant id.
+     * 
+     * @return variant id.
+     */
+    public Long getVariantId() {
+        return variantId;
     }
 
     /**
-     * max autnum str length:10.
+     * set variant id.
+     * 
+     * @param variantId
+     *            variant id.
      */
-    private static final int AUTNUM_MAX_LENGTH = 10;
-    /**
-     * minimum autnum.
-     */
-    private static final Long MIN_AS_NUM = 0L;
-    /**
-     * maximum autnum.
-     */
-    private static final Long MAX_AS_NUM = 4294967295L;
+    public void setVariantId(Long variantId) {
+        this.variantId = variantId;
+    }
 
     /**
-     * check validity of autnum.
+     * get variantType.
      * 
-     * @param autnum
-     *            autnum str
-     * @return true if valid, false if not
+     * @return variantType.
      */
-    public static boolean isValidAutnum(String autnum) {
-        if (StringUtils.isBlank(autnum)
-                || autnum.length() > AUTNUM_MAX_LENGTH) {
-            return false;
-        }
-        if (!autnum.equals(String.valueOf(MIN_AS_NUM))
-                && !autnum.matches("^[1-9][0-9]{0,9}$")) {
-            return false;
-        }
-        Long longValue = Long.valueOf(autnum);
-        if (longValue < MIN_AS_NUM || longValue > MAX_AS_NUM) {
-            return false;
-        }
-        return true;
+    public String getVariantType() {
+        return variantType;
+    }
+
+    /**
+     * set variantType.
+     * 
+     * @param variantType
+     *            variantType.
+     */
+    public void setVariantType(String variantType) {
+        this.variantType = variantType;
     }
 }
