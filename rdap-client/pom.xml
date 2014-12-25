@@ -6,11 +6,11 @@
 	<parent>
 		<groupId>org.restfulwhois.rdap</groupId>
 		<artifactId>rdap</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>${rdap.version}</version>
 	</parent>
 	<groupId>org.restfulwhois.rdap.client.client</groupId>
 	<artifactId>rdap-client</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>${rdap.version}</version>
 	<name>rdap-client</name>
 	<url>http://maven.apache.org</url>
 	<properties>
