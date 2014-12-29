@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.domain.model.DomainSearch;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByDomainNameParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;

@@ -31,8 +31,8 @@
 package org.restfulwhois.rdap.core.entity.queryparam;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.common.util.DomainUtil;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 
 /**

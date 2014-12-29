@@ -37,11 +37,11 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.junit.Test;
 import org.junit.internal.ArrayComparisonFailure;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpV4;
-import org.restfulwhois.rdap.core.common.util.IpV6;
-import org.restfulwhois.rdap.core.common.util.IpVersion;
-import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpV4;
+import org.restfulwhois.rdap.common.util.IpV6;
+import org.restfulwhois.rdap.common.util.IpVersion;
+import org.restfulwhois.rdap.common.util.NetworkInBytes;
 
 import com.googlecode.ipv6.IPv6Address;
 

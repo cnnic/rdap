@@ -31,8 +31,8 @@
 package org.restfulwhois.rdap.core.help.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.ModelType;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

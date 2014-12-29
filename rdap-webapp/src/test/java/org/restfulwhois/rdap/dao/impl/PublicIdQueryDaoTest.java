@@ -38,9 +38,9 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
-import org.restfulwhois.rdap.core.common.model.PublicId;
-import org.restfulwhois.rdap.core.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.model.PublicId;
+import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;

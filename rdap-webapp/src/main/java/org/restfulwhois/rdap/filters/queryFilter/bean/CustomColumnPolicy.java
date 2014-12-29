@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.filters.queryFilter.bean;
 
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 
 /**
  * denotes information about the service providing RDAP information.

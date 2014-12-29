@@ -68,7 +68,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="rdapProperties" class="org.restfulwhois.rdap.core.common.util.RdapProperties">
+	<bean id="rdapProperties" class="org.restfulwhois.rdap.common.util.RdapProperties">
 		<property name="localServiceUrl" value="${localServiceUrl}" />
 		<property name="maxsizeSearch" value="${maxsizeSearch}" />
 		<property name="batchsizeSearch" value="${batchsizeSearch}" />

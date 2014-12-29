@@ -30,8 +30,8 @@
  */
 package org.restfulwhois.rdap.core.nameserver.service.impl;
 
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;

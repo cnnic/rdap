@@ -37,12 +37,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.controller.BaseController;
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RequestUtil;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.controller.BaseController;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.filter.QueryFilter;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.RequestUtil;
+import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByFnParam;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByHandleParam;

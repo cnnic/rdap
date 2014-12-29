@@ -37,10 +37,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RequestUtil;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.RequestUtil;
+import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.domain.model.DomainSearch;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByDomainNameParam;

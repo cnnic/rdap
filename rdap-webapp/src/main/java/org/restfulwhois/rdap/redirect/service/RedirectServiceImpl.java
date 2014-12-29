@@ -34,8 +34,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.RdapProperties;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.slf4j.Logger;

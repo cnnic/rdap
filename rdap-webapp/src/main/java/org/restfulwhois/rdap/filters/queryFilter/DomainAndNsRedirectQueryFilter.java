@@ -30,10 +30,10 @@
  */
 package org.restfulwhois.rdap.filters.queryFilter;
 
-import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.common.filter.QueryFilterResult;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
 import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchParam;

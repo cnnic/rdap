@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.search.domain.dao.strategy;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
+import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.jdbc.core.ResultSetExtractor;

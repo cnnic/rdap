@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.search.entity.bean;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 
 /**

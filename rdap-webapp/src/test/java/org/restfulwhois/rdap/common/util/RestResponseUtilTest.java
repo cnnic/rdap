@@ -37,7 +37,7 @@ import static org.junit.Assert.assertTrue;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

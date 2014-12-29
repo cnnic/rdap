@@ -50,7 +50,7 @@ import org.restfulwhois.rdap.bootstrap.handler.DomainRegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV4RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.handler.NetworkV6RegistryHandler;
 import org.restfulwhois.rdap.bootstrap.registry.DataProvider;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.impl.AutnumRedirectDao;

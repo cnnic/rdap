@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.QueryParamHelper;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;
 import org.springframework.beans.factory.annotation.Autowired;

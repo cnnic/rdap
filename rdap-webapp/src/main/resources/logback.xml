@@ -40,7 +40,7 @@
             </Pattern>
         </encoder>
     </appender> 
-    <logger name="org.restfulwhois.rdap.core.common.controller"  additivity="false">
+    <logger name="org.restfulwhois.rdap.common.controller"  additivity="false">
            <level value="DEBUG" />
           <appender-ref ref="performanceLogAppender" />
     </logger>
