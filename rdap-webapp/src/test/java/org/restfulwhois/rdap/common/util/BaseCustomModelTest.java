@@ -38,8 +38,8 @@ import java.util.Map;
 
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
-import org.restfulwhois.rdap.core.common.model.base.BaseCustomModel;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseCustomModel;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;

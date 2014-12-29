@@ -41,9 +41,9 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.filters.queryFilter.dao.CustomColumnPolicyDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

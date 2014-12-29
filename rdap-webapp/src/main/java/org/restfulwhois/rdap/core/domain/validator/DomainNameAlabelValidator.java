@@ -31,11 +31,11 @@
 package org.restfulwhois.rdap.core.domain.validator;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.IdnaUtil;
-import org.restfulwhois.rdap.core.common.validation.HttpValidationError;
-import org.restfulwhois.rdap.core.common.validation.ValidationResult;
-import org.restfulwhois.rdap.core.common.validation.Validator;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.IdnaUtil;
+import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.ValidationResult;
+import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverQueryParam;
 

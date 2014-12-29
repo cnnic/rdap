@@ -34,11 +34,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
-import org.restfulwhois.rdap.core.common.validation.Validator;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryUri;
+import org.restfulwhois.rdap.common.util.DomainUtil;
+import org.restfulwhois.rdap.common.util.StringUtil;
+import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.domain.validator.DomainNameAlabelValidator;
 import org.restfulwhois.rdap.core.domain.validator.DomainNameValidator;
 import org.slf4j.Logger;

@@ -38,9 +38,9 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.model.Remark;
-import org.restfulwhois.rdap.core.common.service.RemarkService;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
+import org.restfulwhois.rdap.common.model.Remark;
+import org.restfulwhois.rdap.common.service.RemarkService;
+import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseTearDown;

@@ -7,13 +7,13 @@
 	<!-- NOTICE: this file CAN'T be formatted! -->
 	<!-- truncated notice data -->
 	<util:list id="truncatedNoticeList">
-		<bean class="org.restfulwhois.rdap.core.common.model.Notice">
+		<bean class="org.restfulwhois.rdap.common.model.Notice">
 			<property name="title" value="Search Policy"></property>
 			<property name="description" ref="noticeDescriptionExcessiveLoad"></property>
 			<property name="reasonType" value="result set truncated due to excessive load"></property>
 			<property name="reasonTypeShortName" value="excessiveLoad"></property>
 		</bean>
-		<bean class="org.restfulwhois.rdap.core.common.model.Notice">
+		<bean class="org.restfulwhois.rdap.common.model.Notice">
 			<property name="title" value="Search Policy"></property>
 			<property name="description" ref="noticeDescriptionAuth"></property>
 			<property name="reasonType" value="result set truncated due to authorization"></property>
@@ -29,7 +29,7 @@
 	</util:list>
 	<!-- truncated remark data -->
 	<util:list id="truncatedRemarkList">
-		<bean class="org.restfulwhois.rdap.core.common.model.Remark">
+		<bean class="org.restfulwhois.rdap.common.model.Remark">
 			<property name="title" value="Data Policy"></property>
 			<property name="description" ref="remarkDescriptionExcessiveLoad"></property>
 			<property name="reasonType" value="object truncated due to excessive load"></property>

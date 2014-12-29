@@ -30,11 +30,11 @@
  */
 package org.restfulwhois.rdap.filters.queryFilter;
 
-import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.common.filter.QueryFilterResult;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryUri;
+import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

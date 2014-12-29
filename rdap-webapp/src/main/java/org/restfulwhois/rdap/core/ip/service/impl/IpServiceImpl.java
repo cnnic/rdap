@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.ip.service.impl;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.ip.dao.impl.NetworkQueryDaoImpl;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.restfulwhois.rdap.core.ip.service.IpService;

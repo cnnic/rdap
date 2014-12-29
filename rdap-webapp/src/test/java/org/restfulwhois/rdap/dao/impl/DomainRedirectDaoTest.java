@@ -36,7 +36,7 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
+import org.restfulwhois.rdap.common.util.DomainUtil;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.restfulwhois.rdap.redirect.dao.RedirectDao;

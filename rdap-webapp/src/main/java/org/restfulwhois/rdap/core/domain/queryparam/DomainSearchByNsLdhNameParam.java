@@ -30,8 +30,8 @@
  */
 package org.restfulwhois.rdap.core.domain.queryparam;
 
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.common.util.DomainUtil;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsLdhNameValidator;
 

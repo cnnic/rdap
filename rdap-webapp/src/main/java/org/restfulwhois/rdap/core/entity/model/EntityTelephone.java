@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.core.entity.model;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 
 /**
  * telephone number of entity.

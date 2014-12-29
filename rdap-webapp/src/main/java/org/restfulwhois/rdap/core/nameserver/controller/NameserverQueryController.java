@@ -32,9 +32,9 @@ package org.restfulwhois.rdap.core.nameserver.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.domain.controller.BaseDnrController;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverQueryParam;

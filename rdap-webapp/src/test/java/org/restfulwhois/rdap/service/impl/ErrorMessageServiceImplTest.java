@@ -37,8 +37,8 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.model.ErrorMessage;
-import org.restfulwhois.rdap.core.common.service.ErrorMessageService;
+import org.restfulwhois.rdap.common.model.ErrorMessage;
+import org.restfulwhois.rdap.common.service.ErrorMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;

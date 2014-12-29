@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.nameserver.service;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;
 
 /**

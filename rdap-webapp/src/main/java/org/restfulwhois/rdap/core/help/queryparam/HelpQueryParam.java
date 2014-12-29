@@ -32,8 +32,8 @@ package org.restfulwhois.rdap.core.help.queryparam;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryUri;
 import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 
 /**

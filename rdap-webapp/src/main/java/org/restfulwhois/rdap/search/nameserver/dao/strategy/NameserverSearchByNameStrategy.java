@@ -35,9 +35,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.core.common.support.PageBean;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
+import org.restfulwhois.rdap.common.support.PageBean;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchByNameParam;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchParam;

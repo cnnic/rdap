@@ -34,7 +34,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.core.common.util.IdnaUtil;
+import org.restfulwhois.rdap.common.util.IdnaUtil;
 
 /**
  * Test for IpUtil.

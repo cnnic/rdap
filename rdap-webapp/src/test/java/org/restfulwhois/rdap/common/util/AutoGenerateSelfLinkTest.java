@@ -33,9 +33,9 @@ package org.restfulwhois.rdap.common.util;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
-import org.restfulwhois.rdap.core.common.model.Link;
-import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.ip.model.Network;

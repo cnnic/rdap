@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.ip.service;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.ip.model.Network;
 
 /**
