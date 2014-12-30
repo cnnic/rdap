@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.common.controller;
 
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +51,7 @@ public class UnrecognizedQueryController extends BaseController {
      */
     @RequestMapping(value = "/**")
     public ResponseEntity error400() {
-        return RestResponseUtil.createResponse400();
+        return RestResponse.createResponse400();
     }
 
 }

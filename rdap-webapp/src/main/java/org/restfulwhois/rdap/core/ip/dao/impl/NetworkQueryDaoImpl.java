@@ -42,12 +42,12 @@ import java.util.Map;
 import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.common.dao.NoticeDao;
 import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.common.util.IpVersion;
 import org.restfulwhois.rdap.common.util.NetworkInBytes;
@@ -303,7 +303,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                 remarkQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
         objIp.setRemarks(remarks);
         List<Link> links = linkQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
-        links.add(AutoGenerateSelfLink.generateSelfLink(objIp));
+        links.add(SelfLinkGenerator.generateSelfLink(objIp));
         objIp.setLinks(links);
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(ipId, ModelType.IP);

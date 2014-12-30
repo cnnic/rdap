@@ -43,6 +43,7 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.common.dao.QueryDao;
 import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
 import org.restfulwhois.rdap.common.dao.impl.LinkQueryDaoImpl;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
@@ -51,7 +52,6 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelStatus;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.ip.model.IPAddress;
@@ -198,7 +198,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         ns.setRemarks(remarks);
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
-        links.add(AutoGenerateSelfLink.generateSelfLink(ns));
+        links.add(SelfLinkGenerator.generateSelfLink(ns));
         ns.setLinks(links);
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);

@@ -31,16 +31,12 @@
 
 package org.restfulwhois.rdap.common.util;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.util.SubnetUtils.SubnetInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
-import com.googlecode.ipv6.IPv6NetworkMask;
 
 /**
  * IP address validator and convert util.
@@ -58,21 +54,12 @@ import com.googlecode.ipv6.IPv6NetworkMask;
  * 
  */
 public final class IpUtil {
-    /**
-     * dot char.
-     */
-    private static final char CHAR_DOT = '.';
 
     /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(IpUtil.class);
-
-    /**
-     * the V4 IP address has 4 sections, like 192.0.0.in-addr.arpa .
-     */
-    private static final int BYTE_SIZE_IPV4 = 4;
 
     /**
      * Radix 16 .
@@ -264,80 +251,6 @@ public final class IpUtil {
             return IpV6.toString(bytes);
         }
         return StringUtils.EMPTY;
-    }
-
-    /**
-     * decode a string to an Arpa.
-     * 
-     * @param name
-     *            an arpa string.
-     * @return Arpa.
-     */
-    public static NetworkInBytes parseArpa(String name) {
-        LOGGER.debug("parseArpa:{}", name);
-        if (StringUtils.isEmpty(name)) {
-            return null;
-        } else if (StringUtils.endsWith(name, DomainUtil.IPV4_ARPA_SUFFIX)) {
-            return parseIpV4Arpa(name);
-        } else if (StringUtils.endsWith(name, DomainUtil.IPV6_ARPA_SUFFIX)) {
-            return parseIpV6Arpa(name);
-        }
-
-        return null;
-    }
-
-    /**
-     * parse IPV4 ARPA domain to IP bytes.
-     * 
-     * @param name
-     *            an ARPA string.
-     * @return ARPA.
-     */
-    private static NetworkInBytes parseIpV4Arpa(String name) {
-        LOGGER.debug("parseInAddrArpa, name:" + name);
-        String arpa =
-                StringUtils.removeEndIgnoreCase(name, CHAR_DOT
-                        + DomainUtil.IPV4_ARPA_SUFFIX);
-        arpa = StringUtils.reverseDelimited(arpa, CHAR_DOT);
-        String[] arpaLabels = StringUtils.split(arpa, CHAR_DOT);
-        int mask = arpaLabels.length * 8;
-        String[] ipLabels = new String[BYTE_SIZE_IPV4];
-        for (int i = 0; i < BYTE_SIZE_IPV4; i++) {
-            if (i < arpaLabels.length) {
-                ipLabels[i] = arpaLabels[i];
-            } else {
-                ipLabels[i] = "0";
-            }
-        }
-        String networkStr = StringUtils.join(ipLabels, CHAR_DOT) + "/" + mask;
-        return parseNetworkV4(networkStr);
-    }
-
-    /**
-     * parse IPV6 ARPA domain to IP bytes.
-     * 
-     * @param name
-     *            an ARPA string.
-     * @return ARPA.
-     */
-    private static NetworkInBytes parseIpV6Arpa(String name) {
-        LOGGER.debug("parseIp6Arpa, name:" + name);
-        String arpa =
-                StringUtils.removeEndIgnoreCase(name, CHAR_DOT
-                        + DomainUtil.IPV6_ARPA_SUFFIX);
-        arpa = StringUtils.remove(arpa, CHAR_DOT);
-        String ip = StringUtils.reverse(arpa);
-        String fullIp = StringUtils.rightPad(ip, 32, '0');
-        byte[] startIpBytes = DatatypeConverter.parseHexBinary(fullIp);
-        int networkMask = StringUtils.length(arpa) * 4;
-        IPv6Address fromByteArray = IPv6Address.fromByteArray(startIpBytes);
-        IPv6Network network =
-                IPv6Network.fromAddressAndMask(fromByteArray,
-                        IPv6NetworkMask.fromPrefixLength(networkMask));
-        NetworkInBytes result =
-                new NetworkInBytes(IpVersion.V6, network.getFirst()
-                        .toByteArray(), network.getLast().toByteArray());
-        return result;
     }
 
     /**

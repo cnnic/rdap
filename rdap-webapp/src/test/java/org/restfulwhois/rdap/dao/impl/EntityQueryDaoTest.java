@@ -48,7 +48,7 @@ import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.PublicId;
 import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.base.ModelType;
-import org.restfulwhois.rdap.common.util.RdapProperties;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;

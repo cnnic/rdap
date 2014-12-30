@@ -41,8 +41,8 @@ import org.restfulwhois.rdap.common.controller.BaseController;
 import org.restfulwhois.rdap.common.exception.DecodeException;
 import org.restfulwhois.rdap.common.filter.QueryFilter;
 import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.common.util.RequestUtil;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByFnParam;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByHandleParam;
@@ -182,9 +182,9 @@ public class EntitySearchController extends BaseController {
         LOGGER.debug("generate queryParam:{}", queryParam);
         EntitySearch result = searchService.searchEntity(queryParam);
         if (null != result) {
-            return RestResponseUtil.createResponse200(result);
+            return RestResponse.createResponse200(result);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }

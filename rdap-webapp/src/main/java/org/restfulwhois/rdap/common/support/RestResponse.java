@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.util;
+package org.restfulwhois.rdap.common.support;
 
 import java.util.HashSet;
 import java.util.List;
@@ -64,7 +64,7 @@ import org.springframework.stereotype.Component;
  * 
  */
 @Component
-public class RestResponseUtil {
+public class RestResponse {
     /**
      * all ErrorMessage map,must be init before call.
      * getErrorMessageByErrorCode()
@@ -328,7 +328,7 @@ public class RestResponseUtil {
      */
     @Autowired
     public void setErrorMessageService(ErrorMessageService errorMsgService) {
-        RestResponseUtil.errorMessageService = errorMsgService;
+        RestResponse.errorMessageService = errorMsgService;
     }
 
     /**
@@ -339,7 +339,7 @@ public class RestResponseUtil {
      */
     @Autowired
     public void setQueryFilterManager(QueryFilterManager queryFilterManager) {
-        RestResponseUtil.queryFilterManager = queryFilterManager;
+        RestResponse.queryFilterManager = queryFilterManager;
     }
 
     /**
@@ -350,7 +350,7 @@ public class RestResponseUtil {
      */
     @Resource(name = "errorMessageQueryFilters")
     public void setServiceFilters(List<QueryFilter> serviceFilters) {
-        RestResponseUtil.queryFilters = serviceFilters;
+        RestResponse.queryFilters = serviceFilters;
     }
 
 }

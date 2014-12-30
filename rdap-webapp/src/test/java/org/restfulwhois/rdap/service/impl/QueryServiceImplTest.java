@@ -42,7 +42,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.QueryParamHelper;
-import org.restfulwhois.rdap.common.util.RdapProperties;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.autnum.service.AutnumService;
 import org.restfulwhois.rdap.core.domain.model.Domain;

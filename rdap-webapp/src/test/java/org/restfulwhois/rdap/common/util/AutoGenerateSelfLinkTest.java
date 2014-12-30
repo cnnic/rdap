@@ -33,8 +33,8 @@ package org.restfulwhois.rdap.common.util;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
 import org.restfulwhois.rdap.common.model.Link;
-import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.entity.model.Entity;
@@ -43,7 +43,7 @@ import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.springframework.util.Assert;
 
 /**
- * Test for AutoGenerateSelfLink
+ * Test for SelfLinkGenerator
  * 
  * @author zhanyq
  * 
@@ -60,32 +60,32 @@ public class AutoGenerateSelfLinkTest {
         //domain
         Domain domain = new Domain();
         domain.setLdhName("cnnic.cn");
-        Link  link = AutoGenerateSelfLink.generateSelfLink(domain);
+        Link  link = SelfLinkGenerator.generateSelfLink(domain);
         Assert.notNull(link);
         //nameserver
         link = null;
         Nameserver ns = new Nameserver();
 		ns.setLdhName("cnnic.cn");
-		link = AutoGenerateSelfLink.generateSelfLink(ns);
+		link = SelfLinkGenerator.generateSelfLink(ns);
 		Assert.notNull(link);
 		
 		//entity
 		link = null;
 		Entity entity = new Entity();
 		entity.setHandle("h1");
-		link = AutoGenerateSelfLink.generateSelfLink(entity);
+		link = SelfLinkGenerator.generateSelfLink(entity);
 		Assert.notNull(link);
 		//ip
 		link = null;
 		Network network = new Network();
 		network.setCidr("1.1.1.0/24");
-		link = AutoGenerateSelfLink.generateSelfLink(network);
+		link = SelfLinkGenerator.generateSelfLink(network);
 		Assert.notNull(link);
         //autnum
 		link = null;
 		Autnum as = new Autnum();
 		as.setStartAutnum(1L);
-		link = AutoGenerateSelfLink.generateSelfLink(as);
+		link = SelfLinkGenerator.generateSelfLink(as);
 		Assert.notNull(link);
 	}
 	

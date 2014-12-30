@@ -56,7 +56,7 @@ public class RdapProperties {
     /**
      * prop file.
      */
-    private static final String PROPERTIES_FILE = "proxy43.properties";
+    private static final String PROPERTIES_FILE = "conf/proxy43.properties";
 
     /**
      * Load the resource file

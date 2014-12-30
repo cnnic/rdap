@@ -39,7 +39,7 @@ import org.restfulwhois.rdap.common.filter.QueryFilterResult;
 import org.restfulwhois.rdap.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.common.validation.HttpValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
@@ -149,7 +149,7 @@ public class BaseController {
     @SuppressWarnings("rawtypes")
     protected ResponseEntity query(QueryParam queryParam) {
         if (queryParam == null) {
-            return RestResponseUtil.createResponse400();
+            return RestResponse.createResponse400();
         }
         long queryStart = System.currentTimeMillis();
         ResponseEntity responseEntity = queryTemplate(queryParam);
@@ -183,7 +183,7 @@ public class BaseController {
             queryParam.fillParam();
         } catch (Exception e) {
             LOGGER.warn("fillParam error:{}", e);
-            return RestResponseUtil.createResponse400();
+            return RestResponse.createResponse400();
         }
         QueryFilterResult preParamFilterResult =
                 queryFilterManager.preParamValidate(queryParam,
@@ -205,7 +205,7 @@ public class BaseController {
             queryParam.convertParam();
         } catch (Exception e) {
             LOGGER.warn("convertParam error:{}", e);
-            return RestResponseUtil.createResponse400();
+            return RestResponse.createResponse400();
         }
         ResponseEntity result = doQuery(queryParam);
         QueryFilterResult postQueryResult =
@@ -233,13 +233,13 @@ public class BaseController {
         ValidationError error = result.getFirstError();
         if (null != error) {
             HttpValidationError httpError = (HttpValidationError) error;
-            return RestResponseUtil.createCommonErrorResponse(httpError
+            return RestResponse.createCommonErrorResponse(httpError
                     .getStatusCode());
         }
         LOGGER.warn(
                 "can't found error when handleError,for ValidationResult:{}",
                 result);
-        return RestResponseUtil.createResponse400();
+        return RestResponse.createResponse400();
     }
 
     /**

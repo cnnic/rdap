@@ -28,10 +28,12 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.util;
+package org.restfulwhois.rdap.common.dao.impl;
 
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.support.RdapProperties;
+import org.restfulwhois.rdap.common.util.StringUtil;
 
  /**
  * Auto generate link property for object
@@ -41,11 +43,11 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
  *  
  *  @author zhanyq
  */
- public final class AutoGenerateSelfLink {
+ public final class SelfLinkGenerator {
     /**
      * private constructor.
      */
-    private AutoGenerateSelfLink() {
+    private SelfLinkGenerator() {
         super();
     }
     

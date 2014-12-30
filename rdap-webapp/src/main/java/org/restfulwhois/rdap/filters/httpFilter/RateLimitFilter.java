@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.restfulwhois.rdap.common.filter.FilterHelper;
 import org.restfulwhois.rdap.common.filter.HttpFilter;
 import org.restfulwhois.rdap.common.model.ErrorMessage;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.filters.httpFilter.service.ConnectionControlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +78,7 @@ public class RateLimitFilter implements HttpFilter {
     private void writeError429Response(HttpServletResponse response)
             throws IOException {
         ResponseEntity<ErrorMessage> responseEntity =
-                RestResponseUtil.createResponse429();
+                RestResponse.createResponse429();
         FilterHelper.writeResponse(responseEntity, response);
     }
 

@@ -41,8 +41,8 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.common.util.RdapProperties;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RdapProperties;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -91,7 +91,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testSearchExistNameserver() throws Exception {
         super.databaseSetupWithBinaryColumns("nameserver-search.xml");
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String nsNameCn = "name=ns.cnnic*";
         String ipParamNamePrefix = "ip=";
         String nsNameIpV4 = ipParamNamePrefix + "218.241.111.11";
@@ -204,7 +204,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testSearchTruncatedNameserver() throws Exception {
         super.databaseSetupWithBinaryColumns("nameserver-search.xml");
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String nsHead = "name=";
         String ipHead = "ip=";
         String nsName = nsHead + "ns.truncated*";
@@ -255,7 +255,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
             value = "classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public
             void testSearchNonExistNameserver() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String nsHead = "name=";
         String ipHead = "ip=";
         String nsName = nsHead + "nonexist*";
@@ -297,7 +297,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchInvalidNameserver() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         mockMvc.perform(
                 get(URI_NS_SEARCH + "name=*").accept(
                         MediaType.parseMediaType(rdapJson)))
@@ -319,7 +319,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchIllegalNameserver() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String nsHead = "name=";
         String nsNameCn = nsHead + "ns.cnnic.cn";
         String ipHead = "ip=";

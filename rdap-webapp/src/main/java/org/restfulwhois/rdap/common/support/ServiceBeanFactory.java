@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.util;
+package org.restfulwhois.rdap.common.support;
 
 import org.restfulwhois.rdap.authenticate.service.IdentityCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ import org.springframework.stereotype.Component;
  * 
  */
 @Component
-public class ServiceBeanUtil {
+public class ServiceBeanFactory {
 
     /**
      * service of identity check.
@@ -70,7 +70,7 @@ public class ServiceBeanUtil {
     @Autowired
     public void setIdentityCheckService(
             IdentityCheckService identityCheckService) {
-        ServiceBeanUtil.identityCheckService = identityCheckService;
+        ServiceBeanFactory.identityCheckService = identityCheckService;
     }
 
 }

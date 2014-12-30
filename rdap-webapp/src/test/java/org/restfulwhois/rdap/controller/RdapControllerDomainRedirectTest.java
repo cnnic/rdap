@@ -38,8 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.common.util.RdapProperties;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RdapProperties;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -83,7 +83,7 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryExistDomain() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         // set both 'in' and 'not in' tld.
         RdapProperties.clearTldsInMemory();
         String domainName = "cnnic.cn";
@@ -127,7 +127,7 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryNonExistDomain() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         // set both 'in' and 'not in' tld.
         RdapProperties.clearTldsInMemory();
         String domainName = "nonexist.cn";
@@ -172,7 +172,7 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryRedirect() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         // set both 'in' and 'not in' tld.
         String domainName = "cnnic.cn";
         RdapProperties prop = new RdapProperties();
@@ -238,7 +238,7 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-redirect.xml")
     public void testQueryInvalid() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         // set both 'in' and 'not in' tld.
         String domainName = "***invalid.cn";
         RdapProperties prop = new RdapProperties();

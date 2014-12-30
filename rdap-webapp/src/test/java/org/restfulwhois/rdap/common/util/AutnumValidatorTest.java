@@ -37,7 +37,7 @@ import org.junit.Test;
 import org.restfulwhois.rdap.common.util.AutnumUtil;
 
 /**
- * Test for RestResponseUtil
+ * Test for RestResponse
  * 
  * @author jiashuo
  * 

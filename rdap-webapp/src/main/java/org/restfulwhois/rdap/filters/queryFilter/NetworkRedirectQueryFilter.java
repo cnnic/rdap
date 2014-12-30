@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.filters.queryFilter;
 import org.restfulwhois.rdap.common.filter.QueryFilterResult;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.support.QueryUri;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ public class NetworkRedirectQueryFilter extends AbstractRedirectQueryFilter {
                         queryParam.getOriginalQ(), QueryUri.IP.getName(),
                         redirect.getUrl());
         return new QueryFilterResult(
-                RestResponseUtil.createResponse301(redirectUrl));
+                RestResponse.createResponse301(redirectUrl));
     }
 
 }

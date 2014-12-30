@@ -41,12 +41,12 @@ import java.util.Map;
 
 import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.slf4j.Logger;
@@ -226,7 +226,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
         autnum.setRemarks(remarks);
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(autnumId, ModelType.AUTNUM);
-        links.add(AutoGenerateSelfLink.generateSelfLink(autnum));
+        links.add(SelfLinkGenerator.generateSelfLink(autnum));
         autnum.setLinks(links);
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(autnumId, ModelType.AUTNUM);

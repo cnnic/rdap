@@ -39,9 +39,9 @@ import org.restfulwhois.rdap.common.controller.BaseController;
 import org.restfulwhois.rdap.common.exception.DecodeException;
 import org.restfulwhois.rdap.common.filter.QueryFilter;
 import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.common.util.RequestUtil;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
 import org.restfulwhois.rdap.core.ip.service.IpService;
@@ -158,9 +158,9 @@ public class NetworkQueryController extends BaseController {
     protected ResponseEntity doQuery(QueryParam queryParam) {
         Network ip = queryService.queryIp(queryParam);
         if (null != ip) {
-            return RestResponseUtil.createResponse200(ip);
+            return RestResponse.createResponse200(ip);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }
