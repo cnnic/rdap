@@ -30,62 +30,64 @@
  */
 package org.restfulwhois.rdap.common.validation;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 /**
- * HttpValidationError.
+ * SimpleHttpErrorCode.
  * 
  * @author jiashuo
  * 
  */
-public final class HttpValidationError implements ValidationError {
-    /**
-     * errorCode.
-     */
-    private ServiceErrorCode errorCode;
+public enum SimpleHttpErrorCode {
 
-    /**
-     * constructor.
-     * 
-     * @param errorCode
-     *            errorCode.
-     */
-    private HttpValidationError(ServiceErrorCode statusCode) {
-        super();
-        this.errorCode = statusCode;
+    ERROR_400(400, "");
+
+    private final int value;
+
+    private final String reasonPhrase;
+
+    private SimpleHttpErrorCode(int value, String reasonPhrase) {
+        this.value = value;
+        this.reasonPhrase = reasonPhrase;
     }
 
     /**
-     * build400Error.
-     * 
-     * @return ValidationError.
+     * Return the integer value of this status code.
      */
-    public static ValidationError build4001Error() {
-        return new HttpValidationError(ServiceErrorCode.ERROR_4001);
+    public int value() {
+        return this.value;
     }
 
     /**
-     * errorCode.
-     * 
-     * @return errorCode.
+     * Return the reason phrase of this status code.
      */
-    public ServiceErrorCode getStatusCode() {
-        return errorCode;
+    public String getReasonPhrase() {
+        return reasonPhrase;
     }
 
-    @Override
-    public String getCode() {
-        return errorCode.name();
-    }
-
-    @Override
-    public String getMessage() {
-        return errorCode.getReasonPhrase();
-    }
-
+    /**
+     * Return a string representation of this status code.
+     */
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append(errorCode).toString();
+        return Integer.toString(value);
+    }
+
+    /**
+     * Return the enum constant of this type with the specified numeric value.
+     * 
+     * @param statusCode
+     *            the numeric value of the enum to be returned
+     * @return the enum constant with the specified numeric value
+     * @throws IllegalArgumentException
+     *             if this enum has no constant for the specified numeric value
+     */
+    public static SimpleHttpErrorCode valueOf(int statusCode) {
+        for (SimpleHttpErrorCode status : values()) {
+            if (status.value == statusCode) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("No matching constant for ["
+                + statusCode + "]");
     }
 
 }

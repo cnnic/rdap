@@ -31,22 +31,26 @@
 package org.restfulwhois.rdap.common.validation;
 
 /**
- * ErrorCode.
+ * ServiceErrorCode.
  * 
  * @author jiashuo
  * 
  */
-public enum ErrorCode {
+public enum ServiceErrorCode {
 
-    ERROR_4001(4001, "");
+    ERROR_4001(4001, "", SimpleHttpErrorCode.ERROR_400);
 
     private final int value;
 
     private final String reasonPhrase;
 
-    private ErrorCode(int value, String reasonPhrase) {
+    private final SimpleHttpErrorCode httpErrorCode;
+
+    private ServiceErrorCode(int value, String reasonPhrase,
+            SimpleHttpErrorCode httpErrorCode) {
         this.value = value;
         this.reasonPhrase = reasonPhrase;
+        this.httpErrorCode = httpErrorCode;
     }
 
     /**
@@ -61,6 +65,10 @@ public enum ErrorCode {
      */
     public String getReasonPhrase() {
         return reasonPhrase;
+    }
+
+    public SimpleHttpErrorCode getHttpErrorCode() {
+        return httpErrorCode;
     }
 
     /**
@@ -80,8 +88,8 @@ public enum ErrorCode {
      * @throws IllegalArgumentException
      *             if this enum has no constant for the specified numeric value
      */
-    public static ErrorCode valueOf(int statusCode) {
-        for (ErrorCode status : values()) {
+    public static ServiceErrorCode valueOf(int statusCode) {
+        for (ServiceErrorCode status : values()) {
             if (status.value == statusCode) {
                 return status;
             }
