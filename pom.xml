@@ -20,7 +20,6 @@
 		<module>rdap-client</module>
 		<module>rdap-common</module>
 		<module>rdap-initdb</module>
-    <module>rdap-common-util</module>
   </modules>
 	<build>
 		<finalName>rdap</finalName>
