@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_ENTITY ENTITY_ID='1' HANDLE='h1' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_VCARD_ADR ADR_ID='1' ENTITY_ID='1' POST_BOX='post office Box'
+		EXT_ADR='apartment addr' STREET='123 Wall St.' CITY='New York' SP='NY'
+		POSTAL_CODE='12345' COUNTRY='USA' TYPE='home;work' PREF='1' />
+	<RDAP_VCARD_ADR ADR_ID='2' ENTITY_ID='1' POST_BOX='post office Box'
+		EXT_ADR='apartment addr' STREET='123 Wall St.' CITY='New York' SP='NY'
+		POSTAL_CODE='12345' COUNTRY='USA' TYPE='home;work' PREF='2' />
+</dataset>
