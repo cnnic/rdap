@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -218,7 +218,7 @@ public class RdapControllerIpTest extends BaseTest {
     @DatabaseSetup(
             value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
     public void testQuery403() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         super.databaseSetupWithBinaryColumns("ip-query.xml");
         String ip = "0:0:0:0:2001:6a8::";
         query403(ip);

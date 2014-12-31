@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.restfulwhois.rdap.common.exception.DecodeException;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
@@ -110,7 +110,7 @@ public class DomainQueryController extends BaseDnrController {
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryDomainInThisRegistry(queryParam);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
     /**
@@ -126,10 +126,10 @@ public class DomainQueryController extends BaseDnrController {
         Domain domain = queryService.queryDomain(queryParam);
         if (null != domain) {
             LOGGER.debug("   found domain:{}", queryParam);
-            return RestResponseUtil.createResponse200(domain);
+            return RestResponse.createResponse200(domain);
         }
         LOGGER.debug("   domain not found,return 404. {}", queryParam);
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }

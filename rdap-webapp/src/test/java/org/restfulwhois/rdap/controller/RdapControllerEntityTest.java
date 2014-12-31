@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -135,7 +135,7 @@ public class RdapControllerEntityTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity.xml")
     public void testQueryNonExistAutnum() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String nonExistHandle = "1000000";
         mockMvc.perform(
                 get(URI_ENTITY_Q + nonExistHandle).accept(
@@ -155,7 +155,7 @@ public class RdapControllerEntityTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity.xml")
     public void testQueryAutnumWithInvalidQ() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String invalidHandle = "";
         mockMvc.perform(
                 get(URI_ENTITY_Q + invalidHandle).accept(
@@ -170,7 +170,7 @@ public class RdapControllerEntityTest extends BaseTest {
     @DatabaseSetup(
             value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
     public void testQuery403() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         super.databaseSetupWithBinaryColumns("entity.xml");
         String autnumStr = "h1";
         query403(autnumStr);

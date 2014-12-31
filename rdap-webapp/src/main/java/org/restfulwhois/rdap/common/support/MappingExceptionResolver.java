@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.restfulwhois.rdap.common.exception.DecodeException;
 import org.restfulwhois.rdap.common.filter.FilterHelper;
 import org.restfulwhois.rdap.common.model.ErrorMessage;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.InvalidMediaTypeException;
@@ -42,12 +41,12 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
         ResponseEntity<ErrorMessage> responseEntity = null;
         LOGGER.error("error:", ex);
         if (ex instanceof DecodeException) {
-            responseEntity = RestResponseUtil.createResponse400();
+            responseEntity = RestResponse.createResponse400();
         } else if (ex instanceof InvalidMediaTypeException
                 || ex instanceof HttpMediaTypeNotAcceptableException) {
-            responseEntity = RestResponseUtil.createResponse415();
+            responseEntity = RestResponse.createResponse415();
         } else {
-            responseEntity = RestResponseUtil.createResponse500();
+            responseEntity = RestResponse.createResponse500();
         }
         try {
             FilterHelper.writeResponse(responseEntity, response);

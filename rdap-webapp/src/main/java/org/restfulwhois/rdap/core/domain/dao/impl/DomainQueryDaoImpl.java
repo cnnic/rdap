@@ -42,6 +42,7 @@ import java.util.Map;
 import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.common.dao.QueryDao;
 import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.PublicId;
@@ -50,7 +51,7 @@ import org.restfulwhois.rdap.common.model.SecureDns;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
+import org.restfulwhois.rdap.common.util.ArpaUtil;
 import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.domain.model.Domain;
@@ -217,7 +218,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 remarkQueryDao.queryAsInnerObjects(domainId, type);
         domain.setRemarks(remarks);
         List<Link> links = linkQueryDao.queryAsInnerObjects(domainId, type);
-        links.add(AutoGenerateSelfLink.generateSelfLink(domain));
+        links.add(SelfLinkGenerator.generateSelfLink(domain));
         domain.setLinks(links);
         List<Event> events = eventQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEvents(events);
@@ -275,7 +276,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     private Domain queryArpaWithoutInnerObjects(QueryParam queryParam) {
 
         final String arpaName = queryParam.getQ();
-        final NetworkInBytes network = IpUtil.parseArpa(arpaName);
+        final NetworkInBytes network = ArpaUtil.parseArpa(arpaName);
         List<Domain> result = null;
         final int hexCharSize = IpUtil.getHexCharSize(network.getIpVersion());
         String sql =

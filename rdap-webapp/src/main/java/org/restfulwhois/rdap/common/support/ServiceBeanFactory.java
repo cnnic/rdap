@@ -28,42 +28,49 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.util;
+package org.restfulwhois.rdap.common.support;
 
-import org.restfulwhois.rdap.common.model.Link;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.authenticate.service.IdentityCheckService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
- /**
- * Auto generate link property for object
+/**
+ * This class is facade for services.It has static access method for service.
  * <p>
- * This class contains methods to generate link
- * property generateSelfLink.
- *  
- *  @author zhanyq
+ * Now it only contains {@link IdentityCheckService}.
+ * <p>
+ * Some other service may put into this class.
+ * 
+ * @author jiashuo
+ * 
  */
- public final class AutoGenerateSelfLink {
+@Component
+public class ServiceBeanFactory {
+
     /**
-     * private constructor.
+     * service of identity check.
      */
-    private AutoGenerateSelfLink() {
-        super();
+    private static IdentityCheckService identityCheckService;
+
+    /**
+     * get Identity of CheckService.
+     * 
+     * @return object.
+     */
+    public static IdentityCheckService getIdentityCheckService() {
+        return identityCheckService;
     }
-    
+
     /**
-     * auto generate Link property.
-     * @param  object
-     *     object
-     * @return link
+     * set Identity of CheckService.
+     * 
+     * @param identityCheckService
+     *            identity of check servcie.
      */
-    public static Link generateSelfLink(BaseModel object) {
-         Link link = new Link();
-         link.setRel("self");
-         link.setType("application/rdap+json");
-         String value = RdapProperties.getLocalServiceUrl() 
-            + object.generateLinkHref();
-         String encodeValue = StringUtil.urlEncode(value);
-         link.setValue(encodeValue);
-         link.setHref(encodeValue);
-         return link;
-    }  
+    @Autowired
+    public void setIdentityCheckService(
+            IdentityCheckService identityCheckService) {
+        ServiceBeanFactory.identityCheckService = identityCheckService;
+    }
+
 }

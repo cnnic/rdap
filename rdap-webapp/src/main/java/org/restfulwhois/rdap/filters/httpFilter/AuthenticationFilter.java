@@ -13,8 +13,8 @@ import org.restfulwhois.rdap.common.filter.FilterHelper;
 import org.restfulwhois.rdap.common.filter.HttpFilter;
 import org.restfulwhois.rdap.common.model.ErrorMessage;
 import org.restfulwhois.rdap.common.support.PrincipalHolder;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.common.util.ServiceBeanUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
+import org.restfulwhois.rdap.common.support.ServiceBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -99,7 +99,7 @@ public class AuthenticationFilter implements HttpFilter {
             userReqPwd = tempPassdeCode.substring(indexOfSeparator + 1);
             User user = null;
             IdentityCheckService idcService =
-                    ServiceBeanUtil.getIdentityCheckService();
+                    ServiceBeanFactory.getIdentityCheckService();
             user = idcService.identityCheckService(userReqId, userReqPwd);
             if (null == user) {
                 request.getSession().removeAttribute("SESSION_ATTR_USER_ID");
@@ -124,7 +124,7 @@ public class AuthenticationFilter implements HttpFilter {
     private void writeError401Response(HttpServletResponse response)
             throws IOException {
         ResponseEntity<ErrorMessage> responseEntity =
-                RestResponseUtil.createResponse401();
+                RestResponse.createResponse401();
         FilterHelper.writeResponse(responseEntity, response);
     }
 

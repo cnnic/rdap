@@ -28,11 +28,11 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.util;
+package org.restfulwhois.rdap.common.support;
 
 import java.util.List;
 
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.restfulwhois.rdap.common.util.StringUtil;
 
 /**
  * This class contains variables.
@@ -40,7 +40,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
  * Variables in this class is set by spring, from file 'rdap.properties'.
  * <p>
  * Bean 'rdapProperties' MUST configured in spring configuration file,and now
- * configuration file is load by {@link PropertyPlaceholderConfigurer}.
+ * configuration file is load by {@code PropertyPlaceholderConfigurer}.
  * <p>
  * If property is changed, system need restart to reload it.
  * 
@@ -118,6 +118,7 @@ public class RdapProperties {
         RdapProperties.notInTldList = null;
         RdapProperties.notImplementedUriList = null;
     }
+
     /**
      * get implemented object Type list.
      * 
@@ -126,7 +127,7 @@ public class RdapProperties {
     public static List<String> getNotImplementedUriList() {
         RdapProperties.notImplementedUriList =
                 StringUtil.parseSeparatedStringToListIfListIsNull(
-                     notImplementedUri, notImplementedUriList);
+                        notImplementedUri, notImplementedUriList);
         return RdapProperties.notImplementedUriList;
     }
 
@@ -353,6 +354,7 @@ public class RdapProperties {
     public static String getNotImplementedUri() {
         return notImplementedUri;
     }
+
     /**
      * set notImplementedUri.
      * 
@@ -360,7 +362,7 @@ public class RdapProperties {
      *            notImplementedUri.
      */
     public static void setNotImplementedUri(String notImplementedUri) {
-         RdapProperties.notImplementedUri = notImplementedUri;
+        RdapProperties.notImplementedUri = notImplementedUri;
     }
 
 }

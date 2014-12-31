@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,82 +28,66 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.util;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-import org.restfulwhois.rdap.common.util.AutnumUtil;
+package org.restfulwhois.rdap.common.validation;
 
 /**
- * Test for RestResponse
+ * SimpleHttpErrorCode.
  * 
  * @author jiashuo
  * 
  */
-@SuppressWarnings("rawtypes")
-public class AutnumValidatorTest {
+public enum SimpleHttpErrorCode {
 
-	/**
-	 * test valid autnum of one number
-	 */
-	@Test
-	public void testValidAutnumOfOneNum() {
-		String validAutnum = "3";
-		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
-	}
+    ERROR_400(400, "");
 
-	/**
-	 * test valid autnum of two number
-	 */
-	@Test
-	public void testValidAutnumOfTwoNum() {
-		String validAutnum = "13";
-		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
-	}
+    private final int value;
 
-	/**
-	 * test valid autnum of ten number
-	 */
-	@Test
-	public void testValidAutnumOfTenNum() {
-		String validAutnum = "1234567890";
-		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
-	}
+    private final String reasonPhrase;
 
-	/**
-	 * test valid autnum of min autnum
-	 */
-	@Test
-	public void testValidAutnumOfMin() {
-		String validAutnum = "0";
-		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
-	}
+    private SimpleHttpErrorCode(int value, String reasonPhrase) {
+        this.value = value;
+        this.reasonPhrase = reasonPhrase;
+    }
 
-	/**
-	 * test valid autnum of max autnum
-	 */
-	@Test
-	public void testValidAutnumOfMax() {
-		String validAutnum = "4294967295";
-		assertTrue(AutnumUtil.isValidAutnum(validAutnum));
-	}
+    /**
+     * Return the integer value of this status code.
+     */
+    public int value() {
+        return this.value;
+    }
 
-	/**
-	 * test invalid autnum of negative num
-	 */
-	@Test
-	public void testInValidAutnumOfNegativeNum() {
-		String validAutnum = "-13";
-		assertFalse(AutnumUtil.isValidAutnum(validAutnum));
-	}
-	/**
-	 * test invalid autnum of negative num
-	 */
-	@Test
-	public void testInValidAutnumOfLargeNum() {
-		String validAutnum = "4294967296";
-		assertFalse(AutnumUtil.isValidAutnum(validAutnum));
-	}
+    /**
+     * Return the reason phrase of this status code.
+     */
+    public String getReasonPhrase() {
+        return reasonPhrase;
+    }
+
+    /**
+     * Return a string representation of this status code.
+     */
+    @Override
+    public String toString() {
+        return Integer.toString(value);
+    }
+
+    /**
+     * Return the enum constant of this type with the specified numeric value.
+     * 
+     * @param statusCode
+     *            the numeric value of the enum to be returned
+     * @return the enum constant with the specified numeric value
+     * @throws IllegalArgumentException
+     *             if this enum has no constant for the specified numeric value
+     */
+    public static SimpleHttpErrorCode valueOf(int statusCode) {
+        for (SimpleHttpErrorCode status : values()) {
+            if (status.value == statusCode) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("No matching constant for ["
+                + statusCode + "]");
+    }
+
 }

@@ -43,6 +43,7 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.common.dao.QueryDao;
 import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.PublicId;
@@ -52,10 +53,9 @@ import org.restfulwhois.rdap.common.model.base.ModelStatus;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.service.RemarkService;
 import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.support.TruncatedInfo;
 import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
-import org.restfulwhois.rdap.common.util.AutoGenerateSelfLink;
-import org.restfulwhois.rdap.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
@@ -296,7 +296,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setRemarks(remarks);
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        links.add(AutoGenerateSelfLink.generateSelfLink(entity));
+        links.add(SelfLinkGenerator.generateSelfLink(entity));
         entity.setLinks(links);
         queryAndSetEvents(entity, entityId);
     }

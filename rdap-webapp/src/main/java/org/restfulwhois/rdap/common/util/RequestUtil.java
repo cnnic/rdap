@@ -70,7 +70,7 @@ public class RequestUtil {
     public static boolean validateLastSplitUri(HttpServletRequest request,
             QueryUri expectedQueryUri) {
         try {
-            String lastSpliInURI = RequestUtil.getLastSplitInURI(request);
+            String lastSpliInURI = getLastSplitInURI(request);
             if (!expectedQueryUri.getNameWithoutUriSplitter().equals(
                     lastSpliInURI)) {
                 return false;

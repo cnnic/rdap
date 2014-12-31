@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -83,7 +83,7 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryExist() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         // v4
         String networkStr = "218.241.0.0/16";
         commonExist(networkStr);
@@ -119,7 +119,7 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryNonExist() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         // v4
         String networkStr = "219.241.0.0";
         commonNonExist(networkStr);
@@ -154,7 +154,7 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryRedirect() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         // v4
         String networkStr = "1.0.0.0";
         commonRedirect(networkStr);
@@ -189,7 +189,7 @@ public class RdapControllerNetworkRedirectTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryInvalid() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String invalidIpStr = "invalidNumber";
         commonInvalid(invalidIpStr);
     }

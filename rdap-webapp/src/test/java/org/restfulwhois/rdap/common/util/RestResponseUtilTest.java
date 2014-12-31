@@ -37,7 +37,7 @@ import static org.junit.Assert.assertTrue;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 
 /**
- * Test for RestResponseUtil.
+ * Test for RestResponse.
  * 
  * @author jiashuo
  * 
@@ -75,7 +75,7 @@ public class RestResponseUtilTest extends BaseTest {
         Domain domain = new Domain();
         domain.setLdhName(domainName);
         ResponseEntity<Domain> result =
-                RestResponseUtil.createResponse200(domain);
+                RestResponse.createResponse200(domain);
         Assert.notNull(result);
         assertEquals(result.getBody().getLdhName(), domainName);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
@@ -87,7 +87,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse400() {
-        ResponseEntity result = RestResponseUtil.createResponse400();
+        ResponseEntity result = RestResponse.createResponse400();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.BAD_REQUEST);
         checkAllowOriginHeader(result);
@@ -98,7 +98,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse401() {
-        ResponseEntity result = RestResponseUtil.createResponse401();
+        ResponseEntity result = RestResponse.createResponse401();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.UNAUTHORIZED);
         checkAllowOriginHeader(result);
@@ -109,7 +109,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse403() {
-        ResponseEntity result = RestResponseUtil.createResponse403();
+        ResponseEntity result = RestResponse.createResponse403();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
         checkAllowOriginHeader(result);
@@ -120,7 +120,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse404() {
-        ResponseEntity result = RestResponseUtil.createResponse404();
+        ResponseEntity result = RestResponse.createResponse404();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
         checkAllowOriginHeader(result);
@@ -131,7 +131,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse405() {
-        ResponseEntity result = RestResponseUtil.createResponse405();
+        ResponseEntity result = RestResponse.createResponse405();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.METHOD_NOT_ALLOWED);
         assertTrue(result.getHeaders().containsKey("Allow"));
@@ -145,7 +145,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse415() {
-        ResponseEntity result = RestResponseUtil.createResponse415();
+        ResponseEntity result = RestResponse.createResponse415();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         checkAllowOriginHeader(result);
@@ -156,7 +156,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse500() {
-        ResponseEntity result = RestResponseUtil.createResponse500();
+        ResponseEntity result = RestResponse.createResponse500();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
         checkAllowOriginHeader(result);
@@ -167,7 +167,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse422() {
-        ResponseEntity result = RestResponseUtil.createResponse422();
+        ResponseEntity result = RestResponse.createResponse422();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.UNPROCESSABLE_ENTITY);
         checkAllowOriginHeader(result);
@@ -179,7 +179,7 @@ public class RestResponseUtilTest extends BaseTest {
     @Test
     public void testCreateResponse301() {
         ResponseEntity result =
-                RestResponseUtil.createResponse301("http://cnnic.cn");
+                RestResponse.createResponse301("http://cnnic.cn");
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.MOVED_PERMANENTLY);
         checkAllowOriginHeader(result);
@@ -190,7 +190,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse429() {
-        ResponseEntity result = RestResponseUtil.createResponse429();
+        ResponseEntity result = RestResponse.createResponse429();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(), HttpStatus.TOO_MANY_REQUESTS);
         checkAllowOriginHeader(result);
@@ -201,7 +201,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse509() {
-        ResponseEntity result = RestResponseUtil.createResponse509();
+        ResponseEntity result = RestResponse.createResponse509();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(),
                 HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
@@ -212,7 +212,7 @@ public class RestResponseUtilTest extends BaseTest {
      */
     @Test
     public void testCreateResponse501() {
-        ResponseEntity result = RestResponseUtil.createResponse501();
+        ResponseEntity result = RestResponse.createResponse501();
         Assert.notNull(result);
         assertEquals(result.getStatusCode(),
                 HttpStatus.NOT_IMPLEMENTED);

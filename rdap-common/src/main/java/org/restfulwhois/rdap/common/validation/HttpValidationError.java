@@ -42,7 +42,7 @@ public final class HttpValidationError implements ValidationError {
     /**
      * errorCode.
      */
-    private ErrorCode errorCode;
+    private ServiceErrorCode errorCode;
 
     /**
      * constructor.
@@ -50,7 +50,7 @@ public final class HttpValidationError implements ValidationError {
      * @param errorCode
      *            errorCode.
      */
-    private HttpValidationError(ErrorCode statusCode) {
+    private HttpValidationError(ServiceErrorCode statusCode) {
         super();
         this.errorCode = statusCode;
     }
@@ -61,7 +61,7 @@ public final class HttpValidationError implements ValidationError {
      * @return ValidationError.
      */
     public static ValidationError build4001Error() {
-        return new HttpValidationError(ErrorCode.ERROR_4001);
+        return new HttpValidationError(ServiceErrorCode.ERROR_4001);
     }
 
     /**
@@ -69,7 +69,7 @@ public final class HttpValidationError implements ValidationError {
      * 
      * @return errorCode.
      */
-    public ErrorCode getStatusCode() {
+    public ServiceErrorCode getStatusCode() {
         return errorCode;
     }
 

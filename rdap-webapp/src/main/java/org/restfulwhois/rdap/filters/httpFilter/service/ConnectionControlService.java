@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.support.PrincipalHolder;
-import org.restfulwhois.rdap.common.util.RdapProperties;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

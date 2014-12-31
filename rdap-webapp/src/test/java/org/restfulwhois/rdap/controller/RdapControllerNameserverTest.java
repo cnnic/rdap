@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -88,8 +88,8 @@ public class RdapControllerNameserverTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryExistNameserver() throws Exception {
         super.databaseSetupWithBinaryColumns("nameserverTest.xml");
-//        RestResponseUtil.initErrorMessages();
-//        RestResponseUtil.initConformanceService();
+//        RestResponse.initErrorMessages();
+//        RestResponse.initConformanceService();
         String nsName = "ns.cnnic.cn";
         String nsChineseLDH = "ns.清华大学.cn";
         String nsLangEn = "en";
@@ -107,7 +107,7 @@ public class RdapControllerNameserverTest extends BaseTest {
      */
     @Test
     public void testQueryNonExistNS() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         commonQueryNonExistNS("a.notInThisRegistry");
         commonQueryNonExistNS("1cnnic.cn");
         commonQueryNonExistNS("cnnic.com.cn");
@@ -124,7 +124,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryInvalidNS() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         commonQueryInvalidNS("c nnic.cn");
     }
 
@@ -199,7 +199,7 @@ public class RdapControllerNameserverTest extends BaseTest {
     @DatabaseSetup(
             value = { "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
     public void testQuery403() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         super.databaseSetupWithBinaryColumns("nameserverTest.xml");
         String nameserver = "ns.cnnic.cn";
         query403(nameserver);

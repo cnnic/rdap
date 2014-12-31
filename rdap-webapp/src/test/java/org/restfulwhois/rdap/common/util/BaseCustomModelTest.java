@@ -58,9 +58,11 @@ public class BaseCustomModelTest {
     public void test_map() throws JsonProcessingException {
         Entity entity = null;
         entity = new Entity();
+        entity.setHandle("entityHandle");
         CustomEntity customEntity = new CustomEntity();
         entity.setCustomModel(customEntity);
         customEntity.addEntry("key1", "value1");
+        customEntity.addEntry("handle", "customHandle");
         ObjectMapper mapper = new ObjectMapper();
         String entityJson = null;
         entityJson = mapper.writeValueAsString(entity);

@@ -59,8 +59,8 @@ import org.restfulwhois.rdap.common.service.NoticeService;
 import org.restfulwhois.rdap.common.service.RdapConformanceService;
 import org.restfulwhois.rdap.common.service.RemarkService;
 import org.restfulwhois.rdap.common.support.PrincipalHolder;
-import org.restfulwhois.rdap.common.util.RdapProperties;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RdapProperties;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -150,7 +150,7 @@ public abstract class BaseTest {
     public void before() throws Exception {
         resetDefaultMaxSizeSearch();
         rdapConformanceService.initRdapConformance();
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         noticeService.init();
         remarkService.init();
     }

@@ -40,7 +40,7 @@ import org.restfulwhois.rdap.common.controller.BaseController;
 import org.restfulwhois.rdap.common.exception.DecodeException;
 import org.restfulwhois.rdap.common.filter.QueryFilter;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.core.help.model.Help;
 import org.restfulwhois.rdap.core.help.queryparam.HelpQueryParam;
 import org.restfulwhois.rdap.core.help.service.HelpService;
@@ -104,9 +104,9 @@ public class HelpQueryController extends BaseController {
     protected ResponseEntity doQuery(QueryParam queryParam) {
         Help result = queryService.queryHelp(queryParam);
         if (null != result) {
-            return RestResponseUtil.createResponse200(result);
+            return RestResponse.createResponse200(result);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }

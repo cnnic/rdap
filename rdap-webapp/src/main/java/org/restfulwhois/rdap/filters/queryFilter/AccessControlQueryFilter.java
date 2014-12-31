@@ -37,7 +37,7 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.common.service.AccessControlManager;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -97,7 +97,7 @@ public class AccessControlQueryFilter implements QueryFilter {
     private QueryFilterResult filterForQueryResult(Object responseBody) {
         BaseModel objectModel = (BaseModel) responseBody;
         if (!accessControlManager.hasPermission(objectModel)) {
-            return new QueryFilterResult(RestResponseUtil.createResponse403());
+            return new QueryFilterResult(RestResponse.createResponse403());
         }
         return null;
     }
@@ -113,7 +113,7 @@ public class AccessControlQueryFilter implements QueryFilter {
         BaseSearchModel searchModel = (BaseSearchModel) responseBody;
         if (searchModel.getTruncatedInfo() != null
                 && searchModel.getTruncatedInfo().getHasNoAuthForAllObjects()) {
-            return new QueryFilterResult(RestResponseUtil.createResponse403());
+            return new QueryFilterResult(RestResponse.createResponse403());
         }
         return null;
     }
