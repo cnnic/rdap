@@ -36,7 +36,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
@@ -186,6 +188,16 @@ public class EntityQueryDaoTest extends BaseTest {
         assertEquals(autnum.getName(), "name1");
         List<String> autnumStatusList = autnum.getStatus();
         assertThat(autnumStatusList, CoreMatchers.hasItems("validated"));
+        // custom properties
+        Map<String, String> customProperties = entity.getCustomProperties();
+        assertNotNull(customProperties);
+        assertEquals(2, customProperties.size());
+        Map<String, String> expectedCustomProperties =
+                new LinkedHashMap<String, String>();
+        expectedCustomProperties.put("customKey1", "customValue1");
+        expectedCustomProperties.put("customKey2", "customValue2");
+        assertThat(customProperties.entrySet(),
+                CoreMatchers.equalTo(expectedCustomProperties.entrySet()));
     }
 
     /**

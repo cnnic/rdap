@@ -77,6 +77,20 @@ public class RdapControllerEntityTest extends BaseTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity.xml")
+    public void test_custom_properties() throws Exception {
+        String entityHandle = "H1";
+        mockMvc.perform(
+                get(URI_ENTITY_Q + entityHandle).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value("h1"))
+                .andExpect(jsonPath("$.cnnic_customKey1").value("customValue1"))
+                .andExpect(jsonPath("$.cnnic_customKey2").value("customValue2"));
+    }
     /**
      * test_handle_casefold.
      * 

@@ -360,6 +360,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         domain.setLang(rs.getString("LANG"));
         domain.setType(DomainType.getByTypeName(rs.getString("TYPE")));
         domain.setNetworkId(rs.getLong("NETWORK_ID"));
+        extractCustomPropertiesFromRs(rs, domain);
     }
 
     /**

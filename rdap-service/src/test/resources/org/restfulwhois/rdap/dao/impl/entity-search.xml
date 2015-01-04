@@ -2,7 +2,8 @@
 <dataset>
 	<RDAP_ENTITY ENTITY_ID='1' HANDLE='truncated1' KIND='individual'
 		FN='truncated1' EMAIL='john@gmail.com' TITLE='CEO' ORG='org'
-		URL='http://john.com' PORT43='whois.example.net' />
+		URL='http://john.com' PORT43='whois.example.net' 
+		CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}'/>
 	<RDAP_ENTITY ENTITY_ID='2' HANDLE='truncated2' KIND='individual'
 		FN='truncated2' EMAIL='john@gmail.com' TITLE='CEO' ORG='org'
 		URL='http://john.com' PORT43='whois.example.net' />

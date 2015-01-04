@@ -86,6 +86,28 @@ public class RdapControllerIpTest extends BaseTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_custom_properties() throws Exception {
+        super.databaseSetupWithBinaryColumns("ip-query.xml");
+        String ipV4Mask = "1.0.0.0/8";
+        String ipV6Mask = "0:0:0:0:2001:6a8::/96";
+        mockMvc.perform(
+                get(URI_IP + ipV4Mask).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.cnnic_customKey1").value("customValue1"))
+                .andExpect(jsonPath("$.cnnic_customKey2").value("customValue2"));
+        mockMvc.perform(
+                get(URI_IP + ipV6Mask).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.cnnic_customKey1").value("customValue1"))
+                .andExpect(jsonPath("$.cnnic_customKey2").value("customValue2"));
+    }
+
     /**
      * test query exist ip 200.
      * 
