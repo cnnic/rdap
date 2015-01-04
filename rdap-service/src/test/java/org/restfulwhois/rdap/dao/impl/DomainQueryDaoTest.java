@@ -37,7 +37,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.dbunit.DatabaseUnitException;
 import org.hamcrest.CoreMatchers;
@@ -179,6 +181,16 @@ public class DomainQueryDaoTest extends BaseTest {
                 keyData.getPublicKey());
         assertEquals(1, keyData.getProtocol().intValue());
         assertEquals(1, keyData.getFlags().intValue());
+        // custom properties
+        Map<String, String> customProperties = domain.getCustomProperties();
+        assertNotNull(customProperties);
+        assertEquals(2, customProperties.size());
+        Map<String, String> expectedCustomProperties =
+                new LinkedHashMap<String, String>();
+        expectedCustomProperties.put("customKey1", "customValue1");
+        expectedCustomProperties.put("customKey2", "customValue2");
+        assertThat(customProperties.entrySet(),
+                CoreMatchers.equalTo(expectedCustomProperties.entrySet()));
     }
 
     /**

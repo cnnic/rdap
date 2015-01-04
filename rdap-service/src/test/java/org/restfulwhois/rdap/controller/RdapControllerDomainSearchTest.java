@@ -83,6 +83,26 @@ public class RdapControllerDomainSearchTest extends BaseTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_custom_properties() throws Exception {
+        super.databaseSetupWithBinaryColumns("domain.xml");
+        String domainName = "cnnic.cn";
+        mockMvc.perform(
+                get(
+                        DOMAIN_SEARCH_URI + "?name="
+                                + encodeWithIso8859(domainName)).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(
+                        jsonPath("$.domainSearchResults[0].cnnic_customKey1")
+                                .value("customValue1"))
+                .andExpect(
+                        jsonPath("$.domainSearchResults[0].cnnic_customKey2")
+                                .value("customValue2"));
+    }
+
     /**
      * test search 422 and 400.
      * 
