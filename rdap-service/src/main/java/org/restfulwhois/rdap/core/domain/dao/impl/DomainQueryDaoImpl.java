@@ -380,6 +380,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 if (null == domain) {
                     domain = new Domain();
                     extractDomainFromRs(rs, domain);
+                    extractCustomPropertiesFromRs(rs, domain);
                     result.add(domain);
                     domainMapById.put(domainId, domain);
                 }
@@ -387,6 +388,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             }
             return result;
         }
+
     }
 
 }

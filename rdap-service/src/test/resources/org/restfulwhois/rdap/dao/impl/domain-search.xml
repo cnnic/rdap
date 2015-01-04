@@ -2,7 +2,8 @@
 <dataset>
 	<!-- first domain -->
 	<RDAP_DOMAIN DOMAIN_ID='1' HANDLE='1' LDH_NAME='cnnic.cn'
-		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' />
+		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh'
+		CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />
 	<RDAP_DOMAIN_STATUS DOMAIN_STATUS_ID="1" DOMAIN_ID="1"
 		STATUS="validated" />
 	<RDAP_DOMAIN_STATUS DOMAIN_STATUS_ID="2" DOMAIN_ID="1"
@@ -22,14 +23,13 @@
 		REL_OBJECT_TYPE="domain" EVENT_ID="1" />
 	<!-- links -->
 	<RDAP_LINK LINK_ID="1" VALUE="http://domainlink" REL="self"
-		HREF="http://domainlink" MEDIA="screen" TYPE="application/json" 
-		TITLE="Title1 of Link1" />
+		HREF="http://domainlink" MEDIA="screen" TYPE="application/json" TITLE="Title1 of Link1" />
 	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="1"
 		REL_OBJECT_TYPE="domain" LINK_ID="1" />
 	<RDAP_LINK_HREFLANG HREFLANG_ID='1' LINK_ID="1"
 		HREFLANG="en" />
 	<RDAP_LINK_HREFLANG HREFLANG_ID='2' LINK_ID="1"
-		HREFLANG="zh" />	
+		HREFLANG="zh" />
 	<!-- publicId -->
 	<RDAP_PUBLICID PUBLIC_ID='1' IDENTIFIER='identifier'
 		TYPE='type' />

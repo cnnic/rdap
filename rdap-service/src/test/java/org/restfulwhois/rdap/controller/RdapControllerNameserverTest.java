@@ -78,6 +78,21 @@ public class RdapControllerNameserverTest extends BaseTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_custom_properties() throws Exception {
+        super.databaseSetupWithBinaryColumns("nameserverTest.xml");
+        String nsName = "ns.cnnic.cn";
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(
+                        URI_NS_Q + StringUtil.urlEncode(nsName)).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.cnnic_customKey1").value("customValue1"))
+                .andExpect(jsonPath("$.cnnic_customKey2").value("customValue2"));
+    }
+
     /**
      * test query exist nameserver.
      * 
@@ -88,8 +103,8 @@ public class RdapControllerNameserverTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryExistNameserver() throws Exception {
         super.databaseSetupWithBinaryColumns("nameserverTest.xml");
-//        RestResponse.initErrorMessages();
-//        RestResponse.initConformanceService();
+        // RestResponse.initErrorMessages();
+        // RestResponse.initConformanceService();
         String nsName = "ns.cnnic.cn";
         String nsChineseLDH = "ns.清华大学.cn";
         String nsLangEn = "en";

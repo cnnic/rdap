@@ -79,6 +79,20 @@ public class RdapControllerDomainTest extends BaseTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_custom_properties() throws Exception {
+        super.databaseSetupWithBinaryColumns("domain.xml");
+        String domainName = "cnnic.cn";
+        mockMvc.perform(
+                get(URI_DOMAIN_Q + StringUtil.urlEncode(domainName)).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.cnnic_customKey1").value("customValue1"))
+                .andExpect(jsonPath("$.cnnic_customKey2").value("customValue2"));
+    }
+
     /**
      * test query exist domain.
      * 
@@ -199,8 +213,7 @@ public class RdapControllerDomainTest extends BaseTest {
                 .andExpect(jsonPath("$.links[0].title").exists())
                 // objectClassName
                 .andExpect(jsonPath("$.objectClassName").value("domain"))
-                .andExpect(jsonPath("$.rdapConformance").exists())
-        ;
+                .andExpect(jsonPath("$.rdapConformance").exists());
     }
 
     /**

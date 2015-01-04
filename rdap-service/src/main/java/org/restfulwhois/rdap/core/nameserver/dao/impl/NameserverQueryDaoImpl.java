@@ -43,8 +43,8 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
 import org.restfulwhois.rdap.common.dao.QueryDao;
 import org.restfulwhois.rdap.common.dao.SearchDao;
-import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
 import org.restfulwhois.rdap.common.dao.impl.LinkQueryDaoImpl;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.Remark;
@@ -253,37 +253,6 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     }
 
     /**
-     * nameserver NSResultInnerExtractor, extract data from ResultSet.
-     * 
-     * @author weijunkai
-     * 
-     */
-    class NSResultInnerExtractor implements
-            ResultSetExtractor<List<Nameserver>> {
-        @Override
-        public List<Nameserver> extractData(ResultSet rs) throws SQLException {
-            List<Nameserver> result = new ArrayList<Nameserver>();
-            Map<Long, Nameserver> nsMapById = new HashMap<Long, Nameserver>();
-            while (rs.next()) {
-                Long nsId = rs.getLong("NAMESERVER_ID");
-                Nameserver ns = nsMapById.get(nsId);
-                if (null == ns) {
-                    ns = new Nameserver();
-                    ns.setId(nsId);
-                    ns.setHandle(rs.getString("HANDLE"));
-                    ns.setLdhName(rs.getString("LDH_NAME"));
-                    ns.setUnicodeName(rs.getString("UNICODE_NAME"));
-                    ns.setPort43(rs.getString("PORT43"));
-                    ns.setLang(rs.getString("LANG"));
-                    result.add(ns);
-                    nsMapById.put(nsId, ns);
-                }
-            }
-            return result;
-        }
-    }
-
-    /**
      * nameserver ResultSetExtractor, extract data from ResultSet.
      * 
      * @author weijunkai
@@ -370,6 +339,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         nameserver.setUnicodeName(rs.getString("UNICODE_NAME"));
         nameserver.setPort43(rs.getString("PORT43"));
         nameserver.setLang(rs.getString("LANG"));
+        extractCustomPropertiesFromRs(rs, nameserver);
     }
 
     /**

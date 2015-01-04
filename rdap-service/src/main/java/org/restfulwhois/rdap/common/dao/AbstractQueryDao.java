@@ -36,12 +36,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +58,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * </pre>
  * 
  * @param <T>
- *          object derived from BaseModel.
+ *            object derived from BaseModel.
  * @author jiashuo
  * 
  */
@@ -78,35 +80,35 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
+
     /**
      * query result of object T.
      * 
      * @param queryParam
      *            query object id/name.
-     * @return T
-     *            here is an abstract method.
+     * @return T here is an abstract method.
      * 
      * @throws UnsupportedOperationException.
-     *             
+     * 
      */
     @Override
     public T query(QueryParam queryParam) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
+
     /**
-     * query results of object list of T to an associated object.
-     *   ie. domain to name servers,
-     *       use queryAsInnerObjects(domainId) to query name servers
+     * query results of object list of T to an associated object. ie. domain to
+     * name servers, use queryAsInnerObjects(domainId) to query name servers
+     * 
      * @param outerObjectId
      *            associated object id.
      * @param outerModelType
-     *            associated object type.            
-     * @return List<T>
-     *            here is an abstract method.
+     *            associated object type.
+     * @return List<T> here is an abstract method.
      * 
      * @throws UnsupportedOperationException.
-     *             
+     * 
      */
     @Override
     public List<T> queryAsInnerObjects(Long outerObjectId,
@@ -114,8 +116,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-    
-    
+
     @Override
     public void queryAndSetInnerObjectsForSearch(List<T> result) {
         throw new UnsupportedOperationException(
@@ -144,7 +145,7 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      * @return object id list.
      */
     protected List<Long>
-    getModelIds(List<? extends BaseModel> baseModelObjects) {
+            getModelIds(List<? extends BaseModel> baseModelObjects) {
         List<Long> result = new ArrayList<Long>();
         if (null == baseModelObjects) {
             return result;
@@ -157,23 +158,26 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
 
     /**
      * extract timestamp value from ResultSet.
+     * 
      * @param rs
-     *          set of query result.
+     *            set of query result.
      * @param columnName
-     *          string of column name.
+     *            string of column name.
      * @return timestamp str value if value is valid format, null if not.
      */
     protected String extractTimestampFromRs(ResultSet rs, String columnName) {
         try {
             String dateTimeStr = rs.getString(columnName);
-            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                    .parse(dateTimeStr);
+            Date date =
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            .parse(dateTimeStr);
             return DateFormatUtils.format(date, "yyyy-MM-dd'T'HH:mm:ss'Z'");
         } catch (Exception e) {
-            LOGGER.error("error timestamp format,error:", e);
+            LOGGER.error("error timestamp format,error:{}", e);
             return null;
         }
     }
+
     /**
      * get integer from ResultSet.rs.getInt() will return 0 for null value.
      * 
@@ -194,5 +198,29 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
         }
         return intVal;
     }
-    
+
+    /**
+     * extract custom properties from ResultSet.
+     * 
+     * @param rs
+     *            ResultSet.
+     * @param model
+     *            model.
+     * @throws SQLException
+     *             SQLException.
+     */
+    protected static void extractCustomPropertiesFromRs(ResultSet rs,
+            BaseModel model) throws SQLException {
+        try {
+            String customPropertiesJSON = rs.getString("CUSTOM_PROPERTIES");
+            Map<String, String> customProperties =
+                    JsonUtil.deserializeJsonToMap(customPropertiesJSON);
+            model.setCustomProperties(customProperties);
+        } catch (Exception e) {
+            LOGGER.error(
+                    "extractCustomPropertiesFromRs error, not handle custom properties:{}",
+                    e);
+        }
+    }
+
 }

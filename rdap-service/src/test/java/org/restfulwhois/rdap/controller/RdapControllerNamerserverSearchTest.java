@@ -47,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -79,6 +80,23 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    }
+
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_custom_properties() throws Exception {
+        super.databaseSetupWithBinaryColumns("nameserver-search.xml");
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(URI_NS_SEARCH + "name=ns.cnnic1.cn")
+                        .accept(MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(
+                        jsonPath("$.nameserverSearchResults[0].cnnic_customKey1")
+                                .value("customValue1"))
+                .andExpect(
+                        jsonPath("$.nameserverSearchResults[0].cnnic_customKey2")
+                                .value("customValue2"));
     }
 
     /**
