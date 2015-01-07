@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,74 +28,61 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.validation;
+package org.restfulwhois.rdap.common.model.base;
+
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * ServiceErrorCode.
+ * ObjectClassNameEnum.
  * 
- * @author jiashuo
+ * @author zhanyq
  * 
  */
-public enum ServiceErrorCode {
-
-    ERROR_4001(4001, "", SimpleHttpErrorCode.ERROR_400);
-
-    private final int value;
-
-    private final String reasonPhrase;
-
-    private final SimpleHttpErrorCode httpErrorCode;
-
-    private ServiceErrorCode(int value, String reasonPhrase,
-            SimpleHttpErrorCode httpErrorCode) {
-        this.value = value;
-        this.reasonPhrase = reasonPhrase;
-        this.httpErrorCode = httpErrorCode;
-    }
-
+public enum ObjectClassNameEnum {
     /**
-     * Return the integer value of this status code.
+     * 5 main object Class Name.
      */
-    public int value() {
-        return this.value;
-    }
-
+    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameserver"), AUTNUM(
+            "autnum"),
     /**
-     * Return the reason phrase of this status code.
+     * ip network.
      */
-    public String getReasonPhrase() {
-        return reasonPhrase;
-    }
-
-    public SimpleHttpErrorCode getHttpErrorCode() {
-        return httpErrorCode;
-    }
+    IP("ip network");
 
     /**
-     * Return a string representation of this status code.
+     * name of ObjectClassNameEnum.
      */
-    @Override
-    public String toString() {
-        return Integer.toString(value);
-    }
+    private String name;
 
     /**
-     * Return the enum constant of this type with the specified numeric value.
+     * constructor.
      * 
-     * @param statusCode
-     *            the numeric value of the enum to be returned
-     * @return the enum constant with the specified numeric value
-     * @throws IllegalArgumentException
-     *             if this enum has no constant for the specified numeric value
+     * @param name
+     *            .
+     * 
      */
-    public static ServiceErrorCode valueOf(int statusCode) {
-        for (ServiceErrorCode status : values()) {
-            if (status.value == statusCode) {
-                return status;
-            }
-        }
-        throw new IllegalArgumentException("No matching constant for ["
-                + statusCode + "]");
+    private ObjectClassNameEnum(String name) {
+        this.name = name;
+    }
+
+    /**
+     * get ObjectClassNameEnum name.
+     * 
+     * @return ObjectClassNameEnum name.
+     */
+    @JsonValue
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * set ObjectClassNameEnum name.
+     * 
+     * @param name
+     *            ObjectClassNameEnum name.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

@@ -37,6 +37,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.model.base.ObjectClassNameEnum;
 import org.restfulwhois.rdap.common.model.base.QueryUri;
 import org.restfulwhois.rdap.common.model.base.TruncatedInfo;
 

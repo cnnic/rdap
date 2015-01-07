@@ -28,42 +28,45 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.validation;
+package org.restfulwhois.rdap.common.dto;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
- * validate query parameters.
  * 
  * @author jiashuo
  * 
  */
-public interface Validator {
+public class BaseDto {
 
-    /**
-     * Can this {@link Validator} instances of the supplied {@code clazz}?
-     * <p>
-     * @param clazz
-     *            the {@link Class} that this {@link Validator} is being asked
-     *            if it can {@link #validate(Object, ValidationResult) validate}
-     * @return {@code true} if this {@link Validator} can validate instances
-     *            of the supplied {@code clazz}
-     */
-    boolean supports(Class<?> clazz);
+    private String handle;
 
-    /**
-     * Validate the supplied {@code object} object, which must be of a
-     * {@link Class} for which the {@link #supports(Class)} method typically has
-     * (or would) return {@code true}.
-     * <p>
-     * The supplied {@link ValidationResult validationResult} instance can be
-     * used to report any resulting validation errors.
-     * 
-     * @param object
-     *            the queryParam that is to be validated (can be {@code null})
-     * @param validationResult
-     *            contextual state about the validation process (never
-     *            {@code null})
-     */
-    void validate(Object object, ValidationResult validationResult);
+    private Map<String, String> customProperties =
+            new LinkedHashMap<String, String>();
+
+    public void addCustomProperty(String key, String value) {
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
+            customProperties.put(key, value);
+        }
+    }
+
+    public String getHandle() {
+        return handle;
+    }
+
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
+    public Map<String, String> getCustomProperties() {
+        return customProperties;
+    }
+
+    public void setCustomProperties(Map<String, String> customProperties) {
+        this.customProperties = customProperties;
+    }
 
 }
