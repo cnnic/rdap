@@ -38,8 +38,8 @@ import java.util.Map;
 
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
-import org.restfulwhois.rdap.core.common.model.base.BaseCustomModel;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseCustomModel;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -58,9 +58,11 @@ public class BaseCustomModelTest {
     public void test_map() throws JsonProcessingException {
         Entity entity = null;
         entity = new Entity();
+        entity.setHandle("entityHandle");
         CustomEntity customEntity = new CustomEntity();
         entity.setCustomModel(customEntity);
         customEntity.addEntry("key1", "value1");
+        customEntity.addEntry("handle", "customHandle");
         ObjectMapper mapper = new ObjectMapper();
         String entityJson = null;
         entityJson = mapper.writeValueAsString(entity);

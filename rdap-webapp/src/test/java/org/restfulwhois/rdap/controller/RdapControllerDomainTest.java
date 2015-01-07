@@ -39,8 +39,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -104,7 +104,7 @@ public class RdapControllerDomainTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testQueryNonExistDomain() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         commonQueryNonExistDomain("1cnnic.cn");
         commonQueryNonExistDomain("cnnic.com.cn");
         commonQueryNonExistDomain("xn--hxaajaoebldbselhkqsqmapxidccaaahjrgk3chhdip9bclcgddbb4ooioa.bnnhg");
@@ -120,7 +120,7 @@ public class RdapControllerDomainTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testQueryInvalidDomain() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         commonQueryInvalidDomain("123");
         commonQueryInvalidDomain("c nnic.cn");
         commonQueryInvalidDomain("cnnic");

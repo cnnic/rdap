@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_IDENTITY_ROLE ROLE_ID='1' ROLE_NAME='role1' />
+	<RDAP_IDENTITY_ACL ID='1' OBJECT_TYPE='domain'
+		OBJECT_ID='12' ROLE_ID='1' />
+
+	<RDAP_DOMAIN DOMAIN_ID='11' HANDLE='11' LDH_NAME='truncated1.cn'
+		UNICODE_NAME='truncated1.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='12' HANDLE='12' LDH_NAME='truncated2.cn'
+		UNICODE_NAME='truncated2.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='13' HANDLE='13' LDH_NAME='truncated3.cn'
+		UNICODE_NAME='truncated3.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='14' HANDLE='14' LDH_NAME='truncated4.cn'
+		UNICODE_NAME='truncated4.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='15' HANDLE='15' LDH_NAME='truncated5.cn'
+		UNICODE_NAME='truncated5.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='16' HANDLE='16' LDH_NAME='truncated6.cn'
+		UNICODE_NAME='truncated6.cn' PORT43='port43' LANG='zh' />
+	<RDAP_DOMAIN DOMAIN_ID='17' HANDLE='17' LDH_NAME='truncated7.cn'
+		UNICODE_NAME='truncated7.cn' PORT43='port43' LANG='zh' />
+</dataset>

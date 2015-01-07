@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -87,7 +87,7 @@ public class RdapControllerAutnumTest extends BaseTest {
     @DatabaseSetup(
             value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnumWithRdapAndJson() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String autnumStr = "1";
         mockMvc.perform(
                 get(URI_AS + autnumStr).accept(
@@ -110,7 +110,7 @@ public class RdapControllerAutnumTest extends BaseTest {
     @DatabaseSetup(
             value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
     public void testQueryExistAutnum() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String autnumStr = "1";
         mockMvc.perform(
                 get(URI_AS + autnumStr).accept(
@@ -131,7 +131,7 @@ public class RdapControllerAutnumTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryNonExistAutnum() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String nonExistAutnumStr = "1000";
         mockMvc.perform(
                 get(URI_AS + nonExistAutnumStr).accept(
@@ -149,7 +149,7 @@ public class RdapControllerAutnumTest extends BaseTest {
     @Test
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void testQueryAutnumWithInvalidQ() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String invalidAutnumStr = "invalidQ";
         mockMvc.perform(
                 get(URI_AS + invalidAutnumStr).accept(
@@ -165,7 +165,7 @@ public class RdapControllerAutnumTest extends BaseTest {
             "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml",
             "classpath:org/restfulwhois/rdap/dao/impl/acl.xml" })
     public void testQuery403() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         String autnumStr = "1";
         query403(autnumStr);
     }

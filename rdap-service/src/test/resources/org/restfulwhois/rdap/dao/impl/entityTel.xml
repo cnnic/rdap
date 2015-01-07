@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_ENTITY ENTITY_ID='1' HANDLE='h1' KIND='individual'
+		FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+		PORT43='whois.example.net' />
+	<RDAP_VCARD_TEL TEL_ID='1' ENTITY_ID='1' TYPE='home;voice'
+		GLOBAL_NUMBER='+1-555-555-1234' EXT_NUMBER='1234' PREF='1' />
+	<RDAP_VCARD_TEL TEL_ID='2' ENTITY_ID='1' TYPE='work;voice'
+		GLOBAL_NUMBER='+1-555-555-1235' EXT_NUMBER='1234' PREF='2' />
+</dataset>

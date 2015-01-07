@@ -3,13 +3,13 @@
 	<parent>
 		<groupId>org.restfulwhois.rdap</groupId>
 		<artifactId>rdap</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>${rdap.version}</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.restfulwhois.rdap</groupId>
 	<artifactId>rdap-webapp</artifactId>
 	<packaging>war</packaging>
-	<version>0.1-SNAPSHOT</version>
+	<version>${rdap.version}</version>
 	<name>rdap-webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
@@ -76,12 +76,12 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<version>2.3.2</version>
+			<version>${dependency.jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.3.2</version>
+			<version>${dependency.jackson.version}</version>
 		</dependency>
 		<!-- vcard -->
 		<dependency>
@@ -181,11 +181,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<properties>
-		<dependency.spring.version>4.0.0.RELEASE</dependency.spring.version>
-		<maven.test.jvmargs>-Xmx1024m -Xms128m</maven.test.jvmargs>
-		<maven.compiler.target>1.6</maven.compiler.target>
-	</properties>
 	<build>
 		<finalName>rdap</finalName>
 		<plugins>
