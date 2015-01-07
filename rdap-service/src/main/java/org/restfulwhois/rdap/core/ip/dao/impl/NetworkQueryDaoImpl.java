@@ -441,6 +441,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
         network.setLang(rs.getString("LANG"));
         network.setPort43(rs.getString("PORT43"));
         network.setCidr(rs.getString("CIDR"));
+        extractCustomPropertiesFromRs(rs, network);
         return network;
     }
 

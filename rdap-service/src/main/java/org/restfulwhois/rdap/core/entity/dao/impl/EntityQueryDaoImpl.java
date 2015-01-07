@@ -484,6 +484,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setUrl(rs.getString("URL"));
         entity.setPort43(rs.getString("PORT43"));
         entity.setLang(rs.getString("LANG"));
+        extractCustomPropertiesFromRs(rs, entity);
     }
 
     /**

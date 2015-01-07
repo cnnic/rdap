@@ -292,6 +292,7 @@ public class AutnumQueryDaoImpl extends AbstractQueryDao<Autnum> {
                     autnum.setCountry(rs.getString("COUNTRY"));
                     autnum.setLang(rs.getString("LANG"));
                     autnum.setPort43(rs.getString("PORT43"));
+                    extractCustomPropertiesFromRs(rs, autnum);
                     result.add(autnum);
                     autnumMapById.put(autnumId, autnum);
                 }

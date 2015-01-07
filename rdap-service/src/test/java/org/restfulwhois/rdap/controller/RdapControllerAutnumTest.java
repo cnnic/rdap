@@ -77,6 +77,21 @@ public class RdapControllerAutnumTest extends BaseTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseSetup(
+            value = "classpath:org/restfulwhois/rdap/dao/impl/autnum.xml")
+    public void test_custom_properties() throws Exception {
+        String autnumStr = "1";
+        mockMvc.perform(
+                get(URI_AS + autnumStr).accept(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.cnnic_customKey1").value("customValue1"))
+                .andExpect(jsonPath("$.cnnic_customKey2").value("customValue2"));
+    }
+
     /**
      * test query exist autnum,with rdap+json type
      * 
