@@ -30,15 +30,20 @@
  */
 package org.restfulwhois.rdap.common.model.base;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.restfulwhois.rdap.common.model.Notice;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * base class of all model. Model is designed according to <a
@@ -54,8 +59,8 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 public class BaseModel {
 
     /**
-     * this prefix will be added to the front of properties in customModel when
-     * serialized to JSON.
+     * this prefix will be added to the front of properties in customProperties
+     * when serialized to JSON.
      * <p>
      * this value SHOULD end with '_', and NIC name is recommended as start.
      */
@@ -86,14 +91,56 @@ public class BaseModel {
     private List<Notice> notices;
 
     /**
-     * customModel.
-     * 
-     * <pre>
-     *      Position for Properties in customModel is at last.
-     * </pre>
+     * customProperties.
      */
-    @JsonUnwrapped(prefix = CUSTOM_PROPERTY_PREFIX)
-    private BaseCustomModel customModel;
+    @JsonIgnore
+    private Map<String, String> customProperties =
+            new LinkedHashMap<String, String>();
+
+    /**
+     * add custom property.
+     * 
+     * @param key
+     *            key.
+     * @param value
+     *            value.
+     */
+    @JsonAnySetter
+    public void addCustomProperty(String key, String value) {
+        customProperties.put(key, value);
+    }
+
+    /**
+     * get custom property.
+     * 
+     * @return customProperties.
+     */
+    @JsonAnyGetter
+    public Map<String, String> getCustomPropertiesMap() {
+        Map<String, String> result = addCustomPrefixToMapKey(customProperties);
+        return result;
+    }
+
+    /**
+     * add custom prefix to map key.
+     * 
+     * @param customPropertiesMap
+     *            customPropertiesMap.
+     * @return map.
+     */
+    private Map<String, String> addCustomPrefixToMapKey(
+            Map<String, String> customPropertiesMap) {
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        for (Iterator<Entry<String, String>> it =
+                customPropertiesMap.entrySet().iterator(); it.hasNext();) {
+            Entry<String, String> entry = it.next();
+            if (null != entry.getValue()) {
+                result.put(CUSTOM_PROPERTY_PREFIX + entry.getKey(),
+                        entry.getValue());
+            }
+        }
+        return result;
+    }
 
     /**
      * find object from list by id.
@@ -243,22 +290,22 @@ public class BaseModel {
     }
 
     /**
-     * get customModel.
+     * get customProperties.
      * 
-     * @return customModel.
+     * @return customProperties.
      */
-    public BaseCustomModel getCustomModel() {
-        return customModel;
+    public Map<String, String> getCustomProperties() {
+        return customProperties;
     }
 
     /**
-     * set customModel.
+     * set customProperties.
      * 
-     * @param customModel
-     *            customModel.
+     * @param customProperties
+     *            customProperties.
      */
-    public void setCustomModel(BaseCustomModel customModel) {
-        this.customModel = customModel;
+    public void setCustomProperties(Map<String, String> customProperties) {
+        this.customProperties = customProperties;
     }
 
 }

@@ -28,59 +28,22 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.validation;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
+package org.restfulwhois.rdap.common.dto;
 
 /**
- * Validation result.
  * 
  * @author jiashuo
  * 
  */
-public class ValidationResult {
-    /**
-     * errors.
-     */
-    private List<ValidationError> errors = new ArrayList<ValidationError>();
+public class DomainDto extends BaseDto {
+    private String domainName;
 
-    /**
-     * add error.
-     * 
-     * @param error
-     *            error.
-     */
-    public void addError(ValidationError error) {
-        errors.add(error);
+    public String getDomainName() {
+        return domainName;
     }
 
-    /**
-     * check if has error.
-     * 
-     * @return true if has error, false if not.
-     */
-    public boolean hasError() {
-        return errors.size() > 0;
-    }
-
-    /**
-     * getFirstError.
-     * 
-     * @return ValidationError.
-     */
-    public ValidationError getFirstError() {
-        if (!hasError()) {
-            return null;
-        }
-        return errors.get(0);
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append(errors).toString();
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
     }
 
 }
