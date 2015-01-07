@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,61 +28,66 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.model;
-
-import com.fasterxml.jackson.annotation.JsonValue;
+package org.restfulwhois.rdap.common.dto;
 
 /**
- * ObjectClassNameEnum.
+ * SimpleHttpStatusCode.
  * 
- * @author zhanyq
+ * @author jiashuo
  * 
  */
-public enum ObjectClassNameEnum {
-    /**
-     * 5 main object Class Name.
-     */
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameserver"), AUTNUM(
-            "autnum"),
-    /**
-     * ip network.
-     */
-    IP("ip network");
+public enum SimpleHttpStatusCode {
 
-    /**
-     * name of ObjectClassNameEnum.
-     */
-    private String name;
+    ERROR_400(400, ""), OK_200(200, "");
 
-    /**
-     * constructor.
-     * 
-     * @param name
-     *            .
-     * 
-     */
-    private ObjectClassNameEnum(String name) {
-        this.name = name;
+    private final int value;
+
+    private final String reasonPhrase;
+
+    private SimpleHttpStatusCode(int value, String reasonPhrase) {
+        this.value = value;
+        this.reasonPhrase = reasonPhrase;
     }
 
     /**
-     * get ObjectClassNameEnum name.
-     * 
-     * @return ObjectClassNameEnum name.
+     * Return the integer value of this status code.
      */
-    @JsonValue
-    public String getName() {
-        return name;
+    public int value() {
+        return this.value;
     }
 
     /**
-     * set ObjectClassNameEnum name.
-     * 
-     * @param name
-     *            ObjectClassNameEnum name.
+     * Return the reason phrase of this status code.
      */
-    public void setName(String name) {
-        this.name = name;
+    public String getReasonPhrase() {
+        return reasonPhrase;
+    }
+
+    /**
+     * Return a string representation of this status code.
+     */
+    @Override
+    public String toString() {
+        return Integer.toString(value);
+    }
+
+    /**
+     * Return the enum constant of this type with the specified numeric value.
+     * 
+     * @param statusCode
+     *            the numeric value of the enum to be returned
+     * @return the enum constant with the specified numeric value
+     * @throws IllegalArgumentException
+     *             if this enum has no constant for the specified numeric value
+     */
+    public static SimpleHttpStatusCode valueOf(int statusCode) {
+        for (SimpleHttpStatusCode status : values()) {
+            if (status.value == statusCode) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("No matching constant for ["
+                + statusCode + "]");
     }
 
 }
