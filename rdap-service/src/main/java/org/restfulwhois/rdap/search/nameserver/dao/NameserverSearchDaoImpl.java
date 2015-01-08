@@ -34,8 +34,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.search.common.dao.AbstractSearchDao;
 import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.stereotype.Repository;

@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.core.entity.validator;
 
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.util.StringUtil;
-import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.QueryValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByFnParam;
@@ -57,10 +57,10 @@ public class EntitySearchValidator implements Validator {
             ValidationResult validationResult) {
         String q = queryParam.getQ();
         if (!StringUtil.isValidEntityHandleOrName(q)) {
-            validationResult.addError(HttpValidationError.build400Error());
+            validationResult.addError(QueryValidationError.build400Error());
         }
         if (!StringUtil.checkIsValidSearchPattern(q)) {
-            validationResult.addError(HttpValidationError.build422Error());
+            validationResult.addError(QueryValidationError.build422Error());
         }
     }
 

@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.common.service;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.model.Remark;
-import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
+import org.restfulwhois.rdap.common.model.base.TruncatedInfo.TruncateReason;
 
 /**
  * remark service interface.

@@ -31,9 +31,9 @@
 package org.restfulwhois.rdap.search.nameserver.service;
 
 import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverSearchService;
 import org.restfulwhois.rdap.search.common.service.AbstractSearchService;
 import org.restfulwhois.rdap.search.nameserver.bean.NameserverSearch;

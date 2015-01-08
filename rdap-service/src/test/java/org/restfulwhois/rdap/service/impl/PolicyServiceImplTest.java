@@ -38,18 +38,18 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.DsData;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.model.Event;
+import org.restfulwhois.rdap.common.model.IPAddress;
 import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.model.Notice;
 import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.SecureDns;
 import org.restfulwhois.rdap.common.model.Variant;
 import org.restfulwhois.rdap.common.model.Variants;
-import org.restfulwhois.rdap.core.domain.model.Domain;
-import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.ip.model.IPAddress;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.filters.queryFilter.service.CustomColumnPolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 

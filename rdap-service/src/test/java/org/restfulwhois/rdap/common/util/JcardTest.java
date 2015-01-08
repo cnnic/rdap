@@ -39,9 +39,9 @@ import java.util.List;
 import org.hamcrest.core.IsNot;
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
-import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.entity.model.EntityAddress;
-import org.restfulwhois.rdap.core.entity.model.EntityTelephone;
+import org.restfulwhois.rdap.common.model.Entity;
+import org.restfulwhois.rdap.common.model.EntityAddress;
+import org.restfulwhois.rdap.common.model.EntityTelephone;
 import org.restfulwhois.rdap.core.entity.model.jcard.Jcard;
 
 import ezvcard.Ezvcard;

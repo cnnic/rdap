@@ -28,80 +28,63 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.support;
+package org.restfulwhois.rdap.core.domain.service.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.service.AbstractUpdateService;
+import org.restfulwhois.rdap.common.validation.ValidationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * query URI.
+ * query service implementation.
  * 
- * @author zhanyq
+ * RdapController's main query service for querying or searching.
+ * 
+ * Provide the all tlds to be supported
+ * 
+ * Requirement from http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
+ * 
+ * @author jiashuo
  * 
  */
-public enum QueryUri {
+@Service("domainCreateServiceImpl")
+public class DomainCreateServiceImpl extends
+        AbstractUpdateService<DomainDto, Domain> {
 
     /**
-     * 5 main object URI.
+     * logger.
      */
-    DOMAIN("/domain/"), ENTITY("/entity/"), NAMESERVER("/nameserver/"),
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DomainCreateServiceImpl.class);
     /**
-     * 5 main object URI.
+     * domain DAO.
      */
-    AUTNUM("/autnum/"), IP("/ip/"),
-    /**
-     * search.
-     */
-    DOMAINS("/domains"), ENTITIES("/entities"), NAMESERVERS("/nameservers"),
-    /**
-     * help.
-     */
-    HELP("/help");
-    /**
-     * name of model uri.
-     */
-    private String name;
+    @Autowired
+    private UpdateDao<Domain> domainDao;
 
-    /**
-     * constructor.
-     * 
-     * @param name
-     *            name.
-     */
-    private QueryUri(String name) {
-        this.name = name;
-    }
-
-    /**
-     * get name without URI splitter - '/'.
-     * 
-     * @return String.
-     */
-    public String getNameWithoutUriSplitter() {
-        return StringUtils.removeEnd(StringUtils.removeStart(name, "/"), "/");
-    }
-
-    /**
-     * get uri name.
-     * 
-     * @return uri name.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * set uri name.
-     * 
-     * @param name
-     *            uri name.
-     */
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    protected void doCreate(Domain domain) {
+        domainDao.create(domain);
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this).append(name).toString();
+    protected Domain convertDtoToModel(DomainDto dto) {
+        Domain domain = new Domain();
+        domain.setLdhName(dto.getDomainName());
+        domain.setHandle(dto.getHandle());
+        return null;
     }
+
+    @Override
+    protected ValidationResult validate(DomainDto domainDto) {
+        ValidationResult validationResult = new ValidationResult();
+        checkNotEmpty(domainDto.getDomainName(), "domainName", validationResult);
+        return validationResult;
+    }
+
 }

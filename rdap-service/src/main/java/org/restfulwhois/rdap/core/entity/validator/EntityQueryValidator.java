@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.core.entity.validator;
 
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.util.StringUtil;
-import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.QueryValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.entity.queryparam.EntityQueryParam;
@@ -54,7 +54,7 @@ public class EntityQueryValidator implements Validator {
     public void validate(QueryParam queryParam,
             ValidationResult validationResult) {
         if (!StringUtil.isValidEntityHandleOrName(queryParam.getQ())) {
-            validationResult.addError(HttpValidationError.build400Error());
+            validationResult.addError(QueryValidationError.build400Error());
         }
     }
 

@@ -35,6 +35,7 @@ import static org.junit.Assert.assertEquals;
 import javax.xml.bind.DatatypeConverter;
 
 import org.junit.Test;
+import org.restfulwhois.rdap.common.model.IpVersion;
 
 import com.googlecode.ipv6.IPv6Address;
 

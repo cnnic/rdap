@@ -40,7 +40,7 @@ import org.restfulwhois.rdap.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.support.RestResponse;
-import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.QueryValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
@@ -232,7 +232,7 @@ public class BaseController {
     private ResponseEntity handleError(ValidationResult result) {
         ValidationError error = result.getFirstError();
         if (null != error) {
-            HttpValidationError httpError = (HttpValidationError) error;
+            QueryValidationError httpError = (QueryValidationError) error;
             return RestResponse.createCommonErrorResponse(httpError
                     .getStatusCode());
         }

@@ -30,32 +30,59 @@
  */
 package org.restfulwhois.rdap.core.domain.controller;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
-import javax.annotation.Resource;
-
-import org.restfulwhois.rdap.common.controller.BaseController;
-import org.restfulwhois.rdap.common.filter.QueryFilter;
+import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.UpdateResponse;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.service.UpdateService;
+import org.restfulwhois.rdap.common.support.RestResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Base Controller for DNR object, such as domain,nameserver.
+ * Controller for domain update.
  * 
  * @author jiashuo
  * 
  */
 @Controller
-public class BaseDnrController extends BaseController {
+@RequestMapping(value = { "/u/" })
+public class DomainUpdateController {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DomainUpdateController.class);
+
+    @Autowired
+    @Qualifier("domainCreateServiceImpl")
+    private UpdateService<DomainDto, Domain> createService;
 
     /**
-     * queryFilters.
+     * create domain.
+     * 
+     * @param domainName
+     * @param request
+     * @return
+     * @throws DecodeException
      */
-    @Resource(name = "domainOrNsQueryFilters")
-    private List<QueryFilter> queryFilters;
-
-    @Override
-    protected List<QueryFilter> getQueryFilters() {
-        return queryFilters;
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = { "domain" }, method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity create(@RequestBody DomainDto domainDto,
+            HttpServletRequest request) {
+        UpdateResponse response = createService.execute(domainDto);
+        return RestResponse.createUpdateResponse(response);
     }
 
 }

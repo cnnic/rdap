@@ -66,7 +66,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  */
 @Controller
-public class DomainSearchController extends BaseDnrController {
+public class DomainSearchController extends BaseDnrQueryController {
     /**
      * logger.
      */

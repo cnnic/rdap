@@ -38,10 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.support.PageBean;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.entity.dao.impl.EntityQueryDaoImpl;
-import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;

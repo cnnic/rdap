@@ -28,61 +28,20 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.support;
+package org.restfulwhois.rdap.common.service;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import org.restfulwhois.rdap.common.dto.BaseDto;
+import org.restfulwhois.rdap.common.dto.UpdateResponse;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 
 /**
- * ObjectClassNameEnum.
+ * update service interface.
  * 
- * @author zhanyq
+ * @author jiashuo
  * 
  */
-public enum ObjectClassNameEnum {
-    /**
-     * 5 main object Class Name.
-     */
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameserver"), AUTNUM(
-            "autnum"),
-    /**
-     * ip network.
-     */
-    IP("ip network");
+public interface UpdateService<DTO extends BaseDto, MODEL extends BaseModel> {
 
-    /**
-     * name of ObjectClassNameEnum.
-     */
-    private String name;
-
-    /**
-     * constructor.
-     * 
-     * @param name
-     *            .
-     * 
-     */
-    private ObjectClassNameEnum(String name) {
-        this.name = name;
-    }
-
-    /**
-     * get ObjectClassNameEnum name.
-     * 
-     * @return ObjectClassNameEnum name.
-     */
-    @JsonValue
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * set ObjectClassNameEnum name.
-     * 
-     * @param name
-     *            ObjectClassNameEnum name.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+    UpdateResponse execute(DTO dto);
 
 }

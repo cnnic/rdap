@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,67 +28,55 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.model;
+package org.restfulwhois.rdap.common.validation;
 
-import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * maps a public identifier to an object class.
+ * UpdateValidationError.
  * 
  * @author jiashuo
  * 
  */
-public class PublicId extends BaseModel {
-    /**
-     * denoting the type of public identifier.
-     */
-    private String type;
-    /**
-     * a public identifier of the type denoted by 'type'.
-     */
-    private String identifier;
+public final class UpdateValidationError implements ValidationError {
+    private int httpStatusCode;
+    private int errorCode;
+    private String description;
 
-    /**
-     * get type.
-     * 
-     * @return type.
-     */
-    public String getType() {
-        return type;
+    public UpdateValidationError(ServiceErrorCode error,
+            String errorMessageParam) {
+        super();
+        this.httpStatusCode = error.getStatusCode().value();
+        this.errorCode = error.getCode();
+        this.description = String.format(error.getMessage(), errorMessageParam);
     }
 
-    /**
-     * set type.
-     * 
-     * @param type
-     *            type.
-     */
-    public void setType(String type) {
-        this.type = type;
+    public static ValidationError build4002Error(String errorMessageParam) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4002,
+                errorMessageParam);
     }
 
-    /**
-     * get identifier.
-     * 
-     * @return identifier.
-     */
-    public String getIdentifier() {
-        return identifier;
+    public int getHttpStatusCode() {
+        return httpStatusCode;
     }
 
-    /**
-     * set identifier.
-     * 
-     * @param identifier
-     *            identifier.
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setHttpStatusCode(int httpStatusCode) {
+        this.httpStatusCode = httpStatusCode;
     }
-    
+
     @Override
-    public ModelType getObjectType() {
-        return ModelType.PUBLICID;
+    public String toString() {
+        return new ToStringBuilder(this).append(errorCode).toString();
     }
+
+    @Override
+    public int getCode() {
+        return errorCode;
+    }
+
+    @Override
+    public String getMessage() {
+        return description;
+    }
+
 }
