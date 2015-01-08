@@ -30,9 +30,9 @@
  */
 package org.restfulwhois.rdap.core.domain.queryparam;
 
-import org.restfulwhois.rdap.core.common.util.IpInBytes;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.common.util.IpInBytes;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpVersion;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsIpValidator;
 
@@ -50,7 +50,7 @@ public class DomainSearchByNsIpParam extends DomainSearchParam {
     private IpInBytes ipInBytes;
 
     /**
-     * construction.
+     * constructor.
      */
     public DomainSearchByNsIpParam() {
         super();

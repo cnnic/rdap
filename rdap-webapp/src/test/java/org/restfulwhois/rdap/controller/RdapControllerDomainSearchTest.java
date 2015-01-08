@@ -44,7 +44,7 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -90,7 +90,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
      */
     @Test
     public void testSearchQStatus() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         List<String> q422List = new ArrayList<String>();
         q422List.add("*");
         // q422List.add("*cn");
@@ -333,7 +333,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
             value = "classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public
             void testSearchNonExistDomain() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         // test by name
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "?name=" + "nonexist*").accept(
@@ -383,7 +383,7 @@ public class RdapControllerDomainSearchTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/errorMessage.xml")
     public void testSearchInvalidDomain() throws Exception {
-        RestResponseUtil.initErrorMessages();
+        RestResponse.initErrorMessages();
         mockMvc.perform(
                 get(DOMAIN_SEARCH_URI + "?name=" + "*").accept(
                         MediaType.parseMediaType(rdapJson)))

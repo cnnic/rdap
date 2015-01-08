@@ -32,9 +32,9 @@ package org.restfulwhois.rdap.core.domain.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
@@ -94,6 +94,7 @@ public class DomainQueryController extends BaseDnrController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/domain/{domainName}" },
             method = RequestMethod.GET)
     @ResponseBody
@@ -103,12 +104,13 @@ public class DomainQueryController extends BaseDnrController {
         return super.query(queryParam);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryDomainInThisRegistry(queryParam);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
     /**
@@ -118,15 +120,16 @@ public class DomainQueryController extends BaseDnrController {
      *            queryParam.
      * @return ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     protected ResponseEntity queryDomainInThisRegistry(QueryParam queryParam) {
         LOGGER.debug("   queryDomainInThisRegistry:{}", queryParam);
         Domain domain = queryService.queryDomain(queryParam);
         if (null != domain) {
             LOGGER.debug("   found domain:{}", queryParam);
-            return RestResponseUtil.createResponse200(domain);
+            return RestResponse.createResponse200(domain);
         }
         LOGGER.debug("   domain not found,return 404. {}", queryParam);
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }

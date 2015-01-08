@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.entity.model;
 
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 
 /**
  * Address of entity.
@@ -50,7 +50,7 @@ public class EntityAddress extends BaseModel {
     private Integer pref;
 
     /**
-     * address types.
+     * address types.splitted by ';'.
      */
     private String types;
     /**

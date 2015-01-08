@@ -41,10 +41,10 @@ import javax.annotation.Resource;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.common.filter.QueryFilter;
+import org.restfulwhois.rdap.common.filter.QueryFilterManager;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.restfulwhois.rdap.core.common.filter.QueryFilterManager;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -81,7 +81,7 @@ public class ResponseDecoratorTest extends BaseTest {
         Assert.notNull(autnum);
         assertNull(autnum.getRdapConformance());
         ResponseEntity responseEntity =
-                RestResponseUtil.createResponse200(autnum);
+                RestResponse.createResponse200(autnum);
         queryFilterManager.postQuery(null, responseEntity, serviceFilters);
         assertNotNull(autnum.getRdapConformance());
         assertThat(autnum.getRdapConformance(), CoreMatchers.notNullValue());

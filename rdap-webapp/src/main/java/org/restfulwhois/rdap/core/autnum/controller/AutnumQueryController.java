@@ -36,14 +36,14 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.restfulwhois.rdap.common.controller.BaseController;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.filter.QueryFilter;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.autnum.queryparam.AsQueryParam;
 import org.restfulwhois.rdap.core.autnum.service.AutnumService;
-import org.restfulwhois.rdap.core.common.controller.BaseController;
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +72,9 @@ public class AutnumQueryController extends BaseController {
     @Autowired
     protected AutnumService queryService;
 
+    /**
+     * queryFilters.
+     */
     @Resource(name = "autnumQueryFilters")
     private List<QueryFilter> queryFilters;
 
@@ -103,6 +106,7 @@ public class AutnumQueryController extends BaseController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = "/autnum/{autnum}", method = RequestMethod.GET)
     public ResponseEntity queryAs(@PathVariable String autnum,
             HttpServletRequest request, HttpServletResponse response)
@@ -112,13 +116,14 @@ public class AutnumQueryController extends BaseController {
         return super.query(queryParam);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         Autnum result = queryService.queryAutnum(queryParam);
         if (null != result) {
-            return RestResponseUtil.createResponse200(result);
+            return RestResponse.createResponse200(result);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }

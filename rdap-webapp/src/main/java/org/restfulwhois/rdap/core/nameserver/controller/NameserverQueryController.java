@@ -32,9 +32,9 @@ package org.restfulwhois.rdap.core.nameserver.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.core.domain.controller.BaseDnrController;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverQueryParam;
@@ -89,6 +89,7 @@ public class NameserverQueryController extends BaseDnrController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/nameserver/{nsName}" },
             method = RequestMethod.GET)
     @ResponseBody
@@ -98,12 +99,13 @@ public class NameserverQueryController extends BaseDnrController {
         return super.query(queryParam);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         if (queryService.tldInThisRegistry(queryParam)) {
             return queryNsInThisRegistry(queryParam);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
     /**
@@ -113,15 +115,16 @@ public class NameserverQueryController extends BaseDnrController {
      *            queryParam.
      * @return ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     private ResponseEntity queryNsInThisRegistry(QueryParam queryParam) {
         LOGGER.debug("   queryNsInThisRegistry:{}", queryParam);
         Nameserver ns = queryService.queryNameserver(queryParam);
         if (null != ns) {
             LOGGER.debug("   found ns:{}", queryParam);
-            return RestResponseUtil.createResponse200(ns);
+            return RestResponse.createResponse200(ns);
         }
         LOGGER.debug("   ns not found,return 404. {}", queryParam);
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }

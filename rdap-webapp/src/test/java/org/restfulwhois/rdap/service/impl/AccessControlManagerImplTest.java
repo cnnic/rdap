@@ -35,7 +35,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.core.common.service.AccessControlManager;
+import org.restfulwhois.rdap.common.service.AccessControlManager;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.springframework.beans.factory.annotation.Autowired;
 

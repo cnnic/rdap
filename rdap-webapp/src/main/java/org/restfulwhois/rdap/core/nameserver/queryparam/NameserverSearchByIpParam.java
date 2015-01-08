@@ -32,14 +32,14 @@ package org.restfulwhois.rdap.core.nameserver.queryparam;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.util.IpInBytes;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.common.util.IpInBytes;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpVersion;
 import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsIpValidator;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 
 /**
- * NameserverSearchByIpParam.
+ * nameserver search by IP paramater.
  * 
  * @author jiashuo
  * 
@@ -51,14 +51,14 @@ public class NameserverSearchByIpParam extends NameserverSearchParam {
     private IpInBytes ipInBytes;
 
     /**
-     * construction.
+     * constructor.
      */
     public NameserverSearchByIpParam() {
         super();
     }
 
     /**
-     * construction.
+     * constructor.
      * 
      * @param request
      *            request.

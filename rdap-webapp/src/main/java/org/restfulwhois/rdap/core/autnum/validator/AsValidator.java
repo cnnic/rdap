@@ -30,12 +30,12 @@
  */
 package org.restfulwhois.rdap.core.autnum.validator;
 
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.AutnumUtil;
+import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.ValidationResult;
+import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.autnum.queryparam.AsQueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.AutnumValidator;
-import org.restfulwhois.rdap.core.common.validation.HttpValidationError;
-import org.restfulwhois.rdap.core.common.validation.ValidationResult;
-import org.restfulwhois.rdap.core.common.validation.Validator;
 
 /**
  * AsValidator.
@@ -53,7 +53,7 @@ public class AsValidator implements Validator {
     @Override
     public void validate(QueryParam queryParam,
             ValidationResult validationResult) {
-        if (!AutnumValidator.isValidAutnum(queryParam.getQ())) {
+        if (!AutnumUtil.isValidAutnum(queryParam.getQ())) {
             validationResult.addError(HttpValidationError.build400Error());
         }
     }

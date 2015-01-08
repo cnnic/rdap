@@ -30,17 +30,17 @@
  */
 package org.restfulwhois.rdap.core.autnum.service.impl;
 
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.autnum.dao.impl.AutnumQueryDaoImpl;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
 import org.restfulwhois.rdap.core.autnum.service.AutnumService;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * query service implementation.
+ * as query service implementation.
  * 
  * @author jiashuo
  * 

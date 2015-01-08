@@ -34,19 +34,23 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.search.common.dao.AbstractSearchDao;
 import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.stereotype.Repository;
 
 /**
+ * nameserver search DAO.
  * 
  * @author jiashuo
  * 
  */
 @Repository
 public class NameserverSearchDaoImpl extends AbstractSearchDao<Nameserver> {
+    /**
+     * nameserverSearchStrategyList.
+     */
     @Resource(name = "nameserverSearchStrategyList")
     private List<SearchStrategy<Nameserver>> nameserverSearchStrategyList;
 
@@ -55,8 +59,9 @@ public class NameserverSearchDaoImpl extends AbstractSearchDao<Nameserver> {
         SearchStrategy<Nameserver> strategy =
                 this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            List<Nameserver> result = strategy.search(queryParam, jdbcTemplate);
-            queryDao.queryAndSetInnerObjectsForSearch(result);
+            List<Nameserver> result =
+                    strategy.search(queryParam, getJdbcTemplate());
+            getQueryDao().queryAndSetInnerObjectsForSearch(result);
             return result;
         }
         return null;
@@ -67,11 +72,18 @@ public class NameserverSearchDaoImpl extends AbstractSearchDao<Nameserver> {
         SearchStrategy<Nameserver> strategy =
                 this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            return strategy.searchCount(queryParam, jdbcTemplate);
+            return strategy.searchCount(queryParam, getJdbcTemplate());
         }
         return null;
     }
 
+    /**
+     * getSearchStrategy.
+     * 
+     * @param queryParam
+     *            getSearchStrategy.
+     * @return SearchStrategy.
+     */
     private SearchStrategy<Nameserver> getSearchStrategy(QueryParam queryParam) {
         for (SearchStrategy<Nameserver> strategy : nameserverSearchStrategyList) {
             if (strategy.support(queryParam)) {

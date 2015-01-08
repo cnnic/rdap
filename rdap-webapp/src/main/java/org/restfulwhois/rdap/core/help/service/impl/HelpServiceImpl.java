@@ -30,8 +30,8 @@
  */
 package org.restfulwhois.rdap.core.help.service.impl;
 
-import org.restfulwhois.rdap.core.common.dao.NoticeDao;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.dao.NoticeDao;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.help.model.Help;
 import org.restfulwhois.rdap.core.help.service.HelpService;
 import org.slf4j.Logger;
@@ -76,7 +76,7 @@ public class HelpServiceImpl implements HelpService {
     @Override
     public Help queryHelp(QueryParam queryParam) {
         Help help = new Help();
-        help.setNotices(noticeDao.getHelp());
+        help.setNotices(noticeDao.queryHelp());
         return help;
     }
 

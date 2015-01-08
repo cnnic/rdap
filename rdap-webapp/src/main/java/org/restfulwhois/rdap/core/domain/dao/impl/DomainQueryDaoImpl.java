@@ -39,20 +39,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
-import org.restfulwhois.rdap.core.common.dao.SearchDao;
-import org.restfulwhois.rdap.core.common.model.Event;
-import org.restfulwhois.rdap.core.common.model.Link;
-import org.restfulwhois.rdap.core.common.model.PublicId;
-import org.restfulwhois.rdap.core.common.model.Remark;
-import org.restfulwhois.rdap.core.common.model.SecureDns;
-import org.restfulwhois.rdap.core.common.model.Variants;
-import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
+import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
+import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
+import org.restfulwhois.rdap.common.model.Event;
+import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.PublicId;
+import org.restfulwhois.rdap.common.model.Remark;
+import org.restfulwhois.rdap.common.model.SecureDns;
+import org.restfulwhois.rdap.common.model.Variants;
+import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.ArpaUtil;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.model.Domain.DomainType;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
@@ -84,7 +85,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     /**
      * left join domain status SQL.
      */
-    public static String SQL_LEFT_JOIN_DOMAIN_STATUS =
+    public static final String SQL_LEFT_JOIN_DOMAIN_STATUS =
             " left outer join RDAP_DOMAIN_STATUS status "
                     + " on domain.DOMAIN_ID = status.DOMAIN_ID ";
     /**
@@ -145,11 +146,13 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      */
     @Autowired
     private QueryDao<Entity> entityQueryDao;
-    
+
+    /**
+     * searchDao.
+     */
     @Autowired
     @Qualifier("domainSearchDaoImpl")
     private SearchDao<Domain> searchDao;
-
 
     /**
      * query domain (RIR or DNR).
@@ -177,7 +180,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return domain;
         }
     }
-    
+
     @Override
     public void queryAndSetInnerObjectsForSearch(List<Domain> domains) {
         if (null == domains) {
@@ -215,7 +218,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                 remarkQueryDao.queryAsInnerObjects(domainId, type);
         domain.setRemarks(remarks);
         List<Link> links = linkQueryDao.queryAsInnerObjects(domainId, type);
-        links.add(AutoGenerateSelfLink.generateSelfLink(domain));
+        links.add(SelfLinkGenerator.generateSelfLink(domain));
         domain.setLinks(links);
         List<Event> events = eventQueryDao.queryAsInnerObjects(domainId, type);
         domain.setEvents(events);
@@ -273,7 +276,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     private Domain queryArpaWithoutInnerObjects(QueryParam queryParam) {
 
         final String arpaName = queryParam.getQ();
-        final NetworkInBytes network = IpUtil.parseArpa(arpaName);
+        final NetworkInBytes network = ArpaUtil.parseArpa(arpaName);
         List<Domain> result = null;
         final int hexCharSize = IpUtil.getHexCharSize(network.getIpVersion());
         String sql =
@@ -384,17 +387,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             }
             return result;
         }
-    }
-
-    /**
-     * search domain using punyname or unicodeName, without inner objects.
-     * 
-     * @param params
-     *            query parameter include domain punyname.
-     * @return domain list.
-     */
-    private List<Domain> searchWithoutInnerObjects(final QueryParam queryParam) {
-        return searchDao.search(queryParam);
     }
 
 }

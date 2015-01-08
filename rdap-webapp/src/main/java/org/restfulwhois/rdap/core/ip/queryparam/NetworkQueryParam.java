@@ -33,17 +33,17 @@ package org.restfulwhois.rdap.core.ip.queryparam;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryUri;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpVersion;
+import org.restfulwhois.rdap.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.ip.validator.NetworkQueryValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * base query parameter bean.
+ * network query parameter bean.
  * 
  * @author jiashuo
  * @author weijunkai
@@ -88,7 +88,7 @@ public class NetworkQueryParam extends QueryParam {
     }
 
     /**
-     * generateQueryParam
+     * generateQueryParam.
      * 
      * @param cidr
      *            cidr.

@@ -32,7 +32,7 @@ package org.restfulwhois.rdap.search.entity.dao.strategy;
 
 import java.util.List;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByFnParam;
 import org.slf4j.Logger;
@@ -41,6 +41,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 /**
+ * search entity by fn.
  * 
  * @author jiashuo
  * 
@@ -54,6 +55,9 @@ public class EntitySearchByFnStrategy extends AbstractEntitySearchStrategy {
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(EntitySearchByFnStrategy.class);
 
+    /**
+     * SEARCH_COLUMN_NAME.
+     */
     private static final String SEARCH_COLUMN_NAME = "FN";
 
     @Override

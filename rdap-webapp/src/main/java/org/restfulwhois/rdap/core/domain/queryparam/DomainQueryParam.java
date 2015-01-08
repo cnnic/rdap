@@ -34,16 +34,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
-import org.restfulwhois.rdap.core.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryUri;
+import org.restfulwhois.rdap.common.util.DomainUtil;
+import org.restfulwhois.rdap.common.util.StringUtil;
+import org.restfulwhois.rdap.common.validation.Validator;
+import org.restfulwhois.rdap.core.domain.validator.DomainNameAlabelValidator;
 import org.restfulwhois.rdap.core.domain.validator.DomainNameValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * base query parameter bean.
+ * domain query parameter bean.
  * 
  * @author jiashuo
  * 
@@ -55,9 +57,15 @@ public class DomainQueryParam extends QueryParam {
     private static final DomainNameValidator DOMAIN_NAME_VALIDATOR =
             new DomainNameValidator();
     /**
+     * DOMAIN_NAME_ALABEL_VALIDATOR.
+     */
+    private static final Validator DOMAIN_NAME_ALABEL_VALIDATOR = 
+            new DomainNameAlabelValidator();
+    /**
      * logger.
      */
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DomainQueryParam.class);
 
     /**
      * domain puny name.
@@ -65,7 +73,7 @@ public class DomainQueryParam extends QueryParam {
     private String punyName;
 
     /**
-     * generateQueryParam
+     * generateQueryParam.
      * 
      * @param domainName
      *            domainName.
@@ -80,6 +88,7 @@ public class DomainQueryParam extends QueryParam {
 
     @Override
     protected void initValidators() {
+        addValidator(DOMAIN_NAME_ALABEL_VALIDATOR);
         addValidator(DOMAIN_NAME_VALIDATOR);
     }
 
@@ -87,9 +96,9 @@ public class DomainQueryParam extends QueryParam {
     public QueryUri getQueryUri() {
         return QueryUri.DOMAIN;
     }
-    
+
     /**
-     * construction.
+     * constructor.
      * 
      * @param request
      *            request.
@@ -171,10 +180,11 @@ public class DomainQueryParam extends QueryParam {
      * @return tld tld.
      */
     public String getFullPunyTld() {
-        if (StringUtils.isBlank(punyName)) {
+        String punyDomainName = DomainUtil.safeGeneDomainPunyName(super.getQ());
+        if (StringUtils.isBlank(punyDomainName)) {
             return null;
         }
-        String fullTld = StringUtils.substringAfter(punyName, ".");
+        String fullTld = StringUtils.substringAfter(punyDomainName, ".");
         if (StringUtils.isBlank(fullTld)) {
             return ".";
         }

@@ -31,19 +31,19 @@
 package org.restfulwhois.rdap.core.entity.queryparam;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryUri;
 import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 import org.restfulwhois.rdap.core.entity.model.EntitySearchType;
 import org.restfulwhois.rdap.core.entity.validator.EntitySearchValidator;
 
 /**
- * entity query parameter bean.
+ * base entity search parameter bean.
  * 
  * @author jiashuo
  * 
  */
-abstract public class EntitySearchParam extends QueryParam {
+public abstract class EntitySearchParam extends QueryParam {
 
     /**
      * check if support type.
@@ -57,7 +57,7 @@ abstract public class EntitySearchParam extends QueryParam {
     }
 
     /**
-     * construction.
+     * constructor.
      */
     public EntitySearchParam() {
         super();
