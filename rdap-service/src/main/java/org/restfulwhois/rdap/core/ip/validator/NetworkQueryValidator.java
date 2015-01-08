@@ -31,10 +31,10 @@
 package org.restfulwhois.rdap.core.ip.validator;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.model.IpVersion;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.util.IpUtil;
-import org.restfulwhois.rdap.common.util.IpVersion;
-import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.QueryValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
@@ -57,12 +57,12 @@ public class NetworkQueryValidator implements Validator {
             ValidationResult validationResult) {
         String cidr = queryParam.getQ();
         if (StringUtils.isBlank(cidr)) {
-            validationResult.addError(HttpValidationError.build400Error());
+            validationResult.addError(QueryValidationError.build400Error());
         }
         cidr = IpUtil.addNetworkMaskIfNotContainsMask(cidr);
         IpVersion ipVersion = IpUtil.getIpVersionOfNetwork(cidr);
         if (ipVersion.isNotValidIp()) {
-            validationResult.addError(HttpValidationError.build400Error());
+            validationResult.addError(QueryValidationError.build400Error());
         }
     }
 

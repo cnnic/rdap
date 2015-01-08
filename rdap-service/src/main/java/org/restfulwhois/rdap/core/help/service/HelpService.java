@@ -30,8 +30,8 @@
  */
 package org.restfulwhois.rdap.core.help.service;
 
+import org.restfulwhois.rdap.common.model.Help;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.core.help.model.Help;
 
 /**
  * help query service interface.

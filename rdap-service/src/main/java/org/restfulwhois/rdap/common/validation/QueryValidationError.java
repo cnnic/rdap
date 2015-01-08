@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,102 +28,83 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.ip.model;
+package org.restfulwhois.rdap.common.validation;
 
-import java.util.List;
-
-import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.springframework.http.HttpStatus;
 
 /**
- * IPAddress registrations found in RIRs and is the expected response for the
- * "/nameserver/" query as defined by [I-D.ietf-weirds-rdap-query].
+ * QueryValidationError.
  * 
- * @author weijunkai
+ * @author jiashuo
  * 
  */
-public class IPAddress extends BaseModel {
-
+public final class QueryValidationError implements ValidationError {
     /**
-     * the V4 IP address.
+     * statusCode.
      */
-    private List<String> ipAddressV4;
+    private HttpStatus statusCode;
 
     /**
-     * the V6 IP address.
-     */
-    private List<String> ipAddressV6;
-
-    /**
-     * an flag identity if the ipAddress existed.
-     */
-    @JsonIgnore
-    private boolean ipExisted;
-
-    /**
-     * get ip Address.
+     * constructor.
      * 
-     * @return ipAddress.
+     * @param statusCode
+     *            statusCode.
      */
-    public List<String> getAddressV4() {
-        return ipAddressV4;
+    private QueryValidationError(HttpStatus statusCode) {
+        super();
+        this.statusCode = statusCode;
     }
 
     /**
-     * set ip Address V4.
+     * build400Error.
      * 
-     * @param ipAddressV4
-     *            set the ipAddress V4.
+     * @return ValidationError.
      */
-    @JsonProperty("v4")
-    public void setAddressV4(List<String> ipAddressV4) {
-        this.ipAddressV4 = ipAddressV4;
+    public static ValidationError build400Error() {
+        return new QueryValidationError(HttpStatus.BAD_REQUEST);
     }
 
     /**
-     * get lowAddress.
+     * build403Error.
      * 
-     * @return lowAddress.
+     * @return ValidationError.
      */
-    public List<String> getAddressV6() {
-        return ipAddressV6;
+    public static ValidationError build403Error() {
+        return new QueryValidationError(HttpStatus.FORBIDDEN);
     }
 
     /**
-     * set ipAddressV6.
+     * build422Error.
      * 
-     * @param ipAddressV6
-     *            ipAddressV6.
+     * @return build422Error.
      */
-    @JsonProperty("v6")
-    public void setAddressV6(List<String> ipAddressV6) {
-        this.ipAddressV6 = ipAddressV6;
+    public static ValidationError build422Error() {
+        return new QueryValidationError(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     /**
-     * get ipExisted.
+     * statusCode.
      * 
-     * @return ipExisted.
+     * @return statusCode.
      */
-    public boolean getIpExisted() {
-        return ipExisted;
+    public HttpStatus getStatusCode() {
+        return statusCode;
     }
 
-    /**
-     * set ipExisted.
-     * 
-     * @param ipExisted
-     *            for nameserver.
-     */
-    public void setIpExisted(boolean ipExisted) {
-        this.ipExisted = ipExisted;
-    }
-    
     @Override
-    public ModelType getObjectType() {
-        return ModelType.IP;
+    public int getCode() {
+        return statusCode.value();
     }
+
+    @Override
+    public String getMessage() {
+        return statusCode.getReasonPhrase();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append(statusCode).toString();
+    }
+
 }

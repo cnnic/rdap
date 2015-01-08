@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,83 +28,24 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.validation;
+package org.restfulwhois.rdap.common.dao;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.springframework.http.HttpStatus;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 
 /**
- * HttpValidationError.
+ * update DAO interface.
  * 
+ * @param <T>
+ *            object driving from BaseModel.
  * @author jiashuo
  * 
  */
-public final class HttpValidationError implements ValidationError {
-    /**
-     * statusCode.
-     */
-    private HttpStatus statusCode;
+public interface UpdateDao<T extends BaseModel> {
 
-    /**
-     * constructor.
-     * 
-     * @param statusCode
-     *            statusCode.
-     */
-    private HttpValidationError(HttpStatus statusCode) {
-        super();
-        this.statusCode = statusCode;
-    }
+    T create(T model);
 
-    /**
-     * build400Error.
-     * 
-     * @return ValidationError.
-     */
-    public static ValidationError build400Error() {
-        return new HttpValidationError(HttpStatus.BAD_REQUEST);
-    }
+    void update(T model);
 
-    /**
-     * build403Error.
-     * 
-     * @return ValidationError.
-     */
-    public static ValidationError build403Error() {
-        return new HttpValidationError(HttpStatus.FORBIDDEN);
-    }
-
-    /**
-     * build422Error.
-     * 
-     * @return build422Error.
-     */
-    public static ValidationError build422Error() {
-        return new HttpValidationError(HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-
-    /**
-     * statusCode.
-     * 
-     * @return statusCode.
-     */
-    public HttpStatus getStatusCode() {
-        return statusCode;
-    }
-
-    @Override
-    public String getCode() {
-        return statusCode.name();
-    }
-
-    @Override
-    public String getMessage() {
-        return statusCode.getReasonPhrase();
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append(statusCode).toString();
-    }
+    void delete(T model);
 
 }

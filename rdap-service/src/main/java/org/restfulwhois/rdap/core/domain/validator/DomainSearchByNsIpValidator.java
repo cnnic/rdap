@@ -30,10 +30,10 @@
  */
 package org.restfulwhois.rdap.core.domain.validator;
 
+import org.restfulwhois.rdap.common.model.IpVersion;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.util.IpUtil;
-import org.restfulwhois.rdap.common.util.IpVersion;
-import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.QueryValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsIpParam;
@@ -59,7 +59,7 @@ public class DomainSearchByNsIpValidator implements Validator {
         String ip = queryParam.getQ();
         IpVersion ipVersion = IpUtil.getIpVersionOfIp(ip);
         if (ipVersion.isNotValidIp()) {
-            validationResult.addError(HttpValidationError.build400Error());
+            validationResult.addError(QueryValidationError.build400Error());
         }
     }
 

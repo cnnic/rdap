@@ -31,9 +31,9 @@
 package org.restfulwhois.rdap.core.nameserver.service.impl;
 
 import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

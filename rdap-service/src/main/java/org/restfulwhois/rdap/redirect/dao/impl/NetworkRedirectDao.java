@@ -37,8 +37,8 @@ import java.util.List;
 
 import org.restfulwhois.rdap.bootstrap.bean.NetworkRedirect;
 import org.restfulwhois.rdap.bootstrap.bean.Redirect;
+import org.restfulwhois.rdap.common.model.IpVersion;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.util.IpVersion;
 import org.restfulwhois.rdap.common.util.NetworkInBytes;
 import org.restfulwhois.rdap.core.ip.dao.impl.NetworkQueryDaoImpl;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;

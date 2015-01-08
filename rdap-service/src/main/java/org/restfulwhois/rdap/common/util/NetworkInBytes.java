@@ -31,6 +31,7 @@
 package org.restfulwhois.rdap.common.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.model.IpVersion;
 
 /**
  * 

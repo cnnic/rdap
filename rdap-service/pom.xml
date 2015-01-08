@@ -14,6 +14,12 @@
   <name>rdap-service</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+  		<!-- rdap-common -->
+		<dependency>
+			<groupId>org.restfulwhois.rdap</groupId>
+			<artifactId>rdap-common</artifactId>
+			<version>${rdap.version}</version>
+		</dependency>
 		<!-- mysql driver -->
 		<dependency>
 			<groupId>mysql</groupId>

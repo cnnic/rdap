@@ -28,13 +28,33 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.model;
+package org.restfulwhois.rdap.common.dao;
+
+import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * denotes information about the service providing RDAP information.
  * 
+ * @param <T>
+ *            object derived from BaseModel.
  * @author jiashuo
  * 
  */
-public class Notice extends BaseNotice {
+public abstract class AbstractUpdateDao<T extends BaseModel> implements
+        UpdateDao<T> {
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(AbstractUpdateDao.class);
+    /**
+     * JDBC template simplifies the use of JDBC and helps to avoid common
+     * errors.
+     */
+    @Autowired
+    protected JdbcTemplate jdbcTemplate;
+
 }

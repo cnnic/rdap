@@ -35,10 +35,10 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.util.StringUtil;
-import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.domain.service.DomainQueryService;
 import org.slf4j.Logger;

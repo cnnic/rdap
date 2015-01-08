@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.core.entity.model.jcard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.jcard.jcardconverter.JcardAddressConverter;
 import org.restfulwhois.rdap.core.entity.model.jcard.jcardconverter.JcardEmailConverter;
 import org.restfulwhois.rdap.core.entity.model.jcard.jcardconverter.JcardFnConverter;

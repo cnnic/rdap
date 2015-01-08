@@ -58,13 +58,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
         "id", "objectType" })
 public class BaseModel {
 
-    /**
-     * this prefix will be added to the front of properties in customProperties
-     * when serialized to JSON.
-     * <p>
-     * this value SHOULD end with '_', and NIC name is recommended as start.
-     */
-    public static final String CUSTOM_PROPERTY_PREFIX = "cnnic_";
+    private String customPropertyPrefix;
 
     /**
      * specifications used in the construction of the response.
@@ -135,7 +129,7 @@ public class BaseModel {
                 customPropertiesMap.entrySet().iterator(); it.hasNext();) {
             Entry<String, String> entry = it.next();
             if (null != entry.getValue()) {
-                result.put(CUSTOM_PROPERTY_PREFIX + entry.getKey(),
+                result.put(customPropertyPrefix + entry.getKey(),
                         entry.getValue());
             }
         }
@@ -306,6 +300,25 @@ public class BaseModel {
      */
     public void setCustomProperties(Map<String, String> customProperties) {
         this.customProperties = customProperties;
+    }
+
+    /**
+     * get customPropertyPrefix.
+     * 
+     * @return customPropertyPrefix.
+     */
+    public String getCustomPropertyPrefix() {
+        return customPropertyPrefix;
+    }
+
+    /**
+     * set customPropertyPrefix.
+     * 
+     * @param customPropertyPrefix
+     *            customPropertyPrefix.
+     */
+    public void setCustomPropertyPrefix(String customPropertyPrefix) {
+        this.customPropertyPrefix = customPropertyPrefix;
     }
 
 }
