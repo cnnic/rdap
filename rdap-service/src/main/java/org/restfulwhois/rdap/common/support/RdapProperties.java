@@ -50,6 +50,10 @@ import org.restfulwhois.rdap.common.util.StringUtil;
 public class RdapProperties {
 
     /**
+     * custom property prefix.
+     */
+    private static String customPropertyPrefix;
+    /**
      * max concurrent count.
      */
     private static Integer maxConcurrentCount;
@@ -363,6 +367,25 @@ public class RdapProperties {
      */
     public static void setNotImplementedUri(String notImplementedUri) {
         RdapProperties.notImplementedUri = notImplementedUri;
+    }
+
+    /**
+     * get customPropertyPrefix.
+     * 
+     * @return customPropertyPrefix.
+     */
+    public static String getCustomPropertyPrefix() {
+        return customPropertyPrefix;
+    }
+
+    /**
+     * set customPropertyPrefix.
+     * 
+     * @param customPropertyPrefix
+     *            customPropertyPrefix.
+     */
+    public void setCustomPropertyPrefix(String customPropertyPrefix) {
+        RdapProperties.customPropertyPrefix = customPropertyPrefix;
     }
 
 }

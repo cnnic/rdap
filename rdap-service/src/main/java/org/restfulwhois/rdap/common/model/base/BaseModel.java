@@ -38,6 +38,7 @@ import java.util.Map.Entry;
 
 import org.restfulwhois.rdap.common.model.Notice;
 import org.restfulwhois.rdap.common.support.QueryUri;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -58,14 +59,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonIgnoreProperties(value = {
         "id", "objectType" })
 public class BaseModel {
-
-    /**
-     * this prefix will be added to the front of properties in customProperties
-     * when serialized to JSON.
-     * <p>
-     * this value SHOULD end with '_', and NIC name is recommended as start.
-     */
-    public static final String CUSTOM_PROPERTY_PREFIX = "cnnic_";
 
     /**
      * specifications used in the construction of the response.
@@ -136,8 +129,9 @@ public class BaseModel {
                 customPropertiesMap.entrySet().iterator(); it.hasNext();) {
             Entry<String, String> entry = it.next();
             if (null != entry.getValue()) {
-                result.put(CUSTOM_PROPERTY_PREFIX + entry.getKey(),
-                        entry.getValue());
+                result.put(
+                        RdapProperties.getCustomPropertyPrefix()
+                                + entry.getKey(), entry.getValue());
             }
         }
         return result;

@@ -38,7 +38,7 @@ import java.util.Map;
 
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -65,12 +65,15 @@ public class BaseCustomModelTest {
         String entityJson = null;
         entityJson = mapper.writeValueAsString(entity);
         assertNotNull(entityJson);
-        assertThat(entityJson, new StringContains(
-                BaseModel.CUSTOM_PROPERTY_PREFIX + "key1"));
+        assertThat(entityJson,
+                new StringContains(RdapProperties.getCustomPropertyPrefix()
+                        + "key1"));
         assertThat(entityJson, StringContains.containsString("value1"));
         assertThat(entityJson, StringContains.containsString("entityHandle"));
-        assertThat(entityJson, StringContains.
-                containsString(BaseModel.CUSTOM_PROPERTY_PREFIX +"handle"));
+        assertThat(
+                entityJson,
+                StringContains.containsString(RdapProperties
+                        .getCustomPropertyPrefix() + "handle"));
     }
 
     @Test
