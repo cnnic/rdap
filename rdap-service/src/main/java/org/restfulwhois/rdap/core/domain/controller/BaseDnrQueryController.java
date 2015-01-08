@@ -28,88 +28,34 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.model.base;
+package org.restfulwhois.rdap.core.domain.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.restfulwhois.rdap.common.controller.BaseController;
+import org.restfulwhois.rdap.common.filter.QueryFilter;
+import org.springframework.stereotype.Controller;
 
 /**
- * model type.
+ * Base query Controller for DNR object, such as domain,nameserver.
  * 
  * @author jiashuo
  * 
  */
-public enum ModelType {
-    /**
-     * base model.
-     */
-    BASE("base"),
-    /**
-     * model type.
-     */
-    SEARCH("search"), VARIANT("variant"), ERRORMESSAGE("errorMessage"),
-    /**
-     * 5 main object model.
-     */
-    DOMAIN("domain"), ENTITY("entity"), NAMESERVER("nameServer"), AUTNUM(
-            "autnum"),
-    /**
-     * help ip event link publicId type.
-     */
-    HELP("help"), IP("ip"), EVENT("event"), LINK("link"), PUBLICID("publicId"),
-    /**
-     * remark notice secureDns type.
-     */
-    REMARK("remark"), NOTICE("notice"), SECUREDNS("secureDns"),
-    /**
-     * ds type.
-     */
-    DSDATA("dsData"), KEYDATA("keyData");
-    /**
-     * name of model type.
-     */
-    private String name;
+@Controller
+public class BaseDnrQueryController extends BaseController {
 
     /**
-     * constructor.
-     * 
-     * @param name
-     *            name.
+     * queryFilters.
      */
-    private ModelType(String name) {
-        this.name = name;
+    @Resource(name = "domainOrNsQueryFilters")
+    private List<QueryFilter> queryFilters;
+
+    @Override
+    protected List<QueryFilter> getQueryFilters() {
+        return queryFilters;
     }
 
-    /**
-     * get model type be name.
-     * 
-     * @param name
-     *            name.
-     * @return model ModelType.
-     */
-    public static ModelType getModelType(String name) {
-        ModelType[] modelTypes = ModelType.values();
-        for (ModelType modelType : modelTypes) {
-            if (modelType.getName().equals(name)) {
-                return modelType;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * get type name.
-     * 
-     * @return type name.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * set type name.
-     * 
-     * @param name
-     *            type name.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
 }

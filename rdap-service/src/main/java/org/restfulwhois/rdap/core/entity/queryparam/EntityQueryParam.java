@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.restfulwhois.rdap.common.model.base.QueryUri;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.support.QueryUri;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.core.entity.validator.EntityQueryValidator;
 

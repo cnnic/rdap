@@ -35,8 +35,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.dao.impl.NameserverQueryDaoImpl;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
 import org.springframework.jdbc.core.ResultSetExtractor;
 

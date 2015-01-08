@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.core.entity.model.jcard;
 
-import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.common.model.Entity;
 
 import ezvcard.VCard;
 

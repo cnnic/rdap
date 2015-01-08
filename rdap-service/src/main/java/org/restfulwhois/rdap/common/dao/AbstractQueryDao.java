@@ -43,6 +43,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.slf4j.Logger;
@@ -211,11 +212,15 @@ public abstract class AbstractQueryDao<T extends BaseModel> implements
      */
     protected static void extractCustomPropertiesFromRs(ResultSet rs,
             BaseModel model) throws SQLException {
+        LOGGER.debug("extractCustomPropertiesFromRs,prefix:{}",
+                RdapProperties.getCustomPropertyPrefix());
         try {
             String customPropertiesJSON = rs.getString("CUSTOM_PROPERTIES");
             Map<String, String> customProperties =
                     JsonUtil.deserializeJsonToMap(customPropertiesJSON);
             model.setCustomProperties(customProperties);
+            model.setCustomPropertyPrefix(RdapProperties
+                    .getCustomPropertyPrefix());
         } catch (Exception e) {
             LOGGER.error(
                     "extractCustomPropertiesFromRs error, not handle custom properties:{}",

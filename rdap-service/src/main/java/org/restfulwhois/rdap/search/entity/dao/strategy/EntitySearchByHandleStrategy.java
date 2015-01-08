@@ -32,8 +32,8 @@ package org.restfulwhois.rdap.search.entity.dao.strategy;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.queryparam.EntitySearchByHandleParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

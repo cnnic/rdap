@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.exception.DecodeException;
-import org.restfulwhois.rdap.common.support.QueryUri;
+import org.restfulwhois.rdap.common.model.base.QueryUri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

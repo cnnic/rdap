@@ -28,92 +28,73 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.util;
+package org.restfulwhois.rdap.common.validation;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import org.springframework.http.HttpStatus;
 
 /**
- * IpVersion.
+ * ServiceErrorCode.
  * 
  * @author jiashuo
  * 
  */
-public enum IpVersion {
-    /**
-     * The representation of IPv4 addresses in this document uses the
-     * dotted-decimal notation described in [RFC1166]. The representation of
-     * IPv6 addresses in this document follow the forms outlined in
-     * [RFC5952].
-     */
-    INVALID("invalid"), V4("v4"), V6("v6");
-    /**
-     * a string signifying the IP protocol version of the network: "v4"
-     * signifying an IPv4 network, "v6" signifying an IPv6 network.
-     */
-    private String name;
+public enum ServiceErrorCode {
 
-    /**
-     * check if is ipv6.
-     * 
-     * @return true if is, false if not.
-     */
-    public boolean isV4() {
-        return V4.equals(this);
+    ERROR_4002(4002, "Property can’t be empty:%s", HttpStatus.BAD_REQUEST);
+
+    private final int code;
+
+    private final String message;
+
+    private HttpStatus httpStatus;
+
+    private ServiceErrorCode(int value, String message, HttpStatus httpStatus) {
+        this.code = value;
+        this.message = message;
+        this.httpStatus = httpStatus;
+    }
+
+    public HttpStatus getStatusCode() {
+        return httpStatus;
+    }
+
+    public void setStatusCode(HttpStatus statusCode) {
+        this.httpStatus = statusCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getCode() {
+        return code;
     }
 
     /**
-     * check if is ipv6.
-     * 
-     * @return true if is, false if not.
+     * Return a string representation of this status code.
      */
-    public boolean isV6() {
-        return V6.equals(this);
+    @Override
+    public String toString() {
+        return Integer.toString(code);
     }
 
     /**
-     * check if is invalid.
+     * Return the enum constant of this type with the specified numeric code.
      * 
-     * @return true if is invalid, false if not.
+     * @param httpStatus
+     *            the numeric code of the enum to be returned
+     * @return the enum constant with the specified numeric code
+     * @throws IllegalArgumentException
+     *             if this enum has no constant for the specified numeric code
      */
-    public boolean isNotValidIp() {
-        return INVALID.equals(this);
-    }
-
-    /**
-     * default constructor.
-     * 
-     * @param name
-     *            ip version name.
-     */
-    private IpVersion(String name) {
-        this.name = name;
-    }
-
-    /**
-     * get name.
-     * 
-     * @return name.
-     */
-    @JsonValue
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * get IpVersion by name.
-     * 
-     * @param name
-     *            name.
-     * @return IpVersion if name is valid, null if not
-     */
-    public static IpVersion getIpVersion(String name) {
-        IpVersion[] ipVersions = IpVersion.values();
-        for (IpVersion ipVersion : ipVersions) {
-            if (ipVersion.getName().equalsIgnoreCase(name)) {
-                return ipVersion;
+    public static ServiceErrorCode valueOf(int statusCode) {
+        for (ServiceErrorCode status : values()) {
+            if (status.code == statusCode) {
+                return status;
             }
         }
-        return null;
+        throw new IllegalArgumentException("No matching constant for ["
+                + statusCode + "]");
     }
 
 }

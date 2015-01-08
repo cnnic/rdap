@@ -43,8 +43,8 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.QueryParamHelper;
 import org.restfulwhois.rdap.common.dao.QueryDao;
-import org.restfulwhois.rdap.core.autnum.model.Autnum;
-import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.common.model.Autnum;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 

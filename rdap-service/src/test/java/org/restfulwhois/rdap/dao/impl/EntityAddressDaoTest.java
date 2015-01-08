@@ -37,9 +37,9 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.common.model.Entity;
+import org.restfulwhois.rdap.common.model.EntityAddress;
 import org.restfulwhois.rdap.core.entity.dao.impl.EntityAddressDao;
-import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.entity.model.EntityAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;

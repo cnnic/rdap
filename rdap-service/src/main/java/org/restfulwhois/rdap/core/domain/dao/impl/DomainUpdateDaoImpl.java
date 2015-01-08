@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- * 
+ *
  * All rights reserved.
- *  
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  
+ *
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,61 +28,42 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
+package org.restfulwhois.rdap.core.domain.dao.impl;
 
-package org.restfulwhois.rdap.common.model;
+import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
+import org.restfulwhois.rdap.common.model.Domain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 /**
- * relation between domain and variant.
- * 
  * @author jiashuo
  * 
  */
-public class RelDomainVariant {
+@Repository
+public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
+    /**
+     * logger.
+     */
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(DomainUpdateDaoImpl.class);
 
-    /**
-     * variant id.
-     */
-    private Long variantId;
-    /**
-     * variant type.
-     */
-    private String variantType;
-
-    /**
-     * get variant id.
-     * 
-     * @return variant id.
-     */
-    public Long getVariantId() {
-        return variantId;
+    @Override
+    public Domain create(Domain model) {
+        // TODO Auto-generated method stub
+        return model;
     }
 
-    /**
-     * set variant id.
-     * 
-     * @param variantId
-     *            variant id.
-     */
-    public void setVariantId(Long variantId) {
-        this.variantId = variantId;
+    @Override
+    public void update(Domain model) {
+        // TODO Auto-generated method stub
+
     }
 
-    /**
-     * get variantType.
-     * 
-     * @return variantType.
-     */
-    public String getVariantType() {
-        return variantType;
+    @Override
+    public void delete(Domain model) {
+        // TODO Auto-generated method stub
+
     }
 
-    /**
-     * set variantType.
-     * 
-     * @param variantType
-     *            variantType.
-     */
-    public void setVariantType(String variantType) {
-        this.variantType = variantType;
-    }
 }
