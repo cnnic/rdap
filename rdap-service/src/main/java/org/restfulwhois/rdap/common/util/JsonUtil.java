@@ -30,6 +30,7 @@
  */
 package org.restfulwhois.rdap.common.util;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -55,6 +56,11 @@ public class JsonUtil {
             .getLogger(JsonUtil.class);
 
     /**
+     * objectMapper.
+     */
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
      * deserialize JSON to map.
      * 
      * @param restResponse
@@ -68,7 +74,6 @@ public class JsonUtil {
             return result;
         }
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             result =
                     objectMapper.readValue(JSON,
                             new TypeReference<LinkedHashMap<String, String>>() {
@@ -77,6 +82,11 @@ public class JsonUtil {
             LOGGER.error("deserializateJsonToMap error:{}", e);
         }
         return result;
+    }
+
+    public static String serializeMap(Map<String, String> map)
+            throws IOException {
+        return objectMapper.writeValueAsString(map);
     }
 
 }

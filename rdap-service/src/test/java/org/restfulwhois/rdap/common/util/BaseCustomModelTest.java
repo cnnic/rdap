@@ -59,6 +59,7 @@ public class BaseCustomModelTest {
         Map<String, String> customProperties =
                 new LinkedHashMap<String, String>();
         entity.setCustomProperties(customProperties);
+        entity.setCustomPropertyPrefix(RdapProperties.getCustomPropertyPrefix());
         customProperties.put("key1", "value1");
         customProperties.put("handle", "customHandle");
         ObjectMapper mapper = new ObjectMapper();
