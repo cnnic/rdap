@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.common.util;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -84,9 +83,16 @@ public class JsonUtil {
         return result;
     }
 
-    public static String serializeMap(Map<String, String> map)
-            throws IOException {
-        return objectMapper.writeValueAsString(map);
+    public static String serializeMap(Map<String, String> map) {
+        if (null == map) {
+            return null;
+        }
+        try {
+            return objectMapper.writeValueAsString(map);
+        } catch (Exception e) {
+            LOGGER.error("serializeMap error:{}", e);
+            return null;
+        }
     }
 
 }

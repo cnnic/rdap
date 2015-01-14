@@ -48,4 +48,6 @@ public interface UpdateDao<T extends BaseModel> {
 
     void delete(T model);
 
+    Long findIdByHandle(String handle);
+
 }
