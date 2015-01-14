@@ -30,20 +30,67 @@
  */
 package org.restfulwhois.rdap.common.dto;
 
+import java.util.List;
+
 /**
  * 
  * @author jiashuo
  * 
  */
 public class DomainDto extends BaseDto {
-    private String domainName;
+    private String ldhName;
+    private String unicodeName;
+    private String type;
+    private List<String> status;
+    private String networkHandle;
+    private String port43;
 
-    public String getDomainName() {
-        return domainName;
+    public String getLdhName() {
+        return ldhName;
     }
 
-    public void setDomainName(String domainName) {
-        this.domainName = domainName;
+    public void setLdhName(String ldhName) {
+        this.ldhName = ldhName;
+    }
+
+    public String getUnicodeName() {
+        return unicodeName;
+    }
+
+    public void setUnicodeName(String unicodeName) {
+        this.unicodeName = unicodeName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public List<String> getStatus() {
+        return status;
+    }
+
+    public void setStatus(List<String> status) {
+        this.status = status;
+    }
+
+    public String getNetworkHandle() {
+        return networkHandle;
+    }
+
+    public void setNetworkHandle(String networkHandle) {
+        this.networkHandle = networkHandle;
+    }
+
+    public String getPort43() {
+        return port43;
+    }
+
+    public void setPort43(String port43) {
+        this.port43 = port43;
     }
 
 }
