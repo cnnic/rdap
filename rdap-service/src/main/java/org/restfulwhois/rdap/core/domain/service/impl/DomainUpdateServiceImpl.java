@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,60 +28,61 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.validation;
+package org.restfulwhois.rdap.core.domain.service.impl;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Domain.DomainType;
+import org.restfulwhois.rdap.common.service.AbstractUpdateService;
+import org.restfulwhois.rdap.common.validation.ValidationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * UpdateValidationError.
+ * update service implementation.
  * 
  * @author jiashuo
  * 
  */
-public final class UpdateValidationError implements ValidationError {
-    private int httpStatusCode;
-    private int errorCode;
-    private String description;
+@Service("domainUpdateServiceImpl")
+public class DomainUpdateServiceImpl extends
+        AbstractUpdateService<DomainDto, Domain> {
 
-    public UpdateValidationError(ServiceErrorCode error,
-            String errorMessageParam) {
-        super();
-        this.httpStatusCode = error.getStatusCode().value();
-        this.errorCode = error.getCode();
-        this.description = String.format(error.getMessage(), errorMessageParam);
-    }
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DomainUpdateServiceImpl.class);
+    /**
+     * domain DAO.
+     */
+    @Autowired
+    private UpdateDao<Domain> domainDao;
 
-    public static ValidationError build4002Error(String errorMessageParam) {
-        return new UpdateValidationError(ServiceErrorCode.ERROR_4002,
-                errorMessageParam);
-    }
-
-    public static ValidationError build4091Error(String errorMessageParam) {
-        return new UpdateValidationError(ServiceErrorCode.ERROR_4091,
-                errorMessageParam);
-    }
-
-    public int getHttpStatusCode() {
-        return httpStatusCode;
-    }
-
-    public void setHttpStatusCode(int httpStatusCode) {
-        this.httpStatusCode = httpStatusCode;
+    @Override
+    protected void execute(Domain domain) {
+        domainDao.create(domain);
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this).append(errorCode).toString();
+    protected Domain convertDtoToModel(DomainDto dto) {
+        Domain domain = new Domain();
+        domain.setType(DomainType.getByTypeName(dto.getType()));
+        domain.setLdhName(dto.getLdhName());
+        domain.setHandle(dto.getHandle());
+        super.convertCustomProperties(dto, domain);
+        return domain;
     }
 
     @Override
-    public int getCode() {
-        return errorCode;
-    }
-
-    @Override
-    public String getMessage() {
-        return description;
+    protected ValidationResult validate(DomainDto domainDto) {
+        ValidationResult validationResult = new ValidationResult();
+        checkNotEmpty(domainDto.getLdhName(), "ldhName", validationResult);
+        checkNotEmpty(domainDto.getType(), "type", validationResult);
+        return validationResult;
     }
 
 }

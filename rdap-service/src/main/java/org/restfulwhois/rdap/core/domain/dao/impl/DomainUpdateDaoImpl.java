@@ -30,10 +30,14 @@
  */
 package org.restfulwhois.rdap.core.domain.dao.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -42,6 +46,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
+    private static final String SQL_CREATE_DOMAIN =
+            "INSERT INTO RDAP_DOMAIN"
+                    + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"
+                    + " values(?,?,?,?,?,?,?,?)";
     /**
      * logger.
      */
@@ -49,9 +57,24 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
             .getLogger(DomainUpdateDaoImpl.class);
 
     @Override
-    public Domain create(Domain model) {
-        // TODO Auto-generated method stub
+    public Domain create(final Domain model) {
+        jdbcTemplate.update(SQL_CREATE_DOMAIN, generatePrepStatement(model));
         return model;
+    }
+
+    private PreparedStatementSetter generatePrepStatement(final Domain model) {
+        return new PreparedStatementSetter() {
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, model.getHandle());
+                ps.setString(2, model.getLdhName());
+                ps.setString(3, model.getUnicodeName());
+                ps.setString(4, model.getPort43());
+                ps.setString(5, model.getLang());
+                ps.setString(6, model.getType().getName());
+                ps.setObject(7, model.getNetworkId());
+                ps.setString(8, model.getCustomPropertiesJsonVal());
+            }
+        };
     }
 
     @Override
@@ -64,6 +87,11 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
     public void delete(Domain model) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public Long findIdByHandle(String handle) {
+        return super.findIdByHandle(handle, "DOMAIN_ID", "RDAP_DOMAIN");
     }
 
 }
