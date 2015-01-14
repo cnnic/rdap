@@ -30,24 +30,18 @@
  */
 package org.restfulwhois.rdap.core.domain.service.impl;
 
-import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * query service implementation.
- * 
- * RdapController's main query service for querying or searching.
- * 
- * Provide the all tlds to be supported
- * 
- * Requirement from http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
+ * create service implementation.
  * 
  * @author jiashuo
  * 
@@ -61,29 +55,51 @@ public class DomainCreateServiceImpl extends
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainCreateServiceImpl.class);
-    /**
-     * domain DAO.
-     */
-    @Autowired
-    private UpdateDao<Domain> domainDao;
 
     @Override
-    protected void doCreate(Domain domain) {
-        domainDao.create(domain);
+    protected void execute(Domain domain) {
+        dao.create(domain);
     }
 
     @Override
     protected Domain convertDtoToModel(DomainDto dto) {
         Domain domain = new Domain();
-        domain.setLdhName(dto.getDomainName());
+        domain.setType(DomainType.getByTypeName(dto.getType()));
         domain.setHandle(dto.getHandle());
-        return null;
+        domain.setLdhName(dto.getLdhName());
+        domain.setUnicodeName(dto.getUnicodeName());
+        domain.setStatus(dto.getStatus());
+        domain.setPort43(dto.getPort43());
+        setNetworkHandle(dto, domain);
+        super.convertCustomProperties(dto, domain);
+        return domain;
+    }
+
+    /**
+     * set network handle to domain.
+     * 
+     * @param dto
+     *            dto.
+     * @param domain
+     *            domain.
+     */
+    private void setNetworkHandle(DomainDto dto, Domain domain) {
+        if (StringUtils.isBlank(dto.getNetworkHandle())) {
+            return;
+        }
+        Long networkId = dao.findIdByHandle(dto.getNetworkHandle());
+        if (null != networkId) {
+            domain.setNetworkId(networkId);
+        }
     }
 
     @Override
     protected ValidationResult validate(DomainDto domainDto) {
         ValidationResult validationResult = new ValidationResult();
-        checkNotEmpty(domainDto.getDomainName(), "domainName", validationResult);
+        checkNotEmpty(domainDto.getType(), "type", validationResult);
+        checkNotEmpty(domainDto.getLdhName(), "ldhName", validationResult);
+        checkNotEmpty(domainDto.getHandle(), "handle", validationResult);
+        checkHandleExistForCreate(domainDto.getHandle(), validationResult);
         return validationResult;
     }
 

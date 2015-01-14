@@ -30,15 +30,20 @@
  */
 package org.restfulwhois.rdap.common.service;
 
+import java.util.Map;
+
+import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * abstract update service.
@@ -54,6 +59,10 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     private static final Logger LOGGER = LoggerFactory
             .getLogger(AbstractUpdateService.class);
 
+    @Autowired
+    protected UpdateDao<MODEL> dao;
+
+    @Override
     public UpdateResponse execute(DTO dto) {
         LOGGER.info("begin update dto:{}", dto);
         long queryStart = System.currentTimeMillis();
@@ -62,7 +71,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             return handleError(dto, validationResult);
         }
         MODEL model = convertDtoToModel(dto);
-        doCreate(model);
+        execute(model);
         UpdateResponse response =
                 UpdateResponse.buildSuccessResponse(model.getHandle());
         long usedTime = System.currentTimeMillis() - queryStart;
@@ -70,19 +79,31 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         return response;
     }
 
-    abstract protected void doCreate(MODEL model);
+    abstract protected void execute(MODEL model);
 
     abstract protected MODEL convertDtoToModel(DTO dto);
 
     abstract protected ValidationResult validate(DTO dto);
 
     protected void convertCustomProperties(DTO dto, MODEL model) {
-        model.setCustomProperties(dto.getCustomProperties());
+        Map<String, String> customProperties = dto.getCustomProperties();
+        model.setCustomProperties(customProperties);
+        model.setCustomPropertiesJsonVal(JsonUtil
+                .serializeMap(customProperties));
     }
 
     protected void checkNotEmpty(String value, String fieldName,
             ValidationResult validationResult) {
         UpdateValidateUtil.checkNotEmpty(value, fieldName, validationResult);
+    }
+
+    protected void checkHandleExistForCreate(String handle,
+            ValidationResult validationResult) {
+        Long id = dao.findIdByHandle(handle);
+        if (null != id) {
+            validationResult.addError(UpdateValidationError
+                    .build4091Error(handle));
+        }
     }
 
     private UpdateResponse handleError(BaseDto dto,

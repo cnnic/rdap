@@ -40,7 +40,8 @@ import org.springframework.http.HttpStatus;
  */
 public enum ServiceErrorCode {
 
-    ERROR_4002(4002, "Property can’t be empty:%s", HttpStatus.BAD_REQUEST);
+    ERROR_4002(4002, "Property can’t be empty:%s", HttpStatus.BAD_REQUEST),
+    ERROR_4091(4002, "Object already exist for handle:%s", HttpStatus.BAD_REQUEST);
 
     private final int code;
 

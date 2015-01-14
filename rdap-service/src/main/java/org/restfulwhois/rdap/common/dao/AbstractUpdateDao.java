@@ -45,6 +45,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public abstract class AbstractUpdateDao<T extends BaseModel> implements
         UpdateDao<T> {
+    private static final String TPL_COUNT_BY_HANDLE =
+            "SELECT %s from %s where HANDLE = '%s'";
     /**
      * logger.
      */
@@ -56,5 +58,15 @@ public abstract class AbstractUpdateDao<T extends BaseModel> implements
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
+
+    protected Long findIdByHandle(String handle, String idColumnName,
+            String tableName) {
+        String sql =
+                String.format(TPL_COUNT_BY_HANDLE, idColumnName, tableName,
+                        handle);
+        LOGGER.debug("check handle exist,sql:{}", sql);
+        Long id = jdbcTemplate.queryForObject(sql, Long.class);
+        return id;
+    }
 
 }

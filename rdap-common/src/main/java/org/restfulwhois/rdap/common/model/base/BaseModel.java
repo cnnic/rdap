@@ -91,6 +91,9 @@ public class BaseModel {
     private Map<String, String> customProperties =
             new LinkedHashMap<String, String>();
 
+    @JsonIgnore
+    private String customPropertiesJsonVal;
+    
     /**
      * add custom property.
      * 
@@ -321,4 +324,12 @@ public class BaseModel {
         this.customPropertyPrefix = customPropertyPrefix;
     }
 
+    public String getCustomPropertiesJsonVal() {
+        return customPropertiesJsonVal;
+    }
+
+    public void setCustomPropertiesJsonVal(String customPropertiesJsonVal) {
+        this.customPropertiesJsonVal = customPropertiesJsonVal;
+    }
+    
 }

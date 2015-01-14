@@ -75,12 +75,18 @@ public class HttpRequestFilter implements HttpFilter {
     /**
      * allow methods.
      */
-    private static final List<String> ALLOW_METHODS = new ArrayList<String>();
+    private static final List<String> QUERY_ALLOW_METHODS =
+            new ArrayList<String>();
+    private static final List<String> UPDATE_ALLOW_METHODS =
+            new ArrayList<String>();
     /**
      * init allow methods.
      */
     static {
-        ALLOW_METHODS.add("GET");
+        QUERY_ALLOW_METHODS.add("GET");
+        UPDATE_ALLOW_METHODS.add("POST");
+        UPDATE_ALLOW_METHODS.add("PUT");
+        UPDATE_ALLOW_METHODS.add("DELETE");
         SUPPORTED_MEDIA_TYPE.add(new MediaType("application", "rdap+json"));
         SUPPORTED_MEDIA_TYPE.add(new MediaType("application", "json"));
     }
@@ -179,8 +185,25 @@ public class HttpRequestFilter implements HttpFilter {
      */
     private boolean httpMethodIsValid(HttpServletRequest request) {
         String method = request.getMethod();
-        boolean httpMethodIsValid = ALLOW_METHODS.contains(method);
-        return httpMethodIsValid;
+        String uri = request.getRequestURI();
+        if (isUpdateUri(uri)) {
+            boolean httpMethodIsValid = UPDATE_ALLOW_METHODS.contains(method);
+            return httpMethodIsValid;
+        } else {
+            boolean httpMethodIsValid = QUERY_ALLOW_METHODS.contains(method);
+            return httpMethodIsValid;
+        }
+    }
+
+    /**
+     * is update URI.
+     * 
+     * @param uri
+     *            uri.
+     * @return true if is update uri.
+     */
+    private boolean isUpdateUri(String uri) {
+        return StringUtils.startsWith(uri, "/u/");
     }
 
     /**
