@@ -30,11 +30,19 @@
  */
 package org.restfulwhois.rdap.common.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 
 /**
  * 
@@ -46,7 +54,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public abstract class AbstractUpdateDao<T extends BaseModel> implements
         UpdateDao<T> {
     private static final String TPL_COUNT_BY_HANDLE =
-            "SELECT %s from %s where HANDLE = '%s'";
+            "SELECT %s as ID from %s where HANDLE = ?";
     /**
      * logger.
      */
@@ -59,14 +67,26 @@ public abstract class AbstractUpdateDao<T extends BaseModel> implements
     @Autowired
     protected JdbcTemplate jdbcTemplate;
 
-    protected Long findIdByHandle(String handle, String idColumnName,
+    protected Long findIdByHandle(final String handle, String idColumnName,
             String tableName) {
-        String sql =
-                String.format(TPL_COUNT_BY_HANDLE, idColumnName, tableName,
-                        handle);
+        final String sql =
+                String.format(TPL_COUNT_BY_HANDLE, idColumnName, tableName);
         LOGGER.debug("check handle exist,sql:{}", sql);
-        Long id = jdbcTemplate.queryForObject(sql, Long.class);
-        return id;
+        List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setString(1, handle);
+                return ps;
+            }
+        }, new RowMapper<Long>() {
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong("ID");
+            }
+        });
+        if (ids.size() > 0) {
+            return ids.get(0);
+        }
+        return null;
     }
-
 }

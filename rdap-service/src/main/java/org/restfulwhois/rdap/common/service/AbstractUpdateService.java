@@ -94,11 +94,17 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void checkNotEmpty(String value, String fieldName,
             ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
         UpdateValidateUtil.checkNotEmpty(value, fieldName, validationResult);
     }
 
     protected void checkHandleExistForCreate(String handle,
             ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
         Long id = dao.findIdByHandle(handle);
         if (null != id) {
             validationResult.addError(UpdateValidationError
