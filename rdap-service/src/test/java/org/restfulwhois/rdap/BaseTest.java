@@ -94,6 +94,9 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 @Transactional
 public abstract class BaseTest {
 
+    private static final String DEFAULT_RELATIVATE_DATAFILE_PATH =
+            "org/restfulwhois/rdap/dao/impl/";
+
     /**
      * defaultMaxSizeSearch.
      */
@@ -190,7 +193,8 @@ public abstract class BaseTest {
      *             Exception.
      */
     protected static IDataSet getDeleteAllTableRowsDataSet() throws Exception {
-        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/teardown.xml";
+        String dataSetFilePath =
+                DEFAULT_RELATIVATE_DATAFILE_PATH + "teardown.xml";
         return getDataSet(dataSetFilePath);
     }
 
@@ -202,7 +206,8 @@ public abstract class BaseTest {
      *             Exception.
      */
     protected static IDataSet getInitDataSet() throws Exception {
-        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/initData.xml";
+        String dataSetFilePath =
+                DEFAULT_RELATIVATE_DATAFILE_PATH + "initData.xml";
         return getDataSet(dataSetFilePath);
     }
 
@@ -358,7 +363,7 @@ public abstract class BaseTest {
      * @param dataFile
      */
     protected void databaseSetupWithBinaryColumns(String dataFile) {
-        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/" + dataFile;
+        String dataSetFilePath = DEFAULT_RELATIVATE_DATAFILE_PATH + dataFile;
         IDataSet dataSet;
         try {
             dataSet = getDataSet(dataSetFilePath);
@@ -385,16 +390,18 @@ public abstract class BaseTest {
         IDataSet databaseDataSet = connection.createDataSet();
         URL url =
                 BaseTest.class.getClassLoader().getResource(
-                        expectedDataSetFilePath);
+                        DEFAULT_RELATIVATE_DATAFILE_PATH
+                                + expectedDataSetFilePath);
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
         IDataSet expectedDataSet =
                 builder.build(new FileInputStream(url.getPath()));
         for (String tableName : tableNames) {
             ITable expectedTable = expectedDataSet.getTable(tableName);
             ITable actualTable = databaseDataSet.getTable(tableName);
-            ITable filteredTable = DefaultColumnFilter.includedColumnsTable(actualTable, 
-                    expectedTable.getTableMetaData().getColumns());
-            Assertion.assertEquals(expectedTable, filteredTable); 
+            ITable filteredTable =
+                    DefaultColumnFilter.includedColumnsTable(actualTable,
+                            expectedTable.getTableMetaData().getColumns());
+            Assertion.assertEquals(expectedTable, filteredTable);
 
         }
     }
