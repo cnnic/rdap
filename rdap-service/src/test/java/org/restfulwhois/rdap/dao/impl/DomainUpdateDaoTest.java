@@ -54,7 +54,11 @@ public class DomainUpdateDaoTest extends BaseTest {
     @Test
     @DatabaseSetup("teardown.xml")
     @DatabaseTearDown("teardown.xml")
-    public void testQueryExistDomain() throws Exception {
+    // @ExpectedDatabase(
+            // assertionMode = DatabaseAssertionMode.NON_STRICT,
+            // value = "classpath:/org/restfulwhois/rdap/dao/impl/domain-update.xml")
+    public
+            void testQueryExistDomain() throws Exception {
         Domain domain = new Domain();
         domain.setHandle("h1");
         domain.setLdhName("cnnic.cn");
@@ -63,9 +67,7 @@ public class DomainUpdateDaoTest extends BaseTest {
         domain.setLang("zh");
         domain.setType(DomainType.DNR);
         updateDao.create(domain);
-        super.assertTablesForUpdate(
-                "org/restfulwhois/rdap/dao/impl/domain-update.xml",
-                TABLE_RDAP_DOMAIN);
+        super.assertTablesForUpdate("domain-update.xml", TABLE_RDAP_DOMAIN);
     }
 
 }
