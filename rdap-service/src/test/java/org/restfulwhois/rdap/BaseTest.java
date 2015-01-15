@@ -39,6 +39,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang.StringUtils;
+import org.dbunit.Assertion;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
@@ -49,6 +50,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
@@ -106,13 +108,13 @@ public abstract class BaseTest {
      * connection.
      */
     private static IDatabaseConnection connection;
-    
+
     @Autowired
     private RdapConformanceService rdapConformanceService;
-    
+
     @Autowired
     private NoticeService noticeService;
-    
+
     @Autowired
     private RemarkService remarkService;
 
@@ -373,6 +375,28 @@ public abstract class BaseTest {
      */
     protected QueryDataSet getEmptyDataSet() {
         return new QueryDataSet(connection);
+    }
+
+    protected void assertTablesForUpdate(String expectedDataSetFilePath,
+            String... tableNames) throws Exception {
+        if (null == tableNames || tableNames.length == 0) {
+            return;
+        }
+        IDataSet databaseDataSet = connection.createDataSet();
+        URL url =
+                BaseTest.class.getClassLoader().getResource(
+                        expectedDataSetFilePath);
+        FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+        IDataSet expectedDataSet =
+                builder.build(new FileInputStream(url.getPath()));
+        for (String tableName : tableNames) {
+            ITable expectedTable = expectedDataSet.getTable(tableName);
+            ITable actualTable = databaseDataSet.getTable(tableName);
+            ITable filteredTable = DefaultColumnFilter.includedColumnsTable(actualTable, 
+                    expectedTable.getTableMetaData().getColumns());
+            Assertion.assertEquals(expectedTable, filteredTable); 
+
+        }
     }
 
 }

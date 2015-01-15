@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_DOMAIN HANDLE='h1' LDH_NAME='cnnic.cn' UNICODE_NAME='cnnic.cn'
+		PORT43='port43' LANG='zh' TYPE='dnr'/>
+</dataset>
