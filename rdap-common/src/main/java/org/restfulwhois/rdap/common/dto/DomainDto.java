@@ -44,6 +44,7 @@ public class DomainDto extends BaseDto {
     private List<String> status;
     private String networkHandle;
     private String port43;
+    private String lang;
 
     public String getLdhName() {
         return ldhName;
@@ -91,6 +92,19 @@ public class DomainDto extends BaseDto {
 
     public void setPort43(String port43) {
         this.port43 = port43;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
 }

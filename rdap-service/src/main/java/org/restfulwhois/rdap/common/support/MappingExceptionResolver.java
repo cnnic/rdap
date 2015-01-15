@@ -12,7 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
@@ -43,8 +46,13 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
         if (ex instanceof DecodeException) {
             responseEntity = RestResponse.createResponse400();
         } else if (ex instanceof InvalidMediaTypeException
-                || ex instanceof HttpMediaTypeNotAcceptableException) {
+                || ex instanceof HttpMediaTypeNotAcceptableException
+                || ex instanceof HttpMediaTypeNotSupportedException) {
             responseEntity = RestResponse.createResponse415();
+        } else if (ex instanceof HttpMessageNotReadableException) {
+            responseEntity = RestResponse.createResponse422();
+        } else if (ex instanceof HttpRequestMethodNotSupportedException) {
+            responseEntity = RestResponse.createResponse405();
         } else {
             responseEntity = RestResponse.createResponse500();
         }
