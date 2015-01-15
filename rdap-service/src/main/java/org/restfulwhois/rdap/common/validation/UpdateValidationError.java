@@ -56,6 +56,11 @@ public final class UpdateValidationError implements ValidationError {
                 errorMessageParam);
     }
 
+    public static ValidationError build4008Error(String errorMessageParam) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4008,
+                errorMessageParam);
+    }
+
     public static ValidationError build4091Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4091,
                 errorMessageParam);

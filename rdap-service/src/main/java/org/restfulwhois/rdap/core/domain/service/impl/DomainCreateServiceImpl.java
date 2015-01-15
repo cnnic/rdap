@@ -35,6 +35,7 @@ import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
+import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,7 @@ public class DomainCreateServiceImpl extends
         domain.setUnicodeName(dto.getUnicodeName());
         domain.setStatus(dto.getStatus());
         domain.setPort43(dto.getPort43());
+        domain.setLang(dto.getLang());
         setNetworkHandle(dto, domain);
         super.convertCustomProperties(dto, domain);
         return domain;
@@ -97,10 +99,35 @@ public class DomainCreateServiceImpl extends
     protected ValidationResult validate(DomainDto domainDto) {
         ValidationResult validationResult = new ValidationResult();
         checkNotEmpty(domainDto.getType(), "type", validationResult);
+        checkDomainTypeValid(domainDto.getType(), "type", validationResult);
         checkNotEmpty(domainDto.getLdhName(), "ldhName", validationResult);
         checkNotEmpty(domainDto.getHandle(), "handle", validationResult);
         checkHandleExistForCreate(domainDto.getHandle(), validationResult);
         return validationResult;
+    }
+
+    /**
+     * 
+     * @param typeStr
+     * @param fieldName
+     * @param validationResult
+     */
+    private void checkDomainTypeValid(String typeStr, String fieldName,
+            ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        DomainType domainType = null;
+        DomainType[] types = DomainType.values();
+        for (DomainType type : types) {
+            if (type.getName().equals(typeStr)) {
+                domainType = type;
+            }
+        }
+        if (null == domainType) {
+            validationResult.addError(UpdateValidationError
+                    .build4008Error(fieldName));
+        }
     }
 
 }
