@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,37 +28,70 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.util;
+package org.restfulwhois.rdap;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.common.validation.UpdateValidationError;
-import org.restfulwhois.rdap.common.validation.ValidationResult;
+import org.restfulwhois.rdap.common.exception.ServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
+ * JSON util.
  * 
  * @author jiashuo
  * 
  */
-public class UpdateValidateUtil {
-    public static final int MAX_LENGTH_LANG = 64;
-    public static final int MAX_LENGTH_PORT43 = 4096;
-    public static final int MAX_LENGTH_UNICODENAME = 1024;
-    public static final int MAX_LENGTH_HANDLE = 100;
-    public static final int MAX_LENGTH_LDHNAME = 255;
+public class JsonHelper {
+    /**
+     * logger.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(JsonHelper.class);
 
-    public static void checkNotEmpty(String value, String fieldName,
-            ValidationResult validationResult) {
-        if (StringUtils.isBlank(value)) {
-            validationResult.addError(UpdateValidationError
-                    .build4002Error(fieldName));
+    /**
+     * objectMapper.
+     */
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
+     * deserialize JSON to map.
+     * 
+     * @param restResponse
+     *            restResponse.
+     * @return map.
+     * @throws ServiceException
+     */
+    public static Map<String, String> deserializeJsonToMap(String JSON) {
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        if (StringUtils.isBlank(JSON)) {
+            return result;
         }
+        try {
+            result =
+                    objectMapper.readValue(JSON,
+                            new TypeReference<LinkedHashMap<String, String>>() {
+                            });
+        } catch (Exception e) {
+            LOGGER.error("deserializateJsonToMap error:{}", e);
+        }
+        return result;
     }
 
-    public static void checkMaxLength(String value, int maxLength,
-            String fieldName, ValidationResult validationResult) {
-        if (StringUtils.length(value) > maxLength) {
-            validationResult.addError(UpdateValidationError.build4003Error(
-                    fieldName, maxLength + ""));
+    public static String serialize(Object object) {
+        if (null == object) {
+            return null;
+        }
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (Exception e) {
+            LOGGER.error("serialize JSON error:{}", e);
+            return null;
         }
     }
 

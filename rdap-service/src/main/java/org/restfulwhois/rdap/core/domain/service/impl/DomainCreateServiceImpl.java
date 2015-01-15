@@ -30,6 +30,12 @@
  */
 package org.restfulwhois.rdap.core.domain.service.impl;
 
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LANG;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LDHNAME;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_PORT43;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
+
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
@@ -100,8 +106,16 @@ public class DomainCreateServiceImpl extends
         ValidationResult validationResult = new ValidationResult();
         checkNotEmpty(domainDto.getType(), "type", validationResult);
         checkDomainTypeValid(domainDto.getType(), "type", validationResult);
-        checkNotEmpty(domainDto.getLdhName(), "ldhName", validationResult);
-        checkNotEmpty(domainDto.getHandle(), "handle", validationResult);
+        checkNotEmptyAndMaxLength(domainDto.getLdhName(), MAX_LENGTH_LDHNAME,
+                "ldhName", validationResult);
+        checkNotEmptyAndMaxLength(domainDto.getHandle(), MAX_LENGTH_HANDLE,
+                "handle", validationResult);
+        checkMaxLength(domainDto.getUnicodeName(), MAX_LENGTH_UNICODENAME,
+                "unicodeName", validationResult);
+        checkMaxLength(domainDto.getPort43(), MAX_LENGTH_PORT43, "port43",
+                validationResult);
+        checkMaxLength(domainDto.getLang(), MAX_LENGTH_LANG, "lang",
+                validationResult);
         checkHandleExistForCreate(domainDto.getHandle(), validationResult);
         return validationResult;
     }

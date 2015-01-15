@@ -44,11 +44,15 @@ public final class UpdateValidationError implements ValidationError {
     private String description;
 
     public UpdateValidationError(ServiceErrorCode error,
-            String errorMessageParam) {
+            String... errorMessageParams) {
         super();
         this.httpStatusCode = error.getStatusCode().value();
         this.errorCode = error.getCode();
-        this.description = String.format(error.getMessage(), errorMessageParam);
+        ServiceErrorCode.formatMessage(error, (Object[]) errorMessageParams);
+    }
+
+    public static ValidationError build4001Error() {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4001);
     }
 
     public static ValidationError build4002Error(String errorMessageParam) {
@@ -56,9 +60,19 @@ public final class UpdateValidationError implements ValidationError {
                 errorMessageParam);
     }
 
+    public static ValidationError build4003Error(String fieldName,
+            String maxLength) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4003,
+                fieldName, maxLength);
+    }
+
     public static ValidationError build4008Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4008,
                 errorMessageParam);
+    }
+
+    public static ValidationError build4009Error() {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4009);
     }
 
     public static ValidationError build4091Error(String errorMessageParam) {

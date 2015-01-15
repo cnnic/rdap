@@ -46,7 +46,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 public class DomainUpdateDaoTest extends BaseTest {
 
-    private static final String TABLE_RDAP_DOMAIN = "RDAP_DOMAIN";
+    public static final String TABLE_RDAP_DOMAIN = "RDAP_DOMAIN";
 
     @Autowired
     private UpdateDao<Domain> updateDao;
