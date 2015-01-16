@@ -95,7 +95,7 @@ public class InvalidUriFilter implements HttpFilter {
      */
     @Override
     public boolean preProcess(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {  
+            HttpServletResponse response) throws Exception {
         String path = request.getRequestURI();
         LOGGER.info("request URI: {} ", path);
         String decodeUri = StringUtils.EMPTY;
@@ -165,7 +165,7 @@ public class InvalidUriFilter implements HttpFilter {
         }
         return false;
     }
-   
+
     /**
      * write error 400 response.
      * 
@@ -180,7 +180,7 @@ public class InvalidUriFilter implements HttpFilter {
                 RestResponse.createResponse400();
         FilterHelper.writeResponse(responseEntity, response);
     }
-    
+
     /**
      * do post process.
      * 
@@ -197,7 +197,7 @@ public class InvalidUriFilter implements HttpFilter {
             HttpServletResponse response) throws Exception {
         return true;
     }
-    
+
     /**
      * decode url with UTF-8.
      * 
@@ -207,19 +207,25 @@ public class InvalidUriFilter implements HttpFilter {
      * @throws UnsupportedEncodingException
      *             UnsupportedEncodingException.
      */
-    private static String urlDecode(String str) 
-                   throws UnsupportedEncodingException {
+    private static String urlDecode(String str)
+            throws UnsupportedEncodingException {
         if (StringUtils.isBlank(str)) {
             return str;
         }
         return URLDecoder.decode(str, StringUtil.CHAR_SET_UTF8);
     }
+
     /**
      * @return this class name.
      */
     @Override
     public String getName() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
+        return true;
     }
 
 }

@@ -48,7 +48,7 @@ public final class UpdateValidationError implements ValidationError {
         super();
         this.httpStatusCode = error.getStatusCode().value();
         this.errorCode = error.getCode();
-        ServiceErrorCode.formatMessage(error, (Object[]) errorMessageParams);
+        this.description = ServiceErrorCode.formatMessage(error, (Object[]) errorMessageParams);
     }
 
     public static ValidationError build4001Error() {

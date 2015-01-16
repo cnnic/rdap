@@ -54,6 +54,18 @@ import javax.servlet.http.HttpServletResponse;
  * 
  */
 public interface HttpFilter {
+
+    /**
+     * check if need do filter.
+     * 
+     * @param req
+     *            HttpServletRequest.
+     * @param res
+     *            HttpServletResponse.
+     * @return true if need, false if not.
+     */
+    boolean needFilter(HttpServletRequest req, HttpServletResponse res);
+
     /**
      * do pre process.
      * 

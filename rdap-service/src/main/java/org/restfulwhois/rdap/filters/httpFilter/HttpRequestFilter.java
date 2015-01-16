@@ -186,24 +186,13 @@ public class HttpRequestFilter implements HttpFilter {
     private boolean httpMethodIsValid(HttpServletRequest request) {
         String method = request.getMethod();
         String uri = request.getRequestURI();
-        if (isUpdateUri(uri)) {
+        if (FilterHelper.isUpdateUri(uri)) {
             boolean httpMethodIsValid = UPDATE_ALLOW_METHODS.contains(method);
             return httpMethodIsValid;
         } else {
             boolean httpMethodIsValid = QUERY_ALLOW_METHODS.contains(method);
             return httpMethodIsValid;
         }
-    }
-
-    /**
-     * is update URI.
-     * 
-     * @param uri
-     *            uri.
-     * @return true if is update uri.
-     */
-    private boolean isUpdateUri(String uri) {
-        return StringUtils.startsWith(uri, "/u/");
     }
 
     /**
@@ -229,6 +218,11 @@ public class HttpRequestFilter implements HttpFilter {
     @Override
     public String getName() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
+        return true;
     }
 
 }

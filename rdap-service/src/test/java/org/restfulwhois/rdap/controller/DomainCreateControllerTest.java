@@ -31,8 +31,8 @@
 package org.restfulwhois.rdap.controller;
 
 import static org.junit.Assert.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,11 +44,13 @@ import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.JsonHelper;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.restfulwhois.rdap.dao.impl.DomainUpdateDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -448,6 +450,14 @@ public class DomainCreateControllerTest extends BaseTest {
                 .andExpect(content().contentType("application/rdap+json"))
                 .andExpect(jsonPath("$.errorCode").value(405))
                 .andExpect(jsonPath("$.subErrorCode").doesNotExist());
+    }
+
+    @Test
+    public void test_not_filter_ratelimit() throws Exception {
+        RdapProperties prop = new RdapProperties();
+        Long oneMinuteInMilliseconds = 60000L;
+        ReflectionTestUtils.setField(prop, "minSecondsAccessIntervalAnonymous",
+                oneMinuteInMilliseconds);
     }
 
     private DomainDto generateDomainDto() {
