@@ -41,7 +41,6 @@ import org.restfulwhois.rdap.common.model.Notice;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -54,10 +53,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * 
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonIgnoreProperties(value = {
-        "id", "objectType" })
 public class BaseModel {
 
+    @JsonIgnore
     private String customPropertyPrefix;
 
     /**
@@ -67,6 +65,7 @@ public class BaseModel {
     /**
      * identity of object.
      */
+    @JsonIgnore
     private Long id;
     /**
      * DNRs and RIRs have registry-unique identifiers that may be used to
@@ -93,7 +92,7 @@ public class BaseModel {
 
     @JsonIgnore
     private String customPropertiesJsonVal;
-    
+
     /**
      * add custom property.
      * 
@@ -166,6 +165,7 @@ public class BaseModel {
      * 
      * @return simple name of class
      */
+    @JsonIgnore
     public ModelType getObjectType() {
         return ModelType.BASE;
     }
@@ -331,5 +331,5 @@ public class BaseModel {
     public void setCustomPropertiesJsonVal(String customPropertiesJsonVal) {
         this.customPropertiesJsonVal = customPropertiesJsonVal;
     }
-    
+
 }

@@ -40,9 +40,14 @@ import org.springframework.http.HttpStatus;
  */
 public enum ServiceErrorCode {
 
-    ERROR_4002(4002, "Property can’t be empty:%s", HttpStatus.BAD_REQUEST),
-    ERROR_4008(4008, "Property value is not valid:%s", HttpStatus.BAD_REQUEST),
-    ERROR_4091(4091, "Object already exist for handle:%s", HttpStatus.BAD_REQUEST);
+    ERROR_4001(4001, "Request data is not valid JSON", HttpStatus.BAD_REQUEST),
+    ERROR_4002(4002, "Property can't be empty:%s", HttpStatus.BAD_REQUEST),
+    ERROR_4003(4003, "Property '%s' exceed max length:%s",
+            HttpStatus.BAD_REQUEST), ERROR_4008(4008,
+            "Property value is not valid:%s", HttpStatus.BAD_REQUEST),
+    ERROR_4009(4009, "Unrecognized request URI", HttpStatus.BAD_REQUEST),
+    ERROR_4091(4091, "Object already exist for handle:%s",
+            HttpStatus.BAD_REQUEST);
 
     private final int code;
 
@@ -54,6 +59,12 @@ public enum ServiceErrorCode {
         this.code = value;
         this.message = message;
         this.httpStatus = httpStatus;
+    }
+
+    public static String formatMessage(ServiceErrorCode serviceErrorCode,
+            Object[] errorMessageParams) {
+        return String.format(serviceErrorCode.getMessage(),
+                (Object[]) errorMessageParams);
     }
 
     public HttpStatus getStatusCode() {

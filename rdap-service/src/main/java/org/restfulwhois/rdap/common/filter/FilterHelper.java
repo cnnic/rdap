@@ -37,7 +37,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.common.model.ErrorMessage;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -71,8 +70,7 @@ public final class FilterHelper {
      * @throws IOException
      *             IOException.
      */
-    public static void writeResponse(
-            ResponseEntity<ErrorMessage> responseEntity,
+    public static void writeResponse(ResponseEntity responseEntity,
             HttpServletResponse response) throws IOException {
         response.setHeader("Content-Type", "application/rdap+json");
         HttpHeaders headers = responseEntity.getHeaders();
