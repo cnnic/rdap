@@ -5,9 +5,10 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.restfulwhois.rdap.common.dto.UpdateResponse;
 import org.restfulwhois.rdap.common.exception.DecodeException;
 import org.restfulwhois.rdap.common.filter.FilterHelper;
-import org.restfulwhois.rdap.common.model.ErrorMessage;
+import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.InvalidMediaTypeException;
@@ -41,7 +42,7 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
     @Override
     protected ModelAndView doResolveException(HttpServletRequest request,
             HttpServletResponse response, Object handler, Exception ex) {
-        ResponseEntity<ErrorMessage> responseEntity = null;
+        ResponseEntity responseEntity = null;
         LOGGER.error("error:", ex);
         if (ex instanceof DecodeException) {
             responseEntity = RestResponse.createResponse400();
@@ -50,7 +51,14 @@ public class MappingExceptionResolver extends SimpleMappingExceptionResolver {
                 || ex instanceof HttpMediaTypeNotSupportedException) {
             responseEntity = RestResponse.createResponse415();
         } else if (ex instanceof HttpMessageNotReadableException) {
-            responseEntity = RestResponse.createResponse422();
+            UpdateValidationError error =
+                    (UpdateValidationError) UpdateValidationError
+                            .build4001Error();
+            responseEntity =
+                    RestResponse.createUpdateResponse(UpdateResponse
+                            .buildErrorResponse(error.getCode(),
+                                    error.getHttpStatusCode(),
+                                    error.getMessage()));
         } else if (ex instanceof HttpRequestMethodNotSupportedException) {
             responseEntity = RestResponse.createResponse405();
         } else {

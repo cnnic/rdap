@@ -100,6 +100,21 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         UpdateValidateUtil.checkNotEmpty(value, fieldName, validationResult);
     }
 
+    protected void checkMaxLength(String value, int maxLength,
+            String fieldName, ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        UpdateValidateUtil.checkMaxLength(value, maxLength, fieldName,
+                validationResult);
+    }
+
+    protected void checkNotEmptyAndMaxLength(String value, int maxLength,
+            String fieldName, ValidationResult validationResult) {
+        checkNotEmpty(value, fieldName, validationResult);
+        checkMaxLength(value, maxLength, fieldName, validationResult);
+    }
+
     protected void checkHandleExistForCreate(String handle,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
