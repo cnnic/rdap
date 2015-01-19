@@ -30,11 +30,14 @@
  */
 package org.restfulwhois.rdap.common.service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
+import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
@@ -115,7 +118,34 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         checkMaxLength(value, maxLength, fieldName, validationResult);
     }
 
-    protected void checkHandleExistForCreate(String handle,
+    protected void checkMinMaxInt(int value, int minValue, double maxValue,
+            String fieldName, ValidationResult validationResult) {
+        UpdateValidateUtil.checkMinMaxInt(value, minValue, maxValue, fieldName,
+                validationResult);
+    }
+
+    protected void checkMinMaxDate(Date value, Date minValue, Date maxValue,
+            String fieldName, ValidationResult validationResult) {
+        UpdateValidateUtil.checkMinMaxDate(value, minValue, maxValue,
+                fieldName, validationResult);
+    }
+
+    protected void checkEvents(List<Event> events,
+            ValidationResult validationResult) {
+        if (null == events || events.isEmpty()) {
+            return;
+        }
+        for (Event event : events) {
+            checkMinMaxDate(
+                    null,
+                    // event.getEventDate(),
+                    UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_TIMESTAMP_COLUMN,
+                    "event.eventDate", validationResult);
+        }
+    }
+
+    protected void checkHandleNotExistForCreate(String handle,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
             return;
@@ -124,6 +154,18 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         if (null != id) {
             validationResult.addError(UpdateValidationError
                     .build4091Error(handle));
+        }
+    }
+
+    protected void checkHandleExistForUpdate(String handle,
+            ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        Long id = dao.findIdByHandle(handle);
+        if (null == id) {
+            validationResult.addError(UpdateValidationError
+                    .build4041Error(handle));
         }
     }
 

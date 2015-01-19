@@ -50,6 +50,12 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
             "INSERT INTO RDAP_DOMAIN"
                     + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"
                     + " values(?,?,?,?,?,?,?,?)";
+    private static final String SQL_UPDATE_DOMAIN =
+            "UPDATE RDAP_DOMAIN"
+                    + " SET HANDLE=?,LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
+                    + " ,CUSTOM_PROPERTIES=?";
+    private static final String SQL_DELETE_DOMAIN =
+            "DELETE FROM RDAP_DOMAIN where HANDLE=?";
     /**
      * logger.
      */
@@ -58,12 +64,7 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
 
     @Override
     public Domain create(final Domain model) {
-        jdbcTemplate.update(SQL_CREATE_DOMAIN, generatePrepStatement(model));
-        return model;
-    }
-
-    private PreparedStatementSetter generatePrepStatement(final Domain model) {
-        return new PreparedStatementSetter() {
+        jdbcTemplate.update(SQL_CREATE_DOMAIN, new PreparedStatementSetter() {
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, model.getHandle());
                 ps.setString(2, model.getLdhName());
@@ -74,19 +75,29 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
                 ps.setObject(7, model.getNetworkId());
                 ps.setString(8, model.getCustomPropertiesJsonVal());
             }
-        };
+        });
+        return model;
     }
 
     @Override
-    public void update(Domain model) {
-        // TODO Auto-generated method stub
-
+    public void update(final Domain model) {
+        jdbcTemplate.update(SQL_UPDATE_DOMAIN, new PreparedStatementSetter() {
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, model.getHandle());
+                ps.setString(2, model.getLdhName());
+                ps.setString(3, model.getUnicodeName());
+                ps.setString(4, model.getPort43());
+                ps.setString(5, model.getLang());
+                ps.setObject(6, model.getNetworkId());
+                ps.setString(7, model.getCustomPropertiesJsonVal());
+            }
+        });
     }
 
     @Override
     public void delete(Domain model) {
         // TODO Auto-generated method stub
-
+//        SQL_DELETE_DOMAIN
     }
 
     @Override

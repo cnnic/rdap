@@ -153,4 +153,9 @@ public class AuthenticationFilter implements HttpFilter {
         return getClass().getSimpleName();
     }
 
+    @Override
+    public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
+        return true;
+    }
+
 }

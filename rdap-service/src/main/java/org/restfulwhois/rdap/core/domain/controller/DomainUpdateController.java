@@ -101,10 +101,11 @@ public class DomainUpdateController {
      * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
-    @RequestMapping(value = { "" }, method = RequestMethod.PUT)
+    @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity update(@RequestBody DomainDto domainDto,
-            HttpServletRequest request) {
+            @PathVariable String handle, HttpServletRequest request) {
+        domainDto.setHandle(handle);
         UpdateResponse response = updateService.execute(domainDto);
         return RestResponse.createUpdateResponse(response);
     }

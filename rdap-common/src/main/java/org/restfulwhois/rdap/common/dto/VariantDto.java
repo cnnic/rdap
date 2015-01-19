@@ -30,25 +30,15 @@
  */
 package org.restfulwhois.rdap.common.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 
  * @author jiashuo
  * 
  */
-public class DomainDto extends BaseDto {
+public class VariantDto extends BaseDto {
     private String ldhName;
     private String unicodeName;
-    private String type;
-    private List<String> status;
-    private String networkHandle;
-    private String port43;
-    private String lang;
-
-    private List<VariantDto> variants = new ArrayList<VariantDto>();
-    private List<SecureDnsDto> secureDns = new ArrayList<SecureDnsDto>();
+    private String idnTable;
 
     public String getLdhName() {
         return ldhName;
@@ -66,65 +56,12 @@ public class DomainDto extends BaseDto {
         this.unicodeName = unicodeName;
     }
 
-    public String getType() {
-        return type;
+    public String getIdnTable() {
+        return idnTable;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public List<String> getStatus() {
-        return status;
-    }
-
-    public void setStatus(List<String> status) {
-        this.status = status;
-    }
-
-    public String getNetworkHandle() {
-        return networkHandle;
-    }
-
-    public void setNetworkHandle(String networkHandle) {
-        this.networkHandle = networkHandle;
-    }
-
-    public String getPort43() {
-        return port43;
-    }
-
-    public void setPort43(String port43) {
-        this.port43 = port43;
-    }
-
-    public String getLang() {
-        return lang;
-    }
-
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
-
-    public List<VariantDto> getVariants() {
-        return variants;
-    }
-
-    public void setVariants(List<VariantDto> variants) {
-        this.variants = variants;
-    }
-
-    public List<SecureDnsDto> getSecureDns() {
-        return secureDns;
-    }
-
-    public void setSecureDns(List<SecureDnsDto> secureDns) {
-        this.secureDns = secureDns;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
+    public void setIdnTable(String idnTable) {
+        this.idnTable = idnTable;
     }
 
 }
