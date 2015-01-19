@@ -28,32 +28,45 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.dao;
+package org.restfulwhois.rdap.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.junit.Test;
+import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.model.PublicId;
 import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * update DAO interface.
- * 
- * @param <T>
- *            object driving from BaseModel.
- * @author jiashuo
+ * @author zhanyq
  * 
  */
-public interface UpdateDao<T extends BaseModel> {
+public class PublicIdUpdateDaoTest extends BaseTest {
 
-    T create(T model);
+	 private static final String TABLE_RDAP_PUBLICID = "RDAP_PUBLICID";
+	 private static final String TABLE_REL_PUBLICID_REGISTRATION = "REL_PUBLICID_REGISTRATION";
 
-    void update(T model);
 
-    void delete(T model);
+	    @Autowired
+	    private UpdateDao<PublicId> updateDao;
 
-    Long findIdByHandle(String handle);
-    
-    void batchCreateAsInnerObjects(Long outerObjectId,
-             ModelType outerModelType, List<T> models);
-
+	    @Test
+	    @DatabaseSetup("teardown.xml")
+	    @DatabaseTearDown("teardown.xml")   
+	    public void testcreatePublicId() throws Exception {
+	    	List<PublicId> publicIdList = new ArrayList<PublicId>();	    	
+	    	PublicId publicId = new PublicId();
+	    	publicId.setIdentifier("cnnic-1");
+	    	publicId.setType("cnnic");
+	    	publicIdList.add(publicId);
+	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, publicIdList);
+	        super.assertTablesForUpdate("publicId-update.xml", TABLE_RDAP_PUBLICID,
+	        		TABLE_REL_PUBLICID_REGISTRATION);
+	    }
 }
