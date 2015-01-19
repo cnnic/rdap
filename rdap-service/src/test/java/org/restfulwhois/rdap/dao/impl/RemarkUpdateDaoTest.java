@@ -36,9 +36,10 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.Remark;
-import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -58,12 +59,14 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
 	    @Autowired
-	    private UpdateDao<Remark> updateDao;
+	    private UpdateDao<Remark, BaseModel> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")   
 	    public void testcreateRemark() throws Exception {
+	    	Domain domain = new Domain();
+	    	domain.setId(1L);
 	    	List<Remark> remarkList = new ArrayList<Remark>();
 	    	List<String> description = new ArrayList<String>();
 	    	description.add("remarks_description1");
@@ -87,7 +90,7 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	    	linkList.add(link);
 	    	remark.setLinks(linkList);
 	    	remarkList.add(remark);
-	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, remarkList);
+	        updateDao.batchCreateAsInnerObjects(domain, remarkList);
 	        super.assertTablesForUpdate("remark-update.xml", TABLE_RDAP_NOTICE,
 	        		TABLE_REL_NOTICE_REGISTRATION, TABLE_RDAP_NOTICE_DESCRIPTION,
 	        		TABLE_RDAP_LINK,TABLE_REL_LINK_OBJECT,TABLE_RDAP_LINK_HREFLANG);

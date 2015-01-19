@@ -42,6 +42,7 @@ import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class EventUpdateDaoImpl extends AbstractUpdateDao<Event> {
+public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, BaseModel> {
     /**
      * logger.
      */
@@ -69,7 +70,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link> linkUpdateDao;
+    private UpdateDao<Link, BaseModel> linkUpdateDao;
 
 	@Override
 	public Event create(Event model) {
@@ -99,15 +100,15 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event> {
 	 *        events of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(Long outerObjectId,
-             ModelType outerModelType, List<Event> models) {
+	public void batchCreateAsInnerObjects(BaseModel outerModel, List<Event> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
 	    for (Event model: models) {
-	    	Long eventId = createEvent(model);  
-	    	createRelEvent(outerObjectId, outerModelType, eventId);	    	
-	    	linkUpdateDao.batchCreateAsInnerObjects(outerObjectId,  ModelType.EVENT, model.getLinks());
+	    	Long eventId = createEvent(model); 
+	    	model.setId(eventId);
+	    	createRelEvent(outerModel.getId(), outerModel.getObjectType(), eventId);	    	
+	    	linkUpdateDao.batchCreateAsInnerObjects(model, model.getLinks());
 	    	
 			
 	    }

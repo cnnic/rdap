@@ -36,9 +36,11 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.DsData;
 import org.restfulwhois.rdap.common.model.KeyData;
 import org.restfulwhois.rdap.common.model.SecureDns;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,12 +61,14 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
 
 	    @Autowired
-	    private UpdateDao<SecureDns> updateDao;
+	    private UpdateDao<SecureDns, BaseModel> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")   
 	    public void testcreateSecureDns() throws Exception {
+	    	Domain domain = new Domain();
+	    	domain.setId(1L);
 	    	List<SecureDns> secureDnsList = new ArrayList<SecureDns>();	    	
 	    	SecureDns secureDns = new SecureDns();
 	    	secureDns.setDelegationSigned(true);
@@ -89,7 +93,7 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	    	dsDataList.add(dsData);
 	    	secureDns.setDsData(dsDataList);
 	    	secureDnsList.add(secureDns);
-	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, secureDnsList);
+	        updateDao.batchCreateAsInnerObjects(domain, secureDnsList);
 	        super.assertTablesForUpdate("secureDns-update.xml", TABLE_RDAP_DSDATA,
 	        		TABLE_REL_SECUREDNS_DSKEY, TABLE_RDAP_SECUREDNS,TABLE_RDAP_KEYDATA);
 	    }

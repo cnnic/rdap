@@ -36,8 +36,10 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -57,12 +59,14 @@ public class EventUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
 	    @Autowired
-	    private UpdateDao<Event> updateDao;
+	    private UpdateDao<Event,BaseModel> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")   
 	    public void testcreateEvent() throws Exception {
+	    	Domain domain = new Domain();
+	    	domain.setId(1L);
 	    	List<Event> eventList = new ArrayList<Event>();	    	
 	    	Event event = new Event();
 	    	event.setEventAction("registration");
@@ -84,7 +88,7 @@ public class EventUpdateDaoTest extends BaseTest {
 	    	linkList.add(link);
 	    	event.setLinks(linkList);
 	    	eventList.add(event);
-	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, eventList);
+	        updateDao.batchCreateAsInnerObjects(domain, eventList);
 	        super.assertTablesForUpdate("event-update.xml", TABLE_RDAP_EVENT,
 	        		TABLE_REL_EVENT_REGISTRATION,TABLE_RDAP_LINK,TABLE_REL_LINK_OBJECT,TABLE_RDAP_LINK_HREFLANG);
 	    }

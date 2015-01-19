@@ -40,6 +40,7 @@ import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.model.RelDomainVariant;
 import org.restfulwhois.rdap.common.model.Variant;
 import org.restfulwhois.rdap.common.model.Variants;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.util.DomainUtil;
 import org.slf4j.Logger;
@@ -57,7 +58,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants> {
+public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, BaseModel> {
    /**
      * logger for record log.
      */
@@ -90,13 +91,12 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants> {
 	 *        Variants of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(Long outerObjectId,
-			ModelType outerModelType, List<Variants> models) {
+	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<Variants> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
 	    for (Variants model: models) {
-	    	  createVariants(outerObjectId, model);	    	  
+	    	  createVariants(outerModel.getId(), model);	    	  
 	    }
 	}
 

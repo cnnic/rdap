@@ -40,6 +40,7 @@ import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.Remark;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
+public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, BaseModel> {
     /**
      * logger.
      */
@@ -68,7 +69,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link> linkUpdateDao;
+    private UpdateDao<Link, BaseModel> linkUpdateDao;
 
 	@Override
 	public Remark create(Remark model) {
@@ -88,19 +89,17 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
 		
 	}
 	@Override
-	public void batchCreateAsInnerObjects(Long outerObjectId,
-            ModelType outerModelType, List<Remark> models) {
+	public void batchCreateAsInnerObjects(BaseModel outerModel, List<Remark> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
 	    for (Remark remark: models) {
 	    	Long remarkId = createRemark(remark); 
 	    	remark.setId(remarkId);
-	    	createRelRemark(outerObjectId, outerModelType, remarkId);	    	
-			createRemarkDescription(remark);
+	    	createRelRemark(outerModel, remarkId);	    	
+			createRemarkDescription(remark);		
 			//create link			
-			linkUpdateDao.batchCreateAsInnerObjects(remarkId, ModelType.REMARK
-				, remark.getLinks());
+			linkUpdateDao.batchCreateAsInnerObjects(remark, remark.getLinks());
 						
 	    }
 	}
@@ -137,8 +136,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
 	 * @param remarkId
 	 *        remarkId
 	 */
-	private void createRelRemark(final Long outerObjectId, final ModelType
-			outerModelType,	final Long remarkId) {
+	private void createRelRemark(final BaseModel outerModel, final Long remarkId) {
 		final String sql = "insert into REL_NOTICE_REGISTRATION(REL_ID,REL_OBJECT_TYPE,NOTICE_ID)"
 			      +  " values (?,?,?)"; 		       
 		       jdbcTemplate.update(new PreparedStatementCreator() {
@@ -146,8 +144,8 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
 		        			throws SQLException {           
 		            PreparedStatement ps = connection.prepareStatement(
 		            		sql);
-		            ps.setLong(1, outerObjectId);
-		            ps.setString(2, outerModelType.getName());
+		            ps.setLong(1, outerModel.getId());
+		            ps.setString(2, outerModel.getObjectType().getName());
 		            ps.setLong(3, remarkId);
 					return ps;
 					}				

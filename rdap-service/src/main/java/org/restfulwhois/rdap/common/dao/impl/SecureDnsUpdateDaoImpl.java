@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.model.DsData;
 import org.restfulwhois.rdap.common.model.KeyData;
 import org.restfulwhois.rdap.common.model.SecureDns;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns> {
+public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, BaseModel> {
    /**
      * logger for record log.
      */
@@ -71,14 +72,14 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns> {
      */
     @Autowired 
     @Qualifier("keyDataUpdateDaoImpl")
-    private UpdateDao<KeyData>  keyDataUpdateDao;
+    private UpdateDao<KeyData, BaseModel>  keyDataUpdateDao;
     
     /**
      * DsData update dao.
      */    
     @Autowired 
     @Qualifier("dsDataUpdateDaoImpl")
-    private UpdateDao<DsData>  dsDataUpdateDao;
+    private UpdateDao<DsData, BaseModel>  dsDataUpdateDao;
 
     @Override
 	public SecureDns create(SecureDns model) {
@@ -107,17 +108,18 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns> {
 	 * @param models 
 	 *        SecureDns of outer Object
 	 */
-	public  void batchCreateAsInnerObjects(Long outerObjectId,
-            ModelType outerModelType, List<SecureDns> models) {
+	@Override
+	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<SecureDns> models) {
 		if(null == models || models.size() == 0){
 			return;
 		}
 	    for (SecureDns model: models) {
-	    	Long secureDnsId = createSecureDns(model,outerObjectId);  
+	    	Long secureDnsId = createSecureDns(model,outerModel.getId());  
+	    	model.setId(secureDnsId);
 	    	//create keyData	    	
-	    	keyDataUpdateDao.batchCreateAsInnerObjects(secureDnsId,outerModelType, model.getKeyData());	    	
+	    	keyDataUpdateDao.batchCreateAsInnerObjects(model, model.getKeyData());	    	
 	    	//create DsData            
-            dsDataUpdateDao.batchCreateAsInnerObjects(outerObjectId,outerModelType, model.getDsData());	    	
+            dsDataUpdateDao.batchCreateAsInnerObjects(model, model.getDsData());	    	
 	    }
 	}
 	
