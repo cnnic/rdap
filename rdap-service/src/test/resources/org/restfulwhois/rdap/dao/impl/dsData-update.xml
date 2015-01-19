@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- <RDAP_DOMAIN DOMAIN_ID='1' HANDLE='1' LDH_NAME='cnnic.cn'
+		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' />
+	<RDAP_SECUREDNS SECUREDNS_ID='1' ZONE_SIGNED='1'
+		DELEGATION_SIGNED='1' MAX_SIGLIFE='1' DOMAIN_ID='1' 
+		/> -->
+	<RDAP_DSDATA  KEY_TAG='1' ALGORITHM='1'
+		DIGEST='1-ds-dt-200-50'
+		DIGEST_TYPE='1' />
+	<REL_SECUREDNS_DSKEY  REL_DSKEY_TYPE='dsData' />
+	<!-- link -->
+	<RDAP_LINK  VALUE="http://sina.com.cn"
+        REL="up" HREF="http://sina.com.cn" MEDIA="screen"
+        TYPE="application/rdap+json" TITLE="little title" />
+    <REL_LINK_OBJECT    REL_OBJECT_TYPE="dsData" />
+    <RDAP_LINK_HREFLANG   HREFLANG="en" />
+    <RDAP_LINK_HREFLANG   HREFLANG="zh" />
+</dataset>

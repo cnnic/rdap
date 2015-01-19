@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>	
+	<RDAP_VARIANT LDH_NAME='xn--g6ws64d.xn--fiqs8s'
+		UNICODE_NAME='測试.中国' IDNTABLE='.EXAMPLE Swedish' />
+		<REL_DOMAIN_VARIANT   VARIANT_TYPE='conjoined'  />    
+		<REL_DOMAIN_VARIANT  VARIANT_TYPE='open registration'  />
+	
+<!-- 	<RDAP_DOMAIN HANDLE='h1' LDH_NAME='cnnic.cn' UNICODE_NAME='cnnic.cn'
+        PORT43='port43' LANG='zh' TYPE='dnr'/> -->
+   
+</dataset>

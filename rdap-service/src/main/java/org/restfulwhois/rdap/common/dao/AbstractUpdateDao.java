@@ -37,6 +37,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,13 @@ public abstract class AbstractUpdateDao<T extends BaseModel> implements
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
+    
+    @Override
+    public void batchCreateAsInnerObjects(Long outerObjectId,
+            ModelType outerModelType, List<T> models) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
 
     protected Long findIdByHandle(final String handle, String idColumnName,
             String tableName) {

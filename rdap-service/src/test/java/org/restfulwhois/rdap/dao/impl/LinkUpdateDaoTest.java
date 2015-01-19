@@ -28,32 +28,53 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.dao;
+package org.restfulwhois.rdap.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.junit.Test;
+import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
- * update DAO interface.
- * 
- * @param <T>
- *            object driving from BaseModel.
- * @author jiashuo
+ * @author zhanyq
  * 
  */
-public interface UpdateDao<T extends BaseModel> {
+public class LinkUpdateDaoTest extends BaseTest {
 
-    T create(T model);
+	 private static final String TABLE_RDAP_LINK = "RDAP_LINK";
+	 private static final String TABLE_REL_LINK_OBJECT = "REL_LINK_OBJECT";
+	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
-    void update(T model);
+	    @Autowired
+	    private UpdateDao<Link> updateDao;
 
-    void delete(T model);
-
-    Long findIdByHandle(String handle);
-    
-    void batchCreateAsInnerObjects(Long outerObjectId,
-             ModelType outerModelType, List<T> models);
-
+	    @Test
+	    @DatabaseSetup("teardown.xml")
+	    @DatabaseTearDown("teardown.xml")   
+	    public void testcreateLink() throws Exception {
+	    	List<Link> linkList = new ArrayList<Link>();
+	    	List<String> hreflang = new ArrayList<String>();
+	    	hreflang.add("en");
+	    	hreflang.add("zh");
+	    	Link link = new Link();
+	    	link.setHref("http://sina.com.cn");
+	    	link.setMedia("screen");
+	    	link.setRel("up");
+	    	link.setTitle("little title");
+	    	link.setType("application/rdap+json");
+	    	link.setValue("http://sina.com.cn");
+	    	link.setHreflang(hreflang);
+	    	linkList.add(link);
+	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, linkList);
+	        super.assertTablesForUpdate("Link-update.xml", TABLE_RDAP_LINK,
+	        		TABLE_REL_LINK_OBJECT, TABLE_RDAP_LINK_HREFLANG);
+	    }
 }
