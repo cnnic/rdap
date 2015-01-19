@@ -52,8 +52,8 @@ import org.springframework.jdbc.core.RowMapper;
  * @author jiashuo
  * 
  */
-public abstract class AbstractUpdateDao<T extends BaseModel> implements
-        UpdateDao<T> {
+public abstract class AbstractUpdateDao<T extends BaseModel, OUTERT extends BaseModel>
+           implements UpdateDao<T, OUTERT> {
     private static final String TPL_COUNT_BY_HANDLE =
             "SELECT %s as ID from %s where HANDLE = ?";
     /**
@@ -69,8 +69,7 @@ public abstract class AbstractUpdateDao<T extends BaseModel> implements
     protected JdbcTemplate jdbcTemplate;
     
     @Override
-    public void batchCreateAsInnerObjects(Long outerObjectId,
-            ModelType outerModelType, List<T> models) {
+    public void batchCreateAsInnerObjects(OUTERT outerModel, List<T> models) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }

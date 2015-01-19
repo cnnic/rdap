@@ -63,7 +63,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             .getLogger(AbstractUpdateService.class);
 
     @Autowired
-    protected UpdateDao<MODEL> dao;
+    protected UpdateDao<MODEL, MODEL> dao;
 
     @Override
     public UpdateResponse execute(DTO dto) {

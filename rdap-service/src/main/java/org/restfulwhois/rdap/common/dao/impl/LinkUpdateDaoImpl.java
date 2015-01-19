@@ -38,6 +38,7 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link> {
+public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, BaseModel> {
    /**
      * logger for record log.
      */
@@ -89,15 +90,14 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link> {
 	 *        links of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(Long outerObjectId,
-            ModelType outerModelType, List<Link> models) {
+	public void batchCreateAsInnerObjects(BaseModel outerModel, List<Link> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
 	    for (Link link: models) {
 	    	Long linkId = createLink(link); 
 	    	link.setId(linkId);
-	    	createRelLink(outerObjectId, outerModelType, linkId);
+	    	createRelLink(outerModel.getId(), outerModel.getObjectType(), linkId);
 			createLinkHreflang(link);
 	    }
 	}

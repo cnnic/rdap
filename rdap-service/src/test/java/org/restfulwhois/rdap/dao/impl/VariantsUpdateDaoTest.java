@@ -40,6 +40,7 @@ import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.RelDomainVariant;
 import org.restfulwhois.rdap.common.model.Variant;
 import org.restfulwhois.rdap.common.model.Variants;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -57,15 +58,15 @@ public class VariantsUpdateDaoTest extends BaseTest {
 
 
 	    @Autowired
-	    private UpdateDao<Variants> updateDao;
-	    @Autowired
-	    private UpdateDao<Domain> domainUpdateDao;
+	    private UpdateDao<Variants, BaseModel> updateDao;	   
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml") 
 	    //@DatabaseSetup(value = "variants.xml")
 	    public void testcreateVariants() throws Exception {
+	    	Domain domain = new Domain();
+	    	domain.setId(1L);
 	    	List<Variants> variantsList = new ArrayList<Variants>();
 	    	List<Variant> variantList = new ArrayList<Variant>();
 	    	Variants variants = new Variants();
@@ -86,7 +87,7 @@ public class VariantsUpdateDaoTest extends BaseTest {
 	    	
 	    	
 	    
-	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, variantsList);
+	        updateDao.batchCreateAsInnerObjects(domain, variantsList);
 	        super.assertTablesForUpdate("variants-update.xml", TABLE_RDAP_VARIANT,
 	        		TABLE_REL_DOMAIN_VARIANT);
 	    }

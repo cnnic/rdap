@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.KeyData;
 import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData> {
+public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, BaseModel> {
    /**
      * logger for record log.
      */
@@ -71,14 +72,14 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link> linkUpdateDao;
+    private UpdateDao<Link, BaseModel> linkUpdateDao;
     
     /**
      * Event update dao.
      */
     @Autowired   
     @Qualifier("eventUpdateDaoImpl")
-    private UpdateDao<Event>  eventUpdateDao;
+    private UpdateDao<Event, BaseModel>  eventUpdateDao;
     
     /**
      * SecureDns update dao.
@@ -113,17 +114,17 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData> {
 	 *        KeyData of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(final Long outerObjectId,
-            ModelType outerObjectType, List<KeyData> models) {
+	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<KeyData> models) {
 		if (null==models || models.size() == 0) {
 			return;
 		}
 	    for (KeyData model:models) {
 	    	Long keyDataId = createKeyData(model);  
-	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerObjectId, ModelType.KEYDATA, keyDataId);
-	       	linkUpdateDao.batchCreateAsInnerObjects(keyDataId, ModelType.KEYDATA, model.getLinks());
+	    	model.setId(keyDataId);
+	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), ModelType.KEYDATA, keyDataId);
+	       	linkUpdateDao.batchCreateAsInnerObjects(model, model.getLinks());
 	    	//create event
-		    eventUpdateDao.batchCreateAsInnerObjects(keyDataId, ModelType.KEYDATA, model.getEvents());
+		    eventUpdateDao.batchCreateAsInnerObjects(model, model.getEvents());
 	    }
 	}
 	

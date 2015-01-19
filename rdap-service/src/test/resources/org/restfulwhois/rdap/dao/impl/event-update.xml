@@ -6,7 +6,7 @@
 	<RDAP_LINK  VALUE="http://sina.com.cn"
         REL="up" HREF="http://sina.com.cn" MEDIA="screen"
         TYPE="application/rdap+json" TITLE="little title" />
-    <REL_LINK_OBJECT  REL_ID="1"  REL_OBJECT_TYPE="event" />
+    <REL_LINK_OBJECT    REL_OBJECT_TYPE="event" />
     <RDAP_LINK_HREFLANG   HREFLANG="en" />
     <RDAP_LINK_HREFLANG   HREFLANG="zh" />
 </dataset>

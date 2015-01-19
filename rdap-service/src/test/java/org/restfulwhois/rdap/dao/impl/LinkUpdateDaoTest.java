@@ -36,7 +36,9 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,12 +56,14 @@ public class LinkUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
 	    @Autowired
-	    private UpdateDao<Link> updateDao;
+	    private UpdateDao<Link, BaseModel> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")   
 	    public void testcreateLink() throws Exception {
+	    	Domain domain = new Domain();
+	    	domain.setId(1L);
 	    	List<Link> linkList = new ArrayList<Link>();
 	    	List<String> hreflang = new ArrayList<String>();
 	    	hreflang.add("en");
@@ -73,7 +77,7 @@ public class LinkUpdateDaoTest extends BaseTest {
 	    	link.setValue("http://sina.com.cn");
 	    	link.setHreflang(hreflang);
 	    	linkList.add(link);
-	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, linkList);
+	        updateDao.batchCreateAsInnerObjects(domain, linkList);
 	        super.assertTablesForUpdate("Link-update.xml", TABLE_RDAP_LINK,
 	        		TABLE_REL_LINK_OBJECT, TABLE_RDAP_LINK_HREFLANG);
 	    }
