@@ -80,15 +80,15 @@ public final class UpdateValidationError implements ValidationError {
     }
 
     public static ValidationError build4010Error(String fieldName,
-            Integer minValue, Double maxValue) {
-        return new UpdateValidationError(ServiceErrorCode.ERROR_4010, minValue,
-                maxValue);
+            Integer minValue, Long maxValue) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4010,
+                fieldName, minValue, maxValue);
     }
 
     public static ValidationError build4010Error(String fieldName,
-            Date minValue, Date maxValue) {
-        return new UpdateValidationError(ServiceErrorCode.ERROR_4010, minValue,
-                maxValue);
+            String minValue, String maxValue) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4010,
+                fieldName, minValue, maxValue);
     }
 
     public static ValidationError build4041Error(String errorMessageParam) {
