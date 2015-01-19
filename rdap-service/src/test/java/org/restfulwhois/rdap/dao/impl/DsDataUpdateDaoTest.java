@@ -36,8 +36,10 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.DsData;
 import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,12 +61,14 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
 
 	    @Autowired
-	    private UpdateDao<DsData> updateDao;
+	    private UpdateDao<DsData,BaseModel> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")   
 	    public void testcreateDsData() throws Exception {
+	    	Domain domain = new Domain();
+	    	domain.setId(1L);
 	    	List<DsData> dsDataList = new ArrayList<DsData>();	    	
 	    	DsData dsData = new DsData();
 	    	dsData.setAlgorithm(1);
@@ -90,7 +94,7 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	    	dsData.setLinks(linkList);
 	    
 	    	dsDataList.add(dsData);
-	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, dsDataList);
+	        updateDao.batchCreateAsInnerObjects(domain, dsDataList);
 	        super.assertTablesForUpdate("dsData-update.xml", TABLE_RDAP_DSDATA,TABLE_REL_SECUREDNS_DSKEY,
 	        		TABLE_RDAP_LINK,TABLE_REL_LINK_OBJECT,TABLE_RDAP_LINK_HREFLANG);
 	    }

@@ -35,6 +35,7 @@ import java.sql.SQLException;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -45,7 +46,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
+public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, Domain> {
     private static final String SQL_CREATE_DOMAIN =
             "INSERT INTO RDAP_DOMAIN"
                     + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"

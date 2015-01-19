@@ -36,8 +36,9 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.PublicId;
-import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -54,18 +55,20 @@ public class PublicIdUpdateDaoTest extends BaseTest {
 
 
 	    @Autowired
-	    private UpdateDao<PublicId> updateDao;
+	    private UpdateDao<PublicId, BaseModel> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")   
 	    public void testcreatePublicId() throws Exception {
+	    	Domain domain = new Domain();
+	    	domain.setId(1L);
 	    	List<PublicId> publicIdList = new ArrayList<PublicId>();	    	
 	    	PublicId publicId = new PublicId();
 	    	publicId.setIdentifier("cnnic-1");
 	    	publicId.setType("cnnic");
 	    	publicIdList.add(publicId);
-	        updateDao.batchCreateAsInnerObjects(1L, ModelType.DOMAIN, publicIdList);
+	        updateDao.batchCreateAsInnerObjects(domain, publicIdList);
 	        super.assertTablesForUpdate("publicId-update.xml", TABLE_RDAP_PUBLICID,
 	        		TABLE_REL_PUBLICID_REGISTRATION);
 	    }

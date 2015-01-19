@@ -39,6 +39,7 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.model.PublicId;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
+public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId, BaseModel> {
    /**
      * logger for record log.
      */
@@ -90,8 +91,7 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
 	 *        PublicId of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(Long outerObjectId,
-            ModelType outerModelType, List<PublicId> models) {
+	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<PublicId> models) {
 		if (null==models || models.size() == 0) {
 			return;
 		}
@@ -100,7 +100,7 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
 	        if (null == publicId) {
 	        	publicId = createPublicId(model);
 	    	}
-	        createRelPublicId(outerObjectId, outerModelType, publicId);			
+	        createRelPublicId(outerModel, publicId);			
 	    }
 	}	
 	/**
@@ -112,8 +112,7 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
 	 * @param publicId
 	 *        publicId
 	 */
-	private void createRelPublicId(final Long outerObjectId, final ModelType
-			outerModelType,	final Long publicId) {
+	private void createRelPublicId(final BaseModel outerModel ,	final Long publicId) {
 		final String sql = "insert into REL_PUBLICID_REGISTRATION(REL_ID,REL_OBJECT_TYPE,PUBLIC_ID)"
 			      +  " values (?,?,?)"; 		       
 		       jdbcTemplate.update(new PreparedStatementCreator() {
@@ -121,8 +120,8 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
 		        			throws SQLException {           
 		            PreparedStatement ps = connection.prepareStatement(
 		            		sql);
-		            ps.setLong(1, outerObjectId);
-		            ps.setString(2, outerModelType.getName());
+		            ps.setLong(1, outerModel.getId());
+		            ps.setString(2, outerModel.getObjectType().getName());
 		            ps.setLong(3, publicId);
 					return ps;
 					}
