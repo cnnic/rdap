@@ -30,6 +30,8 @@
  */
 package org.restfulwhois.rdap.common.validation;
 
+import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
@@ -44,11 +46,13 @@ public final class UpdateValidationError implements ValidationError {
     private String description;
 
     public UpdateValidationError(ServiceErrorCode error,
-            String... errorMessageParams) {
+            Object... errorMessageParams) {
         super();
         this.httpStatusCode = error.getStatusCode().value();
         this.errorCode = error.getCode();
-        this.description = ServiceErrorCode.formatMessage(error, (Object[]) errorMessageParams);
+        this.description =
+                ServiceErrorCode.formatMessage(error,
+                        (Object[]) errorMessageParams);
     }
 
     public static ValidationError build4001Error() {
@@ -73,6 +77,23 @@ public final class UpdateValidationError implements ValidationError {
 
     public static ValidationError build4009Error() {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4009);
+    }
+
+    public static ValidationError build4010Error(String fieldName,
+            Integer minValue, Double maxValue) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4010, minValue,
+                maxValue);
+    }
+
+    public static ValidationError build4010Error(String fieldName,
+            Date minValue, Date maxValue) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4010, minValue,
+                maxValue);
+    }
+
+    public static ValidationError build4041Error(String errorMessageParam) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4041,
+                errorMessageParam);
     }
 
     public static ValidationError build4091Error(String errorMessageParam) {

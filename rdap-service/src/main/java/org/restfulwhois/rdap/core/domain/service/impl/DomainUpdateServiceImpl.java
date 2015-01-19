@@ -33,8 +33,6 @@ package org.restfulwhois.rdap.core.domain.service.impl;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.common.model.Domain.DomainType;
-import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +46,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service("domainUpdateServiceImpl")
-public class DomainUpdateServiceImpl extends
-        AbstractUpdateService<DomainDto, Domain> {
+public class DomainUpdateServiceImpl extends DomainBaseServiceImpl {
 
     /**
      * logger.
@@ -64,24 +61,24 @@ public class DomainUpdateServiceImpl extends
 
     @Override
     protected void execute(Domain domain) {
-        domainDao.create(domain);
+        Long id = domainDao.findIdByHandle(domain.getHandle());
+        if (null == id) {
+            return;
+        }
+        domainDao.update(domain);
     }
 
     @Override
     protected Domain convertDtoToModel(DomainDto dto) {
-        Domain domain = new Domain();
-        domain.setType(DomainType.getByTypeName(dto.getType()));
-        domain.setLdhName(dto.getLdhName());
-        domain.setHandle(dto.getHandle());
-        super.convertCustomProperties(dto, domain);
+        Domain domain = convertDtoToModelWithoutType(dto);
         return domain;
     }
 
     @Override
     protected ValidationResult validate(DomainDto domainDto) {
-        ValidationResult validationResult = new ValidationResult();
-        checkNotEmpty(domainDto.getLdhName(), "ldhName", validationResult);
-        checkNotEmpty(domainDto.getType(), "type", validationResult);
+        ValidationResult validationResult =
+                super.validateWithoutType(domainDto);
+        checkHandleExistForUpdate(domainDto.getHandle(), validationResult);
         return validationResult;
     }
 
