@@ -39,92 +39,94 @@ import java.util.List;
  * 
  */
 public class DomainDto extends BaseDto {
-    private String ldhName;
-    private String unicodeName;
-    private String type;
-    private List<String> status;
-    private String networkHandle;
-    private String port43;
-    private String lang;
+	private String ldhName;
+	private String unicodeName;
+	private String type;
+	private List<String> status;
+	private String networkHandle;
+	private String port43;
+	private String lang;
+	/**
+	 * variants.
+	 */
+	private List<VariantDto> variants = new ArrayList<VariantDto>();
+	private List<SecureDnsDto> secureDns = new ArrayList<SecureDnsDto>();
 
-    private List<VariantDto> variants = new ArrayList<VariantDto>();
-    private List<SecureDnsDto> secureDns = new ArrayList<SecureDnsDto>();
+	public String getLdhName() {
+		return ldhName;
+	}
 
-    public String getLdhName() {
-        return ldhName;
-    }
+	public void setLdhName(String ldhName) {
+		this.ldhName = ldhName;
+	}
 
-    public void setLdhName(String ldhName) {
-        this.ldhName = ldhName;
-    }
+	public String getUnicodeName() {
+		return unicodeName;
+	}
 
-    public String getUnicodeName() {
-        return unicodeName;
-    }
+	public void setUnicodeName(String unicodeName) {
+		this.unicodeName = unicodeName;
+	}
 
-    public void setUnicodeName(String unicodeName) {
-        this.unicodeName = unicodeName;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public List<String> getStatus() {
+		return status;
+	}
 
-    public List<String> getStatus() {
-        return status;
-    }
+	public void setStatus(List<String> status) {
+		this.status = status;
+	}
 
-    public void setStatus(List<String> status) {
-        this.status = status;
-    }
+	public String getNetworkHandle() {
+		return networkHandle;
+	}
 
-    public String getNetworkHandle() {
-        return networkHandle;
-    }
+	public void setNetworkHandle(String networkHandle) {
+		this.networkHandle = networkHandle;
+	}
 
-    public void setNetworkHandle(String networkHandle) {
-        this.networkHandle = networkHandle;
-    }
+	public String getPort43() {
+		return port43;
+	}
 
-    public String getPort43() {
-        return port43;
-    }
+	public void setPort43(String port43) {
+		this.port43 = port43;
+	}
 
-    public void setPort43(String port43) {
-        this.port43 = port43;
-    }
+	public String getLang() {
+		return lang;
+	}
 
-    public String getLang() {
-        return lang;
-    }
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
 
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
+	public List<VariantDto> getVariants() {
+		return variants;
+	}
 
-    public List<VariantDto> getVariants() {
-        return variants;
-    }
+	public void setVariants(List<VariantDto> variants) {
+		this.variants = variants;
+	}
 
-    public void setVariants(List<VariantDto> variants) {
-        this.variants = variants;
-    }
+	public List<SecureDnsDto> getSecureDns() {
+		return secureDns;
+	}
 
-    public List<SecureDnsDto> getSecureDns() {
-        return secureDns;
-    }
+	public void setSecureDns(List<SecureDnsDto> secureDns) {
+		this.secureDns = secureDns;
+	}
 
-    public void setSecureDns(List<SecureDnsDto> secureDns) {
-        this.secureDns = secureDns;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+	@Override
+	public String toString() {
+		return super.toString();
+	}
 
 }
