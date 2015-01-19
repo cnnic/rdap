@@ -32,6 +32,8 @@ package org.restfulwhois.rdap.common.dto;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.common.dto.embedded.EventDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 
@@ -65,11 +67,11 @@ public class DsDataDto extends BaseDto {
     /**
      * events.
      */
-    private List<Event> events;
+    private List<EventDto> events;
     /**
      * links.
      */
-    private List<Link> links;
+    private List<LinkDto> links;
 
     /**
      * get keyTag.
@@ -152,7 +154,7 @@ public class DsDataDto extends BaseDto {
      * 
      * @return events.
      */
-    public List<Event> getEvents() {
+    public List<EventDto> getEvents() {
         return events;
     }
 
@@ -162,7 +164,7 @@ public class DsDataDto extends BaseDto {
      * @param events
      *            events.
      */
-    public void setEvents(List<Event> events) {
+    public void setEvents(List<EventDto> events) {
         this.events = events;
     }
 
@@ -171,7 +173,7 @@ public class DsDataDto extends BaseDto {
      * 
      * @return links.
      */
-    public List<Link> getLinks() {
+    public List<LinkDto> getLinks() {
         return links;
     }
 
@@ -181,7 +183,7 @@ public class DsDataDto extends BaseDto {
      * @param links
      *            links.
      */
-    public void setLinks(List<Link> links) {
+    public void setLinks(List<LinkDto> links) {
         this.links = links;
     }
 }

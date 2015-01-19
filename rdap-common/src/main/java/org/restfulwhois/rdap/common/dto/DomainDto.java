@@ -33,98 +33,123 @@ package org.restfulwhois.rdap.common.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
+import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
+import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
+
 /**
  * 
  * @author jiashuo
  * 
  */
 public class DomainDto extends BaseDto {
-    private String ldhName;
-    private String unicodeName;
-    private String type;
-    private List<String> status;
-    private String networkHandle;
-    private String port43;
-    private String lang;
+	private String ldhName;
+	private String unicodeName;
+	private String type;
+	private List<String> status;
+	private String networkHandle;
+	private String port43;
+	private String lang;
+	private List<HandleDto> nameservers;
+	private SecureDnsDto secureDNS;
+	private List<PublicIdDto> publicIds;
+	/**
+	 * variants.
+	 */
+	private List<VariantDto> variants = new ArrayList<VariantDto>();
 
-    private List<VariantDto> variants = new ArrayList<VariantDto>();
-    private List<SecureDnsDto> secureDns = new ArrayList<SecureDnsDto>();
+	public String getLdhName() {
+		return ldhName;
+	}
 
-    public String getLdhName() {
-        return ldhName;
-    }
+	public void setLdhName(String ldhName) {
+		this.ldhName = ldhName;
+	}
 
-    public void setLdhName(String ldhName) {
-        this.ldhName = ldhName;
-    }
+	public String getUnicodeName() {
+		return unicodeName;
+	}
 
-    public String getUnicodeName() {
-        return unicodeName;
-    }
+	public void setUnicodeName(String unicodeName) {
+		this.unicodeName = unicodeName;
+	}
 
-    public void setUnicodeName(String unicodeName) {
-        this.unicodeName = unicodeName;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public List<String> getStatus() {
+		return status;
+	}
 
-    public List<String> getStatus() {
-        return status;
-    }
+	public void setStatus(List<String> status) {
+		this.status = status;
+	}
 
-    public void setStatus(List<String> status) {
-        this.status = status;
-    }
+	public String getNetworkHandle() {
+		return networkHandle;
+	}
 
-    public String getNetworkHandle() {
-        return networkHandle;
-    }
+	public void setNetworkHandle(String networkHandle) {
+		this.networkHandle = networkHandle;
+	}
 
-    public void setNetworkHandle(String networkHandle) {
-        this.networkHandle = networkHandle;
-    }
+	public String getPort43() {
+		return port43;
+	}
 
-    public String getPort43() {
-        return port43;
-    }
+	public void setPort43(String port43) {
+		this.port43 = port43;
+	}
 
-    public void setPort43(String port43) {
-        this.port43 = port43;
-    }
+	public String getLang() {
+		return lang;
+	}
 
-    public String getLang() {
-        return lang;
-    }
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
 
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
+	public List<VariantDto> getVariants() {
+		return variants;
+	}
 
-    public List<VariantDto> getVariants() {
-        return variants;
-    }
+	public void setVariants(List<VariantDto> variants) {
+		this.variants = variants;
+	}
+	
+	public List<HandleDto> getNameservers() {
+		return nameservers;
+	}
 
-    public void setVariants(List<VariantDto> variants) {
-        this.variants = variants;
-    }
+	public void setNameservers(List<HandleDto> nameservers) {
+		this.nameservers = nameservers;
+	}
 
-    public List<SecureDnsDto> getSecureDns() {
-        return secureDns;
-    }
+	public SecureDnsDto getSecureDNS() {
+		return secureDNS;
+	}
 
-    public void setSecureDns(List<SecureDnsDto> secureDns) {
-        this.secureDns = secureDns;
-    }
+	public void setSecureDNS(SecureDnsDto secureDNS) {
+		this.secureDNS = secureDNS;
+	}
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
+	public List<PublicIdDto> getPublicIds() {
+		return publicIds;
+	}
+
+	public void setPublicIds(List<PublicIdDto> publicIds) {
+		this.publicIds = publicIds;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
 
 }
