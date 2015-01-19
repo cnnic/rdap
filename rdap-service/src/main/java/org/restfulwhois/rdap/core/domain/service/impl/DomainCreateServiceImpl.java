@@ -30,19 +30,9 @@
  */
 package org.restfulwhois.rdap.core.domain.service.impl;
 
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_IDNTABLE;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
-
-import java.util.List;
-
 import org.restfulwhois.rdap.common.dto.DomainDto;
-import org.restfulwhois.rdap.common.dto.SecureDnsDto;
-import org.restfulwhois.rdap.common.dto.VariantDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
-import org.restfulwhois.rdap.common.model.DsData;
-import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
@@ -83,58 +73,7 @@ public class DomainCreateServiceImpl extends DomainBaseServiceImpl {
         checkHandleNotExistForCreate(domainDto.getHandle(), validationResult);
         checkNotEmpty(domainDto.getType(), "type", validationResult);
         checkDomainTypeValid(domainDto.getType(), "type", validationResult);
-        checkVariants(domainDto, validationResult);
-        checkSecureDns(domainDto, validationResult);
         return validationResult;
-    }
-
-    private void checkSecureDns(DomainDto domainDto,
-            ValidationResult validationResult) {
-        List<SecureDnsDto> secureDnsList = domainDto.getSecureDns();
-        if (secureDnsList.isEmpty()) {
-            return;
-        }
-        for (SecureDnsDto secureDns : secureDnsList) {
-            checkMinMaxInt(secureDns.getMaxSigLife(),
-                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
-                    "secureDns.maxSigLife", validationResult);
-            checkDsData(secureDns, validationResult);
-
-        }
-    }
-
-    private void checkDsData(SecureDnsDto secureDns,
-            ValidationResult validationResult) {
-        List<DsData> dsDatas = secureDns.getDsData();
-        if (dsDatas.isEmpty()) {
-            return;
-        }
-        for (DsData dsData : dsDatas) {
-            checkMinMaxInt(dsData.getKeyTag(),
-                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
-                    "secureDns.maxSigLife", validationResult);
-            checkEvents(dsData.getEvents(), validationResult);
-
-        }
-    }
-
-    private void checkVariants(DomainDto domainDto,
-            ValidationResult validationResult) {
-        List<VariantDto> variants = domainDto.getVariants();
-        if (variants.isEmpty()) {
-            return;
-        }
-        for (VariantDto variant : variants) {
-            checkNotEmptyAndMaxLength(variant.getLdhName(), MAX_LENGTH_HANDLE,
-                    "variant.ldhName", validationResult);
-            checkNotEmptyAndMaxLength(variant.getUnicodeName(),
-                    MAX_LENGTH_UNICODENAME, "variant.unicodeName",
-                    validationResult);
-            checkMaxLength(variant.getIdnTable(), MAX_LENGTH_IDNTABLE,
-                    "idnTable", validationResult);
-        }
     }
 
     /**

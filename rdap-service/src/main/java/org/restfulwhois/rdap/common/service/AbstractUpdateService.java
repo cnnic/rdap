@@ -30,13 +30,25 @@
  */
 package org.restfulwhois.rdap.common.service;
 
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_2048;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LANG;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_PORT43;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_STATUS;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.BaseDto;
+import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
+import org.restfulwhois.rdap.common.dto.embedded.EventDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
+import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
+import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.util.JsonUtil;
@@ -130,18 +142,99 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 fieldName, validationResult);
     }
 
-    protected void checkEvents(List<Event> events,
+    protected void checkMaxLengthForStatus(String statusValue,
             ValidationResult validationResult) {
-        if (null == events || events.isEmpty()) {
+        checkMaxLength(statusValue, MAX_LENGTH_STATUS, "status",
+                validationResult);
+    }
+
+    protected void checkMaxLengthForLang(String langValue,
+            ValidationResult validationResult) {
+        checkMaxLength(langValue, MAX_LENGTH_LANG, "lang", validationResult);
+    }
+
+    protected void checkMaxLengthForPort43(String port43Value,
+            ValidationResult validationResult) {
+        checkMaxLength(port43Value, MAX_LENGTH_PORT43, "port43",
+                validationResult);
+    }
+
+    protected void checkNotEmptyAndMaxLengthForHandle(String handleValue,
+            ValidationResult validationResult) {
+        checkNotEmptyAndMaxLength(handleValue, MAX_LENGTH_HANDLE, "handle",
+                validationResult);
+    }
+
+    protected void checkEvents(List<EventDto> events,
+            ValidationResult validationResult) {
+        if (null == events) {
             return;
         }
-        for (Event event : events) {
-            checkMinMaxDate(
-                    null,
-                    // event.getEventDate(),
-                    UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_TIMESTAMP_COLUMN,
-                    "event.eventDate", validationResult);
+        for (EventDto event : events) {
+            checkNotEmptyAndMaxLength(event.getEventAction(), MAX_LENGTH_255,
+                    "event.eventAction", validationResult);
+            checkMaxLength(event.getEventActor(), MAX_LENGTH_255,
+                    "event.eventAction", validationResult);
+            // checkMinMaxDate(
+            // event.getEventDate(),
+            // UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
+            // UpdateValidateUtil.MAX_VAL_FOR_TIMESTAMP_COLUMN,
+            // "event.eventDate", validationResult);
+        }
+    }
+
+    protected void checkPublicIds(List<PublicIdDto> publicIds,
+            ValidationResult validationResult) {
+        if (null == publicIds) {
+            return;
+        }
+        for (PublicIdDto publicId : publicIds) {
+            checkNotEmptyAndMaxLength(publicId.getIdentifier(), MAX_LENGTH_255,
+                    "public.identifier", validationResult);
+            checkNotEmptyAndMaxLength(publicId.getType(), MAX_LENGTH_255,
+                    "public.type", validationResult);
+        }
+    }
+
+    protected void checkRemarks(List<RemarkDto> remarks,
+            ValidationResult validationResult) {
+        if (null == remarks) {
+            return;
+        }
+        for (RemarkDto remark : remarks) {
+            checkMaxLength(remark.getTitle(), MAX_LENGTH_255, "remark.title",
+                    validationResult);
+            List<String> descriptions = remark.getDescription();
+            for (String description : descriptions) {
+                checkMaxLength(description, MAX_LENGTH_2048,
+                        "remark.description", validationResult);
+            }
+        }
+    }
+
+    protected void checkLinks(List<LinkDto> links,
+            ValidationResult validationResult) {
+        if (null == links) {
+            return;
+        }
+        for (LinkDto link : links) {
+            checkMaxLength(link.getTitle(), MAX_LENGTH_255, "link.title",
+                    validationResult);
+            checkMaxLength(link.getMedia(), MAX_LENGTH_255, "link.media",
+                    validationResult);
+            checkMaxLength(link.getRel(), MAX_LENGTH_255, "link.rel",
+                    validationResult);
+            checkMaxLength(link.getType(), MAX_LENGTH_255, "link.type",
+                    validationResult);
+            checkMaxLength(link.getValue(), MAX_LENGTH_2048, "link.value",
+                    validationResult);
+            checkMaxLength(link.getHref(), MAX_LENGTH_2048, "link.href",
+                    validationResult);
+            List<String> hreflangs = link.getHreflang();
+            for (String hreflang : hreflangs) {
+                checkMaxLength(hreflang, MAX_LENGTH_LANG, "link.hreflang",
+                        validationResult);
+            }
         }
     }
 
