@@ -118,7 +118,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         checkMaxLength(value, maxLength, fieldName, validationResult);
     }
 
-    protected void checkMinMaxInt(int value, int minValue, double maxValue,
+    protected void checkMinMaxInt(int value, int minValue, long maxValue,
             String fieldName, ValidationResult validationResult) {
         UpdateValidateUtil.checkMinMaxInt(value, minValue, maxValue, fieldName,
                 validationResult);

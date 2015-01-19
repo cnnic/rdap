@@ -67,7 +67,7 @@ public enum ServiceErrorCode {
     public static String formatMessage(ServiceErrorCode serviceErrorCode,
             Object[] errorMessageParams) {
         return String.format(serviceErrorCode.getMessage(),
-                (Object[]) errorMessageParams);
+                errorMessageParams);
     }
 
     public HttpStatus getStatusCode() {

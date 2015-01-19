@@ -44,6 +44,7 @@ import org.restfulwhois.rdap.common.validation.ValidationResult;
  * 
  */
 public class UpdateValidateUtil {
+    private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final int MAX_LENGTH_LANG = 64;
     public static final int MAX_LENGTH_PORT43 = 4096;
     public static final int MAX_LENGTH_UNICODENAME = 1024;
@@ -51,16 +52,17 @@ public class UpdateValidateUtil {
     public static final int MAX_LENGTH_IDNTABLE = 100;
     public static final int MAX_LENGTH_LDHNAME = 255;
     public static final int MIN_VAL_FOR_INT_COLUMN = 0;
-    public static final double MAX_VAL_FOR_INT_COLUMN = Math.pow(2, 32) - 1;
+    // Math.pow(2, 32) - 1;
+    public static final long MAX_VAL_FOR_INT_COLUMN = 4294967296L;
     public static Date MIN_VAL_FOR_TIMESTAMP_COLUMN = null;
     public static Date MAX_VAL_FOR_TIMESTAMP_COLUMN = null;
     static {
         try {
             MIN_VAL_FOR_TIMESTAMP_COLUMN =
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                    new SimpleDateFormat(DEFAULT_DATE_FORMAT)
                             .parse("1970-01-02 00:00:00");
             MAX_VAL_FOR_TIMESTAMP_COLUMN =
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                    new SimpleDateFormat(DEFAULT_DATE_FORMAT)
                             .parse("2038-01-02 00:00:00");
         } catch (ParseException e) {
         }
@@ -82,7 +84,7 @@ public class UpdateValidateUtil {
         }
     }
 
-    public static void checkMinMaxInt(int value, int minValue, double maxValue,
+    public static void checkMinMaxInt(int value, int minValue, long maxValue,
             String fieldName, ValidationResult validationResult) {
         if (value < minValue || value > maxValue) {
             validationResult.addError(UpdateValidationError.build4010Error(
@@ -93,8 +95,10 @@ public class UpdateValidateUtil {
     public static void checkMinMaxDate(Date value, Date minValue,
             Date maxValue, String fieldName, ValidationResult validationResult) {
         if (value.compareTo(minValue) < 0 || value.compareTo(maxValue) > 0) {
-            validationResult.addError(UpdateValidationError.build4010Error(
-                    fieldName, minValue, maxValue));
+            SimpleDateFormat format = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+            validationResult
+                    .addError(UpdateValidationError.build4010Error(fieldName,
+                            format.format(minValue), format.format(maxValue)));
         }
     }
 
