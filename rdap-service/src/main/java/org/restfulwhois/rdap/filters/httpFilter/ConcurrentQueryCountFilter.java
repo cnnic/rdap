@@ -106,4 +106,13 @@ public class ConcurrentQueryCountFilter implements HttpFilter {
                 RestResponse.createResponse509();
         FilterHelper.writeResponse(responseEntity, response);
     }
+
+    @Override
+    public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
+        String uri = req.getRequestURI();
+        if (FilterHelper.isUpdateUri(uri)) {
+            return false;
+        }
+        return true;
+    }
 }

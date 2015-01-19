@@ -30,61 +30,135 @@
  */
 package org.restfulwhois.rdap.core.domain.service.impl;
 
-import org.restfulwhois.rdap.common.dao.UpdateDao;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_IDNTABLE;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
+
+import java.util.List;
+
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.SecureDnsDto;
+import org.restfulwhois.rdap.common.dto.VariantDto;
 import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.common.service.AbstractUpdateService;
+import org.restfulwhois.rdap.common.model.Domain.DomainType;
+import org.restfulwhois.rdap.common.model.DsData;
+import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
+import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * query service implementation.
- * 
- * RdapController's main query service for querying or searching.
- * 
- * Provide the all tlds to be supported
- * 
- * Requirement from http://www.ietf.org/id/draft-ietf-weirds-rdap-query-10.txt.
+ * create service implementation.
  * 
  * @author jiashuo
  * 
  */
 @Service("domainCreateServiceImpl")
-public class DomainCreateServiceImpl extends
-        AbstractUpdateService<DomainDto, Domain> {
+public class DomainCreateServiceImpl extends DomainBaseServiceImpl {
 
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainCreateServiceImpl.class);
-    /**
-     * domain DAO.
-     */
-    @Autowired
-    private UpdateDao<Domain> domainDao;
 
     @Override
-    protected void doCreate(Domain domain) {
-        domainDao.create(domain);
+    protected void execute(Domain domain) {
+        dao.create(domain);
     }
 
     @Override
     protected Domain convertDtoToModel(DomainDto dto) {
-        Domain domain = new Domain();
-        domain.setLdhName(dto.getDomainName());
-        domain.setHandle(dto.getHandle());
-        return null;
+        Domain domain = super.convertDtoToModelWithoutType(dto);
+        domain.setType(DomainType.getByTypeName(dto.getType()));
+        return domain;
     }
 
     @Override
     protected ValidationResult validate(DomainDto domainDto) {
-        ValidationResult validationResult = new ValidationResult();
-        checkNotEmpty(domainDto.getDomainName(), "domainName", validationResult);
+        ValidationResult validationResult =
+                super.validateWithoutType(domainDto);
+        checkHandleNotExistForCreate(domainDto.getHandle(), validationResult);
+        checkNotEmpty(domainDto.getType(), "type", validationResult);
+        checkDomainTypeValid(domainDto.getType(), "type", validationResult);
+        checkVariants(domainDto, validationResult);
+        checkSecureDns(domainDto, validationResult);
         return validationResult;
+    }
+
+    private void checkSecureDns(DomainDto domainDto,
+            ValidationResult validationResult) {
+        List<SecureDnsDto> secureDnsList = domainDto.getSecureDns();
+        if (secureDnsList.isEmpty()) {
+            return;
+        }
+        for (SecureDnsDto secureDns : secureDnsList) {
+            checkMinMaxInt(secureDns.getMaxSigLife(),
+                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
+                    "secureDns.maxSigLife", validationResult);
+            checkDsData(secureDns, validationResult);
+
+        }
+    }
+
+    private void checkDsData(SecureDnsDto secureDns,
+            ValidationResult validationResult) {
+        List<DsData> dsDatas = secureDns.getDsData();
+        if (dsDatas.isEmpty()) {
+            return;
+        }
+        for (DsData dsData : dsDatas) {
+            checkMinMaxInt(dsData.getKeyTag(),
+                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
+                    "secureDns.maxSigLife", validationResult);
+            checkEvents(dsData.getEvents(), validationResult);
+
+        }
+    }
+
+    private void checkVariants(DomainDto domainDto,
+            ValidationResult validationResult) {
+        List<VariantDto> variants = domainDto.getVariants();
+        if (variants.isEmpty()) {
+            return;
+        }
+        for (VariantDto variant : variants) {
+            checkNotEmptyAndMaxLength(variant.getLdhName(), MAX_LENGTH_HANDLE,
+                    "variant.ldhName", validationResult);
+            checkNotEmptyAndMaxLength(variant.getUnicodeName(),
+                    MAX_LENGTH_UNICODENAME, "variant.unicodeName",
+                    validationResult);
+            checkMaxLength(variant.getIdnTable(), MAX_LENGTH_IDNTABLE,
+                    "idnTable", validationResult);
+        }
+    }
+
+    /**
+     * 
+     * @param typeStr
+     * @param fieldName
+     * @param validationResult
+     */
+    private void checkDomainTypeValid(String typeStr, String fieldName,
+            ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        DomainType domainType = null;
+        DomainType[] types = DomainType.values();
+        for (DomainType type : types) {
+            if (type.getName().equals(typeStr)) {
+                domainType = type;
+            }
+        }
+        if (null == domainType) {
+            validationResult.addError(UpdateValidationError
+                    .build4008Error(fieldName));
+        }
     }
 
 }

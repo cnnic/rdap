@@ -106,4 +106,13 @@ public class RateLimitFilter implements HttpFilter {
             HttpServletResponse response) throws Exception {
         return true;
     }
+
+    @Override
+    public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
+        String uri = req.getRequestURI();
+        if (FilterHelper.isUpdateUri(uri)) {
+            return false;
+        }
+        return true;
+    }
 }

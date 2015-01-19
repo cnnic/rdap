@@ -35,11 +35,14 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 
  * @author jiashuo
  * 
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BaseDto {
 
     private String handle;

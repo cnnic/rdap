@@ -30,10 +30,14 @@
  */
 package org.restfulwhois.rdap.core.domain.dao.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -42,6 +46,16 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
+    private static final String SQL_CREATE_DOMAIN =
+            "INSERT INTO RDAP_DOMAIN"
+                    + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"
+                    + " values(?,?,?,?,?,?,?,?)";
+    private static final String SQL_UPDATE_DOMAIN =
+            "UPDATE RDAP_DOMAIN"
+                    + " SET HANDLE=?,LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
+                    + " ,CUSTOM_PROPERTIES=?";
+    private static final String SQL_DELETE_DOMAIN =
+            "DELETE FROM RDAP_DOMAIN where HANDLE=?";
     /**
      * logger.
      */
@@ -49,21 +63,46 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
             .getLogger(DomainUpdateDaoImpl.class);
 
     @Override
-    public Domain create(Domain model) {
-        // TODO Auto-generated method stub
+    public Domain create(final Domain model) {
+        jdbcTemplate.update(SQL_CREATE_DOMAIN, new PreparedStatementSetter() {
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, model.getHandle());
+                ps.setString(2, model.getLdhName());
+                ps.setString(3, model.getUnicodeName());
+                ps.setString(4, model.getPort43());
+                ps.setString(5, model.getLang());
+                ps.setString(6, model.getType().getName());
+                ps.setObject(7, model.getNetworkId());
+                ps.setString(8, model.getCustomPropertiesJsonVal());
+            }
+        });
         return model;
     }
 
     @Override
-    public void update(Domain model) {
-        // TODO Auto-generated method stub
-
+    public void update(final Domain model) {
+        jdbcTemplate.update(SQL_UPDATE_DOMAIN, new PreparedStatementSetter() {
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, model.getHandle());
+                ps.setString(2, model.getLdhName());
+                ps.setString(3, model.getUnicodeName());
+                ps.setString(4, model.getPort43());
+                ps.setString(5, model.getLang());
+                ps.setObject(6, model.getNetworkId());
+                ps.setString(7, model.getCustomPropertiesJsonVal());
+            }
+        });
     }
 
     @Override
     public void delete(Domain model) {
         // TODO Auto-generated method stub
+//        SQL_DELETE_DOMAIN
+    }
 
+    @Override
+    public Long findIdByHandle(String handle) {
+        return super.findIdByHandle(handle, "DOMAIN_ID", "RDAP_DOMAIN");
     }
 
 }

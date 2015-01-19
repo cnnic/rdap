@@ -34,12 +34,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * 
  * @author jiashuo
  * 
  */
+@JsonInclude(Include.NON_DEFAULT)
 public class UpdateResponse {
     @JsonIgnore
     private int httpStatusCode;
@@ -62,6 +65,16 @@ public class UpdateResponse {
         response.setSubErrorCode(subErrorCode);
         response.setHttpStatusCode(httpStatusCode);
         response.setHandle(handle);
+        response.addDescription(description);
+        return response;
+    }
+
+    public static UpdateResponse buildErrorResponse(int subErrorCode,
+            int httpStatusCode, String description) {
+        UpdateResponse response = new UpdateResponse();
+        response.setErrorCode(httpStatusCode);
+        response.setSubErrorCode(subErrorCode);
+        response.setHttpStatusCode(httpStatusCode);
         response.addDescription(description);
         return response;
     }

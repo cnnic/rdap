@@ -37,7 +37,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.common.model.ErrorMessage;
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +62,17 @@ public final class FilterHelper {
     }
 
     /**
+     * check if is update URI.
+     * 
+     * @param uri
+     *            URI.
+     * @return true if is update URI, false if not.
+     */
+    public static boolean isUpdateUri(String uri) {
+        return StringUtils.startsWith(uri, "/u/");
+    }
+
+    /**
      * write response for responseEntity.
      * 
      * @param responseEntity
@@ -71,8 +82,7 @@ public final class FilterHelper {
      * @throws IOException
      *             IOException.
      */
-    public static void writeResponse(
-            ResponseEntity<ErrorMessage> responseEntity,
+    public static void writeResponse(ResponseEntity responseEntity,
             HttpServletResponse response) throws IOException {
         response.setHeader("Content-Type", "application/rdap+json");
         HttpHeaders headers = responseEntity.getHeaders();

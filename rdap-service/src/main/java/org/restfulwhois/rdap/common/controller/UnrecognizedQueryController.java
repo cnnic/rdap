@@ -36,7 +36,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Controller for unrecognized URI.
+ * Controller for unrecognized query URI.
  * 
  * @author jiashuo
  * 

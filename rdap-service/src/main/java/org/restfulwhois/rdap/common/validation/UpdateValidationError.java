@@ -30,6 +30,8 @@
  */
 package org.restfulwhois.rdap.common.validation;
 
+import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
@@ -44,15 +46,58 @@ public final class UpdateValidationError implements ValidationError {
     private String description;
 
     public UpdateValidationError(ServiceErrorCode error,
-            String errorMessageParam) {
+            Object... errorMessageParams) {
         super();
         this.httpStatusCode = error.getStatusCode().value();
         this.errorCode = error.getCode();
-        this.description = String.format(error.getMessage(), errorMessageParam);
+        this.description =
+                ServiceErrorCode.formatMessage(error,
+                        (Object[]) errorMessageParams);
+    }
+
+    public static ValidationError build4001Error() {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4001);
     }
 
     public static ValidationError build4002Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4002,
+                errorMessageParam);
+    }
+
+    public static ValidationError build4003Error(String fieldName,
+            String maxLength) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4003,
+                fieldName, maxLength);
+    }
+
+    public static ValidationError build4008Error(String errorMessageParam) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4008,
+                errorMessageParam);
+    }
+
+    public static ValidationError build4009Error() {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4009);
+    }
+
+    public static ValidationError build4010Error(String fieldName,
+            Integer minValue, Long maxValue) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4010,
+                fieldName, minValue, maxValue);
+    }
+
+    public static ValidationError build4010Error(String fieldName,
+            String minValue, String maxValue) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4010,
+                fieldName, minValue, maxValue);
+    }
+
+    public static ValidationError build4041Error(String errorMessageParam) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4041,
+                errorMessageParam);
+    }
+
+    public static ValidationError build4091Error(String errorMessageParam) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4091,
                 errorMessageParam);
     }
 

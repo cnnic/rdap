@@ -44,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,7 +57,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  */
 @Controller
-@RequestMapping(value = { "/u/" })
+@RequestMapping(value = { "/u/domain" })
 public class DomainUpdateController {
     /**
      * logger.
@@ -67,6 +68,12 @@ public class DomainUpdateController {
     @Autowired
     @Qualifier("domainCreateServiceImpl")
     private UpdateService<DomainDto, Domain> createService;
+    @Autowired
+    @Qualifier("domainUpdateServiceImpl")
+    private UpdateService<DomainDto, Domain> updateService;
+    @Autowired
+    @Qualifier("domainDeleteServiceImpl")
+    private UpdateService<DomainDto, Domain> deleteService;
 
     /**
      * create domain.
@@ -77,11 +84,49 @@ public class DomainUpdateController {
      * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
-    @RequestMapping(value = { "domain" }, method = RequestMethod.POST)
+    @RequestMapping(value = { "" }, method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity create(@RequestBody DomainDto domainDto,
             HttpServletRequest request) {
         UpdateResponse response = createService.execute(domainDto);
+        return RestResponse.createUpdateResponse(response);
+    }
+
+    /**
+     * update domain.
+     * 
+     * @param domainName
+     * @param request
+     * @return
+     * @throws DecodeException
+     */
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseEntity update(@RequestBody DomainDto domainDto,
+            @PathVariable String handle, HttpServletRequest request) {
+        domainDto.setHandle(handle);
+        UpdateResponse response = updateService.execute(domainDto);
+        return RestResponse.createUpdateResponse(response);
+    }
+
+    /**
+     * delete domain.
+     * 
+     * @param domainName
+     * @param request
+     * @return
+     * @throws DecodeException
+     */
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = { "/u/domain/{handle}" },
+            method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity delete(@PathVariable String handle,
+            HttpServletRequest request) {
+        DomainDto dto = new DomainDto();
+        dto.setHandle(handle);
+        UpdateResponse response = deleteService.execute(dto);
         return RestResponse.createUpdateResponse(response);
     }
 
