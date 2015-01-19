@@ -33,6 +33,11 @@ package org.restfulwhois.rdap.common.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
+import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
+import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
+
 /**
  * 
  * @author jiashuo
@@ -46,11 +51,13 @@ public class DomainDto extends BaseDto {
 	private String networkHandle;
 	private String port43;
 	private String lang;
+	private List<HandleDto> nameservers;
+	private SecureDnsDto secureDNS;
+	private List<PublicIdDto> publicIds;
 	/**
 	 * variants.
 	 */
 	private List<VariantDto> variants = new ArrayList<VariantDto>();
-	private List<SecureDnsDto> secureDns = new ArrayList<SecureDnsDto>();
 
 	public String getLdhName() {
 		return ldhName;
@@ -115,13 +122,29 @@ public class DomainDto extends BaseDto {
 	public void setVariants(List<VariantDto> variants) {
 		this.variants = variants;
 	}
-
-	public List<SecureDnsDto> getSecureDns() {
-		return secureDns;
+	
+	public List<HandleDto> getNameservers() {
+		return nameservers;
 	}
 
-	public void setSecureDns(List<SecureDnsDto> secureDns) {
-		this.secureDns = secureDns;
+	public void setNameservers(List<HandleDto> nameservers) {
+		this.nameservers = nameservers;
+	}
+
+	public SecureDnsDto getSecureDNS() {
+		return secureDNS;
+	}
+
+	public void setSecureDNS(SecureDnsDto secureDNS) {
+		this.secureDNS = secureDNS;
+	}
+
+	public List<PublicIdDto> getPublicIds() {
+		return publicIds;
+	}
+
+	public void setPublicIds(List<PublicIdDto> publicIds) {
+		this.publicIds = publicIds;
 	}
 
 	@Override
