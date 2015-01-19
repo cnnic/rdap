@@ -49,11 +49,14 @@ public class UpdateValidateUtil {
     public static final int MAX_LENGTH_PORT43 = 4096;
     public static final int MAX_LENGTH_UNICODENAME = 1024;
     public static final int MAX_LENGTH_HANDLE = 100;
-    public static final int MAX_LENGTH_IDNTABLE = 100;
+    public static final int MAX_LENGTH_32 = 32;
+    public static final int MAX_LENGTH_STATUS = 20;
     public static final int MAX_LENGTH_LDHNAME = 255;
+    public static final int MAX_LENGTH_255 = 255;
+    public static final int MAX_LENGTH_2048 = 2048;
     public static final int MIN_VAL_FOR_INT_COLUMN = 0;
-    // Math.pow(2, 32) - 1;
-    public static final long MAX_VAL_FOR_INT_COLUMN = 4294967296L;
+    // Math.pow(2, 31) - 1;
+    public static final long MAX_VAL_FOR_INT_COLUMN = 2147483647L;
     public static Date MIN_VAL_FOR_TIMESTAMP_COLUMN = null;
     public static Date MAX_VAL_FOR_TIMESTAMP_COLUMN = null;
     static {

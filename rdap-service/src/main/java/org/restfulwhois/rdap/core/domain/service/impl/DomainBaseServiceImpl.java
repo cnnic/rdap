@@ -30,16 +30,31 @@
  */
 package org.restfulwhois.rdap.core.domain.service.impl;
 
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_32;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LANG;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LDHNAME;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_PORT43;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
+import org.restfulwhois.rdap.common.dto.embedded.KeyDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
+import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
+import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.KeyData;
+import org.restfulwhois.rdap.common.model.SecureDns;
+import org.restfulwhois.rdap.common.model.Variant;
+import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
+import org.restfulwhois.rdap.common.util.BeanUtil;
+import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,15 +75,57 @@ public abstract class DomainBaseServiceImpl extends
             .getLogger(DomainBaseServiceImpl.class);
 
     protected Domain convertDtoToModelWithoutType(DomainDto dto) {
-        Domain domain = new Domain();
-        domain.setHandle(dto.getHandle());
-        domain.setLdhName(dto.getLdhName());
-        domain.setUnicodeName(dto.getUnicodeName());
-        domain.setStatus(dto.getStatus());
-        domain.setPort43(dto.getPort43());
-        domain.setLang(dto.getLang());
-        setNetworkIdIfExist(dto, domain);
+        Domain domain = convertDtoToDomain(dto);
         super.convertCustomProperties(dto, domain);
+        convertNetworkIdIfExist(dto, domain);
+        return domain;
+    }
+
+    private void convertSecureDns(DomainDto dto, Domain domain) {
+        SecureDnsDto secureDnsDto = dto.getSecureDNS();
+        if (null == secureDnsDto) {
+            return;
+        }
+        SecureDns secureDns = new SecureDns();
+        BeanUtil.copyProperties(secureDnsDto, secureDns, "keyData", "dsData");
+        List<KeyDataDto> keyDataDtoList = secureDnsDto.getKeyData();
+        if (null == keyDataDtoList) {
+            return;
+        }
+        for (KeyDataDto keyDataDto : keyDataDtoList) {
+            KeyData keyData = new KeyData();
+            BeanUtil.copyProperties(keyDataDto, keyData, "events");
+        }
+    }
+
+    private void convertVariants(DomainDto dto, Domain domain) {
+        List<VariantDto> variantDtos = dto.getVariants();
+        if (null == variantDtos) {
+            return;
+        }
+        List<Variants> variantsList = new ArrayList<Variants>();
+        domain.setVariants(variantsList);
+        for (VariantDto variantDto : variantDtos) {
+            Variants variants = new Variants();
+            variantsList.add(variants);
+            variants.setRelation(variantDto.getRelation());
+            variants.setIdnTable(variantDto.getIdnTable());
+            List<VariantNameDto> variantNames = variantDto.getVariantNames();
+            List<Variant> variantList = new ArrayList<Variant>();
+            variants.setVariantNames(variantList);
+            for (VariantNameDto variantNameDto : variantNames) {
+                Variant variant = new Variant();
+                variantList.add(variant);
+                variant.setLdhName(variantNameDto.getLdhName());
+                variant.setUnicodeName(variantNameDto.getUnicodeName());
+            }
+        }
+    }
+
+    private Domain convertDtoToDomain(DomainDto dto) {
+        Domain domain = new Domain();
+        BeanUtil.copyProperties(dto, domain, "variants", "nameservers",
+                "entities", "publicIds", "remarks", "links");
         return domain;
     }
 
@@ -80,7 +137,7 @@ public abstract class DomainBaseServiceImpl extends
      * @param domain
      *            domain.
      */
-    private void setNetworkIdIfExist(DomainDto dto, Domain domain) {
+    private void convertNetworkIdIfExist(DomainDto dto, Domain domain) {
         if (StringUtils.isBlank(dto.getNetworkHandle())) {
             return;
         }
@@ -94,15 +151,118 @@ public abstract class DomainBaseServiceImpl extends
         ValidationResult validationResult = new ValidationResult();
         checkNotEmptyAndMaxLength(domainDto.getLdhName(), MAX_LENGTH_LDHNAME,
                 "ldhName", validationResult);
-        checkNotEmptyAndMaxLength(domainDto.getHandle(), MAX_LENGTH_HANDLE,
-                "handle", validationResult);
+        checkNotEmptyAndMaxLengthForHandle(domainDto.getHandle(),
+                validationResult);
         checkMaxLength(domainDto.getUnicodeName(), MAX_LENGTH_UNICODENAME,
                 "unicodeName", validationResult);
-        checkMaxLength(domainDto.getPort43(), MAX_LENGTH_PORT43, "port43",
-                validationResult);
-        checkMaxLength(domainDto.getLang(), MAX_LENGTH_LANG, "lang",
-                validationResult);
+        checkMaxLengthForPort43(domainDto.getPort43(), validationResult);
+        checkMaxLengthForLang(domainDto.getLang(), validationResult);
+        List<String> statusList = domainDto.getStatus();
+        for (String status : statusList) {
+            checkMaxLengthForStatus(status, validationResult);
+        }
+        checkVariants(domainDto, validationResult);
+        checkSecureDns(domainDto, validationResult);
+        checkEntities(domainDto.getEntities(), validationResult);
+        checkPublicIds(domainDto.getPublicIds(), validationResult);
+        checkRemarks(domainDto.getRemarks(), validationResult);
+        checkLinks(domainDto.getLinks(), validationResult);
+        checkEvents(domainDto.getEvents(), validationResult);
         return validationResult;
     }
 
+    private void checkEntities(List<EntityHandleDto> entities,
+            ValidationResult validationResult) {
+        if (null == entities) {
+            return;
+        }
+        for (EntityHandleDto entityHandle : entities) {
+            List<String> roles = entityHandle.getRoles();
+            for (String role : roles) {
+                checkNotEmptyAndMaxLength(role, MAX_LENGTH_32, "entity.role",
+                        validationResult);
+            }
+        }
+    }
+
+    private void checkSecureDns(DomainDto domainDto,
+            ValidationResult validationResult) {
+        SecureDnsDto secureDns = domainDto.getSecureDNS();
+        if (null == secureDns) {
+            return;
+        }
+        checkMinMaxInt(secureDns.getMaxSigLife(),
+                UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
+                "secureDns.maxSigLife", validationResult);
+        checkDsData(secureDns, validationResult);
+        checkKeyData(secureDns, validationResult);
+    }
+
+    private void checkKeyData(SecureDnsDto secureDns,
+            ValidationResult validationResult) {
+        List<KeyDataDto> keyDatas = secureDns.getKeyData();
+        if (null == keyDatas) {
+            return;
+        }
+        for (KeyDataDto keyData : keyDatas) {
+            checkMinMaxInt(keyData.getFlags(),
+                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN, "keyData.flags",
+                    validationResult);
+            checkMinMaxInt(keyData.getProtocol(),
+                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
+                    "keyData.protocol", validationResult);
+            checkNotEmptyAndMaxLength(keyData.getPublicKey(),
+                    UpdateValidateUtil.MAX_LENGTH_2048, "keyData.publicKey",
+                    validationResult);
+            checkMinMaxInt(keyData.getAlgorithm(),
+                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
+                    "keyData.algorithm", validationResult);
+            checkEvents(keyData.getEvents(), validationResult);
+        }
+    }
+
+    private void checkDsData(SecureDnsDto secureDns,
+            ValidationResult validationResult) {
+        List<DsDataDto> dsDatas = secureDns.getDsData();
+        if (null == dsDatas) {
+            return;
+        }
+        for (DsDataDto dsData : dsDatas) {
+            checkMinMaxInt(dsData.getKeyTag(),
+                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
+                    "secureDns.maxSigLife", validationResult);
+            checkEvents(dsData.getEvents(), validationResult);
+
+        }
+    }
+
+    private void checkVariants(DomainDto domainDto,
+            ValidationResult validationResult) {
+        List<VariantDto> variants = domainDto.getVariants();
+        if (null == variants) {
+            return;
+        }
+        for (VariantDto variant : variants) {
+            checkMaxLength(variant.getIdnTable(), MAX_LENGTH_255,
+                    "variant.idnTable", validationResult);
+            List<String> relations = variant.getRelation();
+            for (String relation : relations) {
+                checkMaxLength(relation, MAX_LENGTH_32, "variant.relation",
+                        validationResult);
+            }
+            List<VariantNameDto> variantNames = variant.getVariantNames();
+            for (VariantNameDto variantName : variantNames) {
+                checkNotEmptyAndMaxLength(variantName.getLdhName(),
+                        MAX_LENGTH_HANDLE, "variant.ldhName", validationResult);
+                checkNotEmptyAndMaxLength(variantName.getUnicodeName(),
+                        MAX_LENGTH_UNICODENAME, "variant.unicodeName",
+                        validationResult);
+            }
+        }
+    }
 }

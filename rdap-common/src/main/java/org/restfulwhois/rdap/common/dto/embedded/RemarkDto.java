@@ -2,8 +2,21 @@ package org.restfulwhois.rdap.common.dto.embedded;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.common.model.Link;
+
 public class RemarkDto{
-	private List<String> description;
+    /**
+     * title.
+     */
+    private String title;
+    /**
+     * description.
+     */
+    private List<String> description;
+    /**
+     * links.
+     */
+    private List<Link> links;
 
 	public List<String> getDescription() {
 		return description;
@@ -12,6 +25,21 @@ public class RemarkDto{
 	public void setDescription(List<String> description) {
 		this.description = description;
 	}
-	
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 	
 }
