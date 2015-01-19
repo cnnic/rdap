@@ -1,10 +1,21 @@
 package org.restfulwhois.rdap.common.dto.embedded;
 
+import java.util.List;
+
 public class LinkDto{
 	private String value;
 	private String rel;
 	private String href;
 	private String type;
+	private List<String> hreflang;
+    /**
+     * title of link.
+     */   
+    private String title;
+    /**
+     * media of link.
+     */
+    private String media;
 	public String getValue() {
 		return value;
 	}
@@ -29,6 +40,23 @@ public class LinkDto{
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+    public List<String> getHreflang() {
+        return hreflang;
+    }
+    public void setHreflang(List<String> hreflang) {
+        this.hreflang = hreflang;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getMedia() {
+        return media;
+    }
+    public void setMedia(String media) {
+        this.media = media;
+    }
 	
 }
