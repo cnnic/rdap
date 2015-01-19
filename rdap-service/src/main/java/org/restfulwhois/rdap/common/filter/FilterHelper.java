@@ -37,6 +37,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +59,17 @@ public final class FilterHelper {
      */
     private FilterHelper() {
 
+    }
+
+    /**
+     * check if is update URI.
+     * 
+     * @param uri
+     *            URI.
+     * @return true if is update URI, false if not.
+     */
+    public static boolean isUpdateUri(String uri) {
+        return StringUtils.startsWith(uri, "/u/");
     }
 
     /**
