@@ -37,11 +37,12 @@ import java.sql.Statement;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
+import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.RelDomainVariant;
 import org.restfulwhois.rdap.common.model.Variant;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.restfulwhois.rdap.common.util.DomainUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants> {
+public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDto> {
    /**
      * logger for record log.
      */
@@ -91,11 +92,11 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants> {
 	 *        Variants of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<Variants> models) {
+	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<VariantDto> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
-	    for (Variants model: models) {
+	    for (VariantDto model: models) {
 	    	  createVariants(outerModel.getId(), model);	    	  
 	    }
 	}
@@ -107,15 +108,19 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants> {
 	 *        Variants object
 	 *         
 	 */
-	private void createVariants(Long outerObjectId, Variants model) {
-		List<Variant> variantList = model.getVariantNames();
+	private void createVariants(Long outerObjectId, VariantDto model) {
+		List<VariantNameDto> variantList = model.getVariantNames();
 		if (null == variantList || variantList.size() == 0) {
 			return;
 		}
-		for (Variant variant:variantList) {
-			Long variantId = createVariant(variant);  
-			variant.setId(variantId);
-	    	createRelDomainVariant(outerObjectId, variant);
+		for (VariantNameDto variant:variantList) {
+			Variant variantObject = new Variant();
+			variantObject.setIdnTable(model.getIdnTable());
+			variantObject.setUnicodeName(variant.getUnicodeName());
+			//variantObject.setRelations(model.getRelation());
+			Long variantId = createVariant(variantObject);  
+			//variant.setId(variantId);			
+	    	//createRelDomainVariant(outerObjectId, variant, variantId);
 		}
 	}
 	/**
@@ -126,7 +131,7 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants> {
 	 *        Variant object
 	 */
 	private void createRelDomainVariant(final Long outerObjectId, 
-			        final Variant model) {
+			        final Variant model, final Long variantId) {
 	    final List<RelDomainVariant> relationList = model.getRelations();
 	    if(null == relationList || relationList .size() == 0 ){
 	    	return;

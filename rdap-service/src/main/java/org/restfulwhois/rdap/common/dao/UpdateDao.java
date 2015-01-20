@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.common.dao;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 
 /**
@@ -42,7 +43,7 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
  * @author jiashuo
  * 
  */
-public interface UpdateDao<T extends BaseModel> {
+public interface UpdateDao<T extends BaseModel, DTO extends BaseDto> {
 
     T create(T model);
 
@@ -52,6 +53,6 @@ public interface UpdateDao<T extends BaseModel> {
 
     Long findIdByHandle(String handle);
     
-    void batchCreateAsInnerObjects(BaseModel outerModel, List<T> models);
+    void batchCreateAsInnerObjects(BaseModel outerModel, List<DTO> models);
 
 }

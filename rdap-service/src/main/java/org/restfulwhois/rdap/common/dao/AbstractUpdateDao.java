@@ -36,8 +36,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +52,8 @@ import org.springframework.jdbc.core.RowMapper;
  * @author jiashuo
  * 
  */
-public abstract class AbstractUpdateDao<T extends BaseModel>
-           implements UpdateDao<T> {
+public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto>
+           implements UpdateDao<T, DTO> {
     private static final String TPL_COUNT_BY_HANDLE =
             "SELECT %s as ID from %s where HANDLE = ?";
     /**
@@ -69,7 +69,7 @@ public abstract class AbstractUpdateDao<T extends BaseModel>
     protected JdbcTemplate jdbcTemplate;
     
     @Override
-    public void batchCreateAsInnerObjects(BaseModel outerModel, List<T> models) {
+    public void batchCreateAsInnerObjects(BaseModel outerModel, List<DTO> models) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }

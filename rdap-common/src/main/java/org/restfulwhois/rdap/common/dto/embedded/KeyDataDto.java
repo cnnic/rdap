@@ -2,7 +2,9 @@ package org.restfulwhois.rdap.common.dto.embedded;
 
 import java.util.List;
 
-public class KeyDataDto{
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class KeyDataDto extends BaseDto{
 	private int flags;
 	private int protocol;
 	private int algorithm;

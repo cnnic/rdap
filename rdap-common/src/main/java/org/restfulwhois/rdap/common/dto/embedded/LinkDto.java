@@ -2,7 +2,9 @@ package org.restfulwhois.rdap.common.dto.embedded;
 
 import java.util.List;
 
-public class LinkDto{
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class LinkDto extends BaseDto{
 	private String value;
 	private String rel;
 	private String href;

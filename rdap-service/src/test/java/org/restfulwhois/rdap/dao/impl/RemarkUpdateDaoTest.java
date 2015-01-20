@@ -36,10 +36,10 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
+import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
 import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.Remark;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -59,7 +59,7 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
 	    @Autowired
-	    private UpdateDao<Remark> updateDao;
+	    private UpdateDao<Remark, RemarkDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
@@ -67,19 +67,19 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	    public void testcreateRemark() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<Remark> remarkList = new ArrayList<Remark>();
+	    	List<RemarkDto> remarkList = new ArrayList<RemarkDto>();
 	    	List<String> description = new ArrayList<String>();
 	    	description.add("remarks_description1");
 	    	description.add("remarks_description2");
-	    	Remark remark = new Remark();
+	    	RemarkDto remark = new RemarkDto();
 	    	remark.setTitle("域名测试-200-50-remark2");
 	    	remark.setDescription(description);	
 	    	//link
-	    	List<Link> linkList = new ArrayList<Link>();
+	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
 	    	List<String> hreflang = new ArrayList<String>();
 	    	hreflang.add("en");
 	    	hreflang.add("zh");
-	    	Link link = new Link();
+	    	LinkDto link = new LinkDto();
 	    	link.setHref("http://sina.com.cn");
 	    	link.setMedia("screen");
 	    	link.setRel("up");

@@ -36,11 +36,10 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.EventDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Event;
-import org.restfulwhois.rdap.common.model.Link;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -59,7 +58,7 @@ public class EventUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
 	    @Autowired
-	    private UpdateDao<Event> updateDao;
+	    private UpdateDao<Event, EventDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
@@ -67,17 +66,17 @@ public class EventUpdateDaoTest extends BaseTest {
 	    public void testcreateEvent() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<Event> eventList = new ArrayList<Event>();	    	
-	    	Event event = new Event();
+	    	List<EventDto> eventList = new ArrayList<EventDto>();	    	
+	    	EventDto event = new EventDto();
 	    	event.setEventAction("registration");
 	    	event.setEventActor("zhanyq");
 	    	event.setEventDate("2015-01-15 17:15:12");
 	    	//link
-	    	List<Link> linkList = new ArrayList<Link>();
+	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
 	    	List<String> hreflang = new ArrayList<String>();
 	    	hreflang.add("en");
 	    	hreflang.add("zh");
-	    	Link link = new Link();
+	    	LinkDto link = new LinkDto();
 	    	link.setHref("http://sina.com.cn");
 	    	link.setMedia("screen");
 	    	link.setRel("up");

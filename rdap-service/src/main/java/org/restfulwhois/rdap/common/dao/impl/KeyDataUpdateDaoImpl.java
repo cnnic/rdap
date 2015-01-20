@@ -38,6 +38,9 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.EventDto;
+import org.restfulwhois.rdap.common.dto.embedded.KeyDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.KeyData;
 import org.restfulwhois.rdap.common.model.Link;
@@ -59,7 +62,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData> {
+public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto> {
    /**
      * logger for record log.
      */
@@ -72,14 +75,14 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link> linkUpdateDao;
+    private UpdateDao<Link, LinkDto> linkUpdateDao;
     
     /**
      * Event update dao.
      */
     @Autowired   
     @Qualifier("eventUpdateDaoImpl")
-    private UpdateDao<Event>  eventUpdateDao;
+    private UpdateDao<Event, EventDto>  eventUpdateDao;
     
     /**
      * SecureDns update dao.
@@ -114,53 +117,28 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData> {
 	 *        KeyData of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<KeyData> models) {
+	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<KeyDataDto> models) {
 		if (null==models || models.size() == 0) {
 			return;
 		}
-	    for (KeyData model:models) {
-	    	Long keyDataId = createKeyData(model);  
-	    	model.setId(keyDataId);
+	    for (KeyDataDto model:models) {
+	    	Long keyDataId = createKeyData(model); 	    	
 	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), ModelType.KEYDATA, keyDataId);
-	       	linkUpdateDao.batchCreateAsInnerObjects(model, model.getLinks());
+	    	KeyData keyDataAsOuter = new KeyData();
+	    	keyDataAsOuter.setId(keyDataId);
+	    	//creat link
+	       	linkUpdateDao.batchCreateAsInnerObjects(keyDataAsOuter, model.getLinks());
 	    	//create event
-		    eventUpdateDao.batchCreateAsInnerObjects(model, model.getEvents());
+		    eventUpdateDao.batchCreateAsInnerObjects(keyDataAsOuter, model.getEvents());
 	    }
 	}
 	
-	/**
-	 * 
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param modelType
-	 *        model type of  object
-	 * @param keyDataId
-	 *        keyDataId
-	 */
-	/*public void createRelSecureDnsDskey(final Long outerObjectId, final ModelType
-			modelType,	final Long keyDataId) {
-		final String sql = "insert into REL_SECUREDNS_DSKEY(SECUREDNS_ID,REL_DSKEY_TYPE,REL_ID)"
-			      +  " values (?,?,?)"; 		       
-		       jdbcTemplate.update(sql, new PreparedStatementCreator() {
-		           public PreparedStatement createPreparedStatement(Connection connection) 
-		        			throws SQLException {           
-		            PreparedStatement ps = connection.prepareStatement(
-		            		sql);
-		            ps.setLong(1, outerObjectId);
-		            ps.setString(2, modelType.getName());
-		            ps.setLong(3, keyDataId);
-					return ps;
-					}
-				
-		        });
-		
-	}*/
 	/**
 	 * @param model
 	 *        KeyData
 	 * @return keyDataId.
 	 */
-    private Long createKeyData(final KeyData model) {
+    private Long createKeyData(final KeyDataDto model) {
         final String sql = "insert into RDAP_KEYDATA(FLAGS,"
 	      +  "PROTOCOL,PUBLIC_KEY,ALGORITHM) values (?,?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
