@@ -43,12 +43,13 @@ import java.util.Map;
 
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.BaseDto;
+import org.restfulwhois.rdap.common.dto.EntityDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
-import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
 import org.restfulwhois.rdap.common.dto.embedded.EventDto;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.PublicId;
@@ -87,8 +88,8 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     protected UpdateDao<Remark, RemarkDto> remarkDao;
     @Autowired
     protected UpdateDao<PublicId, PublicIdDto> publicIdDao;
-    // @Autowired
-    // protected UpdateDao<Entity, EntityDto> entityDao;
+    @Autowired
+    protected UpdateDao<Entity, EntityDto> entityDao;
 
     @Override
     public UpdateResponse execute(DTO dto) {
@@ -309,8 +310,8 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         publicIdDao.batchCreateAsInnerObjects(model, publicIds);
     }
 
-    protected void saveEntities(List<EntityHandleDto> entities, MODEL model) {
-        // entityDao.batchCreateAsInnerObjects(model, entities);
+    protected void saveEntities(MODEL model) {
+        entityDao.saveRel(model);
     }
 
     private UpdateResponse handleError(BaseDto dto,

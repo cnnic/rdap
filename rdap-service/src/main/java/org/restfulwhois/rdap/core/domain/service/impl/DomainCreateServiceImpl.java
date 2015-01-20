@@ -47,7 +47,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service("domainCreateServiceImpl")
-public class DomainCreateServiceImpl extends DomainBaseServiceImpl {
+public class DomainCreateServiceImpl extends DomainUpdateBaseServiceImpl {
 
     /**
      * logger.
@@ -57,12 +57,13 @@ public class DomainCreateServiceImpl extends DomainBaseServiceImpl {
 
     @Override
     protected void execute(Domain domain) {
-        dao.create(domain);
+        dao.save(domain);
         dao.saveStatus(domain);
         DomainDto dto = (DomainDto) domain.getDto();
         saveSecureDns(dto, domain);
         saveVariants(dto, domain);
-        saveEntities(dto.getEntities(), domain);
+        saveEntities(domain);
+        saveNameservers(domain);
         savePublicIds(dto.getPublicIds(), domain);
         saveRemarks(dto.getRemarks(), domain);
         saveLinks(dto.getLinks(), domain);

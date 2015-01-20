@@ -59,7 +59,7 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
             .getLogger(EntityUpdateDaoImpl.class);
 
     @Override
-	public Entity create(Entity model) {
+	public Entity save(Entity model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -84,7 +84,7 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
 	 * @param linkId
 	 *        linkId
 	 */
-	public void createRel(BaseModel outerModel) {
+	public void saveRel(BaseModel outerModel) {
 		if (null == outerModel || null == outerModel.getDto()) {
 			return;
 		}

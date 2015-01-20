@@ -64,7 +64,7 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
             .getLogger(LinkUpdateDaoImpl.class);
 
     @Override
-	public Link create(Link model) {
+	public Link save(Link model) {
 		// TODO Auto-generated method stub
 		return null;
 	}

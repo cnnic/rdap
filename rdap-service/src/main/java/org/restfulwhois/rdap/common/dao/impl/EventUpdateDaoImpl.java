@@ -75,7 +75,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
     private UpdateDao<Link, LinkDto> linkUpdateDao;
 
 	@Override
-	public Event create(Event model) {
+	public Event save(Event model) {
 		// TODO Auto-generated method stub
 		return null;
 	}

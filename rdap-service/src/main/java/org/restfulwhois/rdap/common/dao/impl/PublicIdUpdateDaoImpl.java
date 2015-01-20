@@ -64,7 +64,7 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId, PublicIdD
             .getLogger(PublicIdUpdateDaoImpl.class);
 
     @Override
-	public PublicId create(PublicId model) {
+	public PublicId save(PublicId model) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -67,7 +67,7 @@ public class DomainUpdateDaoTest extends BaseTest {
         domain.setPort43("port43");
         domain.setLang("zh");
         domain.setType(DomainType.DNR);
-        updateDao.create(domain);
+        updateDao.save(domain);
         super.assertTablesForUpdate("domain-update.xml", TABLE_RDAP_DOMAIN);
     }
 

@@ -72,7 +72,7 @@ public class NameserverUpdateDaoTest extends BaseTest {
 	    	handleList.add(handle);
            domainDto.setNameservers(handleList);
            domain.setDto(domainDto);
-           nsUpdateDao.createRel(domain);
+           nsUpdateDao.saveRel(domain);
 	        super.assertTablesForUpdate("rel-domain-nameserver.xml", TABLE_REL_DOMAIN_NAMESERVER);
 	    }
 }

@@ -39,7 +39,6 @@ import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.common.model.RelDomainVariant;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -66,28 +65,31 @@ public class VariantsUpdateDaoTest extends BaseTest {
 	    public void testcreateVariants() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<VariantDto> variantsList = new ArrayList<VariantDto>();
-	    	List<VariantNameDto> variantList = new ArrayList<VariantNameDto>();
-	    	VariantDto variants = new VariantDto();
-	    	VariantNameDto variant = new VariantNameDto();
-	    	List<RelDomainVariant> relDomainVariantList = new ArrayList<RelDomainVariant>();
-	    	RelDomainVariant relDomainVariant = new RelDomainVariant();
-	    	relDomainVariant.setVariantType("conjoined");	    	
-	    	relDomainVariantList.add(relDomainVariant);
-	    	relDomainVariant = new RelDomainVariant();
-	    	relDomainVariant.setVariantType("open registration");
-	    	relDomainVariantList.add(relDomainVariant);
-	    	//variant.setRelations(relDomainVariantList);
-	    	variants.setIdnTable(".EXAMPLE Swedish");
-	    	variant.setUnicodeName("測试.中国");
-	    	variantList.add(variant);
-	    	variants.setVariantNames(variantList);
-	    	variantsList.add(variants);	 
-	    	
-	    	
-	    
+	    	List<VariantDto> variantsList = createVariants();	 
 	        updateDao.batchCreateAsInnerObjects(domain, variantsList);
-	        super.assertTablesForUpdate("variants-update.xml", TABLE_RDAP_VARIANT,
-	        		TABLE_REL_DOMAIN_VARIANT);
+	        assertTable();
 	    }
+
+	    public static List<VariantDto> createVariants() {
+            List<VariantDto> variantsList = new ArrayList<VariantDto>();
+	    	List<VariantNameDto> variantNames = new ArrayList<VariantNameDto>();
+            VariantDto variants = new VariantDto();
+            VariantNameDto variant = new VariantNameDto();
+            List<String> relation = new ArrayList<String>();
+            variants.setRelation(relation);
+            relation.add("conjoined");
+            relation.add("open registration");
+            variants.setIdnTable(".EXAMPLE Swedish");
+            variant.setLdhName("xn--g6ws64d.xn--fiqs8s");
+            variant.setUnicodeName("測试.中国");
+            variantNames.add(variant);
+            variants.setVariantNames(variantNames);
+	    	variantsList.add(variants);
+            return variantsList;
+        }
+
+        public static void assertTable() throws Exception {
+            assertTablesForUpdate("variants-update.xml", TABLE_RDAP_VARIANT,
+	        		TABLE_REL_DOMAIN_VARIANT);
+        }
 }

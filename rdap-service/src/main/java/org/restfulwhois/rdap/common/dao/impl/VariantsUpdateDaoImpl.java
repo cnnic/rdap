@@ -34,16 +34,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
-import org.restfulwhois.rdap.common.model.RelDomainVariant;
-import org.restfulwhois.rdap.common.model.Variant;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.util.DomainUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -67,7 +66,7 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDt
             .getLogger(VariantsUpdateDaoImpl.class);
 
     @Override
-	public Variants create(Variants model) {
+	public Variants save(Variants model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -108,57 +107,62 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDt
 	 *        Variants object
 	 *         
 	 */
-	private void createVariants(Long outerObjectId, VariantDto model) {
+	private void createVariants(Long domainId, VariantDto model) {
+	    List<String> relations = model.getRelation();
 		List<VariantNameDto> variantList = model.getVariantNames();
 		if (null == variantList || variantList.size() == 0) {
 			return;
 		}
 		for (VariantNameDto variant:variantList) {
-			Variant variantObject = new Variant();
-			variantObject.setIdnTable(model.getIdnTable());
-			variantObject.setUnicodeName(variant.getUnicodeName());
-			//variantObject.setRelations(model.getRelation());
-			Long variantId = createVariant(variantObject);  
-			//variant.setId(variantId);			
-	    	//createRelDomainVariant(outerObjectId, variant, variantId);
+			Long variantId = createVariant(variant,model.getIdnTable());
+			createRelDomainVariant(domainId, variantId, relations);
 		}
 	}
 	/**
-	 * create rel domain variant
-	 * @param outerObjectId
-	 *        object id of outer object	 
-	 * @param model
-	 *        Variant object
+	 * 
+	 * @param domainId
+	 * @param variantId
+	 * @param relations
 	 */
-	private void createRelDomainVariant(final Long outerObjectId, 
-			        final Variant model, final Long variantId) {
-	    final List<RelDomainVariant> relationList = model.getRelations();
-	    if(null == relationList || relationList .size() == 0 ){
-	    	return;
-	    }
+	private void createRelDomainVariant(final Long domainId, 
+			        final Long variantId, List<String> relations) {
+	    final List<String> notEmptyRelations = getNotEmptyRelations(relations);
 		final String sql = "insert into REL_DOMAIN_VARIANT("
                + "DOMAIN_ID,VARIANT_TYPE,VARIANT_ID) values (?,?,?)";
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 		    public int getBatchSize() {
-		        return relationList.size();
+		        return notEmptyRelations.size();
 		    }
 		    @Override
 			public void setValues(PreparedStatement ps, int i)
 				throws SQLException {
-		    	ps.setLong(1, outerObjectId); 
-		    	ps.setString(2, relationList.get(i).getVariantType());
-		    	ps.setLong(3, model.getId());
+		    	ps.setLong(1, domainId); 
+		    	ps.setString(2, notEmptyRelations.get(i));
+		    	ps.setLong(3, variantId);
 			}				
 	  });
 		
 	}
+
+    private List<String> getNotEmptyRelations(List<String> relations) {
+        List<String> notEmptyRelations = new ArrayList<String>(); 
+	    if(null == relations){
+	        return notEmptyRelations;
+	    }
+	    for(String relation:relations){
+	        if(StringUtils.isNotBlank(relation)){
+	            notEmptyRelations.add(relation);
+	        }
+	    }
+        return notEmptyRelations;
+    }
 	/**
-	 * create Variant
-	 * @param model
-	 *        Variant object
-	 * @return variantId.
+	 * 
+	 * @param variant
+	 * @param idnTable
+	 * @return
 	 */
-    private Long createVariant(final Variant model) {
+    private Long createVariant(final VariantNameDto variant,final String idnTable) {
         final String sql = "insert into RDAP_VARIANT(LDH_NAME,"
 	      +  " UNICODE_NAME,IDNTABLE) values (?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -167,10 +171,9 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDt
         			throws SQLException {           
              PreparedStatement ps = connection.prepareStatement(
             		 sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, DomainUtil
-				  .geneDomainPunyName(model.getUnicodeName()));
-				ps.setString(2, model.getUnicodeName());
-				ps.setString(3, model.getIdnTable());
+				ps.setString(1, variant.getLdhName());
+				ps.setString(2, variant.getUnicodeName());
+				ps.setString(3, idnTable);
 				return ps;
 			}		
         }, keyHolder);

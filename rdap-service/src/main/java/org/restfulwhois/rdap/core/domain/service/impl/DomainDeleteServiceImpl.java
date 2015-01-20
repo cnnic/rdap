@@ -63,7 +63,7 @@ public class DomainDeleteServiceImpl extends
 
     @Override
     protected void execute(Domain domain) {
-        domainDao.create(domain);
+        domainDao.save(domain);
     }
 
     @Override

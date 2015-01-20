@@ -74,7 +74,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
     private UpdateDao<Link, LinkDto> linkUpdateDao;
 
 	@Override
-	public Remark create(Remark model) {
+	public Remark save(Remark model) {
 		// TODO Auto-generated method stub
 		return null;
 	}

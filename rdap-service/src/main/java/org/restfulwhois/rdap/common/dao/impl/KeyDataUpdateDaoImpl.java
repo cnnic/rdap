@@ -92,7 +92,7 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto>
 
 
     @Override
-	public KeyData create(KeyData model) {
+	public KeyData save(KeyData model) {
 		// TODO Auto-generated method stub
 		return null;
 	}

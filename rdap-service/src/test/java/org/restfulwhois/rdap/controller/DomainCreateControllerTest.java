@@ -55,6 +55,7 @@ import org.restfulwhois.rdap.dao.impl.LinkUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.PublicIdUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.RemarkUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.SecureDnsUpdateDaoTest;
+import org.restfulwhois.rdap.dao.impl.VariantsUpdateDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -138,6 +139,7 @@ public class DomainCreateControllerTest extends BaseTest {
         domain.setLinks(LinkUpdateDaoTest.createLinkList());
         domain.setPublicIds(PublicIdUpdateDaoTest.createPublicIdList());
         domain.setSecureDNS(SecureDnsUpdateDaoTest.createSecureDns().get(0));
+        domain.setVariants(VariantsUpdateDaoTest.createVariants());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -149,6 +151,7 @@ public class DomainCreateControllerTest extends BaseTest {
         // LinkUpdateDaoTest.assertCreate();
         PublicIdUpdateDaoTest.assertCreate();
         SecureDnsUpdateDaoTest.assertTable();
+        VariantsUpdateDaoTest.assertTable();
     }
 
     @Test
