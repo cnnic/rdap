@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.core.domain.service.impl;
 
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.model.SecureDns;
@@ -57,7 +58,7 @@ public class DomainCreateServiceImpl extends DomainBaseServiceImpl {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainCreateServiceImpl.class);
     @Autowired
-    private UpdateDao<SecureDns> secureDnsUpdateDao;
+    private UpdateDao<SecureDns, SecureDnsDto> secureDnsUpdateDao;
 
     @Override
     protected void execute(Domain domain) {

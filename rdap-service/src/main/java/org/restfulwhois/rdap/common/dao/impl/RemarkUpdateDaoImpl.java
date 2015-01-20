@@ -132,10 +132,8 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
 	
 	/**
 	 * create rel remark registration
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param outerModelType
-	 *        model type of outer object
+	 * @param outerModel
+	 *        object of outer object
 	 * @param remarkId
 	 *        remarkId
 	 */
