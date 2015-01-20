@@ -67,7 +67,19 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	    public void testcreateRemark() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<RemarkDto> remarkList = new ArrayList<RemarkDto>();
+	    	List<RemarkDto> remarkList = createRemarkList();
+	        updateDao.batchCreateAsInnerObjects(domain, remarkList);
+	        assertCreate();
+	    }
+
+        public static void assertCreate() throws Exception {
+            assertTablesForUpdate("remark-update.xml", TABLE_RDAP_NOTICE,
+	        		TABLE_REL_NOTICE_REGISTRATION, TABLE_RDAP_NOTICE_DESCRIPTION,
+	        		TABLE_RDAP_LINK,TABLE_REL_LINK_OBJECT,TABLE_RDAP_LINK_HREFLANG);
+        }
+
+        public static List<RemarkDto> createRemarkList() {
+            List<RemarkDto> remarkList = new ArrayList<RemarkDto>();
 	    	List<String> description = new ArrayList<String>();
 	    	description.add("remarks_description1");
 	    	description.add("remarks_description2");
@@ -90,9 +102,6 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	    	linkList.add(link);
 	    	remark.setLinks(linkList);
 	    	remarkList.add(remark);
-	        updateDao.batchCreateAsInnerObjects(domain, remarkList);
-	        super.assertTablesForUpdate("remark-update.xml", TABLE_RDAP_NOTICE,
-	        		TABLE_REL_NOTICE_REGISTRATION, TABLE_RDAP_NOTICE_DESCRIPTION,
-	        		TABLE_RDAP_LINK,TABLE_REL_LINK_OBJECT,TABLE_RDAP_LINK_HREFLANG);
-	    }
+            return remarkList;
+        }
 }

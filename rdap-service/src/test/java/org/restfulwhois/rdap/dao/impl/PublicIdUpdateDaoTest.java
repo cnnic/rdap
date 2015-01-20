@@ -63,13 +63,22 @@ public class PublicIdUpdateDaoTest extends BaseTest {
 	    public void testcreatePublicId() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<PublicIdDto> publicIdList = new ArrayList<PublicIdDto>();	    	
+	    	List<PublicIdDto> publicIdList = createPublicIdList();
+	        updateDao.batchCreateAsInnerObjects(domain, publicIdList);
+	        assertCreate();
+	    }
+
+	    public static void assertCreate() throws Exception {
+            assertTablesForUpdate("publicId-update.xml", TABLE_RDAP_PUBLICID,
+	        		TABLE_REL_PUBLICID_REGISTRATION);
+        }
+
+        public static List<PublicIdDto> createPublicIdList() {
+            List<PublicIdDto> publicIdList = new ArrayList<PublicIdDto>();	    	
 	    	PublicIdDto publicId = new PublicIdDto();
 	    	publicId.setIdentifier("cnnic-1");
 	    	publicId.setType("cnnic");
 	    	publicIdList.add(publicId);
-	        updateDao.batchCreateAsInnerObjects(domain, publicIdList);
-	        super.assertTablesForUpdate("publicId-update.xml", TABLE_RDAP_PUBLICID,
-	        		TABLE_REL_PUBLICID_REGISTRATION);
-	    }
+            return publicIdList;
+        }
 }

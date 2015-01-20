@@ -37,6 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,6 +51,10 @@ import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.restfulwhois.rdap.dao.impl.DomainUpdateDaoTest;
+import org.restfulwhois.rdap.dao.impl.LinkUpdateDaoTest;
+import org.restfulwhois.rdap.dao.impl.PublicIdUpdateDaoTest;
+import org.restfulwhois.rdap.dao.impl.RemarkUpdateDaoTest;
+import org.restfulwhois.rdap.dao.impl.SecureDnsUpdateDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -87,7 +94,7 @@ public class DomainCreateControllerTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    public void test_ok() throws Exception {
+    public void test_ok_with_only_domain() throws Exception {
         DomainDto domain = generateDomainDto();
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
@@ -103,16 +110,10 @@ public class DomainCreateControllerTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    public void test_valid_ldhName_maxlength() throws Exception {
+    public void test_ok_with_thin_domain() throws Exception {
         DomainDto domain = new DomainDto();
         domain.setHandle("h1");
-        String stringMaxLength =
-                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_LDHNAME);
-        domain.setLdhName(stringMaxLength);
-        assertTrue(domain.getLdhName().length() == UpdateValidateUtil.MAX_LENGTH_LDHNAME);
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
-        domain.setLang("zh");
+        domain.setLdhName("cnnic.cn");
         domain.setType(DomainType.DNR.getName());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
@@ -126,16 +127,57 @@ public class DomainCreateControllerTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_ok_with_fat_domain_with_all_inner_objects()
+            throws Exception {
+        DomainDto domain = generateDomainDto();
+        List<String> status = new ArrayList<String>();
+        status.add("validated");
+        status.add("update prohibited");
+        domain.setStatus(status);
+        domain.setRemarks(RemarkUpdateDaoTest.createRemarkList());
+        domain.setLinks(LinkUpdateDaoTest.createLinkList());
+        domain.setPublicIds(PublicIdUpdateDaoTest.createPublicIdList());
+        domain.setSecureDNS(SecureDnsUpdateDaoTest.createSecureDns().get(0));
+        String content = JsonHelper.serialize(domain);
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value(domain.getHandle()));
+        // RemarkUpdateDaoTest.assertCreate();/link duplicated.
+        // LinkUpdateDaoTest.assertCreate();
+        PublicIdUpdateDaoTest.assertCreate();
+        SecureDnsUpdateDaoTest.assertTable();
+    }
+
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_valid_ldhName_maxlength() throws Exception {
+        DomainDto domain = generateDomainDto();
+        String stringMaxLength =
+                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_LDHNAME);
+        domain.setLdhName(stringMaxLength);
+        assertTrue(domain.getLdhName().length() == UpdateValidateUtil.MAX_LENGTH_LDHNAME);
+        String content = JsonHelper.serialize(domain);
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value(domain.getHandle()));
+    }
+
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_ldhName_exceed_maxlength() throws Exception {
-        DomainDto domain = new DomainDto();
+        DomainDto domain = generateDomainDto();
         String stringExceedOneMoreChar =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_LDHNAME + 1);
         domain.setLdhName(stringExceedOneMoreChar);
         assertTrue(domain.getLdhName().length() > UpdateValidateUtil.MAX_LENGTH_LDHNAME);
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
-        domain.setLang("zh");
-        domain.setType(DomainType.DNR.getName());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -157,16 +199,11 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_valid_handle_maxlength() throws Exception {
-        DomainDto domain = new DomainDto();
+        DomainDto domain = generateDomainDto();
         String stringMaxLength =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_HANDLE);
         domain.setHandle(stringMaxLength);
         assertTrue(domain.getHandle().length() == UpdateValidateUtil.MAX_LENGTH_HANDLE);
-        domain.setLdhName("cnnic.cn");
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
-        domain.setLang("zh");
-        domain.setType(DomainType.DNR.getName());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -180,12 +217,8 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_handle_empty() throws Exception {
-        DomainDto domain = new DomainDto();
-        domain.setLdhName("cnnic.cn");
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
-        domain.setLang("zh");
-        domain.setType(DomainType.DNR.getName());
+        DomainDto domain = generateDomainDto();
+        domain.setHandle(null);
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -205,16 +238,11 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_handle_exceed_maxlength() throws Exception {
-        DomainDto domain = new DomainDto();
-        domain.setLdhName("cnnic.cn");
+        DomainDto domain = generateDomainDto();
         String stringExceedOneMoreChar =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_HANDLE + 1);
         domain.setHandle(stringExceedOneMoreChar);
         assertTrue(domain.getHandle().length() > UpdateValidateUtil.MAX_LENGTH_HANDLE);
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
-        domain.setLang("zh");
-        domain.setType(DomainType.DNR.getName());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -256,12 +284,8 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_type_empty() throws Exception {
-        DomainDto domain = new DomainDto();
-        domain.setHandle("h1");
-        domain.setLdhName("cnnic.cn");
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
-        domain.setLang("zh");
+        DomainDto domain = generateDomainDto();
+        domain.setType(null);
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -281,12 +305,7 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_type() throws Exception {
-        DomainDto domain = new DomainDto();
-        domain.setHandle("h1");
-        domain.setLdhName("cnnic.cn");
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
-        domain.setLang("zh");
+        DomainDto domain = generateDomainDto();
         domain.setType("invalidType");
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
@@ -307,16 +326,11 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_valid_lang_maxlength() throws Exception {
-        DomainDto domain = new DomainDto();
-        domain.setHandle("h1");
-        domain.setLdhName("cnnic.cn");
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
+        DomainDto domain = generateDomainDto();
         String stringMaxLength =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_LANG);
         domain.setLang(stringMaxLength);
         assertTrue(domain.getLang().length() == UpdateValidateUtil.MAX_LENGTH_LANG);
-        domain.setType(DomainType.DNR.getName());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -330,16 +344,11 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_lang_exceed_maxlength() throws Exception {
-        DomainDto domain = new DomainDto();
-        domain.setHandle("h1");
-        domain.setLdhName("cnnic.cn");
-        domain.setUnicodeName("cnnic.cn");
-        domain.setPort43("port43");
+        DomainDto domain = generateDomainDto();
         String stringExceedOneMoreChar =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_LANG + 1);
         domain.setLang(stringExceedOneMoreChar);
         assertTrue(domain.getLang().length() > UpdateValidateUtil.MAX_LENGTH_LANG);
-        domain.setType(DomainType.DNR.getName());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -360,16 +369,11 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_valid_port43_maxlength() throws Exception {
-        DomainDto domain = new DomainDto();
-        domain.setHandle("h1");
-        domain.setLdhName("cnnic.cn");
-        domain.setUnicodeName("cnnic.cn");
-        domain.setLang("zh");
+        DomainDto domain = generateDomainDto();
         String stringMaxLength =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_PORT43);
         domain.setPort43(stringMaxLength);
         assertTrue(domain.getPort43().length() == UpdateValidateUtil.MAX_LENGTH_PORT43);
-        domain.setType(DomainType.DNR.getName());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -383,16 +387,11 @@ public class DomainCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_port43_exceed_maxlength() throws Exception {
-        DomainDto domain = new DomainDto();
-        domain.setHandle("h1");
-        domain.setLdhName("cnnic.cn");
+        DomainDto domain = generateDomainDto();
         String stringExceedOneMoreChar =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_PORT43 + 1);
         domain.setPort43(stringExceedOneMoreChar);
         assertTrue(domain.getPort43().length() > UpdateValidateUtil.MAX_LENGTH_PORT43);
-        domain.setUnicodeName("cnnic.cn");
-        domain.setLang("zh");
-        domain.setType(DomainType.DNR.getName());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(

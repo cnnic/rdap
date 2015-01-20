@@ -382,7 +382,7 @@ public abstract class BaseTest {
         return new QueryDataSet(connection);
     }
 
-    protected void assertTablesForUpdate(String expectedDataSetFilePath,
+    protected static void assertTablesForUpdate(String expectedDataSetFilePath,
             String... tableNames) throws Exception {
         if (null == tableNames || tableNames.length == 0) {
             return;

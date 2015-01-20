@@ -63,7 +63,13 @@ public class LinkUpdateDaoTest extends BaseTest {
 	    public void testcreateLink() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
+	    	List<LinkDto> linkList = createLinkList();
+	        updateDao.batchCreateAsInnerObjects(domain, linkList);
+	        assertCreate();
+	    }
+
+	    public static List<LinkDto> createLinkList() {
+            List<LinkDto> linkList = new ArrayList<LinkDto>();
 	    	List<String> hreflang = new ArrayList<String>();
 	    	hreflang.add("en");
 	    	hreflang.add("zh");
@@ -76,8 +82,11 @@ public class LinkUpdateDaoTest extends BaseTest {
 	    	link.setValue("http://sina.com.cn");
 	    	link.setHreflang(hreflang);
 	    	linkList.add(link);
-	        updateDao.batchCreateAsInnerObjects(domain, linkList);
-	        super.assertTablesForUpdate("Link-update.xml", TABLE_RDAP_LINK,
+            return linkList;
+        }
+
+        public static void assertCreate() throws Exception {
+            assertTablesForUpdate("Link-update.xml", TABLE_RDAP_LINK,
 	        		TABLE_REL_LINK_OBJECT, TABLE_RDAP_LINK_HREFLANG);
-	    }
+        }
 }

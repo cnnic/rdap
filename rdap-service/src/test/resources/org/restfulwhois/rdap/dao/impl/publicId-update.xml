@@ -2,5 +2,5 @@
 <dataset>
 	<RDAP_PUBLICID  IDENTIFIER='cnnic-1'
 		TYPE='cnnic' />
-	<REL_PUBLICID_REGISTRATION 	REL_ID='1' REL_OBJECT_TYPE='domain' />
+	<REL_PUBLICID_REGISTRATION 	REL_OBJECT_TYPE='domain' />
 </dataset>
