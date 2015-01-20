@@ -2,7 +2,9 @@ package org.restfulwhois.rdap.common.dto.embedded;
 
 import java.util.List;
 
-public class SecureDnsDto {
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class SecureDnsDto extends BaseDto{
     private boolean zoneSigned;
     private boolean delegationSigned;
     private int maxSigLife;

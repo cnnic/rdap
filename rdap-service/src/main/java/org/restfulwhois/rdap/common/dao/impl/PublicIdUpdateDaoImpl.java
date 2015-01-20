@@ -38,9 +38,9 @@ import java.sql.Statement;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.model.PublicId;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -56,7 +56,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
+public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId, PublicIdDto> {
    /**
      * logger for record log.
      */
@@ -91,11 +91,11 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
 	 *        PublicId of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<PublicId> models) {
+	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<PublicIdDto> models) {
 		if (null==models || models.size() == 0) {
 			return;
 		}
-	    for (PublicId model: models) {	    	 
+	    for (PublicIdDto model: models) {	    	 
 	    	Long publicId = queryByIndentifierAndType(model);
 	        if (null == publicId) {
 	        	publicId = createPublicId(model);
@@ -134,7 +134,7 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
 	 *        pubuliId object
 	 * @return publicId.
 	 */
-    private Long createPublicId(final PublicId model) {
+    private Long createPublicId(final PublicIdDto model) {
         final String sql = "insert into RDAP_PUBLICID(IDENTIFIER,TYPE)"
 	      +  " values (?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -159,7 +159,7 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId> {
      *            PublicId object.
      * @return public id
      */
-    private Long queryByIndentifierAndType(final PublicId model) {
+    private Long queryByIndentifierAndType(final PublicIdDto model) {
         final String sql = "select PUBLIC_ID  from RDAP_PUBLICID publicId"
                 + " where IDENTIFIER=? and TYPE=? " ;                
         List<Long> PublicIds = jdbcTemplate.query(new PreparedStatementCreator() {

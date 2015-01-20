@@ -1,6 +1,8 @@
 package org.restfulwhois.rdap.common.dto.embedded;
 
-public class VariantNameDto{
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class VariantNameDto extends BaseDto{
 	private String ldhName;
 	private String unicodeName;
 	public String getLdhName() {

@@ -38,6 +38,9 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.EventDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.DsData;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
@@ -59,7 +62,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData> {
+public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
    /**
      * logger for record log.
      */
@@ -71,14 +74,14 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link> linkUpdateDao;
+    private UpdateDao<Link, LinkDto> linkUpdateDao;
     
     /**
      * Event update dao.
      */
     @Autowired   
     @Qualifier("eventUpdateDaoImpl")
-    private UpdateDao<Event>  eventUpdateDao;
+    private UpdateDao<Event, EventDto>  eventUpdateDao;
     /**
      * SecureDns update dao.
      */
@@ -114,18 +117,19 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData> {
 	 *        DsData of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel, List<DsData> models) {
+	public void batchCreateAsInnerObjects(BaseModel outerModel, List<DsDataDto> models) {
 		if(null == models || models.size() == 0){
 			return;
 		}
-		for (DsData model: models) {
-	    	Long dsDataId = createDsData(model); 
-	    	model.setId(dsDataId);
+		for (DsDataDto model: models) {
+	    	Long dsDataId = createDsData(model); 	    	
 	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), ModelType.DSDATA, dsDataId);
+	    	DsData dsDataAsOuter = new DsData();
+	    	dsDataAsOuter.setId(dsDataId);	    	
 	    	//create link	    		    		
-		    linkUpdateDao.batchCreateAsInnerObjects(model, model.getLinks());	    		    	
+		    linkUpdateDao.batchCreateAsInnerObjects(dsDataAsOuter, model.getLinks());	    		    	
 	    	//create event
-	    	eventUpdateDao.batchCreateAsInnerObjects(model, model.getEvents());
+	    	eventUpdateDao.batchCreateAsInnerObjects(dsDataAsOuter, model.getEvents());
 	    	    	
 	    }
 	}
@@ -135,7 +139,7 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData> {
 	 *        DsData
 	 * @return dsDataId.
 	 */
-    private Long createDsData(final DsData model) {
+    private Long createDsData(final DsDataDto model) {
         final String sql = "insert into RDAP_DSDATA(KEY_TAG,"
 	      +  "ALGORITHM,DIGEST,DIGEST_TYPE) values (?,?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();

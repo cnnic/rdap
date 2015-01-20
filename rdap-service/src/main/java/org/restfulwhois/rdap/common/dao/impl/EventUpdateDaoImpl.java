@@ -40,6 +40,8 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.EventDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
@@ -58,7 +60,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class EventUpdateDaoImpl extends AbstractUpdateDao<Event> {
+public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
     /**
      * logger.
      */
@@ -70,7 +72,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link> linkUpdateDao;
+    private UpdateDao<Link, LinkDto> linkUpdateDao;
 
 	@Override
 	public Event create(Event model) {
@@ -100,15 +102,17 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event> {
 	 *        events of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel, List<Event> models) {
+	public void batchCreateAsInnerObjects(BaseModel outerModel, List<EventDto> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
-	    for (Event model: models) {
-	    	Long eventId = createEvent(model); 
-	    	model.setId(eventId);
-	    	createRelEvent(outerModel.getId(), outerModel.getObjectType(), eventId);	    	
-	    	linkUpdateDao.batchCreateAsInnerObjects(model, model.getLinks());
+	    for (EventDto model: models) {
+	    	Long eventId = createEvent(model); 	    
+	    	createRelEvent(outerModel.getId(), outerModel.getObjectType(), eventId);
+	    	//create link
+	    	Event eventAsOuter = new Event();
+	    	eventAsOuter.setId(eventId);
+	    	linkUpdateDao.batchCreateAsInnerObjects(eventAsOuter, model.getLinks());
 	    	
 			
 	    }
@@ -119,7 +123,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event> {
 	 *        Event object
 	 * @return eventId.
 	 */
-	private Long createEvent(final Event model) {
+	private Long createEvent(final EventDto model) {
         final String sql = "insert into RDAP_EVENT(EVENT_ACTION,EVENT_ACTOR,EVENT_DATE)"
 	      +  " values (?,?,?)";       
         KeyHolder keyHolder = new GeneratedKeyHolder();

@@ -36,10 +36,11 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.KeyDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.KeyData;
 import org.restfulwhois.rdap.common.model.Link;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -60,7 +61,7 @@ public class KeyDataUpdateDaoTest extends BaseTest {
 	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
 
 	    @Autowired
-	    private UpdateDao<KeyData> updateDao;
+	    private UpdateDao<KeyData, KeyDataDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
@@ -68,18 +69,18 @@ public class KeyDataUpdateDaoTest extends BaseTest {
 	    public void testcreateKeyData() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<KeyData> keyDataList = new ArrayList<KeyData>();	    	
-	    	KeyData keyData = new KeyData();
+	    	List<KeyDataDto> keyDataList = new ArrayList<KeyDataDto>();	    	
+	    	KeyDataDto keyData = new KeyDataDto();
 	    	keyData.setAlgorithm(1);	    	
 	    	keyData.setProtocol(1);
 	    	keyData.setFlags(1);
 	    	keyData.setPublicKey("1-kd-dt-200-50");	    	
 	    	//link
-	    	List<Link> linkList = new ArrayList<Link>();
+	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
 	    	List<String> hreflang = new ArrayList<String>();
 	    	hreflang.add("en");
 	    	hreflang.add("zh");
-	    	Link link = new Link();
+	    	LinkDto link = new LinkDto();
 	    	link.setHref("http://sina.com.cn");
 	    	link.setMedia("screen");
 	    	link.setRel("up");
