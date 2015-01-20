@@ -55,7 +55,7 @@ public class PublicIdUpdateDaoTest extends BaseTest {
 
 
 	    @Autowired
-	    private UpdateDao<PublicId, BaseModel> updateDao;
+	    private UpdateDao<PublicId> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")

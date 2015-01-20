@@ -57,7 +57,7 @@ public class DomainUpdateServiceImpl extends DomainBaseServiceImpl {
      * domain DAO.
      */
     @Autowired
-    private UpdateDao<Domain,Domain> domainDao;
+    private UpdateDao<Domain> domainDao;
 
     @Override
     protected void execute(Domain domain) {

@@ -58,7 +58,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, BaseModel> {
+public class EventUpdateDaoImpl extends AbstractUpdateDao<Event> {
     /**
      * logger.
      */
@@ -70,7 +70,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, BaseModel> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link, BaseModel> linkUpdateDao;
+    private UpdateDao<Link> linkUpdateDao;
 
 	@Override
 	public Event create(Event model) {

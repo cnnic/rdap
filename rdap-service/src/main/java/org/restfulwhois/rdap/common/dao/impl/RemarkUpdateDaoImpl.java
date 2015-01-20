@@ -57,7 +57,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, BaseModel> {
+public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
     /**
      * logger.
      */
@@ -69,7 +69,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, BaseModel> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link, BaseModel> linkUpdateDao;
+    private UpdateDao<Link> linkUpdateDao;
 
 	@Override
 	public Remark create(Remark model) {

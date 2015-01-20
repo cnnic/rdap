@@ -58,7 +58,7 @@ public class VariantsUpdateDaoTest extends BaseTest {
 
 
 	    @Autowired
-	    private UpdateDao<Variants, BaseModel> updateDao;	   
+	    private UpdateDao<Variants> updateDao;	   
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")

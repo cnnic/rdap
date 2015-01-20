@@ -59,7 +59,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, BaseModel> {
+public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData> {
    /**
      * logger for record log.
      */
@@ -72,14 +72,14 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, BaseModel> 
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link, BaseModel> linkUpdateDao;
+    private UpdateDao<Link> linkUpdateDao;
     
     /**
      * Event update dao.
      */
     @Autowired   
     @Qualifier("eventUpdateDaoImpl")
-    private UpdateDao<Event, BaseModel>  eventUpdateDao;
+    private UpdateDao<Event>  eventUpdateDao;
     
     /**
      * SecureDns update dao.

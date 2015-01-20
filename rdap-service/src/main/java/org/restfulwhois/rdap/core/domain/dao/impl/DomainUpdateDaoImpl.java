@@ -46,7 +46,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, Domain> {
+public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
     private static final String SQL_CREATE_DOMAIN =
             "INSERT INTO RDAP_DOMAIN"
                     + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"

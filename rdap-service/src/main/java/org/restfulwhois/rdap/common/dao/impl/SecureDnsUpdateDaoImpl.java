@@ -59,7 +59,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, BaseModel> {
+public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns> {
    /**
      * logger for record log.
      */
@@ -72,14 +72,14 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, BaseMod
      */
     @Autowired 
     @Qualifier("keyDataUpdateDaoImpl")
-    private UpdateDao<KeyData, BaseModel>  keyDataUpdateDao;
+    private UpdateDao<KeyData>  keyDataUpdateDao;
     
     /**
      * DsData update dao.
      */    
     @Autowired 
     @Qualifier("dsDataUpdateDaoImpl")
-    private UpdateDao<DsData, BaseModel>  dsDataUpdateDao;
+    private UpdateDao<DsData>  dsDataUpdateDao;
 
     @Override
 	public SecureDns create(SecureDns model) {

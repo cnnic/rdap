@@ -50,7 +50,7 @@ public class DomainUpdateDaoTest extends BaseTest {
     public static final String TABLE_RDAP_DOMAIN = "RDAP_DOMAIN";
 
     @Autowired
-    private UpdateDao<Domain,Domain> updateDao;
+    private UpdateDao<Domain> updateDao;
 
     @Test
     @DatabaseSetup("teardown.xml")
