@@ -37,6 +37,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
@@ -55,7 +56,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link> {
+public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
    /**
      * logger for record log.
      */
@@ -90,15 +91,14 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link> {
 	 *        links of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel, List<Link> models) {
+	public void batchCreateAsInnerObjects(BaseModel outerModel, List<LinkDto> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
-	    for (Link link: models) {
-	    	Long linkId = createLink(link); 
-	    	link.setId(linkId);
+	    for (LinkDto linkDto: models) {
+	    	Long linkId = createLink(linkDto);	    	
 	    	createRelLink(outerModel.getId(), outerModel.getObjectType(), linkId);
-			createLinkHreflang(link);
+			createLinkHreflang(linkDto, linkId);
 	    }
 	}
 
@@ -107,8 +107,8 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link> {
 	 * @param link 
 	 *        link 
 	 */
-	private void createLinkHreflang(final Link link) {
-		final List<String> hreflang = link.getHreflang();
+	private void createLinkHreflang(final LinkDto linkDto, final Long linkId) {
+		final List<String> hreflang = linkDto.getHreflang();
 		final String sql = "insert into RDAP_LINK_HREFLANG(HREFLANG, LINK_ID)"
 			      +  " values (?,?)";
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -119,7 +119,7 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link> {
 			public void setValues(PreparedStatement ps, int i)
 				throws SQLException {
 		    	ps.setString(1, hreflang.get(i));
-                ps.setLong(2, link.getId());                
+                ps.setLong(2, linkId);                
 			}
 				
 		    });
@@ -156,7 +156,7 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link> {
 	 *        link
 	 * @return linkId.
 	 */
-    private Long createLink(final Link link) {		
+    private Long createLink(final LinkDto link) {		
         final String sql = "insert into RDAP_LINK(VALUE,REL,HREF,MEDIA,TYPE,TITLE)"
 	      +  " values (?,?,?,?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();

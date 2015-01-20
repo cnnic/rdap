@@ -36,12 +36,11 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.KeyDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.common.model.DsData;
-import org.restfulwhois.rdap.common.model.KeyData;
 import org.restfulwhois.rdap.common.model.SecureDns;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -61,7 +60,7 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
 
 	    @Autowired
-	    private UpdateDao<SecureDns> updateDao;
+	    private UpdateDao<SecureDns, SecureDnsDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
@@ -69,14 +68,14 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	    public void testcreateSecureDns() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<SecureDns> secureDnsList = new ArrayList<SecureDns>();	    	
-	    	SecureDns secureDns = new SecureDns();
+	    	List<SecureDnsDto> secureDnsList = new ArrayList<SecureDnsDto>();	    	
+	    	SecureDnsDto secureDns = new SecureDnsDto();
 	    	secureDns.setDelegationSigned(true);
 	    	secureDns.setMaxSigLife(600);
 	    	secureDns.setZoneSigned(true);
 	    	//KeyData
-	    	List<KeyData> keyDataList = new ArrayList<KeyData>();	    	
-	    	KeyData keyData = new KeyData();
+	    	List<KeyDataDto> keyDataList = new ArrayList<KeyDataDto>();	    	
+	    	KeyDataDto keyData = new KeyDataDto();
 	    	keyData.setAlgorithm(1);	    	
 	    	keyData.setProtocol(1);
 	    	keyData.setFlags(1);
@@ -84,8 +83,8 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	    	keyDataList.add(keyData);
 	    	secureDns.setKeyData(keyDataList);
 	    	//DsData
-	    	List<DsData> dsDataList = new ArrayList<DsData>();	    	
-	    	DsData dsData = new DsData();
+	    	List<DsDataDto> dsDataList = new ArrayList<DsDataDto>();	    	
+	    	DsDataDto dsData = new DsDataDto();
 	    	dsData.setAlgorithm(1);
 	    	dsData.setDigest("1-ds-dt-200-50");
 	    	dsData.setDigestType(1);

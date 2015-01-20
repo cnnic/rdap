@@ -36,11 +36,11 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.DsData;
 import org.restfulwhois.rdap.common.model.Link;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -61,7 +61,7 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
 
 	    @Autowired
-	    private UpdateDao<DsData> updateDao;
+	    private UpdateDao<DsData, DsDataDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
@@ -69,8 +69,8 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	    public void testcreateDsData() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<DsData> dsDataList = new ArrayList<DsData>();	    	
-	    	DsData dsData = new DsData();
+	    	List<DsDataDto> dsDataList = new ArrayList<DsDataDto>();	    	
+	    	DsDataDto dsData = new DsDataDto();
 	    	dsData.setAlgorithm(1);
 	    	dsData.setDigest("1-ds-dt-200-50");
 	    	dsData.setDigestType(1);
@@ -78,11 +78,11 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	    	
 	    	
 	    	//link
-	    	List<Link> linkList = new ArrayList<Link>();
+	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
 	    	List<String> hreflang = new ArrayList<String>();
 	    	hreflang.add("en");
 	    	hreflang.add("zh");
-	    	Link link = new Link();
+	    	LinkDto link = new LinkDto();
 	    	link.setHref("http://sina.com.cn");
 	    	link.setMedia("screen");
 	    	link.setRel("up");

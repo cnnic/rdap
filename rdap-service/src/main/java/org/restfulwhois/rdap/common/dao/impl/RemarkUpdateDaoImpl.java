@@ -38,6 +38,8 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
+import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
@@ -57,7 +59,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
+public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
     /**
      * logger.
      */
@@ -69,7 +71,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
      */
     @Autowired
     @Qualifier("linkUpdateDaoImpl")
-    private UpdateDao<Link> linkUpdateDao;
+    private UpdateDao<Link, LinkDto> linkUpdateDao;
 
 	@Override
 	public Remark create(Remark model) {
@@ -89,17 +91,18 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
 		
 	}
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel, List<Remark> models) {
+	public void batchCreateAsInnerObjects(BaseModel outerModel, List<RemarkDto> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
-	    for (Remark remark: models) {
-	    	Long remarkId = createRemark(remark); 
-	    	remark.setId(remarkId);
+	    for (RemarkDto remark: models) {
+	    	Long remarkId = createRemark(remark);	    	
 	    	createRelRemark(outerModel, remarkId);	    	
-			createRemarkDescription(remark);		
-			//create link			
-			linkUpdateDao.batchCreateAsInnerObjects(remark, remark.getLinks());
+			createRemarkDescription(remark,remarkId);		
+			//create link
+			Remark remarkAsOuter = new Remark();
+			remarkAsOuter.setId(remarkId);
+			linkUpdateDao.batchCreateAsInnerObjects(remarkAsOuter, remark.getLinks());
 						
 	    }
 	}
@@ -109,7 +112,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
 	 * @return remarId
 	 *      
 	 */
-	private Long createRemark(final Remark remark) {
+	private Long createRemark(final RemarkDto remark) {
         final String sql = "insert into RDAP_NOTICE(TYPE,TITLE)"
 	      +  " values (?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -156,7 +159,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
 	 * @param remark
 	 *        remark	 
 	 */
-    private void createRemarkDescription(final Remark remark) {
+    private void createRemarkDescription(final RemarkDto remark, final Long remarkId) {
 		final List<String> description = remark.getDescription();
 		if(null == description || description.size() == 0) {
 			return;
@@ -170,7 +173,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark> {
 		    @Override
 			public void setValues(PreparedStatement ps, int i)
 				throws SQLException {
-		    	ps.setLong(1, remark.getId()); 
+		    	ps.setLong(1, remarkId); 
 		    	ps.setString(2, description.get(i));                              
 			}				
 	  });

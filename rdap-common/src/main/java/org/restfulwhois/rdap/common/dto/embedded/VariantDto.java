@@ -2,7 +2,9 @@ package org.restfulwhois.rdap.common.dto.embedded;
 
 import java.util.List;
 
-public class VariantDto{
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class VariantDto extends BaseDto{
 	private List<String> relation;
 	private String idnTable;
 	private List<VariantNameDto> variantNames;

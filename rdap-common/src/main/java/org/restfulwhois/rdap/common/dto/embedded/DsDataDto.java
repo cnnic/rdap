@@ -2,7 +2,9 @@ package org.restfulwhois.rdap.common.dto.embedded;
 
 import java.util.List;
 
-public class DsDataDto {
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class DsDataDto extends BaseDto{
     /**
      * an integer as specified by the key tag field of a DNS DS record as
      * specified by RFC 4034 RFC 4034 [RFC4034] in presentation format.

@@ -1,6 +1,8 @@
 package org.restfulwhois.rdap.common.dto.embedded;
 
-public class PublicIdDto{
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class PublicIdDto extends BaseDto{
 	private String type;
 	private String identifier;
 	public String getType() {

@@ -33,9 +33,9 @@ package org.restfulwhois.rdap.dao.impl;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -50,7 +50,7 @@ public class DomainUpdateDaoTest extends BaseTest {
     public static final String TABLE_RDAP_DOMAIN = "RDAP_DOMAIN";
 
     @Autowired
-    private UpdateDao<Domain> updateDao;
+    private UpdateDao<Domain, DomainDto> updateDao;
 
     @Test
     @DatabaseSetup("teardown.xml")

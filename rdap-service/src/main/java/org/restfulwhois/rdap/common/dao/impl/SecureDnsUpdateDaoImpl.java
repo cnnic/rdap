@@ -38,6 +38,9 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.KeyDataDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.model.DsData;
 import org.restfulwhois.rdap.common.model.KeyData;
 import org.restfulwhois.rdap.common.model.SecureDns;
@@ -59,7 +62,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns> {
+public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureDnsDto> {
    /**
      * logger for record log.
      */
@@ -72,14 +75,14 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns> {
      */
     @Autowired 
     @Qualifier("keyDataUpdateDaoImpl")
-    private UpdateDao<KeyData>  keyDataUpdateDao;
+    private UpdateDao<KeyData, KeyDataDto>  keyDataUpdateDao;
     
     /**
      * DsData update dao.
      */    
     @Autowired 
     @Qualifier("dsDataUpdateDaoImpl")
-    private UpdateDao<DsData>  dsDataUpdateDao;
+    private UpdateDao<DsData, DsDataDto>  dsDataUpdateDao;
 
     @Override
 	public SecureDns create(SecureDns model) {
@@ -109,17 +112,18 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns> {
 	 *        SecureDns of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<SecureDns> models) {
+	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<SecureDnsDto> models) {
 		if(null == models || models.size() == 0){
 			return;
 		}
-	    for (SecureDns model: models) {
-	    	Long secureDnsId = createSecureDns(model,outerModel.getId());  
-	    	model.setId(secureDnsId);
+	    for (SecureDnsDto model: models) {
+	    	Long secureDnsId = createSecureDns(model,outerModel.getId()); 
+	    	SecureDns secureDnsAsOuter = new SecureDns();
+	    	secureDnsAsOuter.setId(secureDnsId);
 	    	//create keyData	    	
-	    	keyDataUpdateDao.batchCreateAsInnerObjects(model, model.getKeyData());	    	
+	    	keyDataUpdateDao.batchCreateAsInnerObjects(secureDnsAsOuter, model.getKeyData());	    	
 	    	//create DsData            
-            dsDataUpdateDao.batchCreateAsInnerObjects(model, model.getDsData());	    	
+            dsDataUpdateDao.batchCreateAsInnerObjects(secureDnsAsOuter, model.getDsData());	    	
 	    }
 	}
 	
@@ -129,7 +133,7 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns> {
 	 *        SecureDns object
 	 * @return secureDnsId.
 	 */
-    private Long createSecureDns(final SecureDns model, final Long outerObjectId) {		
+    private Long createSecureDns(final SecureDnsDto model, final Long outerObjectId) {		
         final String sql = "insert into RDAP_SECUREDNS(ZONE_SIGNED,DELEGATION_SIGNED,MAX_SIGLIFE,DOMAIN_ID)"
 	      +  " values (?,?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();

@@ -36,10 +36,9 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Link;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -56,7 +55,7 @@ public class LinkUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
 	    @Autowired
-	    private UpdateDao<Link> updateDao;
+	    private UpdateDao<Link, LinkDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
@@ -64,11 +63,11 @@ public class LinkUpdateDaoTest extends BaseTest {
 	    public void testcreateLink() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<Link> linkList = new ArrayList<Link>();
+	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
 	    	List<String> hreflang = new ArrayList<String>();
 	    	hreflang.add("en");
 	    	hreflang.add("zh");
-	    	Link link = new Link();
+	    	LinkDto link = new LinkDto();
 	    	link.setHref("http://sina.com.cn");
 	    	link.setMedia("screen");
 	    	link.setRel("up");

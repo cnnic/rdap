@@ -1,6 +1,8 @@
 package org.restfulwhois.rdap.common.dto.embedded;
 
-public class EventDto{
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class EventDto extends BaseDto{
 	private String eventAction;
 	private String eventActor;
 	private String eventDate;

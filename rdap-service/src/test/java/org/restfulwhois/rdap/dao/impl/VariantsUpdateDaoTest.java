@@ -36,12 +36,11 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
+import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.RelDomainVariant;
-import org.restfulwhois.rdap.common.model.Variant;
 import org.restfulwhois.rdap.common.model.Variants;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.model.base.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -58,7 +57,7 @@ public class VariantsUpdateDaoTest extends BaseTest {
 
 
 	    @Autowired
-	    private UpdateDao<Variants> updateDao;	   
+	    private UpdateDao<Variants, VariantDto> updateDao;	   
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
@@ -67,10 +66,10 @@ public class VariantsUpdateDaoTest extends BaseTest {
 	    public void testcreateVariants() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<Variants> variantsList = new ArrayList<Variants>();
-	    	List<Variant> variantList = new ArrayList<Variant>();
-	    	Variants variants = new Variants();
-	    	Variant variant = new Variant();
+	    	List<VariantDto> variantsList = new ArrayList<VariantDto>();
+	    	List<VariantNameDto> variantList = new ArrayList<VariantNameDto>();
+	    	VariantDto variants = new VariantDto();
+	    	VariantNameDto variant = new VariantNameDto();
 	    	List<RelDomainVariant> relDomainVariantList = new ArrayList<RelDomainVariant>();
 	    	RelDomainVariant relDomainVariant = new RelDomainVariant();
 	    	relDomainVariant.setVariantType("conjoined");	    	
@@ -78,8 +77,8 @@ public class VariantsUpdateDaoTest extends BaseTest {
 	    	relDomainVariant = new RelDomainVariant();
 	    	relDomainVariant.setVariantType("open registration");
 	    	relDomainVariantList.add(relDomainVariant);
-	    	variant.setRelations(relDomainVariantList);
-	    	variant.setIdnTable(".EXAMPLE Swedish");
+	    	//variant.setRelations(relDomainVariantList);
+	    	variants.setIdnTable(".EXAMPLE Swedish");
 	    	variant.setUnicodeName("測试.中国");
 	    	variantList.add(variant);
 	    	variants.setVariantNames(variantList);

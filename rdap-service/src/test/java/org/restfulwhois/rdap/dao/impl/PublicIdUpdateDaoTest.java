@@ -36,9 +36,9 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.PublicId;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -55,7 +55,7 @@ public class PublicIdUpdateDaoTest extends BaseTest {
 
 
 	    @Autowired
-	    private UpdateDao<PublicId> updateDao;
+	    private UpdateDao<PublicId, PublicIdDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
@@ -63,8 +63,8 @@ public class PublicIdUpdateDaoTest extends BaseTest {
 	    public void testcreatePublicId() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<PublicId> publicIdList = new ArrayList<PublicId>();	    	
-	    	PublicId publicId = new PublicId();
+	    	List<PublicIdDto> publicIdList = new ArrayList<PublicIdDto>();	    	
+	    	PublicIdDto publicId = new PublicIdDto();
 	    	publicId.setIdentifier("cnnic-1");
 	    	publicId.setType("cnnic");
 	    	publicIdList.add(publicId);
