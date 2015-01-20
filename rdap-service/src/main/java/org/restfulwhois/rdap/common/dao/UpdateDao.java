@@ -55,4 +55,5 @@ public interface UpdateDao<T extends BaseModel, DTO extends BaseDto> {
     
     void batchCreateAsInnerObjects(BaseModel outerModel, List<DTO> models);
 
+    void saveStatus(T model);
 }

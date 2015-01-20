@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -53,9 +54,11 @@ import org.springframework.jdbc.core.RowMapper;
  * 
  */
 public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto>
-           implements UpdateDao<T, DTO> {
+        implements UpdateDao<T, DTO> {
     private static final String TPL_COUNT_BY_HANDLE =
             "SELECT %s as ID from %s where HANDLE = ?";
+    private static final String TPL_CREATE_STATUS =
+            "INSERT INTO %s(%s,STATUS) values(?,?)";
     /**
      * logger.
      */
@@ -67,9 +70,10 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
      */
     @Autowired
     protected JdbcTemplate jdbcTemplate;
-    
+
     @Override
-    public void batchCreateAsInnerObjects(BaseModel outerModel, List<DTO> models) {
+    public void
+            batchCreateAsInnerObjects(BaseModel outerModel, List<DTO> models) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
@@ -95,5 +99,35 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
             return ids.get(0);
         }
         return null;
+    }
+
+    
+    @Override
+    public void saveStatus(T model) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
+
+    protected void saveStatus(final T model, final List<String> statusList,
+            String tableName, String outerModelIdColumnName) {
+        if(null == statusList||statusList.isEmpty()){
+            LOGGER.debug("status is empty, not save.");
+            return;
+        }
+        String sql =
+                String.format(TPL_CREATE_STATUS, tableName,
+                        outerModelIdColumnName);
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                return statusList.size();
+            }
+
+            @Override
+            public void setValues(PreparedStatement ps, int i)
+                    throws SQLException {
+                ps.setLong(1, model.getId());
+                ps.setString(2, statusList.get(i));
+            }
+        });
     }
 }

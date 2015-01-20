@@ -49,6 +49,10 @@ import org.restfulwhois.rdap.common.dto.embedded.EventDto;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
+import org.restfulwhois.rdap.common.model.Event;
+import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.PublicId;
+import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
@@ -75,6 +79,16 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     @Autowired
     protected UpdateDao<MODEL, DTO> dao;
+    @Autowired
+    protected UpdateDao<Event, EventDto> eventDao;
+    @Autowired
+    protected UpdateDao<Link, LinkDto> linkDao;
+    @Autowired
+    protected UpdateDao<Remark, RemarkDto> remarkDao;
+    @Autowired
+    protected UpdateDao<PublicId, PublicIdDto> publicIdDao;
+    // @Autowired
+    // protected UpdateDao<Entity, EntityDto> entityDao;
 
     @Override
     public UpdateResponse execute(DTO dto) {
@@ -155,6 +169,16 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
 
+    protected void checkMaxLengthForStatus(List<String> statusList,
+            ValidationResult validationResult) {
+        if (null == statusList) {
+            return;
+        }
+        for (String status : statusList) {
+            checkMaxLengthForStatus(status, validationResult);
+        }
+    }
+
     protected void checkMaxLengthForLang(String langValue,
             ValidationResult validationResult) {
         checkMaxLength(langValue, MAX_LENGTH_LANG, "lang", validationResult);
@@ -181,7 +205,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             checkNotEmptyAndMaxLength(event.getEventAction(), MAX_LENGTH_255,
                     "event.eventAction", validationResult);
             checkMaxLength(event.getEventActor(), MAX_LENGTH_255,
-                    "event.eventAction", validationResult);
+                    "event.eventActor", validationResult);
             // checkMinMaxDate(
             // event.getEventDate(),
             // UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
@@ -270,22 +294,23 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     }
     
     protected void saveEvents(List<EventDto> events, MODEL model) {
-
+        eventDao.batchCreateAsInnerObjects(model, events);
     }
 
     protected void saveLinks(List<LinkDto> links, MODEL model) {
+        linkDao.batchCreateAsInnerObjects(model, links);
     }
 
     protected void saveRemarks(List<RemarkDto> remarks, MODEL model) {
-
+        remarkDao.batchCreateAsInnerObjects(model, remarks);
     }
 
     protected void savePublicIds(List<PublicIdDto> publicIds, MODEL model) {
-
+        publicIdDao.batchCreateAsInnerObjects(model, publicIds);
     }
 
     protected void saveEntities(List<EntityHandleDto> entities, MODEL model) {
-
+        // entityDao.batchCreateAsInnerObjects(model, entities);
     }
 
     private UpdateResponse handleError(BaseDto dto,

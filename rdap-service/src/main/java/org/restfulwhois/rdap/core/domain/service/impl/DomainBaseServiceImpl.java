@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
 import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
@@ -48,9 +49,7 @@ import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.common.model.KeyData;
 import org.restfulwhois.rdap.common.model.SecureDns;
-import org.restfulwhois.rdap.common.model.Variant;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.util.BeanUtil;
@@ -58,6 +57,7 @@ import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * create service implementation.
@@ -67,7 +67,10 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class DomainBaseServiceImpl extends
         AbstractUpdateService<DomainDto, Domain> {
-
+    @Autowired
+    private UpdateDao<SecureDns, SecureDnsDto> secureDnsUpdateDao;
+    @Autowired
+    private UpdateDao<Variants, VariantDto> variantUpdateDao;
     /**
      * logger.
      */
@@ -86,40 +89,17 @@ public abstract class DomainBaseServiceImpl extends
         if (null == secureDnsDto) {
             return;
         }
-        SecureDns secureDns = new SecureDns();
-        BeanUtil.copyProperties(secureDnsDto, secureDns, "keyData", "dsData");
-        List<KeyDataDto> keyDataDtoList = secureDnsDto.getKeyData();
-        if (null == keyDataDtoList) {
-            return;
-        }
-        for (KeyDataDto keyDataDto : keyDataDtoList) {
-            KeyData keyData = new KeyData();
-            BeanUtil.copyProperties(keyDataDto, keyData, "events");
-        }
+        List<SecureDnsDto> secureDnsDtos = new ArrayList<SecureDnsDto>();
+        secureDnsDtos.add(secureDnsDto);
+        secureDnsUpdateDao.batchCreateAsInnerObjects(domain, secureDnsDtos);
     }
 
     protected void saveVariants(DomainDto dto, Domain domain) {
         List<VariantDto> variantDtos = dto.getVariants();
-        if (null == variantDtos) {
+        if (null == variantDtos || variantDtos.isEmpty()) {
             return;
         }
-        List<Variants> variantsList = new ArrayList<Variants>();
-        domain.setVariants(variantsList);
-        for (VariantDto variantDto : variantDtos) {
-            Variants variants = new Variants();
-            variantsList.add(variants);
-            variants.setRelation(variantDto.getRelation());
-            variants.setIdnTable(variantDto.getIdnTable());
-            List<VariantNameDto> variantNames = variantDto.getVariantNames();
-            List<Variant> variantList = new ArrayList<Variant>();
-            variants.setVariantNames(variantList);
-            for (VariantNameDto variantNameDto : variantNames) {
-                Variant variant = new Variant();
-                variantList.add(variant);
-                variant.setLdhName(variantNameDto.getLdhName());
-                variant.setUnicodeName(variantNameDto.getUnicodeName());
-            }
-        }
+        variantUpdateDao.batchCreateAsInnerObjects(domain, variantDtos);
     }
 
     private Domain convertDtoToDomain(DomainDto dto) {
@@ -157,10 +137,7 @@ public abstract class DomainBaseServiceImpl extends
                 "unicodeName", validationResult);
         checkMaxLengthForPort43(domainDto.getPort43(), validationResult);
         checkMaxLengthForLang(domainDto.getLang(), validationResult);
-        List<String> statusList = domainDto.getStatus();
-        for (String status : statusList) {
-            checkMaxLengthForStatus(status, validationResult);
-        }
+        checkMaxLengthForStatus(domainDto.getStatus(), validationResult);
         checkVariants(domainDto, validationResult);
         checkSecureDns(domainDto, validationResult);
         checkEntities(domainDto.getEntities(), validationResult);
@@ -237,7 +214,6 @@ public abstract class DomainBaseServiceImpl extends
                     UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
                     "secureDns.maxSigLife", validationResult);
             checkEvents(dsData.getEvents(), validationResult);
-
         }
     }
 
@@ -251,17 +227,22 @@ public abstract class DomainBaseServiceImpl extends
             checkMaxLength(variant.getIdnTable(), MAX_LENGTH_255,
                     "variant.idnTable", validationResult);
             List<String> relations = variant.getRelation();
-            for (String relation : relations) {
-                checkMaxLength(relation, MAX_LENGTH_32, "variant.relation",
-                        validationResult);
+            if (null != relations) {
+                for (String relation : relations) {
+                    checkMaxLength(relation, MAX_LENGTH_32, "variant.relation",
+                            validationResult);
+                }
             }
             List<VariantNameDto> variantNames = variant.getVariantNames();
-            for (VariantNameDto variantName : variantNames) {
-                checkNotEmptyAndMaxLength(variantName.getLdhName(),
-                        MAX_LENGTH_HANDLE, "variant.ldhName", validationResult);
-                checkNotEmptyAndMaxLength(variantName.getUnicodeName(),
-                        MAX_LENGTH_UNICODENAME, "variant.unicodeName",
-                        validationResult);
+            if (null != variantNames) {
+                for (VariantNameDto variantName : variantNames) {
+                    checkNotEmptyAndMaxLength(variantName.getLdhName(),
+                            MAX_LENGTH_HANDLE, "variant.ldhName",
+                            validationResult);
+                    checkNotEmptyAndMaxLength(variantName.getUnicodeName(),
+                            MAX_LENGTH_UNICODENAME, "variant.unicodeName",
+                            validationResult);
+                }
             }
         }
     }

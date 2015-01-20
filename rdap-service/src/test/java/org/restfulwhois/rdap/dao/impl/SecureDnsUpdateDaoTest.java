@@ -68,7 +68,18 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	    public void testcreateSecureDns() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
-	    	List<SecureDnsDto> secureDnsList = new ArrayList<SecureDnsDto>();	    	
+	    	List<SecureDnsDto> secureDnsList = createSecureDns();
+	        updateDao.batchCreateAsInnerObjects(domain, secureDnsList);
+	        assertTable();
+	    }
+
+	    public static void assertTable() throws Exception {
+            assertTablesForUpdate("secureDns-update.xml", TABLE_RDAP_DSDATA,
+	        		TABLE_REL_SECUREDNS_DSKEY, TABLE_RDAP_SECUREDNS,TABLE_RDAP_KEYDATA);
+        }
+
+        public static List<SecureDnsDto> createSecureDns() {
+            List<SecureDnsDto> secureDnsList = new ArrayList<SecureDnsDto>();	    	
 	    	SecureDnsDto secureDns = new SecureDnsDto();
 	    	secureDns.setDelegationSigned(true);
 	    	secureDns.setMaxSigLife(600);
@@ -92,8 +103,6 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	    	dsDataList.add(dsData);
 	    	secureDns.setDsData(dsDataList);
 	    	secureDnsList.add(secureDns);
-	        updateDao.batchCreateAsInnerObjects(domain, secureDnsList);
-	        super.assertTablesForUpdate("secureDns-update.xml", TABLE_RDAP_DSDATA,
-	        		TABLE_REL_SECUREDNS_DSKEY, TABLE_RDAP_SECUREDNS,TABLE_RDAP_KEYDATA);
-	    }
+            return secureDnsList;
+        }
 }

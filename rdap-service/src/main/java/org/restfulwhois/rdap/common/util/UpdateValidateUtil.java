@@ -57,7 +57,7 @@ public class UpdateValidateUtil {
     public static final int MAX_LENGTH_2048 = 2048;
     public static final int MIN_VAL_FOR_INT_COLUMN = 0;
     // Math.pow(2, 31) - 1;
-    public static final long MAX_VAL_FOR_INT_COLUMN = 2147483647L;
+    public static final int MAX_VAL_FOR_INT_COLUMN = 2147483647;
     public static Date MIN_VAL_FOR_TIMESTAMP_COLUMN = null;
     public static Date MAX_VAL_FOR_TIMESTAMP_COLUMN = null;
     static {

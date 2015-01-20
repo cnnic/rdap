@@ -30,14 +30,17 @@
  */
 package org.restfulwhois.rdap.core.domain.dao.impl;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -68,8 +71,12 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain,DomainDto> {
     @Override
     public Domain create(final Domain model) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(SQL_CREATE_DOMAIN, new PreparedStatementSetter() {
-            public void setValues(PreparedStatement ps) throws SQLException {
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps =
+                        connection.prepareStatement(SQL_CREATE_DOMAIN,
+                                Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, model.getHandle());
                 ps.setString(2, model.getLdhName());
                 ps.setString(3, model.getUnicodeName());
@@ -78,10 +85,16 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain,DomainDto> {
                 ps.setString(6, model.getType().getName());
                 ps.setObject(7, model.getNetworkId());
                 ps.setString(8, model.getCustomPropertiesJsonVal());
+                return ps;
             }
-        });
+        }, keyHolder);
         model.setId(keyHolder.getKey().longValue());
         return model;
+    }
+
+    @Override
+    public void saveStatus(Domain model) {
+        saveStatus(model, model.getStatus(), "RDAP_DOMAIN_STATUS", "DOMAIN_ID");
     }
 
     @Override
