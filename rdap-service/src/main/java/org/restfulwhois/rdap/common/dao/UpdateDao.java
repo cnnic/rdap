@@ -42,7 +42,7 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
  * @author jiashuo
  * 
  */
-public interface UpdateDao<T extends BaseModel, OUTERT extends BaseModel> {
+public interface UpdateDao<T extends BaseModel> {
 
     T create(T model);
 
@@ -52,6 +52,6 @@ public interface UpdateDao<T extends BaseModel, OUTERT extends BaseModel> {
 
     Long findIdByHandle(String handle);
     
-    void batchCreateAsInnerObjects(OUTERT outerModel, List<T> models);
+    void batchCreateAsInnerObjects(BaseModel outerModel, List<T> models);
 
 }

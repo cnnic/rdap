@@ -58,7 +58,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, BaseModel> {
+public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants> {
    /**
      * logger for record log.
      */

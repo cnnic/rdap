@@ -55,7 +55,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, BaseModel> {
+public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link> {
    /**
      * logger for record log.
      */

@@ -59,7 +59,7 @@ public class EventUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
 	    @Autowired
-	    private UpdateDao<Event,BaseModel> updateDao;
+	    private UpdateDao<Event> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")

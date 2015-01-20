@@ -61,7 +61,7 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
 
 	    @Autowired
-	    private UpdateDao<DsData,BaseModel> updateDao;
+	    private UpdateDao<DsData> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")

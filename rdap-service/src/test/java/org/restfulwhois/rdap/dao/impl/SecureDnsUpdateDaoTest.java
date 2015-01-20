@@ -61,7 +61,7 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
 
 	    @Autowired
-	    private UpdateDao<SecureDns, BaseModel> updateDao;
+	    private UpdateDao<SecureDns> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")

@@ -56,7 +56,7 @@ public class LinkUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
 
 	    @Autowired
-	    private UpdateDao<Link, BaseModel> updateDao;
+	    private UpdateDao<Link> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
