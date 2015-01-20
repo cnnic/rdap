@@ -31,6 +31,7 @@
 package org.restfulwhois.rdap.core.domain.service.impl;
 
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
