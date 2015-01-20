@@ -33,6 +33,7 @@ package org.restfulwhois.rdap.common.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
@@ -74,6 +75,24 @@ public class UpdateValidateUtil {
     public static void checkNotEmpty(String value, String fieldName,
             ValidationResult validationResult) {
         if (StringUtils.isBlank(value)) {
+            validationResult.addError(UpdateValidationError
+                    .build4002Error(fieldName));
+        }
+    }
+
+    public static void checkNotEmpty(List<String> values, String fieldName,
+            ValidationResult validationResult) {
+        if (null == values || values.isEmpty()) {
+            validationResult.addError(UpdateValidationError
+                    .build4002Error(fieldName));
+        }
+        boolean hasContent = false;
+        for (String value : values) {
+            if (StringUtils.isNotBlank(value)) {
+                hasContent = true;
+            }
+        }
+        if (!hasContent) {
             validationResult.addError(UpdateValidationError
                     .build4002Error(fieldName));
         }

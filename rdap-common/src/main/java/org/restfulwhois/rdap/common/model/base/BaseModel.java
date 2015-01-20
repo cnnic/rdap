@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.model.Notice;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -55,6 +56,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_EMPTY)
 public class BaseModel {
 
+    @JsonIgnore
+    private BaseDto dto;
+    
     @JsonIgnore
     private String customPropertyPrefix;
 
@@ -332,4 +336,12 @@ public class BaseModel {
         this.customPropertiesJsonVal = customPropertiesJsonVal;
     }
 
+    public BaseDto getDto() {
+        return dto;
+    }
+
+    public void setDto(BaseDto dto) {
+        this.dto = dto;
+    }
+    
 }

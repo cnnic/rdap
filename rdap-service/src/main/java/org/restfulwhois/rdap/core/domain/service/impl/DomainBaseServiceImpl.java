@@ -81,7 +81,7 @@ public abstract class DomainBaseServiceImpl extends
         return domain;
     }
 
-    private void convertSecureDns(DomainDto dto, Domain domain) {
+    protected void saveSecureDns(DomainDto dto, Domain domain) {
         SecureDnsDto secureDnsDto = dto.getSecureDNS();
         if (null == secureDnsDto) {
             return;
@@ -98,7 +98,7 @@ public abstract class DomainBaseServiceImpl extends
         }
     }
 
-    private void convertVariants(DomainDto dto, Domain domain) {
+    protected void saveVariants(DomainDto dto, Domain domain) {
         List<VariantDto> variantDtos = dto.getVariants();
         if (null == variantDtos) {
             return;

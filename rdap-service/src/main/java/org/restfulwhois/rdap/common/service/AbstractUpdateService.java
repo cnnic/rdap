@@ -43,13 +43,12 @@ import java.util.Map;
 
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.BaseDto;
-import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
+import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
 import org.restfulwhois.rdap.common.dto.embedded.EventDto;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
-import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
@@ -105,6 +104,14 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         model.setCustomProperties(customProperties);
         model.setCustomPropertiesJsonVal(JsonUtil
                 .serializeMap(customProperties));
+    }
+    
+    protected void checkNotEmpty(List<String> values, String fieldName,
+            ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        UpdateValidateUtil.checkNotEmpty(values, fieldName, validationResult);
     }
 
     protected void checkNotEmpty(String value, String fieldName,
@@ -260,6 +267,25 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             validationResult.addError(UpdateValidationError
                     .build4041Error(handle));
         }
+    }
+    
+    protected void saveEvents(List<EventDto> events, MODEL model) {
+
+    }
+
+    protected void saveLinks(List<LinkDto> links, MODEL model) {
+    }
+
+    protected void saveRemarks(List<RemarkDto> remarks, MODEL model) {
+
+    }
+
+    protected void savePublicIds(List<PublicIdDto> publicIds, MODEL model) {
+
+    }
+
+    protected void saveEntities(List<EntityHandleDto> entities, MODEL model) {
+
     }
 
     private UpdateResponse handleError(BaseDto dto,

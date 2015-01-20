@@ -39,6 +39,8 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -65,6 +67,7 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
 
     @Override
     public Domain create(final Domain model) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(SQL_CREATE_DOMAIN, new PreparedStatementSetter() {
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setString(1, model.getHandle());
@@ -77,6 +80,7 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain> {
                 ps.setString(8, model.getCustomPropertiesJsonVal());
             }
         });
+        model.setId(keyHolder.getKey().longValue());
         return model;
     }
 
