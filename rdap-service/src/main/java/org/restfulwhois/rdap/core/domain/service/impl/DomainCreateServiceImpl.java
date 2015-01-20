@@ -30,13 +30,16 @@
  */
 package org.restfulwhois.rdap.core.domain.service.impl;
 
+import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
+import org.restfulwhois.rdap.common.model.SecureDns;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -53,16 +56,27 @@ public class DomainCreateServiceImpl extends DomainBaseServiceImpl {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainCreateServiceImpl.class);
+    @Autowired
+    private UpdateDao<SecureDns> secureDnsUpdateDao;
 
     @Override
     protected void execute(Domain domain) {
         dao.create(domain);
+        DomainDto dto = (DomainDto) domain.getDto();
+        saveSecureDns(dto, domain);
+        saveVariants(dto, domain);
+        saveEntities(dto.getEntities(), domain);
+        savePublicIds(dto.getPublicIds(), domain);
+        saveRemarks(dto.getRemarks(), domain);
+        saveLinks(dto.getLinks(), domain);
+        saveEvents(dto.getEvents(), domain);
     }
 
     @Override
     protected Domain convertDtoToModel(DomainDto dto) {
         Domain domain = super.convertDtoToModelWithoutType(dto);
         domain.setType(DomainType.getByTypeName(dto.getType()));
+        domain.setDto(dto);
         return domain;
     }
 
