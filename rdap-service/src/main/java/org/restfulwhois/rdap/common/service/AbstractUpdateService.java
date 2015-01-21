@@ -55,6 +55,7 @@ import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.PublicId;
 import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.util.DateUtil;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
@@ -63,6 +64,7 @@ import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 /**
  * abstract update service.
@@ -120,7 +122,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         model.setCustomPropertiesJsonVal(JsonUtil
                 .serializeMap(customProperties));
     }
-    
+
     protected void checkNotEmpty(List<String> values, String fieldName,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -158,9 +160,25 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
 
-    protected void checkMinMaxDate(Date value, Date minValue, Date maxValue,
-            String fieldName, ValidationResult validationResult) {
-        UpdateValidateUtil.checkMinMaxDate(value, minValue, maxValue,
+    protected void checkNotEmptyAndValidMinMaxDate(String dateString,
+            Date minValue, Date maxValue, String fieldName,
+            ValidationResult validationResult) {
+        checkNotEmpty(dateString, fieldName, validationResult);
+        checkValidAndMinMaxDate(dateString, minValue, maxValue, fieldName, validationResult);
+    }
+
+    protected void checkValidAndMinMaxDate(String dateString, Date minValue,
+            Date maxValue, String fieldName, ValidationResult validationResult) {
+        if (StringUtils.isEmpty(dateString)) {
+            return;
+        }
+        Date dateValue = DateUtil.parseUTC(dateString);
+        if (null == dateValue) {
+            validationResult.addError(UpdateValidationError
+                    .build4008Error(fieldName));
+            return;
+        }
+        UpdateValidateUtil.checkMinMaxDate(dateValue, minValue, maxValue,
                 fieldName, validationResult);
     }
 
@@ -207,11 +225,10 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                     "event.eventAction", validationResult);
             checkMaxLength(event.getEventActor(), MAX_LENGTH_255,
                     "event.eventActor", validationResult);
-            // checkMinMaxDate(
-            // event.getEventDate(),
-            // UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
-            // UpdateValidateUtil.MAX_VAL_FOR_TIMESTAMP_COLUMN,
-            // "event.eventDate", validationResult);
+            checkNotEmptyAndValidMinMaxDate(event.getEventDate(),
+                    UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_TIMESTAMP_COLUMN,
+                    "event.eventDate", validationResult);
         }
     }
 
@@ -293,7 +310,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                     .build4041Error(handle));
         }
     }
-    
+
     protected void saveEvents(List<EventDto> events, MODEL model) {
         eventDao.batchCreateAsInnerObjects(model, events);
     }

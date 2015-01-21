@@ -46,6 +46,7 @@ import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,9 +135,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
             		 sql, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, model.getEventAction());
 				ps.setString(2, model.getEventActor());
-				ps.setTimestamp(3, new java.sql.Timestamp(
-                   parseStringToDate(model.getEventDate()
-                   , "yyyy-MM-dd HH:mm:ss").getTime()));
+				ps.setString(3, DateUtil.formatUTC(DateUtil.parseUTC(model.getEventDate())));
 				return ps;
 			}		
         }, keyHolder);
@@ -169,23 +168,6 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
 		 });		
 	}
 	
-    /**
-     * 
-     * @param dateString
-     *        dateString
-     * @param format
-     *        format
-     * @return date
-     */
-    protected Date parseStringToDate(String dateString, String format) {
-        try {           
-            Date date = new SimpleDateFormat(format).parse(dateString);
-            return date;
-        } catch (Exception e) {
-            LOGGER.error("error timestamp format,error:{}", e);
-            return null;
-        }
-    }
 	@Override
 	public Long findIdByHandle(String handle) {
 		// TODO Auto-generated method stub
