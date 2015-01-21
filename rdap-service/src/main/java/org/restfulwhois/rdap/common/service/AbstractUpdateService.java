@@ -170,29 +170,6 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
 
-    protected void checkNotEmptyAndValidMinMaxDate(String dateString,
-            Date minValue, Date maxValue, String fieldName,
-            ValidationResult validationResult) {
-        checkNotEmpty(dateString, fieldName, validationResult);
-        checkValidAndMinMaxDate(dateString, minValue, maxValue, fieldName,
-                validationResult);
-    }
-
-    protected void checkValidAndMinMaxDate(String dateString, Date minValue,
-            Date maxValue, String fieldName, ValidationResult validationResult) {
-        if (StringUtils.isEmpty(dateString)) {
-            return;
-        }
-        Date dateValue = DateUtil.parseUTC(dateString);
-        if (null == dateValue) {
-            validationResult.addError(UpdateValidationError
-                    .build4008Error(fieldName));
-            return;
-        }
-        UpdateValidateUtil.checkMinMaxDate(dateValue, minValue, maxValue,
-                fieldName, validationResult);
-    }
-
     protected void checkMaxLengthForStatus(String statusValue,
             ValidationResult validationResult) {
         checkMaxLength(statusValue, MAX_LENGTH_STATUS, "status",
@@ -236,10 +213,8 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                     "event.eventAction", validationResult);
             checkMaxLength(event.getEventActor(), MAX_LENGTH_255,
                     "event.eventActor", validationResult);
-            checkNotEmptyAndValidMinMaxDate(event.getEventDate(),
-                    UpdateValidateUtil.MIN_VAL_FOR_DATETIME_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_DATETIME_COLUMN,
-                    "event.eventDate", validationResult);
+            UpdateValidateUtil.checkNotEmptyAndValidMinMaxDate(
+                    event.getEventDate(), "event.eventDate", validationResult);
         }
     }
 

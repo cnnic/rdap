@@ -126,4 +126,29 @@ public class UpdateValidateUtil {
         }
     }
 
+    public static void checkValidAndMinMaxDate(String dateString,
+            Date minValue, Date maxValue, String fieldName,
+            ValidationResult validationResult) {
+        if (StringUtils.isEmpty(dateString)) {
+            return;
+        }
+        Date dateValue = DateUtil.parseUTC(dateString);
+        if (null == dateValue) {
+            validationResult.addError(UpdateValidationError
+                    .build4008Error(fieldName));
+            return;
+        }
+        checkMinMaxDate(dateValue, minValue, maxValue, fieldName,
+                validationResult);
+    }
+
+    public static void checkNotEmptyAndValidMinMaxDate(String dateString,
+            String fieldName, ValidationResult validationResult) {
+        checkNotEmpty(dateString, fieldName, validationResult);
+        checkValidAndMinMaxDate(dateString,
+                UpdateValidateUtil.MIN_VAL_FOR_DATETIME_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_DATETIME_COLUMN, fieldName,
+                validationResult);
+    }
+
 }

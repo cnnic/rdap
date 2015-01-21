@@ -22,27 +22,17 @@ public class UpdateValidateUtilTest {
 
     @Test
     public void testCheckMinMaxDate_noerror() throws ParseException {
-        Date minDate =
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                        .parse("1970-01-02 00:00:00");
         ValidationResult validationResult = new ValidationResult();
-        UpdateValidateUtil.checkMinMaxDate(minDate,
-                UpdateValidateUtil.MIN_VAL_FOR_DATETIME_COLUMN,
-                UpdateValidateUtil.MAX_VAL_FOR_DATETIME_COLUMN, "eventDate",
-                validationResult);
+        UpdateValidateUtil.checkNotEmptyAndValidMinMaxDate(
+                "1000-01-01T00:00:00Z", "eventDate", validationResult);
         assertFalse(validationResult.hasError());
     }
 
     @Test
     public void testCheckMinMaxDate_haserror() throws ParseException {
-        Date minDate =
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                        .parse("1970-01-01 00:00:00");
         ValidationResult validationResult = new ValidationResult();
-        UpdateValidateUtil.checkMinMaxDate(minDate,
-                UpdateValidateUtil.MIN_VAL_FOR_DATETIME_COLUMN,
-                UpdateValidateUtil.MAX_VAL_FOR_DATETIME_COLUMN, "eventDate",
-                validationResult);
+        UpdateValidateUtil.checkNotEmptyAndValidMinMaxDate(
+                "0001-01-01T00:00:00Z", "eventDate", validationResult);
         assertTrue(validationResult.hasError());
     }
 }
