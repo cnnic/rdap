@@ -64,10 +64,10 @@ public class UpdateValidateUtil {
         try {
             MIN_VAL_FOR_TIMESTAMP_COLUMN =
                     new SimpleDateFormat(DEFAULT_DATE_FORMAT)
-                            .parse("1970-01-02 00:00:00");
+                            .parse("1000-01-01 00:00:00");
             MAX_VAL_FOR_TIMESTAMP_COLUMN =
                     new SimpleDateFormat(DEFAULT_DATE_FORMAT)
-                            .parse("2038-01-02 00:00:00");
+                            .parse("9999-12-31 23:59:59");
         } catch (ParseException e) {
         }
     }

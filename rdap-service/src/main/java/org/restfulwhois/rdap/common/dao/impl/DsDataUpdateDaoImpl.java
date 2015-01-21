@@ -90,7 +90,7 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
 
 
     @Override
-	public DsData create(DsData model) {
+	public DsData save(DsData model) {
 		// TODO Auto-generated method stub
 		return null;
 	}

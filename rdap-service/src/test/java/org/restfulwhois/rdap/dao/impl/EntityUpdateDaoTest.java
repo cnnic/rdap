@@ -74,7 +74,7 @@ public class EntityUpdateDaoTest extends BaseTest {
 	    	entityHandleList.add(entityHandle);
             domainDto.setEntities(entityHandleList);
             domain.setDto(domainDto);
-            entityUpdateDao.createRel(domain);
+            entityUpdateDao.saveRel(domain);
 	        super.assertTablesForUpdate("rel-entity-update.xml", TABLE_REL_ENTITY_REGISTRATION);
 	    }
 }

@@ -85,7 +85,7 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
     private UpdateDao<DsData, DsDataDto>  dsDataUpdateDao;
 
     @Override
-	public SecureDns create(SecureDns model) {
+	public SecureDns save(SecureDns model) {
 		// TODO Auto-generated method stub
 		return null;
 	}

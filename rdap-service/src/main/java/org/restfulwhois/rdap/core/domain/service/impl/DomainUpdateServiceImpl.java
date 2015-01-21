@@ -46,7 +46,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service("domainUpdateServiceImpl")
-public class DomainUpdateServiceImpl extends DomainBaseServiceImpl {
+public class DomainUpdateServiceImpl extends DomainUpdateBaseServiceImpl {
 
     /**
      * logger.

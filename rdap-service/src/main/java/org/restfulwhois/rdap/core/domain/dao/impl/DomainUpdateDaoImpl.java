@@ -69,7 +69,7 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain,DomainDto> {
             .getLogger(DomainUpdateDaoImpl.class);
 
     @Override
-    public Domain create(final Domain model) {
+    public Domain save(final Domain model) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(

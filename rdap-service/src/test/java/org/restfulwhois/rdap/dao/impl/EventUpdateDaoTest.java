@@ -70,7 +70,7 @@ public class EventUpdateDaoTest extends BaseTest {
 	    	EventDto event = new EventDto();
 	    	event.setEventAction("registration");
 	    	event.setEventActor("zhanyq");
-	    	event.setEventDate("2015-01-15 17:15:12");
+	    	event.setEventDate("2015-01-15T17:15:12Z");
 	    	//link
 	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
 	    	List<String> hreflang = new ArrayList<String>();

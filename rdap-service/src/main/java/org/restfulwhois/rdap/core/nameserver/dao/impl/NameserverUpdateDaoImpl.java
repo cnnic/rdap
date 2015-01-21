@@ -36,10 +36,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
+import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
-import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class NameserverUpdateDaoImpl extends AbstractUpdateDao<Nameserver, Names
             .getLogger(NameserverUpdateDaoImpl.class);
 
     @Override
-	public Nameserver create(Nameserver model) {
+	public Nameserver save(Nameserver model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -78,17 +78,17 @@ public class NameserverUpdateDaoImpl extends AbstractUpdateDao<Nameserver, Names
 		// TODO Auto-generated method stub
 		
 	}
-   /**
-    * 
-    * @param outerModel
-    *       object of outer object
-    */
-	public void createRel(BaseModel outerModel) {
+   
+	@Override
+	public void saveRel(BaseModel outerModel) {
 		if (null == outerModel || null == outerModel.getDto()) {
 			return;
 		}
-		Domain domain = (Domain) outerModel;
-		DomainDto domainDto = (DomainDto) domain.getDto();
+		BaseDto dto = outerModel.getDto();
+		if(!(dto instanceof DomainDto)){
+		    return;
+		}
+		DomainDto domainDto = (DomainDto) dto;
 		List<HandleDto> handles= domainDto.getNameservers();
 		if (null == handles  || handles.size() ==0) {
 			return;
@@ -96,7 +96,7 @@ public class NameserverUpdateDaoImpl extends AbstractUpdateDao<Nameserver, Names
 		for (HandleDto handleDto:handles){
 			Long nsId = this.findIdByHandle(handleDto.getHandle());
 			if(null != nsId){
-				createRelDomainNameserver(domain.getId(), nsId);
+				createRelDomainNameserver(outerModel.getId(), nsId);
 			}
 		}	
 	}

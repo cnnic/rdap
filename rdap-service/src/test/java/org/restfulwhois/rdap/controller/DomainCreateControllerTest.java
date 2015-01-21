@@ -46,6 +46,7 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.JsonHelper;
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.embedded.EventDto;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
@@ -55,6 +56,7 @@ import org.restfulwhois.rdap.dao.impl.LinkUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.PublicIdUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.RemarkUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.SecureDnsUpdateDaoTest;
+import org.restfulwhois.rdap.dao.impl.VariantsUpdateDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -134,10 +136,12 @@ public class DomainCreateControllerTest extends BaseTest {
         status.add("validated");
         status.add("update prohibited");
         domain.setStatus(status);
+        createAndSetEvents(domain);
         domain.setRemarks(RemarkUpdateDaoTest.createRemarkList());
         domain.setLinks(LinkUpdateDaoTest.createLinkList());
         domain.setPublicIds(PublicIdUpdateDaoTest.createPublicIdList());
         domain.setSecureDNS(SecureDnsUpdateDaoTest.createSecureDns().get(0));
+        domain.setVariants(VariantsUpdateDaoTest.createVariants());
         String content = JsonHelper.serialize(domain);
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
@@ -149,6 +153,17 @@ public class DomainCreateControllerTest extends BaseTest {
         // LinkUpdateDaoTest.assertCreate();
         PublicIdUpdateDaoTest.assertCreate();
         SecureDnsUpdateDaoTest.assertTable();
+        VariantsUpdateDaoTest.assertTable();
+    }
+
+    private void createAndSetEvents(DomainDto domain) {
+        List<EventDto> events = new ArrayList<EventDto>();           
+        EventDto event = new EventDto();
+        events.add(event);
+        event.setEventAction("registration");
+        event.setEventActor("zhanyq");
+        event.setEventDate("2015-01-15T17:15:12Z");
+        domain.setEvents(events);
     }
 
     @Test
@@ -434,6 +449,33 @@ public class DomainCreateControllerTest extends BaseTest {
                                         ServiceErrorCode.ERROR_4091
                                                 .getMessage(), domain
                                                 .getHandle()))));
+    }
+    
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_invalid_event_date() throws Exception {
+        DomainDto domain = generateDomainDto();
+        List<EventDto> events = new ArrayList<EventDto>();  
+        domain.setEvents(events);
+        EventDto event = new EventDto();
+        events.add(event);
+        event.setEventAction("registration");
+        event.setEventActor("zhanyq");
+        event.setEventDate("2015-01-15 17:15:12Z");
+        String content = JsonHelper.serialize(domain);
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4008))
+                .andExpect(
+                        jsonPath("$.description").value(
+                                CoreMatchers.hasItems(String.format(
+                                        ServiceErrorCode.ERROR_4008
+                                                .getMessage(), "event.eventDate"))));
     }
 
     @Test

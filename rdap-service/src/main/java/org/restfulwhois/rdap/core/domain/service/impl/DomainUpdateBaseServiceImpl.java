@@ -42,6 +42,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
 import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
 import org.restfulwhois.rdap.common.dto.embedded.KeyDataDto;
@@ -49,6 +50,7 @@ import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.model.SecureDns;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
@@ -65,8 +67,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author jiashuo
  * 
  */
-public abstract class DomainBaseServiceImpl extends
+public abstract class DomainUpdateBaseServiceImpl extends
         AbstractUpdateService<DomainDto, Domain> {
+    @Autowired
+    protected UpdateDao<Nameserver, NameserverDto> nameserverDao;
     @Autowired
     private UpdateDao<SecureDns, SecureDnsDto> secureDnsUpdateDao;
     @Autowired
@@ -75,7 +79,7 @@ public abstract class DomainBaseServiceImpl extends
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(DomainBaseServiceImpl.class);
+            .getLogger(DomainUpdateBaseServiceImpl.class);
 
     protected Domain convertDtoToModelWithoutType(DomainDto dto) {
         Domain domain = convertDtoToDomain(dto);
@@ -84,6 +88,10 @@ public abstract class DomainBaseServiceImpl extends
         return domain;
     }
 
+    protected void saveNameservers(Domain domain) {
+        nameserverDao.saveRel(domain);
+    }
+    
     protected void saveSecureDns(DomainDto dto, Domain domain) {
         SecureDnsDto secureDnsDto = dto.getSecureDNS();
         if (null == secureDnsDto) {
