@@ -69,12 +69,7 @@ public class NoticeServiceImpl implements NoticeService {
      * initialized from constants, or file.
      */
     private static List<Notice> truncatedNoticeList;
-
-    @PostConstruct
-    @Override
-    public void init() {
-        NoticeServiceImpl.notTruncatedNoticeList = noticeDao.queryAllNotices();
-    }
+   
 
     @Override
     public List<Notice> getAllNotTruncatedNotice() {
@@ -131,6 +126,17 @@ public class NoticeServiceImpl implements NoticeService {
     @Resource(name = "truncatedNoticeList")
     public void setTruncatedNoticeList(List<Notice> truncatedNoticeList) {
         NoticeServiceImpl.truncatedNoticeList = truncatedNoticeList;
+    }
+    
+    /**
+     * setNotTruncatedNoticeList.
+     * 
+     * @param notTruncatedNoticeList
+     *            setNotTruncatedNoticeList.
+     */
+    @Resource(name = "notTruncatedNoticeList")
+    public void setNotTruncatedNoticeList(List<Notice> notTruncatedNoticeList) {
+        NoticeServiceImpl.notTruncatedNoticeList = notTruncatedNoticeList;
     }
 
 }
