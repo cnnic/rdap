@@ -34,15 +34,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -126,7 +125,10 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDt
 	 */
 	private void createRelDomainVariant(final Long domainId, 
 			        final Long variantId, List<String> relations) {
-	    final List<String> notEmptyRelations = getNotEmptyRelations(relations);
+	    final List<String> notEmptyRelations = StringUtil.getNotEmptyStringList(relations);
+	    if(notEmptyRelations.isEmpty()){
+            return;
+        }
 		final String sql = "insert into REL_DOMAIN_VARIANT("
                + "DOMAIN_ID,VARIANT_TYPE,VARIANT_ID) values (?,?,?)";
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -144,18 +146,6 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDt
 		
 	}
 
-    private List<String> getNotEmptyRelations(List<String> relations) {
-        List<String> notEmptyRelations = new ArrayList<String>(); 
-	    if(null == relations){
-	        return notEmptyRelations;
-	    }
-	    for(String relation:relations){
-	        if(StringUtils.isNotBlank(relation)){
-	            notEmptyRelations.add(relation);
-	        }
-	    }
-        return notEmptyRelations;
-    }
 	/**
 	 * 
 	 * @param variant

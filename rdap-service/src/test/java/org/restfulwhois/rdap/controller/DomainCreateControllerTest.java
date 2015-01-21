@@ -129,6 +129,197 @@ public class DomainCreateControllerTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_ok_ignore_unrecognized_properties() throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"\":1,\"unknownP\":\"x\"}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value("1"));
+    }
+
+    @Test
+    public void test_invalid_propertyType_should_be_object_but_is_array()
+            throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":[{\"maxSigLife\":1}]}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4001))
+                .andExpect(
+                        jsonPath("$.description").value(
+                                CoreMatchers
+                                        .hasItems(ServiceErrorCode.ERROR_4001
+                                                .getMessage())));
+    }
+
+    @Test
+    public void test_invalid_propertyType_should_be_int_but_is_string()
+            throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"maxSigLife\":\"i-am-not-int-value\"}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4001))
+                .andExpect(
+                        jsonPath("$.description").value(
+                                CoreMatchers
+                                        .hasItems(ServiceErrorCode.ERROR_4001
+                                                .getMessage())));
+    }
+
+    @Test
+    public
+            void
+            test_ok_propertyType_should_be_int_but_is_int_with_dot_will_truncated_to_int()
+                    throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"maxSigLife\":1.8}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value("1"));
+    }
+
+    @Test
+    public void
+            test_invalid_propertyType_int_but_exceed_max_value_as_minus_int()
+                    throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"maxSigLife\":"
+                        + (UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN + 1)
+                        + "}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4010));
+    }
+
+    @Test
+    public void test_invalid_propertyType_int_but_exceed_max_value()
+            throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"maxSigLife\":4294967296}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4001));
+    }
+
+    @Test
+    public void test_invalid_propertyType_should_be_tinyint_but_is_string()
+            throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"zoneSigned\":\"i-am-not-tinyint-value\"}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4001))
+                .andExpect(
+                        jsonPath("$.description").value(
+                                CoreMatchers
+                                        .hasItems(ServiceErrorCode.ERROR_4001
+                                                .getMessage())));
+    }
+
+    @Test
+    public
+            void
+            test_ok_propertyType_should_be_boolean_but_is_int_128_result_is_true()
+                    throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"zoneSigned\":128}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value("1"));
+    }
+
+    @Test
+    public
+            void
+            test_ok_propertyType_should_be_boolean_but_is_int_0_result_is_false()
+                    throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"zoneSigned\":0}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value("1"));
+    }
+
+    @Test
+    public
+            void
+            test_ok_propertyType_should_be_boolean_but_is_int_minus_number_result_is_true()
+                    throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"zoneSigned\":-1}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value("1"));
+    }
+
+    @Test
+    public void
+            test_invalid_propertyType_should_be_boolean_but_is_int_with_dot()
+                    throws Exception {
+        String content =
+                "{\"handle\":\"1\",\"ldhName\":\"cnnic.cn\",\"type\":\"dnr\""
+                        + ",\"secureDNS\":{\"zoneSigned\":1.1}}";
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4001))
+                .andExpect(
+                        jsonPath("$.description").value(
+                                CoreMatchers
+                                        .hasItems(ServiceErrorCode.ERROR_4001
+                                                .getMessage())));
+    }
+
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_ok_with_fat_domain_with_all_inner_objects()
             throws Exception {
         DomainDto domain = generateDomainDto();
@@ -157,7 +348,7 @@ public class DomainCreateControllerTest extends BaseTest {
     }
 
     private void createAndSetEvents(DomainDto domain) {
-        List<EventDto> events = new ArrayList<EventDto>();           
+        List<EventDto> events = new ArrayList<EventDto>();
         EventDto event = new EventDto();
         events.add(event);
         event.setEventAction("registration");
@@ -450,13 +641,13 @@ public class DomainCreateControllerTest extends BaseTest {
                                                 .getMessage(), domain
                                                 .getHandle()))));
     }
-    
+
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_event_date() throws Exception {
         DomainDto domain = generateDomainDto();
-        List<EventDto> events = new ArrayList<EventDto>();  
+        List<EventDto> events = new ArrayList<EventDto>();
         domain.setEvents(events);
         EventDto event = new EventDto();
         events.add(event);
@@ -475,7 +666,8 @@ public class DomainCreateControllerTest extends BaseTest {
                         jsonPath("$.description").value(
                                 CoreMatchers.hasItems(String.format(
                                         ServiceErrorCode.ERROR_4008
-                                                .getMessage(), "event.eventDate"))));
+                                                .getMessage(),
+                                        "event.eventDate"))));
     }
 
     @Test

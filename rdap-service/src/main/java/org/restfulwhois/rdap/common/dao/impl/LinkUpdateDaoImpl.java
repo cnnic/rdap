@@ -41,6 +41,7 @@ import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -109,16 +110,20 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
 	 */
 	private void createLinkHreflang(final LinkDto linkDto, final Long linkId) {
 		final List<String> hreflang = linkDto.getHreflang();
+		final List<String> notEmptyHreflangs = StringUtil.getNotEmptyStringList(hreflang);
+		if(notEmptyHreflangs.isEmpty()){
+		    return;
+		}
 		final String sql = "insert into RDAP_LINK_HREFLANG(HREFLANG, LINK_ID)"
 			      +  " values (?,?)";
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 		    public int getBatchSize() {
-		        return hreflang.size();
+		        return notEmptyHreflangs.size();
 		    }
 		    @Override
 			public void setValues(PreparedStatement ps, int i)
 				throws SQLException {
-		    	ps.setString(1, hreflang.get(i));
+		    	ps.setString(1, notEmptyHreflangs.get(i));
                 ps.setLong(2, linkId);                
 			}
 				

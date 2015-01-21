@@ -91,7 +91,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
     protected void saveNameservers(Domain domain) {
         nameserverDao.saveRel(domain);
     }
-    
+
     protected void saveSecureDns(DomainDto dto, Domain domain) {
         SecureDnsDto secureDnsDto = dto.getSecureDNS();
         if (null == secureDnsDto) {
@@ -176,10 +176,8 @@ public abstract class DomainUpdateBaseServiceImpl extends
         if (null == secureDns) {
             return;
         }
-        checkMinMaxInt(secureDns.getMaxSigLife(),
-                UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
-                UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
-                "secureDns.maxSigLife", validationResult);
+        checkMinMaxInt(secureDns.getMaxSigLife(), "secureDns.maxSigLife",
+                validationResult);
         checkDsData(secureDns, validationResult);
         checkKeyData(secureDns, validationResult);
     }
@@ -191,21 +189,15 @@ public abstract class DomainUpdateBaseServiceImpl extends
             return;
         }
         for (KeyDataDto keyData : keyDatas) {
-            checkMinMaxInt(keyData.getFlags(),
-                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN, "keyData.flags",
+            checkMinMaxInt(keyData.getFlags(), "keyData.flags",
                     validationResult);
-            checkMinMaxInt(keyData.getProtocol(),
-                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
-                    "keyData.protocol", validationResult);
+            checkMinMaxInt(keyData.getProtocol(), "keyData.protocol",
+                    validationResult);
             checkNotEmptyAndMaxLength(keyData.getPublicKey(),
                     UpdateValidateUtil.MAX_LENGTH_2048, "keyData.publicKey",
                     validationResult);
-            checkMinMaxInt(keyData.getAlgorithm(),
-                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
-                    "keyData.algorithm", validationResult);
+            checkMinMaxInt(keyData.getAlgorithm(), "keyData.algorithm",
+                    validationResult);
             checkEvents(keyData.getEvents(), validationResult);
         }
     }
@@ -217,10 +209,8 @@ public abstract class DomainUpdateBaseServiceImpl extends
             return;
         }
         for (DsDataDto dsData : dsDatas) {
-            checkMinMaxInt(dsData.getKeyTag(),
-                    UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN,
-                    "secureDns.maxSigLife", validationResult);
+            checkMinMaxInt(dsData.getKeyTag(), "secureDns.maxSigLife",
+                    validationResult);
             checkEvents(dsData.getEvents(), validationResult);
         }
     }

@@ -40,7 +40,7 @@ import org.springframework.http.HttpStatus;
  */
 public enum ServiceErrorCode {
 
-    ERROR_4001(4001, "Request data is not valid JSON", HttpStatus.BAD_REQUEST),
+    ERROR_4001(4001, "Request data is not valid JSON, or has invalid date type", HttpStatus.BAD_REQUEST),
     ERROR_4002(4002, "Property can't be empty:%s", HttpStatus.BAD_REQUEST),
     ERROR_4003(4003, "Property '%s' exceed max length:%s",
             HttpStatus.BAD_REQUEST), ERROR_4008(4008,

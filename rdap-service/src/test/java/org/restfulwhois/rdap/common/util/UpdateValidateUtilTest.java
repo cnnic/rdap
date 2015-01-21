@@ -27,8 +27,8 @@ public class UpdateValidateUtilTest {
                         .parse("1970-01-02 00:00:00");
         ValidationResult validationResult = new ValidationResult();
         UpdateValidateUtil.checkMinMaxDate(minDate,
-                UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
-                UpdateValidateUtil.MAX_VAL_FOR_TIMESTAMP_COLUMN, "eventDate",
+                UpdateValidateUtil.MIN_VAL_FOR_DATETIME_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_DATETIME_COLUMN, "eventDate",
                 validationResult);
         assertFalse(validationResult.hasError());
     }
@@ -40,8 +40,8 @@ public class UpdateValidateUtilTest {
                         .parse("1970-01-01 00:00:00");
         ValidationResult validationResult = new ValidationResult();
         UpdateValidateUtil.checkMinMaxDate(minDate,
-                UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
-                UpdateValidateUtil.MAX_VAL_FOR_TIMESTAMP_COLUMN, "eventDate",
+                UpdateValidateUtil.MIN_VAL_FOR_DATETIME_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_DATETIME_COLUMN, "eventDate",
                 validationResult);
         assertTrue(validationResult.hasError());
     }
