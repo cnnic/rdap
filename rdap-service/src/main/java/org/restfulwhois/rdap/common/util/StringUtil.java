@@ -493,4 +493,22 @@ public final class StringUtil {
         String strFold = UCharacter.foldCase(strParam, true);
         return StringUtil.getNormalization(strFold);
     }
+    
+    /**
+     * 
+     * @param stringList
+     * @return
+     */
+    public static List<String> getNotEmptyStringList(List<String> stringList) {
+        List<String> notEmptyStringList = new ArrayList<String>(); 
+        if(null == stringList){
+            return notEmptyStringList;
+        }
+        for(String string:stringList){
+            if(StringUtils.isNotBlank(string)){
+                notEmptyStringList.add(string);
+            }
+        }
+        return notEmptyStringList;
+    }
 }

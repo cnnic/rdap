@@ -58,14 +58,16 @@ public class UpdateValidateUtil {
     public static final int MIN_VAL_FOR_INT_COLUMN = 0;
     // Math.pow(2, 31) - 1;
     public static final int MAX_VAL_FOR_INT_COLUMN = 2147483647;
-    public static Date MIN_VAL_FOR_TIMESTAMP_COLUMN = null;
-    public static Date MAX_VAL_FOR_TIMESTAMP_COLUMN = null;
+    public static final int MIN_VAL_FOR_TINYINT_COLUMN = 0;
+    public static final int MAX_VAL_FOR_TINYINT_COLUMN = 127;
+    public static Date MIN_VAL_FOR_DATETIME_COLUMN = null;
+    public static Date MAX_VAL_FOR_DATETIME_COLUMN = null;
     static {
         try {
-            MIN_VAL_FOR_TIMESTAMP_COLUMN =
+            MIN_VAL_FOR_DATETIME_COLUMN =
                     new SimpleDateFormat(DEFAULT_DATE_FORMAT)
                             .parse("1000-01-01 00:00:00");
-            MAX_VAL_FOR_TIMESTAMP_COLUMN =
+            MAX_VAL_FOR_DATETIME_COLUMN =
                     new SimpleDateFormat(DEFAULT_DATE_FORMAT)
                             .parse("9999-12-31 23:59:59");
         } catch (ParseException e) {

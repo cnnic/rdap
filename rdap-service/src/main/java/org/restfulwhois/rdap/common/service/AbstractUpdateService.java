@@ -154,9 +154,19 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         checkMaxLength(value, maxLength, fieldName, validationResult);
     }
 
-    protected void checkMinMaxInt(int value, int minValue, long maxValue,
-            String fieldName, ValidationResult validationResult) {
-        UpdateValidateUtil.checkMinMaxInt(value, minValue, maxValue, fieldName,
+    protected void checkMinMaxInt(int value, String fieldName,
+            ValidationResult validationResult) {
+        UpdateValidateUtil.checkMinMaxInt(value,
+                UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN, fieldName,
+                validationResult);
+    }
+
+    protected void checkMinMaxTinyInt(int value, String fieldName,
+            ValidationResult validationResult) {
+        UpdateValidateUtil.checkMinMaxInt(value,
+                UpdateValidateUtil.MIN_VAL_FOR_TINYINT_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_TINYINT_COLUMN, fieldName,
                 validationResult);
     }
 
@@ -164,7 +174,8 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             Date minValue, Date maxValue, String fieldName,
             ValidationResult validationResult) {
         checkNotEmpty(dateString, fieldName, validationResult);
-        checkValidAndMinMaxDate(dateString, minValue, maxValue, fieldName, validationResult);
+        checkValidAndMinMaxDate(dateString, minValue, maxValue, fieldName,
+                validationResult);
     }
 
     protected void checkValidAndMinMaxDate(String dateString, Date minValue,
@@ -226,8 +237,8 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             checkMaxLength(event.getEventActor(), MAX_LENGTH_255,
                     "event.eventActor", validationResult);
             checkNotEmptyAndValidMinMaxDate(event.getEventDate(),
-                    UpdateValidateUtil.MIN_VAL_FOR_TIMESTAMP_COLUMN,
-                    UpdateValidateUtil.MAX_VAL_FOR_TIMESTAMP_COLUMN,
+                    UpdateValidateUtil.MIN_VAL_FOR_DATETIME_COLUMN,
+                    UpdateValidateUtil.MAX_VAL_FOR_DATETIME_COLUMN,
                     "event.eventDate", validationResult);
         }
     }
