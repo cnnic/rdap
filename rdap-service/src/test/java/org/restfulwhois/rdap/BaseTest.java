@@ -155,8 +155,7 @@ public abstract class BaseTest {
     public void before() throws Exception {
         resetDefaultMaxSizeSearch();
         rdapConformanceService.initRdapConformance();
-        RestResponse.initErrorMessages();
-        noticeService.init();
+        RestResponse.initErrorMessages();       
         remarkService.init();
     }
 
