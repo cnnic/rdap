@@ -41,11 +41,7 @@ import org.restfulwhois.rdap.common.model.base.TruncatedInfo.TruncateReason;
  * @author jiashuo
  * 
  */
-public interface NoticeService {
-    /**
-     * initialize.
-     */
-    void init();
+public interface NoticeService {    
 
     /**
      * get notices for no truncated.
