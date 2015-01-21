@@ -198,6 +198,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
             checkMinMaxInt(keyData.getAlgorithm(), "keyData.algorithm",
                     validationResult);
             checkEvents(keyData.getEvents(), validationResult);
+            checkLinks(keyData.getLinks(), validationResult);
         }
     }
 
@@ -208,9 +209,17 @@ public abstract class DomainUpdateBaseServiceImpl extends
             return;
         }
         for (DsDataDto dsData : dsDatas) {
-            checkMinMaxInt(dsData.getKeyTag(), "secureDns.maxSigLife",
+            checkMinMaxInt(dsData.getKeyTag(), "dsData.keyTag",
+                    validationResult);
+            checkMinMaxInt(dsData.getAlgorithm(), "dsData.algorithm",
+                    validationResult);
+            checkMinMaxInt(dsData.getDigestType(), "dsData.digestType",
+                    validationResult);
+            checkNotEmptyAndMaxLength(dsData.getDigest(),
+                    UpdateValidateUtil.MAX_LENGTH_2048, "dsData.digest",
                     validationResult);
             checkEvents(dsData.getEvents(), validationResult);
+            checkLinks(dsData.getLinks(), validationResult);
         }
     }
 
