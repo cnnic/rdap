@@ -50,7 +50,6 @@ public class UpdateValidateUtil {
     public static final int MAX_LENGTH_PORT43 = 4096;
     public static final int MAX_LENGTH_UNICODENAME = 1024;
     public static final int MAX_LENGTH_HANDLE = 100;
-    public static final int MAX_LENGTH_32 = 32;
     public static final int MAX_LENGTH_STATUS = 20;
     public static final int MAX_LENGTH_LDHNAME = 255;
     public static final int MAX_LENGTH_255 = 255;

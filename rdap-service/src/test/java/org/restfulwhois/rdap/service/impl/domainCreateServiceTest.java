@@ -87,7 +87,7 @@ public class domainCreateServiceTest extends BaseTest {
         List<String> relations = new ArrayList<String>();
         v.setRelation(relations);
         String stringExceedOneMoreChar =
-                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_32 + 1);
+                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_255 + 1);
         relations.add(stringExceedOneMoreChar);
         UpdateResponse response = createService.execute(dto);
         assertNotNull(response);
@@ -228,6 +228,24 @@ public class domainCreateServiceTest extends BaseTest {
     }
 
     @Test
+    public void test_invalid_entities_role_maxLength() throws Exception {
+        DomainDto dto = generateDomainDto();
+        List<EntityHandleDto> entities = new ArrayList<EntityHandleDto>();
+        dto.setEntities(entities);
+        EntityHandleDto entityHandle = new EntityHandleDto();
+        entities.add(entityHandle);
+        String stringMaxLength =
+                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_255);
+        List<String> roles = new ArrayList<String>();
+        roles.add("okRole");
+        roles.add(stringMaxLength);
+        entityHandle.setRoles(roles);
+        UpdateResponse response = createService.execute(dto);
+        assertNotNull(response);
+        assertEquals(0, response.getErrorCode());
+    }
+
+    @Test
     public void test_invalid_entities_role_exceedMaxLength() throws Exception {
         DomainDto dto = generateDomainDto();
         List<EntityHandleDto> entities = new ArrayList<EntityHandleDto>();
@@ -235,7 +253,7 @@ public class domainCreateServiceTest extends BaseTest {
         EntityHandleDto entityHandle = new EntityHandleDto();
         entities.add(entityHandle);
         String stringExceedOneMoreChar =
-                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_32 + 1);
+                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_255 + 1);
         List<String> roles = new ArrayList<String>();
         roles.add("okRole");
         roles.add(stringExceedOneMoreChar);
@@ -288,6 +306,7 @@ public class domainCreateServiceTest extends BaseTest {
         assertEquals(400, response.getErrorCode());
         assertEquals(4003, response.getSubErrorCode());
     }
+
     @Test
     public void test_invalid_event_action_exceedMaxLength() throws Exception {
         DomainDto dto = generateDomainDto();
