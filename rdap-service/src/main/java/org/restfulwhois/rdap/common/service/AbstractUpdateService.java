@@ -37,7 +37,6 @@ import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LA
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_PORT43;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_STATUS;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +54,6 @@ import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.PublicId;
 import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.restfulwhois.rdap.common.util.DateUtil;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
@@ -64,7 +62,6 @@ import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 
 /**
  * abstract update service.
@@ -240,9 +237,11 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             checkMaxLength(remark.getTitle(), MAX_LENGTH_255, "remark.title",
                     validationResult);
             List<String> descriptions = remark.getDescription();
-            for (String description : descriptions) {
-                checkMaxLength(description, MAX_LENGTH_2048,
-                        "remark.description", validationResult);
+            if (null != descriptions) {
+                for (String description : descriptions) {
+                    checkMaxLength(description, MAX_LENGTH_2048,
+                            "remark.description", validationResult);
+                }
             }
         }
     }
@@ -266,9 +265,11 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             checkMaxLength(link.getHref(), MAX_LENGTH_2048, "link.href",
                     validationResult);
             List<String> hreflangs = link.getHreflang();
-            for (String hreflang : hreflangs) {
-                checkMaxLength(hreflang, MAX_LENGTH_LANG, "link.hreflang",
-                        validationResult);
+            if (null != hreflangs) {
+                for (String hreflang : hreflangs) {
+                    checkMaxLength(hreflang, MAX_LENGTH_LANG, "link.hreflang",
+                            validationResult);
+                }
             }
         }
     }

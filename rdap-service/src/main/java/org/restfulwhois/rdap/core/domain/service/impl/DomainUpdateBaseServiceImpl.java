@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.core.domain.service.impl;
 
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_32;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LDHNAME;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
@@ -164,7 +163,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
         for (EntityHandleDto entityHandle : entities) {
             List<String> roles = entityHandle.getRoles();
             for (String role : roles) {
-                checkNotEmptyAndMaxLength(role, MAX_LENGTH_32, "entity.role",
+                checkNotEmptyAndMaxLength(role, MAX_LENGTH_255, "entity.role",
                         validationResult);
             }
         }
@@ -199,6 +198,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
             checkMinMaxInt(keyData.getAlgorithm(), "keyData.algorithm",
                     validationResult);
             checkEvents(keyData.getEvents(), validationResult);
+            checkLinks(keyData.getLinks(), validationResult);
         }
     }
 
@@ -209,9 +209,17 @@ public abstract class DomainUpdateBaseServiceImpl extends
             return;
         }
         for (DsDataDto dsData : dsDatas) {
-            checkMinMaxInt(dsData.getKeyTag(), "secureDns.maxSigLife",
+            checkMinMaxInt(dsData.getKeyTag(), "dsData.keyTag",
+                    validationResult);
+            checkMinMaxInt(dsData.getAlgorithm(), "dsData.algorithm",
+                    validationResult);
+            checkMinMaxInt(dsData.getDigestType(), "dsData.digestType",
+                    validationResult);
+            checkNotEmptyAndMaxLength(dsData.getDigest(),
+                    UpdateValidateUtil.MAX_LENGTH_2048, "dsData.digest",
                     validationResult);
             checkEvents(dsData.getEvents(), validationResult);
+            checkLinks(dsData.getLinks(), validationResult);
         }
     }
 
@@ -227,8 +235,8 @@ public abstract class DomainUpdateBaseServiceImpl extends
             List<String> relations = variant.getRelation();
             if (null != relations) {
                 for (String relation : relations) {
-                    checkMaxLength(relation, MAX_LENGTH_32, "variant.relation",
-                            validationResult);
+                    checkMaxLength(relation, MAX_LENGTH_255,
+                            "variant.relation", validationResult);
                 }
             }
             List<VariantNameDto> variantNames = variant.getVariantNames();
