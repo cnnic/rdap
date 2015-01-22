@@ -88,6 +88,7 @@ public class DomainUpdateController {
     @ResponseBody
     public ResponseEntity create(@RequestBody DomainDto domainDto,
             HttpServletRequest request) {
+        LOGGER.debug("create domain begin...");
         UpdateResponse response = createService.execute(domainDto);
         return RestResponse.createUpdateResponse(response);
     }

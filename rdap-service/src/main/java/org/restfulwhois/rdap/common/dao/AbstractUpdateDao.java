@@ -44,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 
 /**
@@ -59,6 +60,7 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
             "SELECT %s as ID from %s where HANDLE = ?";
     private static final String TPL_CREATE_STATUS =
             "INSERT INTO %s(%s,STATUS) values(?,?)";
+    private static final String TPL_DELETE_STATUS = "DELETE FROM %s WHERE %s=?";
     /**
      * logger.
      */
@@ -101,13 +103,18 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         return null;
     }
 
-    
     @Override
     public void saveStatus(T model) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-    
+
+    @Override
+    public void deleteStatus(T model) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
+
     @Override
     public void saveRel(BaseModel outerModel) {
         throw new UnsupportedOperationException(
@@ -116,7 +123,7 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
 
     protected void saveStatus(final T model, final List<String> statusList,
             String tableName, String outerModelIdColumnName) {
-        if(null == statusList||statusList.isEmpty()){
+        if (null == statusList || statusList.isEmpty()) {
             LOGGER.debug("status is empty, not save.");
             return;
         }
@@ -133,6 +140,21 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
                     throws SQLException {
                 ps.setLong(1, model.getId());
                 ps.setString(2, statusList.get(i));
+            }
+        });
+    }
+
+    protected void deleteStatus(final T model, String tableName,
+            String modelIdColumnName) {
+        if (null == model || null == model.getId()) {
+            LOGGER.debug("model id is empty, not delete.");
+            return;
+        }
+        String sql =
+                String.format(TPL_DELETE_STATUS, tableName, modelIdColumnName);
+        jdbcTemplate.update(sql, new PreparedStatementSetter() {
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setLong(1, model.getId());
             }
         });
     }

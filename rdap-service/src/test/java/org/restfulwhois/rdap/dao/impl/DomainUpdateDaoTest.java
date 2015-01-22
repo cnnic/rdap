@@ -30,7 +30,9 @@
  */
 package org.restfulwhois.rdap.dao.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -44,6 +46,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author jiashuo
@@ -59,12 +63,11 @@ public class DomainUpdateDaoTest extends BaseTest {
     @Test
     @DatabaseSetup("teardown.xml")
     @DatabaseTearDown("teardown.xml")
-    // @ExpectedDatabase(
-    // assertionMode = DatabaseAssertionMode.NON_STRICT,
-    // value =
-            // "classpath:/org/restfulwhois/rdap/dao/impl/domain-update.xml")
-            public
-            void testQueryExistDomain() throws Exception {
+    @ExpectedDatabase(
+            assertionMode = DatabaseAssertionMode.NON_STRICT,
+            value = "classpath:/org/restfulwhois/rdap/dao/impl/domain-update.xml")
+    public
+            void test_save_domain_and_status() throws Exception {
         Domain domain = new Domain();
         domain.setHandle("h1");
         domain.setLdhName("cnnic.cn");
@@ -72,6 +75,10 @@ public class DomainUpdateDaoTest extends BaseTest {
         domain.setPort43("port43");
         domain.setLang("zh");
         domain.setType(DomainType.DNR);
+        List<String> status = new ArrayList<String>();
+        status.add("validated");
+        status.add("update prohibited");
+        domain.setStatus(status);
         Map<String, String> customProperties = new HashMap<String, String>();
         customProperties.put("customKey1", "customValue1");
         customProperties.put("customKey2", "customValue2");
@@ -79,7 +86,21 @@ public class DomainUpdateDaoTest extends BaseTest {
         domain.setCustomPropertiesJsonVal(JsonUtil
                 .serializeMap(customProperties));
         updateDao.save(domain);
-        super.assertTablesForUpdate("domain-update.xml", TABLE_RDAP_DOMAIN);
+        updateDao.saveStatus(domain);
+    }
+
+    @Test
+    @DatabaseSetup("domain-delete.xml")
+    @DatabaseTearDown("teardown.xml")
+    @ExpectedDatabase(
+            assertionMode = DatabaseAssertionMode.NON_STRICT,
+            value = "classpath:/org/restfulwhois/rdap/dao/impl/domain-empty.xml")
+    public
+            void test_delete_domain_and_status() throws Exception {
+        Domain domain = new Domain();
+        domain.setId(1L);
+        updateDao.delete(domain);
+        updateDao.deleteStatus(domain);
     }
 
 }
