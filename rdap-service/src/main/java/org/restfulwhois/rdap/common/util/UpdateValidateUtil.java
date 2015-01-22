@@ -81,6 +81,14 @@ public class UpdateValidateUtil {
         }
     }
 
+    public static void checkNotNull(Object value, String fieldName,
+            ValidationResult validationResult) {
+        if (null == value) {
+            validationResult.addError(UpdateValidationError
+                    .build4002Error(fieldName));
+        }
+    }
+
     public static void checkNotEmpty(List<String> values, String fieldName,
             ValidationResult validationResult) {
         if (null == values || values.isEmpty()) {
@@ -107,8 +115,11 @@ public class UpdateValidateUtil {
         }
     }
 
-    public static void checkMinMaxInt(int value, int minValue, long maxValue,
-            String fieldName, ValidationResult validationResult) {
+    public static void checkMinMaxInt(Integer value, int minValue,
+            long maxValue, String fieldName, ValidationResult validationResult) {
+        if (null == value) {
+            return;
+        }
         if (value < minValue || value > maxValue) {
             validationResult.addError(UpdateValidationError.build4010Error(
                     fieldName, minValue, maxValue));

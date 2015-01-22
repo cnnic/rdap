@@ -12,9 +12,9 @@ CREATE TABLE `RDAP_AUTNUM` (
   `HANDLE` varchar(100) COLLATE utf8_bin NOT NULL,
   `START_AUTNUM` bigint(10) NOT NULL DEFAULT '0',
   `END_AUTNUM` bigint(10) NOT NULL,
-  `NAME` varchar(100) COLLATE utf8_bin DEFAULT NULL,
-  `TYPE` varchar(100) COLLATE utf8_bin DEFAULT NULL,
-  `COUNTRY` varchar(2) COLLATE utf8_bin DEFAULT NULL,
+  `NAME` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `TYPE` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `COUNTRY` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `LANG` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `PORT43` varchar(4096) COLLATE utf8_bin DEFAULT NULL,
   `CUSTOM_PROPERTIES` mediumtext COLLATE utf8_bin,
@@ -115,7 +115,7 @@ CREATE TABLE `RDAP_DSDATA` (
   `DSDATA_ID` int(10) NOT NULL AUTO_INCREMENT,
   `KEY_TAG` int(5) NOT NULL,
   `ALGORITHM` int(3) NOT NULL,
-  `DIGEST` varchar(512) COLLATE utf8_bin NOT NULL,
+  `DIGEST` varchar(2048) COLLATE utf8_bin DEFAULT NULL,
   `DIGEST_TYPE` int(3) NOT NULL,
   PRIMARY KEY (`DSDATA_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Ds data for domain DNSSEC, DNSSEC provides data integrity for DNS through digital signing of resource records.  To enable DNSSEC, the zone is signed by one or more private keys and the signatures stored as RRSIG records.  To complete the chain of trust in the DNS zone hierarchy, a digest of each DNSKEY record (which contains the public key) must be loaded into the parent zone, stored as Delegation Signer (DS) records and signed by the parent''s private key (RRSIG DS record), "Resource Records for the DNS Security Extensions" [RFC4034]. Reference to <a href="http://tools.ietf.org/html/draft-ietf-weirds-json-response-06#page-25">Domain</a>';
@@ -603,7 +603,7 @@ DROP TABLE IF EXISTS `REL_SECUREDNS_DSKEY`;
 CREATE TABLE `REL_SECUREDNS_DSKEY` (
   `REL_SECUREDNS_ID` int(10) NOT NULL AUTO_INCREMENT,
   `SECUREDNS_ID` int(10) NOT NULL,
-  `REL_DSKEY_TYPE` varchar(100) COLLATE utf8_bin NOT NULL,
+  `REL_DSKEY_TYPE` varchar(16) COLLATE utf8_bin DEFAULT NULL,
   `REL_ID` int(10) NOT NULL,
   PRIMARY KEY (`REL_SECUREDNS_ID`),
   KEY `IDX_REL_SECUREDNS_SECUREDNS_ID` (`SECUREDNS_ID`) USING BTREE,

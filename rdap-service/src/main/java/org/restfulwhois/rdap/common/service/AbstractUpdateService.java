@@ -135,6 +135,13 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
         UpdateValidateUtil.checkNotEmpty(value, fieldName, validationResult);
     }
+    protected void checkNotNull(Object value, String fieldName,
+            ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        UpdateValidateUtil.checkNotNull(value, fieldName, validationResult);
+    }
 
     protected void checkMaxLength(String value, int maxLength,
             String fieldName, ValidationResult validationResult) {
@@ -151,8 +158,16 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         checkMaxLength(value, maxLength, fieldName, validationResult);
     }
 
-    protected void checkMinMaxInt(int value, String fieldName,
+    protected void checkMinMaxInt(Integer value, String fieldName,
             ValidationResult validationResult) {
+        UpdateValidateUtil.checkMinMaxInt(value,
+                UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN, fieldName,
+                validationResult);
+    }
+    protected void checkNotNullAndMinMaxInt(Integer value, String fieldName,
+            ValidationResult validationResult) {
+        checkNotNull(value, fieldName, validationResult);
         UpdateValidateUtil.checkMinMaxInt(value,
                 UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
                 UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN, fieldName,

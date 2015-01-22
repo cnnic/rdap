@@ -30,12 +30,16 @@
  */
 package org.restfulwhois.rdap.dao.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
+import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -56,9 +60,10 @@ public class DomainUpdateDaoTest extends BaseTest {
     @DatabaseSetup("teardown.xml")
     @DatabaseTearDown("teardown.xml")
     // @ExpectedDatabase(
-            // assertionMode = DatabaseAssertionMode.NON_STRICT,
-            // value = "classpath:/org/restfulwhois/rdap/dao/impl/domain-update.xml")
-    public
+    // assertionMode = DatabaseAssertionMode.NON_STRICT,
+    // value =
+            // "classpath:/org/restfulwhois/rdap/dao/impl/domain-update.xml")
+            public
             void testQueryExistDomain() throws Exception {
         Domain domain = new Domain();
         domain.setHandle("h1");
@@ -67,6 +72,12 @@ public class DomainUpdateDaoTest extends BaseTest {
         domain.setPort43("port43");
         domain.setLang("zh");
         domain.setType(DomainType.DNR);
+        Map<String, String> customProperties = new HashMap<String, String>();
+        customProperties.put("customKey1", "customValue1");
+        customProperties.put("customKey2", "customValue2");
+        domain.setCustomProperties(customProperties);
+        domain.setCustomPropertiesJsonVal(JsonUtil
+                .serializeMap(customProperties));
         updateDao.save(domain);
         super.assertTablesForUpdate("domain-update.xml", TABLE_RDAP_DOMAIN);
     }
