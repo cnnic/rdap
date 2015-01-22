@@ -17,6 +17,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<!-- rdap-common -->
+		<dependency>
+			<groupId>org.restfulwhois.rdap</groupId>
+			<artifactId>rdap-common</artifactId>
+			<version>${rdap.version}</version>
+		</dependency>
 		<!-- log -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
