@@ -31,9 +31,9 @@
 package org.restfulwhois.rdap.search.entity.service;
 
 import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.service.EntitySearchService;
 import org.restfulwhois.rdap.search.common.service.AbstractSearchService;
 import org.restfulwhois.rdap.search.entity.bean.EntitySearch;

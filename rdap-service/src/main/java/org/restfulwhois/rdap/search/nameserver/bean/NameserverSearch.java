@@ -32,8 +32,8 @@ package org.restfulwhois.rdap.search.nameserver.bean;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 
 /**
  * nameserver search model.

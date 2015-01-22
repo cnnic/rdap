@@ -31,8 +31,8 @@
 package org.restfulwhois.rdap.filters.queryFilter;
 
 import org.restfulwhois.rdap.common.filter.QueryFilterResult;
+import org.restfulwhois.rdap.common.model.base.QueryUri;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.support.QueryUri;
 import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.restfulwhois.rdap.redirect.bean.RedirectResponse;

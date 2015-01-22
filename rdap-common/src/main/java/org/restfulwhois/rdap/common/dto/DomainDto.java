@@ -30,20 +30,136 @@
  */
 package org.restfulwhois.rdap.common.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
+import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
+import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
+import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
+
 /**
  * 
  * @author jiashuo
  * 
  */
 public class DomainDto extends BaseDto {
-    private String domainName;
+    private String ldhName;
+    private String unicodeName;
+    private String type;
+    private List<String> status;
+    private String networkHandle;
+    private String port43;
+    private String lang;
+    private List<HandleDto> nameservers;
+    private List<EntityHandleDto> entities;
+    private SecureDnsDto secureDNS;
+    private List<PublicIdDto> publicIds;
+    /**
+     * variants.
+     */
+    private List<VariantDto> variants = new ArrayList<VariantDto>();
 
-    public String getDomainName() {
-        return domainName;
+    public String getLdhName() {
+        return ldhName;
     }
 
-    public void setDomainName(String domainName) {
-        this.domainName = domainName;
+    public void setLdhName(String ldhName) {
+        this.ldhName = ldhName;
+    }
+
+    public String getUnicodeName() {
+        return unicodeName;
+    }
+
+    public void setUnicodeName(String unicodeName) {
+        this.unicodeName = unicodeName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public List<String> getStatus() {
+        return status;
+    }
+
+    public void setStatus(List<String> status) {
+        this.status = status;
+    }
+
+    public String getNetworkHandle() {
+        return networkHandle;
+    }
+
+    public void setNetworkHandle(String networkHandle) {
+        this.networkHandle = networkHandle;
+    }
+
+    public String getPort43() {
+        return port43;
+    }
+
+    public void setPort43(String port43) {
+        this.port43 = port43;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public List<VariantDto> getVariants() {
+        return variants;
+    }
+
+    public void setVariants(List<VariantDto> variants) {
+        this.variants = variants;
+    }
+
+    public List<HandleDto> getNameservers() {
+        return nameservers;
+    }
+
+    public void setNameservers(List<HandleDto> nameservers) {
+        this.nameservers = nameservers;
+    }
+
+    public SecureDnsDto getSecureDNS() {
+        return secureDNS;
+    }
+
+    public void setSecureDNS(SecureDnsDto secureDNS) {
+        this.secureDNS = secureDNS;
+    }
+
+    public List<PublicIdDto> getPublicIds() {
+        return publicIds;
+    }
+
+    public void setPublicIds(List<PublicIdDto> publicIds) {
+        this.publicIds = publicIds;
+    }
+
+    public List<EntityHandleDto> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(List<EntityHandleDto> entities) {
+        this.entities = entities;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
 }

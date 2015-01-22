@@ -28,13 +28,13 @@
 	<RDAP_ERRORMESSAGE ERROR_ID="11" ERROR_CODE="509"
 		TITLE="TOO MANY CONNECTION" DESCRIPTION="TOO MANY CONNECTION" LANG='en' />
         <!-- notices -->
-    <RDAP_NOTICE NOTICE_ID="115" TITLE="Terms of Use" TYPE="notice" /> 
-    <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="115"
+   <!-- <RDAP_NOTICE NOTICE_ID="115" TITLE="Terms of Use" TYPE="notice" /> 
+     <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="115"
         NOTICE_ID="115" DESCRIPTION="description1" />
     <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="116"
-        NOTICE_ID="115" DESCRIPTION="description2" />
+        NOTICE_ID="115" DESCRIPTION="description2" /> -->
     <!-- notice link -->
-    <RDAP_LINK LINK_ID="1022" VALUE="http://example.com/context_uri"
+ <!--    <RDAP_LINK LINK_ID="1022" VALUE="http://example.com/context_uri"
         REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
         TYPE="application/json" />
     <REL_LINK_OBJECT REL_LINK_ID="1022" REL_ID="115"
@@ -44,5 +44,5 @@
     <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="211"
         NOTICE_ID="116" DESCRIPTION="description1" />
     <RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="222"
-        NOTICE_ID="116" DESCRIPTION="description2" />
+        NOTICE_ID="116" DESCRIPTION="description2" /> -->
 </dataset>

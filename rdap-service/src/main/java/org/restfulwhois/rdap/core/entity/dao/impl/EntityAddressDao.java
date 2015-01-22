@@ -38,8 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.entity.model.EntityAddress;
+import org.restfulwhois.rdap.common.model.Entity;
+import org.restfulwhois.rdap.common.model.EntityAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

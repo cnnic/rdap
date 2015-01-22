@@ -32,8 +32,8 @@ package org.restfulwhois.rdap.core.domain.queryparam;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.restfulwhois.rdap.common.model.base.QueryUri;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.support.QueryUri;
 import org.restfulwhois.rdap.core.domain.model.DomainSearchType;
 import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 

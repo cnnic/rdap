@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_LINK  VALUE="http://sina.com.cn"
+        REL="up" HREF="http://sina.com.cn" MEDIA="screen"
+        TYPE="application/rdap+json" TITLE="little title" />
+    <REL_LINK_OBJECT    REL_OBJECT_TYPE="remark" />
+    <RDAP_LINK_HREFLANG   HREFLANG="en" />
+    <RDAP_LINK_HREFLANG   HREFLANG="zh" /> 
+    
+    <RDAP_NOTICE TITLE="域名测试-200-50-remark2" TYPE="remark" />
+    <REL_NOTICE_REGISTRATION  REL_OBJECT_TYPE="domain" />
+        <RDAP_NOTICE_DESCRIPTION DESCRIPTION="remarks_description1" />
+    <RDAP_NOTICE_DESCRIPTION DESCRIPTION="remarks_description2" />   
+</dataset>

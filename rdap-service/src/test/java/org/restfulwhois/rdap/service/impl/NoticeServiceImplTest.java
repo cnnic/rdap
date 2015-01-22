@@ -39,8 +39,8 @@ import java.util.List;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.model.Notice;
+import org.restfulwhois.rdap.common.model.base.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.common.service.NoticeService;
-import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -98,6 +98,15 @@ public class NoticeServiceImplTest extends BaseTest {
                 noticeService.getTruncatedNoticeByReason(truncateReasons);
         assertNotNull(result);
         assertEquals(0, result.size());
+    }
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_get_not_truncated_notice() {       
+        List<Notice> result =
+                noticeService.getAllNotTruncatedNotice();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(2, result.get(0).getDescription().size());
     }
 
 }

@@ -34,7 +34,7 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.util.DomainUtil;
 import org.restfulwhois.rdap.common.util.StringUtil;
-import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.QueryValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByDomainNameParam;
@@ -59,13 +59,13 @@ public class DomainSearchByDomainNameValidator implements Validator {
             ValidationResult validationResult) {
         String decodeDomain = queryParam.getQ();
         if (StringUtils.isBlank(decodeDomain)) {
-            validationResult.addError(HttpValidationError.build400Error());
+            validationResult.addError(QueryValidationError.build400Error());
         }
         if (!StringUtil.checkIsValidSearchPattern(decodeDomain)) {
-            validationResult.addError(HttpValidationError.build422Error());
+            validationResult.addError(QueryValidationError.build422Error());
         }
         if (!DomainUtil.validateSearchStringIsValidIdna(decodeDomain)) {
-            validationResult.addError(HttpValidationError.build400Error());
+            validationResult.addError(QueryValidationError.build400Error());
         }
     }
 

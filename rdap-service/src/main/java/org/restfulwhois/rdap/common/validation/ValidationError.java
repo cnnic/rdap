@@ -42,7 +42,7 @@ public interface ValidationError {
      * 
      * @return code.
      */
-    String getCode();
+    int getCode();
 
     /**
      * get message.

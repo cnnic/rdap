@@ -39,8 +39,8 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.NoticeDao;
 import org.restfulwhois.rdap.common.model.Notice;
+import org.restfulwhois.rdap.common.model.base.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.common.service.NoticeService;
-import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,12 +69,7 @@ public class NoticeServiceImpl implements NoticeService {
      * initialized from constants, or file.
      */
     private static List<Notice> truncatedNoticeList;
-
-    @PostConstruct
-    @Override
-    public void init() {
-        NoticeServiceImpl.notTruncatedNoticeList = noticeDao.queryAllNotices();
-    }
+   
 
     @Override
     public List<Notice> getAllNotTruncatedNotice() {
@@ -124,11 +119,24 @@ public class NoticeServiceImpl implements NoticeService {
 
     /**
      * setTruncatedNoticeList.
-     * @param truncatedNoticeList setTruncatedNoticeList.
+     * 
+     * @param truncatedNoticeList
+     *            setTruncatedNoticeList.
      */
     @Resource(name = "truncatedNoticeList")
     public void setTruncatedNoticeList(List<Notice> truncatedNoticeList) {
         NoticeServiceImpl.truncatedNoticeList = truncatedNoticeList;
+    }
+    
+    /**
+     * setNotTruncatedNoticeList.
+     * 
+     * @param notTruncatedNoticeList
+     *            setNotTruncatedNoticeList.
+     */
+    @Resource(name = "notTruncatedNoticeList")
+    public void setNotTruncatedNoticeList(List<Notice> notTruncatedNoticeList) {
+        NoticeServiceImpl.notTruncatedNoticeList = notTruncatedNoticeList;
     }
 
 }

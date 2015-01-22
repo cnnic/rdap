@@ -39,4 +39,14 @@
 	<util:list id="remarkDescriptionExcessiveLoad">
 		<value>The object does not contain all data due to excessively heavy load on the server.</value>
 	</util:list>
+	<util:list id="notTruncatedNoticeList">      
+        <bean class="org.restfulwhois.rdap.common.model.Notice">
+            <property name="title" value="the notices for response"></property>
+            <property name="description" ref="noticeDescriptionForNotTruncated"></property>            
+        </bean>       
+    </util:list>
+    <util:list id="noticeDescriptionForNotTruncated">
+        <value>Service subject to The Registry of the CNNIC.</value>
+        <value>Copyright (c) 2020 CNNIC.</value>
+    </util:list>  
 </beans>

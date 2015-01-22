@@ -30,8 +30,8 @@
  */
 package org.restfulwhois.rdap.core.autnum.service;
 
+import org.restfulwhois.rdap.common.model.Autnum;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.core.autnum.model.Autnum;
 
 /**
  * as query service interface.

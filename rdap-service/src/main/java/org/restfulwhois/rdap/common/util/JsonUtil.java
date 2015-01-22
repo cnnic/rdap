@@ -55,6 +55,11 @@ public class JsonUtil {
             .getLogger(JsonUtil.class);
 
     /**
+     * objectMapper.
+     */
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
      * deserialize JSON to map.
      * 
      * @param restResponse
@@ -68,7 +73,6 @@ public class JsonUtil {
             return result;
         }
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             result =
                     objectMapper.readValue(JSON,
                             new TypeReference<LinkedHashMap<String, String>>() {
@@ -77,6 +81,18 @@ public class JsonUtil {
             LOGGER.error("deserializateJsonToMap error:{}", e);
         }
         return result;
+    }
+
+    public static String serializeMap(Map<String, String> map) {
+        if (null == map) {
+            return null;
+        }
+        try {
+            return objectMapper.writeValueAsString(map);
+        } catch (Exception e) {
+            LOGGER.error("serializeMap error:{}", e);
+            return null;
+        }
     }
 
 }

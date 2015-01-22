@@ -32,9 +32,9 @@ package org.restfulwhois.rdap.core.nameserver.queryparam;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.restfulwhois.rdap.common.model.IpVersion;
 import org.restfulwhois.rdap.common.util.IpInBytes;
 import org.restfulwhois.rdap.common.util.IpUtil;
-import org.restfulwhois.rdap.common.util.IpVersion;
 import org.restfulwhois.rdap.core.domain.validator.DomainSearchByNsIpValidator;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 

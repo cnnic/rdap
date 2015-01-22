@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<REL_DOMAIN_NAMESERVER  DOMAIN_ID='1' NAMESERVER_ID='1' />
+    <REL_DOMAIN_NAMESERVER   DOMAIN_ID='1' NAMESERVER_ID='2' />
+</dataset>
