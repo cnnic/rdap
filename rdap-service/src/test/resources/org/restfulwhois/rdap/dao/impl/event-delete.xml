@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="jiashuo"
+		EVENT_DATE="2014-01-01 00:01:01" />
+	<REL_EVENT_REGISTRATION REL_EVENT_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="domain" EVENT_ID="1" />
+	<RDAP_LINK LINK_ID="1" VALUE="http://example.com/context_uri"
+        REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+        TYPE="application/json" TITLE="Title1 of Link1" />
+    <REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="1"
+        REL_OBJECT_TYPE="event" LINK_ID="1" />
+    <RDAP_LINK_HREFLANG HREFLANG_ID='1' LINK_ID="1"
+        HREFLANG="en" />
+    <RDAP_LINK_HREFLANG HREFLANG_ID='2' LINK_ID="1"
+        HREFLANG="zh" />     
+</dataset>

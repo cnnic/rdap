@@ -34,8 +34,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
@@ -56,6 +54,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import ezvcard.util.StringUtils;
+
 /**
  * @author zhanyq
  * 
@@ -66,7 +66,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(EventUpdateDaoImpl.class);    
+            .getLogger(EventUpdateDaoImpl.class);   
    
     /**
      * link update dao.
@@ -118,6 +118,29 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
 			
 	    }
 	}
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel) {
+		if (null == outerModel) {
+			return;
+		}
+		List<Long> eventIds = findIdsByOuterIdAndType(outerModel);
+	    if (null != eventIds) {
+	    	String eventIdsStr = StringUtils.join(eventIds, ",");
+	    	//delete event	    	
+	    	super.delete(eventIdsStr, "RDAP_EVENT", "EVENT_ID");
+	    	//delete link
+	    	for(Long eventId:eventIds){
+	    		Event event = new Event();
+	    		event.setId(eventId);
+	    		linkUpdateDao.deleteAsInnerObjects(event);
+	    	}
+	    	//delete relEvent
+	    	super.deleteRel(outerModel,"REL_EVENT_REGISTRATION");
+	    	
+	    }
+	
+	    
+	}	
 	/**
 	 * create Event
 	 * @param model
@@ -173,4 +196,9 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
+		 return super.findIdsByOuterIdAndType(outerModel, "EVENT_ID", "REL_EVENT_REGISTRATION");
+	}
+	
 }

@@ -40,25 +40,19 @@ import org.restfulwhois.rdap.common.dto.embedded.KeyDataDto;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.KeyData;
-import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.SecureDns;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author zhanyq
  * 
  */
-public class KeyDataUpdateDaoTest extends BaseTest {
-
-	 private static final String TABLE_RDAP_KEYDATA= "RDAP_KEYDATA";
-	 private static final String TABLE_REL_SECUREDNS_DSKEY = "REL_SECUREDNS_DSKEY";	 
-	 private static final String TABLE_RDAP_LINK = "RDAP_LINK";
-	 private static final String TABLE_REL_LINK_OBJECT = "REL_LINK_OBJECT";
-	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
-	// private static final String TABLE_RDAP_EVENT= "RDAP_EVENT";
-	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
+public class KeyDataUpdateDaoTest extends BaseTest {	 
 
 	    @Autowired
 	    private UpdateDao<KeyData, KeyDataDto> updateDao;
@@ -66,6 +60,9 @@ public class KeyDataUpdateDaoTest extends BaseTest {
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")   
+	    @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/keyData-update.xml")
 	    public void testcreateKeyData() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
@@ -92,8 +89,19 @@ public class KeyDataUpdateDaoTest extends BaseTest {
 	    	keyData.setLinks(linkList);
 	    
 	    	keyDataList.add(keyData);
-	        updateDao.batchCreateAsInnerObjects(domain, keyDataList);
-	        super.assertTablesForUpdate("keyData-update.xml", TABLE_RDAP_KEYDATA,TABLE_REL_SECUREDNS_DSKEY,
-	        		TABLE_RDAP_LINK,TABLE_REL_LINK_OBJECT,TABLE_RDAP_LINK_HREFLANG);
+	        updateDao.batchCreateAsInnerObjects(domain, keyDataList);	       
 	    }
+	    
+	    @Test
+        @DatabaseSetup("keyData-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/keyData-empty.xml")
+        public  void testDeleteKeyData() throws Exception {
+            SecureDns secureDns = new SecureDns();
+            secureDns.setId(1L);
+            updateDao.deleteAsInnerObjects(secureDns);
+            
+        }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- notice 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<RDAP_NOTICE NOTICE_ID="1" TITLE="Terms of Use" TYPE="remark" />	
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="1"
+		REL_ID="1" REL_OBJECT_TYPE="domain" NOTICE_ID="1" />
+	<!-- notice desc -->
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="1"
+		NOTICE_ID="1" DESCRIPTION="description1" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="2"
+		NOTICE_ID="1" DESCRIPTION="description2" />
+	<!-- notice link -->
+	<RDAP_LINK LINK_ID="2" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="2" REL_ID="1"
+		REL_OBJECT_TYPE="remark" LINK_ID="2" />
+
+	<!-- notice 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<RDAP_NOTICE NOTICE_ID="2" TITLE="Terms of Use" TYPE="remark" />	
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="2"
+		REL_ID="1" REL_OBJECT_TYPE="domain" NOTICE_ID="2" />
+</dataset>

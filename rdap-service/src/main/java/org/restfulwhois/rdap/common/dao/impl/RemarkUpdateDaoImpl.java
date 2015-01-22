@@ -54,6 +54,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import ezvcard.util.StringUtils;
+
 /**
  * @author zhanyq
  * 
@@ -64,7 +66,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(RemarkUpdateDaoImpl.class);
+            .getLogger(RemarkUpdateDaoImpl.class);  
     
     /**
      * link update dao.
@@ -106,6 +108,28 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
 						
 	    }
 	}
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel) {
+		if (null == outerModel) {
+			return;
+		}
+		List<Long> remarkIds = findIdsByOuterIdAndType(outerModel);
+	    if (null != remarkIds) {
+	    	String remarkIdStr = StringUtils.join(remarkIds, ",");
+	    	//delete remark	    	
+             super.delete(remarkIdStr, "RDAP_NOTICE", "NOTICE_ID");
+	    	//delete remark  description
+             super.delete(remarkIdStr, "RDAP_NOTICE_DESCRIPTION", "NOTICE_ID");	    	
+	    	//delete link	    	
+	    	for(Long remarkId:remarkIds){
+	    		Remark remark = new Remark();
+	    		remark.setId(remarkId);	    		
+	    		linkUpdateDao.deleteAsInnerObjects(remark);
+	    	}
+	    	super.deleteRel(outerModel, "REL_NOTICE_REGISTRATION");
+	    	
+	    }	    
+	}	
 	/**
 	 * create remark
 	 * @param remark
@@ -162,7 +186,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
 		if(null == description || description.size() == 0) {
 			return;
 		}
-		final String sql = "insert into  RDAP_NOTICE_DESCRIPTION(NOTICE_ID, DESCRIPTION)"
+		final String sql = "insert into RDAP_NOTICE_DESCRIPTION(NOTICE_ID, DESCRIPTION)"
 			      +  " values (?,?)";
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 		    public int getBatchSize() {
@@ -182,4 +206,10 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
+		 return super.findIdsByOuterIdAndType(outerModel, "NOTICE_ID", "REL_NOTICE_REGISTRATION");
+	}
+	
+	
 }

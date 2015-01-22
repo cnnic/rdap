@@ -32,10 +32,12 @@ package org.restfulwhois.rdap.common.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
@@ -46,6 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -62,7 +65,7 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDt
      * logger for record log.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(VariantsUpdateDaoImpl.class);
+            .getLogger(VariantsUpdateDaoImpl.class);  
 
     @Override
 	public Variants save(Variants model) {
@@ -90,13 +93,28 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDt
 	 *        Variants of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<VariantDto> models) {
+	public void batchCreateAsInnerObjects(BaseModel outerModel, List<VariantDto> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
 	    for (VariantDto model: models) {
 	    	  createVariants(outerModel.getId(), model);	    	  
 	    }
+	}
+	
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel){
+		if (null == outerModel){
+			return;
+		}
+		List<Long> variantIds = findIdsByOuterIdAndType(outerModel);
+		
+		if (null != variantIds) {
+	    	String variantIdStr = StringUtils.join(variantIds, ",");
+	    	super.delete(variantIdStr, "RDAP_VARIANT","VARIANT_ID");
+	    	super.delete(String.valueOf(outerModel.getId()),"REL_DOMAIN_VARIANT","DOMAIN_ID");
+		}
+			
 	}
 
 	/**
@@ -175,4 +193,25 @@ public class VariantsUpdateDaoImpl extends AbstractUpdateDao<Variants, VariantDt
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
+		final String sql = "SELECT VARIANT_ID as ID from REL_DOMAIN_VARIANT where DOMAIN_ID = ?";                
+        LOGGER.debug("find VARIANT_ID exist,sql:{}", sql);
+        List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setLong(1, outerModel.getId());                
+                return ps;
+            }
+        }, new RowMapper<Long>() {
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong("ID");
+            }
+        });
+        if (ids.size() > 0) {
+            return ids;
+        }
+        return null;
+    }	
 }

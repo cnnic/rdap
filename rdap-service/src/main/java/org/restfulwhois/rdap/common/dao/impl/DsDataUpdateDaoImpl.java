@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
@@ -67,7 +68,8 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
      * logger for record log.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(DsDataUpdateDaoImpl.class);    
+            .getLogger(DsDataUpdateDaoImpl.class); 
+  
 
     /**
      * link update dao.
@@ -133,6 +135,26 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
 	    	    	
 	    }
 	}
+	
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel) {
+		if (null == outerModel){
+			return;
+		}
+		List<Long> dsDataIds = secureDnsUpdateDao.findIdsByOuterIdAndType(outerModel.getId(), ModelType.DSDATA);
+	    if (null != dsDataIds) {
+	    	String dsDataIdStr = StringUtils.join(dsDataIds, ",");
+	    	//delete KeyData	    	
+	    	super.delete(dsDataIdStr, "RDAP_DSDATA", "DSDATA_ID");
+	    	secureDnsUpdateDao.deleteRelSecureDnsDskey(outerModel.getId(), ModelType.DSDATA);
+	    	for(Long dsDataId:dsDataIds){
+	    		DsData dsData = new DsData();
+	    		dsData.setId(dsDataId);
+		    	linkUpdateDao.deleteAsInnerObjects(dsData);
+		    	eventUpdateDao.deleteAsInnerObjects(dsData);
+	    	}
+	    }
+    }	
 
 	/**
 	 * @param model
@@ -161,5 +183,5 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
 	public Long findIdByHandle(String handle) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}	
 }
