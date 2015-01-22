@@ -185,8 +185,7 @@ public class HttpRequestFilter implements HttpFilter {
      */
     private boolean httpMethodIsValid(HttpServletRequest request) {
         String method = request.getMethod();
-        String uri = request.getRequestURI();
-        if (FilterHelper.isUpdateUri(uri)) {
+        if (FilterHelper.isUpdateUri(request)) {
             boolean httpMethodIsValid = UPDATE_ALLOW_METHODS.contains(method);
             return httpMethodIsValid;
         } else {
