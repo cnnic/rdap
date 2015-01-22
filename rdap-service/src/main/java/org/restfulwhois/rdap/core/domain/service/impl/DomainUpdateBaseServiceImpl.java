@@ -41,6 +41,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.IpDto;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
 import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
@@ -50,6 +51,7 @@ import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Nameserver;
+import org.restfulwhois.rdap.common.model.Network;
 import org.restfulwhois.rdap.common.model.SecureDns;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
@@ -74,6 +76,8 @@ public abstract class DomainUpdateBaseServiceImpl extends
     private UpdateDao<SecureDns, SecureDnsDto> secureDnsUpdateDao;
     @Autowired
     private UpdateDao<Variants, VariantDto> variantUpdateDao;
+    @Autowired
+    protected UpdateDao<Network, IpDto> networkDao;
     /**
      * logger.
      */
@@ -128,7 +132,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
         if (StringUtils.isBlank(dto.getNetworkHandle())) {
             return;
         }
-        Long networkId = dao.findIdByHandle(dto.getNetworkHandle());
+        Long networkId = networkDao.findIdByHandle(dto.getNetworkHandle());
         if (null != networkId) {
             domain.setNetworkId(networkId);
         }
