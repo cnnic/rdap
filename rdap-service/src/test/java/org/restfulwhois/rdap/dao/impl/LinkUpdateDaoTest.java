@@ -86,7 +86,7 @@ public class LinkUpdateDaoTest extends BaseTest {
         }
 
         public static void assertCreate() throws Exception {
-            assertTablesForUpdate("Link-update.xml", TABLE_RDAP_LINK,
+            assertTablesForUpdate("link-update.xml", TABLE_RDAP_LINK,
 	        		TABLE_REL_LINK_OBJECT, TABLE_RDAP_LINK_HREFLANG);
         }
 }
