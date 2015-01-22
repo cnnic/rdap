@@ -128,6 +128,11 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
+    @Override
+    public void deleteRel(BaseModel outerModel) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
 
     protected void saveStatus(final T model, final List<String> statusList,
             String tableName, String outerModelIdColumnName) {

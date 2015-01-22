@@ -61,5 +61,7 @@ public interface UpdateDao<T extends BaseModel, DTO extends BaseDto> {
     
     void saveRel(BaseModel outerModel);
     
+    void deleteRel(BaseModel outerModel);
+    
     void deleteAsInnerObjects(BaseModel outerModel);
 }

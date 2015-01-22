@@ -100,6 +100,14 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
 		}	
 	}
 	
+	@Override
+	public void deleteRel(BaseModel outerModel) {
+		if (null == outerModel || null == outerModel.getId()) {
+			return;
+		}		
+		super.deleteRel(outerModel, "REL_ENTITY_REGISTRATION");
+	}
+	
     /**
      * 
      * @param outerModel
