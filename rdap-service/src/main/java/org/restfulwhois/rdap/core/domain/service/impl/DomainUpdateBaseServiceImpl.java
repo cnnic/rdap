@@ -188,14 +188,14 @@ public abstract class DomainUpdateBaseServiceImpl extends
             return;
         }
         for (KeyDataDto keyData : keyDatas) {
-            checkMinMaxInt(keyData.getFlags(), "keyData.flags",
+            checkNotNullAndMinMaxInt(keyData.getFlags(), "keyData.flags",
                     validationResult);
-            checkMinMaxInt(keyData.getProtocol(), "keyData.protocol",
+            checkNotNullAndMinMaxInt(keyData.getProtocol(), "keyData.protocol",
                     validationResult);
-            checkNotEmptyAndMaxLength(keyData.getPublicKey(),
+            checkMaxLength(keyData.getPublicKey(),
                     UpdateValidateUtil.MAX_LENGTH_2048, "keyData.publicKey",
                     validationResult);
-            checkMinMaxInt(keyData.getAlgorithm(), "keyData.algorithm",
+            checkNotNullAndMinMaxInt(keyData.getAlgorithm(), "keyData.algorithm",
                     validationResult);
             checkEvents(keyData.getEvents(), validationResult);
             checkLinks(keyData.getLinks(), validationResult);
@@ -209,11 +209,11 @@ public abstract class DomainUpdateBaseServiceImpl extends
             return;
         }
         for (DsDataDto dsData : dsDatas) {
-            checkMinMaxInt(dsData.getKeyTag(), "dsData.keyTag",
+            checkNotNullAndMinMaxInt(dsData.getKeyTag(), "dsData.keyTag",
                     validationResult);
-            checkMinMaxInt(dsData.getAlgorithm(), "dsData.algorithm",
+            checkNotNullAndMinMaxInt(dsData.getAlgorithm(), "dsData.algorithm",
                     validationResult);
-            checkMinMaxInt(dsData.getDigestType(), "dsData.digestType",
+            checkNotNullAndMinMaxInt(dsData.getDigestType(), "dsData.digestType",
                     validationResult);
             checkNotEmptyAndMaxLength(dsData.getDigest(),
                     UpdateValidateUtil.MAX_LENGTH_2048, "dsData.digest",
