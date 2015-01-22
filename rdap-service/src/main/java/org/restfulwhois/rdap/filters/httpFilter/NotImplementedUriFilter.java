@@ -111,8 +111,7 @@ public class NotImplementedUriFilter implements HttpFilter {
 
     @Override
     public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
-        String uri = req.getRequestURI();
-        if (FilterHelper.isUpdateUri(uri)) {
+        if (FilterHelper.isUpdateUri(req)) {
             return false;
         }
         return true;
