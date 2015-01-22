@@ -37,7 +37,9 @@ public class DateUtil {
 
     public static Date parse(String dateString, String format) {
         try {
-            Date date = new SimpleDateFormat(format).parse(dateString);
+        	SimpleDateFormat sdf = new SimpleDateFormat(format);
+        	sdf.setLenient(false);
+            Date date = sdf.parse(dateString);
             return date;
         } catch (Exception e) {
             LOGGER.error("error timestamp format,error:{}", e);
