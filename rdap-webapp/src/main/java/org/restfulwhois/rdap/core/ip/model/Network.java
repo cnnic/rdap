@@ -34,14 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.model.Event;
-import org.restfulwhois.rdap.core.common.model.Link;
-import org.restfulwhois.rdap.core.common.model.Remark;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.support.ObjectClassNameEnum;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
+import org.restfulwhois.rdap.common.model.Event;
+import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.Remark;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.support.ObjectClassNameEnum;
+import org.restfulwhois.rdap.common.support.QueryUri;
+import org.restfulwhois.rdap.common.util.IpVersion;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

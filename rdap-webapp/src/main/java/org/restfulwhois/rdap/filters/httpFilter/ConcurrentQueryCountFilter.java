@@ -5,10 +5,10 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.core.common.filter.FilterHelper;
-import org.restfulwhois.rdap.core.common.filter.HttpFilter;
-import org.restfulwhois.rdap.core.common.model.ErrorMessage;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.filter.FilterHelper;
+import org.restfulwhois.rdap.common.filter.HttpFilter;
+import org.restfulwhois.rdap.common.model.ErrorMessage;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.filters.httpFilter.service.ConnectionControlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +56,9 @@ public class ConcurrentQueryCountFilter implements HttpFilter {
     @Override
     public boolean preProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+        String ip = request.getRemoteAddr();
         if (ConnectionControlService
-                .incrementConcurrentQCountAndCheckIfExceedMax()) {
+                .incrementConcurrentQCountAndCheckIfExceedMax(ip)) {
             writeError509Response(response);
             return false;
         }
@@ -86,7 +87,8 @@ public class ConcurrentQueryCountFilter implements HttpFilter {
     @Override
     public boolean postProcess(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        ConnectionControlService.decrementAndGetCurrentQueryCount();
+        String ip = request.getRemoteAddr();
+        ConnectionControlService.decrementAndGetCurrentQueryCount(ip);
         return true;
     }
 
@@ -101,7 +103,7 @@ public class ConcurrentQueryCountFilter implements HttpFilter {
     private void writeError509Response(HttpServletResponse response)
             throws IOException {
         ResponseEntity<ErrorMessage> responseEntity =
-                RestResponseUtil.createResponse509();
+                RestResponse.createResponse509();
         FilterHelper.writeResponse(responseEntity, response);
     }
 }

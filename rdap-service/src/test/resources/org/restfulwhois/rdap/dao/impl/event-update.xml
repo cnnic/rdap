@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_EVENT  EVENT_ACTION="registration" EVENT_ACTOR="zhanyq"
+		EVENT_DATE="2015-01-15 17:15:12" />
+	<REL_EVENT_REGISTRATION  REL_ID="1" REL_OBJECT_TYPE="domain"  />
+	<RDAP_LINK  VALUE="http://sina.com.cn"
+        REL="up" HREF="http://sina.com.cn" MEDIA="screen"
+        TYPE="application/rdap+json" TITLE="little title" />
+    <REL_LINK_OBJECT    REL_OBJECT_TYPE="event" />
+    <RDAP_LINK_HREFLANG   HREFLANG="en" />
+    <RDAP_LINK_HREFLANG   HREFLANG="zh" />
+</dataset>

@@ -39,19 +39,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.core.common.dao.NoticeDao;
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
-import org.restfulwhois.rdap.core.common.model.Event;
-import org.restfulwhois.rdap.core.common.model.Link;
-import org.restfulwhois.rdap.core.common.model.Remark;
-import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
-import org.restfulwhois.rdap.core.domain.dao.impl.DomainQueryDaoImpl;
+import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
+import org.restfulwhois.rdap.common.dao.NoticeDao;
+import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
+import org.restfulwhois.rdap.common.model.Event;
+import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.Remark;
+import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.IpVersion;
+import org.restfulwhois.rdap.common.util.NetworkInBytes;
+import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
@@ -110,7 +110,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
      * domainQueryDao.
      */
     @Autowired
-    private DomainQueryDaoImpl domainQueryDao;
+    private QueryDao<Domain>  domainQueryDao;
 
     /**
      * entityQueryDao.
@@ -303,7 +303,7 @@ public class NetworkQueryDaoImpl extends AbstractQueryDao<Network> {
                 remarkQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
         objIp.setRemarks(remarks);
         List<Link> links = linkQueryDao.queryAsInnerObjects(ipId, ModelType.IP);
-        links.add(AutoGenerateSelfLink.generateSelfLink(objIp));
+        links.add(SelfLinkGenerator.generateSelfLink(objIp));
         objIp.setLinks(links);
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(ipId, ModelType.IP);

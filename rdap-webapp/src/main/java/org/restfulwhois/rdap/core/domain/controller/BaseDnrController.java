@@ -34,8 +34,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.restfulwhois.rdap.core.common.controller.BaseController;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
+import org.restfulwhois.rdap.common.controller.BaseController;
+import org.restfulwhois.rdap.common.filter.QueryFilter;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -47,6 +47,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class BaseDnrController extends BaseController {
 
+    /**
+     * queryFilters.
+     */
     @Resource(name = "domainOrNsQueryFilters")
     private List<QueryFilter> queryFilters;
 

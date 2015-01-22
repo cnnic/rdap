@@ -30,18 +30,11 @@
  */
 package org.restfulwhois.rdap.common.util;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import javax.xml.bind.DatatypeConverter;
 
 import org.junit.Test;
-import org.junit.internal.ArrayComparisonFailure;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.IpUtil.IpVersion;
-import org.restfulwhois.rdap.core.common.util.IpV4;
-import org.restfulwhois.rdap.core.common.util.IpV6;
-import org.restfulwhois.rdap.core.common.util.NetworkInBytes;
 
 import com.googlecode.ipv6.IPv6Address;
 
@@ -88,64 +81,6 @@ public class IpUtilTest {
                 DatatypeConverter.printHexBinary(IpUtil.ipToByteArray(ip,
                         ipVersion));
 //        System.err.println("0x" + hex);
-    }
-
-    @Test
-    public void test_generate_ARPA() {
-        // NetworkInBytes networkInBytes = IpUtil.parseArpa("f.f.ip6.arpa");
-        NetworkInBytes networkInBytes =
-                IpUtil.parseArpa("1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa");
-        String hex1 =
-                DatatypeConverter.printHexBinary(networkInBytes
-                        .getStartAddress());
-//        System.err.println("0x" + hex1);
-        String hex2 =
-                DatatypeConverter
-                        .printHexBinary(networkInBytes.getEndAddress());
-//        System.err.println("0x" + hex2);
-    }
-
-    @Test
-    public void test_ARPA_V4() {
-        NetworkInBytes networkInBytes = IpUtil.parseArpa("2.0.0.in-addr.arpa");
-        assertEquals(IpVersion.V4, networkInBytes.getIpVersion());
-        assertEquals("0.0.2.0", networkInBytes.getStartAddressAsString());
-        assertArrayEquals("", IpV4.toByteArray("0.0.2.0"),
-                networkInBytes.getStartAddress());
-        assertEquals("0.0.2.255", networkInBytes.getEndAddressAsString());
-        assertArrayEquals("", IpV4.toByteArray("0.0.2.255"),
-                networkInBytes.getEndAddress());
-    }
-
-    @Test
-    public void test_ARPA_V6() {
-        doTestArpaV6("F.0.0.0.1.ip6.arpa", "1000:f000::",
-                "1000:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
-        doTestArpaV6("F.0.0.0.ip6.arpa", "f::",
-                "f:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
-        doTestArpaV6("F.0.0.ip6.arpa", "f0::",
-                "ff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
-        doTestArpaV6("F.ip6.arpa", "f000::",
-                "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff");
-        doTestArpaV6(
-                "F.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa",
-                "::f0", "::ff");
-        doTestArpaV6(
-                "F.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.ip6.arpa",
-                "8000::f0", "8000::ff");
-    }
-
-    private void doTestArpaV6(String arpa, String expectedStartAddress,
-            String expectedEndAddress) throws ArrayComparisonFailure {
-        NetworkInBytes networkInBytes = IpUtil.parseArpa(arpa);
-        assertEquals(IpVersion.V6, networkInBytes.getIpVersion());
-        assertEquals(expectedStartAddress,
-                networkInBytes.getStartAddressAsString());
-        assertArrayEquals("", IpV6.toByteArray(expectedStartAddress),
-                networkInBytes.getStartAddress());
-        assertEquals(expectedEndAddress, networkInBytes.getEndAddressAsString());
-        assertArrayEquals("", IpV6.toByteArray(expectedEndAddress),
-                networkInBytes.getEndAddress());
     }
 
     @Test

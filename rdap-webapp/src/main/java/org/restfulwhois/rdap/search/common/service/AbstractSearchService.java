@@ -33,15 +33,15 @@ package org.restfulwhois.rdap.search.common.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.common.dao.SearchDao;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.common.service.AccessControlManager;
-import org.restfulwhois.rdap.core.common.support.PageBean;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
-import org.restfulwhois.rdap.core.common.util.RdapProperties;
+import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.common.service.AccessControlManager;
+import org.restfulwhois.rdap.common.support.PageBean;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RdapProperties;
+import org.restfulwhois.rdap.common.support.TruncatedInfo;
+import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
-abstract public class AbstractSearchService {
+public abstract class AbstractSearchService {
     /**
      * logger.
      */

@@ -30,17 +30,18 @@
  */
 package org.restfulwhois.rdap.filters.queryFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.common.dao.NoticeDao;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.restfulwhois.rdap.core.common.filter.QueryFilterResult;
-import org.restfulwhois.rdap.core.common.model.Notice;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
-import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
+import org.restfulwhois.rdap.common.dao.NoticeDao;
+import org.restfulwhois.rdap.common.filter.QueryFilter;
+import org.restfulwhois.rdap.common.filter.QueryFilterResult;
+import org.restfulwhois.rdap.common.model.Notice;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.common.service.NoticeService;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,12 @@ public class NoticeQueryFilter implements QueryFilter {
     @Autowired
     private NoticeDao noticeDao;
 
+    /**
+     * noticeService.
+     */
+    @Autowired
+    private NoticeService noticeService;
+
     @Override
     public QueryFilterResult preParamValidate(QueryParam queryParam) {
         return null;
@@ -76,6 +83,7 @@ public class NoticeQueryFilter implements QueryFilter {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public QueryFilterResult postQuery(QueryParam queryParam,
             ResponseEntity responseEntity) {
@@ -99,8 +107,16 @@ public class NoticeQueryFilter implements QueryFilter {
         if (null == model) {
             return;
         }
-        List<Notice> notices = noticeDao.getNoticesNoTruncated();
-        addTruncatedNotice(model, notices);
+        List<Notice> notices = new ArrayList<Notice>();
+        List<Notice> notTruncatedNotices =
+                noticeService.getAllNotTruncatedNotice();
+        if (null != notTruncatedNotices) {
+            notices.addAll(notTruncatedNotices);
+        }
+        List<Notice> truncatedNotices = getTruncatedNotice(model);
+        if (null != truncatedNotices) {
+            notices.addAll(truncatedNotices);
+        }
         model.setNotices(notices);
     }
 
@@ -109,21 +125,20 @@ public class NoticeQueryFilter implements QueryFilter {
      * 
      * @param model
      *            model.
-     * @param notices
-     *            notices.
+     * @return notice list.
      */
-    private void addTruncatedNotice(BaseModel model, List<Notice> notices) {
+    private List<Notice> getTruncatedNotice(BaseModel model) {
         if (model instanceof BaseSearchModel<?>
                 && ((BaseSearchModel<?>) model).getTruncatedInfo()
                         .getResultsTruncated()) {
             BaseSearchModel<?> baseSearchModel = (BaseSearchModel<?>) model;
             List<TruncateReason> truncateReasons =
                     baseSearchModel.getTruncatedInfo().getTruncateReasons();
-            for (TruncateReason truncateReason : truncateReasons) {
-                notices.add(CustomizeNoticeandRemark
-                        .getNoticeByReasonType(truncateReason.getName()));
-            }
+            List<Notice> truncatedNotices =
+                    noticeService.getTruncatedNoticeByReason(truncateReasons);
+            return truncatedNotices;
         }
+        return null;
     }
 
 }

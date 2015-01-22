@@ -1,16 +1,27 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.restfulwhois.rdap</groupId>
 	<artifactId>rdap</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>${rdap.version}</version>
 	<name>rdap</name>
 	<url>http://maven.apache.org</url>
+	<properties>
+		<rdap.version>0.1-SNAPSHOT</rdap.version>
+		<dependency.spring.version>4.0.0.RELEASE</dependency.spring.version>
+		<dependency.jackson.version>2.3.2</dependency.jackson.version>
+		<maven.test.jvmargs>-Xmx1024m -Xms128m</maven.test.jvmargs>
+		<maven.compiler.target>1.6</maven.compiler.target>
+	</properties>
 	<modules>
 		<module>rdap-webapp</module>
 		<module>rdap-proxy43</module>
-	</modules>
+		<module>rdap-client</module>
+		<module>rdap-common</module>
+		<module>rdap-initdb</module>
+    <module>rdap-service</module>
+  </modules>
 	<build>
 		<finalName>rdap</finalName>
 	</build>

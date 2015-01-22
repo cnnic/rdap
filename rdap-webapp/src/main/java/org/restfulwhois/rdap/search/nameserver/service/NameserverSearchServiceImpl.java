@@ -30,9 +30,9 @@
  */
 package org.restfulwhois.rdap.search.nameserver.service;
 
-import org.restfulwhois.rdap.core.common.dao.SearchDao;
-import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverSearchService;
 import org.restfulwhois.rdap.search.common.service.AbstractSearchService;
@@ -44,7 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * NS search service implementation.
+ * nameserver search service implementation.
  * 
  * @author jiashuo
  * 
@@ -58,6 +58,9 @@ public class NameserverSearchServiceImpl extends AbstractSearchService
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverSearchServiceImpl.class);
 
+    /**
+     * searchDao.
+     */
     @Autowired
     private SearchDao<Nameserver> searchDao;
 

@@ -34,7 +34,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.search.common.dao.AbstractSearchDao;
 import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
@@ -59,8 +59,9 @@ public class DomainSearchDaoImpl extends AbstractSearchDao<Domain> {
     public List<Domain> search(QueryParam queryParam) {
         SearchStrategy<Domain> strategy = this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            List<Domain> result = strategy.search(queryParam, jdbcTemplate);
-            queryDao.queryAndSetInnerObjectsForSearch(result);
+            List<Domain> result =
+                    strategy.search(queryParam, getJdbcTemplate());
+            getQueryDao().queryAndSetInnerObjectsForSearch(result);
             return result;
         }
         return null;
@@ -70,7 +71,7 @@ public class DomainSearchDaoImpl extends AbstractSearchDao<Domain> {
     public Long searchCount(QueryParam queryParam) {
         SearchStrategy<Domain> strategy = this.getSearchStrategy(queryParam);
         if (null != strategy) {
-            return strategy.searchCount(queryParam, jdbcTemplate);
+            return strategy.searchCount(queryParam, getJdbcTemplate());
         }
         return null;
     }

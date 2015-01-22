@@ -40,18 +40,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
-import org.restfulwhois.rdap.core.common.dao.SearchDao;
-import org.restfulwhois.rdap.core.common.dao.impl.LinkQueryDaoImpl;
-import org.restfulwhois.rdap.core.common.model.Event;
-import org.restfulwhois.rdap.core.common.model.Link;
-import org.restfulwhois.rdap.core.common.model.Remark;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.model.base.ModelStatus;
-import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
+import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
+import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
+import org.restfulwhois.rdap.common.dao.impl.LinkQueryDaoImpl;
+import org.restfulwhois.rdap.common.model.Event;
+import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.Remark;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.ModelStatus;
+import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.ip.model.IPAddress;
@@ -113,6 +113,9 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
     @Autowired
     private QueryDao<Entity> entityQueryDao;
 
+    /**
+     * searchDao.
+     */
     @Autowired
     @Qualifier("nameserverSearchDaoImpl")
     private SearchDao<Nameserver> searchDao;
@@ -195,7 +198,7 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         ns.setRemarks(remarks);
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
-        links.add(AutoGenerateSelfLink.generateSelfLink(ns));
+        links.add(SelfLinkGenerator.generateSelfLink(ns));
         ns.setLinks(links);
         List<Event> events =
                 eventQueryDao.queryAsInnerObjects(nsID, ModelType.NAMESERVER);
@@ -327,21 +330,6 @@ public class NameserverQueryDaoImpl extends AbstractQueryDao<Nameserver> {
         for (Nameserver nameserver : nameservers) {
             queryAndSetEntities(nameserver);
         }
-    }
-
-    /**
-     * <pre>
-     * search nameservers from RDAP_NAMESERVER, without inner objects.
-     * it can be indexed by ip,or by ldhName.
-     * </pre>
-     * 
-     * @param queryParam
-     *            query parameter of nameserver include index.
-     * @return nameserver list.
-     */
-    private List<Nameserver> searchWithoutInnerObjects(
-            final QueryParam queryParam) {
-        return searchDao.search(queryParam);
     }
 
     /**

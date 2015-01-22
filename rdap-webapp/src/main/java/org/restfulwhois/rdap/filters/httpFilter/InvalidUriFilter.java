@@ -38,11 +38,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.filter.FilterHelper;
-import org.restfulwhois.rdap.core.common.filter.HttpFilter;
-import org.restfulwhois.rdap.core.common.model.ErrorMessage;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
-import org.restfulwhois.rdap.core.common.util.StringUtil;
+import org.restfulwhois.rdap.common.filter.FilterHelper;
+import org.restfulwhois.rdap.common.filter.HttpFilter;
+import org.restfulwhois.rdap.common.model.ErrorMessage;
+import org.restfulwhois.rdap.common.support.RestResponse;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -177,7 +177,7 @@ public class InvalidUriFilter implements HttpFilter {
     private void writeError400Response(HttpServletResponse response)
             throws IOException {
         ResponseEntity<ErrorMessage> responseEntity =
-                RestResponseUtil.createResponse400();
+                RestResponse.createResponse400();
         FilterHelper.writeResponse(responseEntity, response);
     }
     

@@ -37,9 +37,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.core.common.support.PageBean;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
+import org.restfulwhois.rdap.common.support.PageBean;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.entity.dao.impl.EntityQueryDaoImpl;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.search.common.dao.SearchStrategy;
@@ -48,6 +48,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 /**
+ * abstract entity search strategy.
  * 
  * @author jiashuo
  * 
@@ -55,6 +56,17 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 public abstract class AbstractEntitySearchStrategy implements
         SearchStrategy<Entity> {
 
+    /**
+     * searchCount.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @param jdbcTemplate
+     *            jdbcTemplate.
+     * @param searchColumnName
+     *            searchColumnName.
+     * @return count.
+     */
     protected Long searchCount(QueryParam queryParam,
             JdbcTemplate jdbcTemplate, final String searchColumnName) {
         final String q = queryParam.getQ();
@@ -74,6 +86,17 @@ public abstract class AbstractEntitySearchStrategy implements
         return entityCount;
     }
 
+    /**
+     * search entities.
+     * 
+     * @param queryParam
+     *            queryParam.
+     * @param jdbcTemplate
+     *            jdbcTemplate.
+     * @param searchColumnName
+     *            searchColumnName.
+     * @return entity list.
+     */
     protected List<Entity> search(QueryParam queryParam,
             JdbcTemplate jdbcTemplate, String searchColumnName) {
         final String q = queryParam.getQ();
@@ -134,6 +157,13 @@ public abstract class AbstractEntitySearchStrategy implements
         }
     }
 
+    /**
+     * searchColumnName.
+     * 
+     * @param q
+     *            q.
+     * @return string.
+     */
     private String generateLikeClause(String q) {
         return AbstractQueryDao.generateLikeClause(q);
     }

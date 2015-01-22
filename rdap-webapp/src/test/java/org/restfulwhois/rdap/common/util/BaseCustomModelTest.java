@@ -33,12 +33,17 @@ package org.restfulwhois.rdap.common.util;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
-import org.restfulwhois.rdap.core.common.model.base.BaseCustomModel;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.BaseCustomModel;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -49,6 +54,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  */
 public class BaseCustomModelTest {
+    @Test
+    public void test_map() throws JsonProcessingException {
+        Entity entity = null;
+        entity = new Entity();
+        entity.setHandle("entityHandle");
+        CustomEntity customEntity = new CustomEntity();
+        entity.setCustomModel(customEntity);
+        customEntity.addEntry("key1", "value1");
+        customEntity.addEntry("handle", "customHandle");
+        ObjectMapper mapper = new ObjectMapper();
+        String entityJson = null;
+        entityJson = mapper.writeValueAsString(entity);
+        assertNotNull(entityJson);
+        assertThat(entityJson, StringContains.containsString("key1"));
+        assertThat(entityJson, StringContains.containsString("value1"));
+
+    }
+
     /**
      * test prefix.
      */
@@ -99,6 +122,26 @@ public class BaseCustomModelTest {
 
         public void setDigest(int digest) {
             this.digest = digest;
+        }
+
+    }
+
+    class CustomEntity extends BaseCustomModel {
+        private Map<String, String> keyValues = new HashMap<String, String>();
+
+        @JsonAnySetter
+        public CustomEntity addEntry(String key, String value) {
+            keyValues.put(key, value);
+            return this;
+        }
+
+        @JsonAnyGetter
+        public Map<String, String> getKeyValues() {
+            return keyValues;
+        }
+
+        public void setKeyValues(Map<String, String> keyValues) {
+            this.keyValues = keyValues;
         }
 
     }

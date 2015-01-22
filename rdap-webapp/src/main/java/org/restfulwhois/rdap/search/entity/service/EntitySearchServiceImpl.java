@@ -30,9 +30,9 @@
  */
 package org.restfulwhois.rdap.search.entity.service;
 
-import org.restfulwhois.rdap.core.common.dao.SearchDao;
-import org.restfulwhois.rdap.core.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
+import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
+import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.service.EntitySearchService;
 import org.restfulwhois.rdap.search.common.service.AbstractSearchService;
@@ -46,7 +46,7 @@ import org.springframework.stereotype.Service;
 /**
  * search service implementation.
  * 
- * RdapController's searching for domain/NS/IP/entity .etc .
+ * RdapController's searching for domain/NS/IP/entity. etc .
  * 
  * The result list is paged by 'batchsizeSearch' property.
  * 
@@ -62,6 +62,9 @@ public class EntitySearchServiceImpl extends AbstractSearchService implements
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EntitySearchServiceImpl.class);
 
+    /**
+     * searchDao.
+     */
     @Autowired
     private SearchDao<Entity> searchDao;
 

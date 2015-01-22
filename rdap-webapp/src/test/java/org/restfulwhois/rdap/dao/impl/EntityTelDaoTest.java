@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.core.entity.dao.impl.EntityTelDao;
 import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.EntityTelephone;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -47,9 +47,9 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
  * Test for entity DAO.
- *
+ * 
  * @author jiashuo
- *
+ * 
  */
 @SuppressWarnings("rawtypes")
 public class EntityTelDaoTest extends BaseTest {
@@ -68,12 +68,12 @@ public class EntityTelDaoTest extends BaseTest {
     public void testQueryExist() {
         Entity entity = new Entity();
         entity.setId(1L);
-        List<EntityTel> telephones = entityTelDao.query(entity);
+        List<EntityTelephone> telephones = entityTelDao.query(entity);
         assertNotNull(telephones);
         assertEquals(telephones.size(), 2);
-        EntityTel tel = telephones.get(0);
+        EntityTelephone tel = telephones.get(0);
         assertEquals("home;voice", tel.getTypes());
-        assertEquals("+1-555-555-1234", tel.getGlobalNumber());
+        assertEquals("+1-555-555-1234", tel.getNumber());
         assertEquals("1234", tel.getExtNumber());
         assertEquals(Integer.valueOf(1), tel.getPref());
     }
@@ -87,7 +87,7 @@ public class EntityTelDaoTest extends BaseTest {
     public void testQueryNotExist() {
         Entity entity = new Entity();
         entity.setId(100000L);
-        List<EntityTel> telephones = entityTelDao.query(entity);
+        List<EntityTelephone> telephones = entityTelDao.query(entity);
         assertNotNull(telephones);
         assertEquals(telephones.size(), 0);
     }

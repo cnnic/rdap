@@ -40,27 +40,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.dao.AbstractQueryDao;
+import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.dao.SearchDao;
+import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
+import org.restfulwhois.rdap.common.model.Event;
+import org.restfulwhois.rdap.common.model.Link;
+import org.restfulwhois.rdap.common.model.PublicId;
+import org.restfulwhois.rdap.common.model.Remark;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.model.base.ModelStatus;
+import org.restfulwhois.rdap.common.model.base.ModelType;
+import org.restfulwhois.rdap.common.service.RemarkService;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RdapProperties;
+import org.restfulwhois.rdap.common.support.TruncatedInfo;
+import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.core.autnum.model.Autnum;
-import org.restfulwhois.rdap.core.common.dao.AbstractQueryDao;
-import org.restfulwhois.rdap.core.common.dao.QueryDao;
-import org.restfulwhois.rdap.core.common.dao.SearchDao;
-import org.restfulwhois.rdap.core.common.model.Event;
-import org.restfulwhois.rdap.core.common.model.Link;
-import org.restfulwhois.rdap.core.common.model.PublicId;
-import org.restfulwhois.rdap.core.common.model.Remark;
-import org.restfulwhois.rdap.core.common.model.base.BaseModel;
-import org.restfulwhois.rdap.core.common.model.base.ModelStatus;
-import org.restfulwhois.rdap.core.common.model.base.ModelType;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo;
-import org.restfulwhois.rdap.core.common.support.TruncatedInfo.TruncateReason;
-import org.restfulwhois.rdap.core.common.util.AutoGenerateSelfLink;
-import org.restfulwhois.rdap.core.common.util.CustomizeNoticeandRemark;
-import org.restfulwhois.rdap.core.common.util.RdapProperties;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.EntityAddress;
 import org.restfulwhois.rdap.core.entity.model.EntityRole;
-import org.restfulwhois.rdap.core.entity.model.EntityTel;
+import org.restfulwhois.rdap.core.entity.model.EntityTelephone;
 import org.restfulwhois.rdap.core.entity.model.jcard.Jcard;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.slf4j.Logger;
@@ -98,6 +98,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      */
     @Autowired
     private QueryDao<PublicId> publicIdQueryDao;
+
+    /**
+     * remarkService.
+     */
+    @Autowired
+    private RemarkService remarkService;
     /**
      * remark dao.
      */
@@ -138,6 +144,9 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
     @Autowired
     private EntityAddressDao entityAddressDao;
 
+    /**
+     * searchDao.
+     */
     @Autowired
     @Qualifier("entitySearchDaoImpl")
     private SearchDao<Entity> searchDao;
@@ -151,7 +160,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         queryAndSetNetworksAndAs(entity);
         queryAndSetInnerObjectsWithoutEntities(entity);
         queryAndSetInnerEntities(entity);
-        //queryAndSetNetworksAndAs(entity);
+        // queryAndSetNetworksAndAs(entity);
         return entity;
     }
 
@@ -169,18 +178,20 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         queryAndSetInnerObjectsWithoutEntities(entities);
         return entities;
     }
-    
+
     @Override
     public void queryAndSetInnerObjectsForSearch(List<Entity> entities) {
         queryAndSetNetworksAndAs(entities);
         queryAndSetInnerObjectsWithoutEntities(entities);
-        queryAndSetRoles(entities);        
+        queryAndSetRoles(entities);
         queryAndSetInnerEntities(entities);
     }
 
     /**
      * query and set inner entities.
-     * @param entities entities which will be set to entity.
+     * 
+     * @param entities
+     *            entities which will be set to entity.
      */
     private void queryAndSetInnerEntities(List<Entity> entities) {
         if (null == entities) {
@@ -208,10 +219,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setAutnums(autnums);
         setTruncatedIfTooMuchResult(entity);
     }
-    
+
     /**
      * query and set network and autnum.
-     * @param entities entity list.
+     * 
+     * @param entities
+     *            entity list.
      */
     private void queryAndSetNetworksAndAs(List<Entity> entities) {
         if (null == entities) {
@@ -244,7 +257,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
      *            entity object.
      */
     private void convertAndSetVcardArray(Entity entity) {
-        List<EntityTel> telephones = entityTelDao.query(entity);
+        List<EntityTelephone> telephones = entityTelDao.query(entity);
         entity.setTelephones(telephones);
         List<EntityAddress> addresses = entityAddressDao.query(entity);
         entity.setAddresses(addresses);
@@ -272,19 +285,18 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         entity.setPublicIds(publicIds);
         List<Remark> remarks =
                 remarkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        if (entity.getTruncatedInfo() != null 
-                      && entity.getTruncatedInfo().getResultsTruncated()) {
-             List <TruncateReason> truncateReasons = entity
-                    .getTruncatedInfo().getTruncateReasons();
-            for (TruncateReason truncateReason : truncateReasons) {
-                  remarks.add(CustomizeNoticeandRemark
-                          .getRemarkByReasonType(truncateReason.getName()));
-            }  
+        if (entity.getTruncatedInfo() != null
+                && entity.getTruncatedInfo().getResultsTruncated()) {
+            List<TruncateReason> truncateReasons =
+                    entity.getTruncatedInfo().getTruncateReasons();
+            List<Remark> truncatedRemarks =
+                    remarkService.getTruncatedRemarkByReason(truncateReasons);
+            remarks.addAll(truncatedRemarks);
         }
         entity.setRemarks(remarks);
         List<Link> links =
                 linkQueryDao.queryAsInnerObjects(entityId, ModelType.ENTITY);
-        links.add(AutoGenerateSelfLink.generateSelfLink(entity));
+        links.add(SelfLinkGenerator.generateSelfLink(entity));
         entity.setLinks(links);
         queryAndSetEvents(entity, entityId);
     }
@@ -500,7 +512,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             return result;
         }
     }
-    
+
     /**
      * query and set status to entity.
      * 
@@ -535,7 +547,7 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
             entity.addStatus(status.getStatus());
         }
     }
-    
+
     /**
      * query and set roles to entity list.
      * 
@@ -583,10 +595,12 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
                 });
         return result;
     }
-    
+
     /**
      * query roles from REL_ENTITY_REGISTRATION by entity id.
-     * @param entityIds entity id list to check.
+     * 
+     * @param entityIds
+     *            entity id list to check.
      * @return entity role list queried from database.
      */
     private List<EntityRole> queryRoles(List<Long> entityIds) {
@@ -609,14 +623,4 @@ public class EntityQueryDaoImpl extends AbstractQueryDao<Entity> {
         return result;
     }
 
-    /**
-     * search entity from RDAP_ENTITY, without inner objects.
-     * 
-     * @param params
-     *            query parameter include entity's name.
-     * @return entity list which will be filled with data.
-     */
-    private List<Entity> searchWithoutInnerObjects(final QueryParam queryParam) {
-        return searchDao.search(queryParam);
-    }
 }

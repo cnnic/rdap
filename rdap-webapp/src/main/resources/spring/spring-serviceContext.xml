@@ -11,7 +11,7 @@
            				   http://www.springframework.org/schema/util/spring-util.xsd
            				   http://www.springframework.org/schema/aop 
            				   http://www.springframework.org/schema/aop/spring-aop.xsd">
-	
+
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass">
@@ -66,8 +66,18 @@
 
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
-	</bean>    
-	<bean
-		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+	</bean>
 
+	<bean id="rdapProperties" class="org.restfulwhois.rdap.common.support.RdapProperties">
+		<property name="localServiceUrl" value="${localServiceUrl}" />
+		<property name="maxsizeSearch" value="${maxsizeSearch}" />
+		<property name="batchsizeSearch" value="${batchsizeSearch}" />
+		<property name="inTlds" value="${inTlds}" />
+		<property name="notInTlds" value="${notInTlds}" />
+		<property name="minSecondsAccessIntervalAnonymous" value="${minSecondsAccessIntervalAnonymous}" />
+		<property name="minSecondsAccessIntervalAuthed" value="${minSecondsAccessIntervalAuthed}" />
+		<property name="ipWhiteListForAccessInterval" value="${ipWhiteListForAccessInterval}" />
+		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />
+		<property name="notImplementedUri" value="${notImplementedUri}" />
+	</bean>
 </beans>

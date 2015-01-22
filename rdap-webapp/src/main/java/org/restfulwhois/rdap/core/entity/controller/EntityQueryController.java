@@ -36,11 +36,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restfulwhois.rdap.core.common.controller.BaseController;
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.controller.BaseController;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.filter.QueryFilter;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.core.entity.model.Entity;
 import org.restfulwhois.rdap.core.entity.queryparam.EntityQueryParam;
 import org.restfulwhois.rdap.core.entity.service.EntityQueryService;
@@ -72,6 +72,9 @@ public class EntityQueryController extends BaseController {
     @Autowired
     protected EntityQueryService queryService;
 
+    /**
+     * queryFilters.
+     */
     @Resource(name = "commonQueryFilters")
     private List<QueryFilter> queryFilters;
 
@@ -99,6 +102,7 @@ public class EntityQueryController extends BaseController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = "/entity/{handle}", method = RequestMethod.GET)
     public ResponseEntity queryEntity(@PathVariable String handle,
             HttpServletRequest request, HttpServletResponse response)
@@ -108,14 +112,15 @@ public class EntityQueryController extends BaseController {
         return super.query(entityQueryParam);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         EntityQueryParam entityQueryParam = (EntityQueryParam) queryParam;
         Entity result = queryService.queryEntity(entityQueryParam);
         if (null != result) {
-            return RestResponseUtil.createResponse200(result);
+            return RestResponse.createResponse200(result);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }

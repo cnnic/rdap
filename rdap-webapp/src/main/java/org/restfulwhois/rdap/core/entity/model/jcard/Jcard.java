@@ -62,7 +62,7 @@ import ezvcard.VCard;
  * @author jiashuo
  * 
  */
-public class Jcard {
+public final class Jcard {
     /**
      * entity, datasource of VCARD.
      */
@@ -128,6 +128,9 @@ public class Jcard {
         }
         for (JcardPropertyConverter converter : converters) {
             converter.convertAndSetProperty(vcard, entity);
+        }
+        if (!vcard.iterator().hasNext()) {
+            return null;
         }
         return this.writeJSON(vcard);
     }

@@ -32,20 +32,20 @@ package org.restfulwhois.rdap.core.nameserver.queryparam;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.support.QueryUri;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.QueryUri;
 import org.restfulwhois.rdap.core.domain.validator.SearchUriValidator;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 
 /**
- * NameserverSearchParam
+ * base nameserver search parameter.
  * 
  * @author jiashuo
  */
 public abstract class NameserverSearchParam extends QueryParam {
 
     /**
-     * construction.
+     * constructor.
      * 
      * @param punyName
      *            punyName.
@@ -56,7 +56,7 @@ public abstract class NameserverSearchParam extends QueryParam {
     }
 
     /**
-     * construction.
+     * constructor.
      */
     public NameserverSearchParam() {
         super();
@@ -68,7 +68,7 @@ public abstract class NameserverSearchParam extends QueryParam {
     }
 
     /**
-     * construction.
+     * constructor.
      * 
      * @param request
      *            request.
@@ -77,6 +77,13 @@ public abstract class NameserverSearchParam extends QueryParam {
         super(request);
     }
 
+    /**
+     * supportSearchType.
+     * 
+     * @param searchType
+     *            searchType.
+     * @return boolean.
+     */
     public boolean supportSearchType(NameserverSearchType searchType) {
         return false;
     }

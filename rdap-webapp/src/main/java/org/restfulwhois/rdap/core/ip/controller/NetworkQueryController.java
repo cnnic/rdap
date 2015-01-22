@@ -35,18 +35,16 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.core.common.controller.BaseController;
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.filter.QueryFilter;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.IpUtil;
-import org.restfulwhois.rdap.core.common.util.RequestUtil;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.controller.BaseController;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.filter.QueryFilter;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RestResponse;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.RequestUtil;
 import org.restfulwhois.rdap.core.ip.model.Network;
 import org.restfulwhois.rdap.core.ip.queryparam.NetworkQueryParam;
 import org.restfulwhois.rdap.core.ip.service.IpService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -64,16 +62,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class NetworkQueryController extends BaseController {
     /**
-     * logger.
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(NetworkQueryController.class);
-    /**
      * query service.
      */
     @Autowired
-    protected IpService queryService;
+    private IpService queryService;
 
+    /**
+     * queryFilters
+     */
     @Resource(name = "networkQueryFilters")
     private List<QueryFilter> queryFilters;
 
@@ -102,6 +98,7 @@ public class NetworkQueryController extends BaseController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/ip/{ipAddr}/{mask}" },
             method = RequestMethod.GET)
     @ResponseBody
@@ -131,6 +128,7 @@ public class NetworkQueryController extends BaseController {
      * @throws DecodeException
      *             DecodeException.
      */
+    @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/ip/{ipAddr}" }, method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity queryIp(@PathVariable String ipAddr,
@@ -147,10 +145,9 @@ public class NetworkQueryController extends BaseController {
      * 
      * @param cidr
      *            CIDR.
-     * @param originQueryParam
-     *            originQueryParam.
      * @return ResponseEntity ResponseEntity.
      */
+    @SuppressWarnings("rawtypes")
     private ResponseEntity doQueryIp(HttpServletRequest request, String cidr) {
         cidr = IpUtil.addNetworkMaskIfNotContainsMask(cidr);
         NetworkQueryParam queryParam = new NetworkQueryParam(request, cidr);
@@ -161,9 +158,9 @@ public class NetworkQueryController extends BaseController {
     protected ResponseEntity doQuery(QueryParam queryParam) {
         Network ip = queryService.queryIp(queryParam);
         if (null != ip) {
-            return RestResponseUtil.createResponse200(ip);
+            return RestResponse.createResponse200(ip);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }

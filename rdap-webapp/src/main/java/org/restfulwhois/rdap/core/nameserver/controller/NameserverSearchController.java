@@ -37,10 +37,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.common.exception.DecodeException;
-import org.restfulwhois.rdap.core.common.support.QueryParam;
-import org.restfulwhois.rdap.core.common.util.RequestUtil;
-import org.restfulwhois.rdap.core.common.util.RestResponseUtil;
+import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.support.QueryParam;
+import org.restfulwhois.rdap.common.support.RestResponse;
+import org.restfulwhois.rdap.common.util.RequestUtil;
 import org.restfulwhois.rdap.core.domain.controller.BaseDnrController;
 import org.restfulwhois.rdap.core.nameserver.model.NameserverSearchType;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverSearchByIpParam;
@@ -167,19 +167,20 @@ public class NameserverSearchController extends BaseDnrController {
             throws DecodeException {
         NameserverSearchParam nsSearchParam = createNsSearchParam(request);
         if (null == nsSearchParam) {
-            return RestResponseUtil.createResponse400();
+            return RestResponse.createResponse400();
         }
         return super.query(nsSearchParam);
 
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected ResponseEntity doQuery(QueryParam queryParam) {
         NameserverSearch nsSearch = searchService.searchNameserver(queryParam);
         if (null != nsSearch) {
-            return RestResponseUtil.createResponse200(nsSearch);
+            return RestResponse.createResponse200(nsSearch);
         }
-        return RestResponseUtil.createResponse404();
+        return RestResponse.createResponse404();
     }
 
 }
