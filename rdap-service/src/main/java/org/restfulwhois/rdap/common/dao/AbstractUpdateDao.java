@@ -60,7 +60,15 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
             "SELECT %s as ID from %s where HANDLE = ?";
     private static final String TPL_CREATE_STATUS =
             "INSERT INTO %s(%s,STATUS) values(?,?)";
-    private static final String TPL_DELETE_STATUS = "DELETE FROM %s WHERE %s=?";
+    private static final String TPL_DELETE_STATUS = "DELETE FROM %s WHERE %s=?";    
+    
+    private static final String TPL_FINDIDS_BY_OUTERIDANDTYPE =
+            "SELECT %s as ID from %s where REL_ID = ? and REL_OBJECT_TYPE = ? ";
+    
+    private static final String TPL_DELETE_REL_BY_OUTERIDANDTYPE =
+            "DELETE FROM  %s where REL_ID = ? and REL_OBJECT_TYPE = ? ";
+    
+    private static final String TPL_DELETE_BY_ID ="delete from %s where %s in ( %s )";
     /**
      * logger.
      */
@@ -158,4 +166,48 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
             }
         });
     }
+    @Override
+    public void deleteAsInnerObjects(BaseModel outerModel) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
+    protected List<Long> findIdsByOuterIdAndType(final BaseModel outerModel,String idColumnName,
+            String tableName) {
+		 final String sql =
+	                String.format(TPL_FINDIDS_BY_OUTERIDANDTYPE, idColumnName, tableName);
+	        LOGGER.debug("check ids exist,sql:{}", sql);
+	        List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
+	            public PreparedStatement createPreparedStatement(
+	                    Connection connection) throws SQLException {
+	                PreparedStatement ps = connection.prepareStatement(sql);
+	                ps.setLong(1, outerModel.getId());
+	                ps.setString(2, outerModel.getObjectType().getName());
+	                return ps;
+	            }
+	        }, new RowMapper<Long>() {
+	            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+	                return rs.getLong("ID");
+	            }
+	        });
+	        if (ids.size() > 0) {
+	            return ids;
+	        }
+	        return null;
+		
+	} 
+    
+    protected void deleteRel(final BaseModel outerModel,String tableName) {
+    	final String sql = String.format(TPL_DELETE_REL_BY_OUTERIDANDTYPE, tableName);	
+    	  jdbcTemplate.update(sql, new PreparedStatementSetter() {
+              public void setValues(PreparedStatement ps) throws SQLException {
+            	  ps.setLong(1, outerModel.getId());
+            	  ps.setString(2, outerModel.getObjectType().getName());
+              }
+          });
+    }
+    protected void delete(final String ids, final String tableName, final String idColumnName) {
+		final String sql = String.format(TPL_DELETE_BY_ID, tableName, idColumnName, ids);		
+		jdbcTemplate.update(sql);
+		
+	}
 }

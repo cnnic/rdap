@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.EventDto;
@@ -67,9 +68,8 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto>
      * logger for record log.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(KeyDataUpdateDaoImpl.class);
-    
-    
+            .getLogger(KeyDataUpdateDaoImpl.class);    
+ 
     /**
      * link update dao.
      */
@@ -126,12 +126,36 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto>
 	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), ModelType.KEYDATA, keyDataId);
 	    	KeyData keyDataAsOuter = new KeyData();
 	    	keyDataAsOuter.setId(keyDataId);
-	    	//creat link
+	    	//create link
 	       	linkUpdateDao.batchCreateAsInnerObjects(keyDataAsOuter, model.getLinks());
 	    	//create event
 		    eventUpdateDao.batchCreateAsInnerObjects(keyDataAsOuter, model.getEvents());
 	    }
 	}
+	
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel) {
+		if (null == outerModel){
+			return;
+		}
+		List<Long> keyDataIds = secureDnsUpdateDao.findIdsByOuterIdAndType(outerModel.getId(), ModelType.KEYDATA);
+	    if (null != keyDataIds) {
+	    	String keyDataIdStr = StringUtils.join(keyDataIds, ",");
+	    	//delete KeyData	    	
+	    	super.delete(keyDataIdStr, "RDAP_KEYDATA", "KEYDATA_ID");
+	    	secureDnsUpdateDao.deleteRelSecureDnsDskey(outerModel.getId(), ModelType.KEYDATA);
+	    	for(Long keyDataId:keyDataIds){
+	    		KeyData keyData = new KeyData();
+		    	keyData.setId(keyDataId);	    		
+	    		linkUpdateDao.deleteAsInnerObjects(keyData);
+		    	eventUpdateDao.deleteAsInnerObjects(keyData);
+	    	}
+	    	
+	    	
+	    	
+	    }
+	   
+	}	
 	
 	/**
 	 * @param model
@@ -161,5 +185,5 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto>
 	public Long findIdByHandle(String handle) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}		
 }

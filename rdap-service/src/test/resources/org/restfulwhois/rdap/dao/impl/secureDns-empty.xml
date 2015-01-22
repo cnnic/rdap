@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>	
+	<RDAP_SECUREDNS />
+	<!-- dsData -->
+	<RDAP_DSDATA />
+	<REL_SECUREDNS_DSKEY  />
+
+	<!-- keyData -->
+	<RDAP_KEYDATA />
+	<REL_SECUREDNS_DSKEY />
+</dataset>

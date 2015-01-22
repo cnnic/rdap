@@ -44,25 +44,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author zhanyq
  * 
  */
-public class EventUpdateDaoTest extends BaseTest {
-
-	 private static final String TABLE_RDAP_EVENT= "RDAP_EVENT";
-	 private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
-	 private static final String TABLE_RDAP_LINK = "RDAP_LINK";
-	 private static final String TABLE_REL_LINK_OBJECT = "REL_LINK_OBJECT";
-	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
+public class EventUpdateDaoTest extends BaseTest {	 
 
 	    @Autowired
 	    private UpdateDao<Event, EventDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
-	    @DatabaseTearDown("teardown.xml")   
+	    @DatabaseTearDown("teardown.xml")  
+	    @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/event-update.xml")
 	    public void testcreateEvent() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
@@ -87,8 +86,19 @@ public class EventUpdateDaoTest extends BaseTest {
 	    	linkList.add(link);
 	    	event.setLinks(linkList);
 	    	eventList.add(event);
-	        updateDao.batchCreateAsInnerObjects(domain, eventList);
-	        super.assertTablesForUpdate("event-update.xml", TABLE_RDAP_EVENT,
-	        		TABLE_REL_EVENT_REGISTRATION,TABLE_RDAP_LINK,TABLE_REL_LINK_OBJECT,TABLE_RDAP_LINK_HREFLANG);
+	        updateDao.batchCreateAsInnerObjects(domain, eventList);	        
 	    }
+	    
+	    @Test
+        @DatabaseSetup("event-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/event-empty.xml")
+        public void testDeleteEvent() throws Exception {
+            Domain domain = new Domain();
+            domain.setId(1L);
+            updateDao.deleteAsInnerObjects(domain);
+            
+        }
 }

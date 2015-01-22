@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>	
+	<RDAP_PUBLICID PUBLIC_ID='1' IDENTIFIER='identifier'
+		TYPE='type' />
+	<REL_PUBLICID_REGISTRATION  />
+</dataset>
