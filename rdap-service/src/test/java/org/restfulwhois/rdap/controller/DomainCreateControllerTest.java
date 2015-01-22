@@ -38,7 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -701,6 +703,10 @@ public class DomainCreateControllerTest extends BaseTest {
         domain.setPort43("port43");
         domain.setLang("zh");
         domain.setType(DomainType.DNR.getName());
+        Map<String, String> customProperties = new HashMap<String, String>();
+        customProperties.put("customKey1", "customValue1");
+        customProperties.put("customKey2", "customValue2");
+        domain.setCustomProperties(customProperties);
         return domain;
     }
 
