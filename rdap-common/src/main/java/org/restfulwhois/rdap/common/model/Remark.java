@@ -30,6 +30,8 @@
  */
 package org.restfulwhois.rdap.common.model;
 
+import org.restfulwhois.rdap.common.model.base.ModelType;
+
 /**
  * remark model denotes information about the object class.
  * 
@@ -37,4 +39,8 @@ package org.restfulwhois.rdap.common.model;
  * 
  */
 public class Remark extends BaseNotice {
+	 @Override
+	    public ModelType getObjectType() {
+	        return ModelType.REMARK;
+	    }
 }

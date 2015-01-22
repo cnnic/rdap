@@ -33,10 +33,10 @@ package org.restfulwhois.rdap.core.nameserver.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.restfulwhois.rdap.common.exception.DecodeException;
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.support.RestResponse;
-import org.restfulwhois.rdap.core.domain.controller.BaseDnrController;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
+import org.restfulwhois.rdap.core.domain.controller.BaseDnrQueryController;
 import org.restfulwhois.rdap.core.nameserver.queryparam.NameserverQueryParam;
 import org.restfulwhois.rdap.core.nameserver.service.NameserverQueryService;
 import org.slf4j.Logger;
@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  */
 @Controller
-public class NameserverQueryController extends BaseDnrController {
+public class NameserverQueryController extends BaseDnrQueryController {
     /**
      * logger.
      */

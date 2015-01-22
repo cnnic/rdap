@@ -146,6 +146,9 @@ public class FilterChainProxy implements Filter {
     private boolean safePostProcess(HttpServletRequest request,
             HttpServletResponse response) {
         for (HttpFilter filter : filters) {
+            if (!filter.needFilter(request, response)) {
+                continue;
+            }
             LOGGER.debug("call postProcess for:{}", filter.getName());
             try {
                 if (!filter.postProcess(request, response)) {
@@ -172,6 +175,9 @@ public class FilterChainProxy implements Filter {
     private boolean safePreProcess(HttpServletRequest request,
             HttpServletResponse response) {
         for (HttpFilter filter : filters) {
+            if (!filter.needFilter(request, response)) {
+                continue;
+            }
             LOGGER.debug("call preProcess for:{}", filter.getName());
             try {
                 if (!filter.preProcess(request, response)) {

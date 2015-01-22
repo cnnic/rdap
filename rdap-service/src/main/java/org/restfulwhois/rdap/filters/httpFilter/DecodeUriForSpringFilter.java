@@ -51,9 +51,8 @@ import org.springframework.web.util.WebUtils;
  * This filter is used to decode URI exception.
  * <p>
  * Some URI can be seized by spring URL mapping, these URI is validated by this
- * filter pre spring mapping.
- * decode uri exception and  URI can not be Empty.
- * <p> 
+ * filter pre spring mapping. decode uri exception and URI can not be Empty.
+ * <p>
  * 
  * @author zhanyq
  * 
@@ -87,19 +86,19 @@ public class DecodeUriForSpringFilter implements HttpFilter {
      */
     @Override
     public boolean preProcess(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {   
+            HttpServletResponse response) throws Exception {
         decodeServletPathForSpringUrlMapping(request);
         String path = request.getRequestURI();
         LOGGER.info("request URI: {} ", path);
         if (StringUtils.isBlank(path) || "/".equals(path)) {
             writeError400Response(response);
             return false;
-        }        
+        }
         String uri = path.substring(request.getContextPath().length());
         if (StringUtils.isBlank(uri)) {
             writeError400Response(response);
             return false;
-        }       
+        }
         return true;
     }
 
@@ -111,9 +110,8 @@ public class DecodeUriForSpringFilter implements HttpFilter {
      * @throws UnsupportedEncodingException
      *             UnsupportedEncodingException.
      */
-    private static void
-            decodeServletPathForSpringUrlMapping(HttpServletRequest request)
-                    throws UnsupportedEncodingException {
+    private static void decodeServletPathForSpringUrlMapping(
+            HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding(StringUtil.CHAR_SET_ISO8859);
         String servletPath = request.getServletPath();
         if (StringUtils.isNotBlank(servletPath)) {
@@ -125,7 +123,7 @@ public class DecodeUriForSpringFilter implements HttpFilter {
                     decodedPath);
         }
     }
-   
+
     /**
      * write error 400 response.
      * 
@@ -140,7 +138,7 @@ public class DecodeUriForSpringFilter implements HttpFilter {
                 RestResponse.createResponse400();
         FilterHelper.writeResponse(responseEntity, response);
     }
-    
+
     /**
      * do post process.
      * 
@@ -164,6 +162,14 @@ public class DecodeUriForSpringFilter implements HttpFilter {
     @Override
     public String getName() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
+        if (FilterHelper.isUpdateUri(req)) {
+            return false;
+        }
+        return true;
     }
 
 }

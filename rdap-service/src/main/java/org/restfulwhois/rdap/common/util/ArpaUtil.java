@@ -34,6 +34,7 @@ package org.restfulwhois.rdap.common.util;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.model.IpVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

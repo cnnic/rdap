@@ -38,6 +38,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.restfulwhois.rdap.common.dto.UpdateResponse;
 import org.restfulwhois.rdap.common.filter.QueryFilter;
 import org.restfulwhois.rdap.common.filter.QueryFilterManager;
 import org.restfulwhois.rdap.common.model.ErrorMessage;
@@ -119,6 +120,21 @@ public class RestResponse {
             return result;
         }
         return ErrorMessage.getNullErrorMessage();
+    }
+
+    /**
+     * create response with HTTP status code 200.
+     * 
+     * @param response
+     *            model T of response.
+     * @param <T>
+     *            a model
+     * @return ResponseEntity<T> ResponseEntity model.
+     */
+    public static ResponseEntity<UpdateResponse> createUpdateResponse(
+            UpdateResponse response) {
+        return new ResponseEntity<UpdateResponse>(response,
+                HttpStatus.valueOf(response.getHttpStatusCode()));
     }
 
     /**

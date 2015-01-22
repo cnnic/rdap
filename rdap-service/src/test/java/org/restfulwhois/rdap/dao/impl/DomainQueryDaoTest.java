@@ -46,6 +46,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.common.dao.QueryDao;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.DsData;
 import org.restfulwhois.rdap.common.model.Event;
 import org.restfulwhois.rdap.common.model.KeyData;
@@ -56,7 +57,6 @@ import org.restfulwhois.rdap.common.model.SecureDns;
 import org.restfulwhois.rdap.common.model.Variant;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.util.DomainUtil;
-import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 

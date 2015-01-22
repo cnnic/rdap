@@ -35,12 +35,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.IpVersion;
 import org.restfulwhois.rdap.common.support.PageBean;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.util.IpUtil;
-import org.restfulwhois.rdap.common.util.IpVersion;
 import org.restfulwhois.rdap.core.domain.dao.impl.DomainQueryDaoImpl;
-import org.restfulwhois.rdap.core.domain.model.Domain;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchByNsIpParam;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
 import org.slf4j.Logger;

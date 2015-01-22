@@ -37,6 +37,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.junit.Test;
 import org.junit.internal.ArrayComparisonFailure;
+import org.restfulwhois.rdap.common.model.IpVersion;
 
 /**
  * 

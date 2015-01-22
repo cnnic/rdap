@@ -36,12 +36,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.model.Notice;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -54,17 +54,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  * 
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonIgnoreProperties(value = {
-        "id", "objectType" })
 public class BaseModel {
 
-    /**
-     * this prefix will be added to the front of properties in customProperties
-     * when serialized to JSON.
-     * <p>
-     * this value SHOULD end with '_', and NIC name is recommended as start.
-     */
-    public static final String CUSTOM_PROPERTY_PREFIX = "cnnic_";
+    @JsonIgnore
+    private BaseDto dto;
+    
+    @JsonIgnore
+    private String customPropertyPrefix;
 
     /**
      * specifications used in the construction of the response.
@@ -73,6 +69,7 @@ public class BaseModel {
     /**
      * identity of object.
      */
+    @JsonIgnore
     private Long id;
     /**
      * DNRs and RIRs have registry-unique identifiers that may be used to
@@ -96,6 +93,9 @@ public class BaseModel {
     @JsonIgnore
     private Map<String, String> customProperties =
             new LinkedHashMap<String, String>();
+
+    @JsonIgnore
+    private String customPropertiesJsonVal;
 
     /**
      * add custom property.
@@ -135,7 +135,7 @@ public class BaseModel {
                 customPropertiesMap.entrySet().iterator(); it.hasNext();) {
             Entry<String, String> entry = it.next();
             if (null != entry.getValue()) {
-                result.put(CUSTOM_PROPERTY_PREFIX + entry.getKey(),
+                result.put(customPropertyPrefix + entry.getKey(),
                         entry.getValue());
             }
         }
@@ -169,6 +169,7 @@ public class BaseModel {
      * 
      * @return simple name of class
      */
+    @JsonIgnore
     public ModelType getObjectType() {
         return ModelType.BASE;
     }
@@ -308,4 +309,39 @@ public class BaseModel {
         this.customProperties = customProperties;
     }
 
+    /**
+     * get customPropertyPrefix.
+     * 
+     * @return customPropertyPrefix.
+     */
+    public String getCustomPropertyPrefix() {
+        return customPropertyPrefix;
+    }
+
+    /**
+     * set customPropertyPrefix.
+     * 
+     * @param customPropertyPrefix
+     *            customPropertyPrefix.
+     */
+    public void setCustomPropertyPrefix(String customPropertyPrefix) {
+        this.customPropertyPrefix = customPropertyPrefix;
+    }
+
+    public String getCustomPropertiesJsonVal() {
+        return customPropertiesJsonVal;
+    }
+
+    public void setCustomPropertiesJsonVal(String customPropertiesJsonVal) {
+        this.customPropertiesJsonVal = customPropertiesJsonVal;
+    }
+
+    public BaseDto getDto() {
+        return dto;
+    }
+
+    public void setDto(BaseDto dto) {
+        this.dto = dto;
+    }
+    
 }

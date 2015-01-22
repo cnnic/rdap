@@ -33,7 +33,7 @@ package org.restfulwhois.rdap.common.service;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.model.Notice;
-import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
+import org.restfulwhois.rdap.common.model.base.TruncatedInfo.TruncateReason;
 
 /**
  * notice service interface.
@@ -41,11 +41,7 @@ import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
  * @author jiashuo
  * 
  */
-public interface NoticeService {
-    /**
-     * initialize.
-     */
-    void init();
+public interface NoticeService {    
 
     /**
      * get notices for no truncated.

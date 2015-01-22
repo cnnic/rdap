@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_PUBLICID  IDENTIFIER='cnnic-1'
+		TYPE='cnnic' />
+	<REL_PUBLICID_REGISTRATION 	REL_OBJECT_TYPE='domain' />
+</dataset>

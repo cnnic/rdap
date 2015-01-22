@@ -17,7 +17,6 @@
 	<modules>
 		<module>rdap-webapp</module>
 		<module>rdap-proxy43</module>
-		<module>rdap-client</module>
 		<module>rdap-common</module>
 		<module>rdap-initdb</module>
     <module>rdap-service</module>

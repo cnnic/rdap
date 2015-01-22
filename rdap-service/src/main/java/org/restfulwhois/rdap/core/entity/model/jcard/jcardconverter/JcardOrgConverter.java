@@ -31,7 +31,7 @@
 package org.restfulwhois.rdap.core.entity.model.jcard.jcardconverter;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.core.entity.model.Entity;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.core.entity.model.jcard.JcardPropertyConverter;
 
 import ezvcard.VCard;

@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.core.domain.model;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
 
 /**

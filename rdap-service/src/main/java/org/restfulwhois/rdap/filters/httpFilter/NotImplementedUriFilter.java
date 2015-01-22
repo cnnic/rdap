@@ -17,10 +17,10 @@ import org.springframework.http.ResponseEntity;
 /**
  * This class is used to filter not implemented object type .
  * <p>
- * If a server receives a query that it cannot process because it 
- * is not implemented it will return  an HTTP 501.
- * <p> 
- *  
+ * If a server receives a query that it cannot process because it is not
+ * implemented it will return an HTTP 501.
+ * <p>
+ * 
  * @author zhanyq
  * 
  */
@@ -53,10 +53,10 @@ public class NotImplementedUriFilter implements HttpFilter {
      */
     @Override
     public boolean preProcess(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {       
+            HttpServletResponse response) throws Exception {
         String path = request.getRequestURI();
-        LOGGER.info("request URI: {} ", path);           
-        String uri = path.substring(request.getContextPath().length());      
+        LOGGER.info("request URI: {} ", path);
+        String uri = path.substring(request.getContextPath().length());
         if (containNotImplementedType(uri)) {
             ResponseEntity<ErrorMessage> responseEntity =
                     RestResponse.createResponse501();
@@ -65,6 +65,7 @@ public class NotImplementedUriFilter implements HttpFilter {
         }
         return true;
     }
+
     /**
      * check if decodeUri contain not implemented object types.
      * 
@@ -72,17 +73,17 @@ public class NotImplementedUriFilter implements HttpFilter {
      *            decodeUri.
      * @return true if contain, false if not.
      */
-    public boolean containNotImplementedType(String uri) {        
-        List<String> notImplementedUriList = RdapProperties
-             .getNotImplementedUriList();
-        for (String notImplementedUri :notImplementedUriList) {
+    public boolean containNotImplementedType(String uri) {
+        List<String> notImplementedUriList =
+                RdapProperties.getNotImplementedUriList();
+        for (String notImplementedUri : notImplementedUriList) {
             if (uri.startsWith(notImplementedUri)) {
-                return true;             
+                return true;
             }
-        }       
+        }
         return false;
     }
-   
+
     /**
      * do post process.
      * 
@@ -106,6 +107,14 @@ public class NotImplementedUriFilter implements HttpFilter {
     @Override
     public String getName() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
+        if (FilterHelper.isUpdateUri(req)) {
+            return false;
+        }
+        return true;
     }
 
 }

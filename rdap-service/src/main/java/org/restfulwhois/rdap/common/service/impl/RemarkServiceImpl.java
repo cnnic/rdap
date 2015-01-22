@@ -38,8 +38,8 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.impl.RemarkQueryDaoImpl;
 import org.restfulwhois.rdap.common.model.Remark;
+import org.restfulwhois.rdap.common.model.base.TruncatedInfo.TruncateReason;
 import org.restfulwhois.rdap.common.service.RemarkService;
-import org.restfulwhois.rdap.common.support.TruncatedInfo.TruncateReason;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

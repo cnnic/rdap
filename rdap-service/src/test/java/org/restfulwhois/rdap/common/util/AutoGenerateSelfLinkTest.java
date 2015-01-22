@@ -30,16 +30,14 @@
  */
 package org.restfulwhois.rdap.common.util;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 import org.restfulwhois.rdap.common.dao.impl.SelfLinkGenerator;
+import org.restfulwhois.rdap.common.model.Autnum;
+import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.model.Link;
-import org.restfulwhois.rdap.core.autnum.model.Autnum;
-import org.restfulwhois.rdap.core.domain.model.Domain;
-import org.restfulwhois.rdap.core.entity.model.Entity;
-import org.restfulwhois.rdap.core.ip.model.Network;
-import org.restfulwhois.rdap.core.nameserver.model.Nameserver;
+import org.restfulwhois.rdap.common.model.Nameserver;
+import org.restfulwhois.rdap.common.model.Network;
 import org.springframework.util.Assert;
 
 /**

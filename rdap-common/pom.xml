@@ -8,7 +8,7 @@
 		<artifactId>rdap</artifactId>
 		<version>${rdap.version}</version>
 	</parent>
-	<groupId>org.restfulwhois.rdap.common.model.common</groupId>
+	<groupId>org.restfulwhois.rdap</groupId>
 	<artifactId>rdap-common</artifactId>
 	<version>${rdap.version}</version>
 	<name>rdap-common</name>

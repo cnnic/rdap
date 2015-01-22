@@ -39,6 +39,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang.StringUtils;
+import org.dbunit.Assertion;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
@@ -49,6 +50,7 @@ import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ITableIterator;
 import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
@@ -92,6 +94,9 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 @Transactional
 public abstract class BaseTest {
 
+    private static final String DEFAULT_RELATIVATE_DATAFILE_PATH =
+            "org/restfulwhois/rdap/dao/impl/";
+
     /**
      * defaultMaxSizeSearch.
      */
@@ -106,13 +111,13 @@ public abstract class BaseTest {
      * connection.
      */
     private static IDatabaseConnection connection;
-    
+
     @Autowired
     private RdapConformanceService rdapConformanceService;
-    
+
     @Autowired
     private NoticeService noticeService;
-    
+
     @Autowired
     private RemarkService remarkService;
 
@@ -150,8 +155,7 @@ public abstract class BaseTest {
     public void before() throws Exception {
         resetDefaultMaxSizeSearch();
         rdapConformanceService.initRdapConformance();
-        RestResponse.initErrorMessages();
-        noticeService.init();
+        RestResponse.initErrorMessages();       
         remarkService.init();
     }
 
@@ -188,7 +192,8 @@ public abstract class BaseTest {
      *             Exception.
      */
     protected static IDataSet getDeleteAllTableRowsDataSet() throws Exception {
-        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/teardown.xml";
+        String dataSetFilePath =
+                DEFAULT_RELATIVATE_DATAFILE_PATH + "teardown.xml";
         return getDataSet(dataSetFilePath);
     }
 
@@ -200,7 +205,8 @@ public abstract class BaseTest {
      *             Exception.
      */
     protected static IDataSet getInitDataSet() throws Exception {
-        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/initData.xml";
+        String dataSetFilePath =
+                DEFAULT_RELATIVATE_DATAFILE_PATH + "initData.xml";
         return getDataSet(dataSetFilePath);
     }
 
@@ -356,7 +362,7 @@ public abstract class BaseTest {
      * @param dataFile
      */
     protected void databaseSetupWithBinaryColumns(String dataFile) {
-        String dataSetFilePath = "org/restfulwhois/rdap/dao/impl/" + dataFile;
+        String dataSetFilePath = DEFAULT_RELATIVATE_DATAFILE_PATH + dataFile;
         IDataSet dataSet;
         try {
             dataSet = getDataSet(dataSetFilePath);
@@ -373,6 +379,30 @@ public abstract class BaseTest {
      */
     protected QueryDataSet getEmptyDataSet() {
         return new QueryDataSet(connection);
+    }
+
+    protected static void assertTablesForUpdate(String expectedDataSetFilePath,
+            String... tableNames) throws Exception {
+        if (null == tableNames || tableNames.length == 0) {
+            return;
+        }
+        IDataSet databaseDataSet = connection.createDataSet();
+        URL url =
+                BaseTest.class.getClassLoader().getResource(
+                        DEFAULT_RELATIVATE_DATAFILE_PATH
+                                + expectedDataSetFilePath);
+        FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+        IDataSet expectedDataSet =
+                builder.build(new FileInputStream(url.getPath()));
+        for (String tableName : tableNames) {
+            ITable expectedTable = expectedDataSet.getTable(tableName);
+            ITable actualTable = databaseDataSet.getTable(tableName);
+            ITable filteredTable =
+                    DefaultColumnFilter.includedColumnsTable(actualTable,
+                            expectedTable.getTableMetaData().getColumns());
+            Assertion.assertEquals(expectedTable, filteredTable);
+
+        }
     }
 
 }

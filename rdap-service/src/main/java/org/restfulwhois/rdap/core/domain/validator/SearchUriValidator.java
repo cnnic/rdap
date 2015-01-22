@@ -32,10 +32,10 @@ package org.restfulwhois.rdap.core.domain.validator;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.restfulwhois.rdap.common.model.base.QueryUri;
 import org.restfulwhois.rdap.common.support.QueryParam;
-import org.restfulwhois.rdap.common.support.QueryUri;
 import org.restfulwhois.rdap.common.util.RequestUtil;
-import org.restfulwhois.rdap.common.validation.HttpValidationError;
+import org.restfulwhois.rdap.common.validation.QueryValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.restfulwhois.rdap.common.validation.Validator;
 import org.restfulwhois.rdap.core.domain.queryparam.DomainSearchParam;
@@ -81,7 +81,7 @@ public class SearchUriValidator implements Validator {
                 queryParam.getQueryUri())) {
             LOGGER.debug("error:last split URI is not valid for search: {}",
                     queryParam.getQueryUri());
-            validationResult.addError(HttpValidationError.build400Error());
+            validationResult.addError(QueryValidationError.build400Error());
         }
     }
 

@@ -38,8 +38,8 @@ import java.util.Map;
 
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.support.RdapProperties;
-import org.restfulwhois.rdap.core.entity.model.Entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,6 +59,7 @@ public class BaseCustomModelTest {
         Map<String, String> customProperties =
                 new LinkedHashMap<String, String>();
         entity.setCustomProperties(customProperties);
+        entity.setCustomPropertyPrefix(RdapProperties.getCustomPropertyPrefix());
         customProperties.put("key1", "value1");
         customProperties.put("handle", "customHandle");
         ObjectMapper mapper = new ObjectMapper();

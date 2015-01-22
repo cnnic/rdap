@@ -32,8 +32,8 @@ package org.restfulwhois.rdap.search.entity.bean;
 
 import java.util.List;
 
+import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.model.base.BaseSearchModel;
-import org.restfulwhois.rdap.core.entity.model.Entity;
 
 /**
  * entity search model.

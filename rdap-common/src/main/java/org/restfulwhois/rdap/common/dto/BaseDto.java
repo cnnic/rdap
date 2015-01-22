@@ -31,19 +31,32 @@
 package org.restfulwhois.rdap.common.dto;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
+import org.restfulwhois.rdap.common.dto.embedded.EventDto;
+import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
+import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
  * @author jiashuo
  * 
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BaseDto {
 
     private String handle;
-
+    private List<EntityHandleDto> entities;
+	private List<String> status;
+	private List<RemarkDto> remarks;
+	private List<LinkDto> links;
+	private String port43;
+	private List<EventDto> events;
     private Map<String, String> customProperties =
             new LinkedHashMap<String, String>();
 
@@ -60,8 +73,56 @@ public class BaseDto {
     public void setHandle(String handle) {
         this.handle = handle;
     }
+    
+    public List<EntityHandleDto> getEntities() {
+		return entities;
+	}
 
-    public Map<String, String> getCustomProperties() {
+	public void setEntities(List<EntityHandleDto> entities) {
+		this.entities = entities;
+	}
+
+	public List<String> getStatus() {
+		return status;
+	}
+
+	public void setStatus(List<String> status) {
+		this.status = status;
+	}
+
+	public List<RemarkDto> getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(List<RemarkDto> remarks) {
+		this.remarks = remarks;
+	}
+
+	public List<LinkDto> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<LinkDto> links) {
+		this.links = links;
+	}
+
+	public String getPort43() {
+		return port43;
+	}
+
+	public void setPort43(String port43) {
+		this.port43 = port43;
+	}
+
+	public List<EventDto> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<EventDto> events) {
+		this.events = events;
+	}
+
+	public Map<String, String> getCustomProperties() {
         return customProperties;
     }
 
