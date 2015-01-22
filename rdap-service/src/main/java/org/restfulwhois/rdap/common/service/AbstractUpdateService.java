@@ -118,6 +118,9 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     protected void convertCustomProperties(DTO dto, MODEL model) {
         Map<String, String> customProperties = dto.getCustomProperties();
         model.setCustomProperties(customProperties);
+        if (null == customProperties || customProperties.isEmpty()) {
+            return;
+        }
         model.setCustomPropertiesJsonVal(JsonUtil
                 .serializeMap(customProperties));
     }
