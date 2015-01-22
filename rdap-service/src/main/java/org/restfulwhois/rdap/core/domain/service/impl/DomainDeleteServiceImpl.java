@@ -30,14 +30,12 @@
  */
 package org.restfulwhois.rdap.core.domain.service.impl;
 
-import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -55,27 +53,26 @@ public class DomainDeleteServiceImpl extends
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainDeleteServiceImpl.class);
-    /**
-     * domain DAO.
-     */
-    @Autowired
-    private UpdateDao<Domain, DomainDto> domainDao;
 
     @Override
     protected void execute(Domain domain) {
-        domainDao.save(domain);
+        dao.delete(domain);
+        dao.deleteStatus(domain);
     }
 
     @Override
     protected Domain convertDtoToModel(DomainDto dto) {
         Domain domain = new Domain();
-        domain.setLdhName(dto.getLdhName());
+        Long id = dao.findIdByHandle(dto.getHandle());
+        domain.setId(id);
         return domain;
     }
 
     @Override
     protected ValidationResult validate(DomainDto domainDto) {
         ValidationResult validationResult = new ValidationResult();
+        checkNotEmpty(domainDto.getHandle(), "handle", validationResult);
+        checkHandleExistForUpdate(domainDto.getHandle(), validationResult);
         return validationResult;
     }
 
