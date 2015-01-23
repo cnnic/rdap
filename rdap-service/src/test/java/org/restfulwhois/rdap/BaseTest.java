@@ -34,6 +34,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -155,7 +159,7 @@ public abstract class BaseTest {
     public void before() throws Exception {
         resetDefaultMaxSizeSearch();
         rdapConformanceService.initRdapConformance();
-        RestResponse.initErrorMessages();       
+        RestResponse.initErrorMessages();
         remarkService.init();
     }
 
@@ -403,6 +407,29 @@ public abstract class BaseTest {
             Assertion.assertEquals(expectedTable, filteredTable);
 
         }
+    }
+
+    protected List<Map<?, ?>> getTableDataForSql(String tableName, String sql)
+            throws Exception {
+        ITable table = connection.createQueryTable(tableName, sql);
+        return getDataFromTable(table);
+    }
+
+    private List<Map<?, ?>> getDataFromTable(ITable table) throws Exception {
+        List<Map<?, ?>> ret = new ArrayList<Map<?, ?>>();
+        int count_table = table.getRowCount();
+        if (count_table > 0) {
+            Column[] columns = table.getTableMetaData().getColumns();
+            for (int i = 0; i < count_table; i++) {
+                Map<String, Object> map = new TreeMap<String, Object>();
+                for (Column column : columns) {
+                    map.put(column.getColumnName().toUpperCase(),
+                            table.getValue(i, column.getColumnName()));
+                }
+                ret.add(map);
+            }
+        }
+        return ret;
     }
 
 }
