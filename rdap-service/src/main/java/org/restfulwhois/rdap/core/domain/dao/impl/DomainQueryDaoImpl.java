@@ -324,7 +324,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         LOGGER.debug("query LDH_NAME with punyName:{}", punyName);
         final String sql =
                 "select * from RDAP_DOMAIN domain "
-                        + " where LDH_NAME= ?  ";
+                        + " where LDH_NAME= ? order by domain.DOMAIN_ID";
         List<Domain> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
