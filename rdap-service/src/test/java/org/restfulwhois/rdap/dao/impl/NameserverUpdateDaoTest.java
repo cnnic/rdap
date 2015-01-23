@@ -35,10 +35,12 @@ import java.util.List;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
 import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.core.nameserver.dao.impl.NameserverUpdateDaoImpl;
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -53,7 +55,7 @@ public class NameserverUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_REL_DOMAIN_NAMESERVER = "REL_DOMAIN_NAMESERVER";
 
 	    @Autowired
-	    private NameserverUpdateDaoImpl nsUpdateDao;
+	    private UpdateDao<Nameserver, NameserverDto> nsUpdateDao;
 
 	    @Test
 	   // @DatabaseSetup("teardown.xml")
@@ -75,4 +77,16 @@ public class NameserverUpdateDaoTest extends BaseTest {
            nsUpdateDao.saveRel(domain);
 	        super.assertTablesForUpdate("rel-domain-nameserver.xml", TABLE_REL_DOMAIN_NAMESERVER);
 	    }
+	    
+	    
+	    @Test
+	    @DatabaseSetup("rel-domain-nameserver-delete.xml")
+	    @DatabaseTearDown("teardown.xml")	    
+	    public void testDeleteRel() throws Exception {
+	        Domain domain = new Domain();
+	        domain.setId(1L);
+	        nsUpdateDao.deleteRel(domain);
+	        super.assertTablesForUpdate("teardown.xml","REL_DOMAIN_NAMESERVER");
+	    }
+
 }
