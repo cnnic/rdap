@@ -78,17 +78,17 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             .getLogger(AbstractUpdateService.class);
 
     @Autowired
-    protected UpdateDao<MODEL, DTO> dao;
+    private UpdateDao<MODEL, DTO> dao;
     @Autowired
-    protected UpdateDao<Event, EventDto> eventDao;
+    private UpdateDao<Event, EventDto> eventDao;
     @Autowired
-    protected UpdateDao<Link, LinkDto> linkDao;
+    private UpdateDao<Link, LinkDto> linkDao;
     @Autowired
-    protected UpdateDao<Remark, RemarkDto> remarkDao;
+    private UpdateDao<Remark, RemarkDto> remarkDao;
     @Autowired
-    protected UpdateDao<PublicId, PublicIdDto> publicIdDao;
+    private UpdateDao<PublicId, PublicIdDto> publicIdDao;
     @Autowired
-    protected UpdateDao<Entity, EntityDto> entityDao;
+    private UpdateDao<Entity, EntityDto> entityDao;
 
     @Override
     public UpdateResponse execute(DTO dto) {
@@ -353,4 +353,29 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationError.getCode(), validationError.getHttpStatusCode(),
                 validationError.getMessage());
     }
+
+    public UpdateDao<MODEL, DTO> getDao() {
+        return dao;
+    }
+
+    public UpdateDao<Event, EventDto> getEventDao() {
+        return eventDao;
+    }
+
+    public UpdateDao<Link, LinkDto> getLinkDao() {
+        return linkDao;
+    }
+
+    public UpdateDao<Remark, RemarkDto> getRemarkDao() {
+        return remarkDao;
+    }
+
+    public UpdateDao<PublicId, PublicIdDto> getPublicIdDao() {
+        return publicIdDao;
+    }
+
+    public UpdateDao<Entity, EntityDto> getEntityDao() {
+        return entityDao;
+    }
+    
 }

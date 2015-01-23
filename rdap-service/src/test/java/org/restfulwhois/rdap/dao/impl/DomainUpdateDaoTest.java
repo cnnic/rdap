@@ -92,15 +92,13 @@ public class DomainUpdateDaoTest extends BaseTest {
     @Test
     @DatabaseSetup("domain-delete.xml")
     @DatabaseTearDown("teardown.xml")
-    @ExpectedDatabase(
-            assertionMode = DatabaseAssertionMode.NON_STRICT,
-            value = "classpath:/org/restfulwhois/rdap/dao/impl/domain-empty.xml")
-    public
-            void test_delete_domain_and_status() throws Exception {
+    public void test_delete_domain_and_status() throws Exception {
         Domain domain = new Domain();
         domain.setId(1L);
         updateDao.delete(domain);
         updateDao.deleteStatus(domain);
+        assertTablesForUpdate("teardown.xml", "RDAP_DOMAIN",
+                "RDAP_DOMAIN_STATUS");
     }
 
 }
