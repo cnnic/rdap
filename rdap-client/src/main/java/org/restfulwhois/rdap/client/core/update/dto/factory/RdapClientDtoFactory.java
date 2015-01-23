@@ -1,10 +1,10 @@
 package org.restfulwhois.rdap.client.core.update.dto.factory;
 
-import org.restfulwhois.rdap.client.core.update.dto.AutnumDto;
-import org.restfulwhois.rdap.client.core.update.dto.DomainDto;
-import org.restfulwhois.rdap.client.core.update.dto.EntityDto;
-import org.restfulwhois.rdap.client.core.update.dto.IpDto;
-import org.restfulwhois.rdap.client.core.update.dto.NameserverDto;
+import org.restfulwhois.rdap.common.dto.AutnumDto;
+import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.EntityDto;
+import org.restfulwhois.rdap.common.dto.IpDto;
+import org.restfulwhois.rdap.common.dto.NameserverDto;
 
 public class RdapClientDtoFactory{
 	private static RdapClientDtoFactory rdapClientDtoFactory = new RdapClientDtoFactory();

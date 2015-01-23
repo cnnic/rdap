@@ -1,8 +1,10 @@
 package org.restfulwhois.rdap.client.common.service;
 
 import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -10,7 +12,6 @@ import java.util.List;
 
 import org.restfulwhois.rdap.client.common.type.HttpMethodType;
 import org.restfulwhois.rdap.client.common.type.ObjectType;
-import org.springframework.http.HttpMethod;
 
 public class RdapRestTemplate{
 	private final String url;
@@ -43,7 +44,13 @@ public class RdapRestTemplate{
 		httpURLConnection.setRequestMethod(httpMethod.name());
 		httpURLConnection.setRequestProperty("content-type", MEDIA_TYPE);
 		httpURLConnection.connect();
-		httpURLConnection.getOutputStream().write(param.getBytes());
+		OutputStream out = httpURLConnection.getOutputStream();
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "utf-8"));
+		writer.write(param);
+		writer.flush();
+		writer.close();
+		out.close();
+
 		if(httpURLConnection.getResponseCode() != 200){
 			//TODO
 		}

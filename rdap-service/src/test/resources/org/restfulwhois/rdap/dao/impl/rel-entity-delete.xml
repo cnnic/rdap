@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>	
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='11'
+        REL_ID='1' REL_OBJECT_TYPE='domain' ENTITY_ID='1' ENTITY_ROLE="registrar" />
+    <REL_ENTITY_REGISTRATION REL_ENTITY_ID='12'
+        REL_ID='1' REL_OBJECT_TYPE='domain' ENTITY_ID='1' ENTITY_ROLE="billing" />
+</dataset>

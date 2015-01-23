@@ -101,6 +101,14 @@ public class NameserverUpdateDaoImpl extends AbstractUpdateDao<Nameserver, Names
 		}	
 	}
 	
+	@Override
+	public void deleteRel(BaseModel outerModel) {
+		if (null == outerModel || null == outerModel.getId()) {
+			return;
+		}		
+		super.delete(String.valueOf(outerModel.getId()), "REL_DOMAIN_NAMESERVER", "DOMAIN_ID");
+	}
+	
     /**
      * 
      * @param outerModel 
