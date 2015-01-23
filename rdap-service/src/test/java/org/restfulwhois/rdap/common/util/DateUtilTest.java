@@ -57,6 +57,13 @@ public class DateUtilTest {
     }
     
     @Test
+    public void test_parse_impossible_date_hasrror(){
+    	String formatString = "yyyy-MM-dd HH:mm:ss";
+    	String dateString = "2015-25-22 01:44:50";
+    	assertEquals(null, DateUtil.parse(dateString, formatString));
+    }
+    
+    @Test
     public void test_parse_emptydate_haserror() throws ParseException{
     	String formatString = "yyyy-MM-dd HH:mm:ss";
     	String dateString = "";
