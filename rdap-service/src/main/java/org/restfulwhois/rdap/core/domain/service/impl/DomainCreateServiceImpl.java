@@ -57,7 +57,9 @@ public class DomainCreateServiceImpl extends DomainUpdateBaseServiceImpl {
 
     @Override
     protected void execute(Domain domain) {
+        LOGGER.debug("save domain...");
         dao.save(domain);
+        LOGGER.debug("save status...");
         dao.saveStatus(domain);
         DomainDto dto = (DomainDto) domain.getDto();
         saveSecureDns(dto, domain);

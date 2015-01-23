@@ -187,9 +187,9 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.notices[0].description").isArray())
                 .andExpect(
                         jsonPath("$.notices[0].description").value(
-                                CoreMatchers.hasItems("description1",
-                                        "description2")))
-                .andExpect(jsonPath("$.notices[0].links").exists())
+                                CoreMatchers.hasItems("Service subject to The Registry of the CNNIC.",
+                                        "Copyright (c) 2020 CNNIC.")))
+                /*.andExpect(jsonPath("$.notices[0].links").exists())
                 .andExpect(jsonPath("$.notices[0].links").isArray())
                 .andExpect(jsonPath("$.notices[0].links[0]").exists())
                 .andExpect(jsonPath("$.notices[0].links[0].value").exists())
@@ -198,7 +198,7 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
                 .andExpect(jsonPath("$.notices[0].links[0].type").exists())
                 .andExpect(
                         jsonPath("$.notices[0].links[0].type").value(
-                                "application/json"))
+                                "application/json"))*/
                 // links.
                 .andExpect(
                         jsonPath(

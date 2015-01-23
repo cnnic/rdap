@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Link;
@@ -62,7 +63,8 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
      * logger for record log.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(LinkUpdateDaoImpl.class);
+            .getLogger(LinkUpdateDaoImpl.class);    
+ 
 
     @Override
 	public Link save(Link model) {
@@ -102,7 +104,25 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
 			createLinkHreflang(linkDto, linkId);
 	    }
 	}
-
+	
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel) {
+		if (null == outerModel){
+			return;
+		}
+		List<Long> linkIds = super.findIdsByOuterIdAndType(outerModel,"LINK_ID","REL_LINK_OBJECT");		
+	    if (null != linkIds) {
+	    	String linkIdStr = StringUtils.join(linkIds, ",");
+	    	//delete link
+	    	//deleteLinks(linkIdStr,"RDAP_LINK");
+	    	super.delete(linkIdStr, "RDAP_LINK", "LINK_ID");
+	    	//delete link hreflang
+	    	super.delete(linkIdStr, "RDAP_LINK_HREFLANG", "LINK_ID");
+	    	//deleteLinks(linkIdStr,"RDAP_LINK_HREFLANG");
+	    	super.deleteRel(outerModel, "REL_LINK_OBJECT");
+	    }
+	    
+	}	
 	/**
 	 * create link hreflang.
 	 * @param link 
@@ -186,5 +206,5 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
 	public Long findIdByHandle(String handle) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}	
 }

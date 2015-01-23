@@ -39,4 +39,29 @@
 	<util:list id="remarkDescriptionExcessiveLoad">
 		<value>The object does not contain all data due to excessively heavy load on the server.</value>
 	</util:list>
+	<util:list id="notTruncatedNoticeList">      
+        <bean class="org.restfulwhois.rdap.common.model.Notice">
+            <property name="title" value="the notices for response"></property>
+            <property name="description" ref="noticeDescriptionForNotTruncated"></property>            
+            <property name="links" ref="linksForNotTruncatedNotice"></property>            
+        </bean>       
+    </util:list>
+    <util:list id="noticeDescriptionForNotTruncated">
+        <value>Service subject to The Registry of the CNNIC.</value>
+        <value>Copyright (c) 2020 CNNIC.</value>
+    </util:list>  
+    <util:list id="linksForNotTruncatedNotice">
+        <bean class="org.restfulwhois.rdap.common.model.Link">
+            <property name="value" value="http://rdap.cnnic.cn/links1"></property>
+            <property name="rel" value="self"></property>            
+            <property name="href" value="http://rdap.cnnic.cn/links1/href1"></property>
+            <property name="hreflang" ref="hreflangForLinksOfNotTruncatedNotice"></property>            
+            <property name="title" value="the first links title"></property>
+            <property name="media" value="screen"></property>
+            <property name="type" value="application/rdap+json"></property>
+        </bean>
+    </util:list>
+    <util:list id="hreflangForLinksOfNotTruncatedNotice">
+        <value>en</value>
+    </util:list>
 </beans>

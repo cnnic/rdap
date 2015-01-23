@@ -43,6 +43,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author zhanyq
@@ -50,22 +52,23 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  */
 public class LinkUpdateDaoTest extends BaseTest {
 
-	 private static final String TABLE_RDAP_LINK = "RDAP_LINK";
-	 private static final String TABLE_REL_LINK_OBJECT = "REL_LINK_OBJECT";
-	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
+	
 
 	    @Autowired
 	    private UpdateDao<Link, LinkDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
-	    @DatabaseTearDown("teardown.xml")   
+	    @DatabaseTearDown("teardown.xml")  
+	    @ExpectedDatabase(
+	            assertionMode = DatabaseAssertionMode.NON_STRICT,
+	            value = "classpath:/org/restfulwhois/rdap/dao/impl/link-update.xml")
 	    public void testcreateLink() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<LinkDto> linkList = createLinkList();
 	        updateDao.batchCreateAsInnerObjects(domain, linkList);
-	        assertCreate();
+	       
 	    }
 
 	    public static List<LinkDto> createLinkList() {
@@ -83,10 +86,20 @@ public class LinkUpdateDaoTest extends BaseTest {
 	    	link.setHreflang(hreflang);
 	    	linkList.add(link);
             return linkList;
+        }       
+        
+        @Test
+        @DatabaseSetup("link-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/link-empty.xml")
+        public
+                void testDeleteLink() throws Exception {
+            Domain domain = new Domain();
+            domain.setId(1L);
+            updateDao.deleteAsInnerObjects(domain);
+            
         }
 
-        public static void assertCreate() throws Exception {
-            assertTablesForUpdate("Link-update.xml", TABLE_RDAP_LINK,
-	        		TABLE_REL_LINK_OBJECT, TABLE_RDAP_LINK_HREFLANG);
-        }
 }

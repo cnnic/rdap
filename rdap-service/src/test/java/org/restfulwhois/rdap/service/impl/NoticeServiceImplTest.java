@@ -99,5 +99,14 @@ public class NoticeServiceImplTest extends BaseTest {
         assertNotNull(result);
         assertEquals(0, result.size());
     }
+    @Test
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_get_not_truncated_notice() {       
+        List<Notice> result =
+                noticeService.getAllNotTruncatedNotice();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(2, result.get(0).getDescription().size());
+    }
 
 }

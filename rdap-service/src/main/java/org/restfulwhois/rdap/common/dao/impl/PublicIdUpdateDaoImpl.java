@@ -103,6 +103,15 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId, PublicIdD
 	        createRelPublicId(outerModel, publicId);			
 	    }
 	}	
+	
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel) {
+		if (null == outerModel){
+			return;
+		}
+		super.deleteRel(outerModel,"REL_PUBLICID_REGISTRATION");		
+		//List<Long> publicIds = super.findIdsByOuterIdAndType(outerModel,"PUBLIC_ID","REL_PUBLICID_REGISTRATION");			    
+	}	
 	/**
 	 * 
 	 * @param outerObjectId
@@ -129,6 +138,7 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId, PublicIdD
 		        });
 		
 	}
+	
 	/**
 	 * @param model
 	 *        pubuliId object
@@ -185,5 +195,5 @@ public class PublicIdUpdateDaoImpl extends AbstractUpdateDao<PublicId, PublicIdD
 	public Long findIdByHandle(String handle) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}	
 }

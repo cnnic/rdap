@@ -51,7 +51,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain,DomainDto> {
+public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
     private static final String SQL_CREATE_DOMAIN =
             "INSERT INTO RDAP_DOMAIN"
                     + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"
@@ -61,7 +61,7 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain,DomainDto> {
                     + " SET HANDLE=?,LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
                     + " ,CUSTOM_PROPERTIES=?";
     private static final String SQL_DELETE_DOMAIN =
-            "DELETE FROM RDAP_DOMAIN where HANDLE=?";
+            "DELETE FROM RDAP_DOMAIN where DOMAIN_ID=?";
     /**
      * logger.
      */
@@ -113,9 +113,17 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain,DomainDto> {
     }
 
     @Override
-    public void delete(Domain model) {
-        // TODO Auto-generated method stub
-//        SQL_DELETE_DOMAIN
+    public void delete(final Domain model) {
+        jdbcTemplate.update(SQL_DELETE_DOMAIN, new PreparedStatementSetter() {
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setLong(1, model.getId());
+            }
+        });
+    }
+
+    @Override
+    public void deleteStatus(Domain model) {
+        deleteStatus(model, "RDAP_DOMAIN_STATUS", "DOMAIN_ID");
     }
 
     @Override

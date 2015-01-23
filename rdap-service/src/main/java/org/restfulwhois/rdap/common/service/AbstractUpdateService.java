@@ -92,10 +92,12 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     @Override
     public UpdateResponse execute(DTO dto) {
-        LOGGER.info("begin update dto:{}", dto);
+        LOGGER.debug("update dto:{}", dto);
         long queryStart = System.currentTimeMillis();
         ValidationResult validationResult = validate(dto);
         if (validationResult.hasError()) {
+            LOGGER.info("update dto error:{}", validationResult.getFirstError()
+                    .getCode());
             return handleError(dto, validationResult);
         }
         MODEL model = convertDtoToModel(dto);
@@ -103,7 +105,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         UpdateResponse response =
                 UpdateResponse.buildSuccessResponse(model.getHandle());
         long usedTime = System.currentTimeMillis() - queryStart;
-        LOGGER.info("end update, milliseconds:{}", usedTime);
+        LOGGER.debug("end update, milliseconds:{}", usedTime);
         return response;
     }
 
@@ -116,6 +118,9 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     protected void convertCustomProperties(DTO dto, MODEL model) {
         Map<String, String> customProperties = dto.getCustomProperties();
         model.setCustomProperties(customProperties);
+        if (null == customProperties || customProperties.isEmpty()) {
+            return;
+        }
         model.setCustomPropertiesJsonVal(JsonUtil
                 .serializeMap(customProperties));
     }
@@ -136,6 +141,14 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         UpdateValidateUtil.checkNotEmpty(value, fieldName, validationResult);
     }
 
+    protected void checkNotNull(Object value, String fieldName,
+            ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        UpdateValidateUtil.checkNotNull(value, fieldName, validationResult);
+    }
+
     protected void checkMaxLength(String value, int maxLength,
             String fieldName, ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -151,8 +164,17 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         checkMaxLength(value, maxLength, fieldName, validationResult);
     }
 
-    protected void checkMinMaxInt(int value, String fieldName,
+    protected void checkMinMaxInt(Integer value, String fieldName,
             ValidationResult validationResult) {
+        UpdateValidateUtil.checkMinMaxInt(value,
+                UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN, fieldName,
+                validationResult);
+    }
+
+    protected void checkNotNullAndMinMaxInt(Integer value, String fieldName,
+            ValidationResult validationResult) {
+        checkNotNull(value, fieldName, validationResult);
         UpdateValidateUtil.checkMinMaxInt(value,
                 UpdateValidateUtil.MIN_VAL_FOR_INT_COLUMN,
                 UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN, fieldName,
@@ -299,22 +321,27 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     }
 
     protected void saveEvents(List<EventDto> events, MODEL model) {
+        LOGGER.debug("save events...");
         eventDao.batchCreateAsInnerObjects(model, events);
     }
 
     protected void saveLinks(List<LinkDto> links, MODEL model) {
+        LOGGER.debug("save links...");
         linkDao.batchCreateAsInnerObjects(model, links);
     }
 
     protected void saveRemarks(List<RemarkDto> remarks, MODEL model) {
+        LOGGER.debug("save remarks...");
         remarkDao.batchCreateAsInnerObjects(model, remarks);
     }
 
     protected void savePublicIds(List<PublicIdDto> publicIds, MODEL model) {
+        LOGGER.debug("save publicIds...");
         publicIdDao.batchCreateAsInnerObjects(model, publicIds);
     }
 
     protected void saveEntities(MODEL model) {
+        LOGGER.debug("save entities...");
         entityDao.saveRel(model);
     }
 

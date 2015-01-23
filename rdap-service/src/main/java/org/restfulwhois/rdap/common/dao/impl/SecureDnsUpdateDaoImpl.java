@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.common.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -51,9 +52,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
+import ezvcard.util.StringUtils;
 
 
 
@@ -67,8 +71,7 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
      * logger for record log.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(SecureDnsUpdateDaoImpl.class);
-    
+            .getLogger(SecureDnsUpdateDaoImpl.class);    
     
     /**
      * KeyData update dao.
@@ -120,13 +123,37 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
 	    	Long secureDnsId = createSecureDns(model,outerModel.getId()); 
 	    	SecureDns secureDnsAsOuter = new SecureDns();
 	    	secureDnsAsOuter.setId(secureDnsId);
-	    	//create keyData	    	
+	    	//create KeyData	    	
 	    	keyDataUpdateDao.batchCreateAsInnerObjects(secureDnsAsOuter, model.getKeyData());	    	
 	    	//create DsData            
             dsDataUpdateDao.batchCreateAsInnerObjects(secureDnsAsOuter, model.getDsData());	    	
 	    }
 	}
 	
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel) {
+		if (null == outerModel) {
+			return;
+		}
+
+		List<Long> secureDnsIds = findIdsByOuterIdAndType(outerModel);
+	    if (null != secureDnsIds) {
+	    	String secureDnsIdStr = StringUtils.join(secureDnsIds, ",");
+	    	//delete SecureDns	    		
+	    	super.delete(secureDnsIdStr, "RDAP_SECUREDNS", "SECUREDNS_ID");
+	    	for(Long secureDnsId:secureDnsIds){
+	    		SecureDns secureDns = new SecureDns();
+	    		secureDns.setId(secureDnsId);
+	    		//delete KeyData
+		    	keyDataUpdateDao.deleteAsInnerObjects(secureDns);
+		    	//delete DsData
+		    	dsDataUpdateDao.deleteAsInnerObjects(secureDns); 	
+	    	}
+	    	
+	    }
+	
+	    
+	}	
 	
 	/**
 	 * @param model
@@ -185,4 +212,83 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
+		final String sql = "SELECT SECUREDNS_ID as ID from RDAP_SECUREDNS where DOMAIN_ID = ?";                
+        LOGGER.debug("check SECUREDNS_ID exist,sql:{}", sql);
+        List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setLong(1, outerModel.getId());                
+                return ps;
+            }
+        }, new RowMapper<Long>() {
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong("ID");
+            }
+        });
+        if (ids.size() > 0) {
+            return ids;
+        }
+        return null;
+    }
+	
+	/**
+	 * 
+	 * @param secureDnsIds
+	 * @param tableName
+	 */
+	/*public void deleteSecureDns(final String secureDnsIds, final String tableName, final String idColumnName) {
+		final String sql = String.format(SQL_DELETE_BY_ID, tableName, idColumnName);		
+		jdbcTemplate.update(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);               
+                ps.setString(1, secureDnsIds);
+                return ps;
+            }       
+		});
+		
+	}*/
+	/**
+	 * 
+	 * @param secureDnsId
+	 * @param modelType
+	 */
+	public void deleteRelSecureDnsDskey(final Long secureDnsId, final ModelType modelType) {
+		final String sql = "delete from REL_SECUREDNS_DSKEY where SECUREDNS_ID = ? and REL_DSKEY_TYPE= ?";		
+		jdbcTemplate.update(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);               
+                ps.setLong(1, secureDnsId);
+                ps.setString(2, modelType.getName());
+                return ps;
+            }       
+		});
+		
+	}
+	
+	public List<Long> findIdsByOuterIdAndType(final Long outerModelId,final ModelType modelType) {
+		final String sql = "SELECT REL_ID as ID from REL_SECUREDNS_DSKEY where SECUREDNS_ID = ? and REL_DSKEY_TYPE =?";                
+        LOGGER.debug("check SECUREDNS_ID exist,sql:{}", sql);
+        List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setLong(1, outerModelId);   
+                ps.setString(2,modelType.getName()); 
+                return ps;
+            }
+        }, new RowMapper<Long>() {
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong("ID");
+            }
+        });
+        if (ids.size() > 0) {
+            return ids;
+        }
+        return null;
+    }
 }

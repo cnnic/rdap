@@ -41,6 +41,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.IpDto;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
 import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
@@ -50,6 +51,7 @@ import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Nameserver;
+import org.restfulwhois.rdap.common.model.Network;
 import org.restfulwhois.rdap.common.model.SecureDns;
 import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
@@ -74,6 +76,8 @@ public abstract class DomainUpdateBaseServiceImpl extends
     private UpdateDao<SecureDns, SecureDnsDto> secureDnsUpdateDao;
     @Autowired
     private UpdateDao<Variants, VariantDto> variantUpdateDao;
+    @Autowired
+    protected UpdateDao<Network, IpDto> networkDao;
     /**
      * logger.
      */
@@ -92,8 +96,10 @@ public abstract class DomainUpdateBaseServiceImpl extends
     }
 
     protected void saveSecureDns(DomainDto dto, Domain domain) {
+        LOGGER.debug("save secureDns...");
         SecureDnsDto secureDnsDto = dto.getSecureDNS();
         if (null == secureDnsDto) {
+            LOGGER.debug("secureDns is empty.");
             return;
         }
         List<SecureDnsDto> secureDnsDtos = new ArrayList<SecureDnsDto>();
@@ -102,8 +108,10 @@ public abstract class DomainUpdateBaseServiceImpl extends
     }
 
     protected void saveVariants(DomainDto dto, Domain domain) {
+        LOGGER.debug("save variants...");
         List<VariantDto> variantDtos = dto.getVariants();
         if (null == variantDtos || variantDtos.isEmpty()) {
+            LOGGER.debug("variants is empty.");
             return;
         }
         variantUpdateDao.batchCreateAsInnerObjects(domain, variantDtos);
@@ -128,7 +136,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
         if (StringUtils.isBlank(dto.getNetworkHandle())) {
             return;
         }
-        Long networkId = dao.findIdByHandle(dto.getNetworkHandle());
+        Long networkId = networkDao.findIdByHandle(dto.getNetworkHandle());
         if (null != networkId) {
             domain.setNetworkId(networkId);
         }
@@ -188,16 +196,17 @@ public abstract class DomainUpdateBaseServiceImpl extends
             return;
         }
         for (KeyDataDto keyData : keyDatas) {
-            checkMinMaxInt(keyData.getFlags(), "keyData.flags",
+            checkNotNullAndMinMaxInt(keyData.getFlags(), "keyData.flags",
                     validationResult);
-            checkMinMaxInt(keyData.getProtocol(), "keyData.protocol",
+            checkNotNullAndMinMaxInt(keyData.getProtocol(), "keyData.protocol",
                     validationResult);
-            checkNotEmptyAndMaxLength(keyData.getPublicKey(),
+            checkMaxLength(keyData.getPublicKey(),
                     UpdateValidateUtil.MAX_LENGTH_2048, "keyData.publicKey",
                     validationResult);
-            checkMinMaxInt(keyData.getAlgorithm(), "keyData.algorithm",
+            checkNotNullAndMinMaxInt(keyData.getAlgorithm(), "keyData.algorithm",
                     validationResult);
             checkEvents(keyData.getEvents(), validationResult);
+            checkLinks(keyData.getLinks(), validationResult);
         }
     }
 
@@ -208,9 +217,17 @@ public abstract class DomainUpdateBaseServiceImpl extends
             return;
         }
         for (DsDataDto dsData : dsDatas) {
-            checkMinMaxInt(dsData.getKeyTag(), "secureDns.maxSigLife",
+            checkNotNullAndMinMaxInt(dsData.getKeyTag(), "dsData.keyTag",
+                    validationResult);
+            checkNotNullAndMinMaxInt(dsData.getAlgorithm(), "dsData.algorithm",
+                    validationResult);
+            checkNotNullAndMinMaxInt(dsData.getDigestType(), "dsData.digestType",
+                    validationResult);
+            checkNotEmptyAndMaxLength(dsData.getDigest(),
+                    UpdateValidateUtil.MAX_LENGTH_2048, "dsData.digest",
                     validationResult);
             checkEvents(dsData.getEvents(), validationResult);
+            checkLinks(dsData.getLinks(), validationResult);
         }
     }
 
