@@ -120,8 +120,7 @@ public class DomainUpdateController {
      * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
-    @RequestMapping(value = { "/u/domain/{handle}" },
-            method = RequestMethod.DELETE)
+    @RequestMapping(value = { "/{handle}" }, method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity delete(@PathVariable String handle,
             HttpServletRequest request) {

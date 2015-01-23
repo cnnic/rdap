@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.core.domain.service.impl;
 
 import org.restfulwhois.rdap.common.dto.DomainDto;
-import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
@@ -58,9 +57,9 @@ public class DomainCreateServiceImpl extends DomainUpdateBaseServiceImpl {
     @Override
     protected void execute(Domain domain) {
         LOGGER.debug("save domain...");
-        dao.save(domain);
+        getDao().save(domain);
         LOGGER.debug("save status...");
-        dao.saveStatus(domain);
+        getDao().saveStatus(domain);
         DomainDto dto = (DomainDto) domain.getDto();
         saveSecureDns(dto, domain);
         saveVariants(dto, domain);

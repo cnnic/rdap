@@ -260,4 +260,21 @@ public abstract class DomainUpdateBaseServiceImpl extends
             }
         }
     }
+
+    public UpdateDao<Nameserver, NameserverDto> getNameserverDao() {
+        return nameserverDao;
+    }
+
+    public UpdateDao<SecureDns, SecureDnsDto> getSecureDnsUpdateDao() {
+        return secureDnsUpdateDao;
+    }
+
+    public UpdateDao<Variants, VariantDto> getVariantUpdateDao() {
+        return variantUpdateDao;
+    }
+
+    public UpdateDao<Network, IpDto> getNetworkDao() {
+        return networkDao;
+    }
+    
 }

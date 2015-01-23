@@ -32,7 +32,6 @@ package org.restfulwhois.rdap.core.domain.service.impl;
 
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +44,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service("domainDeleteServiceImpl")
-public class DomainDeleteServiceImpl extends
-        AbstractUpdateService<DomainDto, Domain> {
+public class DomainDeleteServiceImpl extends DomainUpdateBaseServiceImpl {
 
     /**
      * logger.
@@ -56,15 +54,24 @@ public class DomainDeleteServiceImpl extends
 
     @Override
     protected void execute(Domain domain) {
-        dao.delete(domain);
-        dao.deleteStatus(domain);
+        getDao().delete(domain);
+        getDao().deleteStatus(domain);
+        getSecureDnsUpdateDao().deleteAsInnerObjects(domain);
+        getVariantUpdateDao().deleteAsInnerObjects(domain);
+        getEntityDao().deleteRel(domain);
+        getNameserverDao().deleteRel(domain);
+        getPublicIdDao().deleteAsInnerObjects(domain);
+        getRemarkDao().deleteAsInnerObjects(domain);
+        getLinkDao().deleteAsInnerObjects(domain);
+        getEventDao().deleteAsInnerObjects(domain);
     }
 
     @Override
     protected Domain convertDtoToModel(DomainDto dto) {
         Domain domain = new Domain();
-        Long id = dao.findIdByHandle(dto.getHandle());
+        Long id = getDao().findIdByHandle(dto.getHandle());
         domain.setId(id);
+        domain.setHandle(dto.getHandle());
         return domain;
     }
 
