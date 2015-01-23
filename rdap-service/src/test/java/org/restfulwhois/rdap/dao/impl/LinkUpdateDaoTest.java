@@ -52,17 +52,16 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
  */
 public class LinkUpdateDaoTest extends BaseTest {
 
-	
 
-	    @Autowired
-	    private UpdateDao<Link, LinkDto> updateDao;
+        @Autowired
+       private UpdateDao<Link, LinkDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")  
 	    @ExpectedDatabase(
-	            assertionMode = DatabaseAssertionMode.NON_STRICT,
-	            value = "classpath:/org/restfulwhois/rdap/dao/impl/link-update.xml")
+	         assertionMode = DatabaseAssertionMode.NON_STRICT,
+	         value = "classpath:/org/restfulwhois/rdap/dao/impl/link-update.xml")
 	    public void testcreateLink() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
@@ -92,13 +91,27 @@ public class LinkUpdateDaoTest extends BaseTest {
         @DatabaseSetup("link-delete.xml")
         @DatabaseTearDown("teardown.xml")
         @ExpectedDatabase(
-                assertionMode = DatabaseAssertionMode.NON_STRICT,
-                value = "classpath:/org/restfulwhois/rdap/dao/impl/link-empty.xml")
+             assertionMode = DatabaseAssertionMode.NON_STRICT,
+             value = "classpath:/org/restfulwhois/rdap/dao/impl/link-empty.xml")
         public
                 void testDeleteLink() throws Exception {
+        	Domain domain = new Domain();
+	    	domain.setId(1L);	    	
+            updateDao.deleteAsInnerObjects(domain);
+            
+        }
+        
+        @Test
+        @DatabaseSetup("link-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+             assertionMode = DatabaseAssertionMode.NON_STRICT,
+             value = "classpath:/org/restfulwhois/rdap/dao/impl/link-update.xml")
+        public void testUpdateLink() throws Exception {
             Domain domain = new Domain();
             domain.setId(1L);
-            updateDao.deleteAsInnerObjects(domain);
+            List<LinkDto> linkList = createLinkList();
+            updateDao.updateAsInnerObjects(domain, linkList);
             
         }
 

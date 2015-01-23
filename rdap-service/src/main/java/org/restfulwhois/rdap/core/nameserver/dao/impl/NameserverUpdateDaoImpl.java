@@ -54,7 +54,8 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class NameserverUpdateDaoImpl extends AbstractUpdateDao<Nameserver, NameserverDto> {
+public class NameserverUpdateDaoImpl extends 
+               AbstractUpdateDao<Nameserver, NameserverDto> {
    /**
      * logger for record log.
      */
@@ -62,76 +63,80 @@ public class NameserverUpdateDaoImpl extends AbstractUpdateDao<Nameserver, Names
             .getLogger(NameserverUpdateDaoImpl.class);
 
     @Override
-	public Nameserver save(Nameserver model) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Nameserver save(Nameserver model) {
+         return null;
+    }
 
-	@Override
-	public void update(Nameserver model) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void update(Nameserver model) {
+    }
 
-	@Override
-	public void delete(Nameserver model) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void delete(Nameserver model) {
+    }
    
-	@Override
-	public void saveRel(BaseModel outerModel) {
-		if (null == outerModel || null == outerModel.getDto()) {
-			return;
-		}
-		BaseDto dto = outerModel.getDto();
-		if(!(dto instanceof DomainDto)){
-		    return;
-		}
-		DomainDto domainDto = (DomainDto) dto;
-		List<HandleDto> handles= domainDto.getNameservers();
-		if (null == handles  || handles.size() ==0) {
-			return;
-		}
-		for (HandleDto handleDto:handles){
-			Long nsId = this.findIdByHandle(handleDto.getHandle());
-			if(null != nsId){
-				createRelDomainNameserver(outerModel.getId(), nsId);
-			}
-		}	
-	}
-	
-	@Override
-	public void deleteRel(BaseModel outerModel) {
-		if (null == outerModel || null == outerModel.getId()) {
-			return;
-		}		
-		super.delete(String.valueOf(outerModel.getId()), "REL_DOMAIN_NAMESERVER", "DOMAIN_ID");
-	}
-	
+    @Override
+    public void saveRel(BaseModel outerModel) {
+        if (null == outerModel || null == outerModel.getDto()) {
+               return;
+        }
+        BaseDto dto = outerModel.getDto();
+        if (!(dto instanceof DomainDto)) {
+               return;
+        }
+        DomainDto domainDto = (DomainDto) dto;
+        List<HandleDto> handles = domainDto.getNameservers();
+        if (null == handles  || handles.size() == 0) {
+             return;
+        }
+        for (HandleDto handleDto:handles) {
+            Long nsId = this.findIdByHandle(handleDto.getHandle());
+            if (null != nsId) {
+                createRelDomainNameserver(outerModel.getId(), nsId);
+            }
+        }       
+    }
+       
+    @Override
+    public void deleteRel(BaseModel outerModel) {
+         if (null == outerModel || null == outerModel.getId()) {
+             return;
+         }              
+         super.delete(String.valueOf(outerModel.getId()),
+                            "REL_DOMAIN_NAMESERVER", "DOMAIN_ID");
+    }
+       
+    @Override
+    public void updateRel(BaseModel outerModel) {
+        if (null == outerModel || null == outerModel.getId()
+                    || null == outerModel.getDto()) {
+               return;
+        }
+        deleteRel(outerModel);
+        saveRel(outerModel);
+    }
     /**
      * 
-     * @param outerModel 
-     *       object of outer object
-     * @param entityHandleDto
-     *        entityHandle
-     * @param entityId
-     *        entity id
+     * @param outerModelId 
+     *       object id of outer object  
+     * @param nsId
+     *        ns id
      */
-    private void createRelDomainNameserver(final Long outerModelId, final Long nsId) {	    	
-    	final String sql = "insert into REL_DOMAIN_NAMESERVER (DOMAIN_ID,NAMESERVER_ID)"
-			      +  " values (?,?)"; 	   
-    	jdbcTemplate.update(new PreparedStatementCreator() {
-	           public PreparedStatement createPreparedStatement(Connection connection) 
-	        			throws SQLException {           
-	            PreparedStatement ps = connection.prepareStatement(
-	            		sql);
-	            ps.setLong(1, outerModelId);	           
-	            ps.setLong(2, nsId);
-				return ps;
-				}				
-	   });		
-	}
+    private void createRelDomainNameserver(final Long outerModelId,
+                  final Long nsId) {                  
+           final String sql = "insert into REL_DOMAIN_NAMESERVER (DOMAIN_ID,"
+                           +  "NAMESERVER_ID) values (?,?)";           
+           jdbcTemplate.update(new PreparedStatementCreator() {
+                  public PreparedStatement createPreparedStatement(
+                                Connection connection) throws SQLException {
+                   PreparedStatement ps = connection.prepareStatement(
+                                 sql);
+                   ps.setLong(1, outerModelId);                  
+                   ps.setLong(2, nsId);
+                            return ps;
+                  }                            
+          });              
+     }
 
     @Override
     public Long findIdByHandle(String handle) {

@@ -75,7 +75,8 @@ public class NameserverUpdateDaoTest extends BaseTest {
            domainDto.setNameservers(handleList);
            domain.setDto(domainDto);
            nsUpdateDao.saveRel(domain);
-	        super.assertTablesForUpdate("rel-domain-nameserver.xml", TABLE_REL_DOMAIN_NAMESERVER);
+	       super.assertTablesForUpdate("rel-domain-nameserver.xml", 
+	        		TABLE_REL_DOMAIN_NAMESERVER);
 	    }
 	    
 	    
@@ -83,10 +84,32 @@ public class NameserverUpdateDaoTest extends BaseTest {
 	    @DatabaseSetup("rel-domain-nameserver-delete.xml")
 	    @DatabaseTearDown("teardown.xml")	    
 	    public void testDeleteRel() throws Exception {
+	       Domain domain = new Domain();
+	       domain.setId(1L);
+	       nsUpdateDao.deleteRel(domain);
+           super.assertTablesForUpdate("teardown.xml", "REL_DOMAIN_NAMESERVER");
+	    }
+	    
+	    @Test
+	    @DatabaseSetup("rel-domain-nameserver-update-init.xml")
+	    @DatabaseTearDown("teardown.xml")	    
+	    public void testUpdateRel() throws Exception {
 	        Domain domain = new Domain();
 	        domain.setId(1L);
-	        nsUpdateDao.deleteRel(domain);
-	        super.assertTablesForUpdate("teardown.xml","REL_DOMAIN_NAMESERVER");
+	        
+	    	DomainDto domainDto = new DomainDto();
+	    	List<HandleDto> handleList = new ArrayList<HandleDto>();
+	    	HandleDto handle = new HandleDto();
+	    	handle.setHandle("h1");
+	    	handleList.add(handle);
+	    	handle = new HandleDto();
+	    	handle.setHandle("h2");
+	    	handleList.add(handle);
+           domainDto.setNameservers(handleList);
+           domain.setDto(domainDto);
+           nsUpdateDao.updateRel(domain);
+	        super.assertTablesForUpdate("rel-domain-nameserver.xml", 
+	        		TABLE_REL_DOMAIN_NAMESERVER);
 	    }
 
 }

@@ -140,9 +140,20 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
 	    }
 	
 	    
-	}	
-	/**
-	 * create Event
+	}
+	
+	@Override
+    public void updateAsInnerObjects(BaseModel outerModel,
+             List<EventDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        deleteAsInnerObjects(outerModel);
+        batchCreateAsInnerObjects(outerModel, models);
+    }
+	
+   /**
+	 * create Event.
 	 * @param model
 	 *        Event object
 	 * @return eventId.

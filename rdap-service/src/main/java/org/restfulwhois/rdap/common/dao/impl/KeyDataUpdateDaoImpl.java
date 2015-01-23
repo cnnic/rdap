@@ -156,12 +156,18 @@ public class KeyDataUpdateDaoImpl extends
 	    		linkUpdateDao.deleteAsInnerObjects(keyData);
 		    	eventUpdateDao.deleteAsInnerObjects(keyData);
 	    	}
-	    	
-	    	
-	    	
 	    }
-	   
 	}	
+	
+	@Override
+    public void updateAsInnerObjects(BaseModel outerModel,
+             List<KeyDataDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        deleteAsInnerObjects(outerModel);
+        batchCreateAsInnerObjects(outerModel, models);
+    }
 	
 	/**
 	 * @param model
