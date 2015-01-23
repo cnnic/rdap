@@ -85,9 +85,9 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     /**
      * left join domain status SQL.
      */
-    public static final String SQL_LEFT_JOIN_DOMAIN_STATUS =
-            " left outer join RDAP_DOMAIN_STATUS status "
-                    + " on domain.DOMAIN_ID = status.DOMAIN_ID ";
+    public static final String SQL_QUERY_DOMAIN_STATUS =
+    		"select * from RDAP_DOMAIN_STATUS status"
+        			+ " where status.DOMAIN_ID = ?";
     /**
      * logger.
      */
@@ -171,12 +171,14 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             Domain domain = queryArpaWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             LOGGER.debug("query, domain:" + domain);
+            queryDomainStatus(domain);
             return domain;
         } else {
             // LDH domain for DNR
             Domain domain = queryDomainWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             LOGGER.debug("query, domain:" + domain);
+            queryDomainStatus(domain);
             return domain;
         }
     }
@@ -284,7 +286,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                         + " from RDAP_IP ip "
                         + " inner join RDAP_DOMAIN domain "
                         + " on domain.NETWORK_ID = ip.IP_ID "
-                        + SQL_LEFT_JOIN_DOMAIN_STATUS
                         + " where ip.STARTADDRESS <= ? and ip.ENDADDRESS >= ?"
                         + " and domain.TYPE = 'arpa' and ip.version = ? "
                         + " && LENGTH(HEX(STARTADDRESS))=? && LENGTH(HEX(ENDADDRESS))=? "
@@ -323,7 +324,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         LOGGER.debug("query LDH_NAME with punyName:{}", punyName);
         final String sql =
                 "select * from RDAP_DOMAIN domain "
-                        + SQL_LEFT_JOIN_DOMAIN_STATUS + " where LDH_NAME= ?  ";
+                        + " where LDH_NAME= ?  ";
         List<Domain> result =
                 jdbcTemplate.query(new PreparedStatementCreator() {
                     @Override
@@ -340,6 +341,25 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         return result.get(0);
     }
 
+    private void queryDomainStatus(Domain domain){
+    	final long domainId = domain.getId();
+    	List<String> result = 
+    		jdbcTemplate.query(new PreparedStatementCreator() {
+				@Override
+				public PreparedStatement createPreparedStatement(Connection connection)
+						throws SQLException {
+					PreparedStatement ps = 
+							connection.prepareStatement(SQL_QUERY_DOMAIN_STATUS);
+					ps.setLong(1, domainId);
+					return ps;
+				}
+			}, new StatusResultSetExtractor());
+    	if (null != result && result.size() != 0) {
+    		domain.setStatus(result);
+        }
+    }
+    
+    
     /**
      * extract domain from ResultSet.
      * 
@@ -392,4 +412,25 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
 
     }
 
+    /**
+     * Status ResultSetExtractor, extract data from ResultSet.
+     * 
+     * @author weijunkai
+     * 
+     */
+    class StatusResultSetExtractor implements ResultSetExtractor<List<String>> {
+        @Override
+        public List<String> extractData(ResultSet rs) throws SQLException {
+            List<String> result = new ArrayList<String>();
+
+            while (rs.next()) {
+                String status = rs.getString("STATUS");
+                if (!result.contains(status)) {
+                    result.add(status);
+                }
+            }
+            return result;
+        }
+    }
+    
 }
