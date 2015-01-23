@@ -30,7 +30,7 @@
  */
 package org.restfulwhois.rdap.controller;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -126,6 +126,72 @@ public class DomainCreateControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(domain.getHandle()));
+    }
+
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_ok_with_not_empty_custom_properties() throws Exception {
+        DomainDto domain = generateDomainDto();
+        String content = JsonHelper.serialize(domain);
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value(domain.getHandle()));
+        List<Map<?, ?>> resultList =
+                getTableDataForSql("RDAP_DOMAIN",
+                        "select CUSTOM_PROPERTIES from RDAP_DOMAIN where HANDLE='h1'");
+        assertTrue(resultList.size() > 0);
+        assertEquals(
+                "{\"customKey1\":\"customValue1\",\"customKey2\":\"customValue2\"}",
+                resultList.get(0).get("CUSTOM_PROPERTIES"));
+    }
+
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_ok_with_empty_custom_properties() throws Exception {
+        DomainDto domain = new DomainDto();
+        domain.setHandle("h1");
+        domain.setLdhName("cnnic.cn");
+        domain.setType(DomainType.DNR.getName());
+        domain.setCustomProperties(new HashMap<String, String>());
+        String content = JsonHelper.serialize(domain);
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value(domain.getHandle()));
+        List<Map<?, ?>> resultList =
+                getTableDataForSql("RDAP_DOMAIN",
+                        "select CUSTOM_PROPERTIES from RDAP_DOMAIN where HANDLE='h1'");
+        assertTrue(resultList.size() > 0);
+        assertNull(resultList.get(0).get("CUSTOM_PROPERTIES"));
+    }
+
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_ok_with_null_custom_properties() throws Exception {
+        DomainDto domain = new DomainDto();
+        domain.setHandle("h1");
+        domain.setLdhName("cnnic.cn");
+        domain.setType(DomainType.DNR.getName());
+        String content = JsonHelper.serialize(domain);
+        mockMvc.perform(
+                post(URI_DOMAIN_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.handle").value(domain.getHandle()));
+        List<Map<?, ?>> resultList =
+                getTableDataForSql("RDAP_DOMAIN",
+                        "select CUSTOM_PROPERTIES from RDAP_DOMAIN where HANDLE='h1'");
+        assertTrue(resultList.size() > 0);
+        assertNull(resultList.get(0).get("CUSTOM_PROPERTIES"));
     }
 
     @Test
