@@ -77,25 +77,22 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
 	}
 	/**
 	 * 
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param outerModelType
-	 *        model type of outer object
-	 * @param linkId
-	 *        linkId
+	 * @param outerModel
+	 *         outer object	 
 	 */
 	public void saveRel(BaseModel outerModel) {
 		if (null == outerModel || null == outerModel.getDto()) {
 			return;
 		}
-		List<EntityHandleDto> entityHandles= outerModel.getDto().getEntities();
-		if(null == entityHandles  || entityHandles.size() ==0){
+		List<EntityHandleDto> entityHandles = 
+				outerModel.getDto().getEntities();
+		if (null == entityHandles  || entityHandles.size() == 0) {
 			return;
 		}
-		for (EntityHandleDto entityHandleDto:entityHandles){
-			Long entityId = this.findIdByHandle(entityHandleDto.getHandle());
-			if(null != entityId){
-				createRelEntity(outerModel,entityHandleDto, entityId);
+		for (EntityHandleDto entityHandleDto:entityHandles) {
+            Long entityId = this.findIdByHandle(entityHandleDto.getHandle());
+			if (null != entityId) {
+                 createRelEntity(outerModel, entityHandleDto, entityId);
 			}
 		}	
 	}
@@ -107,7 +104,15 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
 		}		
 		super.deleteRel(outerModel, "REL_ENTITY_REGISTRATION");
 	}
-	
+	@Override
+	public void updateRel(BaseModel outerModel) {
+		if (null == outerModel || null == outerModel.getId()
+				|| null == outerModel.getDto()) {
+			return;
+		}
+		deleteRel(outerModel);
+		saveRel(outerModel);
+	}
     /**
      * 
      * @param outerModel

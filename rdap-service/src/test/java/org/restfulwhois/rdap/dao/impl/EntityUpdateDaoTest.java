@@ -51,7 +51,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * 
  */
 public class EntityUpdateDaoTest extends BaseTest {
-	
 	 private static final String TABLE_REL_ENTITY_REGISTRATION = "REL_ENTITY_REGISTRATION";
 
 	 @Autowired
@@ -59,13 +58,14 @@ public class EntityUpdateDaoTest extends BaseTest {
 
 	    @Test
 	   // @DatabaseSetup("teardown.xml")
-	    @DatabaseSetup("rel-entity-update-init.xml")
+	    @DatabaseSetup("rel-entity-create-init.xml")
 	    @DatabaseTearDown("teardown.xml")   
 	    public void testcreateRel() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	DomainDto domainDto = new DomainDto();
-	    	List<EntityHandleDto> entityHandleList = new ArrayList<EntityHandleDto>();
+	    	List<EntityHandleDto> entityHandleList = 
+	    			new ArrayList<EntityHandleDto>();
 	    	EntityHandleDto entityHandle = new EntityHandleDto();
 	    	entityHandle.setHandle("h1");
 	    	List<String> roles = new ArrayList<String>();
@@ -77,16 +77,41 @@ public class EntityUpdateDaoTest extends BaseTest {
             domainDto.setEntities(entityHandleList);
             domain.setDto(domainDto);
             updateDao.saveRel(domain);
-	        super.assertTablesForUpdate("rel-entity-update.xml", TABLE_REL_ENTITY_REGISTRATION);
+	        super.assertTablesForUpdate("rel-entity-update.xml", 
+	        		TABLE_REL_ENTITY_REGISTRATION);
 	    }
 	    
 	    @Test
 	    @DatabaseSetup("rel-entity-delete.xml")
 	    @DatabaseTearDown("teardown.xml")	    
 	    public void testDeleteRel() throws Exception {
+	      Domain domain = new Domain();
+	      domain.setId(1L);
+	      updateDao.deleteRel(domain);
+          super.assertTablesForUpdate("teardown.xml","REL_ENTITY_REGISTRATION");
+	    }
+	    
+	    @Test
+	    @DatabaseSetup("rel-entity-update-init.xml")
+	    @DatabaseTearDown("teardown.xml")	    
+	    public void testUpdateRel() throws Exception {	       
 	        Domain domain = new Domain();
-	        domain.setId(1L);
-	        updateDao.deleteRel(domain);
-	        super.assertTablesForUpdate("teardown.xml","REL_ENTITY_REGISTRATION");
+	    	domain.setId(1L);
+	    	DomainDto domainDto = new DomainDto();
+	    	List<EntityHandleDto> entityHandleList = 
+	    			new ArrayList<EntityHandleDto>();
+	    	EntityHandleDto entityHandle = new EntityHandleDto();
+	    	entityHandle.setHandle("h1");
+	    	List<String> roles = new ArrayList<String>();
+	    	roles.add("registrant");
+	    	roles.add("administrative");
+	    	
+	    	entityHandle.setRoles(roles);
+	    	entityHandleList.add(entityHandle);
+            domainDto.setEntities(entityHandleList);
+            domain.setDto(domainDto);
+            updateDao.updateRel(domain);
+	        super.assertTablesForUpdate("rel-entity-update.xml", 
+	        		TABLE_REL_ENTITY_REGISTRATION);
 	    }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- ASCII ns -->
+	<RDAP_NAMESERVER NAMESERVER_ID='1' HANDLE='h1'
+		LDH_NAME='ns.cnnic.cn' UNICODE_NAME='ns.cnnic.cn' PORT43='port43'
+		LANG='en' CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />	
+	<RDAP_NAMESERVER NAMESERVER_ID='2' HANDLE='h2'
+        LDH_NAME='ns.cnnic2.cn' UNICODE_NAME='ns.cnnic2.cn' PORT43='port43'
+        LANG='en' />
+     <REL_DOMAIN_NAMESERVER REL_DOMAIN_NS_ID='111'
+        DOMAIN_ID='1' NAMESERVER_ID='1' />
+    <REL_DOMAIN_NAMESERVER REL_DOMAIN_NS_ID='112'
+        DOMAIN_ID='1' NAMESERVER_ID='2' />
+</dataset>

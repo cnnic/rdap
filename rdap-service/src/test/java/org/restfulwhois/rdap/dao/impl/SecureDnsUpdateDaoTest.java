@@ -63,13 +63,16 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
-	    @DatabaseTearDown("teardown.xml")   
+	    @DatabaseTearDown("teardown.xml") 
+	    @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/secureDns-update.xml")
 	    public void testcreateSecureDns() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<SecureDnsDto> secureDnsList = createSecureDns();
 	        updateDao.batchCreateAsInnerObjects(domain, secureDnsList);
-	        assertTable();
+	        //assertTable();
 	    }
 
 	    public static void assertTable() throws Exception {
@@ -111,11 +114,24 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
         @ExpectedDatabase(
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 value = "classpath:/org/restfulwhois/rdap/dao/impl/secureDns-empty.xml")
-        public
-                void testDeleteSecureDns() throws Exception {
+        public void testDeleteSecureDns() throws Exception {
             Domain domain = new Domain();
             domain.setId(1L);
             updateDao.deleteAsInnerObjects(domain);
+            
+        }
+        
+        @Test
+        @DatabaseSetup("secureDns-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/secureDns-update.xml")
+        public void testUpdateSecureDns() throws Exception {
+        	Domain domain = new Domain();
+	    	domain.setId(1L);
+	    	List<SecureDnsDto> secureDnsList = createSecureDns();
+            updateDao.updateAsInnerObjects(domain, secureDnsList);
             
         }
 }

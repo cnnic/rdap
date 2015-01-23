@@ -63,18 +63,23 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	    @ExpectedDatabase(
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 value = "classpath:/org/restfulwhois/rdap/dao/impl/dsData-update.xml")
-	    public void testcreateDsData() throws Exception {
-	    	Domain domain = new Domain();
-	    	domain.setId(1L);
-	    	List<DsDataDto> dsDataList = new ArrayList<DsDataDto>();	    	
+	    public void testcreateDsData() throws Exception {	    	
+	    	SecureDns secureDns = new SecureDns();
+	        secureDns.setId(1L);
+	    	List<DsDataDto> dsDataList = new ArrayList<DsDataDto>();
 	    	DsDataDto dsData = new DsDataDto();
 	    	dsData.setAlgorithm(1);
 	    	dsData.setDigest("1-ds-dt-200-50");
 	    	dsData.setDigestType(1);
-	    	dsData.setKeyTag(1);
-	    	
-	    	
+	    	dsData.setKeyTag(1);	    	
 	    	//link
+	    	List<LinkDto> linkList = createLinkList();	    	
+	    	dsData.setLinks(linkList);
+	    
+	    	dsDataList.add(dsData);
+	        updateDao.batchCreateAsInnerObjects(secureDns, dsDataList);
+	    }
+	    public static List<LinkDto> createLinkList() {
 	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
 	    	List<String> hreflang = new ArrayList<String>();
 	    	hreflang.add("en");
@@ -88,10 +93,7 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	    	link.setValue("http://sina.com.cn");
 	    	link.setHreflang(hreflang);
 	    	linkList.add(link);
-	    	dsData.setLinks(linkList);
-	    
-	    	dsDataList.add(dsData);
-	        updateDao.batchCreateAsInnerObjects(domain, dsDataList);	       
+	    	return linkList;
 	    }
 	    
 	    @Test
@@ -102,8 +104,31 @@ public class DsDataUpdateDaoTest extends BaseTest {
                 value = "classpath:/org/restfulwhois/rdap/dao/impl/dsData-empty.xml")
         public void testDeleteDsData() throws Exception {
 	    	 SecureDns secureDns = new SecureDns();
-	          secureDns.setId(1L);
+	         secureDns.setId(1L);
             updateDao.deleteAsInnerObjects(secureDns);
+            
+        }
+	    
+	    @Test
+        @DatabaseSetup("dsData-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+             assertionMode = DatabaseAssertionMode.NON_STRICT,
+             value = "classpath:/org/restfulwhois/rdap/dao/impl/dsData-update.xml")
+        public void testUpdateDsData() throws Exception {
+	    	SecureDns secureDns = new SecureDns();
+	        secureDns.setId(1L);
+	    	List<DsDataDto> dsDataList = new ArrayList<DsDataDto>();
+	    	DsDataDto dsData = new DsDataDto();
+	    	dsData.setAlgorithm(1);
+	    	dsData.setDigest("1-ds-dt-200-50");
+	    	dsData.setDigestType(1);
+	    	dsData.setKeyTag(1);	    	
+	    	//link
+	    	List<LinkDto> linkList = createLinkList();	    	
+	    	dsData.setLinks(linkList);
+	    	dsDataList.add(dsData);
+            updateDao.updateAsInnerObjects(secureDns, dsDataList);
             
         }
 }

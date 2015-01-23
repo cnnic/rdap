@@ -133,6 +133,17 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
+    
+    @Override
+    public void updateRel(BaseModel outerModel) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
+    @Override
+    public void updateAsInnerObjects(BaseModel outerModel, List<DTO> models) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
 
     protected void saveStatus(final T model, final List<String> statusList,
             String tableName, String outerModelIdColumnName) {
@@ -176,8 +187,8 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-    protected List<Long> findIdsByOuterIdAndType(final BaseModel outerModel,String idColumnName,
-            String tableName) {
+    protected List<Long> findIdsByOuterIdAndType(final BaseModel outerModel,
+    		String idColumnName, String tableName) {
 		 final String sql =
 	                String.format(TPL_FINDIDS_BY_OUTERIDANDTYPE, idColumnName, tableName);
 	        LOGGER.debug("check ids exist,sql:{}", sql);

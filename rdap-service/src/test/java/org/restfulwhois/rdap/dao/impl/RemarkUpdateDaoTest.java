@@ -79,19 +79,7 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	    	remark.setTitle("域名测试-200-50-remark2");
 	    	remark.setDescription(description);	
 	    	//link
-	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
-	    	List<String> hreflang = new ArrayList<String>();
-	    	hreflang.add("en");
-	    	hreflang.add("zh");
-	    	LinkDto link = new LinkDto();
-	    	link.setHref("http://sina.com.cn");
-	    	link.setMedia("screen");
-	    	link.setRel("up");
-	    	link.setTitle("little title");
-	    	link.setType("application/rdap+json");
-	    	link.setValue("http://sina.com.cn");
-	    	link.setHreflang(hreflang);
-	    	linkList.add(link);
+	    	List<LinkDto> linkList = LinkUpdateDaoTest.createLinkList();
 	    	remark.setLinks(linkList);
 	    	remarkList.add(remark);
             return remarkList;
@@ -107,6 +95,20 @@ public class RemarkUpdateDaoTest extends BaseTest {
             Domain domain = new Domain();
             domain.setId(1L);
             updateDao.deleteAsInnerObjects(domain);
+            
+        }
+        
+        @Test
+        @DatabaseSetup("remark-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/remark-update.xml")
+        public void testUpdateRemark() throws Exception {
+        	Domain domain = new Domain();
+	    	domain.setId(1L);
+	    	List<RemarkDto> remarkList = createRemarkList();
+            updateDao.updateAsInnerObjects(domain, remarkList);
             
         }
 

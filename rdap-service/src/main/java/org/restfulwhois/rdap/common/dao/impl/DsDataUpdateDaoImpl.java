@@ -63,7 +63,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
+public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData, DsDataDto> {
    /**
      * logger for record log.
      */
@@ -111,43 +111,47 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
 	/**
 	 * batch create DsData.
 	 * 
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param outerModelType
-	 *        model type of outer object
+	 * @param outerModel
+	 *         outer object	 
 	 * @param models 
 	 *        DsData of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel, List<DsDataDto> models) {
-		if(null == models || models.size() == 0){
+	public void batchCreateAsInnerObjects(BaseModel outerModel,
+			List<DsDataDto> models) {
+		if (null == models || models.size() == 0){
 			return;
 		}
 		for (DsDataDto model: models) {
 	    	Long dsDataId = createDsData(model); 	    	
-	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), ModelType.DSDATA, dsDataId);
+	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(),
+	    			ModelType.DSDATA, dsDataId);
 	    	DsData dsDataAsOuter = new DsData();
 	    	dsDataAsOuter.setId(dsDataId);	    	
 	    	//create link	    		    		
-		    linkUpdateDao.batchCreateAsInnerObjects(dsDataAsOuter, model.getLinks());	    		    	
+		    linkUpdateDao.batchCreateAsInnerObjects(dsDataAsOuter,
+		    		model.getLinks());	    		    	
 	    	//create event
-	    	eventUpdateDao.batchCreateAsInnerObjects(dsDataAsOuter, model.getEvents());
+	    	eventUpdateDao.batchCreateAsInnerObjects(dsDataAsOuter, 
+	    			model.getEvents());
 	    	    	
 	    }
 	}
 	
 	@Override
 	public void deleteAsInnerObjects(BaseModel outerModel) {
-		if (null == outerModel){
+		if (null == outerModel) {
 			return;
 		}
-		List<Long> dsDataIds = secureDnsUpdateDao.findIdsByOuterIdAndType(outerModel.getId(), ModelType.DSDATA);
+		List<Long> dsDataIds = secureDnsUpdateDao.findIdsByOuterIdAndType(
+				outerModel.getId(), ModelType.DSDATA);
 	    if (null != dsDataIds) {
 	    	String dsDataIdStr = StringUtils.join(dsDataIds, ",");
 	    	//delete KeyData	    	
 	    	super.delete(dsDataIdStr, "RDAP_DSDATA", "DSDATA_ID");
-	    	secureDnsUpdateDao.deleteRelSecureDnsDskey(outerModel.getId(), ModelType.DSDATA);
-	    	for(Long dsDataId:dsDataIds){
+	    	secureDnsUpdateDao.deleteRelSecureDnsDskey(
+	    			outerModel.getId(), ModelType.DSDATA);
+	    	for (Long dsDataId:dsDataIds) {
 	    		DsData dsData = new DsData();
 	    		dsData.setId(dsDataId);
 		    	linkUpdateDao.deleteAsInnerObjects(dsData);
@@ -155,7 +159,16 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
 	    	}
 	    }
     }	
-
+	
+    @Override
+    public void updateAsInnerObjects(BaseModel outerModel,
+             List<DsDataDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        deleteAsInnerObjects(outerModel);
+        batchCreateAsInnerObjects(outerModel, models);
+    }
 	/**
 	 * @param model
 	 *        DsData
@@ -166,9 +179,9 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData,DsDataDto> {
 	      +  "ALGORITHM,DIGEST,DIGEST_TYPE) values (?,?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
-        	public PreparedStatement createPreparedStatement(Connection connection) 
-        			throws SQLException {           
-             PreparedStatement ps = connection.prepareStatement(
+        	public PreparedStatement createPreparedStatement(
+        		 Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(
             		 sql, Statement.RETURN_GENERATED_KEYS);
 				ps.setInt(1, model.getKeyTag());
 				ps.setInt(2, model.getAlgorithm());

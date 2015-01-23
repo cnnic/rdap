@@ -71,19 +71,7 @@ public class EventUpdateDaoTest extends BaseTest {
 	    	event.setEventActor("zhanyq");
 	    	event.setEventDate("2015-01-15T17:15:12Z");
 	    	//link
-	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
-	    	List<String> hreflang = new ArrayList<String>();
-	    	hreflang.add("en");
-	    	hreflang.add("zh");
-	    	LinkDto link = new LinkDto();
-	    	link.setHref("http://sina.com.cn");
-	    	link.setMedia("screen");
-	    	link.setRel("up");
-	    	link.setTitle("little title");
-	    	link.setType("application/rdap+json");
-	    	link.setValue("http://sina.com.cn");
-	    	link.setHreflang(hreflang);
-	    	linkList.add(link);
+	    	List<LinkDto> linkList = LinkUpdateDaoTest.createLinkList();	    	
 	    	event.setLinks(linkList);
 	    	eventList.add(event);
 	        updateDao.batchCreateAsInnerObjects(domain, eventList);	        
@@ -99,6 +87,28 @@ public class EventUpdateDaoTest extends BaseTest {
             Domain domain = new Domain();
             domain.setId(1L);
             updateDao.deleteAsInnerObjects(domain);
+            
+        }
+	    
+	    @Test
+        @DatabaseSetup("event-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+             assertionMode = DatabaseAssertionMode.NON_STRICT,
+             value = "classpath:/org/restfulwhois/rdap/dao/impl/event-update.xml")
+        public void testUpdateEvent() throws Exception {
+	    	Domain domain = new Domain();
+	    	domain.setId(1L);
+	    	List<EventDto> eventList = new ArrayList<EventDto>();	    	
+	    	EventDto event = new EventDto();
+	    	event.setEventAction("registration");
+	    	event.setEventActor("zhanyq");
+	    	event.setEventDate("2015-01-15T17:15:12Z");
+	    	//link
+	    	List<LinkDto> linkList = LinkUpdateDaoTest.createLinkList();
+	    	event.setLinks(linkList);
+	    	eventList.add(event);	           
+            updateDao.updateAsInnerObjects(domain, eventList);
             
         }
 }

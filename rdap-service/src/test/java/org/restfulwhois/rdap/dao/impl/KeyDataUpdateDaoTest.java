@@ -64,32 +64,20 @@ public class KeyDataUpdateDaoTest extends BaseTest {
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 value = "classpath:/org/restfulwhois/rdap/dao/impl/keyData-update.xml")
 	    public void testcreateKeyData() throws Exception {
-	    	Domain domain = new Domain();
-	    	domain.setId(1L);
-	    	List<KeyDataDto> keyDataList = new ArrayList<KeyDataDto>();	    	
+	    	SecureDns secureDns = new SecureDns();
+            secureDns.setId(1L);
+	    	List<KeyDataDto> keyDataList = new ArrayList<KeyDataDto>();
 	    	KeyDataDto keyData = new KeyDataDto();
 	    	keyData.setAlgorithm(1);	    	
 	    	keyData.setProtocol(1);
 	    	keyData.setFlags(1);
 	    	keyData.setPublicKey("1-kd-dt-200-50");	    	
 	    	//link
-	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
-	    	List<String> hreflang = new ArrayList<String>();
-	    	hreflang.add("en");
-	    	hreflang.add("zh");
-	    	LinkDto link = new LinkDto();
-	    	link.setHref("http://sina.com.cn");
-	    	link.setMedia("screen");
-	    	link.setRel("up");
-	    	link.setTitle("little title");
-	    	link.setType("application/rdap+json");
-	    	link.setValue("http://sina.com.cn");
-	    	link.setHreflang(hreflang);
-	    	linkList.add(link);
+	    	List<LinkDto> linkList = LinkUpdateDaoTest.createLinkList();
 	    	keyData.setLinks(linkList);
-	    
+	        
 	    	keyDataList.add(keyData);
-	        updateDao.batchCreateAsInnerObjects(domain, keyDataList);	       
+	        updateDao.batchCreateAsInnerObjects(secureDns, keyDataList);
 	    }
 	    
 	    @Test
@@ -102,6 +90,30 @@ public class KeyDataUpdateDaoTest extends BaseTest {
             SecureDns secureDns = new SecureDns();
             secureDns.setId(1L);
             updateDao.deleteAsInnerObjects(secureDns);
+            
+        }
+	    
+	    @Test
+        @DatabaseSetup("keyData-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/keyData-update.xml")
+        public  void testUpdateKeyData() throws Exception {
+	    	SecureDns secureDns = new SecureDns();
+            secureDns.setId(1L);
+	    	List<KeyDataDto> keyDataList = new ArrayList<KeyDataDto>();
+	    	KeyDataDto keyData = new KeyDataDto();
+	    	keyData.setAlgorithm(1);	    	
+	    	keyData.setProtocol(1);
+	    	keyData.setFlags(1);
+	    	keyData.setPublicKey("1-kd-dt-200-50");	    	
+	    	//link
+	    	List<LinkDto> linkList = LinkUpdateDaoTest.createLinkList();
+	    	keyData.setLinks(linkList);
+	        
+	    	keyDataList.add(keyData);
+            updateDao.updateAsInnerObjects(secureDns, keyDataList);
             
         }
 }

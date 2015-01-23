@@ -39,6 +39,7 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
+import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.model.PublicId;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
@@ -106,6 +107,16 @@ public class PublicIdUpdateDaoImpl extends
         }
         super.deleteRel(outerModel, "REL_PUBLICID_REGISTRATION");
     }
+    
+    @Override
+    public void updateAsInnerObjects(BaseModel outerModel,
+             List<PublicIdDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        deleteAsInnerObjects(outerModel);
+        batchCreateAsInnerObjects(outerModel, models);
+    }
     /**
      * 
      * @param outerModel
@@ -115,24 +126,22 @@ public class PublicIdUpdateDaoImpl extends
      */
      private void createRelPublicId(final BaseModel outerModel, 
              final Long publicId) {
-		final String sql = "insert into REL_PUBLICID_REGISTRATION(REL_ID,"
-			      +  "REL_OBJECT_TYPE,PUBLIC_ID) values (?,?,?)";
-		jdbcTemplate.update(new PreparedStatementCreator() {
-		     public PreparedStatement createPreparedStatement(Connection connection) 
-		         throws SQLException {           
-		            PreparedStatement ps = connection.prepareStatement(
-		            		sql);
-		          ps.setLong(1, outerModel.getId());
-		          ps.setString(2, outerModel.getObjectType().getName());
-		          ps.setLong(3, publicId);
-				  return ps;
-			 }
-				
-		});
-		
-	}
-	
-	/**
+        final String sql = "insert into REL_PUBLICID_REGISTRATION(REL_ID,"
+               +  "REL_OBJECT_TYPE,PUBLIC_ID) values (?,?,?)";
+        jdbcTemplate.update(new PreparedStatementCreator() {
+             public PreparedStatement createPreparedStatement(
+                   Connection connection) throws SQLException {
+                  PreparedStatement ps = connection.prepareStatement(
+                      sql);
+                  ps.setLong(1, outerModel.getId());
+                  ps.setString(2, outerModel.getObjectType().getName());
+                  ps.setLong(3, publicId);
+                  return ps;
+             }
+         });
+    }
+
+   /**
 	 * @param model
 	 *        pubuliId object
 	 * @return publicId.
@@ -142,8 +151,8 @@ public class PublicIdUpdateDaoImpl extends
 	      +  " values (?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
-        	public PreparedStatement createPreparedStatement(Connection connection) 
-        			throws SQLException {           
+        	public PreparedStatement createPreparedStatement(
+        		Connection connection) throws SQLException {
              PreparedStatement ps = connection.prepareStatement(
             		 sql, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, model.getIdentifier());
@@ -165,7 +174,8 @@ public class PublicIdUpdateDaoImpl extends
     private Long queryByIndentifierAndType(final PublicIdDto model) {
         final String sql = "select PUBLIC_ID  from RDAP_PUBLICID publicId"
                 + " where IDENTIFIER=? and TYPE=? ";
-        List<Long> publicIds = jdbcTemplate.query(new PreparedStatementCreator() {
+        List<Long> publicIds = 
+        		jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql);

@@ -102,11 +102,24 @@ public class VariantsUpdateDaoTest extends BaseTest {
         @ExpectedDatabase(
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 value = "classpath:/org/restfulwhois/rdap/dao/impl/variants-empty.xml")
-        public
-                void testDeleteVariant() throws Exception {
+        public void testDeleteVariant() throws Exception {
             Domain domain = new Domain();
             domain.setId(1L);
             updateDao.deleteAsInnerObjects(domain);
+            
+        }
+        
+        @Test
+        @DatabaseSetup("variants-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/variants-update.xml")
+        public void testUpdateVariant() throws Exception {
+        	Domain domain = new Domain();
+	    	domain.setId(1L);
+	    	List<VariantDto> variantsList = createVariants();
+            updateDao.updateAsInnerObjects(domain, variantsList);
             
         }
 }
