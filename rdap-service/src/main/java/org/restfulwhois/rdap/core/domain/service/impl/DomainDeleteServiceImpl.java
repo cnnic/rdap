@@ -58,8 +58,8 @@ public class DomainDeleteServiceImpl extends DomainUpdateBaseServiceImpl {
         getDao().deleteStatus(domain);
         getSecureDnsUpdateDao().deleteAsInnerObjects(domain);
         getVariantUpdateDao().deleteAsInnerObjects(domain);
-        getEntityDao().deleteAsInnerObjects(domain);
-        getNameserverDao().deleteAsInnerObjects(domain);
+        getEntityDao().deleteRel(domain);
+        getNameserverDao().deleteRel(domain);
         getPublicIdDao().deleteAsInnerObjects(domain);
         getRemarkDao().deleteAsInnerObjects(domain);
         getLinkDao().deleteAsInnerObjects(domain);
@@ -71,6 +71,7 @@ public class DomainDeleteServiceImpl extends DomainUpdateBaseServiceImpl {
         Domain domain = new Domain();
         Long id = getDao().findIdByHandle(dto.getHandle());
         domain.setId(id);
+        domain.setHandle(dto.getHandle());
         return domain;
     }
 

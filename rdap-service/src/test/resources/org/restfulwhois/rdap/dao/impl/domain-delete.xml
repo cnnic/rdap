@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_DOMAIN DOMAIN_ID="1" HANDLE='h1' LDH_NAME='cnnic.cn'
+		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' TYPE='dnr'
+		CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />
+	<RDAP_DOMAIN_STATUS DOMAIN_ID="1" STATUS="validated" />
+	<RDAP_DOMAIN_STATUS DOMAIN_ID="1" STATUS="update prohibited" />
+</dataset>
