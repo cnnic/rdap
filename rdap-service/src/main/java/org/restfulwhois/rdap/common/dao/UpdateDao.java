@@ -59,6 +59,8 @@ public interface UpdateDao<T extends BaseModel, DTO extends BaseDto> {
     
     void deleteStatus(T model);
     
+    void updateStatus(T model);
+    
     void saveRel(BaseModel outerModel);
     
     void deleteRel(BaseModel outerModel);

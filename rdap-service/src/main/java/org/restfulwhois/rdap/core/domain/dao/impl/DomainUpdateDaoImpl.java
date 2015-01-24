@@ -56,10 +56,9 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
             "INSERT INTO RDAP_DOMAIN"
                     + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"
                     + " values(?,?,?,?,?,?,?,?)";
-    private static final String SQL_UPDATE_DOMAIN =
-            "UPDATE RDAP_DOMAIN"
-                    + " SET HANDLE=?,LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
-                    + " ,CUSTOM_PROPERTIES=?";
+    private static final String SQL_UPDATE_DOMAIN = "UPDATE RDAP_DOMAIN"
+            + " SET LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
+            + " ,CUSTOM_PROPERTIES=?";
     private static final String SQL_DELETE_DOMAIN =
             "DELETE FROM RDAP_DOMAIN where DOMAIN_ID=?";
     /**
@@ -101,13 +100,12 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
     public void update(final Domain model) {
         jdbcTemplate.update(SQL_UPDATE_DOMAIN, new PreparedStatementSetter() {
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, model.getHandle());
-                ps.setString(2, model.getLdhName());
-                ps.setString(3, model.getUnicodeName());
-                ps.setString(4, model.getPort43());
-                ps.setString(5, model.getLang());
-                ps.setObject(6, model.getNetworkId());
-                ps.setString(7, model.getCustomPropertiesJsonVal());
+                ps.setString(1, model.getLdhName());
+                ps.setString(2, model.getUnicodeName());
+                ps.setString(3, model.getPort43());
+                ps.setString(4, model.getLang());
+                ps.setObject(5, model.getNetworkId());
+                ps.setString(6, model.getCustomPropertiesJsonVal());
             }
         });
     }
@@ -124,6 +122,12 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
     @Override
     public void deleteStatus(Domain model) {
         deleteStatus(model, "RDAP_DOMAIN_STATUS", "DOMAIN_ID");
+    }
+
+    @Override
+    public void updateStatus(Domain domain) {
+        deleteStatus(domain);
+        saveStatus(domain);
     }
 
     @Override

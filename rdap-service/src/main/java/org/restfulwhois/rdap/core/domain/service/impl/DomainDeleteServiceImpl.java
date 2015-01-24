@@ -56,14 +56,14 @@ public class DomainDeleteServiceImpl extends DomainUpdateBaseServiceImpl {
     protected void execute(Domain domain) {
         getDao().delete(domain);
         getDao().deleteStatus(domain);
-        getSecureDnsUpdateDao().deleteAsInnerObjects(domain);
-        getVariantUpdateDao().deleteAsInnerObjects(domain);
-        getEntityDao().deleteRel(domain);
-        getNameserverDao().deleteRel(domain);
-        getPublicIdDao().deleteAsInnerObjects(domain);
-        getRemarkDao().deleteAsInnerObjects(domain);
-        getLinkDao().deleteAsInnerObjects(domain);
-        getEventDao().deleteAsInnerObjects(domain);
+        deleteSecureDns(domain);
+        deleteVariants(domain);
+        deleteEntitiesRel(domain);
+        deleteNameserversRel(domain);
+        deletePublicIds(domain);
+        deleteRemarks(domain);
+        deleteLinks(domain);
+        deleteEvents(domain);
     }
 
     @Override

@@ -106,6 +106,7 @@ public class DomainUpdateController {
     @ResponseBody
     public ResponseEntity update(@RequestBody DomainDto domainDto,
             @PathVariable String handle, HttpServletRequest request) {
+        LOGGER.debug("update domain begin...");
         domainDto.setHandle(handle);
         UpdateResponse response = updateService.execute(domainDto);
         return RestResponse.createUpdateResponse(response);
@@ -124,6 +125,7 @@ public class DomainUpdateController {
     @ResponseBody
     public ResponseEntity delete(@PathVariable String handle,
             HttpServletRequest request) {
+        LOGGER.debug("delete domain begin...");
         DomainDto dto = new DomainDto();
         dto.setHandle(handle);
         UpdateResponse response = deleteService.execute(dto);

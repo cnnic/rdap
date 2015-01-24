@@ -122,6 +122,12 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
+    
+    @Override
+    public void updateStatus(T model) {
+        throw new UnsupportedOperationException(
+                "must be implemented in sub class if I'am called.");
+    }
 
     @Override
     public void saveRel(BaseModel outerModel) {
