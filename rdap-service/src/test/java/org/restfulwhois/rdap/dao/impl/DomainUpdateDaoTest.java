@@ -30,6 +30,10 @@
  */
 package org.restfulwhois.rdap.dao.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +69,7 @@ public class DomainUpdateDaoTest extends BaseTest {
     @DatabaseTearDown("teardown.xml")
     @ExpectedDatabase(
             assertionMode = DatabaseAssertionMode.NON_STRICT,
-            value = "classpath:/org/restfulwhois/rdap/dao/impl/domain-update.xml")
+            value = "classpath:/org/restfulwhois/rdap/dao/impl/domain-create.xml")
     public
             void test_save_domain_and_status() throws Exception {
         Domain domain = new Domain();
@@ -99,6 +103,74 @@ public class DomainUpdateDaoTest extends BaseTest {
         updateDao.deleteStatus(domain);
         assertTablesForUpdate("teardown.xml", "RDAP_DOMAIN",
                 "RDAP_DOMAIN_STATUS");
+    }
+
+    @Test
+    @DatabaseSetup("classpath:/org/restfulwhois/rdap/dao/impl/domain-update.xml")
+    @DatabaseTearDown("teardown.xml")
+    public
+            void test_update_domain_and_status() throws Exception {
+        List<Map<?, ?>> resultList =
+                getTableDataForSql("RDAP_DOMAIN",
+                        "select * from RDAP_DOMAIN where HANDLE='h1'");
+        assertTrue(resultList.size() > 0);
+        Map<?, ?> existDomain = resultList.get(0);
+        Integer domainId = (Integer) existDomain.get("DOMAIN_ID");
+        assertNotNull(domainId);
+        String updateLdhName = "update.cn";
+        String updateLang = "us";
+        String originalHandle = "h1";
+        String updatePort43 = "update-port43";
+        String updateHandle = "new-handle";
+        String updateStatusRenewProbibited = "renew prohibited";
+        String updateStatusTransferProbibited = "transfer prohibited";
+        String updateStatusDeleteProbibited = "delete prohibited";
+        Domain domain = new Domain();
+        domain.setId(Long.valueOf(domainId));
+        domain.setHandle(updateHandle);
+        domain.setLdhName(updateLdhName);
+        domain.setUnicodeName(updateLdhName);
+        domain.setPort43(updatePort43);
+        domain.setLang(updateLang);
+        domain.setType(DomainType.ARPA);
+        List<String> expectedStatus = new ArrayList<String>();
+        expectedStatus.add(updateStatusRenewProbibited);
+        expectedStatus.add(updateStatusTransferProbibited);
+        expectedStatus.add(updateStatusDeleteProbibited);
+        domain.setStatus(expectedStatus);
+        Map<String, String> customProperties = new HashMap<String, String>();
+        customProperties.put("customKey3", "customValue3");
+        domain.setCustomProperties(customProperties);
+        domain.setCustomPropertiesJsonVal(JsonUtil
+                .serializeMap(customProperties));
+        updateDao.update(domain);
+        updateDao.updateStatus(domain);
+        assertDomain(updateLdhName, updateLang, originalHandle, updatePort43);
+        assertStatus();
+    }
+
+    private void assertStatus() throws Exception {
+        List<Map<?, ?>> resultList1 =
+                getTableDataForSql("RDAP_DOMAIN_STATUS",
+                        "select * from RDAP_DOMAIN_STATUS where DOMAIN_ID=1");
+        assertEquals(3, resultList1.size());
+    }
+
+    private void assertDomain(String updateLdhName, String updateLang,
+            String originalHandle, String updatePort43) throws Exception {
+        List<Map<?, ?>> resultList =
+                getTableDataForSql("RDAP_DOMAIN",
+                        "select * from RDAP_DOMAIN where HANDLE='h1'");
+        assertTrue(resultList.size() > 0);
+        Map<?, ?> actualDomain = resultList.get(0);
+        assertEquals(originalHandle, actualDomain.get("HANDLE"));
+        assertEquals(DomainType.DNR.getName(), actualDomain.get("TYPE"));
+        assertEquals(updateLdhName, actualDomain.get("LDH_NAME"));
+        assertEquals(updateLdhName, actualDomain.get("UNICODE_NAME"));
+        assertEquals(updateLang, actualDomain.get("LANG"));
+        assertEquals(updatePort43, actualDomain.get("PORT43"));
+        assertEquals("{\"customKey3\":\"customValue3\"}",
+                actualDomain.get("CUSTOM_PROPERTIES"));
     }
 
 }

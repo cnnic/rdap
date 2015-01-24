@@ -325,9 +325,29 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         eventDao.batchCreateAsInnerObjects(model, events);
     }
 
+    protected void deleteEvents(MODEL model) {
+        LOGGER.debug("delete events...");
+        getEventDao().deleteAsInnerObjects(model);
+    }
+
+    protected void updateEvents(List<EventDto> events, MODEL model) {
+        deleteEvents(model);
+        saveEvents(events, model);
+    }
+
     protected void saveLinks(List<LinkDto> links, MODEL model) {
         LOGGER.debug("save links...");
         linkDao.batchCreateAsInnerObjects(model, links);
+    }
+
+    protected void deleteLinks(MODEL model) {
+        LOGGER.debug("delete links...");
+        getLinkDao().deleteAsInnerObjects(model);
+    }
+
+    protected void updateLinks(List<LinkDto> links, MODEL model) {
+        deleteLinks(model);
+        saveLinks(links, model);
     }
 
     protected void saveRemarks(List<RemarkDto> remarks, MODEL model) {
@@ -335,14 +355,43 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         remarkDao.batchCreateAsInnerObjects(model, remarks);
     }
 
+    protected void deleteRemarks(MODEL model) {
+        LOGGER.debug("delete remarks...");
+        getRemarkDao().deleteAsInnerObjects(model);
+    }
+
+    protected void updateRemarks(List<RemarkDto> remarks, MODEL model) {
+        deleteRemarks(model);
+        saveRemarks(remarks, model);
+    }
+
     protected void savePublicIds(List<PublicIdDto> publicIds, MODEL model) {
         LOGGER.debug("save publicIds...");
         publicIdDao.batchCreateAsInnerObjects(model, publicIds);
     }
 
-    protected void saveEntities(MODEL model) {
-        LOGGER.debug("save entities...");
+    protected void deletePublicIds(MODEL model) {
+        LOGGER.debug("delete publicIds...");
+        getPublicIdDao().deleteAsInnerObjects(model);
+    }
+
+    protected void updatePublicIds(List<PublicIdDto> publicIds, MODEL model) {
+        deletePublicIds(model);
+        savePublicIds(publicIds, model);
+    }
+
+    protected void saveEntitiesRel(MODEL model) {
+        LOGGER.debug("save entities rel...");
         entityDao.saveRel(model);
+    }
+
+    protected void deleteEntitiesRel(MODEL model) {
+        getEntityDao().deleteRel(model);
+    }
+
+    protected void updateEntitiesRel(MODEL model) {
+        deleteEntitiesRel(model);
+        saveEntitiesRel(model);
     }
 
     private UpdateResponse handleError(BaseDto dto,
