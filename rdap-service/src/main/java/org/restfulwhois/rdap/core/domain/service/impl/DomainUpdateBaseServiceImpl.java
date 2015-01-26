@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.core.domain.service.impl;
 
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LDHNAME;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
 
@@ -50,11 +49,11 @@ import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.model.Network;
 import org.restfulwhois.rdap.common.model.SecureDns;
 import org.restfulwhois.rdap.common.model.Variants;
-import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.util.BeanUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
@@ -164,6 +163,9 @@ public abstract class DomainUpdateBaseServiceImpl extends
      *            domain.
      */
     private void convertNetworkIdIfExist(DomainDto dto, Domain domain) {
+        if (!DomainType.ARPA.equals(DomainType.getByTypeName(dto.getType()))) {
+            return;
+        }
         if (StringUtils.isBlank(dto.getNetworkHandle())) {
             return;
         }
@@ -270,22 +272,22 @@ public abstract class DomainUpdateBaseServiceImpl extends
         }
         for (VariantDto variant : variants) {
             checkMaxLength(variant.getIdnTable(), MAX_LENGTH_255,
-                    "variant.idnTable", validationResult);
+                    "variants.idnTable", validationResult);
             List<String> relations = variant.getRelation();
             if (null != relations) {
                 for (String relation : relations) {
                     checkMaxLength(relation, MAX_LENGTH_255,
-                            "variant.relation", validationResult);
+                            "variants.relation", validationResult);
                 }
             }
             List<VariantNameDto> variantNames = variant.getVariantNames();
             if (null != variantNames) {
                 for (VariantNameDto variantName : variantNames) {
                     checkNotEmptyAndMaxLength(variantName.getLdhName(),
-                            MAX_LENGTH_HANDLE, "variant.ldhName",
+                            MAX_LENGTH_LDHNAME, "variants.ldhName",
                             validationResult);
                     checkNotEmptyAndMaxLength(variantName.getUnicodeName(),
-                            MAX_LENGTH_UNICODENAME, "variant.unicodeName",
+                            MAX_LENGTH_UNICODENAME, "variants.unicodeName",
                             validationResult);
                 }
             }

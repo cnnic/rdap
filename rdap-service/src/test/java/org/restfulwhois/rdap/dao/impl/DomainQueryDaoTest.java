@@ -214,6 +214,17 @@ public class DomainQueryDaoTest extends BaseTest {
         List<String> statusList = domain.getStatus();
         assertThat(statusList, CoreMatchers.hasItems("validated"));
     }
+    
+    @Test
+    @DatabaseTearDown("teardown.xml")
+    public void test_QueryDomainStatus_status_is_null(){
+    	String domainName = "1.0.0.in-addr.arpa";
+        String punyDomainName = DomainUtil.geneDomainPunyName(domainName);
+        Domain domain =
+                domainQueryDao.query(DomainQueryParam.generateQueryParam(
+                        domainName, punyDomainName));
+    	assertEquals(null, domain.getStatus());
+    }
 
     /**
      * test query ont exist domain.

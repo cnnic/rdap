@@ -98,7 +98,7 @@ public class DomainSearchByNsNameStrategy extends AbstractDomainSearchStrategy {
         final String punyName = domainQueryParam.getPunyName();
         final String punyNameLikeClause = generateLikeClause(punyName);
         final String sql =
-                "select distinct domain.*,status.* from  RDAP_DOMAIN domain inner join "
+                "select distinct domain.* from  RDAP_DOMAIN domain inner join "
                         + " REL_DOMAIN_NAMESERVER rel on domain.DOMAIN_ID = rel.DOMAIN_ID "
                         + " inner join RDAP_NAMESERVER ns "
                         + " on rel.NAMESERVER_ID = ns.NAMESERVER_ID "
@@ -122,7 +122,7 @@ public class DomainSearchByNsNameStrategy extends AbstractDomainSearchStrategy {
                     }
                 }, domainDao.new DomainWithStatusResultSetExtractor());
         for(Domain domain : result){
-        	domainDao.queryDomainStatus(domain);
+        	domainDao.queryDomainStatus(domain, jdbcTemplate);
         }
         return result;
     }

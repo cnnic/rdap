@@ -105,7 +105,7 @@ public class DomainSearchByNsIpStrategy extends AbstractDomainSearchStrategy {
         final byte[] ipBytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
         DomainQueryDaoImpl domainDao = new DomainQueryDaoImpl();
         final String sql =
-                "SELECT distinct domain.*,status.* FROM  RDAP_DOMAIN domain "
+                "SELECT distinct domain.* FROM  RDAP_DOMAIN domain "
                         + " INNER JOIN REL_DOMAIN_NAMESERVER rel "
                         + " ON domain.DOMAIN_ID = rel.DOMAIN_ID "
                         + " INNER JOIN RDAP_NAMESERVER_IP nsip "
@@ -122,7 +122,7 @@ public class DomainSearchByNsIpStrategy extends AbstractDomainSearchStrategy {
             }
         }, domainDao.new DomainWithStatusResultSetExtractor());
         for(Domain domain : result){
-        	domainDao.queryDomainStatus(domain);
+        	domainDao.queryDomainStatus(domain, jdbcTemplate);
         }
         return result;
     }
