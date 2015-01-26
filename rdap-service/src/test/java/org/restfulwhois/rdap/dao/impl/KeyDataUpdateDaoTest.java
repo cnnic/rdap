@@ -77,7 +77,7 @@ public class KeyDataUpdateDaoTest extends BaseTest {
 	    	keyData.setLinks(linkList);
 	        
 	    	keyDataList.add(keyData);
-	        updateDao.batchCreateAsInnerObjects(secureDns, keyDataList);
+	        updateDao.saveAsInnerObjects(secureDns, keyDataList);
 	    }
 	    
 	    @Test

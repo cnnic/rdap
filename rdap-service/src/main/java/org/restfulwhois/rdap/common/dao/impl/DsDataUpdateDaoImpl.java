@@ -117,7 +117,7 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData, DsDataDto> {
 	 *        DsData of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel,
+	public void saveAsInnerObjects(BaseModel outerModel,
 			List<DsDataDto> models) {
 		if (null == models || models.size() == 0){
 			return;
@@ -129,10 +129,10 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData, DsDataDto> {
 	    	DsData dsDataAsOuter = new DsData();
 	    	dsDataAsOuter.setId(dsDataId);	    	
 	    	//create link	    		    		
-		    linkUpdateDao.batchCreateAsInnerObjects(dsDataAsOuter,
+		    linkUpdateDao.saveAsInnerObjects(dsDataAsOuter,
 		    		model.getLinks());	    		    	
 	    	//create event
-	    	eventUpdateDao.batchCreateAsInnerObjects(dsDataAsOuter, 
+	    	eventUpdateDao.saveAsInnerObjects(dsDataAsOuter, 
 	    			model.getEvents());
 	    	    	
 	    }
@@ -167,7 +167,7 @@ public class DsDataUpdateDaoImpl extends AbstractUpdateDao<DsData, DsDataDto> {
              return;
         }
         deleteAsInnerObjects(outerModel);
-        batchCreateAsInnerObjects(outerModel, models);
+        saveAsInnerObjects(outerModel, models);
     }
 	/**
 	 * @param model

@@ -103,7 +103,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
 	 *        events of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel, List<EventDto> models) {
+	public void saveAsInnerObjects(BaseModel outerModel, List<EventDto> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
@@ -113,7 +113,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
 	    	//create link
 	    	Event eventAsOuter = new Event();
 	    	eventAsOuter.setId(eventId);
-	    	linkUpdateDao.batchCreateAsInnerObjects(eventAsOuter, model.getLinks());
+	    	linkUpdateDao.saveAsInnerObjects(eventAsOuter, model.getLinks());
 	    	
 			
 	    }
@@ -149,7 +149,7 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
              return;
         }
         deleteAsInnerObjects(outerModel);
-        batchCreateAsInnerObjects(outerModel, models);
+        saveAsInnerObjects(outerModel, models);
     }
 	
    /**

@@ -322,7 +322,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void saveEvents(List<EventDto> events, MODEL model) {
         LOGGER.debug("save events...");
-        eventDao.batchCreateAsInnerObjects(model, events);
+        eventDao.saveAsInnerObjects(model, events);
     }
 
     protected void deleteEvents(MODEL model) {
@@ -337,7 +337,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void saveLinks(List<LinkDto> links, MODEL model) {
         LOGGER.debug("save links...");
-        linkDao.batchCreateAsInnerObjects(model, links);
+        linkDao.saveAsInnerObjects(model, links);
     }
 
     protected void deleteLinks(MODEL model) {
@@ -352,7 +352,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void saveRemarks(List<RemarkDto> remarks, MODEL model) {
         LOGGER.debug("save remarks...");
-        remarkDao.batchCreateAsInnerObjects(model, remarks);
+        remarkDao.saveAsInnerObjects(model, remarks);
     }
 
     protected void deleteRemarks(MODEL model) {
@@ -367,7 +367,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void savePublicIds(List<PublicIdDto> publicIds, MODEL model) {
         LOGGER.debug("save publicIds...");
-        publicIdDao.batchCreateAsInnerObjects(model, publicIds);
+        publicIdDao.saveAsInnerObjects(model, publicIds);
     }
 
     protected void deletePublicIds(MODEL model) {

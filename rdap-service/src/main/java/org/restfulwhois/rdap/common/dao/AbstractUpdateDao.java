@@ -83,7 +83,7 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
 
     @Override
     public void
-            batchCreateAsInnerObjects(BaseModel outerModel, List<DTO> models) {
+            saveAsInnerObjects(BaseModel outerModel, List<DTO> models) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }

@@ -86,7 +86,7 @@ public class PublicIdUpdateDaoImpl extends
      *        PublicId of outer Object
      */
     @Override
-    public void batchCreateAsInnerObjects(BaseModel outerModel,
+    public void saveAsInnerObjects(BaseModel outerModel,
                    List<PublicIdDto> models) {
        if (null == models || models.size() == 0) {
               return;
@@ -115,7 +115,7 @@ public class PublicIdUpdateDaoImpl extends
              return;
         }
         deleteAsInnerObjects(outerModel);
-        batchCreateAsInnerObjects(outerModel, models);
+        saveAsInnerObjects(outerModel, models);
     }
     /**
      * 

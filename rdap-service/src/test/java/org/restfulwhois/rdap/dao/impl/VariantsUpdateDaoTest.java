@@ -70,7 +70,7 @@ public class VariantsUpdateDaoTest extends BaseTest {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<VariantDto> variantsList = createVariants();	 
-	        updateDao.batchCreateAsInnerObjects(domain, variantsList);	     
+	        updateDao.saveAsInnerObjects(domain, variantsList);	     
 	    }
 
 	    public static List<VariantDto> createVariants() {

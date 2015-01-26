@@ -69,7 +69,7 @@ public class PublicIdUpdateDaoTest extends BaseTest {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<PublicIdDto> publicIdList = createPublicIdList();
-	        updateDao.batchCreateAsInnerObjects(domain, publicIdList);
+	        updateDao.saveAsInnerObjects(domain, publicIdList);
 	        //assertCreate();
 	    }
 

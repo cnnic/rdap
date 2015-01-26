@@ -117,7 +117,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
         }
         List<SecureDnsDto> secureDnsDtos = new ArrayList<SecureDnsDto>();
         secureDnsDtos.add(secureDnsDto);
-        secureDnsUpdateDao.batchCreateAsInnerObjects(domain, secureDnsDtos);
+        secureDnsUpdateDao.saveAsInnerObjects(domain, secureDnsDtos);
     }
 
     protected void deleteSecureDns(Domain domain) {
@@ -136,7 +136,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
             LOGGER.debug("variants is empty.");
             return;
         }
-        variantUpdateDao.batchCreateAsInnerObjects(domain, variantDtos);
+        variantUpdateDao.saveAsInnerObjects(domain, variantDtos);
     }
 
     protected void deleteVariants(Domain domain) {

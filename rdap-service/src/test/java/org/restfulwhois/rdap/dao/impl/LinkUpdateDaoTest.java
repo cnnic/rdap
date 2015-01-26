@@ -66,7 +66,7 @@ public class LinkUpdateDaoTest extends BaseTest {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<LinkDto> linkList = createLinkList();
-	        updateDao.batchCreateAsInnerObjects(domain, linkList);
+	        updateDao.saveAsInnerObjects(domain, linkList);
 	       
 	    }
 
