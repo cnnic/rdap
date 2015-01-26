@@ -122,7 +122,7 @@ public class DomainSearchByNsIpStrategy extends AbstractDomainSearchStrategy {
             }
         }, domainDao.new DomainWithStatusResultSetExtractor());
         for(Domain domain : result){
-        	domainDao.queryDomainStatus(domain);
+        	domainDao.queryDomainStatus(domain, jdbcTemplate);
         }
         return result;
     }
