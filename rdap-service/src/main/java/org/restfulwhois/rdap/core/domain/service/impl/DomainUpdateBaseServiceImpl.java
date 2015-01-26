@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.core.domain.service.impl;
 
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LDHNAME;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
 
@@ -183,7 +182,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
         checkVariants(domainDto, validationResult);
         checkSecureDns(domainDto, validationResult);
         checkPublicIds(domainDto.getPublicIds(), validationResult);
-        validateBaseDto(domainDto,validationResult);
+        validateBaseDto(domainDto, validationResult);
         return validationResult;
     }
 
@@ -261,7 +260,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
             if (null != variantNames) {
                 for (VariantNameDto variantName : variantNames) {
                     checkNotEmptyAndMaxLength(variantName.getLdhName(),
-                            MAX_LENGTH_HANDLE, "variant.ldhName",
+                            MAX_LENGTH_LDHNAME, "variant.ldhName",
                             validationResult);
                     checkNotEmptyAndMaxLength(variantName.getUnicodeName(),
                             MAX_LENGTH_UNICODENAME, "variant.unicodeName",
