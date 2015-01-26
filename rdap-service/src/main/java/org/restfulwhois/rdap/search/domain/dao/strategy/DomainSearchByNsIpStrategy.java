@@ -110,7 +110,6 @@ public class DomainSearchByNsIpStrategy extends AbstractDomainSearchStrategy {
                         + " ON domain.DOMAIN_ID = rel.DOMAIN_ID "
                         + " INNER JOIN RDAP_NAMESERVER_IP nsip "
                         + " ON rel.NAMESERVER_ID = nsip.NAMESERVER_ID "
-                        + DomainQueryDaoImpl.SQL_LEFT_JOIN_DOMAIN_STATUS
                         + " where nsip.IP = ? order by domain.LDH_NAME limit ?,?";
         result = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
@@ -122,6 +121,9 @@ public class DomainSearchByNsIpStrategy extends AbstractDomainSearchStrategy {
                 return ps;
             }
         }, domainDao.new DomainWithStatusResultSetExtractor());
+        for(Domain domain : result){
+        	domainDao.queryDomainStatus(domain);
+        }
         return result;
     }
 
