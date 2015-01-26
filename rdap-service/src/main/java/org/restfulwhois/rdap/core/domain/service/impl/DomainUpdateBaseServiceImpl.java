@@ -269,22 +269,22 @@ public abstract class DomainUpdateBaseServiceImpl extends
         }
         for (VariantDto variant : variants) {
             checkMaxLength(variant.getIdnTable(), MAX_LENGTH_255,
-                    "variant.idnTable", validationResult);
+                    "variants.idnTable", validationResult);
             List<String> relations = variant.getRelation();
             if (null != relations) {
                 for (String relation : relations) {
                     checkMaxLength(relation, MAX_LENGTH_255,
-                            "variant.relation", validationResult);
+                            "variants.relation", validationResult);
                 }
             }
             List<VariantNameDto> variantNames = variant.getVariantNames();
             if (null != variantNames) {
                 for (VariantNameDto variantName : variantNames) {
                     checkNotEmptyAndMaxLength(variantName.getLdhName(),
-                            MAX_LENGTH_LDHNAME, "variant.ldhName",
+                            MAX_LENGTH_LDHNAME, "variants.ldhName",
                             validationResult);
                     checkNotEmptyAndMaxLength(variantName.getUnicodeName(),
-                            MAX_LENGTH_UNICODENAME, "variant.unicodeName",
+                            MAX_LENGTH_UNICODENAME, "variants.unicodeName",
                             validationResult);
                 }
             }
