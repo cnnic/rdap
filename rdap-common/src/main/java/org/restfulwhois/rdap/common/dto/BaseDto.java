@@ -57,6 +57,7 @@ public class BaseDto {
 	private List<LinkDto> links;
 	private String port43;
 	private List<EventDto> events;
+	private String lang;
     private Map<String, String> customProperties =
             new LinkedHashMap<String, String>();
 
@@ -121,8 +122,16 @@ public class BaseDto {
 	public void setEvents(List<EventDto> events) {
 		this.events = events;
 	}
+	
+	public String getLang() {
+        return lang;
+    }
 
-	public Map<String, String> getCustomProperties() {
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public Map<String, String> getCustomProperties() {
         return customProperties;
     }
 
