@@ -43,6 +43,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author zhanyq
@@ -59,26 +61,54 @@ public class PublicIdUpdateDaoTest extends BaseTest {
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
-	    @DatabaseTearDown("teardown.xml")   
+	    @DatabaseTearDown("teardown.xml") 
+	    @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/publicId-create.xml")
 	    public void testcreatePublicId() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<PublicIdDto> publicIdList = createPublicIdList();
-	        updateDao.batchCreateAsInnerObjects(domain, publicIdList);
-	        assertCreate();
+	        updateDao.saveAsInnerObjects(domain, publicIdList);
+	        //assertCreate();
 	    }
 
 	    public static void assertCreate() throws Exception {
-            assertTablesForUpdate("publicId-update.xml", TABLE_RDAP_PUBLICID,
+            assertTablesForUpdate("publicId-create.xml", TABLE_RDAP_PUBLICID,
 	        		TABLE_REL_PUBLICID_REGISTRATION);
         }
 
         public static List<PublicIdDto> createPublicIdList() {
-            List<PublicIdDto> publicIdList = new ArrayList<PublicIdDto>();	    	
+            List<PublicIdDto> publicIdList = new ArrayList<PublicIdDto>();
 	    	PublicIdDto publicId = new PublicIdDto();
 	    	publicId.setIdentifier("cnnic-1");
 	    	publicId.setType("cnnic");
 	    	publicIdList.add(publicId);
             return publicIdList;
+        }
+        @Test
+        @DatabaseSetup("publicId-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/publicId-empty.xml")
+        public void testDeletePublicId() throws Exception {
+            Domain domain = new Domain();
+            domain.setId(1L);
+            updateDao.deleteAsInnerObjects(domain);
+        }
+        
+        @Test
+        @DatabaseSetup("publicId-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/publicId-update.xml")
+        public void testUpdatePublicId() throws Exception {
+        	Domain domain = new Domain();
+	    	domain.setId(1L);
+	    	List<PublicIdDto> publicIdList = createPublicIdList();
+            updateDao.updateAsInnerObjects(domain, publicIdList);
+            
         }
 }

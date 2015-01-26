@@ -45,17 +45,30 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
  */
 public interface UpdateDao<T extends BaseModel, DTO extends BaseDto> {
 
+    Long findIdByHandle(String handle);
+    
     T save(T model);
 
     void update(T model);
 
     void delete(T model);
 
-    Long findIdByHandle(String handle);
-    
-    void batchCreateAsInnerObjects(BaseModel outerModel, List<DTO> models);
-
     void saveStatus(T model);
     
+    void updateStatus(T model);
+    
+    void deleteStatus(T model);
+    
     void saveRel(BaseModel outerModel);
+    
+    void updateRel(BaseModel outerModel);
+    
+    void deleteRel(BaseModel outerModel);
+    
+    void saveAsInnerObjects(BaseModel outerModel, List<DTO> models);
+
+    void updateAsInnerObjects(BaseModel outerModel, List<DTO> models);
+    
+    void deleteAsInnerObjects(BaseModel outerModel);
+    
 }

@@ -3,7 +3,7 @@
 	<RDAP_KEYDATA FLAGS='1' ALGORITHM='1'
 		PUBLIC_KEY='1-kd-dt-200-50'
 		PROTOCOL='1' />
-	<REL_SECUREDNS_DSKEY  REL_DSKEY_TYPE='keyData'  />
+	<REL_SECUREDNS_DSKEY  REL_DSKEY_TYPE='keyData'  SECUREDNS_ID='1' />
 	<!-- link -->
 	<RDAP_LINK  VALUE="http://sina.com.cn"
 		REL="up" HREF="http://sina.com.cn" MEDIA="screen"

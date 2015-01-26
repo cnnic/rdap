@@ -88,6 +88,7 @@ public class DomainUpdateController {
     @ResponseBody
     public ResponseEntity create(@RequestBody DomainDto domainDto,
             HttpServletRequest request) {
+        LOGGER.debug("create domain begin...");
         UpdateResponse response = createService.execute(domainDto);
         return RestResponse.createUpdateResponse(response);
     }
@@ -105,6 +106,7 @@ public class DomainUpdateController {
     @ResponseBody
     public ResponseEntity update(@RequestBody DomainDto domainDto,
             @PathVariable String handle, HttpServletRequest request) {
+        LOGGER.debug("update domain begin...");
         domainDto.setHandle(handle);
         UpdateResponse response = updateService.execute(domainDto);
         return RestResponse.createUpdateResponse(response);
@@ -119,11 +121,11 @@ public class DomainUpdateController {
      * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
-    @RequestMapping(value = { "/u/domain/{handle}" },
-            method = RequestMethod.DELETE)
+    @RequestMapping(value = { "/{handle}" }, method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity delete(@PathVariable String handle,
             HttpServletRequest request) {
+        LOGGER.debug("delete domain begin...");
         DomainDto dto = new DomainDto();
         dto.setHandle(handle);
         UpdateResponse response = deleteService.execute(dto);

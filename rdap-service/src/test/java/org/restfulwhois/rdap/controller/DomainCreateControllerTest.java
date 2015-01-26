@@ -107,7 +107,7 @@ public class DomainCreateControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(domain.getHandle()));
-        super.assertTablesForUpdate("domain-update.xml",
+        super.assertTablesForUpdate("domain-create.xml",
                 DomainUpdateDaoTest.TABLE_RDAP_DOMAIN);
     }
 

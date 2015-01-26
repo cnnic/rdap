@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.common.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
 import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
 import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
@@ -48,12 +47,8 @@ public class DomainDto extends BaseDto {
     private String ldhName;
     private String unicodeName;
     private String type;
-    private List<String> status;
     private String networkHandle;
-    private String port43;
-    private String lang;
     private List<HandleDto> nameservers;
-    private List<EntityHandleDto> entities;
     private SecureDnsDto secureDNS;
     private List<PublicIdDto> publicIds;
     /**
@@ -85,36 +80,12 @@ public class DomainDto extends BaseDto {
         this.type = type;
     }
 
-    public List<String> getStatus() {
-        return status;
-    }
-
-    public void setStatus(List<String> status) {
-        this.status = status;
-    }
-
     public String getNetworkHandle() {
         return networkHandle;
     }
 
     public void setNetworkHandle(String networkHandle) {
         this.networkHandle = networkHandle;
-    }
-
-    public String getPort43() {
-        return port43;
-    }
-
-    public void setPort43(String port43) {
-        this.port43 = port43;
-    }
-
-    public String getLang() {
-        return lang;
-    }
-
-    public void setLang(String lang) {
-        this.lang = lang;
     }
 
     public List<VariantDto> getVariants() {
@@ -147,14 +118,6 @@ public class DomainDto extends BaseDto {
 
     public void setPublicIds(List<PublicIdDto> publicIds) {
         this.publicIds = publicIds;
-    }
-
-    public List<EntityHandleDto> getEntities() {
-        return entities;
-    }
-
-    public void setEntities(List<EntityHandleDto> entities) {
-        this.entities = entities;
     }
 
     @Override

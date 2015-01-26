@@ -44,6 +44,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author zhanyq
@@ -61,13 +63,14 @@ public class VariantsUpdateDaoTest extends BaseTest {
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml") 
-	    //@DatabaseSetup(value = "variants.xml")
+	    @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/variants-update.xml")
 	    public void testcreateVariants() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<VariantDto> variantsList = createVariants();	 
-	        updateDao.batchCreateAsInnerObjects(domain, variantsList);
-	        assertTable();
+	        updateDao.saveAsInnerObjects(domain, variantsList);	     
 	    }
 
 	    public static List<VariantDto> createVariants() {
@@ -91,5 +94,32 @@ public class VariantsUpdateDaoTest extends BaseTest {
         public static void assertTable() throws Exception {
             assertTablesForUpdate("variants-update.xml", TABLE_RDAP_VARIANT,
 	        		TABLE_REL_DOMAIN_VARIANT);
+        }
+        
+        @Test
+        @DatabaseSetup("variants-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/variants-empty.xml")
+        public void testDeleteVariant() throws Exception {
+            Domain domain = new Domain();
+            domain.setId(1L);
+            updateDao.deleteAsInnerObjects(domain);
+            
+        }
+        
+        @Test
+        @DatabaseSetup("variants-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/variants-update.xml")
+        public void testUpdateVariant() throws Exception {
+        	Domain domain = new Domain();
+	    	domain.setId(1L);
+	    	List<VariantDto> variantsList = createVariants();
+            updateDao.updateAsInnerObjects(domain, variantsList);
+            
         }
 }
