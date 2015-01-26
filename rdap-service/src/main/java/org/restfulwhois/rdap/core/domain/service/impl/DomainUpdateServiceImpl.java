@@ -30,13 +30,11 @@
  */
 package org.restfulwhois.rdap.core.domain.service.impl;
 
-import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -53,32 +51,38 @@ public class DomainUpdateServiceImpl extends DomainUpdateBaseServiceImpl {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainUpdateServiceImpl.class);
-    /**
-     * domain DAO.
-     */
-    @Autowired
-    private UpdateDao<Domain, DomainDto> domainDao;
 
     @Override
     protected void execute(Domain domain) {
-        Long id = domainDao.findIdByHandle(domain.getHandle());
-        if (null == id) {
-            return;
-        }
-        domainDao.update(domain);
+        LOGGER.debug("update domain...");
+        getDao().update(domain);
+        LOGGER.debug("update status...");
+        getDao().updateStatus(domain);
+        DomainDto dto = (DomainDto) domain.getDto();
+        updateSecureDns(dto, domain);
+        updateVariants(dto, domain);
+        updateEntitiesRel(domain);
+        updateNameserversRel(domain);
+        updatePublicIds(dto.getPublicIds(), domain);
+        updateRemarks(dto.getRemarks(), domain);
+        updateLinks(dto.getLinks(), domain);
+        updateEvents(dto.getEvents(), domain);
     }
 
     @Override
     protected Domain convertDtoToModel(DomainDto dto) {
-        Domain domain = convertDtoToModelWithoutType(dto);
+        Domain domain = super.convertDtoToModelWithoutType(dto);
+        Long id = getDao().findIdByHandle(dto.getHandle());
+        domain.setId(id);
+        domain.setDto(dto);
         return domain;
     }
 
     @Override
     protected ValidationResult validate(DomainDto domainDto) {
-        ValidationResult validationResult =
-                super.validateWithoutType(domainDto);
+        ValidationResult validationResult = new ValidationResult();
         checkHandleExistForUpdate(domainDto.getHandle(), validationResult);
+        super.validateWithoutType(domainDto, validationResult);
         return validationResult;
     }
 

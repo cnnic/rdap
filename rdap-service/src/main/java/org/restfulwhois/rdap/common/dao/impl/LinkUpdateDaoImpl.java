@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.model.Link;
@@ -62,52 +63,79 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
      * logger for record log.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(LinkUpdateDaoImpl.class);
+            .getLogger(LinkUpdateDaoImpl.class);    
+ 
 
     @Override
-	public Link save(Link model) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Link save(Link model) {
+        return null;
+    }
 
-	@Override
-	public void update(Link model) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void update(Link model) {
 
-	@Override
-	public void delete(Link model) {
-		// TODO Auto-generated method stub
-		
-	}
-	/**
-	 * batch create link.
-	 * 
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param outerModelType
-	 *        model type of outer object
-	 * @param models 
-	 *        links of outer Object
-	 */
-	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel, List<LinkDto> models) {
-		if (null == models || models.size() == 0){
-			return;
-		}
-	    for (LinkDto linkDto: models) {
-	    	Long linkId = createLink(linkDto);	    	
-	    	createRelLink(outerModel.getId(), outerModel.getObjectType(), linkId);
-			createLinkHreflang(linkDto, linkId);
-	    }
-	}
+    }
 
-	/**
-	 * create link hreflang.
-	 * @param link 
-	 *        link 
-	 */
+    @Override
+    public void delete(Link model) {
+
+    }
+    /**
+     * batch create link.
+     * 
+     * @param outerModel
+     *         outer object
+     * @param models
+     *        links of outer Object
+     */
+    @Override
+    public void saveAsInnerObjects(BaseModel outerModel,
+             List<LinkDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        for (LinkDto linkDto: models) {
+            Long linkId = createLink(linkDto);
+            createRelLink(outerModel.getId(), outerModel.getObjectType(),
+                      linkId);
+            createLinkHreflang(linkDto, linkId);
+        }
+    }
+    
+    @Override
+    public void updateAsInnerObjects(BaseModel outerModel,
+             List<LinkDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        deleteAsInnerObjects(outerModel);
+        saveAsInnerObjects(outerModel, models);
+    }
+
+    @Override
+    public void deleteAsInnerObjects(BaseModel outerModel) {
+        if (null == outerModel) {
+              return;
+        }
+        List<Long> linkIds = super.findIdsByOuterIdAndType(outerModel,
+                  "LINK_ID", "REL_LINK_OBJECT");
+        if (null != linkIds) {
+            String linkIdStr = StringUtils.join(linkIds, ",");
+            //delete link
+            super.delete(linkIdStr, "RDAP_LINK", "LINK_ID");
+            //delete link hreflang
+            super.delete(linkIdStr, "RDAP_LINK_HREFLANG", "LINK_ID");
+            super.deleteRel(outerModel, "REL_LINK_OBJECT");
+        }
+    }
+    
+   /**
+     * create link hreflang.
+     * @param linkDto 
+     *        link
+     * @param linkId
+     *        linkId
+     */
 	private void createLinkHreflang(final LinkDto linkDto, final Long linkId) {
 		final List<String> hreflang = linkDto.getHreflang();
 		final List<String> notEmptyHreflangs = StringUtil.getNotEmptyStringList(hreflang);
@@ -115,18 +143,18 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
 		    return;
 		}
 		final String sql = "insert into RDAP_LINK_HREFLANG(HREFLANG, LINK_ID)"
-			      +  " values (?,?)";
+                    +  " values (?,?)";
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 		    public int getBatchSize() {
 		        return notEmptyHreflangs.size();
 		    }
 		    @Override
-			public void setValues(PreparedStatement ps, int i)
-				throws SQLException {
+              public void setValues(PreparedStatement ps, int i)
+              	throws SQLException {
 		    	ps.setString(1, notEmptyHreflangs.get(i));
                 ps.setLong(2, linkId);                
-			}
-				
+              }
+              	
 		    });
 	}
 	/**
@@ -139,20 +167,20 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
 	 *        linkId
 	 */
 	private void createRelLink(final Long outerObjectId, final ModelType
-			outerModelType,	final Long linkId) {
+              outerModelType,	final Long linkId) {
 		final String sql = "insert into REL_LINK_OBJECT(REL_ID,REL_OBJECT_TYPE,LINK_ID)"
-			      +  " values (?,?,?)"; 		       
+                    +  " values (?,?,?)"; 		       
 		       jdbcTemplate.update(new PreparedStatementCreator() {
 		           public PreparedStatement createPreparedStatement(Connection connection) 
-		        			throws SQLException {           
+		                      throws SQLException {           
 		            PreparedStatement ps = connection.prepareStatement(
 		            		sql);
 		            ps.setLong(1, outerObjectId);
 		            ps.setString(2, outerModelType.getName());
 		            ps.setLong(3, linkId);
-					return ps;
-					}
-				
+              		return ps;
+              		}
+              	
 		        });
 		
 	}
@@ -167,17 +195,17 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
         	public PreparedStatement createPreparedStatement(Connection connection) 
-        			throws SQLException {           
+                      throws SQLException {           
              PreparedStatement ps = connection.prepareStatement(
             		 sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, link.getValue());
-				ps.setString(2, link.getRel());
-				ps.setString(3, link.getHref());
-				ps.setString(4, link.getMedia());
-				ps.setString(5, link.getType());
-				ps.setString(6, link.getTitle());
-				return ps;
-			}		
+              	ps.setString(1, link.getValue());
+              	ps.setString(2, link.getRel());
+              	ps.setString(3, link.getHref());
+              	ps.setString(4, link.getMedia());
+              	ps.setString(5, link.getType());
+              	ps.setString(6, link.getTitle());
+              	return ps;
+              }		
         }, keyHolder);
 		return keyHolder.getKey().longValue();
 	}
@@ -186,5 +214,5 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
 	public Long findIdByHandle(String handle) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}	
 }

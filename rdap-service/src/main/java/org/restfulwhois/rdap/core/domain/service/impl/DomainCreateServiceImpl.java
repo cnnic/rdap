@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.core.domain.service.impl;
 
 import org.restfulwhois.rdap.common.dto.DomainDto;
-import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
@@ -57,12 +56,14 @@ public class DomainCreateServiceImpl extends DomainUpdateBaseServiceImpl {
 
     @Override
     protected void execute(Domain domain) {
-        dao.save(domain);
-        dao.saveStatus(domain);
+        LOGGER.debug("save domain...");
+        getDao().save(domain);
+        LOGGER.debug("save status...");
+        getDao().saveStatus(domain);
         DomainDto dto = (DomainDto) domain.getDto();
         saveSecureDns(dto, domain);
         saveVariants(dto, domain);
-        saveEntities(domain);
+        saveEntitiesRel(domain);
         saveNameservers(domain);
         savePublicIds(dto.getPublicIds(), domain);
         saveRemarks(dto.getRemarks(), domain);
@@ -80,36 +81,11 @@ public class DomainCreateServiceImpl extends DomainUpdateBaseServiceImpl {
 
     @Override
     protected ValidationResult validate(DomainDto domainDto) {
-        ValidationResult validationResult =
-                super.validateWithoutType(domainDto);
+        ValidationResult validationResult = new ValidationResult();
+        super.validateWithoutType(domainDto, validationResult);
         checkHandleNotExistForCreate(domainDto.getHandle(), validationResult);
-        checkNotEmpty(domainDto.getType(), "type", validationResult);
-        checkDomainTypeValid(domainDto.getType(), "type", validationResult);
+        checkDomainTypeNotEmptyAndValid(domainDto.getType(), validationResult);
         return validationResult;
-    }
-
-    /**
-     * 
-     * @param typeStr
-     * @param fieldName
-     * @param validationResult
-     */
-    private void checkDomainTypeValid(String typeStr, String fieldName,
-            ValidationResult validationResult) {
-        if (validationResult.hasError()) {
-            return;
-        }
-        DomainType domainType = null;
-        DomainType[] types = DomainType.values();
-        for (DomainType type : types) {
-            if (type.getName().equals(typeStr)) {
-                domainType = type;
-            }
-        }
-        if (null == domainType) {
-            validationResult.addError(UpdateValidationError
-                    .build4008Error(fieldName));
-        }
     }
 
 }

@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.embedded.EventDto;
@@ -62,14 +63,14 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto> {
+public class KeyDataUpdateDaoImpl extends 
+                AbstractUpdateDao<KeyData, KeyDataDto> {
    /**
      * logger for record log.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(KeyDataUpdateDaoImpl.class);
-    
-    
+            .getLogger(KeyDataUpdateDaoImpl.class);    
+ 
     /**
      * link update dao.
      */
@@ -92,7 +93,7 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto>
 
 
     @Override
-	public KeyData save(KeyData model) {
+    public KeyData save(KeyData model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -111,27 +112,62 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto>
 	/**
 	 * batch create KeyData.
 	 * 
-	 * @param outerObjectId
-	 *        object id of outer object	 
+	 * @param outerModel
+	 *        outer object	 
 	 * @param models 
 	 *        KeyData of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<KeyDataDto> models) {
-		if (null==models || models.size() == 0) {
+	public  void saveAsInnerObjects(BaseModel outerModel, List<KeyDataDto> models) {
+		if (null == models || models.size() == 0) {
 			return;
 		}
 	    for (KeyDataDto model:models) {
 	    	Long keyDataId = createKeyData(model); 	    	
-	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), ModelType.KEYDATA, keyDataId);
+	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), 
+	    			ModelType.KEYDATA, keyDataId);
 	    	KeyData keyDataAsOuter = new KeyData();
 	    	keyDataAsOuter.setId(keyDataId);
-	    	//creat link
-	       	linkUpdateDao.batchCreateAsInnerObjects(keyDataAsOuter, model.getLinks());
+	    	//create link
+	       	linkUpdateDao.saveAsInnerObjects(keyDataAsOuter,
+	       			model.getLinks());
 	    	//create event
-		    eventUpdateDao.batchCreateAsInnerObjects(keyDataAsOuter, model.getEvents());
+		    eventUpdateDao.saveAsInnerObjects(keyDataAsOuter, 
+		    		model.getEvents());
 	    }
 	}
+	
+	@Override
+	public void deleteAsInnerObjects(BaseModel outerModel) {
+		if (null == outerModel) {
+			return;
+		}
+		List<Long> keyDataIds = secureDnsUpdateDao.findIdsByOuterIdAndType(
+				outerModel.getId(), ModelType.KEYDATA);
+	    if (null != keyDataIds) {
+	    	String keyDataIdStr = StringUtils.join(keyDataIds, ",");
+	    	//delete KeyData	    	
+	    	super.delete(keyDataIdStr, "RDAP_KEYDATA", "KEYDATA_ID");
+	    	secureDnsUpdateDao.deleteRelSecureDnsDskey(
+	    			outerModel.getId(), ModelType.KEYDATA);
+	    	for (Long keyDataId : keyDataIds) {
+	    		KeyData keyData = new KeyData();
+		    	keyData.setId(keyDataId);	    		
+	    		linkUpdateDao.deleteAsInnerObjects(keyData);
+		    	eventUpdateDao.deleteAsInnerObjects(keyData);
+	    	}
+	    }
+	}	
+	
+	@Override
+    public void updateAsInnerObjects(BaseModel outerModel,
+             List<KeyDataDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        deleteAsInnerObjects(outerModel);
+        saveAsInnerObjects(outerModel, models);
+    }
 	
 	/**
 	 * @param model
@@ -161,5 +197,5 @@ public class KeyDataUpdateDaoImpl extends AbstractUpdateDao<KeyData, KeyDataDto>
 	public Long findIdByHandle(String handle) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}		
 }

@@ -31,7 +31,6 @@
 package org.restfulwhois.rdap.core.domain.service.impl;
 
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LDHNAME;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
 
@@ -50,6 +49,7 @@ import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.model.Network;
 import org.restfulwhois.rdap.common.model.SecureDns;
@@ -57,6 +57,7 @@ import org.restfulwhois.rdap.common.model.Variants;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.util.BeanUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
+import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,25 +93,58 @@ public abstract class DomainUpdateBaseServiceImpl extends
     }
 
     protected void saveNameservers(Domain domain) {
+        LOGGER.debug("save ns rel ...");
         nameserverDao.saveRel(domain);
     }
 
+    protected void deleteNameserversRel(Domain domain) {
+        LOGGER.debug("delete ns rel ...");
+        getNameserverDao().deleteRel(domain);
+    }
+
+    protected void updateNameserversRel(Domain domain) {
+        deleteNameserversRel(domain);
+        saveNameservers(domain);
+    }
+
     protected void saveSecureDns(DomainDto dto, Domain domain) {
+        LOGGER.debug("save secureDns...");
         SecureDnsDto secureDnsDto = dto.getSecureDNS();
         if (null == secureDnsDto) {
+            LOGGER.debug("secureDns is empty.");
             return;
         }
         List<SecureDnsDto> secureDnsDtos = new ArrayList<SecureDnsDto>();
         secureDnsDtos.add(secureDnsDto);
-        secureDnsUpdateDao.batchCreateAsInnerObjects(domain, secureDnsDtos);
+        secureDnsUpdateDao.saveAsInnerObjects(domain, secureDnsDtos);
+    }
+
+    protected void deleteSecureDns(Domain domain) {
+        secureDnsUpdateDao.deleteAsInnerObjects(domain);
+    }
+
+    protected void updateSecureDns(DomainDto dto, Domain domain) {
+        deleteSecureDns(domain);
+        saveSecureDns(dto, domain);
     }
 
     protected void saveVariants(DomainDto dto, Domain domain) {
+        LOGGER.debug("save variants...");
         List<VariantDto> variantDtos = dto.getVariants();
         if (null == variantDtos || variantDtos.isEmpty()) {
+            LOGGER.debug("variants is empty.");
             return;
         }
-        variantUpdateDao.batchCreateAsInnerObjects(domain, variantDtos);
+        variantUpdateDao.saveAsInnerObjects(domain, variantDtos);
+    }
+
+    protected void deleteVariants(Domain domain) {
+        variantUpdateDao.deleteAsInnerObjects(domain);
+    }
+
+    protected void updateVariants(DomainDto dto, Domain domain) {
+        deleteVariants(domain);
+        saveVariants(dto, domain);
     }
 
     private Domain convertDtoToDomain(DomainDto dto) {
@@ -138,8 +172,8 @@ public abstract class DomainUpdateBaseServiceImpl extends
         }
     }
 
-    protected ValidationResult validateWithoutType(DomainDto domainDto) {
-        ValidationResult validationResult = new ValidationResult();
+    protected ValidationResult validateWithoutType(DomainDto domainDto,
+            ValidationResult validationResult) {
         checkNotEmptyAndMaxLength(domainDto.getLdhName(), MAX_LENGTH_LDHNAME,
                 "ldhName", validationResult);
         checkNotEmptyAndMaxLengthForHandle(domainDto.getHandle(),
@@ -199,8 +233,8 @@ public abstract class DomainUpdateBaseServiceImpl extends
             checkMaxLength(keyData.getPublicKey(),
                     UpdateValidateUtil.MAX_LENGTH_2048, "keyData.publicKey",
                     validationResult);
-            checkNotNullAndMinMaxInt(keyData.getAlgorithm(), "keyData.algorithm",
-                    validationResult);
+            checkNotNullAndMinMaxInt(keyData.getAlgorithm(),
+                    "keyData.algorithm", validationResult);
             checkEvents(keyData.getEvents(), validationResult);
             checkLinks(keyData.getLinks(), validationResult);
         }
@@ -217,8 +251,8 @@ public abstract class DomainUpdateBaseServiceImpl extends
                     validationResult);
             checkNotNullAndMinMaxInt(dsData.getAlgorithm(), "dsData.algorithm",
                     validationResult);
-            checkNotNullAndMinMaxInt(dsData.getDigestType(), "dsData.digestType",
-                    validationResult);
+            checkNotNullAndMinMaxInt(dsData.getDigestType(),
+                    "dsData.digestType", validationResult);
             checkNotEmptyAndMaxLength(dsData.getDigest(),
                     UpdateValidateUtil.MAX_LENGTH_2048, "dsData.digest",
                     validationResult);
@@ -247,7 +281,7 @@ public abstract class DomainUpdateBaseServiceImpl extends
             if (null != variantNames) {
                 for (VariantNameDto variantName : variantNames) {
                     checkNotEmptyAndMaxLength(variantName.getLdhName(),
-                            MAX_LENGTH_HANDLE, "variant.ldhName",
+                            MAX_LENGTH_LDHNAME, "variant.ldhName",
                             validationResult);
                     checkNotEmptyAndMaxLength(variantName.getUnicodeName(),
                             MAX_LENGTH_UNICODENAME, "variant.unicodeName",
@@ -256,4 +290,58 @@ public abstract class DomainUpdateBaseServiceImpl extends
             }
         }
     }
+
+    /**
+     * 
+     * @param typeStr
+     * @param fieldName
+     * @param validationResult
+     */
+    protected void checkDomainTypeNotEmptyAndValid(String typeStr,
+            ValidationResult validationResult) {
+        String fieldName = "type";
+        checkNotEmpty(typeStr, fieldName, validationResult);
+        checkDomainTypeValid(typeStr, fieldName, validationResult);
+    }
+
+    /**
+     * 
+     * @param typeStr
+     * @param fieldName
+     * @param validationResult
+     */
+    protected void checkDomainTypeValid(String typeStr, String fieldName,
+            ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        DomainType domainType = null;
+        DomainType[] types = DomainType.values();
+        for (DomainType type : types) {
+            if (type.getName().equals(typeStr)) {
+                domainType = type;
+            }
+        }
+        if (null == domainType) {
+            validationResult.addError(UpdateValidationError
+                    .build4008Error(fieldName));
+        }
+    }
+
+    public UpdateDao<Nameserver, NameserverDto> getNameserverDao() {
+        return nameserverDao;
+    }
+
+    public UpdateDao<SecureDns, SecureDnsDto> getSecureDnsUpdateDao() {
+        return secureDnsUpdateDao;
+    }
+
+    public UpdateDao<Variants, VariantDto> getVariantUpdateDao() {
+        return variantUpdateDao;
+    }
+
+    public UpdateDao<Network, IpDto> getNetworkDao() {
+        return networkDao;
+    }
+
 }

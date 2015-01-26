@@ -78,24 +78,26 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             .getLogger(AbstractUpdateService.class);
 
     @Autowired
-    protected UpdateDao<MODEL, DTO> dao;
+    private UpdateDao<MODEL, DTO> dao;
     @Autowired
-    protected UpdateDao<Event, EventDto> eventDao;
+    private UpdateDao<Event, EventDto> eventDao;
     @Autowired
-    protected UpdateDao<Link, LinkDto> linkDao;
+    private UpdateDao<Link, LinkDto> linkDao;
     @Autowired
-    protected UpdateDao<Remark, RemarkDto> remarkDao;
+    private UpdateDao<Remark, RemarkDto> remarkDao;
     @Autowired
-    protected UpdateDao<PublicId, PublicIdDto> publicIdDao;
+    private UpdateDao<PublicId, PublicIdDto> publicIdDao;
     @Autowired
-    protected UpdateDao<Entity, EntityDto> entityDao;
+    private UpdateDao<Entity, EntityDto> entityDao;
 
     @Override
     public UpdateResponse execute(DTO dto) {
-        LOGGER.info("begin update dto:{}", dto);
+        LOGGER.debug("update dto:{}", dto);
         long queryStart = System.currentTimeMillis();
         ValidationResult validationResult = validate(dto);
         if (validationResult.hasError()) {
+            LOGGER.info("update dto error:{}", validationResult.getFirstError()
+                    .getCode());
             return handleError(dto, validationResult);
         }
         MODEL model = convertDtoToModel(dto);
@@ -103,7 +105,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         UpdateResponse response =
                 UpdateResponse.buildSuccessResponse(model.getHandle());
         long usedTime = System.currentTimeMillis() - queryStart;
-        LOGGER.info("end update, milliseconds:{}", usedTime);
+        LOGGER.debug("end update, milliseconds:{}", usedTime);
         return response;
     }
 
@@ -319,23 +321,77 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     }
 
     protected void saveEvents(List<EventDto> events, MODEL model) {
-        eventDao.batchCreateAsInnerObjects(model, events);
+        LOGGER.debug("save events...");
+        eventDao.saveAsInnerObjects(model, events);
+    }
+
+    protected void deleteEvents(MODEL model) {
+        LOGGER.debug("delete events...");
+        getEventDao().deleteAsInnerObjects(model);
+    }
+
+    protected void updateEvents(List<EventDto> events, MODEL model) {
+        deleteEvents(model);
+        saveEvents(events, model);
     }
 
     protected void saveLinks(List<LinkDto> links, MODEL model) {
-        linkDao.batchCreateAsInnerObjects(model, links);
+        LOGGER.debug("save links...");
+        linkDao.saveAsInnerObjects(model, links);
+    }
+
+    protected void deleteLinks(MODEL model) {
+        LOGGER.debug("delete links...");
+        getLinkDao().deleteAsInnerObjects(model);
+    }
+
+    protected void updateLinks(List<LinkDto> links, MODEL model) {
+        deleteLinks(model);
+        saveLinks(links, model);
     }
 
     protected void saveRemarks(List<RemarkDto> remarks, MODEL model) {
-        remarkDao.batchCreateAsInnerObjects(model, remarks);
+        LOGGER.debug("save remarks...");
+        remarkDao.saveAsInnerObjects(model, remarks);
+    }
+
+    protected void deleteRemarks(MODEL model) {
+        LOGGER.debug("delete remarks...");
+        getRemarkDao().deleteAsInnerObjects(model);
+    }
+
+    protected void updateRemarks(List<RemarkDto> remarks, MODEL model) {
+        deleteRemarks(model);
+        saveRemarks(remarks, model);
     }
 
     protected void savePublicIds(List<PublicIdDto> publicIds, MODEL model) {
-        publicIdDao.batchCreateAsInnerObjects(model, publicIds);
+        LOGGER.debug("save publicIds...");
+        publicIdDao.saveAsInnerObjects(model, publicIds);
     }
 
-    protected void saveEntities(MODEL model) {
+    protected void deletePublicIds(MODEL model) {
+        LOGGER.debug("delete publicIds...");
+        getPublicIdDao().deleteAsInnerObjects(model);
+    }
+
+    protected void updatePublicIds(List<PublicIdDto> publicIds, MODEL model) {
+        deletePublicIds(model);
+        savePublicIds(publicIds, model);
+    }
+
+    protected void saveEntitiesRel(MODEL model) {
+        LOGGER.debug("save entities rel...");
         entityDao.saveRel(model);
+    }
+
+    protected void deleteEntitiesRel(MODEL model) {
+        getEntityDao().deleteRel(model);
+    }
+
+    protected void updateEntitiesRel(MODEL model) {
+        deleteEntitiesRel(model);
+        saveEntitiesRel(model);
     }
 
     private UpdateResponse handleError(BaseDto dto,
@@ -346,4 +402,29 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationError.getCode(), validationError.getHttpStatusCode(),
                 validationError.getMessage());
     }
+
+    public UpdateDao<MODEL, DTO> getDao() {
+        return dao;
+    }
+
+    public UpdateDao<Event, EventDto> getEventDao() {
+        return eventDao;
+    }
+
+    public UpdateDao<Link, LinkDto> getLinkDao() {
+        return linkDao;
+    }
+
+    public UpdateDao<Remark, RemarkDto> getRemarkDao() {
+        return remarkDao;
+    }
+
+    public UpdateDao<PublicId, PublicIdDto> getPublicIdDao() {
+        return publicIdDao;
+    }
+
+    public UpdateDao<Entity, EntityDto> getEntityDao() {
+        return entityDao;
+    }
+    
 }

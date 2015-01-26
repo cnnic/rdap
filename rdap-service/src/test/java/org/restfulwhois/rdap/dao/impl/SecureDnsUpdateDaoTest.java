@@ -45,6 +45,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author zhanyq
@@ -55,22 +57,22 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	 private static final String TABLE_RDAP_SECUREDNS= "RDAP_SECUREDNS";
 	 private static final String TABLE_REL_SECUREDNS_DSKEY = "REL_SECUREDNS_DSKEY";	 
 	 private static final String TABLE_RDAP_KEYDATA= "RDAP_KEYDATA";
-	 private static final String TABLE_RDAP_DSDATA = "RDAP_DSDATA";	
-	// private static final String TABLE_RDAP_EVENT= "RDAP_EVENT";
-	// private static final String TABLE_REL_EVENT_REGISTRATION = "REL_EVENT_REGISTRATION";
-
+	 private static final String TABLE_RDAP_DSDATA = "RDAP_DSDATA";
 	    @Autowired
 	    private UpdateDao<SecureDns, SecureDnsDto> updateDao;
 
 	    @Test
 	    @DatabaseSetup("teardown.xml")
-	    @DatabaseTearDown("teardown.xml")   
+	    @DatabaseTearDown("teardown.xml") 
+	    @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/secureDns-update.xml")
 	    public void testcreateSecureDns() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<SecureDnsDto> secureDnsList = createSecureDns();
-	        updateDao.batchCreateAsInnerObjects(domain, secureDnsList);
-	        assertTable();
+	        updateDao.saveAsInnerObjects(domain, secureDnsList);
+	        //assertTable();
 	    }
 
 	    public static void assertTable() throws Exception {
@@ -104,5 +106,32 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	    	secureDns.setDsData(dsDataList);
 	    	secureDnsList.add(secureDns);
             return secureDnsList;
+        }
+        
+        @Test
+        @DatabaseSetup("secureDns-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/secureDns-empty.xml")
+        public void testDeleteSecureDns() throws Exception {
+            Domain domain = new Domain();
+            domain.setId(1L);
+            updateDao.deleteAsInnerObjects(domain);
+            
+        }
+        
+        @Test
+        @DatabaseSetup("secureDns-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/secureDns-update.xml")
+        public void testUpdateSecureDns() throws Exception {
+        	Domain domain = new Domain();
+	    	domain.setId(1L);
+	    	List<SecureDnsDto> secureDnsList = createSecureDns();
+            updateDao.updateAsInnerObjects(domain, secureDnsList);
+            
         }
 }

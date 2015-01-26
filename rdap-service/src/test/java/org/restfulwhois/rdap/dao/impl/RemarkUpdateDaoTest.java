@@ -44,19 +44,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author zhanyq
  * 
  */
-public class RemarkUpdateDaoTest extends BaseTest {
-
-	 private static final String TABLE_RDAP_NOTICE= "RDAP_NOTICE";
-	 private static final String TABLE_REL_NOTICE_REGISTRATION = "REL_NOTICE_REGISTRATION";
-	 private static final String TABLE_RDAP_NOTICE_DESCRIPTION = "RDAP_NOTICE_DESCRIPTION";
-	 private static final String TABLE_RDAP_LINK = "RDAP_LINK";
-	 private static final String TABLE_REL_LINK_OBJECT = "REL_LINK_OBJECT";
-	 private static final String TABLE_RDAP_LINK_HREFLANG = "RDAP_LINK_HREFLANG";
+public class RemarkUpdateDaoTest extends BaseTest { 
 
 	    @Autowired
 	    private UpdateDao<Remark, RemarkDto> updateDao;
@@ -64,19 +59,16 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	    @Test
 	    @DatabaseSetup("teardown.xml")
 	    @DatabaseTearDown("teardown.xml")   
+	    @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/remark-update.xml")
 	    public void testcreateRemark() throws Exception {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<RemarkDto> remarkList = createRemarkList();
-	        updateDao.batchCreateAsInnerObjects(domain, remarkList);
-	        assertCreate();
-	    }
-
-        public static void assertCreate() throws Exception {
-            assertTablesForUpdate("remark-update.xml", TABLE_RDAP_NOTICE,
-	        		TABLE_REL_NOTICE_REGISTRATION, TABLE_RDAP_NOTICE_DESCRIPTION,
-	        		TABLE_RDAP_LINK,TABLE_REL_LINK_OBJECT,TABLE_RDAP_LINK_HREFLANG);
-        }
+	        updateDao.saveAsInnerObjects(domain, remarkList);
+	       
+	    }      
 
         public static List<RemarkDto> createRemarkList() {
             List<RemarkDto> remarkList = new ArrayList<RemarkDto>();
@@ -87,21 +79,37 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	    	remark.setTitle("域名测试-200-50-remark2");
 	    	remark.setDescription(description);	
 	    	//link
-	    	List<LinkDto> linkList = new ArrayList<LinkDto>();
-	    	List<String> hreflang = new ArrayList<String>();
-	    	hreflang.add("en");
-	    	hreflang.add("zh");
-	    	LinkDto link = new LinkDto();
-	    	link.setHref("http://sina.com.cn");
-	    	link.setMedia("screen");
-	    	link.setRel("up");
-	    	link.setTitle("little title");
-	    	link.setType("application/rdap+json");
-	    	link.setValue("http://sina.com.cn");
-	    	link.setHreflang(hreflang);
-	    	linkList.add(link);
+	    	List<LinkDto> linkList = LinkUpdateDaoTest.createLinkList();
 	    	remark.setLinks(linkList);
 	    	remarkList.add(remark);
             return remarkList;
         }
+        
+        @Test
+        @DatabaseSetup("remark-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/remark-empty.xml")
+        public void testDeleteRemark() throws Exception {
+            Domain domain = new Domain();
+            domain.setId(1L);
+            updateDao.deleteAsInnerObjects(domain);
+            
+        }
+        
+        @Test
+        @DatabaseSetup("remark-delete.xml")
+        @DatabaseTearDown("teardown.xml")
+        @ExpectedDatabase(
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                value = "classpath:/org/restfulwhois/rdap/dao/impl/remark-update.xml")
+        public void testUpdateRemark() throws Exception {
+        	Domain domain = new Domain();
+	    	domain.setId(1L);
+	    	List<RemarkDto> remarkList = createRemarkList();
+            updateDao.updateAsInnerObjects(domain, remarkList);
+            
+        }
+
 }

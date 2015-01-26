@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_DOMAIN DOMAIN_ID="1" HANDLE='h1' LDH_NAME='cnnic.cn'
+		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' TYPE='dnr'
+		CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />
+	<RDAP_DOMAIN_STATUS DOMAIN_ID="1" STATUS="validated" />
+	<RDAP_DOMAIN_STATUS DOMAIN_ID="1" STATUS="update prohibited" />
+	<!-- event -->
+	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="jiashuo"
+		EVENT_DATE="2014-01-01 00:01:01" />
+	<REL_EVENT_REGISTRATION REL_EVENT_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="domain" EVENT_ID="1" />
+	<RDAP_LINK LINK_ID="1" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" TITLE="Title1 of Link1" />
+	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="event" LINK_ID="1" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='1' LINK_ID="1"
+		HREFLANG="en" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='2' LINK_ID="1"
+		HREFLANG="zh" />
+	<!-- variants -->
+	<RDAP_VARIANT VARIANT_ID='1' LDH_NAME='variant1'
+		UNICODE_NAME='unicodeName1' IDNTABLE='idntable1' />
+	<RDAP_VARIANT VARIANT_ID='2' LDH_NAME='variant2'
+		UNICODE_NAME='unicodeName2' IDNTABLE='idntable2' />
+	<REL_DOMAIN_VARIANT REL_VARIANT_ID='1' DOMAIN_ID='1'
+		VARIANT_TYPE='registered' VARIANT_ID='1' />
+	<REL_DOMAIN_VARIANT REL_VARIANT_ID='2' DOMAIN_ID='1'
+		VARIANT_TYPE='open registration' VARIANT_ID='2' />
+	<!-- entities rel -->
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='11'
+		REL_ID='1' REL_OBJECT_TYPE='domain' ENTITY_ID='1' ENTITY_ROLE="registrar" />
+	<!-- ns rel -->
+	<REL_DOMAIN_NAMESERVER REL_DOMAIN_NS_ID='111'
+		DOMAIN_ID='1' NAMESERVER_ID='1' />
+	<REL_DOMAIN_NAMESERVER REL_DOMAIN_NS_ID='112'
+		DOMAIN_ID='1' NAMESERVER_ID='2' />
+	<!-- publicId -->
+	<RDAP_PUBLICID PUBLIC_ID='1' IDENTIFIER='identifier'
+		TYPE='type' />
+	<REL_PUBLICID_REGISTRATION REL_PUBLICID_ID='1'
+		REL_ID='1' REL_OBJECT_TYPE='domain' PUBLIC_ID='1' />
+	<!-- remark -->
+	<RDAP_NOTICE NOTICE_ID="1" TITLE="Terms of Use" TYPE="remark" />
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="1"
+		REL_ID="1" REL_OBJECT_TYPE="domain" NOTICE_ID="1" />
+	<!-- remark desc -->
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="1"
+		NOTICE_ID="1" DESCRIPTION="description1" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="2"
+		NOTICE_ID="1" DESCRIPTION="description2" />
+	<!-- remark link -->
+	<RDAP_LINK LINK_ID="2" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="2" REL_ID="1"
+		REL_OBJECT_TYPE="remark" LINK_ID="2" />
+	<!-- link -->
+	<RDAP_LINK LINK_ID="3" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" TITLE="Title1 of Link1" />
+	<REL_LINK_OBJECT REL_LINK_ID="3" REL_ID="1"
+		REL_OBJECT_TYPE="domain" LINK_ID="3" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='3' LINK_ID="3"
+		HREFLANG="en" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='4' LINK_ID="3"
+		HREFLANG="zh" />
+	<!-- securedns -->
+	<RDAP_SECUREDNS SECUREDNS_ID='1' ZONE_SIGNED='1'
+		DELEGATION_SIGNED='1' MAX_SIGLIFE='1' DOMAIN_ID='1' />
+	<!-- dsData -->
+	<RDAP_DSDATA DSDATA_ID='1' KEY_TAG='1' ALGORITHM='1'
+		DIGEST='D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A'
+		DIGEST_TYPE='1' />
+	<REL_SECUREDNS_DSKEY REL_SECUREDNS_ID='1'
+		SECUREDNS_ID='1' REL_DSKEY_TYPE='dsData' REL_ID='1' />
+	<!-- keyData -->
+	<RDAP_KEYDATA KEYDATA_ID='1' FLAGS='1' ALGORITHM='1'
+		PUBLIC_KEY='D4B7D520E7BB5F0F67674A0CCEB1E3E0614B93C4F9E99B8383F6A1E4469DA50A'
+		PROTOCOL='1' />
+	<REL_SECUREDNS_DSKEY REL_SECUREDNS_ID='2'
+		SECUREDNS_ID='1' REL_DSKEY_TYPE='keyData' REL_ID='1' />
+</dataset>
