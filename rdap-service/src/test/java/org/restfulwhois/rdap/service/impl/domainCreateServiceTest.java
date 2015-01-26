@@ -104,7 +104,7 @@ public class domainCreateServiceTest extends BaseTest {
         v.setIdnTable("idnTable");
         variantDto.add(v);
         String stringExceedOneMoreChar =
-                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_HANDLE + 1);
+                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_LDHNAME + 1);
         List<VariantNameDto> variantNames = new ArrayList<VariantNameDto>();
         VariantNameDto name = new VariantNameDto();
         variantNames.add(name);
