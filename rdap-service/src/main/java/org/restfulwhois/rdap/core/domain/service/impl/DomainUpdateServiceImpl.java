@@ -61,12 +61,9 @@ public class DomainUpdateServiceImpl extends DomainUpdateBaseServiceImpl {
         DomainDto dto = (DomainDto) domain.getDto();
         updateSecureDns(dto, domain);
         updateVariants(dto, domain);
-        updateEntitiesRel(domain);
         updateNameserversRel(domain);
         updatePublicIds(dto.getPublicIds(), domain);
-        updateRemarks(dto.getRemarks(), domain);
-        updateLinks(dto.getLinks(), domain);
-        updateEvents(dto.getEvents(), domain);
+        updateBaseModel(domain);
     }
 
     @Override
