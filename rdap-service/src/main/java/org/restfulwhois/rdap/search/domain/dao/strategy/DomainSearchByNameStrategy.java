@@ -99,7 +99,6 @@ public class DomainSearchByNameStrategy extends AbstractDomainSearchStrategy {
         final String punyNameLikeClause = generateLikeClause(punyName);
         final String sql =
                 "select * from RDAP_DOMAIN domain "
-                        + DomainQueryDaoImpl.SQL_LEFT_JOIN_DOMAIN_STATUS
                         + " where LDH_NAME like ? or UNICODE_NAME like ? "
                         + " order by domain.LDH_NAME limit ?,? ";
         final PageBean page = domainSearchParam.getPageBean();
@@ -120,6 +119,9 @@ public class DomainSearchByNameStrategy extends AbstractDomainSearchStrategy {
                 return ps;
             }
         }, domainDao.new DomainWithStatusResultSetExtractor());
+        for(Domain domain : result){
+        	domainDao.queryDomainStatus(domain);
+        }
         return result;
     }
 
