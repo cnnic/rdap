@@ -102,7 +102,6 @@ public class DomainSearchByNsNameStrategy extends AbstractDomainSearchStrategy {
                         + " REL_DOMAIN_NAMESERVER rel on domain.DOMAIN_ID = rel.DOMAIN_ID "
                         + " inner join RDAP_NAMESERVER ns "
                         + " on rel.NAMESERVER_ID = ns.NAMESERVER_ID "
-                        + DomainQueryDaoImpl.SQL_LEFT_JOIN_DOMAIN_STATUS
                         + " where ns.LDH_NAME LIKE ? "
                         + " order by domain.LDH_NAME limit ?,? ";
         final PageBean page = queryParam.getPageBean();
@@ -122,6 +121,9 @@ public class DomainSearchByNsNameStrategy extends AbstractDomainSearchStrategy {
                         return ps;
                     }
                 }, domainDao.new DomainWithStatusResultSetExtractor());
+        for(Domain domain : result){
+        	domainDao.queryDomainStatus(domain);
+        }
         return result;
     }
 

@@ -85,7 +85,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     /**
      * left join domain status SQL.
      */
-    public static final String SQL_QUERY_DOMAIN_STATUS =
+    private final String SQL_QUERY_DOMAIN_STATUS =
     		"select * from RDAP_DOMAIN_STATUS status"
         			+ " where status.DOMAIN_ID = ?";
     /**
@@ -341,22 +341,24 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         return result.get(0);
     }
 
-    private void queryDomainStatus(Domain domain){
-    	final long domainId = domain.getId();
-    	List<String> result = 
-    		jdbcTemplate.query(new PreparedStatementCreator() {
-				@Override
-				public PreparedStatement createPreparedStatement(Connection connection)
-						throws SQLException {
-					PreparedStatement ps = 
-							connection.prepareStatement(SQL_QUERY_DOMAIN_STATUS);
-					ps.setLong(1, domainId);
-					return ps;
-				}
-			}, new StatusResultSetExtractor());
-    	if (null != result && result.size() != 0) {
-    		domain.setStatus(result);
-        }
+    public void queryDomainStatus(Domain domain){
+    	if(domain != null){
+    		final long domainId = domain.getId();
+        	List<String> result = 
+        		jdbcTemplate.query(new PreparedStatementCreator() {
+    				@Override
+    				public PreparedStatement createPreparedStatement(Connection connection)
+    						throws SQLException {
+    					PreparedStatement ps = 
+    							connection.prepareStatement(SQL_QUERY_DOMAIN_STATUS);
+    					ps.setLong(1, domainId);
+    					return ps;
+    				}
+    			}, new StatusResultSetExtractor());
+        	if (null != result && result.size() != 0) {
+        		domain.setStatus(result);
+            }
+    	}
     }
     
     
