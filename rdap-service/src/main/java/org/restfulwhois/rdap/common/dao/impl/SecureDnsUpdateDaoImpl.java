@@ -113,7 +113,7 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
 	 *        SecureDns of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(BaseModel outerModel,
+	public  void saveAsInnerObjects(BaseModel outerModel,
 			List<SecureDnsDto> models) {
 		if (null == models || models.size() == 0) {
 			return;
@@ -123,10 +123,10 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
 	    	SecureDns secureDnsAsOuter = new SecureDns();
 	    	secureDnsAsOuter.setId(secureDnsId);
 	    	//create KeyData	    	
-	    	keyDataUpdateDao.batchCreateAsInnerObjects(secureDnsAsOuter,
+	    	keyDataUpdateDao.saveAsInnerObjects(secureDnsAsOuter,
 	    			model.getKeyData());	    	
 	    	//create DsData            
-            dsDataUpdateDao.batchCreateAsInnerObjects(secureDnsAsOuter, 
+            dsDataUpdateDao.saveAsInnerObjects(secureDnsAsOuter, 
             		model.getDsData());	    	
 	    }
 	}
@@ -159,7 +159,7 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
              return;
         }
         deleteAsInnerObjects(outerModel);
-        batchCreateAsInnerObjects(outerModel, models);
+        saveAsInnerObjects(outerModel, models);
     }
 	/**
 	 * @param model

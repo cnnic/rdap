@@ -95,7 +95,7 @@ public class VariantsUpdateDaoImpl extends
 	 *        Variants of outer Object
 	 */
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel,
+	public void saveAsInnerObjects(BaseModel outerModel,
 			List<VariantDto> models) {
 		if (null == models || models.size() == 0) {
 			return;
@@ -127,7 +127,7 @@ public class VariantsUpdateDaoImpl extends
              return;
         }
         deleteAsInnerObjects(outerModel);
-        batchCreateAsInnerObjects(outerModel, models);
+        saveAsInnerObjects(outerModel, models);
     }
 	/**
 	 * @param domainId

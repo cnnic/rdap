@@ -71,7 +71,7 @@ public class SecureDnsUpdateDaoTest extends BaseTest {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<SecureDnsDto> secureDnsList = createSecureDns();
-	        updateDao.batchCreateAsInnerObjects(domain, secureDnsList);
+	        updateDao.saveAsInnerObjects(domain, secureDnsList);
 	        //assertTable();
 	    }
 

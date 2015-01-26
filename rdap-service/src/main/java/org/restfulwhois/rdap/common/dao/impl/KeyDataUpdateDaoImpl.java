@@ -118,7 +118,7 @@ public class KeyDataUpdateDaoImpl extends
 	 *        KeyData of outer Object
 	 */
 	@Override
-	public  void batchCreateAsInnerObjects(BaseModel outerModel, List<KeyDataDto> models) {
+	public  void saveAsInnerObjects(BaseModel outerModel, List<KeyDataDto> models) {
 		if (null == models || models.size() == 0) {
 			return;
 		}
@@ -129,10 +129,10 @@ public class KeyDataUpdateDaoImpl extends
 	    	KeyData keyDataAsOuter = new KeyData();
 	    	keyDataAsOuter.setId(keyDataId);
 	    	//create link
-	       	linkUpdateDao.batchCreateAsInnerObjects(keyDataAsOuter,
+	       	linkUpdateDao.saveAsInnerObjects(keyDataAsOuter,
 	       			model.getLinks());
 	    	//create event
-		    eventUpdateDao.batchCreateAsInnerObjects(keyDataAsOuter, 
+		    eventUpdateDao.saveAsInnerObjects(keyDataAsOuter, 
 		    		model.getEvents());
 	    }
 	}
@@ -166,7 +166,7 @@ public class KeyDataUpdateDaoImpl extends
              return;
         }
         deleteAsInnerObjects(outerModel);
-        batchCreateAsInnerObjects(outerModel, models);
+        saveAsInnerObjects(outerModel, models);
     }
 	
 	/**

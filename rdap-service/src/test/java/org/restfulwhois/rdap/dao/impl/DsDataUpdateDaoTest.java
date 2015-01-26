@@ -77,7 +77,7 @@ public class DsDataUpdateDaoTest extends BaseTest {
 	    	dsData.setLinks(linkList);
 	    
 	    	dsDataList.add(dsData);
-	        updateDao.batchCreateAsInnerObjects(secureDns, dsDataList);
+	        updateDao.saveAsInnerObjects(secureDns, dsDataList);
 	    }
 	    public static List<LinkDto> createLinkList() {
 	    	List<LinkDto> linkList = new ArrayList<LinkDto>();

@@ -89,7 +89,7 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
      *        links of outer Object
      */
     @Override
-    public void batchCreateAsInnerObjects(BaseModel outerModel,
+    public void saveAsInnerObjects(BaseModel outerModel,
              List<LinkDto> models) {
         if (null == models || models.size() == 0) {
              return;
@@ -109,7 +109,7 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
              return;
         }
         deleteAsInnerObjects(outerModel);
-        batchCreateAsInnerObjects(outerModel, models);
+        saveAsInnerObjects(outerModel, models);
     }
 
     @Override

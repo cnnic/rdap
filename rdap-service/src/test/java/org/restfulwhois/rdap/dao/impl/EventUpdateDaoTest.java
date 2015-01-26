@@ -74,7 +74,7 @@ public class EventUpdateDaoTest extends BaseTest {
 	    	List<LinkDto> linkList = LinkUpdateDaoTest.createLinkList();	    	
 	    	event.setLinks(linkList);
 	    	eventList.add(event);
-	        updateDao.batchCreateAsInnerObjects(domain, eventList);	        
+	        updateDao.saveAsInnerObjects(domain, eventList);	        
 	    }
 	    
 	    @Test

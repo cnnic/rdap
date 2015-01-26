@@ -93,7 +93,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
 		
 	}
 	@Override
-	public void batchCreateAsInnerObjects(BaseModel outerModel, List<RemarkDto> models) {
+	public void saveAsInnerObjects(BaseModel outerModel, List<RemarkDto> models) {
 		if (null == models || models.size() == 0){
 			return;
 		}
@@ -104,7 +104,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
 			//create link
 			Remark remarkAsOuter = new Remark();
 			remarkAsOuter.setId(remarkId);
-			linkUpdateDao.batchCreateAsInnerObjects(remarkAsOuter,
+			linkUpdateDao.saveAsInnerObjects(remarkAsOuter,
 					remark.getLinks());
 						
 	    }
@@ -139,7 +139,7 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
              return;
         }
         deleteAsInnerObjects(outerModel);
-        batchCreateAsInnerObjects(outerModel, models);
+        saveAsInnerObjects(outerModel, models);
     }
 	
    /**

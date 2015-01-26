@@ -66,7 +66,7 @@ public class RemarkUpdateDaoTest extends BaseTest {
 	    	Domain domain = new Domain();
 	    	domain.setId(1L);
 	    	List<RemarkDto> remarkList = createRemarkList();
-	        updateDao.batchCreateAsInnerObjects(domain, remarkList);
+	        updateDao.saveAsInnerObjects(domain, remarkList);
 	       
 	    }      
 
