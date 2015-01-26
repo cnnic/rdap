@@ -64,6 +64,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
@@ -171,14 +172,14 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             Domain domain = queryArpaWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             LOGGER.debug("query, domain:" + domain);
-            queryDomainStatus(domain);
+            queryDomainStatus(domain, jdbcTemplate);
             return domain;
         } else {
             // LDH domain for DNR
             Domain domain = queryDomainWithoutInnerObjects(queryParam);
             queryAndSetInnerObjects(domain);
             LOGGER.debug("query, domain:" + domain);
-            queryDomainStatus(domain);
+            queryDomainStatus(domain, jdbcTemplate);
             return domain;
         }
     }
@@ -282,7 +283,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         List<Domain> result = null;
         final int hexCharSize = IpUtil.getHexCharSize(network.getIpVersion());
         String sql =
-                "select domain.*,status.* "
+                "select domain.*"
                         + " from RDAP_IP ip "
                         + " inner join RDAP_DOMAIN domain "
                         + " on domain.NETWORK_ID = ip.IP_ID "
@@ -341,7 +342,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         return result.get(0);
     }
 
-    public void queryDomainStatus(Domain domain){
+    public void queryDomainStatus(Domain domain, JdbcTemplate jdbcTemplate){
     	if(domain != null){
     		final long domainId = domain.getId();
         	List<String> result = 
@@ -407,7 +408,6 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
                     result.add(domain);
                     domainMapById.put(domainId, domain);
                 }
-                domain.addStatus(rs.getString("STATUS"));
             }
             return result;
         }
