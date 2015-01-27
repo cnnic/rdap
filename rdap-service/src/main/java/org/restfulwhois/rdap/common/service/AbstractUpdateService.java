@@ -30,6 +30,11 @@
  */
 package org.restfulwhois.rdap.common.service;
 
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_ENTITY;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_EVENT;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_LINK;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_PUBLICID;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_REMARK;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_2048;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
@@ -40,20 +45,24 @@ import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_ST
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.dto.EntityDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
+import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
 import org.restfulwhois.rdap.common.dto.embedded.EventDto;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
 import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.model.Event;
+import org.restfulwhois.rdap.common.model.IpVersion;
 import org.restfulwhois.rdap.common.model.Link;
 import org.restfulwhois.rdap.common.model.PublicId;
 import org.restfulwhois.rdap.common.model.Remark;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.util.IpUtil;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
@@ -114,6 +123,55 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     abstract protected MODEL convertDtoToModel(DTO dto);
 
     abstract protected ValidationResult validate(DTO dto);
+
+    protected void validateBaseDto(BaseDto dto,
+            ValidationResult validationResult) {
+        checkMaxLengthForStatus(dto.getStatus(), validationResult);
+        checkEntities(dto.getEntities(), validationResult);
+        checkRemarks(dto.getRemarks(), validationResult);
+        checkLinks(dto.getLinks(), validationResult);
+        checkMaxLengthForPort43(dto.getPort43(), validationResult);
+        checkEvents(dto.getEvents(), validationResult);
+        checkMaxLengthForLang(dto.getLang(), validationResult);
+    }
+
+    protected void saveBaseModel(MODEL model) {
+        saveEntitiesRel(model);
+        BaseDto dto = model.getDto();
+        saveRemarks(dto.getRemarks(), model);
+        saveLinks(dto.getLinks(), model);
+        saveEvents(dto.getEvents(), model);
+    }
+
+    protected void updateBaseModel(MODEL model) {
+        BaseDto dto = model.getDto();
+        updateEntitiesRel(model);
+        updateRemarks(dto.getRemarks(), model);
+        updateLinks(dto.getLinks(), model);
+        updateEvents(dto.getEvents(), model);
+    }
+
+    protected void deleteBaseModelRel(MODEL model) {
+        deleteEntitiesRel(model);
+        deleteRemarks(model);
+        deleteLinks(model);
+        deleteEvents(model);
+    }
+
+    protected void checkIp(String ip, String fieldName,
+            ValidationResult validationResult) {
+        if (validationResult.hasError()) {
+            return;
+        }
+        if (StringUtils.isBlank(ip)) {
+            return;
+        }
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ip);
+        if (ipVersion.isNotValidIp()) {
+            validationResult.addError(UpdateValidationError
+                    .build4008Error(fieldName));
+        }
+    }
 
     protected void convertCustomProperties(DTO dto, MODEL model) {
         Map<String, String> customProperties = dto.getCustomProperties();
@@ -229,11 +287,14 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
         for (EventDto event : events) {
             checkNotEmptyAndMaxLength(event.getEventAction(), MAX_LENGTH_255,
-                    "event.eventAction", validationResult);
+                    ERROR_PROP_NAME_PREFIX_EVENT + "eventAction",
+                    validationResult);
             checkMaxLength(event.getEventActor(), MAX_LENGTH_255,
-                    "event.eventActor", validationResult);
+                    ERROR_PROP_NAME_PREFIX_EVENT + "eventActor",
+                    validationResult);
             UpdateValidateUtil.checkNotEmptyAndValidMinMaxDate(
-                    event.getEventDate(), "event.eventDate", validationResult);
+                    event.getEventDate(), ERROR_PROP_NAME_PREFIX_EVENT
+                            + "eventDate", validationResult);
         }
     }
 
@@ -244,9 +305,10 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
         for (PublicIdDto publicId : publicIds) {
             checkNotEmptyAndMaxLength(publicId.getIdentifier(), MAX_LENGTH_255,
-                    "public.identifier", validationResult);
+                    ERROR_PROP_NAME_PREFIX_PUBLICID + "identifier",
+                    validationResult);
             checkNotEmptyAndMaxLength(publicId.getType(), MAX_LENGTH_255,
-                    "public.type", validationResult);
+                    ERROR_PROP_NAME_PREFIX_PUBLICID + "type", validationResult);
         }
     }
 
@@ -256,13 +318,14 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             return;
         }
         for (RemarkDto remark : remarks) {
-            checkMaxLength(remark.getTitle(), MAX_LENGTH_255, "remark.title",
-                    validationResult);
+            checkMaxLength(remark.getTitle(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_REMARK + "title", validationResult);
             List<String> descriptions = remark.getDescription();
             if (null != descriptions) {
                 for (String description : descriptions) {
                     checkMaxLength(description, MAX_LENGTH_2048,
-                            "remark.description", validationResult);
+                            ERROR_PROP_NAME_PREFIX_REMARK + "description",
+                            validationResult);
                 }
             }
         }
@@ -274,24 +337,40 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             return;
         }
         for (LinkDto link : links) {
-            checkMaxLength(link.getTitle(), MAX_LENGTH_255, "link.title",
-                    validationResult);
-            checkMaxLength(link.getMedia(), MAX_LENGTH_255, "link.media",
-                    validationResult);
-            checkMaxLength(link.getRel(), MAX_LENGTH_255, "link.rel",
-                    validationResult);
-            checkMaxLength(link.getType(), MAX_LENGTH_255, "link.type",
-                    validationResult);
-            checkMaxLength(link.getValue(), MAX_LENGTH_2048, "link.value",
-                    validationResult);
-            checkMaxLength(link.getHref(), MAX_LENGTH_2048, "link.href",
-                    validationResult);
+            checkMaxLength(link.getTitle(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_LINK + "title", validationResult);
+            checkMaxLength(link.getMedia(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_LINK + "media", validationResult);
+            checkMaxLength(link.getRel(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_LINK + "rel", validationResult);
+            checkMaxLength(link.getType(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_LINK + "type", validationResult);
+            checkMaxLength(link.getValue(), MAX_LENGTH_2048,
+                    ERROR_PROP_NAME_PREFIX_LINK + "value", validationResult);
+            checkMaxLength(link.getHref(), MAX_LENGTH_2048,
+                    ERROR_PROP_NAME_PREFIX_LINK + "href", validationResult);
             List<String> hreflangs = link.getHreflang();
             if (null != hreflangs) {
                 for (String hreflang : hreflangs) {
-                    checkMaxLength(hreflang, MAX_LENGTH_LANG, "link.hreflang",
+                    checkMaxLength(hreflang, MAX_LENGTH_LANG,
+                            ERROR_PROP_NAME_PREFIX_LINK + "hreflang",
                             validationResult);
                 }
+            }
+        }
+    }
+
+    protected void checkEntities(List<EntityHandleDto> entities,
+            ValidationResult validationResult) {
+        if (null == entities) {
+            return;
+        }
+        for (EntityHandleDto entityHandle : entities) {
+            List<String> roles = entityHandle.getRoles();
+            for (String role : roles) {
+                checkNotEmptyAndMaxLength(role, MAX_LENGTH_255,
+                        ERROR_PROP_NAME_PREFIX_ENTITY + "roles",
+                        validationResult);
             }
         }
     }
@@ -327,7 +406,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void deleteEvents(MODEL model) {
         LOGGER.debug("delete events...");
-        getEventDao().deleteAsInnerObjects(model);
+        eventDao.deleteAsInnerObjects(model);
     }
 
     protected void updateEvents(List<EventDto> events, MODEL model) {
@@ -342,7 +421,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void deleteLinks(MODEL model) {
         LOGGER.debug("delete links...");
-        getLinkDao().deleteAsInnerObjects(model);
+        linkDao.deleteAsInnerObjects(model);
     }
 
     protected void updateLinks(List<LinkDto> links, MODEL model) {
@@ -357,7 +436,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void deleteRemarks(MODEL model) {
         LOGGER.debug("delete remarks...");
-        getRemarkDao().deleteAsInnerObjects(model);
+        remarkDao.deleteAsInnerObjects(model);
     }
 
     protected void updateRemarks(List<RemarkDto> remarks, MODEL model) {
@@ -372,7 +451,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
 
     protected void deletePublicIds(MODEL model) {
         LOGGER.debug("delete publicIds...");
-        getPublicIdDao().deleteAsInnerObjects(model);
+        publicIdDao.deleteAsInnerObjects(model);
     }
 
     protected void updatePublicIds(List<PublicIdDto> publicIds, MODEL model) {
@@ -386,7 +465,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     }
 
     protected void deleteEntitiesRel(MODEL model) {
-        getEntityDao().deleteRel(model);
+        entityDao.deleteRel(model);
     }
 
     protected void updateEntitiesRel(MODEL model) {
@@ -407,24 +486,4 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         return dao;
     }
 
-    public UpdateDao<Event, EventDto> getEventDao() {
-        return eventDao;
-    }
-
-    public UpdateDao<Link, LinkDto> getLinkDao() {
-        return linkDao;
-    }
-
-    public UpdateDao<Remark, RemarkDto> getRemarkDao() {
-        return remarkDao;
-    }
-
-    public UpdateDao<PublicId, PublicIdDto> getPublicIdDao() {
-        return publicIdDao;
-    }
-
-    public UpdateDao<Entity, EntityDto> getEntityDao() {
-        return entityDao;
-    }
-    
 }

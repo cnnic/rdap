@@ -43,7 +43,6 @@ import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.IpDto;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.DsDataDto;
-import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
 import org.restfulwhois.rdap.common.dto.embedded.KeyDataDto;
 import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
@@ -183,31 +182,11 @@ public abstract class DomainUpdateBaseServiceImpl extends
                 validationResult);
         checkMaxLength(domainDto.getUnicodeName(), MAX_LENGTH_UNICODENAME,
                 "unicodeName", validationResult);
-        checkMaxLengthForPort43(domainDto.getPort43(), validationResult);
-        checkMaxLengthForLang(domainDto.getLang(), validationResult);
-        checkMaxLengthForStatus(domainDto.getStatus(), validationResult);
         checkVariants(domainDto, validationResult);
         checkSecureDns(domainDto, validationResult);
-        checkEntities(domainDto.getEntities(), validationResult);
         checkPublicIds(domainDto.getPublicIds(), validationResult);
-        checkRemarks(domainDto.getRemarks(), validationResult);
-        checkLinks(domainDto.getLinks(), validationResult);
-        checkEvents(domainDto.getEvents(), validationResult);
+        validateBaseDto(domainDto, validationResult);
         return validationResult;
-    }
-
-    private void checkEntities(List<EntityHandleDto> entities,
-            ValidationResult validationResult) {
-        if (null == entities) {
-            return;
-        }
-        for (EntityHandleDto entityHandle : entities) {
-            List<String> roles = entityHandle.getRoles();
-            for (String role : roles) {
-                checkNotEmptyAndMaxLength(role, MAX_LENGTH_255, "entity.role",
-                        validationResult);
-            }
-        }
     }
 
     private void checkSecureDns(DomainDto domainDto,
