@@ -163,7 +163,7 @@ public class HttpRequestFilter implements HttpFilter {
     private boolean containsSupportedMediaType(List<MediaType> mediaTypes) {
         LOGGER.debug("SUPPORTED_MEDIA_TYPE:{}", SUPPORTED_MEDIA_TYPE);
         for (MediaType supportedMediaType : SUPPORTED_MEDIA_TYPE) {
-            for (MediaType mediaType : SUPPORTED_MEDIA_TYPE) {
+            for (MediaType mediaType : mediaTypes) {
                 if (StringUtils.equalsIgnoreCase(supportedMediaType.getType(),
                         mediaType.getType())
                         && StringUtils.equalsIgnoreCase(
