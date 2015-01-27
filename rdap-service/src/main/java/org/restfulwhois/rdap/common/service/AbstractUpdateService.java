@@ -30,6 +30,11 @@
  */
 package org.restfulwhois.rdap.common.service;
 
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_ENTITY;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_EVENT;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_LINK;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_PUBLICID;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_REMARK;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_2048;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_HANDLE;
@@ -129,7 +134,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         checkEvents(dto.getEvents(), validationResult);
         checkMaxLengthForLang(dto.getLang(), validationResult);
     }
-    
+
     protected void saveBaseModel(MODEL model) {
         saveEntitiesRel(model);
         BaseDto dto = model.getDto();
@@ -137,7 +142,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         saveLinks(dto.getLinks(), model);
         saveEvents(dto.getEvents(), model);
     }
-    
+
     protected void updateBaseModel(MODEL model) {
         BaseDto dto = model.getDto();
         updateEntitiesRel(model);
@@ -145,7 +150,7 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         updateLinks(dto.getLinks(), model);
         updateEvents(dto.getEvents(), model);
     }
-    
+
     protected void deleteBaseModelRel(MODEL model) {
         deleteEntitiesRel(model);
         deleteRemarks(model);
@@ -282,11 +287,14 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
         for (EventDto event : events) {
             checkNotEmptyAndMaxLength(event.getEventAction(), MAX_LENGTH_255,
-                    "event.eventAction", validationResult);
+                    ERROR_PROP_NAME_PREFIX_EVENT + "eventAction",
+                    validationResult);
             checkMaxLength(event.getEventActor(), MAX_LENGTH_255,
-                    "event.eventActor", validationResult);
+                    ERROR_PROP_NAME_PREFIX_EVENT + "eventActor",
+                    validationResult);
             UpdateValidateUtil.checkNotEmptyAndValidMinMaxDate(
-                    event.getEventDate(), "event.eventDate", validationResult);
+                    event.getEventDate(), ERROR_PROP_NAME_PREFIX_EVENT
+                            + "eventDate", validationResult);
         }
     }
 
@@ -297,9 +305,10 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
         for (PublicIdDto publicId : publicIds) {
             checkNotEmptyAndMaxLength(publicId.getIdentifier(), MAX_LENGTH_255,
-                    "public.identifier", validationResult);
+                    ERROR_PROP_NAME_PREFIX_PUBLICID + "identifier",
+                    validationResult);
             checkNotEmptyAndMaxLength(publicId.getType(), MAX_LENGTH_255,
-                    "public.type", validationResult);
+                    ERROR_PROP_NAME_PREFIX_PUBLICID + "type", validationResult);
         }
     }
 
@@ -309,13 +318,14 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             return;
         }
         for (RemarkDto remark : remarks) {
-            checkMaxLength(remark.getTitle(), MAX_LENGTH_255, "remark.title",
-                    validationResult);
+            checkMaxLength(remark.getTitle(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_REMARK + "title", validationResult);
             List<String> descriptions = remark.getDescription();
             if (null != descriptions) {
                 for (String description : descriptions) {
                     checkMaxLength(description, MAX_LENGTH_2048,
-                            "remark.description", validationResult);
+                            ERROR_PROP_NAME_PREFIX_REMARK + "description",
+                            validationResult);
                 }
             }
         }
@@ -327,22 +337,23 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
             return;
         }
         for (LinkDto link : links) {
-            checkMaxLength(link.getTitle(), MAX_LENGTH_255, "link.title",
-                    validationResult);
-            checkMaxLength(link.getMedia(), MAX_LENGTH_255, "link.media",
-                    validationResult);
-            checkMaxLength(link.getRel(), MAX_LENGTH_255, "link.rel",
-                    validationResult);
-            checkMaxLength(link.getType(), MAX_LENGTH_255, "link.type",
-                    validationResult);
-            checkMaxLength(link.getValue(), MAX_LENGTH_2048, "link.value",
-                    validationResult);
-            checkMaxLength(link.getHref(), MAX_LENGTH_2048, "link.href",
-                    validationResult);
+            checkMaxLength(link.getTitle(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_LINK + "title", validationResult);
+            checkMaxLength(link.getMedia(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_LINK + "media", validationResult);
+            checkMaxLength(link.getRel(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_LINK + "rel", validationResult);
+            checkMaxLength(link.getType(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_LINK + "type", validationResult);
+            checkMaxLength(link.getValue(), MAX_LENGTH_2048,
+                    ERROR_PROP_NAME_PREFIX_LINK + "value", validationResult);
+            checkMaxLength(link.getHref(), MAX_LENGTH_2048,
+                    ERROR_PROP_NAME_PREFIX_LINK + "href", validationResult);
             List<String> hreflangs = link.getHreflang();
             if (null != hreflangs) {
                 for (String hreflang : hreflangs) {
-                    checkMaxLength(hreflang, MAX_LENGTH_LANG, "link.hreflang",
+                    checkMaxLength(hreflang, MAX_LENGTH_LANG,
+                            ERROR_PROP_NAME_PREFIX_LINK + "hreflang",
                             validationResult);
                 }
             }
@@ -357,7 +368,8 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         for (EntityHandleDto entityHandle : entities) {
             List<String> roles = entityHandle.getRoles();
             for (String role : roles) {
-                checkNotEmptyAndMaxLength(role, MAX_LENGTH_255, "entity.role",
+                checkNotEmptyAndMaxLength(role, MAX_LENGTH_255,
+                        ERROR_PROP_NAME_PREFIX_ENTITY + "roles",
                         validationResult);
             }
         }
