@@ -72,7 +72,7 @@ public class NameserverUpdateDaoImpl extends
                     + " values(?,?,?,?,?,?)";
     private static final String SQL_UPDATE_NAMESERVER = "UPDATE RDAP_NAMESERVER"
             + " SET LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?"
-            + " ,CUSTOM_PROPERTIES=?";
+            + " ,CUSTOM_PROPERTIES=? where NAMESERVER_ID=?";
     private static final String SQL_DELETE_NAMESERVER =
             "DELETE FROM RDAP_NAMESERVER where NAMESERVER_ID=?";
 
@@ -115,6 +115,7 @@ public class NameserverUpdateDaoImpl extends
                 ps.setString(3, model.getPort43());
                 ps.setString(4, model.getLang());               
                 ps.setString(5, model.getCustomPropertiesJsonVal());
+                ps.setLong(6, model.getId());
             }
         });
     }

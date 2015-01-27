@@ -145,7 +145,11 @@ public class DomainUpdateDaoTest extends BaseTest {
                 .serializeMap(customProperties));
         updateDao.update(domain);
         updateDao.updateStatus(domain);
-        assertDomain(updateLdhName, updateLang, originalHandle, updatePort43);
+        assertDomain(updateLdhName, updateLang, originalHandle, updatePort43,
+                "{\"customKey3\":\"customValue3\"}");
+        // assert for h2, must not be udpated.
+        assertDomain("cnnic.cn", "zh", "h2", "port43",
+                "{\"customKey1\":\"customValue1\",\"customKey2\":\"customValue2\"}");
         assertStatus();
     }
 
@@ -157,10 +161,12 @@ public class DomainUpdateDaoTest extends BaseTest {
     }
 
     private void assertDomain(String updateLdhName, String updateLang,
-            String originalHandle, String updatePort43) throws Exception {
+            String originalHandle, String updatePort43,
+            String customPropertiesStr) throws Exception {
         List<Map<?, ?>> resultList =
                 getTableDataForSql("RDAP_DOMAIN",
-                        "select * from RDAP_DOMAIN where HANDLE='h1'");
+                        "select * from RDAP_DOMAIN where HANDLE='"
+                                + originalHandle + "'");
         assertTrue(resultList.size() > 0);
         Map<?, ?> actualDomain = resultList.get(0);
         assertEquals(originalHandle, actualDomain.get("HANDLE"));
@@ -169,8 +175,7 @@ public class DomainUpdateDaoTest extends BaseTest {
         assertEquals(updateLdhName, actualDomain.get("UNICODE_NAME"));
         assertEquals(updateLang, actualDomain.get("LANG"));
         assertEquals(updatePort43, actualDomain.get("PORT43"));
-        assertEquals("{\"customKey3\":\"customValue3\"}",
-                actualDomain.get("CUSTOM_PROPERTIES"));
+        assertEquals(customPropertiesStr, actualDomain.get("CUSTOM_PROPERTIES"));
     }
 
 }

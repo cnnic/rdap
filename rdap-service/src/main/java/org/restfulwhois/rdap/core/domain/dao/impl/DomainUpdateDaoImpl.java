@@ -58,9 +58,9 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
                     + " values(?,?,?,?,?,?,?,?)";
     private static final String SQL_UPDATE_DOMAIN = "UPDATE RDAP_DOMAIN"
             + " SET LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
-            + " ,CUSTOM_PROPERTIES=?";
+            + " ,CUSTOM_PROPERTIES=? WHERE DOMAIN_ID=?";
     private static final String SQL_DELETE_DOMAIN =
-            "DELETE FROM RDAP_DOMAIN where DOMAIN_ID=?";
+            "DELETE FROM RDAP_DOMAIN WHERE DOMAIN_ID=?";
     /**
      * logger.
      */
@@ -106,6 +106,7 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
                 ps.setString(4, model.getLang());
                 ps.setObject(5, model.getNetworkId());
                 ps.setString(6, model.getCustomPropertiesJsonVal());
+                ps.setLong(7, model.getId());
             }
         });
     }

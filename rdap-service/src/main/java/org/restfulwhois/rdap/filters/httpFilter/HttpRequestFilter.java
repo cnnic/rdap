@@ -122,12 +122,36 @@ public class HttpRequestFilter implements HttpFilter {
             FilterHelper.writeResponse(responseEntity, response);
             return false;
         }
+        if (FilterHelper.isUpdateUri(request)) {
+            boolean contentTypeValid = checkContentTypeForUpdate(request);
+            if (!contentTypeValid) {
+                ResponseEntity<ErrorMessage> responseEntity =
+                        RestResponse.createResponse415();
+                FilterHelper.writeResponse(responseEntity, response);
+                return contentTypeValid;
+            }
+            return true;
+        }
         boolean mediaTypeIsValid = mediaTypeIsValid(request);
         LOGGER.debug("mediaType is valid:{}", mediaTypeIsValid);
         if (!mediaTypeIsValid) {
             ResponseEntity<ErrorMessage> responseEntity =
                     RestResponse.createResponse415();
             FilterHelper.writeResponse(responseEntity, response);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkContentTypeForUpdate(HttpServletRequest request) {
+        String contentTypeHeader = request.getHeader("Content-Type");
+        LOGGER.debug("contentTypeHeader:{}", contentTypeHeader);
+        if (StringUtils.isBlank(contentTypeHeader)) {
+            return false;
+        }
+        List<MediaType> mediaTypes =
+                StringUtil.parseMediaTypes(contentTypeHeader);
+        if (null == mediaTypes) {
             return false;
         }
         return true;
