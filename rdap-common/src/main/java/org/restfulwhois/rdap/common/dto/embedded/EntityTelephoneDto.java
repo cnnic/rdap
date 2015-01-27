@@ -1,6 +1,8 @@
 package org.restfulwhois.rdap.common.dto.embedded;
 
-public class EntityTelephoneDto{
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class EntityTelephoneDto extends BaseDto{
 	private int pref;
 	private String types;
 	private String number;

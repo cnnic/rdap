@@ -98,8 +98,6 @@ public class NameserverUpdateDaoImpl extends
         return model;
     
     }
-
-   
     
     @Override
     public void saveStatus(Nameserver model) {

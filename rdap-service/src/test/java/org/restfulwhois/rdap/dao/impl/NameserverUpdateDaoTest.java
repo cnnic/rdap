@@ -210,7 +210,7 @@ public class NameserverUpdateDaoTest extends BaseTest {
 	        assertEquals(3, resultList1.size());
 	    }
 
-	    private void assertNameserver(String updateLdhName, String updateLang,
+        private void assertNameserver(String updateLdhName, String updateLang,
 	            String originalHandle, String updatePort43) throws Exception {
 	        List<Map<?, ?>> resultList =
 	                getTableDataForSql("RDAP_NAMESERVER",
