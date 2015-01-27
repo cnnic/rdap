@@ -45,6 +45,11 @@ import org.restfulwhois.rdap.common.validation.ValidationResult;
  * 
  */
 public class UpdateValidateUtil {
+    public static final String ERROR_PROP_NAME_PREFIX_EVENT = "events.";
+    public static final String ERROR_PROP_NAME_PREFIX_PUBLICID = "publicIds.";
+    public static final String ERROR_PROP_NAME_PREFIX_REMARK = "remarks.";
+    public static final String ERROR_PROP_NAME_PREFIX_LINK = "links.";
+    public static final String ERROR_PROP_NAME_PREFIX_ENTITY = "entities.";
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final int MAX_LENGTH_LANG = 64;
     public static final int MAX_LENGTH_PORT43 = 4096;
@@ -145,7 +150,7 @@ public class UpdateValidateUtil {
         Date dateValue = DateUtil.parseUTC(dateString);
         if (null == dateValue) {
             validationResult.addError(UpdateValidationError
-                    .build4008Error(fieldName));
+                    .build4007Error(fieldName));
             return;
         }
         checkMinMaxDate(dateValue, minValue, maxValue, fieldName,

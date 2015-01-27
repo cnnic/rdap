@@ -63,12 +63,9 @@ public class DomainCreateServiceImpl extends DomainUpdateBaseServiceImpl {
         DomainDto dto = (DomainDto) domain.getDto();
         saveSecureDns(dto, domain);
         saveVariants(dto, domain);
-        saveEntitiesRel(domain);
         saveNameservers(domain);
         savePublicIds(dto.getPublicIds(), domain);
-        saveRemarks(dto.getRemarks(), domain);
-        saveLinks(dto.getLinks(), domain);
-        saveEvents(dto.getEvents(), domain);
+        saveBaseModel(domain);
     }
 
     @Override

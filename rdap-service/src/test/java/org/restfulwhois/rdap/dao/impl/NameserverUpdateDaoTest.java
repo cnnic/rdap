@@ -30,8 +30,14 @@
  */
 package org.restfulwhois.rdap.dao.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
@@ -41,10 +47,14 @@ import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Nameserver;
+import org.restfulwhois.rdap.common.model.Domain.DomainType;
+import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 /**
  * @author zhanyq
@@ -111,5 +121,110 @@ public class NameserverUpdateDaoTest extends BaseTest {
 	        super.assertTablesForUpdate("rel-domain-nameserver.xml", 
 	        		TABLE_REL_DOMAIN_NAMESERVER);
 	    }
+	    
+	    @Test
+	    @DatabaseSetup("teardown.xml")
+	    @DatabaseTearDown("teardown.xml")
+	    @ExpectedDatabase(
+	            assertionMode = DatabaseAssertionMode.NON_STRICT,
+          value = "classpath:/org/restfulwhois/rdap/dao/impl/nameserver-create.xml")
+	    public void test_save_nameserver_and_status() throws Exception {
+	        Nameserver nameserver = new Nameserver();
+	        nameserver.setHandle("h1");
+	        nameserver.setLdhName("cnnic.cn");
+	        nameserver.setUnicodeName("cnnic.cn");
+	        nameserver.setPort43("port43");
+	        nameserver.setLang("zh");	        
+	        List<String> status = new ArrayList<String>();
+	        status.add("validated");
+	        status.add("update prohibited");
+	        nameserver.setStatus(status);
+	        Map<String, String> customProperties = new HashMap<String, String>();
+	        customProperties.put("customKey1", "customValue1");
+	        customProperties.put("customKey2", "customValue2");
+	        nameserver.setCustomProperties(customProperties);
+	        nameserver.setCustomPropertiesJsonVal(JsonUtil
+	                .serializeMap(customProperties));
+	        nsUpdateDao.save(nameserver);
+	        nsUpdateDao.saveStatus(nameserver);
+	    }
+	    
+	    @Test
+	    @DatabaseSetup("nameserver-delete.xml")
+	    @DatabaseTearDown("teardown.xml")
+	    public void test_delete_nameserver_and_status() throws Exception {
+	    	Nameserver nameserver = new Nameserver();
+	    	nameserver.setId(1L);
+	        nsUpdateDao.delete(nameserver);
+	        nsUpdateDao.deleteStatus(nameserver);
+	        assertTablesForUpdate("teardown.xml", "RDAP_NAMESERVER",
+	                "RDAP_NAMESERVER_STATUS");
+	    }
+
+	    @Test
+	    @DatabaseSetup("classpath:/org/restfulwhois/rdap/dao/impl/nameserver-update.xml")
+	    @DatabaseTearDown("teardown.xml")
+	    public void test_update_nameserver_and_status() throws Exception {
+	        List<Map<?, ?>> resultList =
+	                getTableDataForSql("RDAP_NAMESERVER",
+	                        "select * from RDAP_NAMESERVER where HANDLE='h1'");
+	        assertTrue(resultList.size() > 0);
+	        Map<?, ?> existNameserver = resultList.get(0);
+	        Integer nameserverId = (Integer) existNameserver.get("NAMESERVER_ID");
+	        assertNotNull(nameserverId);
+	        String updateLdhName = "update.cn";
+	        String updateLang = "us";
+	        String originalHandle = "h1";
+	        String updatePort43 = "update-port43";
+	        String updateHandle = "new-handle";
+	        String updateStatusRenewProbibited = "renew prohibited";
+	        String updateStatusTransferProbibited = "transfer prohibited";
+	        String updateStatusDeleteProbibited = "delete prohibited";
+	        Nameserver nameserver = new Nameserver();
+	        nameserver.setId(Long.valueOf(nameserverId));
+	        nameserver.setHandle(updateHandle);
+	        nameserver.setLdhName(updateLdhName);
+	        nameserver.setUnicodeName(updateLdhName);
+	        nameserver.setPort43(updatePort43);
+	        nameserver.setLang(updateLang);	        
+	        List<String> expectedStatus = new ArrayList<String>();
+	        expectedStatus.add(updateStatusRenewProbibited);
+	        expectedStatus.add(updateStatusTransferProbibited);
+	        expectedStatus.add(updateStatusDeleteProbibited);
+	        nameserver.setStatus(expectedStatus);
+	        Map<String, String> customProperties = new HashMap<String, String>();
+	        customProperties.put("customKey3", "customValue3");
+	        nameserver.setCustomProperties(customProperties);
+	        nameserver.setCustomPropertiesJsonVal(JsonUtil
+	                .serializeMap(customProperties));
+	        nsUpdateDao.update(nameserver);
+	        nsUpdateDao.updateStatus(nameserver);
+	        assertNameserver(updateLdhName, updateLang, originalHandle, updatePort43);
+	        assertStatus();
+	    }
+
+	    private void assertStatus() throws Exception {
+	        List<Map<?, ?>> resultList1 =
+	                getTableDataForSql("RDAP_NAMESERVER_STATUS",
+	                        "select * from RDAP_NAMESERVER_STATUS where NAMESERVER_ID=1");
+	        assertEquals(3, resultList1.size());
+	    }
+
+	    private void assertNameserver(String updateLdhName, String updateLang,
+	            String originalHandle, String updatePort43) throws Exception {
+	        List<Map<?, ?>> resultList =
+	                getTableDataForSql("RDAP_NAMESERVER",
+	                        "select * from RDAP_NAMESERVER where HANDLE='h1'");
+	        assertTrue(resultList.size() > 0);
+	        Map<?, ?> actualNameserver = resultList.get(0);
+	        assertEquals(originalHandle, actualNameserver.get("HANDLE"));	    
+	        assertEquals(updateLdhName, actualNameserver.get("LDH_NAME"));
+	        assertEquals(updateLdhName, actualNameserver.get("UNICODE_NAME"));
+	        assertEquals(updateLang, actualNameserver.get("LANG"));
+	        assertEquals(updatePort43, actualNameserver.get("PORT43"));
+	        assertEquals("{\"customKey3\":\"customValue3\"}",
+	        		actualNameserver.get("CUSTOM_PROPERTIES"));
+	    }
+
 
 }

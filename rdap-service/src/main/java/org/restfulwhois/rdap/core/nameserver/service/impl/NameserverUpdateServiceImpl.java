@@ -28,57 +28,57 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.domain.service.impl;
+package org.restfulwhois.rdap.core.nameserver.service.impl;
 
 import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * delete service implementation.
+ * update NAMESERVER service implementation.
  * 
  * @author jiashuo
  * 
  */
-@Service("domainDeleteServiceImpl")
-public class DomainDeleteServiceImpl extends DomainUpdateBaseServiceImpl {
+@Service("nameserverUpdateServiceImpl")
+public class NameserverUpdateServiceImpl extends
+        NameserverUpdateBaseServiceImpl {
 
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(DomainDeleteServiceImpl.class);
+            .getLogger(NameserverUpdateServiceImpl.class);
 
     @Override
-    protected void execute(Domain domain) {
-        LOGGER.debug("delete domain...");
-        getDao().delete(domain);
-        LOGGER.debug("delete status...");
-        getDao().deleteStatus(domain);
-        deleteSecureDns(domain);
-        deleteVariants(domain);
-        deleteNameserversRel(domain);
-        deletePublicIds(domain);
-        deleteBaseModelRel(domain);
+    protected void execute(Nameserver nameserver) {
+        LOGGER.debug("save nameserver...");
+        getDao().update(nameserver);
+        LOGGER.debug("save status...");
+        getDao().updateStatus(nameserver);
+        updateIpAddresses(nameserver);
+        updateBaseModel(nameserver);
     }
 
     @Override
-    protected Domain convertDtoToModel(DomainDto dto) {
-        Domain domain = new Domain();
+    protected Nameserver convertDtoToModel(NameserverDto dto) {
+        Nameserver nameserver = super.convertDtoToModel(dto);
         Long id = getDao().findIdByHandle(dto.getHandle());
-        domain.setId(id);
-        domain.setHandle(dto.getHandle());
-        return domain;
+        nameserver.setId(id);
+        nameserver.setDto(dto);
+        return nameserver;
     }
 
     @Override
-    protected ValidationResult validate(DomainDto domainDto) {
+    protected ValidationResult validate(NameserverDto dto) {
         ValidationResult validationResult = new ValidationResult();
-        checkNotEmpty(domainDto.getHandle(), "handle", validationResult);
-        checkHandleExistForUpdate(domainDto.getHandle(), validationResult);
+        checkHandleExistForUpdate(dto.getHandle(), validationResult);
+        super.validateForSaveAndUpdate(dto, validationResult);
         return validationResult;
     }
 

@@ -40,15 +40,18 @@ import org.springframework.http.HttpStatus;
  */
 public enum ServiceErrorCode {
 
-    ERROR_4001(4001, "Request data is not valid JSON, or has invalid date type", HttpStatus.BAD_REQUEST),
-    ERROR_4002(4002, "Property can't be empty:%s", HttpStatus.BAD_REQUEST),
+    ERROR_4001(4001,
+            "Request data is not valid JSON, or has invalid date type",
+            HttpStatus.BAD_REQUEST), ERROR_4002(4002,
+            "Property can't be empty:%s", HttpStatus.BAD_REQUEST),
     ERROR_4003(4003, "Property '%s' exceed max length:%s",
-            HttpStatus.BAD_REQUEST), ERROR_4008(4008,
-            "Property value is not valid:%s", HttpStatus.BAD_REQUEST),
+            HttpStatus.BAD_REQUEST), ERROR_4007(4007,
+            "Property must be valid date:%s", HttpStatus.BAD_REQUEST),
+    ERROR_4008(4008, "Property value is not valid:%s", HttpStatus.BAD_REQUEST),
     ERROR_4009(4009, "Unrecognized request URI", HttpStatus.BAD_REQUEST),
-    ERROR_4010(4010, "Property '%s' value must between [%s,%s]", HttpStatus.BAD_REQUEST),
-    ERROR_4041(4041, "Object not found with handle:%s",
-            HttpStatus.BAD_REQUEST),
+    ERROR_4010(4010, "Property '%s' value must between [%s,%s]",
+            HttpStatus.BAD_REQUEST), ERROR_4041(4041,
+            "Object not found with handle:%s", HttpStatus.BAD_REQUEST),
     ERROR_4091(4091, "Object already exist for handle:%s",
             HttpStatus.BAD_REQUEST);
 
@@ -66,8 +69,7 @@ public enum ServiceErrorCode {
 
     public static String formatMessage(ServiceErrorCode serviceErrorCode,
             Object[] errorMessageParams) {
-        return String.format(serviceErrorCode.getMessage(),
-                errorMessageParams);
+        return String.format(serviceErrorCode.getMessage(), errorMessageParams);
     }
 
     public HttpStatus getStatusCode() {
