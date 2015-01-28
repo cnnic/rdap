@@ -162,9 +162,6 @@ public abstract class DomainUpdateBaseServiceImpl extends
      *            domain.
      */
     private void convertNetworkIdIfExist(DomainDto dto, Domain domain) {
-        if (!DomainType.ARPA.equals(DomainType.getByTypeName(dto.getType()))) {
-            return;
-        }
         if (StringUtils.isBlank(dto.getNetworkHandle())) {
             return;
         }
