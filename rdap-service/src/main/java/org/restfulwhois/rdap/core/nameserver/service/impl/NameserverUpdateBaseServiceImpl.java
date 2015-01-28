@@ -33,11 +33,13 @@ package org.restfulwhois.rdap.core.nameserver.service.impl;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LDHNAME;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.IpAddressDto;
+import org.restfulwhois.rdap.common.model.IPAddress;
 import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.util.BeanUtil;
@@ -55,7 +57,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class NameserverUpdateBaseServiceImpl extends
         AbstractUpdateService<NameserverDto, Nameserver> {
     @Autowired
-    protected UpdateDao<Nameserver, NameserverDto> nameserverDao;
+    protected UpdateDao<IPAddress, IpAddressDto> ipAddressDao;
     /**
      * logger.
      */
@@ -68,19 +70,27 @@ public abstract class NameserverUpdateBaseServiceImpl extends
         return Nameserver;
     }
 
-    protected void saveIpAddresses(Nameserver Nameserver) {
+    protected void saveIpAddresses(Nameserver nameserver) {
         LOGGER.debug("save ipAddresses ...");
-        nameserverDao.saveRel(Nameserver);
+        NameserverDto dto = (NameserverDto) nameserver.getDto();
+        IpAddressDto ipAddressDto = dto.getIpAddresses();
+        if (null == ipAddressDto) {
+            LOGGER.debug("ipAddresses is empty.");
+            return;
+        }
+        List<IpAddressDto> ipAddressList = new ArrayList<IpAddressDto>();
+        ipAddressList.add(ipAddressDto);
+        ipAddressDao.saveAsInnerObjects(nameserver, ipAddressList);
     }
 
-    protected void deleteIpAddresses(Nameserver Nameserver) {
+    protected void deleteIpAddresses(Nameserver nameserver) {
         LOGGER.debug("delete ipAddresses ...");
-        getNameserverDao().deleteRel(Nameserver);
+        ipAddressDao.deleteAsInnerObjects(nameserver);
     }
 
-    protected void updateIpAddresses(Nameserver Nameserver) {
-        deleteIpAddresses(Nameserver);
-        saveIpAddresses(Nameserver);
+    protected void updateIpAddresses(Nameserver nameserver) {
+        deleteIpAddresses(nameserver);
+        saveIpAddresses(nameserver);
     }
 
     private Nameserver convertDtoToNameserver(NameserverDto dto) {
@@ -121,10 +131,6 @@ public abstract class NameserverUpdateBaseServiceImpl extends
                 checkIp(ip, fieldName, validationResult);
             }
         }
-    }
-
-    public UpdateDao<Nameserver, NameserverDto> getNameserverDao() {
-        return nameserverDao;
     }
 
 }

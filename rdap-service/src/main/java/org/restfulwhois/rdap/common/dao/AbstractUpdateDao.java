@@ -38,6 +38,7 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,15 +61,16 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
             "SELECT %s as ID from %s where HANDLE = ?";
     private static final String TPL_CREATE_STATUS =
             "INSERT INTO %s(%s,STATUS) values(?,?)";
-    private static final String TPL_DELETE_STATUS = "DELETE FROM %s WHERE %s=?";    
-    
+    private static final String TPL_DELETE_STATUS = "DELETE FROM %s WHERE %s=?";
+
     private static final String TPL_FINDIDS_BY_OUTERIDANDTYPE =
             "SELECT %s as ID from %s where REL_ID = ? and REL_OBJECT_TYPE = ? ";
-    
+
     private static final String TPL_DELETE_REL_BY_OUTERIDANDTYPE =
             "DELETE FROM  %s where REL_ID = ? and REL_OBJECT_TYPE = ? ";
-    
-    private static final String TPL_DELETE_BY_ID ="delete from %s where %s in ( %s )";
+
+    private static final String TPL_DELETE_BY_ID =
+            "delete from %s where %s in ( %s )";
     /**
      * logger.
      */
@@ -82,8 +84,7 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
     protected JdbcTemplate jdbcTemplate;
 
     @Override
-    public void
-            saveAsInnerObjects(BaseModel outerModel, List<DTO> models) {
+    public void saveAsInnerObjects(BaseModel outerModel, List<DTO> models) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
@@ -122,7 +123,7 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-    
+
     @Override
     public void updateStatus(T model) {
         throw new UnsupportedOperationException(
@@ -134,17 +135,19 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
+
     @Override
     public void deleteRel(BaseModel outerModel) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-    
+
     @Override
     public void updateRel(BaseModel outerModel) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
+
     @Override
     public void updateAsInnerObjects(BaseModel outerModel, List<DTO> models) {
         throw new UnsupportedOperationException(
@@ -153,7 +156,9 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
 
     protected void saveStatus(final T model, final List<String> statusList,
             String tableName, String outerModelIdColumnName) {
-        if (null == statusList || statusList.isEmpty()) {
+        final List<String> notEmptyStatusList =
+                StringUtil.getNotEmptyStringList(statusList);
+        if (notEmptyStatusList.isEmpty()) {
             LOGGER.debug("status is empty, not save.");
             return;
         }
@@ -162,14 +167,14 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
                         outerModelIdColumnName);
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
-                return statusList.size();
+                return notEmptyStatusList.size();
             }
 
             @Override
             public void setValues(PreparedStatement ps, int i)
                     throws SQLException {
                 ps.setLong(1, model.getId());
-                ps.setString(2, statusList.get(i));
+                ps.setString(2, notEmptyStatusList.get(i));
             }
         });
     }
@@ -188,48 +193,55 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
             }
         });
     }
+
     @Override
     public void deleteAsInnerObjects(BaseModel outerModel) {
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
+
     protected List<Long> findIdsByOuterIdAndType(final BaseModel outerModel,
-    		String idColumnName, String tableName) {
-		 final String sql =
-	                String.format(TPL_FINDIDS_BY_OUTERIDANDTYPE, idColumnName, tableName);
-	        LOGGER.debug("check ids exist,sql:{}", sql);
-	        List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
-	            public PreparedStatement createPreparedStatement(
-	                    Connection connection) throws SQLException {
-	                PreparedStatement ps = connection.prepareStatement(sql);
-	                ps.setLong(1, outerModel.getId());
-	                ps.setString(2, outerModel.getObjectType().getName());
-	                return ps;
-	            }
-	        }, new RowMapper<Long>() {
-	            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
-	                return rs.getLong("ID");
-	            }
-	        });
-	        if (ids.size() > 0) {
-	            return ids;
-	        }
-	        return null;
-		
-	} 
-    
-    protected void deleteRel(final BaseModel outerModel,String tableName) {
-    	final String sql = String.format(TPL_DELETE_REL_BY_OUTERIDANDTYPE, tableName);	
-    	  jdbcTemplate.update(sql, new PreparedStatementSetter() {
-              public void setValues(PreparedStatement ps) throws SQLException {
-            	  ps.setLong(1, outerModel.getId());
-            	  ps.setString(2, outerModel.getObjectType().getName());
-              }
-          });
+            String idColumnName, String tableName) {
+        final String sql =
+                String.format(TPL_FINDIDS_BY_OUTERIDANDTYPE, idColumnName,
+                        tableName);
+        LOGGER.debug("check ids exist,sql:{}", sql);
+        List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setLong(1, outerModel.getId());
+                ps.setString(2, outerModel.getObjectType().getName());
+                return ps;
+            }
+        }, new RowMapper<Long>() {
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong("ID");
+            }
+        });
+        if (ids.size() > 0) {
+            return ids;
+        }
+        return null;
+
     }
-    protected void delete(final String ids, final String tableName, final String idColumnName) {
-		final String sql = String.format(TPL_DELETE_BY_ID, tableName, idColumnName, ids);		
-		jdbcTemplate.update(sql);
-		
-	}
+
+    protected void deleteRel(final BaseModel outerModel, String tableName) {
+        final String sql =
+                String.format(TPL_DELETE_REL_BY_OUTERIDANDTYPE, tableName);
+        jdbcTemplate.update(sql, new PreparedStatementSetter() {
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setLong(1, outerModel.getId());
+                ps.setString(2, outerModel.getObjectType().getName());
+            }
+        });
+    }
+
+    protected void delete(final String ids, final String tableName,
+            final String idColumnName) {
+        final String sql =
+                String.format(TPL_DELETE_BY_ID, tableName, idColumnName, ids);
+        jdbcTemplate.update(sql);
+
+    }
 }

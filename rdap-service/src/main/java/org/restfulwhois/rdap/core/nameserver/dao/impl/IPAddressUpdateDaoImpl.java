@@ -116,23 +116,23 @@ public class IPAddressUpdateDaoImpl extends
      */
     private void createNameserverIp(final IpAddressDto ipAdressDto,
              final Long outerModelId) {
-       List<String> ipAdress = ipAdressDto.getIpList();    
-       final List<String> notEmptyIp = 
-               StringUtil.getNotEmptyStringList(ipAdress);
-       if (notEmptyIp.isEmpty()) {
+       List<String> ips = ipAdressDto.getIpList();    
+       final List<String> notEmptyIps = 
+               StringUtil.getNotEmptyStringList(ips);
+       if (notEmptyIps.isEmpty()) {
              return;
         }
        final String sql = "insert into RDAP_NAMESERVER_IP (NAMESERVER_ID,"
                            +  "IP, VERSION) values (?,?,?)";    
        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
            public int getBatchSize() {
-               return notEmptyIp.size();
+               return notEmptyIps.size();
            }
            @Override
            public void setValues(PreparedStatement ps, int i)
               throws SQLException {
-              IpVersion ipVersion = IpUtil.getIpVersionOfIp(notEmptyIp.get(i));
-              byte[] bytes = IpUtil.ipToByteArray(notEmptyIp.get(i), ipVersion);
+              IpVersion ipVersion = IpUtil.getIpVersionOfIp(notEmptyIps.get(i));
+              byte[] bytes = IpUtil.ipToByteArray(notEmptyIps.get(i), ipVersion);
                 ps.setLong(1, outerModelId); 
                 ps.setBytes(2, bytes);
                 ps.setString(3, ipVersion.getName());

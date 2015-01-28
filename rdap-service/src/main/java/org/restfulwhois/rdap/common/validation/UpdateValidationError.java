@@ -70,6 +70,11 @@ public final class UpdateValidationError implements ValidationError {
                 fieldName, maxLength);
     }
 
+    public static ValidationError build4007Error(String errorMessageParam) {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4007,
+                errorMessageParam);
+    }
+    
     public static ValidationError build4008Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4008,
                 errorMessageParam);
