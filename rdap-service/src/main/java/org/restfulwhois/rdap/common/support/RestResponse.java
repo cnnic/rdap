@@ -44,6 +44,7 @@ import org.restfulwhois.rdap.common.filter.QueryFilterManager;
 import org.restfulwhois.rdap.common.model.ErrorMessage;
 import org.restfulwhois.rdap.common.service.ErrorMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -365,6 +366,7 @@ public class RestResponse {
      *            serviceFilters.
      */
     @Resource(name = "errorMessageQueryFilters")
+    @Qualifier("errorMessageQueryFilters")
     public void setServiceFilters(List<QueryFilter> serviceFilters) {
         RestResponse.queryFilters = serviceFilters;
     }
