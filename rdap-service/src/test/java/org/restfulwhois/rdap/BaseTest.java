@@ -89,9 +89,8 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(locations = {
-        "/spring/spring-applicationContext-test.xml",
-        "/spring/spring-servlet.xml" })
+@ContextConfiguration(
+        locations = { "/spring/spring-applicationContext-test.xml" })
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class,
         DbUnitTestExecutionListener.class })
