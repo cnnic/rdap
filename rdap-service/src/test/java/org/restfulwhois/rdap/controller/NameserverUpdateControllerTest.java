@@ -134,9 +134,9 @@ public class NameserverUpdateControllerTest extends BaseTest {
         mockMvc.perform(
                 put(URI_NS_U + notExistHandle).contentType(
                         MediaType.parseMediaType(rdapJson)).content("{}"))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.subErrorCode").value(4041))
                 .andExpect(
                         jsonPath("$.description")

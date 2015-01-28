@@ -109,11 +109,11 @@ public class NameserverDeleteControllerTest extends BaseTest {
         mockMvc.perform(
                 delete(URI_NS_U + notExistHandle).contentType(
                         MediaType.parseMediaType(rdapJson)))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(
                         content().contentType(
                                 "application/rdap+json;charset=UTF-8"))
-                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.subErrorCode").value(4041))
                 .andExpect(
                         jsonPath("$.description")
