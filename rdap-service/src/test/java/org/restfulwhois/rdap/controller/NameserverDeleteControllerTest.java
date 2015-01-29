@@ -30,25 +30,15 @@
  */
 package org.restfulwhois.rdap.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
-import org.restfulwhois.rdap.JsonHelper;
-import org.restfulwhois.rdap.common.dto.DomainDto;
-import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -65,12 +55,8 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * 
  */
 @SuppressWarnings("rawtypes")
-public class DomainUpdateControllerTest extends BaseTest {
-
-    /**
-     * domain query URI.
-     */
-    public static final String URI_DOMAIN_U = "/u/domain/";
+public class NameserverDeleteControllerTest extends BaseTest {
+    private static final String URI_NS_U = "/u/nameserver/";
 
     @Autowired
     private WebApplicationContext wac;
@@ -85,41 +71,35 @@ public class DomainUpdateControllerTest extends BaseTest {
     }
 
     @Test
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-update.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserver-delete.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public
-            void test_ok_only_domain() throws Exception {
-        String updateLdhName = "update.cn";
-        String updateLang = "us";
-        String originalHandle = "h1";
-        String updatePort43 = "update-port43";
-        String updateHandle = "new-handle";
-        String updateStatusRenewProbibited = "renew prohibited";
-        String updateStatusTransferProbibited = "transfer prohibited";
-        String updateStatusDeleteProbibited = "delete prohibited";
-        DomainDto domain = new DomainDto();
-        domain.setHandle(updateHandle);
-        domain.setLdhName(updateLdhName);
-        domain.setUnicodeName(updateLdhName);
-        domain.setPort43(updatePort43);
-        domain.setLang(updateLang);
-        domain.setType(DomainType.ARPA.getName());
-        List<String> expectedStatus = new ArrayList<String>();
-        expectedStatus.add(updateStatusRenewProbibited);
-        expectedStatus.add(updateStatusTransferProbibited);
-        expectedStatus.add(updateStatusDeleteProbibited);
-        domain.setStatus(expectedStatus);
-        Map<String, String> customProperties = new HashMap<String, String>();
-        customProperties.put("customKey3", "customValue3");
-        domain.setCustomProperties(customProperties);
-        String content = JsonHelper.serialize(domain);
+            void test_ok_only_ns() throws Exception {
         mockMvc.perform(
-                put(URI_DOMAIN_U + originalHandle).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
+                delete(URI_NS_U + "h1").contentType(
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson));
-        assertDomain(updateLdhName, updateLang, originalHandle, updatePort43);
-        assertStatus();
+        super.assertTablesForUpdate("teardown.xml", "RDAP_NAMESERVER",
+                "RDAP_NAMESERVER_STATUS");
+    }
+
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserver-delete-for-controller.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public
+            void test_ok_with_fat_domain_with_all_inner_objects()
+                    throws Exception {
+        mockMvc.perform(
+                delete(URI_NS_U + "h1").contentType(
+                        MediaType.parseMediaType(rdapJson)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(rdapJson));
+        super.assertTablesForUpdate("teardown.xml", "RDAP_NAMESERVER",
+                "RDAP_NAMESERVER_STATUS", "RDAP_NAMESERVER_IP", "RDAP_EVENT",
+                "REL_EVENT_REGISTRATION", "RDAP_LINK", "REL_LINK_OBJECT",
+                "RDAP_LINK_HREFLANG", "REL_ENTITY_REGISTRATION", "RDAP_NOTICE",
+                "REL_NOTICE_REGISTRATION", "RDAP_NOTICE_DESCRIPTION");
     }
 
     @Test
@@ -127,10 +107,12 @@ public class DomainUpdateControllerTest extends BaseTest {
     public void test_invalid_handle_not_exist() throws Exception {
         String notExistHandle = "not-exist-handle";
         mockMvc.perform(
-                put(URI_DOMAIN_U + notExistHandle).contentType(
-                        MediaType.parseMediaType(rdapJson)).content("{}"))
+                delete(URI_NS_U + notExistHandle).contentType(
+                        MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType(rdapJson))
+                .andExpect(
+                        content().contentType(
+                                "application/rdap+json;charset=UTF-8"))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.subErrorCode").value(4041))
                 .andExpect(
@@ -139,29 +121,4 @@ public class DomainUpdateControllerTest extends BaseTest {
                                         ServiceErrorCode.ERROR_4041
                                                 .getMessage(), notExistHandle))));
     }
-
-    private void assertStatus() throws Exception {
-        List<Map<?, ?>> resultList1 =
-                getTableDataForSql("RDAP_DOMAIN_STATUS",
-                        "select * from RDAP_DOMAIN_STATUS where DOMAIN_ID=1");
-        assertEquals(3, resultList1.size());
-    }
-
-    private void assertDomain(String updateLdhName, String updateLang,
-            String originalHandle, String updatePort43) throws Exception {
-        List<Map<?, ?>> resultList =
-                getTableDataForSql("RDAP_DOMAIN",
-                        "select * from RDAP_DOMAIN where HANDLE='h1'");
-        assertTrue(resultList.size() > 0);
-        Map<?, ?> actualDomain = resultList.get(0);
-        assertEquals(originalHandle, actualDomain.get("HANDLE"));
-        assertEquals(DomainType.DNR.getName(), actualDomain.get("TYPE"));
-        assertEquals(updateLdhName, actualDomain.get("LDH_NAME"));
-        assertEquals(updateLdhName, actualDomain.get("UNICODE_NAME"));
-        assertEquals(updateLang, actualDomain.get("LANG"));
-        assertEquals(updatePort43, actualDomain.get("PORT43"));
-        assertEquals("{\"customKey3\":\"customValue3\"}",
-                actualDomain.get("CUSTOM_PROPERTIES"));
-    }
-
 }

@@ -150,7 +150,7 @@ public class UpdateValidateUtil {
         Date dateValue = DateUtil.parseUTC(dateString);
         if (null == dateValue) {
             validationResult.addError(UpdateValidationError
-                    .build4008Error(fieldName));
+                    .build4007Error(fieldName));
             return;
         }
         checkMinMaxDate(dateValue, minValue, maxValue, fieldName,

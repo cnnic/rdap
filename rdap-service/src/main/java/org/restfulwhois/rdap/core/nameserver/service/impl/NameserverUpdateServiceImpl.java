@@ -32,6 +32,7 @@ package org.restfulwhois.rdap.core.nameserver.service.impl;
 
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
@@ -57,20 +58,18 @@ public class NameserverUpdateServiceImpl extends
     @Override
     protected void execute(Nameserver nameserver) {
         LOGGER.debug("save nameserver...");
-        getDao().save(nameserver);
+        getDao().update(nameserver);
         LOGGER.debug("save status...");
-        getDao().saveStatus(nameserver);
-        saveIpAddresses(nameserver);
-        saveEntitiesRel(nameserver);
-        DomainDto dto = (DomainDto) nameserver.getDto();
-        saveRemarks(dto.getRemarks(), nameserver);
-        saveLinks(dto.getLinks(), nameserver);
-        saveEvents(dto.getEvents(), nameserver);
+        getDao().updateStatus(nameserver);
+        updateIpAddresses(nameserver);
+        updateBaseModel(nameserver);
     }
 
     @Override
     protected Nameserver convertDtoToModel(NameserverDto dto) {
         Nameserver nameserver = super.convertDtoToModel(dto);
+        Long id = getDao().findIdByHandle(dto.getHandle());
+        nameserver.setId(id);
         nameserver.setDto(dto);
         return nameserver;
     }
@@ -78,8 +77,8 @@ public class NameserverUpdateServiceImpl extends
     @Override
     protected ValidationResult validate(NameserverDto dto) {
         ValidationResult validationResult = new ValidationResult();
-        super.validateForSaveAndUpdate(dto, validationResult);
         checkHandleExistForUpdate(dto.getHandle(), validationResult);
+        super.validateForSaveAndUpdate(dto, validationResult);
         return validationResult;
     }
 

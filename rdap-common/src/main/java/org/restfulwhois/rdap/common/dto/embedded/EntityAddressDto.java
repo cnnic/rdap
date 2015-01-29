@@ -1,10 +1,13 @@
 package org.restfulwhois.rdap.common.dto.embedded;
 
-public class EntityAddressDto{
+import org.restfulwhois.rdap.common.dto.BaseDto;
+
+public class EntityAddressDto extends BaseDto{
 	private int pref;
 	private String types;
 	private String postbox;
 	private String extendedAddress;
+	private String streetAddress;
 	private String locality;
 	private String region;
 	private String postalcode;
@@ -33,6 +36,12 @@ public class EntityAddressDto{
 	public void setExtendedAddress(String extendedAddress) {
 		this.extendedAddress = extendedAddress;
 	}
+    public String getStreetAddress() {
+        return streetAddress;
+    }   
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }	
 	public String getLocality() {
 		return locality;
 	}

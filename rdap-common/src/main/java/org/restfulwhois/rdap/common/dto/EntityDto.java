@@ -15,8 +15,8 @@ public class EntityDto extends BaseDto{
 	private String org;
 	private String url;
 	private String lang;
-	private EntityAddressDto addresses;
-	private EntityTelephoneDto telephones;
+	private List<EntityAddressDto> addresses;
+	private List<EntityTelephoneDto> telephones;
 	private List<PublicIdDto> publicIds;
 
 	
@@ -61,19 +61,19 @@ public class EntityDto extends BaseDto{
 	}
 	public void setLang(String lang) {
 		this.lang = lang;
-	}
-	public EntityAddressDto getAddresses() {
-		return addresses;
-	}
-	public void setAddresses(EntityAddressDto addresses) {
-		this.addresses = addresses;
-	}
-	public EntityTelephoneDto getTelephones() {
-		return telephones;
-	}
-	public void setTelephones(EntityTelephoneDto telephones) {
-		this.telephones = telephones;
-	}
+	}	
+    public List<EntityTelephoneDto> getTelephones() {
+        return telephones;
+    }    
+    public void setTelephones(List<EntityTelephoneDto> telephones) {
+        this.telephones = telephones;
+    }
+    public List<EntityAddressDto> getAddresses() {
+        return addresses;
+    }    
+    public void setAddresses(List<EntityAddressDto> addresses) {
+        this.addresses = addresses;
+    }
 	public List<PublicIdDto> getPublicIds() {
 		return publicIds;
 	}

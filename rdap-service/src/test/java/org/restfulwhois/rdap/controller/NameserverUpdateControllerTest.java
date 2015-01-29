@@ -47,8 +47,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.JsonHelper;
-import org.restfulwhois.rdap.common.dto.DomainDto;
-import org.restfulwhois.rdap.common.model.Domain.DomainType;
+import org.restfulwhois.rdap.common.dto.NameserverDto;
+import org.restfulwhois.rdap.common.dto.embedded.IpAddressDto;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -60,17 +60,14 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
+ * Test for RdapController
  * 
  * @author jiashuo
  * 
  */
 @SuppressWarnings("rawtypes")
-public class DomainUpdateControllerTest extends BaseTest {
-
-    /**
-     * domain query URI.
-     */
-    public static final String URI_DOMAIN_U = "/u/domain/";
+public class NameserverUpdateControllerTest extends BaseTest {
+    private static final String URI_NS_U = "/u/nameserver/";
 
     @Autowired
     private WebApplicationContext wac;
@@ -85,10 +82,10 @@ public class DomainUpdateControllerTest extends BaseTest {
     }
 
     @Test
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/domain-update.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/nameserver-update-for-controller.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public
-            void test_ok_only_domain() throws Exception {
+            void test_ok() throws Exception {
         String updateLdhName = "update.cn";
         String updateLang = "us";
         String originalHandle = "h1";
@@ -97,28 +94,36 @@ public class DomainUpdateControllerTest extends BaseTest {
         String updateStatusRenewProbibited = "renew prohibited";
         String updateStatusTransferProbibited = "transfer prohibited";
         String updateStatusDeleteProbibited = "delete prohibited";
-        DomainDto domain = new DomainDto();
-        domain.setHandle(updateHandle);
-        domain.setLdhName(updateLdhName);
-        domain.setUnicodeName(updateLdhName);
-        domain.setPort43(updatePort43);
-        domain.setLang(updateLang);
-        domain.setType(DomainType.ARPA.getName());
+        NameserverDto nameserver = new NameserverDto();
+        nameserver.setHandle(updateHandle);
+        nameserver.setLdhName(updateLdhName);
+        nameserver.setUnicodeName(updateLdhName);
+        nameserver.setPort43(updatePort43);
+        nameserver.setLang(updateLang);
         List<String> expectedStatus = new ArrayList<String>();
         expectedStatus.add(updateStatusRenewProbibited);
         expectedStatus.add(updateStatusTransferProbibited);
         expectedStatus.add(updateStatusDeleteProbibited);
-        domain.setStatus(expectedStatus);
+        nameserver.setStatus(expectedStatus);
         Map<String, String> customProperties = new HashMap<String, String>();
         customProperties.put("customKey3", "customValue3");
-        domain.setCustomProperties(customProperties);
-        String content = JsonHelper.serialize(domain);
+        nameserver.setCustomProperties(customProperties);
+        IpAddressDto ipAddresses = new IpAddressDto();
+        List<String> ipList = new ArrayList<String>();
+        ipList.add("218.1.1.1");
+        ipList.add("2001:12::");
+        ipList.add(" ");
+        ipAddresses.setIpList(ipList);
+        nameserver.setIpAddresses(ipAddresses);
+        String content = JsonHelper.serialize(nameserver);
         mockMvc.perform(
-                put(URI_DOMAIN_U + originalHandle).contentType(
+                put(URI_NS_U + originalHandle).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson));
-        assertDomain(updateLdhName, updateLang, originalHandle, updatePort43);
+        assertNameserver(updateLdhName, updateLang, originalHandle,
+                updatePort43);
+        assertNsIp();
         assertStatus();
     }
 
@@ -127,7 +132,7 @@ public class DomainUpdateControllerTest extends BaseTest {
     public void test_invalid_handle_not_exist() throws Exception {
         String notExistHandle = "not-exist-handle";
         mockMvc.perform(
-                put(URI_DOMAIN_U + notExistHandle).contentType(
+                put(URI_NS_U + notExistHandle).contentType(
                         MediaType.parseMediaType(rdapJson)).content("{}"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -140,28 +145,34 @@ public class DomainUpdateControllerTest extends BaseTest {
                                                 .getMessage(), notExistHandle))));
     }
 
+    private void assertNsIp() throws Exception {
+        List<Map<?, ?>> actualIpList =
+                getTableDataForSql("RDAP_NAMESERVER_IP",
+                        "select * from RDAP_NAMESERVER_IP where NAMESERVER_ID=1");
+        assertEquals(2, actualIpList.size());
+    }
+
     private void assertStatus() throws Exception {
         List<Map<?, ?>> resultList1 =
-                getTableDataForSql("RDAP_DOMAIN_STATUS",
-                        "select * from RDAP_DOMAIN_STATUS where DOMAIN_ID=1");
+                getTableDataForSql("RDAP_NAMESERVER_STATUS",
+                        "select * from RDAP_NAMESERVER_STATUS where NAMESERVER_ID=1");
         assertEquals(3, resultList1.size());
     }
 
-    private void assertDomain(String updateLdhName, String updateLang,
+    private void assertNameserver(String updateLdhName, String updateLang,
             String originalHandle, String updatePort43) throws Exception {
         List<Map<?, ?>> resultList =
-                getTableDataForSql("RDAP_DOMAIN",
-                        "select * from RDAP_DOMAIN where HANDLE='h1'");
+                getTableDataForSql("RDAP_NAMESERVER",
+                        "select * from RDAP_NAMESERVER where HANDLE='h1'");
         assertTrue(resultList.size() > 0);
-        Map<?, ?> actualDomain = resultList.get(0);
-        assertEquals(originalHandle, actualDomain.get("HANDLE"));
-        assertEquals(DomainType.DNR.getName(), actualDomain.get("TYPE"));
-        assertEquals(updateLdhName, actualDomain.get("LDH_NAME"));
-        assertEquals(updateLdhName, actualDomain.get("UNICODE_NAME"));
-        assertEquals(updateLang, actualDomain.get("LANG"));
-        assertEquals(updatePort43, actualDomain.get("PORT43"));
+        Map<?, ?> actualNameserver = resultList.get(0);
+        assertEquals(originalHandle, actualNameserver.get("HANDLE"));
+        assertEquals(updateLdhName, actualNameserver.get("LDH_NAME"));
+        assertEquals(updateLdhName, actualNameserver.get("UNICODE_NAME"));
+        assertEquals(updateLang, actualNameserver.get("LANG"));
+        assertEquals(updatePort43, actualNameserver.get("PORT43"));
         assertEquals("{\"customKey3\":\"customValue3\"}",
-                actualDomain.get("CUSTOM_PROPERTIES"));
+                actualNameserver.get("CUSTOM_PROPERTIES"));
     }
 
 }

@@ -729,13 +729,13 @@ public class DomainCreateControllerTest extends BaseTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
-                .andExpect(jsonPath("$.subErrorCode").value(4008))
+                .andExpect(jsonPath("$.subErrorCode").value(4007))
                 .andExpect(
                         jsonPath("$.description").value(
                                 CoreMatchers.hasItems(String.format(
-                                        ServiceErrorCode.ERROR_4008
+                                        ServiceErrorCode.ERROR_4007
                                                 .getMessage(),
-                                        "event.eventDate"))));
+                                        "events.eventDate"))));
     }
 
     @Test

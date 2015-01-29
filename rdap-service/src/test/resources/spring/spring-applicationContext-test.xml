@@ -6,20 +6,17 @@
 		   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 	default-autowire="byType" default-lazy-init="false">
+	<context:component-scan base-package="org.restfulwhois.rdap" />
 	<context:property-placeholder location="classpath:*.properties"
 		ignore-unresolvable="true" />
 	<bean
 		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
 	<import resource="classpath:spring/spring-serviceContext.xml" />
-	<import resource="classpath:spring/spring-servlet.xml" />
+	<import resource="classpath:spring/spring-servlet-test.xml" />
 	<import resource="classpath:spring/spring-bootstrap.xml" />
 	<import resource="classpath:spring/spring-search.xml" />
 	<import resource="classpath:spring/spring-queryFilter.xml" />
 	<import resource="classpath:spring/spring-initData-notice.xml" />
 	<import resource="classpath:spring/spring-initData-errorMessage.xml" />
 	<import resource="classpath:spring/spring-initData-rdapConformance.xml" />
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
 </beans>
