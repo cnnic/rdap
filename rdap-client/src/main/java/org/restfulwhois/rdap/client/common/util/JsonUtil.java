@@ -44,7 +44,14 @@ public class JsonUtil{
 			throws RdapClientException{
 		try {
 			T t = objectMapper.readValue(response, model);
-			t.setCustomProperties(unidentifiedFields(response, model));
+			if(t.getCustomProperties() != null){
+				Map<String, String> customMap = t.getCustomProperties();
+				customMap.putAll(unidentifiedFields(response, model));
+				t.setCustomProperties(customMap);
+			}else{
+				t.setCustomProperties(unidentifiedFields(response, model));
+			}
+			
 			return t;
 		} catch (IOException e) {
 			throw new RdapClientException(

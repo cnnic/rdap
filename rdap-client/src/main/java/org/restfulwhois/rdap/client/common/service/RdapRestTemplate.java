@@ -18,6 +18,7 @@ import org.restfulwhois.rdap.client.common.type.HttpMethodType;
 import org.restfulwhois.rdap.client.common.type.ObjectType;
 import org.restfulwhois.rdap.client.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.dto.BaseDto;
+import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 
 public class RdapRestTemplate{
@@ -74,11 +75,12 @@ public class RdapRestTemplate{
 			int code = httpURLConnection.getResponseCode();
 			String response;
 			if(code != 200){
-				if(isOtherError(code)){
+				try{
+					SimpleHttpStatusCode.valueOf(code);
+					response = getResponseJSON(httpURLConnection.getErrorStream());
+				}catch(IllegalArgumentException e){
 					return UpdateResponse.buildErrorResponse(
 							0, code, httpURLConnection.getResponseMessage());
-				}else{
-					response = getResponseJSON(httpURLConnection.getErrorStream());
 				}
 			}else{
 				response = getResponseJSON(httpURLConnection.getInputStream());
@@ -134,20 +136,6 @@ public class RdapRestTemplate{
 			requestUrl.append("/").append(path);
 		}
 		return requestUrl.toString();
-	}
-	
-	private boolean isOtherError(int code){
-		switch(code){
-		case 400:
-		case 404:
-		case 405:
-		case 409:
-		case 415:
-		case 500:
-			return false;
-		default:
-			return true;
-		}
 	}
 	
 	private String getResponseJSON(InputStream input) throws IOException{
