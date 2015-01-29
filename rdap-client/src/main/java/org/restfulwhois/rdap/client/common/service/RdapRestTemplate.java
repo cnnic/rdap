@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.restfulwhois.rdap.client.common.exception.RdapClientException;
@@ -32,13 +33,13 @@ public class RdapRestTemplate{
 		this.MEDIA_TYPE = "application/json;charset=UTF-8";
 	}
 	
-	public <T extends BaseDto> T excute(String param, ObjectType objectType, Class<T> model) 
+	public <T extends BaseDto> T excute(List<String> param, ObjectType objectType, Class<T> dtoClass) 
 			throws RdapClientException{
 		try{
-			URL url = new URL(makeUrl(objectType));
+			URL url = new URL(makeUrl(objectType, param));
 			URLConnection urlConnection = url.openConnection();
 			HttpURLConnection httpURLConnection = (HttpURLConnection)urlConnection;
-			prepareExcute(httpURLConnection, param, HttpMethodType.GET);
+			prepareExcute(httpURLConnection, null, HttpMethodType.GET);
 			
 			int code = httpURLConnection.getResponseCode();
 			String response;
@@ -47,7 +48,7 @@ public class RdapRestTemplate{
 			}else{
 				response = getResponseJSON(httpURLConnection.getInputStream());
 			}
-			return JsonUtil.responseConverter(response, model);
+			return JsonUtil.responseConverter(response, dtoClass);
 		}catch(IOException io){
 			throw new RdapClientException(io.getMessage());
 		}catch(RdapClientException e){
@@ -59,7 +60,13 @@ public class RdapRestTemplate{
 	public UpdateResponse excute(String param, HttpMethodType httpMethod, ObjectType objectType) 
 			throws RdapClientException{
 		try{
-			URL url = new URL(makeUrl(objectType));
+			URL url;
+			if(httpMethod.equals(HttpMethodType.DELETE)){
+				url = new URL(makeUrl(objectType, param));
+			}else{
+				url = new URL(makeUrl(objectType));
+			}
+			
 			URLConnection urlConnection = url.openConnection();
 			HttpURLConnection httpURLConnection = (HttpURLConnection)urlConnection;
 			prepareExcute(httpURLConnection, param, httpMethod);
@@ -89,37 +96,42 @@ public class RdapRestTemplate{
 		
 		httpURLConnection.setConnectTimeout(connectTimeout);
 		httpURLConnection.setReadTimeout(readTimeout);
+		httpURLConnection.setUseCaches(false);
+		httpURLConnection.setRequestMethod(httpMethod.name());
 		httpURLConnection.setDoInput(true);
 		if(!httpMethod.equals(HttpMethodType.GET)){
 			httpURLConnection.setDoOutput(true);
 			httpURLConnection.setInstanceFollowRedirects(false);
+			httpURLConnection.connect();
 		}else{
 			httpURLConnection.setDoOutput(false);
 			httpURLConnection.setInstanceFollowRedirects(true);
+			httpURLConnection.setRequestProperty("content-type", MEDIA_TYPE);
+			httpURLConnection.connect();
+			OutputStream out = httpURLConnection.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "utf-8"));
+			writer.write(param);
+			writer.flush();
+			writer.close();
+			out.close();
 		}
-		httpURLConnection.setUseCaches(false);
-		httpURLConnection.setRequestMethod(httpMethod.name());
-		httpURLConnection.setRequestProperty("content-type", MEDIA_TYPE);
-		httpURLConnection.connect();
-		OutputStream out = httpURLConnection.getOutputStream();
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "utf-8"));
-		writer.write(param);
-		writer.flush();
-		writer.close();
-		out.close();
 	}
 	
 	private String makeUrl(ObjectType objectType){
-		return makeUrl(null, objectType);
+		return makeUrl(objectType, new ArrayList<String>());
 	}
 	
-	private String makeUrl(List<String> param, ObjectType objectType){
+	private String makeUrl(ObjectType objectType, String param){
+		ArrayList<String> paramList = new ArrayList<String>();
+		paramList.add(param);
+		return makeUrl(objectType, paramList);
+	}
+	
+	private String makeUrl(ObjectType objectType, List<String> param){
 		StringBuilder requestUrl = new StringBuilder(url);
 		requestUrl.append("/").append(objectType.name());
-		if(param != null){
-			for(String path : param){
-				requestUrl.append("/").append(path);
-			}
+		for(String path : param){
+			requestUrl.append("/").append(path);
 		}
 		return requestUrl.toString();
 	}

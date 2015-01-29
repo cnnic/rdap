@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.restfulwhois.rdap.client.common.exception.ExceptionMessage;
 import org.restfulwhois.rdap.client.common.exception.RdapClientException;
-import org.restfulwhois.rdap.client.common.type.ExceptionMessage;
 import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 

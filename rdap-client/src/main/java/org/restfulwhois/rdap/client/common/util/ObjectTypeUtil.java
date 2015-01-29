@@ -1,7 +1,7 @@
 package org.restfulwhois.rdap.client.common.util;
 
+import org.restfulwhois.rdap.client.common.exception.ExceptionMessage;
 import org.restfulwhois.rdap.client.common.exception.RdapClientException;
-import org.restfulwhois.rdap.client.common.type.ExceptionMessage;
 import org.restfulwhois.rdap.client.common.type.ObjectType;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
@@ -11,7 +11,8 @@ import org.restfulwhois.rdap.common.dto.NameserverDto;
 
 public class ObjectTypeUtil{
 	
-	public static ObjectType getObjectType(Object dto) throws RdapClientException{
+	public static ObjectType getObjectType(Object dto) 
+			throws RdapClientException{
 		if(dto instanceof IpDto){
 			return ObjectType.ip; 
 		}else if(dto instanceof AutnumDto){
