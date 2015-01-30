@@ -75,6 +75,16 @@ public class EntityUpdateDaoTest extends BaseTest {
 	    	domain.setId(1L);
 	    	DomainDto domainDto = new DomainDto();
 	    	List<EntityHandleDto> entityHandleList = 
+	    			createEntityHandleList();
+            domainDto.setEntities(entityHandleList);
+            domain.setDto(domainDto);
+            updateDao.saveRel(domain);
+	        super.assertTablesForUpdate("rel-entity-update.xml", 
+	        		TABLE_REL_ENTITY_REGISTRATION);
+	    }
+	    
+	    public static List<EntityHandleDto> createEntityHandleList() {
+	    	List<EntityHandleDto> entityHandleList = 
 	    			new ArrayList<EntityHandleDto>();
 	    	EntityHandleDto entityHandle = new EntityHandleDto();
 	    	entityHandle.setHandle("h1");
@@ -84,11 +94,7 @@ public class EntityUpdateDaoTest extends BaseTest {
 	    	
 	    	entityHandle.setRoles(roles);
 	    	entityHandleList.add(entityHandle);
-            domainDto.setEntities(entityHandleList);
-            domain.setDto(domainDto);
-            updateDao.saveRel(domain);
-	        super.assertTablesForUpdate("rel-entity-update.xml", 
-	        		TABLE_REL_ENTITY_REGISTRATION);
+	    	return entityHandleList;
 	    }
 	    
 	    @Test
@@ -142,6 +148,7 @@ public class EntityUpdateDaoTest extends BaseTest {
 	        entity.setPort43("whois.example.net");
 	        entity.setUrl("00miss.cnnic.cn");
 	        entity.setTitle("team leader");
+	        entity.setLang("zh");
 	        List<String> status = new ArrayList<String>();
 	        status.add("validated");
 	        status.add("active");
