@@ -30,7 +30,7 @@ public class RdapRestTemplate{
 	public RdapRestTemplate(int connectTimeout, int readTimeout){
 		this.connectTimeout = connectTimeout;
 		this.readTimeout = readTimeout;
-		this.url = "";
+		this.url = "http://127.0.0.1:8081";
 		this.MEDIA_TYPE = "application/json;charset=UTF-8";
 	}
 	
