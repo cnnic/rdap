@@ -19,8 +19,9 @@ public enum ObjectType{
 		this.dtoName = dtoName;
 	}
 	
-	public static ObjectType getObjectType(String dtoName) 
+	public static ObjectType valueOf(Class<?> dtoClass) 
 			throws RdapClientException{
+		String dtoName = dtoClass.getSimpleName();
 		for(ObjectType type : ObjectType.values()){
 			if(type.dtoName.equals(dtoName)){
 				return type;
@@ -28,7 +29,7 @@ public enum ObjectType{
 		}
 		
 		throw new RdapClientException(
-				ExceptionMessage.NOT_LEGAL_DTO_EXCEPTION.getMessage());
+				ExceptionMessage.NOT_LEGAL_DTO_ERROR.getMessage());
 	}
 	
 }

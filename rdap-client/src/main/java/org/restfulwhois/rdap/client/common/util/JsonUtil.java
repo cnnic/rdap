@@ -36,7 +36,7 @@ public class JsonUtil{
 			return objectMapper.writeValueAsString(dto);
 		} catch (JsonProcessingException e) {
 			throw new RdapClientException(
-					makeMessage(ExceptionMessage.DTO_TO_JSON_EXCEPTION, e));
+					makeMessage(ExceptionMessage.DTO_TO_JSON_ERROR, e));
 		}
 	}
 	
@@ -55,7 +55,7 @@ public class JsonUtil{
 			return t;
 		} catch (IOException e) {
 			throw new RdapClientException(
-					makeMessage(ExceptionMessage.JSON_TO_DTO_EXCEPTION, e));
+					makeMessage(ExceptionMessage.JSON_TO_DTO_ERROR, e));
 		} catch (RdapClientException e){
 			throw e;
 		}
@@ -69,7 +69,7 @@ public class JsonUtil{
 			updateResponse = objectMapper.readValue(response, UpdateResponse.class);
 		} catch (IOException e) {
 			throw new RdapClientException(
-					makeMessage(ExceptionMessage.JSON_TO_UPDATERESPONSE_EXCEPTION, e));
+					makeMessage(ExceptionMessage.JSON_TO_UPDATERESPONSE_ERROR, e));
 		}
 		return updateResponse;
 	}
@@ -106,7 +106,7 @@ public class JsonUtil{
 			}
 		}catch(IOException e){
 			throw new RdapClientException(
-					makeMessage(ExceptionMessage.SET_CUSTOMPROPERTIES_EXCEPTION, e));
+					makeMessage(ExceptionMessage.SET_CUSTOMPROPERTIES_ERROR, e));
 		}
 		return rtnMap;
 	}

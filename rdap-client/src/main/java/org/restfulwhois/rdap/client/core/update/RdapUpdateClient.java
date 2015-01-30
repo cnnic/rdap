@@ -38,8 +38,7 @@ public class RdapUpdateClient{
 	
 	private UpdateResponse excute(BaseDto dto, HttpMethodType httpMethod) 
 			throws RdapClientException {
-		ObjectType objectType = 
-				ObjectType.getObjectType(dto.getClass().getSimpleName());
+		ObjectType objectType = ObjectType.valueOf(dto.getClass());
 		String param = JsonUtil.toJson(dto);
 		RdapRestTemplate template = 
 				new RdapRestTemplate(connectTimeout, readTimeout);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.junit.Test;
+import org.restfulwhois.rdap.client.common.exception.ExceptionMessage;
 import org.restfulwhois.rdap.client.common.exception.RdapClientException;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
@@ -31,8 +32,9 @@ public class JsonUtilTest{
 	private String jsonCustom = "{\"handle\":\"handle1\",\"myCustom\":"
 			+ "{\"innerCustom1\":\"1\",\"innerCustom2\":[\"1\",\"2\"]},"
 			+ "\"entities\":null,\"status\":null,\"remarks\":null,\"links\":null,"
-			+ "\"port43\":null,\"events\":null,\"lang\":null,\"customProperties\":{},"
-			+ "\"ldhName\":null,\"unicodeName\":null,\"type\":null,\"networkHandle\":null,"
+			+ "\"port43\":null,\"events\":null,\"lang\":null,\"customProperties\":"
+			+ "{\"custom1\":\"1\",\"custom2\":\"2\"},\"ldhName\":null,"
+			+ "\"unicodeName\":null,\"type\":null,\"networkHandle\":null,"
 			+ "\"nameservers\":null,\"secureDNS\":{\"handle\":\"dns-handle1\","
 			+ "\"entities\":null,\"status\":null,\"remarks\":[{\"handle\":null,"
 			+ "\"entities\":null,\"status\":null,\"remarks\":null,\"links\":null,"
@@ -45,7 +47,9 @@ public class JsonUtilTest{
 	
 	private String responseString = "{\"handle\":\"domain-1\",\"errorCode\":400,"
 			+ "\"subErrorCode\":4002,\"description\":"
-			+ "[\" Property can¡¯t be empty: domainName\"]}";
+			+ "[\"Property can¡¯t be empty: domainName\"]}";
+	
+	private String responseException = "[]";
 	
 	@Test
 	public void test_toJson() throws RdapClientException{
@@ -87,6 +91,8 @@ public class JsonUtilTest{
 				+ "\"innerCustom2\":[\"1\",\"2\"]}";
 		Map<String, String> custom = dto.getCustomProperties();
 		assertEquals(customString, custom.get("myCustom"));
+		assertEquals("1", custom.get("custom1"));
+		assertEquals("2", custom.get("custom2"));
 	}
 	
 	@Test
@@ -98,6 +104,23 @@ public class JsonUtilTest{
 		assertEquals("domain-1",response.getHandle());
 		assertEquals("Property can¡¯t be empty: domainName",
 				response.getDescription().get(0));
+	}
+	
+	@Test
+	public void test_responseConverter_exception(){
+		UpdateResponse response;
+		String message = null;
+		try{
+			response = JsonUtil.responseConverter(responseException);
+		}catch(RdapClientException e){
+			response = null;
+			message = e.getMessage();
+		}
+		assertEquals(null, response);
+		String[] messages = message.split("\n");
+		assertEquals(
+				ExceptionMessage.JSON_TO_UPDATERESPONSE_ERROR.getMessage(), 
+				messages[0]+"\n");
 	}
 	
 }
