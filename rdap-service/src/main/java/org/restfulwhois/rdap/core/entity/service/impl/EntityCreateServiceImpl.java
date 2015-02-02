@@ -60,9 +60,9 @@ public class EntityCreateServiceImpl extends
         LOGGER.debug("save status...");
         getDao().saveStatus(entity);
         EntityDto dto = (EntityDto) entity.getDto();       
-        savePublicIds(dto.getPublicIds(), entity);
         saveEntityAddresses(entity);
         saveEntityTels(entity);        
+        savePublicIds(dto.getPublicIds(), entity);
         saveBaseModel(entity);
     }
 
