@@ -30,24 +30,20 @@
  */
 package org.restfulwhois.rdap.core.entity.service.impl;
 
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_ENTITY_ADDR;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.ERROR_PROP_NAME_PREFIX_ENTITY_TEL;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_LDHNAME;
-import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_UNICODENAME;
+import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_PORT43;
 
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dao.UpdateDao;
 import org.restfulwhois.rdap.common.dto.EntityDto;
-import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.EntityAddressDto;
 import org.restfulwhois.rdap.common.dto.embedded.EntityTelephoneDto;
-import org.restfulwhois.rdap.common.dto.embedded.IpAddressDto;
-import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
-import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Entity;
 import org.restfulwhois.rdap.common.model.EntityAddress;
 import org.restfulwhois.rdap.common.model.EntityTelephone;
-import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
 import org.restfulwhois.rdap.common.util.BeanUtil;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
@@ -131,19 +127,22 @@ public abstract class EntityUpdateBaseServiceImpl extends
 
     protected ValidationResult validateForSaveAndUpdate(EntityDto dto,
             ValidationResult validationResult) {
+        checkNotEmptyAndMaxLengthForHandle(dto.getHandle(), validationResult);
         checkNotEmptyAndMaxLength(dto.getFn(), MAX_LENGTH_255,
                  "fn", validationResult);
+        checkMaxLength(dto.getKind(), MAX_LENGTH_255,
+                "kind", validationResult);
     	checkMaxLength(dto.getEmail(), MAX_LENGTH_255,
                 "email", validationResult);
+    	checkMaxLength(dto.getTitle(), MAX_LENGTH_255,
+    	        "title", validationResult);
     	checkMaxLength(dto.getOrg(), MAX_LENGTH_255,
                 "org", validationResult);
-    	checkMaxLength(dto.getKind(), MAX_LENGTH_255,
-                "kind", validationResult);
-    	checkMaxLength(dto.getTitle(), MAX_LENGTH_255,
-                "title", validationResult);
-    	checkNotEmptyAndMaxLengthForHandle(dto.getHandle(), validationResult);
+    	checkMaxLength(dto.getUrl(), MAX_LENGTH_PORT43, "url",
+                validationResult);
     	checkEntityAddress(dto, validationResult);
     	checkEntityTel(dto, validationResult);
+    	checkPublicIds(dto.getPublicIds(), validationResult);
     	validateBaseDto(dto, validationResult);
         return validationResult;
     }
@@ -156,22 +155,22 @@ public abstract class EntityUpdateBaseServiceImpl extends
          }        
          for (EntityAddressDto entityAddress : entityAddressList) {
              checkMaxLength(entityAddress.getCountry(), MAX_LENGTH_255,
-                     "entityAddress.country", validationResult);
+                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"country", validationResult);
              checkMaxLength(entityAddress.getExtendedAddress(), MAX_LENGTH_255,
-                     "entityAddress.extendedAddress", validationResult);
+                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"extendedAddress", validationResult);
              checkMaxLength(entityAddress.getLocality(), MAX_LENGTH_255,
-                     "entityAddress.localcity", validationResult);
+                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"locality", validationResult);
              checkMaxLength(entityAddress.getPostalcode(), MAX_LENGTH_255,
-                     "entityAddress.postalcode", validationResult);
+                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"postalcode", validationResult);
              checkMaxLength(entityAddress.getPostbox(), MAX_LENGTH_255,
-                     "entityAddress.postbox", validationResult);             
+                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"postbox", validationResult);             
              checkMaxLength(entityAddress.getTypes(), MAX_LENGTH_255,
-                     "entityAddress.types", validationResult);
+                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"types", validationResult);
              checkMaxLength(entityAddress.getStreetAddress(), MAX_LENGTH_255,
-                     "entityAddress.streetAddress", validationResult);
+                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"streetAddress", validationResult);
              checkMaxLength(entityAddress.getRegion(), MAX_LENGTH_255,
-                     "entityAddress.region", validationResult);
-             checkMinMaxInt(entityAddress.getPref(), "entityAddress.pref", 
+                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"region", validationResult);
+             checkMinMaxInt(entityAddress.getPref(), ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"pref", 
             		 validationResult);
          }
     }
@@ -184,12 +183,12 @@ public abstract class EntityUpdateBaseServiceImpl extends
          }        
          for (EntityTelephoneDto entityTelephone : entityTelList) {
              checkMaxLength(entityTelephone.getExtNumber(), MAX_LENGTH_255,
-                     "entityAddress.extNumber", validationResult);
+                     ERROR_PROP_NAME_PREFIX_ENTITY_TEL+"extNumber", validationResult);
              checkMaxLength(entityTelephone.getNumber(), MAX_LENGTH_255,
-                     "entityAddress.number", validationResult);
+                     ERROR_PROP_NAME_PREFIX_ENTITY_TEL+"number", validationResult);
              checkMaxLength(entityTelephone.getTypes(), MAX_LENGTH_255,
-                     "entityAddress.types", validationResult);             
-             checkMinMaxInt(entityTelephone.getPref(), "entityTelephone.pref", 
+                     ERROR_PROP_NAME_PREFIX_ENTITY_TEL+"types", validationResult);             
+             checkMinMaxInt(entityTelephone.getPref(), ERROR_PROP_NAME_PREFIX_ENTITY_TEL+"pref", 
             		 validationResult);
          }
     }
