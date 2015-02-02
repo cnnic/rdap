@@ -39,6 +39,8 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 
+import sun.security.util.BigInt;
+
 /**
  * 
  * @author jiashuo
@@ -64,6 +66,9 @@ public class UpdateValidateUtil {
     public static final int MAX_VAL_FOR_INT_COLUMN = 2147483647;
     public static final int MIN_VAL_FOR_TINYINT_COLUMN = 0;
     public static final int MAX_VAL_FOR_TINYINT_COLUMN = 127;
+    public static final int MIN_VAL_FOR_BIGINT_COLUMN = 0;
+    // Math.pow(2, 63) - 1;
+    public static final long MAX_VAL_FOR_BIGINT_COLUMN = 9223372036854775807L;
     public static Date MIN_VAL_FOR_DATETIME_COLUMN = null;
     public static Date MAX_VAL_FOR_DATETIME_COLUMN = null;
     static {
@@ -121,6 +126,16 @@ public class UpdateValidateUtil {
     }
 
     public static void checkMinMaxInt(Integer value, int minValue,
+            long maxValue, String fieldName, ValidationResult validationResult) {
+        if (null == value) {
+            return;
+        }
+        if (value < minValue || value > maxValue) {
+            validationResult.addError(UpdateValidationError.build4010Error(
+                    fieldName, minValue, maxValue));
+        }
+    }
+    public static void checkMinMaxLong(Long value, int minValue,
             long maxValue, String fieldName, ValidationResult validationResult) {
         if (null == value) {
             return;

@@ -2,23 +2,23 @@ package org.restfulwhois.rdap.common.dto;
 
 
 public class AutnumDto extends BaseDto{
-	private int startAutnum;
-	private int endAutnum;
+	private Long startAutnum;
+	private Long endAutnum;
 	private String name;
 	private String type;
 	private String country;
 	
 	
-	public int getStartAutnum() {
+	public Long getStartAutnum() {
 		return startAutnum;
 	}
-	public void setStartAutnum(int startAutnum) {
+	public void setStartAutnum(Long startAutnum) {
 		this.startAutnum = startAutnum;
 	}
-	public int getEndAutnum() {
+	public Long getEndAutnum() {
 		return endAutnum;
 	}
-	public void setEndAutnum(int endAutnum) {
+	public void setEndAutnum(Long endAutnum) {
 		this.endAutnum = endAutnum;
 	}
 	public String getName() {
