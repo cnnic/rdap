@@ -60,7 +60,7 @@ public class EntityUpdateServiceImpl extends EntityUpdateBaseServiceImpl {
         getDao().updateStatus(entity);
         EntityDto dto = (EntityDto) entity.getDto();        
         updateEntityAddresses(entity);
-        updateEntitiesRel(entity);
+        updateEntityTels(entity);
         updatePublicIds(dto.getPublicIds(), entity);
         updateBaseModel(entity);
     }
