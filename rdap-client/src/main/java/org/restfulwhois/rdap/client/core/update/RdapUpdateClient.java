@@ -12,15 +12,18 @@ public class RdapUpdateClient{
 
 	private int connectTimeout;
 	private int readTimeout;
+	private String url;
 	
-	public RdapUpdateClient(){
+	public RdapUpdateClient(String url){
 		connectTimeout = 3000;
 		readTimeout = 10000;
+		this.url = url;
 	}
 	
-	public RdapUpdateClient(int connectTimeout, int readTimeout){
+	public RdapUpdateClient(int connectTimeout, int readTimeout, String url){
 		this.connectTimeout = connectTimeout;
 		this.readTimeout = readTimeout;
+		this.url = url;
 	}
 	
 	public UpdateResponse create(BaseDto dto) throws RdapClientException{
@@ -41,14 +44,14 @@ public class RdapUpdateClient{
 		ObjectType objectType = ObjectType.valueOf(dto.getClass());
 		String param = JsonUtil.toJson(dto);
 		RdapRestTemplate template = 
-				new RdapRestTemplate(connectTimeout, readTimeout);
+				new RdapRestTemplate(connectTimeout, readTimeout, url);
 		return template.excute(param, httpMethod, objectType);
 	}
 	
 	private UpdateResponse excute(String param, ObjectType objectType) 
 			throws RdapClientException{
 		RdapRestTemplate template = 
-				new RdapRestTemplate(connectTimeout, readTimeout);
+				new RdapRestTemplate(connectTimeout, readTimeout, url);
 		return template.excute(param, HttpMethodType.DELETE, objectType);
 	}
 	

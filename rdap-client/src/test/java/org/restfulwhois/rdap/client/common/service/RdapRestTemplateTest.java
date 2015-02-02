@@ -20,13 +20,13 @@ public class RdapRestTemplateTest{
 	MockHttpServer mockHttpServer;
 	String url = "http://127.0.0.1";
 	int port = 8080;
-	RdapRestTemplate template = new RdapRestTemplate(10000, 10000);
+	RdapRestTemplate template = new RdapRestTemplate(10000, 10000, url+":"+port);
 	String param = "{\"handle\":\"ip-handle1\",\"entities\":null,\"status\":null,"
 			+ "\"remarks\":null,\"links\":null,\"port43\":null,\"events\":null,"
 			+ "\"lang\":null,\"customProperties\":{\"custom1\":\"1\",\"custom2\":"
 			+ "\"{\\\"property\\\":2}\"},\"startAddress\":\"192.168.1.1\","
 			+ "\"endAddress\":\"192.168.1.100\",\"ipVersion\":\"v4\","
-			+ "\"name\":null,\"type\":null,\"country\":\"±±¾©\",\"parentHandle\":null}";
+			+ "\"name\":null,\"type\":null,\"country\":\"ä¸­å›½\",\"parentHandle\":null}";
 	
 	@Before
 	public void startServer(){
@@ -35,7 +35,7 @@ public class RdapRestTemplateTest{
 		
 	}
 	
-	public void setContent(UpdateResponse updateResponse){  
+	public void setContent200(UpdateResponse updateResponse){  
         MockHttpServerResponse response = new MockHttpServerResponse();  
           
         try {
@@ -54,7 +54,7 @@ public class RdapRestTemplateTest{
 	@Test
 	public void test_excute_post(){
 		UpdateResponse response;
-		setContent(UpdateResponse.buildSuccessResponse("ip-handle1"));
+		setContent200(UpdateResponse.buildSuccessResponse("ip-handle1"));
 		try {
 			response = template.excute(param, HttpMethodType.POST, ObjectType.ip);
 		} catch (RdapClientException e) {

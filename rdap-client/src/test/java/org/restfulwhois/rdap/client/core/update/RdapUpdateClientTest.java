@@ -37,7 +37,7 @@ public class RdapUpdateClientTest{
 		dto.setStartAddress("192.168.1.1");
 		dto.setEndAddress("192.168.1.100");
 		dto.setIpVersion("v4");
-		dto.setCountry("北京");
+		dto.setCountry("涓浗");
 		Map<String, String> customProperties = new HashMap<String, String>();
 		customProperties.put("custom1", "1");
 		customProperties.put("custom2", "{\"property\":2}");
@@ -66,7 +66,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 400);
 		assertEquals(response.getErrorCode(), 400);
 		assertEquals(response.getSubErrorCode(), 4002);
-		assertEquals(response.getDescription(), "Property can’t be empty");
+		assertEquals(response.getDescription(), "Property can't be empty");
 	}
 	
 	@Test
@@ -78,7 +78,7 @@ public class RdapUpdateClientTest{
 		dto.setStartAddress("ff00::1111");
 		dto.setEndAddress("ff00::ffff");
 		dto.setIpVersion("v6");
-		dto.setCountry("北京");
+		dto.setCountry("涓浗");
 		Map<String, String> customProperties = new HashMap<String, String>();
 		customProperties.put("custom1", "1");
 		customProperties.put("custom2", "{\"property\":2}");
@@ -106,7 +106,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 400);
 		assertEquals(response.getErrorCode(), 400);
 		assertEquals(response.getSubErrorCode(), 4002);
-		assertEquals(response.getDescription(), "Property can’t be empty");
+		assertEquals(response.getDescription(), "Property can锟斤拷t be empty");
 	}
 	
 	@Test
