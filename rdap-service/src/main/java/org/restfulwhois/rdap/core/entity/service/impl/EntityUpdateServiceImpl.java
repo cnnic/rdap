@@ -59,9 +59,9 @@ public class EntityUpdateServiceImpl extends EntityUpdateBaseServiceImpl {
         LOGGER.debug("update status...");
         getDao().updateStatus(entity);
         EntityDto dto = (EntityDto) entity.getDto();        
-        updatePublicIds(dto.getPublicIds(), entity);
         updateEntityAddresses(entity);
         updateEntitiesRel(entity);
+        updatePublicIds(dto.getPublicIds(), entity);
         updateBaseModel(entity);
     }
 
