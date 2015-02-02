@@ -38,7 +38,13 @@ package org.restfulwhois.rdap.common.dto;
  */
 public enum SimpleHttpStatusCode {
 
-    ERROR_400(400, ""), OK_200(200, "");
+	OK_200(200, ""), 
+    ERROR_400(400, ""), 
+    NOT_FOUND_404(404, ""),
+    CONFLICT_409(409, ""), 
+    METHOD_NOT_ALLOWED_405(405, ""), 
+    UNSUPPORTED_MEDIA_TYPE_415(415, ""),
+    INTERNAL_SERVER_ERROR_500(500, "");
 
     private final int value;
 
