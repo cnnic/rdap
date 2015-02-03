@@ -3,6 +3,7 @@ package org.restfulwhois.rdap.client.util;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class JsonUtilTest{
 	
 	private String responseString = "{\"handle\":\"domain-1\",\"errorCode\":400,"
 			+ "\"subErrorCode\":4002,\"description\":"
-			+ "[\"Property can��t be empty: domainName\"]}";
+			+ "[\"Property can't be empty: domainName\"]}";
 	
 	private String responseException = "[]";
 	
@@ -74,8 +75,8 @@ public class JsonUtilTest{
 	}
 	
 	@Test
-	public void test_responseConverter() throws RdapClientException{
-		DomainDto dto = JsonUtil.responseConverter(json, DomainDto.class);
+	public void test_toObject() throws RdapClientException{
+		DomainDto dto = JsonUtil.toObject(json, DomainDto.class);
 		assertEquals("handle1", dto.getHandle());
 		assertEquals("dns-handle1", dto.getSecureDNS().getHandle());
 		assertEquals("description1", dto.getSecureDNS().getRemarks().get(0)
@@ -85,34 +86,32 @@ public class JsonUtilTest{
 	}
 	
 	@Test
-	public void test_responseConverter_custom() 
+	public void test_toObject_custom() 
 			throws RdapClientException{
-		DomainDto dto = JsonUtil.responseConverter(jsonCustom, DomainDto.class);
+		Map<String, String> custom = new HashMap<String, String>();
+		JsonUtil.toObject(jsonCustom, DomainDto.class, custom);
 		String customString = "{\"innerCustom1\":\"1\","
 				+ "\"innerCustom2\":[\"1\",\"2\"]}";
-		Map<String, String> custom = dto.getCustomProperties();
 		assertEquals(customString, custom.get("myCustom"));
-		assertEquals("1", custom.get("custom1"));
-		assertEquals("2", custom.get("custom2"));
 	}
 	
 	@Test
-	public void test_responseConverter_updateresponse() 
+	public void test_toObject_updateresponse() 
 			throws RdapClientException{
-		UpdateResponse response = JsonUtil.responseConverter(responseString);
+		UpdateResponse response = JsonUtil.toObject(responseString, UpdateResponse.class);
 		assertEquals(400, response.getErrorCode());
 		assertEquals(4002,response.getSubErrorCode());
 		assertEquals("domain-1",response.getHandle());
-		assertEquals("Property can��t be empty: domainName",
+		assertEquals("Property can't be empty: domainName",
 				response.getDescription().get(0));
 	}
 	
 	@Test
-	public void test_responseConverter_exception(){
+	public void test_toObject_exception(){
 		UpdateResponse response;
 		String message = null;
 		try{
-			response = JsonUtil.responseConverter(responseException);
+			response = JsonUtil.toObject(responseException, UpdateResponse.class);
 		}catch(RdapClientException e){
 			response = null;
 			message = e.getMessage();
@@ -120,7 +119,7 @@ public class JsonUtilTest{
 		assertEquals(null, response);
 		String[] messages = message.split("\n");
 		assertEquals(
-				ExceptionMessage.JSON_TO_UPDATERESPONSE_ERROR.getMessage(), 
+				ExceptionMessage.JSON_TO_OBJECT_ERROR.getMessage(), 
 				messages[0]+"\n");
 	}
 	

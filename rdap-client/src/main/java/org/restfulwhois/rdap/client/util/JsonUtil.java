@@ -63,7 +63,8 @@ public class JsonUtil{
 					makeMessage(ExceptionMessage.JSON_TO_OBJECT_ERROR, e));
 		}
 		if(unkonwnPropertiesMap != null){
-			unkonwnPropertiesMap = unidentifiedFields(json, objectType);
+			Map<String, String> map = unidentifiedFields(json, objectType);
+			unkonwnPropertiesMap.putAll(map);
 		}
 		return object;
 	}

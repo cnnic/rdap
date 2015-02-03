@@ -2,26 +2,24 @@ package org.restfulwhois.rdap.client.service;
 
 import static org.junit.Assert.assertEquals;
 
+import java.net.URL;
 import java.util.List;
 
 import org.apache.wink.client.MockHttpServer;
 import org.apache.wink.client.MockHttpServer.MockHttpServerResponse;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
-import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.type.HttpMethodType;
-import org.restfulwhois.rdap.client.type.ObjectType;
-import org.restfulwhois.rdap.client.util.JsonUtil;
+import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 
 public class RdapRestTemplateTest{
 	MockHttpServer mockHttpServer;
-	String url = "http://127.0.0.1";
+	String url = "http://127.0.0.1:8081";
 	int port = 8080;
-	RdapRestTemplate template = new RdapRestTemplate(10000, 10000, url+":"+port);
+	RdapRestTemplate template = new RdapRestTemplate();
 	String param = "{\"handle\":\"ip-handle1\",\"entities\":null,\"status\":null,"
 			+ "\"remarks\":null,\"links\":null,\"port43\":null,\"events\":null,"
 			+ "\"lang\":null,\"customProperties\":{\"custom1\":\"1\",\"custom2\":"
@@ -33,17 +31,14 @@ public class RdapRestTemplateTest{
 	public void startServer(){
 		mockHttpServer = new MockHttpServer(port);
 		mockHttpServer.startServer();
-		
+		template.setConnectTimeout(10000);
+		template.setReadTimeout(10000);
 	}
 	
-	public void setContent200(UpdateResponse updateResponse){  
+	public void setContent200(){  
         MockHttpServerResponse response = new MockHttpServerResponse();  
           
-        try {
-			response.setMockResponseContent(JsonUtil.toJson(updateResponse));
-		} catch (RdapClientException e) {
-			response.setMockResponseContent("{\"handle\":\"ip-handle1\"}");
-		}  
+        response.setMockResponseContent("{\"handle\":\"ip-handle1\"}");
         response.setMockResponseCode(200);  
         response.setMockResponseContentType("application/json");  
 
@@ -52,47 +47,102 @@ public class RdapRestTemplateTest{
 	    mockHttpServer.setMockHttpServerResponses(response);  
     }
 	
+	public void setContent400(){  
+        MockHttpServerResponse response = new MockHttpServerResponse();  
+        String responseString = "{\"handle\":\"domain-1\",\"errorCode\":400,"
+    			+ "\"subErrorCode\":4002,\"description\":"
+    			+ "[\"Property can't be empty: domainName\"]}";
+		response.setMockResponseContent(responseString);
+        response.setMockResponseCode(400);  
+        response.setMockResponseContentType("application/json");  
+
+	    List<MockHttpServerResponse> list = mockHttpServer.getMockHttpServerResponses();  
+	    list.add(response);  
+	    mockHttpServer.setMockHttpServerResponses(response);  
+    }
+	
 	@Test
-	public void test_excute_post(){
+	public void test_execute_post200(){
 		UpdateResponse response;
-		setContent200(UpdateResponse.buildSuccessResponse("ip-handle1"));
+		int code;
+		setContent200();
 		try {
-			response = template.excute(param, HttpMethodType.POST, ObjectType.ip);
+			URL url = URLUtil.makeURLWithPath(this.url, "ip");
+			RdapResponse res = template.execute(HttpMethodType.POST, url, param);
+			code = res.getResponseCode();
+			response = res.getResponseBody(UpdateResponse.class);
 		} catch (RdapClientException e) {
 			response = null;
+			code = 0;
 		}
-		assertEquals(response.getHttpStatusCode(), 200);
+		assertEquals(code, 200);
+		assertEquals(response.getHandle(), "ip-handle1");
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
-	public void test_excute_put(){
+	public void test_execute_put200(){
 		UpdateResponse response;
+		int code;
+		setContent200();
 		try {
-			response = template.excute(param, HttpMethodType.PUT, ObjectType.ip);
+			URL url = URLUtil.makeURLWithPath(this.url, "ip");
+			RdapResponse res = template.execute(HttpMethodType.PUT, url, param);
+			code = res.getResponseCode();
+			response = res.getResponseBody(UpdateResponse.class);
 		} catch (RdapClientException e) {
 			response = null;
+			code = 0;
 		}
-		assertEquals(response.getHttpStatusCode(), 200);
+		assertEquals(code, 200);
+		assertEquals(response.getHandle(), "ip-handle1");
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
-	public void test_excute_delete(){
+	public void test_execute_delete200(){
 		UpdateResponse response;
+		int code;
+		setContent200();
 		try {
-			response = template.excute("ip-handle1", HttpMethodType.DELETE, ObjectType.ip);
+			URL url = URLUtil.makeURLWithPath(this.url, "ip", "ip-handle1");
+			RdapResponse res = template.execute(HttpMethodType.DELETE, url);
+			code = res.getResponseCode();
+			response = res.getResponseBody(UpdateResponse.class);
 		} catch (RdapClientException e) {
 			response = null;
+			code = 0;
 		}
-		assertEquals(response.getHttpStatusCode(), 200);
+		assertEquals(code, 200);
+		assertEquals(response.getHandle(), "ip-handle1");
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
+	}
+	
+	@Test
+	public void test_execute_post400(){
+		UpdateResponse response;
+		int code;
+		setContent400();
+		try {
+			URL url = URLUtil.makeURLWithPath(this.url, "domain");
+			RdapResponse res = template.execute(HttpMethodType.DELETE, url, null);
+			code = res.getResponseCode();
+			response = res.getResponseBody(UpdateResponse.class);
+		} catch (RdapClientException e) {
+			response = null;
+			code = 0;
+		}
+		assertEquals(code, 400);
+		assertEquals(response.getHandle(), "domain-1");
+		assertEquals(response.getErrorCode(), 400);
+		assertEquals(response.getSubErrorCode(), 4002);
+		assertEquals(response.getDescription().get(0), "Property can't be empty: domainName");
 	}
 	
 	@After

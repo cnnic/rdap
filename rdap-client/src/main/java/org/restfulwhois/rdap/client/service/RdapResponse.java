@@ -35,6 +35,8 @@ public class RdapResponse{
 			while((line = reader.readLine())!=null){
 				sb.append(line);
 			}
+			reader.close();
+			in.close();
 			if(isSaveUnknownProperties()){
 				unknownPropertiesMap = new HashMap<String, String>();
 			}
