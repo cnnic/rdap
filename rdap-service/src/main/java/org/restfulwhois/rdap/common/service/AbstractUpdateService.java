@@ -239,6 +239,15 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
 
+    protected void checkNotNullAndMinMaxBigInt(Long value, String fieldName,
+            ValidationResult validationResult) {
+        checkNotNull(value, fieldName, validationResult);
+        UpdateValidateUtil.checkMinMaxLong(value,
+                UpdateValidateUtil.MIN_VAL_FOR_BIGINT_COLUMN,
+                UpdateValidateUtil.MAX_VAL_FOR_BIGINT_COLUMN, fieldName,
+                validationResult);
+    }
+    
     protected void checkMinMaxTinyInt(int value, String fieldName,
             ValidationResult validationResult) {
         UpdateValidateUtil.checkMinMaxInt(value,

@@ -78,7 +78,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 public class EntityCreateControllerTest extends BaseTest {
 
     /**
-     * domain query URI.
+     * entity query URI.
      */
     public static final String URI_ENTITY_U = "/u/entity";
 
@@ -130,14 +130,14 @@ public class EntityCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_ok_with_not_empty_custom_properties() throws Exception {
-        EntityDto domain = generateEntityDto();
-        String content = JsonHelper.serialize(domain);
+        EntityDto entity = generateEntityDto();
+        String content = JsonHelper.serialize(entity);
         mockMvc.perform(
                 post(URI_ENTITY_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(domain.getHandle()));
+                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
         List<Map<?, ?>> resultList =
                 getTableDataForSql("RDAP_ENTITY",
                         "select CUSTOM_PROPERTIES from RDAP_ENTITY where HANDLE='h1'");

@@ -28,57 +28,53 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.entity.service.impl;
+package org.restfulwhois.rdap.core.autnum.service.impl;
 
-import org.restfulwhois.rdap.common.dto.EntityDto;
-import org.restfulwhois.rdap.common.model.Entity;
+import org.restfulwhois.rdap.common.dto.AutnumDto;
+import org.restfulwhois.rdap.common.model.Autnum;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * update service implementation.
+ * delete service implementation.
  * 
  * @author zhanyq
  * 
  */
-@Service("entityUpdateServiceImpl")
-public class EntityUpdateServiceImpl extends EntityUpdateBaseServiceImpl {
+@Service("autnumDeleteServiceImpl")
+public class AutnumDeleteServiceImpl extends AutnumUpdateBaseServiceImpl {
 
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(EntityUpdateServiceImpl.class);
+            .getLogger(AutnumDeleteServiceImpl.class);
 
     @Override
-    protected void execute(Entity entity) {
-        LOGGER.debug("update entity...");
-        getDao().update(entity);
-        LOGGER.debug("update status...");
-        getDao().updateStatus(entity);
-        EntityDto dto = (EntityDto) entity.getDto();        
-        updateEntityAddresses(entity);
-        updateEntityTels(entity);
-        updatePublicIds(dto.getPublicIds(), entity);
-        updateBaseModel(entity);
+    protected void execute(Autnum autnum) {
+        LOGGER.debug("delete autnum...");
+        getDao().delete(autnum);
+        LOGGER.debug("delete status...");
+        getDao().deleteStatus(autnum);
+        deleteBaseModelRel(autnum);
     }
 
     @Override
-    protected Entity convertDtoToModel(EntityDto dto) {
-        Entity entity = super.convertDtoToModel(dto);
+    protected Autnum convertDtoToModel(AutnumDto dto) {
+        Autnum autnum = new Autnum();
         Long id = getDao().findIdByHandle(dto.getHandle());
-        entity.setId(id);
-        entity.setDto(dto);
-        return entity;
+        autnum.setId(id);
+        autnum.setHandle(dto.getHandle());
+        return autnum;
     }
 
     @Override
-    protected ValidationResult validate(EntityDto entityDto) {
+    protected ValidationResult validate(AutnumDto autnumDto) {
         ValidationResult validationResult = new ValidationResult();
-        checkHandleExistForUpdate(entityDto.getHandle(), validationResult);
-        super.validateForSaveAndUpdate(entityDto, validationResult);
+        checkNotEmpty(autnumDto.getHandle(), "handle", validationResult);
+        checkHandleExistForUpdate(autnumDto.getHandle(), validationResult);
         return validationResult;
     }
 

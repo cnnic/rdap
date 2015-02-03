@@ -28,10 +28,10 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.entity.service.impl;
+package org.restfulwhois.rdap.core.autnum.service.impl;
 
-import org.restfulwhois.rdap.common.dto.EntityDto;
-import org.restfulwhois.rdap.common.model.Entity;
+import org.restfulwhois.rdap.common.dto.AutnumDto;
+import org.restfulwhois.rdap.common.model.Autnum;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,42 +43,38 @@ import org.springframework.stereotype.Service;
  * @author zhanyq
  * 
  */
-@Service("entityUpdateServiceImpl")
-public class EntityUpdateServiceImpl extends EntityUpdateBaseServiceImpl {
+@Service("autnumUpdateServiceImpl")
+public class AutnumUpdateServiceImpl extends AutnumUpdateBaseServiceImpl {
 
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(EntityUpdateServiceImpl.class);
+            .getLogger(AutnumUpdateServiceImpl.class);
 
     @Override
-    protected void execute(Entity entity) {
-        LOGGER.debug("update entity...");
-        getDao().update(entity);
+    protected void execute(Autnum autnum) {
+        LOGGER.debug("update autnum...");
+        getDao().update(autnum);
         LOGGER.debug("update status...");
-        getDao().updateStatus(entity);
-        EntityDto dto = (EntityDto) entity.getDto();        
-        updateEntityAddresses(entity);
-        updateEntityTels(entity);
-        updatePublicIds(dto.getPublicIds(), entity);
-        updateBaseModel(entity);
+        getDao().updateStatus(autnum);
+        updateBaseModel(autnum);
     }
 
     @Override
-    protected Entity convertDtoToModel(EntityDto dto) {
-        Entity entity = super.convertDtoToModel(dto);
+    protected Autnum convertDtoToModel(AutnumDto dto) {
+        Autnum autnum = super.convertDtoToModel(dto);
         Long id = getDao().findIdByHandle(dto.getHandle());
-        entity.setId(id);
-        entity.setDto(dto);
-        return entity;
+        autnum.setId(id);
+        autnum.setDto(dto);
+        return autnum;
     }
 
     @Override
-    protected ValidationResult validate(EntityDto entityDto) {
+    protected ValidationResult validate(AutnumDto autnumDto) {
         ValidationResult validationResult = new ValidationResult();
-        checkHandleExistForUpdate(entityDto.getHandle(), validationResult);
-        super.validateForSaveAndUpdate(entityDto, validationResult);
+        checkHandleExistForUpdate(autnumDto.getHandle(), validationResult);
+        super.validateForSaveAndUpdate(autnumDto, validationResult);
         return validationResult;
     }
 
