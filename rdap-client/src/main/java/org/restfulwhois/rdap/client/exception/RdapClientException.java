@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.client.common.exception;
+package org.restfulwhois.rdap.client.exception;
 
 public class RdapClientException extends Exception{
 

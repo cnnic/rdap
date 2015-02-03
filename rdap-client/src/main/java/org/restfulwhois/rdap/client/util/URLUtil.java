@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.client.common.util;
+package org.restfulwhois.rdap.client.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.restfulwhois.rdap.client.common.exception.RdapClientException;
+import org.restfulwhois.rdap.client.exception.RdapClientException;
 
 public class URLUtil{
 	private static final String slash = "/";

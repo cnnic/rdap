@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.client.common.util;
+package org.restfulwhois.rdap.client.util;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -8,10 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.restfulwhois.rdap.client.common.exception.ExceptionMessage;
-import org.restfulwhois.rdap.client.common.exception.RdapClientException;
-import org.restfulwhois.rdap.common.dto.BaseDto;
-import org.restfulwhois.rdap.common.dto.UpdateResponse;
+import org.restfulwhois.rdap.client.exception.ExceptionMessage;
+import org.restfulwhois.rdap.client.exception.RdapClientException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -29,50 +27,47 @@ public class JsonUtil{
 	}
 	
 	/**
-	 * convert dto object to json for update.
+	 * Converts object to json string.
 	 */
-	public static String toJson(Object dto) throws RdapClientException{
+	public static String toJson(Object object) throws RdapClientException{
 		try {
-			return objectMapper.writeValueAsString(dto);
+			return objectMapper.writeValueAsString(object);
 		} catch (JsonProcessingException e) {
 			throw new RdapClientException(
-					makeMessage(ExceptionMessage.DTO_TO_JSON_ERROR, e));
+					makeMessage(ExceptionMessage.OBJECT_TO_JSON_ERROR, e));
 		}
 	}
 	
-	public static <T extends BaseDto> T responseConverter(String response, Class<T> model) 
+	/**
+	 * Converts json string to object.
+	 */
+	public static <T> T toObject(String json, Class<T> objectType)
 			throws RdapClientException{
-		try {
-			T t = objectMapper.readValue(response, model);
-			if(t.getCustomProperties() != null){
-				Map<String, String> customMap = t.getCustomProperties();
-				customMap.putAll(unidentifiedFields(response, model));
-				t.setCustomProperties(customMap);
-			}else{
-				t.setCustomProperties(unidentifiedFields(response, model));
-			}
-			
-			return t;
-		} catch (IOException e) {
-			throw new RdapClientException(
-					makeMessage(ExceptionMessage.JSON_TO_DTO_ERROR, e));
-		} catch (RdapClientException e){
-			throw e;
-		}
-		
+		return toObject(json, objectType, null);
 	}
 	
-	public static UpdateResponse responseConverter(String response) throws RdapClientException{
-
-		UpdateResponse updateResponse = null;
+	/**
+	 * Converts json string to object and saves unkonwn properties
+	 * into the paramter unkonwnPropertiesMap.
+	 */
+	public static <T> T toObject(String json,
+			Class<T> objectType,
+			Map<String, String> unkonwnPropertiesMap)
+					throws RdapClientException{
+		
+		T object = null;
 		try {
-			updateResponse = objectMapper.readValue(response, UpdateResponse.class);
+			object = objectMapper.readValue(json, objectType);
 		} catch (IOException e) {
 			throw new RdapClientException(
-					makeMessage(ExceptionMessage.JSON_TO_UPDATERESPONSE_ERROR, e));
+					makeMessage(ExceptionMessage.JSON_TO_OBJECT_ERROR, e));
 		}
-		return updateResponse;
+		if(unkonwnPropertiesMap != null){
+			unkonwnPropertiesMap = unidentifiedFields(json, objectType);
+		}
+		return object;
 	}
+	
 	
 	private static Map<String, String> unidentifiedFields(String json, Class<?> model) 
 			throws RdapClientException{

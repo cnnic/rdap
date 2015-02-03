@@ -1,10 +1,11 @@
-package org.restfulwhois.rdap.client.common.type;
+package org.restfulwhois.rdap.client.type;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.client.common.exception.ExceptionMessage;
-import org.restfulwhois.rdap.client.common.exception.RdapClientException;
+import org.restfulwhois.rdap.client.exception.ExceptionMessage;
+import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.type.ObjectType;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.EntityDto;

@@ -1,7 +1,7 @@
-package org.restfulwhois.rdap.client.common.type;
+package org.restfulwhois.rdap.client.type;
 
-import org.restfulwhois.rdap.client.common.exception.ExceptionMessage;
-import org.restfulwhois.rdap.client.common.exception.RdapClientException;
+import org.restfulwhois.rdap.client.exception.ExceptionMessage;
+import org.restfulwhois.rdap.client.exception.RdapClientException;
 
 
 public enum ObjectType{

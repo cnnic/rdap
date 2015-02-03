@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.client.common.exception.RdapClientException;
-import org.restfulwhois.rdap.client.common.type.ObjectType;
+import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.type.ObjectType;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.EntityDto;

@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.client.common.util;
+package org.restfulwhois.rdap.client.util;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.junit.Test;
-import org.restfulwhois.rdap.client.common.exception.ExceptionMessage;
-import org.restfulwhois.rdap.client.common.exception.RdapClientException;
+import org.restfulwhois.rdap.client.exception.ExceptionMessage;
+import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.util.JsonUtil;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
@@ -47,7 +48,7 @@ public class JsonUtilTest{
 	
 	private String responseString = "{\"handle\":\"domain-1\",\"errorCode\":400,"
 			+ "\"subErrorCode\":4002,\"description\":"
-			+ "[\"Property can¡¯t be empty: domainName\"]}";
+			+ "[\"Property canï¿½ï¿½t be empty: domainName\"]}";
 	
 	private String responseException = "[]";
 	
@@ -102,7 +103,7 @@ public class JsonUtilTest{
 		assertEquals(400, response.getErrorCode());
 		assertEquals(4002,response.getSubErrorCode());
 		assertEquals("domain-1",response.getHandle());
-		assertEquals("Property can¡¯t be empty: domainName",
+		assertEquals("Property canï¿½ï¿½t be empty: domainName",
 				response.getDescription().get(0));
 	}
 	

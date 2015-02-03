@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.client.common.service;
+package org.restfulwhois.rdap.client.service;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,10 +10,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.restfulwhois.rdap.client.common.exception.RdapClientException;
-import org.restfulwhois.rdap.client.common.type.HttpMethodType;
-import org.restfulwhois.rdap.client.common.type.ObjectType;
-import org.restfulwhois.rdap.client.common.util.JsonUtil;
+import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.service.RdapRestTemplate;
+import org.restfulwhois.rdap.client.type.HttpMethodType;
+import org.restfulwhois.rdap.client.type.ObjectType;
+import org.restfulwhois.rdap.client.util.JsonUtil;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 
 public class RdapRestTemplateTest{
