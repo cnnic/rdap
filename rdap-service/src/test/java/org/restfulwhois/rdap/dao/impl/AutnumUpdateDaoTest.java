@@ -123,7 +123,7 @@ public class AutnumUpdateDaoTest extends BaseTest {
 	        String updatePort43 = "port43";
 	        String updateHandle = "new-handle";
 	        String updateName = "as-200-3:4269852";
-	        String updateCounty = "FR";
+	        String updateCountry = "FR";
 	        String updateType = "DIRECT ALLOCATION";
 	        String updateStatusRenewProbibited = "renew prohibited";
 	        String updateStatusTransferProbibited = "transfer prohibited";
@@ -135,7 +135,7 @@ public class AutnumUpdateDaoTest extends BaseTest {
 	    	autnum.setEndAutnum(updateEndAutnum);
 	    	autnum.setName(updateName);
 	    	autnum.setPort43(updatePort43);
-	        autnum.setCountry(updateCounty);	 
+	        autnum.setCountry(updateCountry);	 
 	        autnum.setLang(updateLang);
 	        autnum.setType(updateType);    
 	        List<String> expectedStatus = new ArrayList<String>();
@@ -152,7 +152,7 @@ public class AutnumUpdateDaoTest extends BaseTest {
 	        updateDao.updateStatus(autnum);
 	        assertAutnum(updateName, updateLang, originalHandle, 
                     updatePort43, updateStartAutnum, updateEndAutnum,
-	        		updateCounty, updateType);
+	        		updateCountry, updateType);
 	        assertStatus();
 	    }
 
@@ -166,7 +166,7 @@ public class AutnumUpdateDaoTest extends BaseTest {
 
        private void assertAutnum(String updateName, String updateLang,
 	            String originalHandle, String updatePort43,
-	            Long updateStartAutnum, Long updateEndAutnum, String updateCounty,
+	            Long updateStartAutnum, Long updateEndAutnum, String updateCountry,
 	            String updateType) throws Exception {
 	        List<Map<?, ?>> resultList =
 	                getTableDataForSql("RDAP_AUTNUM",
@@ -182,7 +182,7 @@ public class AutnumUpdateDaoTest extends BaseTest {
 	        assertEquals(updateType, actualNameserver.get("TYPE"));
 	        assertEquals(updateEndAutnum, 
 	        		(Long)((BigInteger)actualNameserver.get("END_AUTNUM")).longValue());
-	        assertEquals(updateCounty, actualNameserver.get("COUNTRY"));
+	        assertEquals(updateCountry, actualNameserver.get("COUNTRY"));
 	        assertEquals("{\"customKey3\":\"customValue3\"}",
 	        		actualNameserver.get("CUSTOM_PROPERTIES"));
 	    }

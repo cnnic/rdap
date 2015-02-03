@@ -106,9 +106,9 @@ public class AutnumUpdateController {
     }
 
     /**
-     * update entity.
+     * update autnum.
      * 
-     * @param entityDto
+     * @param autnumDto
      *    entityDto
      * @param handle
      *        handle
