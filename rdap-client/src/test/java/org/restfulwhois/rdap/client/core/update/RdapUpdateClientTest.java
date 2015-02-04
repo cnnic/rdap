@@ -7,9 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wink.client.MockHttpServer;
+import org.apache.wink.client.MockHttpServer.MockHttpServerResponse;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.restfulwhois.rdap.client.common.exception.RdapClientException;
-import org.restfulwhois.rdap.client.common.type.ObjectType;
+import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.service.RdapRestTemplate;
+import org.restfulwhois.rdap.client.type.ObjectType;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.EntityDto;
@@ -24,9 +29,44 @@ import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.dto.embedded.SecureDnsDto;
 
 public class RdapUpdateClientTest{
-	RdapUpdateClient client = new RdapUpdateClient();
+	MockHttpServer mockHttpServer;
+	int port = 8080;
+	String url = "http://127.0.0.1:8081";
+	RdapUpdateClient client = new RdapUpdateClient(url);
 	
+	@Before
+	public void startServer(){
+		mockHttpServer = new MockHttpServer(port);
+		mockHttpServer.startServer();
+		client.setConnectTimeout(10000);
+		client.setReadTimeout(10000);
+	}
 	
+	public void setContent200(){  
+        MockHttpServerResponse response = new MockHttpServerResponse();  
+          
+        response.setMockResponseContent("{\"handle\":\"ip-handle1\"}");
+        response.setMockResponseCode(200);  
+        response.setMockResponseContentType("application/json");  
+
+	    List<MockHttpServerResponse> list = mockHttpServer.getMockHttpServerResponses();  
+	    list.add(response);  
+	    mockHttpServer.setMockHttpServerResponses(response);  
+    }
+	
+	public void setContent400(){  
+        MockHttpServerResponse response = new MockHttpServerResponse();  
+        String responseString = "{\"handle\":\"domain-1\",\"errorCode\":400,"
+    			+ "\"subErrorCode\":4002,\"description\":"
+    			+ "[\"Property can't be empty: domainName\"]}";
+		response.setMockResponseContent(responseString);
+        response.setMockResponseCode(400);  
+        response.setMockResponseContentType("application/json");  
+
+	    List<MockHttpServerResponse> list = mockHttpServer.getMockHttpServerResponses();  
+	    list.add(response);  
+	    mockHttpServer.setMockHttpServerResponses(response);  
+    }
 	
 	@Test
 	public void test_create_noerror(){
@@ -37,12 +77,13 @@ public class RdapUpdateClientTest{
 		dto.setStartAddress("192.168.1.1");
 		dto.setEndAddress("192.168.1.100");
 		dto.setIpVersion("v4");
-		dto.setCountry("北京");
+		dto.setCountry("涓浗");
 		Map<String, String> customProperties = new HashMap<String, String>();
 		customProperties.put("custom1", "1");
 		customProperties.put("custom2", "{\"property\":2}");
 		dto.setCustomProperties(customProperties);
 		try {
+			setContent200();
 			response = client.create(dto);
 		} catch (RdapClientException e) {
 			response = null;
@@ -50,7 +91,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -59,6 +100,7 @@ public class RdapUpdateClientTest{
 		
 		IpDto dto = new IpDto();
 		try {
+			setContent400();
 			response = client.create(dto);
 		} catch (RdapClientException e) {
 			response = null;
@@ -66,7 +108,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 400);
 		assertEquals(response.getErrorCode(), 400);
 		assertEquals(response.getSubErrorCode(), 4002);
-		assertEquals(response.getDescription(), "Property can’t be empty");
+		assertEquals(response.getDescription().get(0), "Property can't be empty");
 	}
 	
 	@Test
@@ -78,11 +120,12 @@ public class RdapUpdateClientTest{
 		dto.setStartAddress("ff00::1111");
 		dto.setEndAddress("ff00::ffff");
 		dto.setIpVersion("v6");
-		dto.setCountry("北京");
+		dto.setCountry("涓浗");
 		Map<String, String> customProperties = new HashMap<String, String>();
 		customProperties.put("custom1", "1");
 		customProperties.put("custom2", "{\"property\":2}");
 		try {
+			setContent200();
 			response = client.update(dto);
 		} catch (RdapClientException e) {
 			response = null;
@@ -90,7 +133,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -99,6 +142,7 @@ public class RdapUpdateClientTest{
 		
 		IpDto dto = new IpDto();
 		try {
+			setContent400();
 			response = client.update(dto);
 		} catch (RdapClientException e) {
 			response = null;
@@ -106,7 +150,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 400);
 		assertEquals(response.getErrorCode(), 400);
 		assertEquals(response.getSubErrorCode(), 4002);
-		assertEquals(response.getDescription(), "Property can’t be empty");
+		assertEquals(response.getDescription().get(0), "Property can't be empty");
 	}
 	
 	@Test
@@ -114,6 +158,7 @@ public class RdapUpdateClientTest{
 		UpdateResponse response;
 		
 		try {
+			setContent200();
 			response = client.delete("ip-handle1", ObjectType.ip);
 		} catch (RdapClientException e) {
 			response = null;
@@ -121,7 +166,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -136,7 +181,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 404);
 		assertEquals(response.getErrorCode(), 404);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), "Object not found");
+		assertEquals(response.getDescription().get(0), "Object not found");
 	}
 	
 	@Test
@@ -169,7 +214,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -203,7 +248,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -218,7 +263,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -246,7 +291,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -274,7 +319,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -289,7 +334,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -307,7 +352,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -325,7 +370,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -340,7 +385,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -358,7 +403,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -376,7 +421,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -391,7 +436,7 @@ public class RdapUpdateClientTest{
 		assertEquals(response.getHttpStatusCode(), 200);
 		assertEquals(response.getErrorCode(), 0);
 		assertEquals(response.getSubErrorCode(), 0);
-		assertEquals(response.getDescription(), null);
+		assertEquals(response.getDescription().size(), 0);
 	}
 	
 	@Test
@@ -406,5 +451,10 @@ public class RdapUpdateClientTest{
 			response = null;
 		}
 		assertEquals(response, null);
+	}
+	
+	@After
+	public void stopServer(){
+		mockHttpServer.stopServer();
 	}
 }
