@@ -30,14 +30,10 @@
  */
 package org.restfulwhois.rdap.controller;
 
-import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-import java.util.Map;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -59,12 +55,12 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * 
  */
 @SuppressWarnings("rawtypes")
-public class EntityDeleteControllerTest extends BaseTest {
+public class AutnumDeleteControllerTest extends BaseTest {
 
     /**
-     * entity   URI.
+     * autnum URI.
      */
-    public static final String URI_ENTITY_U = "/u/entity/";
+    public static final String URI_AUTNUM_U = "/u/autnum/";
 
     @Autowired
     private WebApplicationContext wac;
@@ -79,51 +75,45 @@ public class EntityDeleteControllerTest extends BaseTest {
     }
 
     @Test
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-delete.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-delete.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public
-            void test_ok_only_entity() throws Exception {
+            void test_ok_only_autnum() throws Exception {
         mockMvc.perform(
-                delete(URI_ENTITY_U + "h1").contentType(
+                delete(URI_AUTNUM_U + "h1").contentType(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson));
-        super.assertTablesForUpdate("teardown.xml", "RDAP_ENTITY",
-                "RDAP_ENTITY_STATUS");
+        super.assertTablesForUpdate("teardown.xml", "RDAP_AUTNUM",
+                "RDAP_AUTNUM_STATUS");
     }
 
     @Test
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-delete-for-controller.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-delete-for-controller.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public
-            void test_ok_with_fat_entity_with_all_inner_objects()
+            void test_ok_with_fat_autnum_with_all_inner_objects()
                     throws Exception {
         mockMvc.perform(
-                delete(URI_ENTITY_U + "h1").contentType(
+                delete(URI_AUTNUM_U + "h1").contentType(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson));
-        super.assertTablesForUpdate("teardown.xml", "RDAP_ENTITY",
-                "RDAP_ENTITY_STATUS", "RDAP_EVENT", "REL_EVENT_REGISTRATION",
+        super.assertTablesForUpdate("teardown.xml", "RDAP_AUTNUM",
+                "RDAP_AUTNUM_STATUS", "RDAP_EVENT", "REL_EVENT_REGISTRATION",
                 "RDAP_LINK", "REL_LINK_OBJECT", "RDAP_LINK_HREFLANG",
-                "REL_ENTITY_REGISTRATION", "REL_PUBLICID_REGISTRATION", "RDAP_NOTICE",
-                "REL_NOTICE_REGISTRATION", "RDAP_NOTICE_DESCRIPTION",
-                "RDAP_VCARD_TEL", "RDAP_VCARD_ADR");
-
-        List<Map<?, ?>> resultList =
-                getTableDataForSql("RDAP_PUBLICID",
-                        "select * from RDAP_PUBLICID where PUBLIC_ID=1");
-        assertTrue(resultList.size() > 0);
+                "REL_ENTITY_REGISTRATION", "RDAP_NOTICE",
+                "REL_NOTICE_REGISTRATION", "RDAP_NOTICE_DESCRIPTION");       
     }
 
     @Test
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-delete.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-delete.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public
             void test_invalid_handle_not_exist() throws Exception {
         String notExistHandle = "not-exist-handle";
         mockMvc.perform(
-                delete(URI_ENTITY_U + notExistHandle).contentType(
+                delete(URI_AUTNUM_U + notExistHandle).contentType(
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(
@@ -134,8 +124,8 @@ public class EntityDeleteControllerTest extends BaseTest {
                 .andExpect(
                         jsonPath("$.description")
                                 .value(CoreMatchers.hasItems(String.format(
-                                        ServiceErrorCode.ERROR_4041
-                                                .getMessage(), notExistHandle))));
+                                 ServiceErrorCode.ERROR_4041
+                                .getMessage(), notExistHandle))));
     }
 
 }

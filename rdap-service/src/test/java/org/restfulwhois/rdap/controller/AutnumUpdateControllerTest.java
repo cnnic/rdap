@@ -37,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +48,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.JsonHelper;
-import org.restfulwhois.rdap.common.dto.EntityDto;
+import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -64,12 +65,12 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * 
  */
 @SuppressWarnings("rawtypes")
-public class EntityUpdateControllerTest extends BaseTest {
+public class AutnumUpdateControllerTest extends BaseTest {
 
     /**
-     * entity query URI.
+     * autnum query URI.
      */
-    public static final String URI_ENTITY_U = "/u/entity/";
+    public static final String URI_AUTNUM_U = "/u/autnum/";
 
     @Autowired
     private WebApplicationContext wac;
@@ -84,49 +85,47 @@ public class EntityUpdateControllerTest extends BaseTest {
     }
 
     @Test
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-update.xml")
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/autnum-delete.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public
-            void test_ok_only_entity() throws Exception {
-    	String updateEmail = "john@gmail.com";
-        String updateFn = "john";
-        String updateKind = "update-org";
+            void test_ok_only_autnum() throws Exception {
+        String updateName = "as-200-3:4269852";
+        String updateType = "ALLOCATION";
         String updateLang = "us";
-        String updateOrg = "org";
-        String updateUrl = "http://john.com";
-        String updateTitle = "CEO";
+        String updateCountry = "FR";
         String originalHandle = "h1";
         String updatePort43 = "update-port43";
         String updateHandle = "new-handle";
+        Long updateStartAutnum = 4L;
+        Long updateEndAutnum = 5L;
         String updateStatusRenewProbibited = "renew prohibited";
         String updateStatusTransferProbibited = "transfer prohibited";
         String updateStatusDeleteProbibited = "delete prohibited";
-        EntityDto entity = new EntityDto();
-        entity.setHandle(updateHandle);
-        entity.setEmail(updateEmail);
-        entity.setKind(updateKind);
-        entity.setFn(updateFn);
-        entity.setLang(updateLang);
-        entity.setOrg(updateOrg);
-        entity.setPort43(updatePort43);
-        entity.setUrl(updateUrl);
-        entity.setTitle(updateTitle);        
+        AutnumDto autnum = new AutnumDto();
+        autnum.setHandle(updateHandle);
+        autnum.setLang(updateLang);
+        autnum.setCountry(updateCountry);
+        autnum.setStartAutnum(updateStartAutnum);
+        autnum.setEndAutnum(updateEndAutnum);
+        autnum.setName(updateName);
+        autnum.setType(updateType);
+        autnum.setPort43(updatePort43);
         List<String> expectedStatus = new ArrayList<String>();
         expectedStatus.add(updateStatusRenewProbibited);
         expectedStatus.add(updateStatusTransferProbibited);
         expectedStatus.add(updateStatusDeleteProbibited);
-        entity.setStatus(expectedStatus);
+        autnum.setStatus(expectedStatus);
         Map<String, String> customProperties = new HashMap<String, String>();
         customProperties.put("customKey3", "customValue3");
-        entity.setCustomProperties(customProperties);
-        String content = JsonHelper.serialize(entity);
+        autnum.setCustomProperties(customProperties);
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                put(URI_ENTITY_U + originalHandle).contentType(
+                put(URI_AUTNUM_U + originalHandle).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson));
-        assertEntity(updateEmail, updateFn, updateKind, updateOrg, updateLang, 
-        		updateUrl, originalHandle, updatePort43);
+        assertAutnum(updateName, updateType, updateCountry, updateLang, 
+            originalHandle, updatePort43, updateStartAutnum, updateEndAutnum);
         assertStatus();
     }
 
@@ -135,7 +134,7 @@ public class EntityUpdateControllerTest extends BaseTest {
     public void test_invalid_handle_not_exist() throws Exception {
         String notExistHandle = "not-exist-handle";
         mockMvc.perform(
-                put(URI_ENTITY_U + notExistHandle).contentType(
+                put(URI_AUTNUM_U + notExistHandle).contentType(
                         MediaType.parseMediaType(rdapJson)).content("{}"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -150,28 +149,31 @@ public class EntityUpdateControllerTest extends BaseTest {
 
     private void assertStatus() throws Exception {
         List<Map<?, ?>> resultList1 =
-                getTableDataForSql("RDAP_ENTITY_STATUS",
-                        "select * from RDAP_ENTITY_STATUS where ENTITY_ID=1");
+                getTableDataForSql("RDAP_AUTNUM_STATUS",
+                        "select * from RDAP_AUTNUM_STATUS where AS_ID=1");
         assertEquals(3, resultList1.size());
     }
 
-    private void assertEntity(String updateEmail, String updateFn, String updateKind,
-    		String updateOrg, String updateLang, String updateUrl,
-            String originalHandle, String updatePort43) throws Exception {
-        List<Map<?, ?>> resultList =
-                getTableDataForSql("RDAP_ENTITY",
-                        "select * from RDAP_ENTITY where HANDLE='h1'");
-        assertTrue(resultList.size() > 0);
-        Map<?, ?> actualEntity = resultList.get(0);
-        assertEquals(originalHandle, actualEntity.get("HANDLE"));
-        assertEquals(updateFn, actualEntity.get("FN"));
-        assertEquals(updateKind, actualEntity.get("KIND"));
-        assertEquals(updateOrg, actualEntity.get("ORG"));
-        assertEquals(updateLang, actualEntity.get("LANG"));
-        assertEquals(updateUrl, actualEntity.get("URL"));
-        assertEquals(updatePort43, actualEntity.get("PORT43"));
-        assertEquals("{\"customKey3\":\"customValue3\"}",
-        		actualEntity.get("CUSTOM_PROPERTIES"));
+    private void assertAutnum(String updateName, String updateType, String updateCountry,
+             String updateLang, String originalHandle, String updatePort43,
+             Long updateStartAutnum,  Long updateEndAutnum) throws Exception {
+    	 List<Map<?, ?>> resultList =
+	                getTableDataForSql("RDAP_AUTNUM",
+	                        "select * from RDAP_AUTNUM where HANDLE='h1'");
+	        assertTrue(resultList.size() > 0);
+	        Map<?, ?> actualNameserver = resultList.get(0);
+	        assertEquals(originalHandle, actualNameserver.get("HANDLE"));	    
+	        assertEquals(updateName, actualNameserver.get("NAME"));
+	        assertEquals(updateStartAutnum, 
+	        		(Long)((BigInteger)actualNameserver.get("START_AUTNUM")).longValue());
+	        assertEquals(updateLang, actualNameserver.get("LANG"));
+	        assertEquals(updatePort43, actualNameserver.get("PORT43"));
+	        assertEquals(updateType, actualNameserver.get("TYPE"));
+	        assertEquals(updateEndAutnum, 
+	        		(Long)((BigInteger)actualNameserver.get("END_AUTNUM")).longValue());
+	        assertEquals(updateCountry, actualNameserver.get("COUNTRY"));
+	        assertEquals("{\"customKey3\":\"customValue3\"}",
+	        		actualNameserver.get("CUSTOM_PROPERTIES"));
     }
 
 }
