@@ -9,66 +9,102 @@ import org.restfulwhois.rdap.client.type.HttpMethodType;
 import org.restfulwhois.rdap.client.type.ObjectType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
 import org.restfulwhois.rdap.client.util.URLUtil;
+import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.BaseDto;
+import org.restfulwhois.rdap.common.dto.DomainDto;
+import org.restfulwhois.rdap.common.dto.EntityDto;
+import org.restfulwhois.rdap.common.dto.IpDto;
+import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 
-public class RdapUpdateClient{
+public class RdapUpdateClient {
 
-	private int connectTimeout;
-	private int readTimeout;
-	private String url;
-	
-	public RdapUpdateClient(String url){
-		connectTimeout = 3000;
-		readTimeout = 10000;
-		this.url = url;
-	}
-	
-	public UpdateResponse create(BaseDto dto) throws RdapClientException{
-		return execute(dto, HttpMethodType.POST, null, null);
-	} 
-	
-	public UpdateResponse update(BaseDto dto) throws RdapClientException{
-		return execute(dto, HttpMethodType.PUT, dto.getHandle(), null);
-	}
-	
-	public UpdateResponse delete(String handle, ObjectType type)
-			throws RdapClientException{
-		return execute(null, HttpMethodType.DELETE, handle, type);	
-	}
-	
-	private UpdateResponse execute(BaseDto dto, 
-			HttpMethodType httpMethod, String handle, ObjectType type)
-					throws RdapClientException{
-		RdapRestTemplate template = new RdapRestTemplate();
-		template.setConnectTimeout(connectTimeout);
-		template.setReadTimeout(readTimeout);
-		
-		String body = JsonUtil.toJson(dto);
-		String objectType;
-		if(!httpMethod.equals(HttpMethodType.DELETE))
-			objectType = ObjectType.valueOf(dto.getClass()).name();
-		else
-			objectType = type.name();
-		URL url =  URLUtil.makeURLWithPath(this.url, objectType, "u", handle);
-		RdapResponse response = template.execute(httpMethod, url, body);
-		return response.getResponseBody(UpdateResponse.class);
-	}
+    private int connectTimeout;
+    private int readTimeout;
+    private String urlStr;
+    private final String UPDATE = "u";
 
-	public int getConnectTimeout() {
-		return connectTimeout;
-	}
+    public RdapUpdateClient(String url) {
+        connectTimeout = 3000;
+        readTimeout = 10000;
+        this.urlStr = url;
+    }
 
-	public void setConnectTimeout(int connectTimeout) {
-		this.connectTimeout = connectTimeout;
-	}
+    public UpdateResponse create(BaseDto dto) throws RdapClientException {
+        return execute(dto, HttpMethodType.POST);
+    }
 
-	public int getReadTimeout() {
-		return readTimeout;
-	}
+    public UpdateResponse update(BaseDto dto) throws RdapClientException {
+        return execute(dto, HttpMethodType.PUT);
+    }
 
-	public void setReadTimeout(int readTimeout) {
-		this.readTimeout = readTimeout;
-	}
-	
+    public UpdateResponse deleteIp(String handle) throws RdapClientException {
+        IpDto dto = new IpDto();
+        dto.setHandle(handle);
+        return execute(dto, HttpMethodType.DELETE);
+    }
+
+    public UpdateResponse deleteDomain(String handle)
+            throws RdapClientException {
+        DomainDto dto = new DomainDto();
+        dto.setHandle(handle);
+        return execute(dto, HttpMethodType.DELETE);
+    }
+
+    public UpdateResponse deleteEntity(String handle)
+            throws RdapClientException {
+        EntityDto dto = new EntityDto();
+        dto.setHandle(handle);
+        return execute(dto, HttpMethodType.DELETE);
+    }
+
+    public UpdateResponse deleteNameserver(String handle)
+            throws RdapClientException {
+        NameserverDto dto = new NameserverDto();
+        dto.setHandle(handle);
+        return execute(dto, HttpMethodType.DELETE);
+    }
+
+    public UpdateResponse deleteAutnum(String handle)
+            throws RdapClientException {
+        AutnumDto dto = new AutnumDto();
+        dto.setHandle(handle);
+        return execute(dto, HttpMethodType.DELETE);
+    }
+
+    private UpdateResponse execute(BaseDto dto, HttpMethodType httpMethod)
+            throws RdapClientException {
+        String body = JsonUtil.toJson(dto);
+        StringBuilder path = new StringBuilder(UPDATE).append(dto.getUpdateUri());
+        if(!httpMethod.equals(HttpMethodType.POST)){
+            path.append(dto.getHandle());
+        }
+        URL url = URLUtil.makeURLWithPath(urlStr, path.toString());
+        RdapResponse response = createTemplate().execute(httpMethod, url, body);
+        return response.getResponseBody(UpdateResponse.class);
+    }
+
+    private RdapRestTemplate createTemplate() {
+        RdapRestTemplate template = new RdapRestTemplate();
+        template.setConnectTimeout(connectTimeout);
+        template.setReadTimeout(readTimeout);
+        return template;
+    }
+
+    public int getConnectTimeout() {
+        return connectTimeout;
+    }
+
+    public void setConnectTimeout(int connectTimeout) {
+        this.connectTimeout = connectTimeout;
+    }
+
+    public int getReadTimeout() {
+        return readTimeout;
+    }
+
+    public void setReadTimeout(int readTimeout) {
+        this.readTimeout = readTimeout;
+    }
+
 }
