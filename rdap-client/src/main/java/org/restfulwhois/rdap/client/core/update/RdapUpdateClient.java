@@ -1,24 +1,15 @@
 package org.restfulwhois.rdap.client.core.update;
 
-import java.io.IOException;
-
+import org.restfulwhois.rdap.client.common.exception.RdapClientException;
 import org.restfulwhois.rdap.client.common.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.common.type.HttpMethodType;
 import org.restfulwhois.rdap.client.common.type.ObjectType;
 import org.restfulwhois.rdap.client.common.util.JsonUtil;
-import org.restfulwhois.rdap.client.core.update.dto.factory.RdapClientDtoFactory;
-import org.restfulwhois.rdap.common.dto.AutnumDto;
-import org.restfulwhois.rdap.common.dto.DomainDto;
-import org.restfulwhois.rdap.common.dto.EntityDto;
-import org.restfulwhois.rdap.common.dto.IpDto;
-import org.restfulwhois.rdap.common.dto.NameserverDto;
+import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RdapUpdateClient{
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RdapUpdateClient.class);
 	private int connectTimeout;
 	private int readTimeout;
 	
@@ -32,58 +23,33 @@ public class RdapUpdateClient{
 		this.readTimeout = readTimeout;
 	}
 	
-	
-	public RdapClientDtoFactory getDtoFactory(){
-		return RdapClientDtoFactory.getInstance();
-	}
-	
-	public UpdateResponse create(Object dto) throws Exception{
-		ObjectType objectType = checkObjectType(dto);
-		return excute(dto, HttpMethodType.POST, objectType);
+	public UpdateResponse create(BaseDto dto) throws RdapClientException{
+		return excute(dto, HttpMethodType.POST);
 	} 
 	
-	public UpdateResponse update(Object dto) throws Exception{
-		ObjectType objectType = checkObjectType(dto);
-		return excute(dto, HttpMethodType.PUT, objectType);
+	public UpdateResponse update(BaseDto dto) throws RdapClientException{
+		return excute(dto, HttpMethodType.PUT);
 	}
 	
-	public UpdateResponse delete(Object dto) throws Exception{
-		ObjectType objectType = checkObjectType(dto);
-		return excute(dto, HttpMethodType.DELETE, objectType);	
+	public UpdateResponse delete(String handle, ObjectType objectType) 
+			throws RdapClientException{
+		return excute(handle, objectType);	
 	}
 	
-	private ObjectType checkObjectType(Object dto){
-		
-		if(dto instanceof IpDto){
-			return ObjectType.ip; 
-		}else if(dto instanceof AutnumDto){
-			return ObjectType.autnum;
-		}else if(dto instanceof EntityDto){
-			return ObjectType.entity;
-		}else if(dto instanceof DomainDto){
-			return ObjectType.domain;
-		}else if(dto instanceof NameserverDto){
-			return ObjectType.nameserver;
-		}else{
-			return null;
-		}
-		
-	}
-	
-	private UpdateResponse excute(Object dto, HttpMethodType httpMethod, ObjectType objectType) throws Exception {
-	
+	private UpdateResponse excute(BaseDto dto, HttpMethodType httpMethod) 
+			throws RdapClientException {
+		ObjectType objectType = ObjectType.valueOf(dto.getClass());
 		String param = JsonUtil.toJson(dto);
-		String reponse = null;
-		UpdateResponse updateResponse = null;
-		if(param != null){
-			try {
-				reponse = new RdapRestTemplate(connectTimeout, readTimeout).excute(param, httpMethod, objectType);
-				updateResponse = JsonUtil.responseConverter(reponse);
-			} catch (IOException e) {
-				LOGGER.error("Send request to server error:{}");
-			}
-		}
-		return updateResponse;
+		RdapRestTemplate template = 
+				new RdapRestTemplate(connectTimeout, readTimeout);
+		return template.excute(param, httpMethod, objectType);
+	}
+	
+	private UpdateResponse excute(String param, ObjectType objectType) 
+			throws RdapClientException{
+		RdapRestTemplate template = 
+				new RdapRestTemplate(connectTimeout, readTimeout);
+		return template.excute(param, HttpMethodType.DELETE, objectType);
 	}
 	
 }

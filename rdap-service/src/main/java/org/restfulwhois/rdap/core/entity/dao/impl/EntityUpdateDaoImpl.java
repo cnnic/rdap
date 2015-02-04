@@ -69,7 +69,7 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
          + " values(?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_UPDATE_ENTITY = "UPDATE RDAP_ENTITY"
             + " SET KIND=?,FN=?,EMAIL=?,TITLE=?,ORG=?,URL=?,PORT43=?,LANG=?"
-            + " ,CUSTOM_PROPERTIES=?";
+            + " ,CUSTOM_PROPERTIES=? WHERE ENTITY_ID=?";
     private static final String SQL_DELETE_ENTITY =
             "DELETE FROM RDAP_ENTITY where ENTITY_ID=?";
 
@@ -116,6 +116,7 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
                 ps.setString(7, model.getPort43());
                 ps.setString(8, model.getLang());               
                 ps.setString(9, model.getCustomPropertiesJsonVal());
+                ps.setLong(10, model.getId());
             }
         });
     }

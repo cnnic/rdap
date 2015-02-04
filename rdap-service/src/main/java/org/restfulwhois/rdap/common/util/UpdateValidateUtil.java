@@ -50,6 +50,8 @@ public class UpdateValidateUtil {
     public static final String ERROR_PROP_NAME_PREFIX_REMARK = "remarks.";
     public static final String ERROR_PROP_NAME_PREFIX_LINK = "links.";
     public static final String ERROR_PROP_NAME_PREFIX_ENTITY = "entities.";
+    public static final String ERROR_PROP_NAME_PREFIX_ENTITY_ADDR = "addresses.";
+    public static final String ERROR_PROP_NAME_PREFIX_ENTITY_TEL = "telephones.";
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final int MAX_LENGTH_LANG = 64;
     public static final int MAX_LENGTH_PORT43 = 4096;

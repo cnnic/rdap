@@ -8,63 +8,84 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.restfulwhois.rdap.client.common.exception.ExceptionMessage;
+import org.restfulwhois.rdap.client.common.exception.RdapClientException;
+import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class JsonUtil{
-	private static final Logger LOGGER = LoggerFactory.getLogger(JsonUtil.class);
-	private static ObjectMapper objectMapper = new ObjectMapper();;
+
+	private static ObjectMapper objectMapper;
 	
-	public static String toJson(Object dto){
-		String json = null;
+	static{
+		objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	}
+	
+	/**
+	 * convert dto object to json for update.
+	 */
+	public static String toJson(Object dto) throws RdapClientException{
 		try {
 			return objectMapper.writeValueAsString(dto);
 		} catch (JsonProcessingException e) {
-			LOGGER.error("Convert dto into json error:{}", e);
+			throw new RdapClientException(
+					makeMessage(ExceptionMessage.DTO_TO_JSON_ERROR, e));
 		}
-		return json;
 	}
 	
-	public static <T extends BaseModel> T responseConverter(String response, Class<T> model) throws JsonParseException, JsonMappingException, IOException{
+	public static <T extends BaseDto> T responseConverter(String response, Class<T> model) 
+			throws RdapClientException{
+		try {
+			T t = objectMapper.readValue(response, model);
+			if(t.getCustomProperties() != null){
+				Map<String, String> customMap = t.getCustomProperties();
+				customMap.putAll(unidentifiedFields(response, model));
+				t.setCustomProperties(customMap);
+			}else{
+				t.setCustomProperties(unidentifiedFields(response, model));
+			}
+			
+			return t;
+		} catch (IOException e) {
+			throw new RdapClientException(
+					makeMessage(ExceptionMessage.JSON_TO_DTO_ERROR, e));
+		} catch (RdapClientException e){
+			throw e;
+		}
+		
+	}
+	
+	public static UpdateResponse responseConverter(String response) throws RdapClientException{
 
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		T t = objectMapper.readValue(response, model);
-		t.setCustomProperties(JsonUtil.unidentifiedFields(response, model));
-		return t;
-	}
-	
-	public static UpdateResponse responseConverter(String response){
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		UpdateResponse updateResponse = null;
 		try {
 			updateResponse = objectMapper.readValue(response, UpdateResponse.class);
 		} catch (IOException e) {
-			LOGGER.error("Convert response into UpdateResponse error:{}", e);
+			throw new RdapClientException(
+					makeMessage(ExceptionMessage.JSON_TO_UPDATERESPONSE_ERROR, e));
 		}
 		return updateResponse;
 	}
 	
-	public static Map<String, String> unidentifiedFields(String json, Class<?> model){
+	private static Map<String, String> unidentifiedFields(String json, Class<?> model) 
+			throws RdapClientException{
 		Map<String, String> rtnMap = new HashMap<String, String>();
 		try{
 			JsonNode node = objectMapper.readTree(json);
 			Iterator<String> it = node.fieldNames();
 			Class<?> superClass = model.getSuperclass();
-			ArrayList<Field> fieldList = new ArrayList<Field>(Arrays.asList(model.getDeclaredFields()));
+			ArrayList<Field> fieldList = new ArrayList<Field>(
+					Arrays.asList(model.getDeclaredFields()));
 			if(superClass != null && !superClass.getName().equals(Object.class.getName())){
 				fieldList.addAll(Arrays.asList(superClass.getDeclaredFields()));
 			}
-			
 			
 			boolean identifiableFlag = true;
 			String currentString;
@@ -84,8 +105,13 @@ public class JsonUtil{
 				}
 			}
 		}catch(IOException e){
-			LOGGER.error("set CustomProperties error:{}", e);
+			throw new RdapClientException(
+					makeMessage(ExceptionMessage.SET_CUSTOMPROPERTIES_ERROR, e));
 		}
 		return rtnMap;
+	}
+	
+	private static String makeMessage(ExceptionMessage em, Exception e){
+		return em.getMessage() + e.getMessage();
 	}
 }

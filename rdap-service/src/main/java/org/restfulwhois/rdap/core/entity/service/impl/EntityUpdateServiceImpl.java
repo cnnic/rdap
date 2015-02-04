@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2012 - 2015, Internet Corporation for Assigned Names and
  * Numbers (ICANN) and China Internet Network Information Center (CNNIC)
- *
+ * 
  * All rights reserved.
- *
+ *  
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ *  
  * * Redistributions of source code must retain the above copyright notice,
  *  this list of conditions and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice,
@@ -15,7 +15,7 @@
  * * Neither the name of the ICANN, CNNIC nor the names of its contributors may
  *  be used to endorse or promote products derived from this software without
  *  specific prior written permission.
- *
+ *  
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,72 +28,58 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.common.dto;
+package org.restfulwhois.rdap.core.entity.service.impl;
+
+import org.restfulwhois.rdap.common.dto.EntityDto;
+import org.restfulwhois.rdap.common.model.Entity;
+import org.restfulwhois.rdap.common.validation.ValidationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
- * SimpleHttpStatusCode.
+ * update service implementation.
  * 
- * @author jiashuo
+ * @author zhanyq
  * 
  */
-public enum SimpleHttpStatusCode {
-
-	OK_200(200, ""), 
-    ERROR_400(400, ""), 
-    NOT_FOUND_404(404, ""),
-    CONFLICT_409(409, ""), 
-    METHOD_NOT_ALLOWED_405(405, ""), 
-    UNSUPPORTED_MEDIA_TYPE_415(415, ""),
-    INTERNAL_SERVER_ERROR_500(500, "");
-
-    private final int value;
-
-    private final String reasonPhrase;
-
-    private SimpleHttpStatusCode(int value, String reasonPhrase) {
-        this.value = value;
-        this.reasonPhrase = reasonPhrase;
-    }
+@Service("entityUpdateServiceImpl")
+public class EntityUpdateServiceImpl extends EntityUpdateBaseServiceImpl {
 
     /**
-     * Return the integer value of this status code.
+     * logger.
      */
-    public int value() {
-        return this.value;
-    }
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(EntityUpdateServiceImpl.class);
 
-    /**
-     * Return the reason phrase of this status code.
-     */
-    public String getReasonPhrase() {
-        return reasonPhrase;
-    }
-
-    /**
-     * Return a string representation of this status code.
-     */
     @Override
-    public String toString() {
-        return Integer.toString(value);
+    protected void execute(Entity entity) {
+        LOGGER.debug("update entity...");
+        getDao().update(entity);
+        LOGGER.debug("update status...");
+        getDao().updateStatus(entity);
+        EntityDto dto = (EntityDto) entity.getDto();        
+        updateEntityAddresses(entity);
+        updateEntityTels(entity);
+        updatePublicIds(dto.getPublicIds(), entity);
+        updateBaseModel(entity);
     }
 
-    /**
-     * Return the enum constant of this type with the specified numeric value.
-     * 
-     * @param statusCode
-     *            the numeric value of the enum to be returned
-     * @return the enum constant with the specified numeric value
-     * @throws IllegalArgumentException
-     *             if this enum has no constant for the specified numeric value
-     */
-    public static SimpleHttpStatusCode valueOf(int statusCode) {
-        for (SimpleHttpStatusCode status : values()) {
-            if (status.value == statusCode) {
-                return status;
-            }
-        }
-        throw new IllegalArgumentException("No matching constant for ["
-                + statusCode + "]");
+    @Override
+    protected Entity convertDtoToModel(EntityDto dto) {
+        Entity entity = super.convertDtoToModel(dto);
+        Long id = getDao().findIdByHandle(dto.getHandle());
+        entity.setId(id);
+        entity.setDto(dto);
+        return entity;
+    }
+
+    @Override
+    protected ValidationResult validate(EntityDto entityDto) {
+        ValidationResult validationResult = new ValidationResult();
+        checkHandleExistForUpdate(entityDto.getHandle(), validationResult);
+        super.validateForSaveAndUpdate(entityDto, validationResult);
+        return validationResult;
     }
 
 }
