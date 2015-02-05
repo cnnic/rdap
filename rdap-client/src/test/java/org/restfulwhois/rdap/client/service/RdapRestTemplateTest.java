@@ -78,6 +78,7 @@ public class RdapRestTemplateTest {
             response = null;
             code = 0;
         }
+        assertEquals(mockHttpServer.getRequestContentAsString(), param);
         assertEquals(code, 200);
         assertEquals(response.getHandle(), "ip-handle1");
         assertEquals(response.getErrorCode(), 0);

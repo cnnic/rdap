@@ -13,8 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
-import org.restfulwhois.rdap.client.service.RdapRestTemplate;
-import org.restfulwhois.rdap.client.type.ObjectType;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.EntityDto;
@@ -38,32 +36,45 @@ public class RdapUpdateClientTest {
     public void startServer() {
         mockHttpServer = new MockHttpServer(port);
         mockHttpServer.startServer();
-        client.setConnectTimeout(10000);
-        client.setReadTimeout(10000);
+        client.setConnectTimeout(100000);
+        client.setReadTimeout(100000);
     }
 
-    public void setContent200() {
-        MockHttpServerResponse response = new MockHttpServerResponse();
+    public void setContent200(String objectType) {
+        String responseString = "{\"handle\":\"" + objectType + "-1\"}";
+        setMockResponse(200, responseString);
 
-        response.setMockResponseContent("{\"handle\":\"ip-handle1\"}");
-        response.setMockResponseCode(200);
-        response.setMockResponseContentType("application/json");
-
-        List<MockHttpServerResponse> list = mockHttpServer
-                .getMockHttpServerResponses();
-        list.add(response);
-        mockHttpServer.setMockHttpServerResponses(response);
     }
 
-    public void setContent400() {
-        MockHttpServerResponse response = new MockHttpServerResponse();
-        String responseString = "{\"handle\":\"domain-1\",\"errorCode\":400,"
+    public void setContent400(String objectType) {
+        String responseString = "{\"handle\":\"" + objectType
+                + "-1\",\"errorCode\":400,"
                 + "\"subErrorCode\":4002,\"description\":"
-                + "[\"Property can't be empty: domainName\"]}";
-        response.setMockResponseContent(responseString);
-        response.setMockResponseCode(400);
-        response.setMockResponseContentType("application/json");
+                + "[\"Property can't be empty\"]}";
+        setMockResponse(400, responseString);
+    }
 
+    public void setContent404(String objectType) {
+        String responseString = "{\"handle\":\"" + objectType
+                + "-1\",\"errorCode\":404,"
+                + "\"subErrorCode\":4041,\"description\":"
+                + "[\"Object not found\"]}";
+        setMockResponse(404, responseString);
+    }
+
+    public void setContent409(String objectType) {
+        String responseString = "{\"handle\":\"" + objectType
+                + "-1\",\"errorCode\":409,"
+                + "\"subErrorCode\":4091,\"description\":"
+                + "[\"Object already exist\"]}";
+        setMockResponse(409, responseString);
+    }
+
+    private void setMockResponse(int code, String content) {
+        MockHttpServerResponse response = new MockHttpServerResponse();
+        response.setMockResponseContent(content);
+        response.setMockResponseCode(code);
+        response.setMockResponseContentType("application/json");
         List<MockHttpServerResponse> list = mockHttpServer
                 .getMockHttpServerResponses();
         list.add(response);
@@ -71,11 +82,11 @@ public class RdapUpdateClientTest {
     }
 
     @Test
-    public void test_create_noerror() {
+    public void test_create_ip() {
         UpdateResponse response;
 
         IpDto dto = new IpDto();
-        dto.setHandle("ip-handle1");
+        dto.setHandle("ip-1");
         dto.setStartAddress("192.168.1.1");
         dto.setEndAddress("192.168.1.100");
         dto.setIpVersion("v4");
@@ -85,41 +96,42 @@ public class RdapUpdateClientTest {
         customProperties.put("custom2", "{\"property\":2}");
         dto.setCustomProperties(customProperties);
         try {
-            setContent200();
+            setContent200(dto.getUpdateUri());
             response = client.create(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/ip");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
     }
 
     @Test
-    public void test_create_failToCreate_haserror() {
+    public void test_create_failToCreate_ip() {
         UpdateResponse response;
 
         IpDto dto = new IpDto();
+        dto.setHandle("ip-1");
         try {
-            setContent400();
+            setContent409(dto.getUpdateUri());
             response = client.create(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 400);
-        assertEquals(response.getErrorCode(), 400);
-        assertEquals(response.getSubErrorCode(), 4002);
-        assertEquals(response.getDescription().get(0),
-                "Property can't be empty");
+        assertEquals(response.getHandle(), dto.getHandle());
+        assertEquals(response.getErrorCode(), 409);
+        assertEquals(response.getSubErrorCode(), 4091);
+        assertEquals(response.getDescription().get(0), "Object already exist");
     }
 
     @Test
-    public void test_update_noerror() {
+    public void test_update_ip() {
         UpdateResponse response;
 
         IpDto dto = new IpDto();
-        dto.setHandle("ip-handle1");
+        dto.setHandle("ip-1");
         dto.setStartAddress("ff00::1111");
         dto.setEndAddress("ff00::ffff");
         dto.setIpVersion("v6");
@@ -128,63 +140,66 @@ public class RdapUpdateClientTest {
         customProperties.put("custom1", "1");
         customProperties.put("custom2", "{\"property\":2}");
         try {
-            setContent200();
+            setContent200(dto.getUpdateUri());
             response = client.update(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/ip/ip-1");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
     }
 
     @Test
-    public void test_update_failToUpdate_haserror() {
+    public void test_update_failToUpdate_ip() {
         UpdateResponse response;
 
         IpDto dto = new IpDto();
+        dto.setHandle("ip-1");
         try {
-            setContent400();
+            setContent404(dto.getUpdateUri());
             response = client.update(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 400);
-        assertEquals(response.getErrorCode(), 400);
-        assertEquals(response.getSubErrorCode(), 4002);
-        assertEquals(response.getDescription().get(0),
-                "Property can't be empty");
+        assertEquals(response.getHandle(), dto.getHandle());
+        assertEquals(response.getErrorCode(), 404);
+        assertEquals(response.getSubErrorCode(), 4041);
+        assertEquals(response.getDescription().get(0), "Object not found");
     }
 
     @Test
-    public void test_delete_noerror() {
+    public void test_delete_ip() {
         UpdateResponse response;
 
         try {
-            setContent200();
-            response = client.delete("ip-handle1", ObjectType.ip);
+            setContent200("ip");
+            response = client.deleteIp("ip-1");
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/ip/ip-1");
+        assertEquals(response.getHandle(), "ip-1");
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
     }
 
     @Test
-    public void test_delete_failToDelete_haserror() {
+    public void test_delete_failToDelete_ip() {
         UpdateResponse response;
 
         try {
-            response = client.delete("ip-handle2", ObjectType.nameserver);
+            setContent404("ip");
+            response = client.deleteIp("ip-1");
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 404);
+        assertEquals(response.getHandle(), "ip-1");
         assertEquals(response.getErrorCode(), 404);
-        assertEquals(response.getSubErrorCode(), 0);
+        assertEquals(response.getSubErrorCode(), 4041);
         assertEquals(response.getDescription().get(0), "Object not found");
     }
 
@@ -193,17 +208,17 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         AutnumDto dto = new AutnumDto();
-        dto.setHandle("autnum-handle1");
+        dto.setHandle("autnum-1");
         List<EventDto> events = new ArrayList<EventDto>();
         EventDto eventDto = new EventDto();
-        eventDto.setHandle("event-handle1");
+        eventDto.setHandle("event-1");
         List<LinkDto> links = new ArrayList<LinkDto>();
         LinkDto linkDto = new LinkDto();
-        linkDto.setHandle("link-handle1");
+        linkDto.setHandle("link-1");
         links.add(linkDto);
         List<EntityHandleDto> entities = new ArrayList<EntityHandleDto>();
         EntityHandleDto entityHandleDto = new EntityHandleDto();
-        entityHandleDto.setHandle("entityHandle-handle1");
+        entityHandleDto.setHandle("entityHandle-1");
         entities.add(entityHandleDto);
         linkDto.setEntities(entities);
         eventDto.setLinks(links);
@@ -211,11 +226,13 @@ public class RdapUpdateClientTest {
         dto.setEvents(events);
 
         try {
+            setContent200(dto.getUpdateUri());
             response = client.create(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/autnum");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -226,18 +243,18 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         AutnumDto dto = new AutnumDto();
-        dto.setHandle("autnum-handle1");
+        dto.setHandle("autnum-1");
         List<EventDto> events = new ArrayList<EventDto>();
         EventDto eventDto = new EventDto();
-        eventDto.setHandle("event-handle1");
+        eventDto.setHandle("event-1");
         eventDto.setEventActor("eventActor1");
         List<LinkDto> links = new ArrayList<LinkDto>();
         LinkDto linkDto = new LinkDto();
-        linkDto.setHandle("link-handle1");
+        linkDto.setHandle("link-1");
         links.add(linkDto);
         List<EntityHandleDto> entities = new ArrayList<EntityHandleDto>();
         EntityHandleDto entityHandleDto = new EntityHandleDto();
-        entityHandleDto.setHandle("entityHandle-handle1");
+        entityHandleDto.setHandle("entityHandle-1");
         entities.add(entityHandleDto);
         linkDto.setEntities(entities);
         eventDto.setLinks(links);
@@ -245,11 +262,13 @@ public class RdapUpdateClientTest {
         dto.setEvents(events);
 
         try {
+            setContent200(dto.getUpdateUri());
             response = client.update(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/autnum/autnum-1");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -260,11 +279,13 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         try {
-            response = client.delete("autnum-handle1", ObjectType.autnum);
+            setContent200("autnum");
+            response = client.deleteAutnum("autnum-1");
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/autnum/autnum-1");
+        assertEquals(response.getHandle(), "autnum-1");
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -275,10 +296,10 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         DomainDto dto = new DomainDto();
-        dto.setHandle("domain-handle1");
+        dto.setHandle("domain-1");
         dto.setLdhName("ldhName1");
         SecureDnsDto secureDNS = new SecureDnsDto();
-        secureDNS.setHandle("secureDNS-handle1");
+        secureDNS.setHandle("secureDNS-1");
         secureDNS.setDelegationSigned(false);
         List<DsDataDto> dsData = new ArrayList<DsDataDto>();
         DsDataDto dsDataDto = new DsDataDto();
@@ -288,11 +309,13 @@ public class RdapUpdateClientTest {
         dto.setSecureDNS(secureDNS);
 
         try {
+            setContent200(dto.getUpdateUri());
             response = client.create(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/domain");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -303,10 +326,10 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         DomainDto dto = new DomainDto();
-        dto.setHandle("domain-handle1");
+        dto.setHandle("domain-1");
         dto.setLdhName("ldhName1");
         SecureDnsDto secureDNS = new SecureDnsDto();
-        secureDNS.setHandle("secureDNS-handle1");
+        secureDNS.setHandle("secureDNS-1");
         secureDNS.setDelegationSigned(false);
         List<DsDataDto> dsData = new ArrayList<DsDataDto>();
         DsDataDto dsDataDto = new DsDataDto();
@@ -316,11 +339,13 @@ public class RdapUpdateClientTest {
         dto.setSecureDNS(secureDNS);
 
         try {
+            setContent200(dto.getUpdateUri());
             response = client.update(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/domain/domain-1");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -331,11 +356,13 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         try {
-            response = client.delete("domain-handle1", ObjectType.domain);
+            setContent200("domain");
+            response = client.deleteDomain("domain-1");
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/domain/domain-1");
+        assertEquals(response.getHandle(), "domain-1");
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -346,14 +373,16 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         EntityDto dto = new EntityDto();
-        dto.setHandle("entity-handle1");
+        dto.setHandle("entity-1");
         dto.setFn("fn");
         try {
+            setContent200(dto.getUpdateUri());
             response = client.create(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/entity");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -364,14 +393,16 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         EntityDto dto = new EntityDto();
-        dto.setHandle("entity-handle1");
+        dto.setHandle("entity-1");
         dto.setFn("fn1");
         try {
+            setContent200(dto.getUpdateUri());
             response = client.update(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/entity/entity-1");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -382,11 +413,13 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         try {
-            response = client.delete("entity-handle1", ObjectType.entity);
+            setContent200("entity");
+            response = client.deleteEntity("entity-1");
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/entity/entity-1");
+        assertEquals(response.getHandle(), "entity-1");
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -397,14 +430,16 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         NameserverDto dto = new NameserverDto();
-        dto.setHandle("nameserver-handle1");
+        dto.setHandle("nameserver-1");
         dto.setLdhName("ldhName1");
         try {
+            setContent200(dto.getUpdateUri());
             response = client.create(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(), "/u/nameserver");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -415,14 +450,17 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         NameserverDto dto = new NameserverDto();
-        dto.setHandle("nameserver-handle1");
+        dto.setHandle("nameserver-1");
         dto.setLdhName("ldhName2");
         try {
-            response = client.create(dto);
+            setContent200(dto.getUpdateUri());
+            response = client.update(dto);
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(),
+                "/u/nameserver/nameserver-1");
+        assertEquals(response.getHandle(), dto.getHandle());
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);
@@ -433,12 +471,14 @@ public class RdapUpdateClientTest {
         UpdateResponse response;
 
         try {
-            response = client.delete("nameserver-handle1",
-                    ObjectType.nameserver);
+            setContent200("nameserver");
+            response = client.deleteNameserver("nameserver-1");
         } catch (RdapClientException e) {
             response = null;
         }
-        assertEquals(response.getHttpStatusCode(), 200);
+        assertEquals(mockHttpServer.getRequestUrl(),
+                "/u/nameserver/nameserver-1");
+        assertEquals(response.getHandle(), "nameserver-1");
         assertEquals(response.getErrorCode(), 0);
         assertEquals(response.getSubErrorCode(), 0);
         assertEquals(response.getDescription().size(), 0);

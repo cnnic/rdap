@@ -6,7 +6,6 @@ import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.type.HttpMethodType;
-import org.restfulwhois.rdap.client.type.ObjectType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
 import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
@@ -75,11 +74,13 @@ public class RdapUpdateClient {
     private UpdateResponse execute(BaseDto dto, HttpMethodType httpMethod)
             throws RdapClientException {
         String body = JsonUtil.toJson(dto);
-        StringBuilder path = new StringBuilder(UPDATE).append(dto.getUpdateUri());
-        if(!httpMethod.equals(HttpMethodType.POST)){
-            path.append(dto.getHandle());
+        URL url;
+        if (!httpMethod.equals(HttpMethodType.POST)) {
+            url = URLUtil.makeURLWithPath(urlStr, UPDATE, dto.getUpdateUri(),
+                    dto.getHandle());
+        } else {
+            url = URLUtil.makeURLWithPath(urlStr, UPDATE, dto.getUpdateUri());
         }
-        URL url = URLUtil.makeURLWithPath(urlStr, path.toString());
         RdapResponse response = createTemplate().execute(httpMethod, url, body);
         return response.getResponseBody(UpdateResponse.class);
     }

@@ -42,7 +42,8 @@ public class RdapRestTemplate {
             httpURLConnection.setUseCaches(false);
             httpURLConnection.setRequestMethod(httpMethod.name());
             httpURLConnection.setDoInput(true);
-            if (httpMethod.equals(HttpMethodType.GET)) {
+            if (httpMethod.equals(HttpMethodType.GET)
+                    || httpMethod.equals(HttpMethodType.DELETE)) {
                 httpURLConnection.setDoOutput(false);
                 httpURLConnection.setInstanceFollowRedirects(false);
             } else {
