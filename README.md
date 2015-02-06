@@ -29,6 +29,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
    This step will create database named 'rdap', and you can insert test data into it.  
    This step will use database info in jdbc.properties you haved configured before. 
    WARN: this step will DROP database of 'jdbc.url.dbName' if it is existing, and then recreate it. 
+
 	```
    		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
 		CLASSPATH=.:$CLASSPATH
@@ -36,8 +37,10 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 		[If you want load some test data, execute following command:]
 		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initdata  init/mysql/test-data.sql      
 	```
+	
 7. Start up tomcat 
    * Start up tomcat 
+   
 	```
 	[in Linux/OS X, open a shell and execute command:]
 		cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
@@ -48,9 +51,11 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 	```
 
    * Test if it is runing ok 
+   
 	```
 		curl -H Accept:application/rdap+json http://$RDAP_SERVER_IP:$RDAP_SERVER_PORT/rdap/autnum/2100
 	```
+	
 	It's ok if response contains 'rdapConformance'. 
 	
 ### rdap-port43 Install
