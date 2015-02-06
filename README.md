@@ -1,7 +1,5 @@
-### rdap-webapp Install
-
-Tested Operating environment:Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.
-
+### rdap-webapp Install 
+Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4. 
 1. Install JDK 7, or higher version. (Skip this step if already installed) 
 2. Install Mysql5, or higher version. (Skip this step if already installed) 
    The user used for RDAP must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html). 
