@@ -39,6 +39,10 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
    * Start up tomcat 
    
 	```
+	[in Linux/OS X, open a shell and execute command:]
+		cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
+		bin/startup.sh
+	[in Windows, open command prompt window and execute command:]
 		cd $TOMCAT_HOME/bin		#$TOMCAT_HOME must be replaced by real dir
 		startup.bat
 	```
