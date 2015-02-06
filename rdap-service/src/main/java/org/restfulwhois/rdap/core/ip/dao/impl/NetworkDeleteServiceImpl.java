@@ -30,11 +30,15 @@
  */
 package org.restfulwhois.rdap.core.ip.dao.impl;
 
+import org.restfulwhois.rdap.common.dao.UpdateDao;
+import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.IpDto;
+import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Network;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,12 +56,17 @@ public class NetworkDeleteServiceImpl extends NetworkUpdateBaseServiceImpl {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NetworkDeleteServiceImpl.class);
 
+    @Autowired
+    private UpdateDao<Domain, DomainDto> domainDao;
+    
     @Override
     protected void execute(Network network) {
         LOGGER.debug("delete network...");
         getDao().delete(network);
         LOGGER.debug("delete status...");
         getDao().deleteStatus(network);
+        LOGGER.debug("delete related arpa domain ...");
+        domainDao.deleteRel(network);
         deleteBaseModelRel(network);
     }
 
