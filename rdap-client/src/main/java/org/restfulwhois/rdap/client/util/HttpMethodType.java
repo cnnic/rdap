@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.client.type;
+package org.restfulwhois.rdap.client.util;
 
 public enum HttpMethodType {
     GET, PUT, POST, DELETE;

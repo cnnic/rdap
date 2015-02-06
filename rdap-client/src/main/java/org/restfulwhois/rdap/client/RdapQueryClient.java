@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.client.core.query;
+package org.restfulwhois.rdap.client;
 
 import java.util.ArrayList;
 import java.util.List;
