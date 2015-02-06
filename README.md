@@ -12,14 +12,11 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 3. Install Tomcat7, or higher version. (Skip this step if already installed)   
 
    [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).  
-    Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.  
-    For OS X,you should use tar.gz formated Binary Distributions.   
-    
+    Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.    
 4. Get war file 'rdap.war'.  
    There are two methods to get war file 
    * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK7. 
-   * [Build war file from source](https://github.com/cnnic/rdap/wiki/%5Binstall%5DBuild-war-file-from-source) 
-   
+   * [Build war file from source](https://github.com/cnnic/rdap/wiki/%5Binstall%5DBuild-war-file-from-source)   
 5. Deploy rdap.war to tomcat. 
    * Create folder 'rdap' in dir $TOMCAT_HOME/webapps/
    * Unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
@@ -42,10 +39,6 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
    * Start up tomcat 
    
 	```
-	[in Linux/OS X, open a shell and execute command:]
-		cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
-		bin/startup.sh
-	[in Windows, open command prompt window and execute command:]
 		cd $TOMCAT_HOME/bin		#$TOMCAT_HOME must be replaced by real dir
 		startup.bat
 	```
