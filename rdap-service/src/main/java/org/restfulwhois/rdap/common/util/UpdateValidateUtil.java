@@ -39,8 +39,6 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 
-import sun.security.util.BigInt;
-
 /**
  * 
  * @author jiashuo
