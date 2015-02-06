@@ -57,7 +57,7 @@ import org.springframework.jdbc.core.RowMapper;
  */
 public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto>
         implements UpdateDao<T, DTO> {
-    private static final String TPL_COUNT_BY_HANDLE =
+    private static final String TPL_FIND_ID_BY_HANDLE =
             "SELECT %s as ID from %s where HANDLE = ?";
     private static final String TPL_CREATE_STATUS =
             "INSERT INTO %s(%s,STATUS) values(?,?)";
@@ -92,7 +92,7 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
     protected Long findIdByHandle(final String handle, String idColumnName,
             String tableName) {
         final String sql =
-                String.format(TPL_COUNT_BY_HANDLE, idColumnName, tableName);
+                String.format(TPL_FIND_ID_BY_HANDLE, idColumnName, tableName);
         LOGGER.debug("check handle exist,sql:{}", sql);
         List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(

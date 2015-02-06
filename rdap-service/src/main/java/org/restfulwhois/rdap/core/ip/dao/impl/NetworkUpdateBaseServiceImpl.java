@@ -75,11 +75,8 @@ public abstract class NetworkUpdateBaseServiceImpl extends
     protected ValidationResult validateWithoutIpVersion(IpDto dto,
             ValidationResult validationResult) {
         LOGGER.debug("validate for save and update ...");
-        checkNotNull(dto.getStartAddress(), 
-                 "startAddress", validationResult);
-        checkIp(dto.getStartAddress(), "startAddress", validationResult);
-        checkNotNull(dto.getEndAddress(), "endAddress", validationResult);
-        checkIp(dto.getEndAddress(), "endAddress", validationResult);
+        checkIpNotNullAndValid(dto.getStartAddress(), validationResult, "startAddress");
+        checkIpNotNullAndValid(dto.getEndAddress(), validationResult, "endAddress");
         checkMaxLength(dto.getName(), MAX_LENGTH_255,
                 "name", validationResult);
         checkMaxLength(dto.getType(), MAX_LENGTH_255,
@@ -93,6 +90,13 @@ public abstract class NetworkUpdateBaseServiceImpl extends
         checkNotEmptyAndMaxLengthForHandle(dto.getHandle(), validationResult);
         validateBaseDto(dto, validationResult);
         return validationResult;
+    }
+
+    private void checkIpNotNullAndValid(String ip,
+            ValidationResult validationResult, String fieldName) {
+        checkNotNull(ip, 
+                 fieldName, validationResult);
+        checkIp(ip, fieldName, validationResult);
     }
     
     /**

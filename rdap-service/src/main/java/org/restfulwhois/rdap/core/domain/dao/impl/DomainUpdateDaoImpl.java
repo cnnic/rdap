@@ -38,6 +38,8 @@ import java.sql.Statement;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Network;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -134,6 +136,19 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
     @Override
     public Long findIdByHandle(String handle) {
         return super.findIdByHandle(handle, "DOMAIN_ID", "RDAP_DOMAIN");
+    }
+    
+    @Override
+    public void deleteRel(BaseModel outerModel) {
+        //delete ARPA domain by network id
+         if (null == outerModel || null == outerModel.getId()) {
+             return;
+         }             
+         if(!(outerModel instanceof Network)){
+             return;
+         }
+         super.delete(String.valueOf(outerModel.getId()),
+                            "RDAP_DOMAIN", "NETWORK_ID");
     }
 
 }
