@@ -26,9 +26,9 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
    * Edit database configuration file [jdbc.properties](https://github.com/cnnic/rdap/wiki/jdbc.properties)
    * Edit global configuration file [rdap.properties](https://github.com/cnnic/rdap/wiki/rdap.properties) 
 6. Init database.  
-   This step will create database named 'rdap', and you can insert test data into it.  
-   This step will use database info in jdbc.properties you haved configured before. 
-   WARN: this step will DROP database of 'jdbc.url.dbName' if it is existing, and then recreate it. 
+   This step will create database named 'rdap', and you can insert test data into it.   
+   This step will use database info in jdbc.properties you haved configured before.   
+   WARN: this step will DROP database of 'jdbc.url.dbName' if it is existing, and then recreate it.   
 
 	```
    		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
