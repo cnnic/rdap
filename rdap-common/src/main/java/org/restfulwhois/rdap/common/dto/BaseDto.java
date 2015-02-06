@@ -40,6 +40,7 @@ import org.restfulwhois.rdap.common.dto.embedded.EventDto;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
 import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -137,6 +138,11 @@ public class BaseDto {
 
     public void setCustomProperties(Map<String, String> customProperties) {
         this.customProperties = customProperties;
+    }
+    
+    @JsonIgnore
+    public String getUpdateUri(){
+        return this.getClass().getSimpleName().replace("Dto", "").toLowerCase();
     }
 
 }
