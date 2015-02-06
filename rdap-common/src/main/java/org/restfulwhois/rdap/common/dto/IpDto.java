@@ -2,6 +2,7 @@ package org.restfulwhois.rdap.common.dto;
 
 
 
+
 public class IpDto extends BaseDto{
 	private String startAddress;
     /**
@@ -28,6 +29,12 @@ public class IpDto extends BaseDto{
      * represents the parentHandle.
      */
     private String parentHandle;
+    
+    /**
+     * network name  cidr.
+     */    
+    private String cidr;
+    
 	public String getStartAddress() {
 		return startAddress;
 	}
@@ -69,7 +76,11 @@ public class IpDto extends BaseDto{
 	}
 	public void setParentHandle(String parentHandle) {
 		this.parentHandle = parentHandle;
-	}
-   
-    
+	}	
+    public String getCidr() {
+        return cidr;
+    }
+    public void setCidr(String cidr) {
+         this.cidr = cidr;
+    }
 }
