@@ -28,13 +28,13 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.autnum.controller;
+package org.restfulwhois.rdap.core.ip.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.restfulwhois.rdap.common.dto.AutnumDto;
+import org.restfulwhois.rdap.common.dto.IpDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
-import org.restfulwhois.rdap.common.model.Autnum;
+import org.restfulwhois.rdap.common.model.Network;
 import org.restfulwhois.rdap.common.service.UpdateService;
 import org.restfulwhois.rdap.common.support.RestResponse;
 import org.slf4j.Logger;
@@ -50,46 +50,46 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Controller for autnum update.
+ * Controller for network update.
  * 
  * @author zhanyq
  * 
  */
 @Controller
-@RequestMapping(value = { "/u/autnum" })
-public class AutnumUpdateController {
+@RequestMapping(value = { "/u/ip" })
+public class NetworkUpdateController {
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(AutnumUpdateController.class);
+            .getLogger(NetworkUpdateController.class);
 
    /**
      * create service.
      */
     @Autowired
-    @Qualifier("autnumCreateServiceImpl")
-    private UpdateService<AutnumDto, Autnum> createService;
+    @Qualifier("networkCreateServiceImpl")
+    private UpdateService<IpDto, Network> createService;
     
     /**
      * update service.
      */
     @Autowired
-    @Qualifier("autnumUpdateServiceImpl")
-    private UpdateService<AutnumDto, Autnum> updateService;
+    @Qualifier("networkUpdateServiceImpl")
+    private UpdateService<IpDto, Network> updateService;
     
     /**
      * delete service.
      */
     @Autowired
-    @Qualifier("autnumDeleteServiceImpl")
-    private UpdateService<AutnumDto, Autnum> deleteService;
+    @Qualifier("networkDeleteServiceImpl")
+    private UpdateService<IpDto, Network> deleteService;
 
     /**
-     * create autnum.
+     * create ip.
      * 
-     * @param autnumDto
-     *        autnumDto
+     * @param ipDto
+     *        ipDto
      * @param request
      *        HttpServletRequest
      * @return JSON formated result,with HTTP code.
@@ -98,18 +98,18 @@ public class AutnumUpdateController {
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "" }, method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity create(@RequestBody AutnumDto autnumDto,
+    public ResponseEntity create(@RequestBody IpDto ipDto,
             HttpServletRequest request) {
-        LOGGER.debug("create autnum begin...");
-        UpdateResponse response = createService.execute(autnumDto);
+        LOGGER.debug("create network begin...");
+        UpdateResponse response = createService.execute(ipDto);
         return RestResponse.createUpdateResponse(response);
     }
 
     /**
-     * update autnum.
+     * update ip.
      * 
-     * @param autnumDto
-     *    autnumDto
+     * @param ipDto
+     *    ipDto
      * @param handle
      *        handle
      * @param request
@@ -120,16 +120,16 @@ public class AutnumUpdateController {
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity update(@RequestBody AutnumDto autnumDto,
+    public ResponseEntity update(@RequestBody IpDto ipDto,
             @PathVariable String handle, HttpServletRequest request) {
-        LOGGER.debug("update autnum begin...");
-        autnumDto.setHandle(handle);
-        UpdateResponse response = updateService.execute(autnumDto);
+        LOGGER.debug("update network begin...");
+        ipDto.setHandle(handle);
+        UpdateResponse response = updateService.execute(ipDto);
         return RestResponse.createUpdateResponse(response);
     }
 
     /**
-     * delete autnum.
+     * delete ip.
      * 
      * @param handle
      *        handle
@@ -143,8 +143,8 @@ public class AutnumUpdateController {
     @ResponseBody
     public ResponseEntity delete(@PathVariable String handle,
             HttpServletRequest request) {
-        LOGGER.debug("delete autnum begin...");
-        AutnumDto dto = new AutnumDto();
+        LOGGER.debug("delete network begin...");
+        IpDto dto = new IpDto();
         dto.setHandle(handle);
         UpdateResponse response = deleteService.execute(dto);
         return RestResponse.createUpdateResponse(response);
