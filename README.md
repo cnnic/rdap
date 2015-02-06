@@ -31,8 +31,6 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
    		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
 		CLASSPATH=.:$CLASSPATH
 		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initschema      #DROP database 'jdbc.url.dbName', and recreate it, and create table, load base data.
-		[If you want load some test data, execute following command:]
-		java -Djava.ext.dirs=../lib cn.cnnic.rdap.init.Init initdata  init/mysql/test-data.sql      
 	```
 	
 7. Start up tomcat 
