@@ -1,20 +1,13 @@
-### rdap-webapp Install 
-
-Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4. 
-
-1. Install JDK 7, or higher version. (Skip this step if already installed) 
-
-2. Install Mysql5, or higher version. (Skip this step if already installed) 
-
-   The user used for RDAP must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege. 
-   For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html). 
-
-3. Install Tomcat7, or higher version. (Skip this step if already installed) 
-
+### rdap-webapp Install  
+Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.  
+1. Install JDK 7, or higher version. (Skip this step if already installed)   
+2. Install Mysql5, or higher version. (Skip this step if already installed)   
+   The user used for RDAP must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege.  
+   For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html).   
+3. Install Tomcat7, or higher version. (Skip this step if already installed)   
    [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).  
-    Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc. 
-    For OS X,you should use tar.gz formated Binary Distributions. 
-    
+    Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.  
+    For OS X,you should use tar.gz formated Binary Distributions.   
 4. Get war file 'rdap.war'.  
    There are two methods to get war file 
    * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK7. 
