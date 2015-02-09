@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.restfulwhois.rdap.filters.httpFilter.AuthenticationFilter;
+import org.restfulwhois.rdap.filters.httpFilter.AuthenticationForUpdateApiFilter;
 import org.restfulwhois.rdap.filters.httpFilter.ConcurrentQueryCountFilter;
 import org.restfulwhois.rdap.filters.httpFilter.DecodeUriForSpringFilter;
 import org.restfulwhois.rdap.filters.httpFilter.HttpRequestFilter;
@@ -59,6 +60,7 @@ public class FilterChainProxy implements Filter {
         filters = new ArrayList<HttpFilter>();
         filters.add(new ConcurrentQueryCountFilter());
         filters.add(new AuthenticationFilter());
+        filters.add(new AuthenticationForUpdateApiFilter());
         filters.add(new RateLimitFilter());
         filters.add(new HttpRequestFilter());
         filters.add(new DecodeUriForSpringFilter());

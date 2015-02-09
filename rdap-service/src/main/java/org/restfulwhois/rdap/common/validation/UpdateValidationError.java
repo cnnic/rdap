@@ -96,6 +96,10 @@ public final class UpdateValidationError implements ValidationError {
                 fieldName, minValue, maxValue);
     }
 
+    public static ValidationError build4031Error() {
+        return new UpdateValidationError(ServiceErrorCode.ERROR_4031);
+    }
+    
     public static ValidationError build4041Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4041,
                 errorMessageParam);
