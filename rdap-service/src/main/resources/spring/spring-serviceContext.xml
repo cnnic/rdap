@@ -99,5 +99,6 @@
 		<property name="maxConcurrentCount" value="${maxConcurrentCount}" />
 		<property name="notImplementedUri" value="${notImplementedUri}" />
 		<property name="customPropertyPrefix" value="${customPropertyPrefix}" />
+		<property name="ipWhiteListForUpdateApi" value="${ipWhiteListForUpdateApi}" />
 	</bean>
 </beans>

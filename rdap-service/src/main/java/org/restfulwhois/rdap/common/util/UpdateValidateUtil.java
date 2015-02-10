@@ -39,8 +39,6 @@ import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 
-import sun.security.util.BigInt;
-
 /**
  * 
  * @author jiashuo
@@ -73,6 +71,8 @@ public class UpdateValidateUtil {
     public static final long MAX_VAL_FOR_BIGINT_COLUMN = 9223372036854775807L;
     public static Date MIN_VAL_FOR_DATETIME_COLUMN = null;
     public static Date MAX_VAL_FOR_DATETIME_COLUMN = null;
+    public static final int MAX_LENGTH_VERSION = 2;
+    
     static {
         try {
             MIN_VAL_FOR_DATETIME_COLUMN =
