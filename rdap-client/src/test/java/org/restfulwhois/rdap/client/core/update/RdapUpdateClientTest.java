@@ -12,6 +12,7 @@ import org.apache.wink.client.MockHttpServer.MockHttpServerResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.restfulwhois.rdap.client.RdapUpdateClient;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
