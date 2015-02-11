@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
-import org.restfulwhois.rdap.client.type.HttpMethodType;
+import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 

@@ -1,11 +1,11 @@
-package org.restfulwhois.rdap.client.core.update;
+package org.restfulwhois.rdap.client;
 
 import java.net.URL;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
-import org.restfulwhois.rdap.client.type.HttpMethodType;
+import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
 import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
