@@ -49,15 +49,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.JsonHelper;
-import org.restfulwhois.rdap.common.dto.EntityDto;
+import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.embedded.EventDto;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
-import org.restfulwhois.rdap.dao.impl.EntityAddressUpdateDaoTest;
-import org.restfulwhois.rdap.dao.impl.EntityTelUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.EntityUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.LinkUpdateDaoTest;
-import org.restfulwhois.rdap.dao.impl.PublicIdUpdateDaoTest;
 import org.restfulwhois.rdap.dao.impl.RemarkUpdateDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -75,12 +72,12 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * 
  */
 @SuppressWarnings("rawtypes")
-public class EntityCreateControllerTest extends BaseTest {
+public class AutnumCreateControllerTest extends BaseTest {
 
     /**
-     * entity query URI.
+     * autnum query URI.
      */
-    public static final String URI_ENTITY_U = "/u/entity";
+    public static final String URI_AUTNUM_U = "/u/autnum";
 
     @Autowired
     private WebApplicationContext wac;
@@ -97,50 +94,50 @@ public class EntityCreateControllerTest extends BaseTest {
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    public void test_ok_with_only_entity() throws Exception {
-        EntityDto entity = generateEntityDto();
-        String content = JsonHelper.serialize(entity);
+    public void test_ok_with_only_autnum() throws Exception {
+        AutnumDto autnum = generateAutnumDto();
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
-        super.assertTablesForUpdate("entity-create.xml", "RDAP_ENTITY");
+                .andExpect(jsonPath("$.handle").value(autnum.getHandle()));
+        super.assertTablesForUpdate("autnum-create.xml", "RDAP_AUTNUM");
     }
 
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    public void test_ok_with_thin_entity() throws Exception {
-        EntityDto entity = new EntityDto();
-        entity.setHandle("h1");
-        entity.setFn("00miss");
-        entity.setEmail("100_1@cnnic.cn");
-        String content = JsonHelper.serialize(entity);
+    public void test_ok_with_thin_autnum() throws Exception {
+        AutnumDto autnum = new AutnumDto();
+        autnum.setHandle("h1");
+        autnum.setStartAutnum(1L);
+        autnum.setEndAutnum(1L);
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
+                .andExpect(jsonPath("$.handle").value(autnum.getHandle()));
     }
 
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_ok_with_not_empty_custom_properties() throws Exception {
-        EntityDto entity = generateEntityDto();
-        String content = JsonHelper.serialize(entity);
+        AutnumDto autnum = generateAutnumDto();
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
+                .andExpect(jsonPath("$.handle").value(autnum.getHandle()));
         List<Map<?, ?>> resultList =
-                getTableDataForSql("RDAP_ENTITY",
-                        "select CUSTOM_PROPERTIES from RDAP_ENTITY where HANDLE='h1'");
+                getTableDataForSql("RDAP_AUTNUM",
+                        "select CUSTOM_PROPERTIES from RDAP_AUTNUM where HANDLE='h1'");
         assertTrue(resultList.size() > 0);
         assertEquals(
                 "{\"customKey1\":\"customValue1\",\"customKey2\":\"customValue2\"}",
@@ -151,21 +148,21 @@ public class EntityCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_ok_with_empty_custom_properties() throws Exception {
-        EntityDto entity = new EntityDto();
-        entity.setHandle("h1");
-        entity.setFn("00miss");
-        entity.setEmail("100_1@cnnic.cn");
-        entity.setCustomProperties(new HashMap<String, String>());
-        String content = JsonHelper.serialize(entity);
+        AutnumDto autnum = new AutnumDto();
+        autnum.setHandle("h1");
+        autnum.setStartAutnum(1L);
+        autnum.setEndAutnum(1L);
+        autnum.setCustomProperties(new HashMap<String, String>());
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
+                .andExpect(jsonPath("$.handle").value(autnum.getHandle()));
         List<Map<?, ?>> resultList =
-                getTableDataForSql("RDAP_ENTITY",
-                        "select CUSTOM_PROPERTIES from RDAP_ENTITY where HANDLE='h1'");
+                getTableDataForSql("RDAP_AUTNUM",
+                        "select CUSTOM_PROPERTIES from RDAP_AUTNUM where HANDLE='h1'");
         assertTrue(resultList.size() > 0);
         assertNull(resultList.get(0).get("CUSTOM_PROPERTIES"));
     }
@@ -174,20 +171,20 @@ public class EntityCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_ok_with_null_custom_properties() throws Exception {
-    	EntityDto entity = new EntityDto();
-        entity.setHandle("h1");
-        entity.setFn("00miss");
-        entity.setEmail("100_1@cnnic.cn");
-        String content = JsonHelper.serialize(entity);
+    	AutnumDto autnum = new AutnumDto();
+        autnum.setHandle("h1");
+        autnum.setStartAutnum(1L);
+        autnum.setEndAutnum(1L);
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
+                .andExpect(jsonPath("$.handle").value(autnum.getHandle()));
         List<Map<?, ?>> resultList =
-                getTableDataForSql("RDAP_ENTITY",
-                        "select CUSTOM_PROPERTIES from RDAP_ENTITY where HANDLE='h1'");
+                getTableDataForSql("RDAP_AUTNUM",
+                        "select CUSTOM_PROPERTIES from RDAP_AUTNUM where HANDLE='h1'");
         assertTrue(resultList.size() > 0);
         assertNull(resultList.get(0).get("CUSTOM_PROPERTIES"));
     }
@@ -197,10 +194,10 @@ public class EntityCreateControllerTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_ok_ignore_unrecognized_properties() throws Exception {
         String content =
-                "{\"handle\":\"1\",\"fn\":\"00miss\",\"org\":\"dnr\""
+                "{\"handle\":\"1\",\"startAutnum\":1,\"endAutnum\":2"
                         + ",\"\":1,\"unknownP\":\"x\"}";
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -208,13 +205,14 @@ public class EntityCreateControllerTest extends BaseTest {
     } 
     
     @Test
-    public void test_invalid_propertyType_should_be_int_but_is_string()
+    public void test_invalid_propertyType_should_be_long_but_is_string()
             throws Exception {
         String content =
-                "{\"handle\":\"1\",\"fn\":\"00miss\",\"org\":\"dnr\""
-                        + ",\"addresses\":[{\"pref\":\"i-am-not-int-value\"}]}";
+                "{\"handle\":\"1\",\"startAutnum\":\" i-am-not-long-value\","
+                + "\"endAutnum\":2}";
+                    
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/rdap+json"))
@@ -230,13 +228,13 @@ public class EntityCreateControllerTest extends BaseTest {
     @Test
     public
             void
-            test_ok_propertyType_should_be_int_but_is_int_with_dot_will_truncated_to_int()
+            test_ok_propertyType_should_be_int_but_is_long_with_dot_will_truncated_to_long()
                     throws Exception {
     	String content =
-                "{\"handle\":\"1\",\"fn\":\"00miss\",\"org\":\"dnr\""
-                        + ",\"addresses\":[{\"pref\":1.8}]}";
+                "{\"handle\":\"1\",\"startAutnum\":1,\"endAutnum\":2.8}";
+                      
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
@@ -244,15 +242,14 @@ public class EntityCreateControllerTest extends BaseTest {
     }
     @Test
     public void
-            test_invalid_propertyType_int_but_exceed_max_value_as_minus_int()
+            test_invalid_propertyType_long_but_exceed_max_value_as_minus_long()
                     throws Exception {
     	String content =
-                "{\"handle\":\"1\",\"fn\":\"00miss\",\"org\":\"dnr\""
-                     + ",\"addresses\":[{\"pref\":"
-                    + (UpdateValidateUtil.MAX_VAL_FOR_INT_COLUMN + 1) + "}]}";
+    			"{\"handle\":\"1\",\"startAutnum\":1,\"endAutnum\":"
+                   + (UpdateValidateUtil.MAX_VAL_FOR_BIGINT_COLUMN + 1) + "}]}";
                        
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -260,14 +257,14 @@ public class EntityCreateControllerTest extends BaseTest {
     }
     
     @Test
-    public void test_invalid_propertyType_int_but_exceed_max_value()
+    public void test_invalid_propertyType_long_but_exceed_max_value()
             throws Exception {
     	String content =
-                "{\"handle\":\"1\",\"fn\":\"00miss\",\"org\":\"dnr\""
-                        + ",\"addresses\":[{\"pref\":4294967296}]}";
+    			"{\"handle\":\"1\",\"startAutnum\":1,\"endAutnum\":"
+    			+ "18446744073709551616}";
                         
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -279,74 +276,65 @@ public class EntityCreateControllerTest extends BaseTest {
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_ok_with_fat_entity_with_all_inner_objects()
             throws Exception {
-        EntityDto entity = generateEntityDto();
+        AutnumDto entity = generateAutnumDto();
         List<String> status = new ArrayList<String>();
         status.add("validated");
         status.add("update prohibited");
         entity.setStatus(status);
         createAndSetEvents(entity);
         entity.setRemarks(RemarkUpdateDaoTest.createRemarkList());
-        entity.setLinks(LinkUpdateDaoTest.createLinkList());
-        entity.setPublicIds(PublicIdUpdateDaoTest.createPublicIdList());
-        entity.setAddresses(EntityAddressUpdateDaoTest.
-        		createEntityAddressList());
-        entity.setTelephones(EntityTelUpdateDaoTest.createEntityTelList());
+        entity.setLinks(LinkUpdateDaoTest.createLinkList());        
         entity.setEntities(EntityUpdateDaoTest.createEntityHandleList());
         String content = JsonHelper.serialize(entity);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(entity.getHandle()));
         // RemarkUpdateDaoTest.assertCreate();/link duplicated.
-        // LinkUpdateDaoTest.assertCreate();
-        super.assertTablesForUpdate("publicId-create-for-entity.xml", 
-        		"RDAP_PUBLICID", "REL_PUBLICID_REGISTRATION");
-        super.assertTablesForUpdate("entityAddress-create.xml", 
-        		"RDAP_VCARD_ADR");
-        super.assertTablesForUpdate("entityTel-create.xml", "RDAP_VCARD_TEL");
-        List<Map<?, ?>> actualEntityIds =
-                getTableDataForSql("RDAP_ENTITY",
-                        "SELECT ENTITY_ID from RDAP_ENTITY WHERE HANDLE='h1'");
-        assertNotNull(actualEntityIds);
-        assertTrue(actualEntityIds.size() > 0);
-        Integer entityId = (Integer) actualEntityIds.get(0).get("ENTITY_ID");
-        List<Map<?, ?>> actualRelEntityList =
-                getTableDataForSql("REL_ENTITY_REGISTRATION",
-                        "select * from REL_ENTITY_REGISTRATION where REL_ID="
-                                + entityId + " and REL_OBJECT_TYPE ='entity' ");
-        assertNotNull(actualRelEntityList);
-        assertEquals(2,actualRelEntityList.size());
+        // LinkUpdateDaoTest.assertCreate();       
+        List<Map<?, ?>> actualAutnumIds =
+                getTableDataForSql("RDAP_AUTNUM",
+                        "SELECT AS_ID from RDAP_AUTNUM WHERE HANDLE='h1'");
+        assertNotNull(actualAutnumIds);
+        assertTrue(actualAutnumIds.size() > 0);
+        Integer asId = (Integer) actualAutnumIds.get(0).get("AS_ID");
+        List<Map<?, ?>> actualRelAutnumList =
+        		getTableDataForSql("RDAP_AUTNUM_STATUS",
+                        "select * from RDAP_AUTNUM_STATUS where AS_ID="
+                                + asId);
+        assertNotNull(actualRelAutnumList);
+        assertEquals(2,actualRelAutnumList.size());
         
     }
 
-    private void createAndSetEvents(EntityDto domain) {
+    private void createAndSetEvents(AutnumDto autnum) {
         List<EventDto> events = new ArrayList<EventDto>();
         EventDto event = new EventDto();
         events.add(event);
         event.setEventAction("registration");
         event.setEventActor("zhanyq");
         event.setEventDate("2015-01-15T17:15:12Z");
-        domain.setEvents(events);
+        autnum.setEvents(events);
     }
 
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
-    public void test_valid_fn_maxlength() throws Exception {
-        EntityDto entity = generateEntityDto();
+    public void test_valid_name_maxlength() throws Exception {
+        AutnumDto autnum = generateAutnumDto();
         String stringMaxLength =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_255);        
-        entity.setFn(stringMaxLength);
-        assertTrue(entity.getFn().length() == UpdateValidateUtil.MAX_LENGTH_255);
-        String content = JsonHelper.serialize(entity);
+        autnum.setName(stringMaxLength);
+        assertTrue(autnum.getName().length() == UpdateValidateUtil.MAX_LENGTH_255);
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
+                .andExpect(jsonPath("$.handle").value(autnum.getHandle()));
     }
 
     
@@ -354,29 +342,29 @@ public class EntityCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_valid_handle_maxlength() throws Exception {
-        EntityDto entity = generateEntityDto();
+        AutnumDto autnum = generateAutnumDto();
         String stringMaxLength =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_HANDLE);
-        entity.setHandle(stringMaxLength);
-        assertTrue(entity.getHandle().length() == UpdateValidateUtil.MAX_LENGTH_HANDLE);
-        String content = JsonHelper.serialize(entity);
+        autnum.setHandle(stringMaxLength);
+        assertTrue(autnum.getHandle().length() == UpdateValidateUtil.MAX_LENGTH_HANDLE);
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
+                .andExpect(jsonPath("$.handle").value(autnum.getHandle()));
     }
 
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_handle_empty() throws Exception {
-        EntityDto entity = generateEntityDto();
-        entity.setHandle(null);
-        String content = JsonHelper.serialize(entity);
+        AutnumDto autnum = generateAutnumDto();
+        autnum.setHandle(null);
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
@@ -393,14 +381,14 @@ public class EntityCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_handle_exceed_maxlength() throws Exception {
-        EntityDto entity = generateEntityDto();
+        AutnumDto autnum = generateAutnumDto();
         String stringExceedOneMoreChar =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_HANDLE + 1);
-        entity.setHandle(stringExceedOneMoreChar);
-        assertTrue(entity.getHandle().length() > UpdateValidateUtil.MAX_LENGTH_HANDLE);
-        String content = JsonHelper.serialize(entity);
+        autnum.setHandle(stringExceedOneMoreChar);
+        assertTrue(autnum.getHandle().length() > UpdateValidateUtil.MAX_LENGTH_HANDLE);
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
@@ -421,7 +409,7 @@ public class EntityCreateControllerTest extends BaseTest {
     public void test_invalid_JSON() throws Exception {
         String invalidContent = "{";
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(
                         invalidContent))
                 .andExpect(status().isBadRequest())
@@ -441,16 +429,16 @@ public class EntityCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_handle_already_exist() throws Exception {
-        EntityDto entity = generateEntityDto();
-        String content = JsonHelper.serialize(entity);
+        AutnumDto autnum = generateAutnumDto();
+        String content = JsonHelper.serialize(autnum);
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.handle").value(entity.getHandle()));
+                .andExpect(jsonPath("$.handle").value(autnum.getHandle()));
         mockMvc.perform(
-                post(URI_ENTITY_U).contentType(
+                post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
@@ -460,29 +448,28 @@ public class EntityCreateControllerTest extends BaseTest {
                         jsonPath("$.description").value(
                                 CoreMatchers.hasItems(String.format(
                                         ServiceErrorCode.ERROR_4091
-                                                .getMessage(), entity
+                                                .getMessage(), autnum
                                                 .getHandle()))));
     }      
-    private EntityDto generateEntityDto() {
-        EntityDto entity = new EntityDto();
-        entity.setHandle("h1");
-    	entity.setEmail("100_1@cnnic.cn");
-    	entity.setFn("00miss");
-    	entity.setKind("individual");
-    	entity.setOrg("中国互联网络信息中心");
-    	entity.setPort43("whois.example.net");
-    	entity.setLang("zh");
-    	entity.setTitle("team leader");
-    	entity.setUrl("00miss.cnnic.cn");
-        Map<String, String> customProperties = new HashMap<String, String>();
+    private AutnumDto generateAutnumDto() {
+        AutnumDto autnum = new AutnumDto();
+        autnum.setHandle("h1");
+    	autnum.setStartAutnum(1L);
+    	autnum.setEndAutnum(1L);
+    	autnum.setName("as-200-2:data:1~1");
+    	autnum.setPort43("cnnic.cn");
+        autnum.setCountry("CN");	 
+        autnum.setLang("zh");
+        autnum.setType("alocated");
+    	Map<String, String> customProperties = new HashMap<String, String>();
         customProperties.put("customKey1", "customValue1");
         customProperties.put("customKey2", "customValue2");
-        entity.setCustomProperties(customProperties);
+        autnum.setCustomProperties(customProperties);
         List<String> status = new ArrayList<String>();
         status.add("validated");
         status.add("active");
-        entity.setStatus(status);
-        return entity;
+        autnum.setStatus(status);
+        return autnum;
     }
 
     private String createStringWithLength(int length) {

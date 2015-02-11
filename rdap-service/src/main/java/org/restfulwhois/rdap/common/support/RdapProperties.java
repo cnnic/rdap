@@ -67,6 +67,10 @@ public class RdapProperties {
      * ip white list for access interval, these ip are not limited.
      */
     private static String ipWhiteListForAccessInterval;
+    /**
+     * Requests from these IPs can be handled.
+     */
+    private static String ipWhiteListForUpdateApi;
 
     /**
      * min seconds between access interval,for Anonymous.
@@ -171,6 +175,19 @@ public class RdapProperties {
                         ipWhiteListForAccessInterval,
                         ipWhiteListForAccessIntervalList);
         return ipWhiteListForAccessIntervalList;
+    }
+
+    /**
+     * get IP white list for update API.
+     * 
+     * @return IP white list.
+     */
+    public static List<String> getIpWhiteListArrayForUpdateApi() {
+        List<String> result = null;
+        result =
+                StringUtil.parseSeparatedStringToListIfListIsNull(
+                        ipWhiteListForUpdateApi, result);
+        return result;
     }
 
     /**
@@ -386,6 +403,25 @@ public class RdapProperties {
      */
     public void setCustomPropertyPrefix(String customPropertyPrefix) {
         RdapProperties.customPropertyPrefix = customPropertyPrefix;
+    }
+
+    /**
+     * ipWhiteListForUpdateApi.
+     * 
+     * @return ipWhiteListForUpdateApi.
+     */
+    public static String getIpWhiteListForUpdateApi() {
+        return ipWhiteListForUpdateApi;
+    }
+
+    /**
+     * set ipWhiteListForUpdateApi.
+     * 
+     * @param ipWhiteListForUpdateApi
+     *            ipWhiteListForUpdateApi.
+     */
+    public void setIpWhiteListForUpdateApi(String ipWhiteListForUpdateApi) {
+        RdapProperties.ipWhiteListForUpdateApi = ipWhiteListForUpdateApi;
     }
 
 }

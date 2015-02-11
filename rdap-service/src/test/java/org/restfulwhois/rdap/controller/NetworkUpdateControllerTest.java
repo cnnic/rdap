@@ -37,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +48,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.JsonHelper;
-import org.restfulwhois.rdap.common.dto.EntityDto;
+import org.restfulwhois.rdap.common.dto.AutnumDto;
+import org.restfulwhois.rdap.common.dto.IpDto;
+import org.restfulwhois.rdap.common.model.IpVersion;
+import org.restfulwhois.rdap.common.model.Network;
+import org.restfulwhois.rdap.common.util.BeanUtil;
+import org.restfulwhois.rdap.common.util.IpUtil;
+import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -55,7 +62,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 /**
@@ -64,12 +70,12 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
  * 
  */
 @SuppressWarnings("rawtypes")
-public class EntityUpdateControllerTest extends BaseTest {
+public class NetworkUpdateControllerTest extends BaseTest {
 
     /**
-     * entity query URI.
+     * ip  URI.
      */
-    public static final String URI_ENTITY_U = "/u/entity/";
+    public static final String URI_IP_U = "/u/ip/";
 
     @Autowired
     private WebApplicationContext wac;
@@ -84,50 +90,44 @@ public class EntityUpdateControllerTest extends BaseTest {
     }
 
     @Test
-    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/entity-update.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public
-            void test_ok_only_entity() throws Exception {
-    	String updateEmail = "john@gmail.com";
-        String updateFn = "john";
-        String updateKind = "update-org";
-        String updateLang = "us";
-        String updateOrg = "org";
-        String updateUrl = "http://john.com";
-        String updateTitle = "CEO";
-        String originalHandle = "h1";
-        String updatePort43 = "update-port43";
-        String updateHandle = "new-handle";
-        String updateStatusRenewProbibited = "renew prohibited";
-        String updateStatusTransferProbibited = "transfer prohibited";
-        String updateStatusDeleteProbibited = "delete prohibited";
-        EntityDto entity = new EntityDto();
-        entity.setHandle(updateHandle);
-        entity.setEmail(updateEmail);
-        entity.setKind(updateKind);
-        entity.setFn(updateFn);
-        entity.setLang(updateLang);
-        entity.setOrg(updateOrg);
-        entity.setPort43(updatePort43);
-        entity.setUrl(updateUrl);
-        entity.setTitle(updateTitle);        
-        List<String> expectedStatus = new ArrayList<String>();
-        expectedStatus.add(updateStatusRenewProbibited);
-        expectedStatus.add(updateStatusTransferProbibited);
-        expectedStatus.add(updateStatusDeleteProbibited);
-        entity.setStatus(expectedStatus);
-        Map<String, String> customProperties = new HashMap<String, String>();
-        customProperties.put("customKey3", "customValue3");
-        entity.setCustomProperties(customProperties);
-        String content = JsonHelper.serialize(entity);
-        mockMvc.perform(
-                put(URI_ENTITY_U + originalHandle).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(rdapJson));
-        assertEntity(updateEmail, updateFn, updateKind, updateOrg, updateLang, 
-        		updateUrl, originalHandle, updatePort43);
-        assertStatus();
+            void test_ok_only_ip() throws Exception {
+    	super.databaseSetupWithBinaryColumns("ip-delete.xml");
+		IpDto network = new IpDto();
+		network.setHandle("h1");
+		network.setCidr("2001:0DB8:0000:0000:0000:0000:1428:0000");
+		network.setEndAddress("::2001:6a8:0:1");
+		network.setStartAddress("::2001:6a8:0:0");
+		network.setIpVersion(IpVersion.V6.getName());
+		network.setName("test-v6");
+		network.setPort43("port43");
+		network.setCountry("FR");
+		network.setLang("en");
+		network.setType("located");
+		List<String> status = new ArrayList<String>();
+		status.add("renew prohibited");
+		status.add("transfer prohibited");
+		status.add("delete prohibited");
+		network.setStatus(status);
+		Map<String, String> customProperties = new HashMap<String, String>();
+		customProperties.put("customKey3", "customValue3");
+		network.setCustomProperties(customProperties);
+		String content = JsonHelper.serialize(network);
+	        mockMvc.perform(
+	                put(URI_IP_U + "h1").contentType(
+	                MediaType.parseMediaType(rdapJson)).content(content))
+	                .andExpect(status().isOk())
+	                .andExpect(content().contentType(rdapJson));
+		//change IpDto to NetWork        
+		Network networkAssert = new Network();
+		BeanUtil.copyProperties(network, networkAssert, "entities", "events",
+				"remarks", "links");
+		networkAssert.setIpVersion(IpVersion.getIpVersion(network.getIpVersion()));
+		networkAssert.setCustomPropertiesJsonVal(JsonUtil.serializeMap(network
+				.getCustomProperties()));
+		int ipId = assertIp(networkAssert);
+		assertStatus(networkAssert, ipId);     
     }
 
     @Test
@@ -135,7 +135,7 @@ public class EntityUpdateControllerTest extends BaseTest {
     public void test_invalid_handle_not_exist() throws Exception {
         String notExistHandle = "not-exist-handle";
         mockMvc.perform(
-                put(URI_ENTITY_U + notExistHandle).contentType(
+                put(URI_IP_U + notExistHandle).contentType(
                         MediaType.parseMediaType(rdapJson)).content("{}"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(rdapJson))
@@ -148,30 +148,42 @@ public class EntityUpdateControllerTest extends BaseTest {
                           .getMessage(), notExistHandle))));
     }
 
-    private void assertStatus() throws Exception {
+    private int assertIp(Network network) throws Exception {
+    	List<Map<?, ?>> resultList =
+                getTableDataForSql("RDAP_IP",
+                        "select * from RDAP_IP where HANDLE='h1'");
+    	assertTrue(resultList.size() > 0);
+    	Map<?, ?> existIp = resultList.get(0);
+    	Integer ipId = (Integer) existIp.get("IP_ID");
+    	assertEquals(network.getHandle(), existIp.get("HANDLE"));
+        assertEquals(network.getCidr(), existIp.get("CIDR"));
+        assertEquals(network.getLang(), existIp.get("LANG"));
+        assertEquals(network.getPort43(), existIp.get("PORT43"));
+        assertEquals(network.getType(), existIp.get("TYPE"));
+        assertEquals(network.getName(), existIp.get("NAME"));
+        assertEquals(network.getParentHandle(), 
+        		existIp.get("PARENT_HANDLE"));
+        assertEquals(network.getIpVersion().getName(), 
+        		existIp.get("VERSION"));
+        assertEquals(network.getCountry(), existIp.get("COUNTRY"));
+        assertEquals(network.getStartAddress(), IpUtil.toString(
+            (byte[]) existIp.get("STARTADDRESS"), 
+            network.getIpVersion()));
+        assertEquals(network.getEndAddress(), IpUtil.toString(
+  	       (byte[]) existIp.get("ENDADDRESS"),
+  	       network.getIpVersion()));
+        assertEquals(network.getCustomPropertiesJsonVal(),
+        		existIp.get("CUSTOM_PROPERTIES"));
+        return ipId;
+	}
+    private void assertStatus(Network network,int ipId) throws Exception {
         List<Map<?, ?>> resultList1 =
-                getTableDataForSql("RDAP_ENTITY_STATUS",
-                        "select * from RDAP_ENTITY_STATUS where ENTITY_ID=1");
-        assertEquals(3, resultList1.size());
+                getTableDataForSql("RDAP_IP_STATUS",
+                        "select * from RDAP_IP_STATUS"
+                        + " where IP_ID = " + ipId);
+        assertEquals(network.getStatus().size(), resultList1.size());
     }
-
-    private void assertEntity(String updateEmail, String updateFn, String updateKind,
-    		String updateOrg, String updateLang, String updateUrl,
-            String originalHandle, String updatePort43) throws Exception {
-        List<Map<?, ?>> resultList =
-                getTableDataForSql("RDAP_ENTITY",
-                        "select * from RDAP_ENTITY where HANDLE='h1'");
-        assertTrue(resultList.size() > 0);
-        Map<?, ?> actualEntity = resultList.get(0);
-        assertEquals(originalHandle, actualEntity.get("HANDLE"));
-        assertEquals(updateFn, actualEntity.get("FN"));
-        assertEquals(updateKind, actualEntity.get("KIND"));
-        assertEquals(updateOrg, actualEntity.get("ORG"));
-        assertEquals(updateLang, actualEntity.get("LANG"));
-        assertEquals(updateUrl, actualEntity.get("URL"));
-        assertEquals(updatePort43, actualEntity.get("PORT43"));
-        assertEquals("{\"customKey3\":\"customValue3\"}",
-        		actualEntity.get("CUSTOM_PROPERTIES"));
-    }
+    
+    
 
 }

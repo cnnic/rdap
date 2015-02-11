@@ -28,7 +28,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-package org.restfulwhois.rdap.core.domain.dao.impl;
+package org.restfulwhois.rdap.core.autnum.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,10 +36,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
-import org.restfulwhois.rdap.common.dto.DomainDto;
-import org.restfulwhois.rdap.common.model.Domain;
-import org.restfulwhois.rdap.common.model.Network;
-import org.restfulwhois.rdap.common.model.base.BaseModel;
+import org.restfulwhois.rdap.common.dto.AutnumDto;
+import org.restfulwhois.rdap.common.model.Autnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -49,43 +47,44 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author jiashuo
+ * @author zhanyq
  * 
  */
 @Repository
-public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
-    private static final String SQL_CREATE_DOMAIN =
-            "INSERT INTO RDAP_DOMAIN"
-                    + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"
-                    + " values(?,?,?,?,?,?,?,?)";
-    private static final String SQL_UPDATE_DOMAIN = "UPDATE RDAP_DOMAIN"
-            + " SET LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
-            + " ,CUSTOM_PROPERTIES=? WHERE DOMAIN_ID=?";
-    private static final String SQL_DELETE_DOMAIN =
-            "DELETE FROM RDAP_DOMAIN WHERE DOMAIN_ID=?";
+public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
+    private static final String SQL_CREATE_AUTNUM =
+            "INSERT INTO RDAP_AUTNUM"
+             + " (HANDLE,START_AUTNUM,END_AUTNUM,NAME,TYPE,COUNTRY,LANG,PORT43,"
+             + " CUSTOM_PROPERTIES) values(?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_UPDATE_AUTNUM = "UPDATE RDAP_AUTNUM"
+            + " SET START_AUTNUM=?,END_AUTNUM=?,NAME=?,TYPE=?,COUNTRY=?,LANG=?,PORT43=?,"
+            + " CUSTOM_PROPERTIES=? WHERE AS_ID=?";
+    private static final String SQL_DELETE_AUTNUM =
+            "DELETE FROM RDAP_AUTNUM WHERE AS_ID=?";
     /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory
-            .getLogger(DomainUpdateDaoImpl.class);
+            .getLogger(AutnumUpdateDaoImpl.class);
 
     @Override
-    public Domain save(final Domain model) {
+    public Autnum save(final Autnum model) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps =
-                        connection.prepareStatement(SQL_CREATE_DOMAIN,
+                        connection.prepareStatement(SQL_CREATE_AUTNUM,
                                 Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, model.getHandle());
-                ps.setString(2, model.getLdhName());
-                ps.setString(3, model.getUnicodeName());
-                ps.setString(4, model.getPort43());
-                ps.setString(5, model.getLang());
-                ps.setString(6, model.getType().getName());
-                ps.setObject(7, model.getNetworkId());
-                ps.setString(8, model.getCustomPropertiesJsonVal());
+                ps.setLong(2, model.getStartAutnum());
+                ps.setLong(3, model.getEndAutnum());
+                ps.setString(4, model.getName());
+                ps.setString(5, model.getType());
+                ps.setString(6, model.getCountry());
+                ps.setString(7, model.getLang());
+                ps.setString(8, model.getPort43());               
+                ps.setString(9, model.getCustomPropertiesJsonVal());
                 return ps;
             }
         }, keyHolder);
@@ -94,28 +93,30 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
     }
 
     @Override
-    public void saveStatus(Domain model) {
-        saveStatus(model, model.getStatus(), "RDAP_DOMAIN_STATUS", "DOMAIN_ID");
+    public void saveStatus(Autnum model) {
+        saveStatus(model, model.getStatus(), "RDAP_AUTNUM_STATUS", "AS_ID");
     }
 
     @Override
-    public void update(final Domain model) {
-        jdbcTemplate.update(SQL_UPDATE_DOMAIN, new PreparedStatementSetter() {
+    public void update(final Autnum model) {
+        jdbcTemplate.update(SQL_UPDATE_AUTNUM, new PreparedStatementSetter() {
             public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, model.getLdhName());
-                ps.setString(2, model.getUnicodeName());
-                ps.setString(3, model.getPort43());
-                ps.setString(4, model.getLang());
-                ps.setObject(5, model.getNetworkId());
-                ps.setString(6, model.getCustomPropertiesJsonVal());
-                ps.setLong(7, model.getId());
+                ps.setLong(1, model.getStartAutnum());
+                ps.setLong(2, model.getEndAutnum());
+                ps.setString(3, model.getName());
+                ps.setString(4, model.getType());
+                ps.setString(5, model.getCountry());
+                ps.setString(6, model.getLang());
+                ps.setString(7, model.getPort43());               
+                ps.setString(8, model.getCustomPropertiesJsonVal());
+                ps.setLong(9, model.getId());
             }
         });
     }
 
     @Override
-    public void delete(final Domain model) {
-        jdbcTemplate.update(SQL_DELETE_DOMAIN, new PreparedStatementSetter() {
+    public void delete(final Autnum model) {
+        jdbcTemplate.update(SQL_DELETE_AUTNUM, new PreparedStatementSetter() {
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setLong(1, model.getId());
             }
@@ -123,32 +124,19 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
     }
 
     @Override
-    public void deleteStatus(Domain model) {
-        deleteStatus(model, "RDAP_DOMAIN_STATUS", "DOMAIN_ID");
+    public void deleteStatus(Autnum model) {
+        deleteStatus(model, "RDAP_AUTNUM_STATUS", "AS_ID");
     }
 
     @Override
-    public void updateStatus(Domain domain) {
+    public void updateStatus(Autnum domain) {
         deleteStatus(domain);
         saveStatus(domain);
     }
 
     @Override
     public Long findIdByHandle(String handle) {
-        return super.findIdByHandle(handle, "DOMAIN_ID", "RDAP_DOMAIN");
-    }
-    
-    @Override
-    public void deleteRel(BaseModel outerModel) {
-        //delete ARPA domain by network id
-         if (null == outerModel || null == outerModel.getId()) {
-             return;
-         }             
-         if(!(outerModel instanceof Network)){
-             return;
-         }
-         super.delete(String.valueOf(outerModel.getId()),
-                            "RDAP_DOMAIN", "NETWORK_ID");
+        return super.findIdByHandle(handle, "AS_ID", "RDAP_AUTNUM");
     }
 
 }
