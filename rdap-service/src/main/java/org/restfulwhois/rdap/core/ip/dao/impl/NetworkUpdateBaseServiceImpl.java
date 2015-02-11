@@ -85,7 +85,7 @@ public abstract class NetworkUpdateBaseServiceImpl extends
                 "country", validationResult);
         checkMaxLength(dto.getParentHandle(), MAX_LENGTH_255,
                 "parentHandle", validationResult);
-        checkMaxLength(dto.getCidr(), MAX_LENGTH_255,
+        checkNotEmptyAndMaxLength(dto.getCidr(), MAX_LENGTH_255,
                 "cidr", validationResult);        
         checkNotEmptyAndMaxLengthForHandle(dto.getHandle(), validationResult);
         validateBaseDto(dto, validationResult);
