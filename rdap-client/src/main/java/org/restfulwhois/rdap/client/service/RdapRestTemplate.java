@@ -6,15 +6,16 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 
-public class RdapRestTemplate {
-    private String MEDIA_TYPE;
-    private int connectTimeout;
-    private int readTimeout;
+public abstract class RdapRestTemplate {
+    protected String MEDIA_TYPE;
+    protected int connectTimeout;
+    protected int readTimeout;
 
     public RdapRestTemplate() {
         this.MEDIA_TYPE = "application/json;charset=UTF-8";
@@ -32,65 +33,11 @@ public class RdapRestTemplate {
         return doExecute(this.prepareExecute(url, httpMethod), body);
     }
 
-    private HttpURLConnection prepareExecute(URL url, HttpMethodType httpMethod)
-            throws RdapClientException {
-        try {
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url
-                    .openConnection();
-            httpURLConnection.setConnectTimeout(connectTimeout);
-            httpURLConnection.setReadTimeout(readTimeout);
-            httpURLConnection.setUseCaches(false);
-            httpURLConnection.setRequestMethod(httpMethod.name());
-            httpURLConnection.setDoInput(true);
-            if (httpMethod.equals(HttpMethodType.GET)
-                    || httpMethod.equals(HttpMethodType.DELETE)) {
-                httpURLConnection.setDoOutput(false);
-                httpURLConnection.setInstanceFollowRedirects(false);
-            } else {
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setInstanceFollowRedirects(true);
-                httpURLConnection
-                        .setRequestProperty("content-type", MEDIA_TYPE);
-            }
-            return httpURLConnection;
-        } catch (IOException e) {
-            throw new RdapClientException(e.getMessage());
-        }
+    protected abstract URLConnection prepareExecute(URL url,
+            HttpMethodType httpMethod) throws RdapClientException;
 
-    }
-
-    private RdapResponse doExecute(HttpURLConnection httpURLConnection,
-            String body) throws RdapClientException {
-        RdapResponse response = new RdapResponse();
-        try {
-            httpURLConnection.connect();
-            if (httpURLConnection.getDoOutput() && body != null) {
-                OutputStream out = httpURLConnection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(out, "utf-8"));
-                writer.write(body);
-                writer.flush();
-                writer.close();
-                out.close();
-            }
-            int code = httpURLConnection.getResponseCode();
-            response.setResponseCode(code);
-            response.setResponseMessage(httpURLConnection.getResponseMessage());
-            try {
-                SimpleHttpStatusCode.valueOf(code);
-                if (code == 200) {
-                    response.setIn(httpURLConnection.getInputStream());
-                } else {
-                    response.setIn(httpURLConnection.getErrorStream());
-                }
-            } catch (IllegalArgumentException iae) {
-            }
-        } catch (IOException io) {
-            throw new RdapClientException(io.getMessage());
-        }
-
-        return response;
-    }
+    protected abstract RdapResponse doExecute(URLConnection urlConnection,
+            String body) throws RdapClientException;
 
     public String getMEDIA_TYPE() {
         return MEDIA_TYPE;

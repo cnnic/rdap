@@ -5,6 +5,8 @@ import java.net.URL;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
+import org.restfulwhois.rdap.client.service.impl.HttpTemplate;
+import org.restfulwhois.rdap.client.service.impl.HttpsTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
 import org.restfulwhois.rdap.client.util.URLUtil;
@@ -22,6 +24,9 @@ public class RdapUpdateClient {
     private int readTimeout;
     private String urlStr;
     private final String UPDATE = "u";
+    private boolean isTrustAll = false;
+    private String filePath;
+    private String password;
 
     public RdapUpdateClient(String url) {
         connectTimeout = 3000;
@@ -81,12 +86,19 @@ public class RdapUpdateClient {
         } else {
             url = URLUtil.makeURLWithPath(urlStr, UPDATE, dto.getUpdateUri());
         }
-        RdapResponse response = createTemplate().execute(httpMethod, url, body);
+        boolean isHttps = URLUtil.isHttps(url);
+        RdapResponse response = createTemplate(isHttps).execute(httpMethod,
+                url, body);
         return response.getResponseBody(UpdateResponse.class);
     }
 
-    private RdapRestTemplate createTemplate() {
-        RdapRestTemplate template = new RdapRestTemplate();
+    private RdapRestTemplate createTemplate(boolean isHttps) {
+        RdapRestTemplate template;
+        if (isHttps) {
+            template = new HttpsTemplate();
+        } else {
+            template = new HttpTemplate();
+        }
         template.setConnectTimeout(connectTimeout);
         template.setReadTimeout(readTimeout);
         return template;
@@ -106,6 +118,30 @@ public class RdapUpdateClient {
 
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
+    }
+
+    public boolean isTrustAll() {
+        return isTrustAll;
+    }
+
+    public void setTrustAll(boolean isTrustAll) {
+        this.isTrustAll = isTrustAll;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }
