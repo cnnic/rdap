@@ -214,6 +214,25 @@ public final class IpUtil {
         }
         return null;
     }
+    
+    /**
+     * ipToByteArray.
+     * @param ipPrefix IP.
+     * @return bytes.
+     */
+    public static byte[] ipToByteArray(String ipPrefix) {
+        IpVersion ipVersion = getIpVersionOfIp(ipPrefix);
+        if (null == ipVersion || ipVersion.isNotValidIp()) {
+            return null;
+        }
+        if (ipVersion.isV4()) {
+            return IpV4.toByteArray(ipPrefix);
+        }
+        if (ipVersion.isV6()) {
+            return IpV6.toByteArray(ipPrefix);
+        }
+        return null;
+    }
 
     /**
      * get IpVersion of IP.

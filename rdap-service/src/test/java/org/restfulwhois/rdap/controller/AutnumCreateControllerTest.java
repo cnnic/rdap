@@ -41,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -461,7 +462,7 @@ public class AutnumCreateControllerTest extends BaseTest {
         autnum.setCountry("CN");	 
         autnum.setLang("zh");
         autnum.setType("alocated");
-    	Map<String, String> customProperties = new HashMap<String, String>();
+    	Map<String, String> customProperties = new LinkedHashMap<String, String>();
         customProperties.put("customKey1", "customValue1");
         customProperties.put("customKey2", "customValue2");
         autnum.setCustomProperties(customProperties);
