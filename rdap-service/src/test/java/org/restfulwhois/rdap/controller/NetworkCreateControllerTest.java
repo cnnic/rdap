@@ -102,17 +102,16 @@ public class NetworkCreateControllerTest extends BaseTest {
         IpDto ipDto = generateIpDto();
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
-                .andExpect(status().isOk())
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content)).andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(ipDto.getHandle()));
         Network network = new Network();
         BeanUtil.copyProperties(ipDto, network, "entities", "events",
                 "remarks", "links");
         network.setIpVersion(IpVersion.getIpVersion(ipDto.getIpVersion()));
-        network.setCustomPropertiesJsonVal(JsonUtil
-                .serializeMap(ipDto.getCustomProperties()));
+        network.setCustomPropertiesJsonVal(JsonUtil.serializeMap(ipDto
+                .getCustomProperties()));
         int ipId = assertIp(network);
         assertStatus(network, ipId);
     }
@@ -121,21 +120,20 @@ public class NetworkCreateControllerTest extends BaseTest {
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_ok_with_thin_ip() throws Exception {
-    	IpDto ipDto = new IpDto();
-    	ipDto.setHandle("h1");
-    	ipDto.setEndAddress("218.241.111.12");
-    	ipDto.setStartAddress("218.241.111.11");
-    	ipDto.setIpVersion("v4");
-    	
+        IpDto ipDto = new IpDto();
+        ipDto.setHandle("h1");
+        ipDto.setEndAddress("218.241.111.12");
+        ipDto.setStartAddress("218.241.111.11");
+        ipDto.setIpVersion("v4");
+        ipDto.setCidr("218.241.111.0/8");
+
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
-                .andExpect(status().isOk())
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content)).andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(ipDto.getHandle()));
     }
-   
 
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
@@ -149,17 +147,16 @@ public class NetworkCreateControllerTest extends BaseTest {
         ipDto.setStatus(status);
         createAndSetEvents(ipDto);
         ipDto.setRemarks(RemarkUpdateDaoTest.createRemarkList());
-        ipDto.setLinks(LinkUpdateDaoTest.createLinkList());        
+        ipDto.setLinks(LinkUpdateDaoTest.createLinkList());
         ipDto.setEntities(EntityUpdateDaoTest.createEntityHandleList());
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
-                .andExpect(status().isOk())
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content)).andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(ipDto.getHandle()));
         // RemarkUpdateDaoTest.assertCreate();/link duplicated.
-        // LinkUpdateDaoTest.assertCreate();       
+        // LinkUpdateDaoTest.assertCreate();
         List<Map<?, ?>> actualAutnumIds =
                 getTableDataForSql("RDAP_IP",
                         "SELECT IP_ID from RDAP_IP WHERE HANDLE='h1'");
@@ -167,12 +164,11 @@ public class NetworkCreateControllerTest extends BaseTest {
         assertTrue(actualAutnumIds.size() > 0);
         Integer ipId = (Integer) actualAutnumIds.get(0).get("IP_ID");
         List<Map<?, ?>> actualRelAutnumList =
-        		getTableDataForSql("RDAP_IP_STATUS",
-                        "select * from RDAP_IP_STATUS where IP_ID="
-                                + ipId);
+                getTableDataForSql("RDAP_IP_STATUS",
+                        "select * from RDAP_IP_STATUS where IP_ID=" + ipId);
         assertNotNull(actualRelAutnumList);
-        assertEquals(2,actualRelAutnumList.size());
-        
+        assertEquals(2, actualRelAutnumList.size());
+
     }
 
     private void createAndSetEvents(IpDto ipDto) {
@@ -191,35 +187,51 @@ public class NetworkCreateControllerTest extends BaseTest {
     public void test_valid_name_maxlength() throws Exception {
         IpDto ipDto = generateIpDto();
         String stringMaxLength =
-                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_255);        
+                createStringWithLength(UpdateValidateUtil.MAX_LENGTH_255);
         ipDto.setName(stringMaxLength);
         assertTrue(ipDto.getName().length() == UpdateValidateUtil.MAX_LENGTH_255);
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
-                .andExpect(status().isOk())
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content)).andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(ipDto.getHandle()));
     }
 
-    
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_valid_handle_maxlength() throws Exception {
-    	IpDto ipDto = generateIpDto();
+        IpDto ipDto = generateIpDto();
         String stringMaxLength =
                 createStringWithLength(UpdateValidateUtil.MAX_LENGTH_HANDLE);
         ipDto.setHandle(stringMaxLength);
         assertTrue(ipDto.getHandle().length() == UpdateValidateUtil.MAX_LENGTH_HANDLE);
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
-                .andExpect(status().isOk())
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content)).andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(ipDto.getHandle()));
+    }
+
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_invalid_empty_cidr() throws Exception {
+        IpDto ipDto = new IpDto();
+        ipDto.setHandle("h1");
+        ipDto.setEndAddress("218.241.111.12");
+        ipDto.setStartAddress("218.241.111.11");
+        ipDto.setIpVersion("v4");
+
+        String content = JsonHelper.serialize(ipDto);
+        mockMvc.perform(
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content)).andExpect(status().isBadRequest())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4002));
     }
 
     @Test
@@ -230,8 +242,8 @@ public class NetworkCreateControllerTest extends BaseTest {
         ipDto.setHandle(null);
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -254,8 +266,8 @@ public class NetworkCreateControllerTest extends BaseTest {
         assertTrue(ipDto.getHandle().length() > UpdateValidateUtil.MAX_LENGTH_HANDLE);
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -275,9 +287,8 @@ public class NetworkCreateControllerTest extends BaseTest {
     public void test_invalid_JSON() throws Exception {
         String invalidContent = "{";
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(
-                        invalidContent))
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(invalidContent))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/rdap+json"))
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -289,8 +300,6 @@ public class NetworkCreateControllerTest extends BaseTest {
                                                 .getMessage())));
     }
 
-   
-
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
@@ -298,14 +307,13 @@ public class NetworkCreateControllerTest extends BaseTest {
         IpDto ipDto = generateIpDto();
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
-                .andExpect(status().isOk())
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content)).andExpect(status().isOk())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.handle").value(ipDto.getHandle()));
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -316,18 +324,18 @@ public class NetworkCreateControllerTest extends BaseTest {
                                         ServiceErrorCode.ERROR_4091
                                                 .getMessage(), ipDto
                                                 .getHandle()))));
-    }      
-    
+    }
+
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_IpVersion_empty() throws Exception {
-    	IpDto ipDto = generateIpDto();
-    	ipDto.setIpVersion(null);
+        IpDto ipDto = generateIpDto();
+        ipDto.setIpVersion(null);
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -338,17 +346,17 @@ public class NetworkCreateControllerTest extends BaseTest {
                                         ServiceErrorCode.ERROR_4002
                                                 .getMessage(), "ipVersion"))));
     }
-    
+
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_IpVersion() throws Exception {
-    	IpDto ipDto = generateIpDto();
-    	ipDto.setIpVersion("invalidIpVersion");
+        IpDto ipDto = generateIpDto();
+        ipDto.setIpVersion("invalidIpVersion");
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -359,63 +367,63 @@ public class NetworkCreateControllerTest extends BaseTest {
                                         ServiceErrorCode.ERROR_4008
                                                 .getMessage(), "ipVersion"))));
     }
-    
+
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_startAddress_empty() throws Exception {
-    	IpDto ipDto = generateIpDto();
-    	ipDto.setStartAddress(null);
+        IpDto ipDto = generateIpDto();
+        ipDto.setStartAddress(null);
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4002))
                 .andExpect(
-                        jsonPath("$.description").value(
-                                CoreMatchers.hasItems(String.format(
+                        jsonPath("$.description")
+                                .value(CoreMatchers.hasItems(String.format(
                                         ServiceErrorCode.ERROR_4002
                                                 .getMessage(), "startAddress"))));
     }
-    
+
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     public void test_invalid_startAddress() throws Exception {
-    	IpDto ipDto = generateIpDto();
-    	ipDto.setStartAddress("::123.dd.ff.gg/23");
+        IpDto ipDto = generateIpDto();
+        ipDto.setStartAddress("::123.dd.ff.gg/23");
         String content = JsonHelper.serialize(ipDto);
         mockMvc.perform(
-                post(URI_IP_U).contentType(
-                        MediaType.parseMediaType(rdapJson)).content(content))
+                post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
+                        .content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4008))
                 .andExpect(
-                        jsonPath("$.description").value(
-                                CoreMatchers.hasItems(String.format(
+                        jsonPath("$.description")
+                                .value(CoreMatchers.hasItems(String.format(
                                         ServiceErrorCode.ERROR_4008
                                                 .getMessage(), "startAddress"))));
     }
-    
+
     private IpDto generateIpDto() {
-    	IpDto network = new IpDto();
-    	network.setHandle("h1");
-    	network.setCidr("FFF1:1::");
-    	network.setEndAddress("218.241.111.12");
-    	network.setStartAddress("218.241.111.11");
-    	network.setIpVersion(IpVersion.V4.getName());
-    	network.setParentHandle("ip-200-1");
-    	network.setName("cnnic-1");
-    	network.setPort43("cnnic.cn");
-    	network.setCountry("cn");	 
-    	network.setLang("zh");
+        IpDto network = new IpDto();
+        network.setHandle("h1");
+        network.setCidr("FFF1:1::");
+        network.setEndAddress("218.241.111.12");
+        network.setStartAddress("218.241.111.11");
+        network.setIpVersion(IpVersion.V4.getName());
+        network.setParentHandle("ip-200-1");
+        network.setName("cnnic-1");
+        network.setPort43("cnnic.cn");
+        network.setCountry("cn");
+        network.setLang("zh");
         network.setType("alocated");
-    	Map<String, String> customProperties = new HashMap<String, String>();
+        Map<String, String> customProperties = new HashMap<String, String>();
         customProperties.put("customKey1", "customValue1");
         customProperties.put("customKey2", "customValue2");
         network.setCustomProperties(customProperties);
@@ -425,42 +433,44 @@ public class NetworkCreateControllerTest extends BaseTest {
         network.setStatus(status);
         return network;
     }
-    
+
     private int assertIp(Network network) throws Exception {
-    	List<Map<?, ?>> resultList =
+        List<Map<?, ?>> resultList =
                 getTableDataForSql("RDAP_IP",
                         "select * from RDAP_IP where HANDLE='h1'");
-    	assertTrue(resultList.size() > 0);
-    	Map<?, ?> existIp = resultList.get(0);
-    	Integer ipId = (Integer) existIp.get("IP_ID");
-    	assertEquals(network.getHandle(), existIp.get("HANDLE"));
+        assertTrue(resultList.size() > 0);
+        Map<?, ?> existIp = resultList.get(0);
+        Integer ipId = (Integer) existIp.get("IP_ID");
+        assertEquals(network.getHandle(), existIp.get("HANDLE"));
         assertEquals(network.getCidr(), existIp.get("CIDR"));
         assertEquals(network.getLang(), existIp.get("LANG"));
         assertEquals(network.getPort43(), existIp.get("PORT43"));
         assertEquals(network.getType(), existIp.get("TYPE"));
         assertEquals(network.getName(), existIp.get("NAME"));
-        assertEquals(network.getParentHandle(), 
-        		existIp.get("PARENT_HANDLE"));
-        assertEquals(network.getIpVersion().getName(), 
-        		existIp.get("VERSION"));
+        assertEquals(network.getParentHandle(), existIp.get("PARENT_HANDLE"));
+        assertEquals(network.getIpVersion().getName(), existIp.get("VERSION"));
         assertEquals(network.getCountry(), existIp.get("COUNTRY"));
-        assertEquals(network.getStartAddress(), IpUtil.toString(
-            (byte[]) existIp.get("STARTADDRESS"), 
-            network.getIpVersion()));
-        assertEquals(network.getEndAddress(), IpUtil.toString(
-  	       (byte[]) existIp.get("ENDADDRESS"),
-  	       network.getIpVersion()));
+        assertEquals(
+                network.getStartAddress(),
+                IpUtil.toString((byte[]) existIp.get("STARTADDRESS"),
+                        network.getIpVersion()));
+        assertEquals(
+                network.getEndAddress(),
+                IpUtil.toString((byte[]) existIp.get("ENDADDRESS"),
+                        network.getIpVersion()));
         assertEquals(network.getCustomPropertiesJsonVal(),
-        		existIp.get("CUSTOM_PROPERTIES"));
+                existIp.get("CUSTOM_PROPERTIES"));
         return ipId;
-	}
-    private void assertStatus(Network network,int ipId) throws Exception {
+    }
+
+    private void assertStatus(Network network, int ipId) throws Exception {
         List<Map<?, ?>> resultList1 =
                 getTableDataForSql("RDAP_IP_STATUS",
-                        "select * from RDAP_IP_STATUS"
-                        + " where IP_ID = " + ipId);
+                        "select * from RDAP_IP_STATUS" + " where IP_ID = "
+                                + ipId);
         assertEquals(network.getStatus().size(), resultList1.size());
     }
+
     private String createStringWithLength(int length) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
