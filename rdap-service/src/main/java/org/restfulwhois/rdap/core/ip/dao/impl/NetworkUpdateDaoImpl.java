@@ -90,10 +90,8 @@ public class NetworkUpdateDaoImpl extends AbstractUpdateDao<Network, IpDto> {
                          connection.prepareStatement(SQL_SAVE_IP,
                                  Statement.RETURN_GENERATED_KEYS);
                  ps.setString(1, model.getHandle());
-                 ps.setBytes(2, IpUtil.ipToByteArray(model.getEndAddress(), 
-                             model.getIpVersion()));
-                 ps.setBytes(3, IpUtil.ipToByteArray(model.getStartAddress(), 
-                             model.getIpVersion()));
+                 ps.setBytes(2, IpUtil.ipToByteArray(model.getEndAddress()));
+                 ps.setBytes(3, IpUtil.ipToByteArray(model.getStartAddress()));
                  ps.setString(4, model.getIpVersion().getName());
                  ps.setString(5, model.getName());
                  ps.setString(6, model.getType());
@@ -121,10 +119,8 @@ public class NetworkUpdateDaoImpl extends AbstractUpdateDao<Network, IpDto> {
     public void update(final Network model) {
         jdbcTemplate.update(SQL_UPDATE_IP, new PreparedStatementSetter() {
            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setBytes(1, IpUtil.ipToByteArray(model.getEndAddress(), 
-                            model.getIpVersion()));
-                ps.setBytes(2, IpUtil.ipToByteArray(model.getStartAddress(),
-                            model.getIpVersion()));
+                ps.setBytes(1, IpUtil.ipToByteArray(model.getEndAddress()));
+                ps.setBytes(2, IpUtil.ipToByteArray(model.getStartAddress()));
                 ps.setString(3, model.getIpVersion().getName());
                 ps.setString(4, model.getName());
                 ps.setString(5, model.getType());
