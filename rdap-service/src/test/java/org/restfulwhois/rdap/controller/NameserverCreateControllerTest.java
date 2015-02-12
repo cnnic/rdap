@@ -30,14 +30,16 @@
  */
 package org.restfulwhois.rdap.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -203,7 +205,7 @@ public class NameserverCreateControllerTest extends BaseTest {
         status.add("validated");
         status.add("update prohibited");
         nameserver.setStatus(status);
-        Map<String, String> customProperties = new HashMap<String, String>();
+        Map<String, String> customProperties = new LinkedHashMap<String, String>();
         customProperties.put("customKey1", "customValue1");
         customProperties.put("customKey2", "customValue2");
         nameserver.setCustomProperties(customProperties);
