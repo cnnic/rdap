@@ -1,28 +1,18 @@
 package org.restfulwhois.rdap.client.service.impl;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.service.RdapResponse;
@@ -33,6 +23,18 @@ import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 
 public class HttpsTemplate extends RdapRestTemplate {
 
+	private boolean isDefault;
+    private boolean isTrustAll;
+    private String filePath;
+    private String password;
+	
+    public HttpsTemplate(boolean isDefault, boolean isTrustAll, String filePath, String password){
+    	this.isDefault = isDefault;
+    	this.isTrustAll = isTrustAll;
+    	this.filePath = filePath;
+    	this.password = password;
+    }
+    
     @Override
     protected URLConnection prepareExecute(URL url, HttpMethodType httpMethod)
             throws RdapClientException {
@@ -53,9 +55,24 @@ public class HttpsTemplate extends RdapRestTemplate {
                 httpsURLConn.setInstanceFollowRedirects(true);
                 httpsURLConn.setRequestProperty("content-type", MEDIA_TYPE);
             }
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, SSLUtil.createManagersWithTrustAll(), null);
-            httpsURLConn.setSSLSocketFactory(sslContext.getSocketFactory());
+            if(!isDefault){
+            	SSLContext sslContext = SSLContext.getInstance("TLS");
+            	 TrustManager[] managers;
+            	 if(isTrustAll){
+            		 managers = SSLUtil.createManagersWithTrustAll();
+            	 }else{
+            		 KeyStore ks;
+            		 if(isEmpty(password)){
+            			 ks = SSLUtil.createKeyStoreWithCerFile(filePath);
+            		 }else{
+            			 ks = SSLUtil.createKeyStoreWithKSFile(filePath, password);
+            		 }
+            		 managers = SSLUtil.createManagersWithKeyStroe(ks);
+            	 }
+                sslContext.init(null, managers, null);
+                httpsURLConn.setSSLSocketFactory(sslContext.getSocketFactory());
+            }
+            
             return httpsURLConn;
         } catch (IOException | NoSuchAlgorithmException
                 | KeyManagementException e) {
@@ -97,5 +114,44 @@ public class HttpsTemplate extends RdapRestTemplate {
 
         return response;
     }
+
+    private static boolean isEmpty(String s) {
+        if (s == null || "".equals(s.trim()))
+            return true;
+        else
+            return false;
+    }
+    
+	public boolean isDefault() {
+		return isDefault;
+	}
+
+	public void setDefault(boolean isDefault) {
+		this.isDefault = isDefault;
+	}
+
+	public boolean isTrustAll() {
+		return isTrustAll;
+	}
+
+	public void setTrustAll(boolean isTrustAll) {
+		this.isTrustAll = isTrustAll;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 }

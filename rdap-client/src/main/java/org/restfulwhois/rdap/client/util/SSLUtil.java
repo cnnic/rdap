@@ -1,7 +1,6 @@
 package org.restfulwhois.rdap.client.util;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -38,7 +37,7 @@ public class SSLUtil {
         return ks;
     }
 
-    public static KeyStore createKeyStoreWhithKSFile(String filePath,
+    public static KeyStore createKeyStoreWithKSFile(String filePath,
             String password) throws RdapClientException {
         KeyStore ks;
         try {

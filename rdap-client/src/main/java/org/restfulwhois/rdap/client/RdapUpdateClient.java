@@ -24,6 +24,7 @@ public class RdapUpdateClient {
     private int readTimeout;
     private String urlStr;
     private final String UPDATE = "u";
+    private boolean isDefault = true;
     private boolean isTrustAll = false;
     private String filePath;
     private String password;
@@ -95,7 +96,7 @@ public class RdapUpdateClient {
     private RdapRestTemplate createTemplate(boolean isHttps) {
         RdapRestTemplate template;
         if (isHttps) {
-            template = new HttpsTemplate();
+            template = new HttpsTemplate(isDefault, isTrustAll, filePath, password);
         } else {
             template = new HttpTemplate();
         }
@@ -120,7 +121,15 @@ public class RdapUpdateClient {
         this.readTimeout = readTimeout;
     }
 
-    public boolean isTrustAll() {
+    public boolean isDefault() {
+		return isDefault;
+	}
+
+	public void setDefault(boolean isDefault) {
+		this.isDefault = isDefault;
+	}
+
+	public boolean isTrustAll() {
         return isTrustAll;
     }
 

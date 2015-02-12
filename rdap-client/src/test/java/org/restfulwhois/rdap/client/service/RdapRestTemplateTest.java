@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.service.impl.HttpTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
@@ -19,7 +20,7 @@ public class RdapRestTemplateTest {
     MockHttpServer mockHttpServer;
     String url = "http://127.0.0.1:8081";
     int port = 8080;
-    RdapRestTemplate template = new RdapRestTemplate();
+    RdapRestTemplate template = new HttpTemplate();
     String param = "{\"handle\":\"ip-handle1\",\"entities\":null,\"status\":null,"
             + "\"remarks\":null,\"links\":null,\"port43\":null,\"events\":null,"
             + "\"lang\":null,\"customProperties\":{\"custom1\":\"1\",\"custom2\":"
