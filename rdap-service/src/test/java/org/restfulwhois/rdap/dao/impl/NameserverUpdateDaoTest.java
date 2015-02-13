@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +47,6 @@ import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Nameserver;
-import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -139,7 +138,7 @@ public class NameserverUpdateDaoTest extends BaseTest {
 	        status.add("validated");
 	        status.add("update prohibited");
 	        nameserver.setStatus(status);
-	        Map<String, String> customProperties = new HashMap<String, String>();
+	        Map<String, String> customProperties = new LinkedHashMap<String, String>();
 	        customProperties.put("customKey1", "customValue1");
 	        customProperties.put("customKey2", "customValue2");
 	        nameserver.setCustomProperties(customProperties);
@@ -192,7 +191,7 @@ public class NameserverUpdateDaoTest extends BaseTest {
 	        expectedStatus.add(updateStatusTransferProbibited);
 	        expectedStatus.add(updateStatusDeleteProbibited);
 	        nameserver.setStatus(expectedStatus);
-	        Map<String, String> customProperties = new HashMap<String, String>();
+	        Map<String, String> customProperties = new LinkedHashMap<String, String>();
 	        customProperties.put("customKey3", "customValue3");
 	        nameserver.setCustomProperties(customProperties);
 	        nameserver.setCustomPropertiesJsonVal(JsonUtil

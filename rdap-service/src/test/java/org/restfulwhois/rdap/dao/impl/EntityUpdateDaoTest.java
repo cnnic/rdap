@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +47,6 @@ import org.restfulwhois.rdap.common.dto.EntityDto;
 import org.restfulwhois.rdap.common.dto.embedded.EntityHandleDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Entity;
-import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -153,7 +152,7 @@ public class EntityUpdateDaoTest extends BaseTest {
 	        status.add("validated");
 	        status.add("active");
 	        entity.setStatus(status);
-	        Map<String, String> customProperties = new HashMap<String, String>();
+	        Map<String, String> customProperties = new LinkedHashMap<String, String>();
 	        customProperties.put("customKey1", "customValue1");
 	        customProperties.put("customKey2", "customValue2");
 	        entity.setCustomProperties(customProperties);
@@ -214,7 +213,7 @@ public class EntityUpdateDaoTest extends BaseTest {
 	        expectedStatus.add(updateStatusTransferProbibited);
 	        expectedStatus.add(updateStatusDeleteProbibited);
 	        entity.setStatus(expectedStatus);
-	        Map<String, String> customProperties = new HashMap<String, String>();
+	        Map<String, String> customProperties = new LinkedHashMap<String, String>();
 	        customProperties.put("customKey3", "customValue3");
 	        entity.setCustomProperties(customProperties);
 	        entity.setCustomPropertiesJsonVal(JsonUtil

@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,7 +83,7 @@ public class DomainUpdateDaoTest extends BaseTest {
         status.add("validated");
         status.add("update prohibited");
         domain.setStatus(status);
-        Map<String, String> customProperties = new HashMap<String, String>();
+        Map<String, String> customProperties = new LinkedHashMap<String, String>();
         customProperties.put("customKey1", "customValue1");
         customProperties.put("customKey2", "customValue2");
         domain.setCustomProperties(customProperties);
@@ -138,7 +138,7 @@ public class DomainUpdateDaoTest extends BaseTest {
         expectedStatus.add(updateStatusTransferProbibited);
         expectedStatus.add(updateStatusDeleteProbibited);
         domain.setStatus(expectedStatus);
-        Map<String, String> customProperties = new HashMap<String, String>();
+        Map<String, String> customProperties = new LinkedHashMap<String, String>();
         customProperties.put("customKey3", "customValue3");
         domain.setCustomProperties(customProperties);
         domain.setCustomPropertiesJsonVal(JsonUtil

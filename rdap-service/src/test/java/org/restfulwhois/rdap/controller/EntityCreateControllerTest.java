@@ -41,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -474,7 +475,7 @@ public class EntityCreateControllerTest extends BaseTest {
     	entity.setLang("zh");
     	entity.setTitle("team leader");
     	entity.setUrl("00miss.cnnic.cn");
-        Map<String, String> customProperties = new HashMap<String, String>();
+        Map<String, String> customProperties = new LinkedHashMap<String, String>();
         customProperties.put("customKey1", "customValue1");
         customProperties.put("customKey2", "customValue2");
         entity.setCustomProperties(customProperties);
