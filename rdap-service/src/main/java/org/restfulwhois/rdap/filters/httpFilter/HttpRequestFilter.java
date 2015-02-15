@@ -149,9 +149,8 @@ public class HttpRequestFilter implements HttpFilter {
         if (StringUtils.isBlank(contentTypeHeader)) {
             return false;
         }
-        List<MediaType> mediaTypes =
-                StringUtil.parseMediaTypes(contentTypeHeader);
-        if (null == mediaTypes) {
+        MediaType mediaType = StringUtil.parseMediaType(contentTypeHeader);
+        if (null == mediaType) {
             return false;
         }
         return true;
