@@ -233,7 +233,47 @@ public class NetworkCreateControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4002));
     }
-
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_valid_startAddress_empty() throws Exception {
+        IpDto ipDto = generateIpDto();
+        ipDto.setStartAddress("");      
+        String content = JsonHelper.serialize(ipDto);
+        mockMvc.perform(
+                post(URI_IP_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4002))
+                .andExpect(
+                        jsonPath("$.description").value(
+                                CoreMatchers.hasItems(String.format(
+                                        ServiceErrorCode.ERROR_4002
+                                                .getMessage(), "startAddress"))));
+    }
+    
+    @Test
+    @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
+    public void test_valid_endAddress_empty() throws Exception {
+        IpDto ipDto = generateIpDto();
+        ipDto.setEndAddress("");      
+        String content = JsonHelper.serialize(ipDto);
+        mockMvc.perform(
+                post(URI_IP_U).contentType(
+                        MediaType.parseMediaType(rdapJson)).content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(rdapJson))
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.subErrorCode").value(4002))
+                .andExpect(
+                        jsonPath("$.description").value(
+                                CoreMatchers.hasItems(String.format(
+                                        ServiceErrorCode.ERROR_4002
+                                                .getMessage(), "endAddress"))));
+    }
     @Test
     @DatabaseSetup("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")
     @DatabaseTearDown("classpath:org/restfulwhois/rdap/dao/impl/teardown.xml")

@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.core.ip.dao.impl;
 import static org.restfulwhois.rdap.common.util.UpdateValidateUtil.MAX_LENGTH_255;
 
 import org.restfulwhois.rdap.common.dto.IpDto;
-import org.restfulwhois.rdap.common.model.Domain.DomainType;
 import org.restfulwhois.rdap.common.model.IpVersion;
 import org.restfulwhois.rdap.common.model.Network;
 import org.restfulwhois.rdap.common.service.AbstractUpdateService;
@@ -75,8 +74,8 @@ public abstract class NetworkUpdateBaseServiceImpl extends
     protected ValidationResult validateWithoutIpVersion(IpDto dto,
             ValidationResult validationResult) {
         LOGGER.debug("validate for save and update ...");
-        checkIpNotNullAndValid(dto.getStartAddress(), validationResult, "startAddress");
-        checkIpNotNullAndValid(dto.getEndAddress(), validationResult, "endAddress");
+        checkIpNotEmptyAndValid(dto.getStartAddress(), validationResult, "startAddress");
+        checkIpNotEmptyAndValid(dto.getEndAddress(), validationResult, "endAddress");
         checkMaxLength(dto.getName(), MAX_LENGTH_255,
                 "name", validationResult);
         checkMaxLength(dto.getType(), MAX_LENGTH_255,
@@ -92,9 +91,9 @@ public abstract class NetworkUpdateBaseServiceImpl extends
         return validationResult;
     }
 
-    private void checkIpNotNullAndValid(String ip,
+    private void checkIpNotEmptyAndValid(String ip,
             ValidationResult validationResult, String fieldName) {
-        checkNotNull(ip, 
+        checkNotEmpty(ip, 
                  fieldName, validationResult);
         checkIp(ip, fieldName, validationResult);
     }
