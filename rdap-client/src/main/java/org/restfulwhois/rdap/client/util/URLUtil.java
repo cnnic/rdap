@@ -95,22 +95,23 @@ public class URLUtil {
         return makeURLWithParam(urlBuilder.toString(), param);
     }
 
-    public static boolean isHttps(URL url){
+    public static boolean isHttps(URL url) {
         String protocol = url.getProtocol();
-        if(protocol.equals(ProtocolType.HTTPS.name())){
+        if (protocol.equals(ProtocolType.HTTPS.name())) {
             return true;
         }
         return false;
     }
-    
+
     private static boolean isEmpty(String s) {
-        if (s == null || "".equals(s.trim()))
+        if (s == null || "".equals(s.trim())){
             return true;
-        else
+        }else{
             return false;
+        }
     }
 
-    private enum ProtocolType{
+    private enum ProtocolType {
         HTTP, HTTPS;
     }
 }

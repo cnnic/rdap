@@ -19,22 +19,22 @@ import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.SSLUtil;
+import org.restfulwhois.rdap.client.util.TrustType;
 import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 
 public class HttpsTemplate extends RdapRestTemplate {
 
-	private boolean isDefault;
-    private boolean isTrustAll;
+    private TrustType trustType;
     private String filePath;
     private String password;
-	
-    public HttpsTemplate(boolean isDefault, boolean isTrustAll, String filePath, String password){
-    	this.isDefault = isDefault;
-    	this.isTrustAll = isTrustAll;
-    	this.filePath = filePath;
-    	this.password = password;
+
+    public HttpsTemplate(TrustType trustType, String filePath, String password) 
+    {
+        this.trustType = trustType;
+        this.filePath = filePath;
+        this.password = password;
     }
-    
+
     @Override
     protected URLConnection prepareExecute(URL url, HttpMethodType httpMethod)
             throws RdapClientException {
@@ -55,27 +55,31 @@ public class HttpsTemplate extends RdapRestTemplate {
                 httpsURLConn.setInstanceFollowRedirects(true);
                 httpsURLConn.setRequestProperty("content-type", MEDIA_TYPE);
             }
-            if(!isDefault){
-            	SSLContext sslContext = SSLContext.getInstance("TLS");
-            	 TrustManager[] managers;
-            	 if(isTrustAll){
-            		 managers = SSLUtil.createManagersWithTrustAll();
-            	 }else{
-            		 KeyStore ks;
-            		 if(isEmpty(password)){
-            			 ks = SSLUtil.createKeyStoreWithCerFile(filePath);
-            		 }else{
-            			 ks = SSLUtil.createKeyStoreWithKSFile(filePath, password);
-            		 }
-            		 managers = SSLUtil.createManagersWithKeyStroe(ks);
-            	 }
+            if (trustType.equals(TrustType.DEFAULT)) {
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                TrustManager[] managers;
+                if (trustType.equals(TrustType.TRUST_ALL)) {
+                    managers = SSLUtil.createManagersWithTrustAll();
+                } else {
+                    KeyStore ks;
+                    if (trustType.equals(TrustType.CERTIFICATE)) {
+                        ks = SSLUtil.loadKeyStoreWithCerFile(filePath);
+                    } else {
+                        ks = SSLUtil.loadKeyStoreWithKSFile(filePath,
+                                password);
+                    }
+                    managers = SSLUtil.createManagersWithKeyStroe(ks);
+                }
                 sslContext.init(null, managers, null);
                 httpsURLConn.setSSLSocketFactory(sslContext.getSocketFactory());
             }
-            
+
             return httpsURLConn;
-        } catch (IOException | NoSuchAlgorithmException
-                | KeyManagementException e) {
+        } catch (IOException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (KeyManagementException e) {
             throw new RdapClientException(e.getMessage());
         }
     }
@@ -115,43 +119,28 @@ public class HttpsTemplate extends RdapRestTemplate {
         return response;
     }
 
-    private static boolean isEmpty(String s) {
-        if (s == null || "".equals(s.trim()))
-            return true;
-        else
-            return false;
+    public TrustType getTrustType() {
+        return trustType;
     }
-    
-	public boolean isDefault() {
-		return isDefault;
-	}
 
-	public void setDefault(boolean isDefault) {
-		this.isDefault = isDefault;
-	}
+    public void setTrustType(TrustType trustType) {
+        this.trustType = trustType;
+    }
 
-	public boolean isTrustAll() {
-		return isTrustAll;
-	}
+    public String getFilePath() {
+        return filePath;
+    }
 
-	public void setTrustAll(boolean isTrustAll) {
-		this.isTrustAll = isTrustAll;
-	}
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
-	public String getFilePath() {
-		return filePath;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 }

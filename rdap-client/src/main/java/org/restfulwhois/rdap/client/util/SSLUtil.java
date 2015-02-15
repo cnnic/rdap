@@ -20,9 +20,9 @@ public class SSLUtil {
     private final static String X509 = "X.509";
     private final static String ALIAS_RDAP = "rdap";
 
-    public static KeyStore createKeyStoreWithCerFile(String filePath)
+    public static KeyStore loadKeyStoreWithCerFile(String filePath)
             throws RdapClientException {
-        KeyStore ks = null;
+        KeyStore ks;
         try {
             CertificateFactory cf = CertificateFactory.getInstance(X509);
             FileInputStream in = new FileInputStream(filePath);
@@ -30,22 +30,32 @@ public class SSLUtil {
             ks = KeyStore.getInstance(KeyStore.getDefaultType());
             ks.load(null);
             ks.setCertificateEntry(ALIAS_RDAP, c);
-        } catch (KeyStoreException | CertificateException
-                | NoSuchAlgorithmException | IOException e) {
+        } catch (KeyStoreException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (CertificateException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (IOException e) {
             throw new RdapClientException(e.getMessage());
         }
         return ks;
     }
 
-    public static KeyStore createKeyStoreWithKSFile(String filePath,
+    public static KeyStore loadKeyStoreWithKSFile(String filePath,
             String password) throws RdapClientException {
         KeyStore ks;
         try {
             ks = KeyStore.getInstance(KeyStore.getDefaultType());
             FileInputStream in = new FileInputStream(filePath);
             ks.load(in, password.toCharArray());
-        } catch (KeyStoreException | NoSuchAlgorithmException
-                | CertificateException | IOException e) {
+        } catch (KeyStoreException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (CertificateException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (IOException e) {
             throw new RdapClientException(e.getMessage());
         }
         return ks;
@@ -60,7 +70,9 @@ public class SSLUtil {
                     .getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init(ks);
             tm = tmf.getTrustManagers();
-        } catch (NoSuchAlgorithmException | KeyStoreException e) {
+        } catch (NoSuchAlgorithmException e) {
+            throw new RdapClientException(e.getMessage());
+        } catch (KeyStoreException e) {
             throw new RdapClientException(e.getMessage());
         }
 

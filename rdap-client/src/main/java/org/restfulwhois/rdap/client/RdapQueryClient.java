@@ -10,6 +10,7 @@ import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.service.impl.HttpTemplate;
 import org.restfulwhois.rdap.client.service.impl.HttpsTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
+import org.restfulwhois.rdap.client.util.TrustType;
 import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
@@ -20,18 +21,20 @@ import org.restfulwhois.rdap.common.model.Help;
 
 public class RdapQueryClient {
 
-    private int connectTimeout;
-    private int readTimeout;
+    private int connectTimeout = 3000;
+    private int readTimeout = 10000;
     private String urlStr;
-    private boolean isDefault = true;
-    private boolean isTrustAll = false;
+    private TrustType trustType;
     private String filePath;
     private String password;
 
     public RdapQueryClient(String urlStr) {
-        connectTimeout = 3000;
-        readTimeout = 10000;
         this.urlStr = urlStr;
+    }
+    
+    public RdapQueryClient(String urlStr, TrustType trustType) {
+        this.urlStr = urlStr;
+        this.trustType = trustType;
     }
 
     public IpDto queryIp(String address) throws RdapClientException {
@@ -88,7 +91,8 @@ public class RdapQueryClient {
             String... param) throws RdapClientException {
         URL url = URLUtil.makeURLWithPath(urlStr, param);
         boolean isHttps = URLUtil.isHttps(url);
-        RdapResponse response = createTemplate(isHttps).execute(httpMethod, url);
+        RdapResponse response = createTemplate(isHttps)
+                .execute(httpMethod, url);
         return response.getResponseBody(type);
     }
 
@@ -98,14 +102,15 @@ public class RdapQueryClient {
         map.put(key, value);
         URL url = URLUtil.makeURLWithParam(urlStr, map);
         boolean isHttps = URLUtil.isHttps(url);
-        RdapResponse response = createTemplate(isHttps).execute(httpMethod, url);
+        RdapResponse response = createTemplate(isHttps)
+                .execute(httpMethod, url);
         return response.getResponseBody(type);
     }
 
     private RdapRestTemplate createTemplate(boolean isHttps) {
-    	RdapRestTemplate template;
+        RdapRestTemplate template;
         if (isHttps) {
-            template = new HttpsTemplate(isDefault, isTrustAll, filePath, password);
+            template = new HttpsTemplate(trustType, filePath, password);
         } else {
             template = new HttpTemplate();
         }
@@ -138,36 +143,28 @@ public class RdapQueryClient {
         this.urlStr = urlStr;
     }
 
-	public boolean isDefault() {
-		return isDefault;
-	}
+    public TrustType getTrustType() {
+        return trustType;
+    }
 
-	public void setDefault(boolean isDefault) {
-		this.isDefault = isDefault;
-	}
+    public void setTrustType(TrustType trustType) {
+        this.trustType = trustType;
+    }
 
-	public boolean isTrustAll() {
-		return isTrustAll;
-	}
+    public String getFilePath() {
+        return filePath;
+    }
 
-	public void setTrustAll(boolean isTrustAll) {
-		this.isTrustAll = isTrustAll;
-	}
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
-	public String getFilePath() {
-		return filePath;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 }

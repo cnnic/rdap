@@ -1,16 +1,10 @@
 package org.restfulwhois.rdap.client.service;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
-import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 
 public abstract class RdapRestTemplate {
     protected String MEDIA_TYPE;
