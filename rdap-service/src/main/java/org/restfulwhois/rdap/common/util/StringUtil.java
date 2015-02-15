@@ -131,6 +131,24 @@ public final class StringUtil {
         }
         return null;
     }
+    /**
+     * parse media type from media type string.
+     * <p>
+     * This method is more strict than parseMediaTypes.
+     * 
+     * @param mediaTypesStr
+     *            media type string.
+     * @return media type.
+     */
+    public static MediaType parseMediaType(String mediaTypeStr) {
+        try {
+            return MediaType.parseMediaType(mediaTypeStr);
+        } catch (Exception e) {
+            LOGGER.error("invalid media type for {}, error :{}", mediaTypeStr,
+                    e);
+        }
+        return null;
+    }
 
     /**
      * check if decodeUri contain non-ASCII-printable chars.
