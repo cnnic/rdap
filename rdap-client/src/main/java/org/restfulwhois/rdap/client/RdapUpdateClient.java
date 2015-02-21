@@ -9,7 +9,6 @@ import org.restfulwhois.rdap.client.service.impl.HttpTemplate;
 import org.restfulwhois.rdap.client.service.impl.HttpsTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
-import org.restfulwhois.rdap.client.util.TrustType;
 import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.BaseDto;
@@ -25,17 +24,11 @@ public class RdapUpdateClient {
     private int readTimeout = 10000;
     private String urlStr;
     private final String UPDATE = "u";
-    private TrustType trustType;
     private String filePath;
     private String password;
 
     public RdapUpdateClient(String url) {
         this.urlStr = url;
-    }
-    
-    public RdapUpdateClient(String url, TrustType trustType) {
-        this.urlStr = url;
-        this.trustType = trustType;
     }
 
     public UpdateResponse create(BaseDto dto) throws RdapClientException {
@@ -99,7 +92,7 @@ public class RdapUpdateClient {
     private RdapRestTemplate createTemplate(boolean isHttps) {
         RdapRestTemplate template;
         if (isHttps) {
-            template = new HttpsTemplate(trustType, filePath, password);
+            template = new HttpsTemplate(filePath, password);
         } else {
             template = new HttpTemplate();
         }
@@ -122,14 +115,6 @@ public class RdapUpdateClient {
 
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
-    }
-
-    public TrustType getTrustType() {
-        return trustType;
-    }
-
-    public void setTrustType(TrustType trustType) {
-        this.trustType = trustType;
     }
 
     public String getFilePath() {
