@@ -19,7 +19,6 @@ import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.SSLUtil;
-import org.restfulwhois.rdap.client.util.TrustType;
 import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 
 public class HttpsTemplate extends RdapRestTemplate {
@@ -28,9 +27,13 @@ public class HttpsTemplate extends RdapRestTemplate {
     private String filePath;
     private String password;
 
-    public HttpsTemplate(TrustType trustType, String filePath, String password) 
+    public HttpsTemplate(){
+    	this.trustType = TrustType.DEFAULT;
+    }
+    
+    public HttpsTemplate(String filePath, String password) 
     {
-        this.trustType = trustType;
+        this.trustType = TrustType.KEYSTORE;
         this.filePath = filePath;
         this.password = password;
     }
@@ -55,25 +58,13 @@ public class HttpsTemplate extends RdapRestTemplate {
                 httpsURLConn.setInstanceFollowRedirects(true);
                 httpsURLConn.setRequestProperty("content-type", MEDIA_TYPE);
             }
-            if (trustType.equals(TrustType.DEFAULT)) {
+            if (!trustType.equals(TrustType.DEFAULT)) {
                 SSLContext sslContext = SSLContext.getInstance("TLS");
-                TrustManager[] managers;
-                if (trustType.equals(TrustType.TRUST_ALL)) {
-                    managers = SSLUtil.createManagersWithTrustAll();
-                } else {
-                    KeyStore ks;
-                    if (trustType.equals(TrustType.CERTIFICATE)) {
-                        ks = SSLUtil.loadKeyStoreWithCerFile(filePath);
-                    } else {
-                        ks = SSLUtil.loadKeyStoreWithKSFile(filePath,
-                                password);
-                    }
-                    managers = SSLUtil.createManagersWithKeyStroe(ks);
-                }
+                KeyStore ks = SSLUtil.loadKeyStoreWithKSFile(filePath, password);
+                TrustManager[] managers = SSLUtil.createManagersWithKeyStroe(ks);
                 sslContext.init(null, managers, null);
                 httpsURLConn.setSSLSocketFactory(sslContext.getSocketFactory());
             }
-
             return httpsURLConn;
         } catch (IOException e) {
             throw new RdapClientException(e.getMessage());
@@ -119,6 +110,10 @@ public class HttpsTemplate extends RdapRestTemplate {
         return response;
     }
 
+    public enum TrustType{
+        DEFAULT, KEYSTORE;
+    }
+    
     public TrustType getTrustType() {
         return trustType;
     }
