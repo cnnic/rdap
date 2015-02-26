@@ -9,6 +9,7 @@ import org.restfulwhois.rdap.client.service.impl.HttpTemplate;
 import org.restfulwhois.rdap.client.service.impl.HttpsTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
+import org.restfulwhois.rdap.client.util.StringUtil;
 import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.BaseDto;
@@ -92,7 +93,11 @@ public class RdapUpdateClient {
     private RdapRestTemplate createTemplate(boolean isHttps) {
         RdapRestTemplate template;
         if (isHttps) {
-            template = new HttpsTemplate(filePath, password);
+            if(StringUtil.isEmpty(filePath)){
+                template = new HttpsTemplate();
+            }else{
+                template = new HttpsTemplate(filePath, password);
+            }
         } else {
             template = new HttpTemplate();
         }

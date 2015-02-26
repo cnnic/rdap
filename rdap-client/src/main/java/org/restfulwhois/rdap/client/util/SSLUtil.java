@@ -18,7 +18,7 @@ import org.restfulwhois.rdap.client.exception.RdapClientException;
 
 public class SSLUtil {
 
-    public static KeyStore loadKeyStoreWithKSFile(String filePath,
+    public static KeyStore loadKeyStore(String filePath,
             String password) throws RdapClientException {
         KeyStore ks;
         try {
@@ -37,7 +37,7 @@ public class SSLUtil {
         return ks;
     }
 
-    public static TrustManager[] createManagersWithKeyStroe(KeyStore ks)
+    public static TrustManager[] createTrustManager(KeyStore ks)
             throws RdapClientException {
 
         TrustManager[] tm = null;

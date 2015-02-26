@@ -60,8 +60,8 @@ public class HttpsTemplate extends RdapRestTemplate {
             }
             if (!trustType.equals(TrustType.DEFAULT)) {
                 SSLContext sslContext = SSLContext.getInstance("TLS");
-                KeyStore ks = SSLUtil.loadKeyStoreWithKSFile(filePath, password);
-                TrustManager[] managers = SSLUtil.createManagersWithKeyStroe(ks);
+                KeyStore ks = SSLUtil.loadKeyStore(filePath, password);
+                TrustManager[] managers = SSLUtil.createTrustManager(ks);
                 sslContext.init(null, managers, null);
                 httpsURLConn.setSSLSocketFactory(sslContext.getSocketFactory());
             }

@@ -38,7 +38,7 @@ public class URLUtil {
         StringBuilder urlBuilder = new StringBuilder(url);
         if (path != null && path.size() != 0) {
             for (String p : path) {
-                if (!isEmpty(p))
+                if (!StringUtil.isEmpty(p))
                     urlBuilder.append(slash).append(p);
             }
         }
@@ -88,7 +88,7 @@ public class URLUtil {
         StringBuilder urlBuilder = new StringBuilder(url);
         if (path != null && path.size() != 0) {
             for (String p : path) {
-                if (!isEmpty(p))
+                if (!StringUtil.isEmpty(p))
                     urlBuilder.append(slash).append(p);
             }
         }
@@ -101,14 +101,6 @@ public class URLUtil {
             return true;
         }
         return false;
-    }
-
-    private static boolean isEmpty(String s) {
-        if (s == null || "".equals(s.trim())){
-            return true;
-        }else{
-            return false;
-        }
     }
 
     private enum ProtocolType {
