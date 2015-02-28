@@ -7,8 +7,6 @@ import java.util.Map;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
-import org.restfulwhois.rdap.client.service.impl.HttpTemplate;
-import org.restfulwhois.rdap.client.service.impl.HttpsTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.StringUtil;
 import org.restfulwhois.rdap.client.util.URLUtil;
@@ -23,6 +21,7 @@ public class RdapQueryClient {
 
     private int connectTimeout = 3000;
     private int readTimeout = 10000;
+    private final String mediaTypeJson = "application/json;charset=UTF-8";
     private String urlStr;
     private String filePath;
     private String password;
@@ -84,9 +83,7 @@ public class RdapQueryClient {
     private <T> T query(Class<T> type, HttpMethodType httpMethod,
             String... param) throws RdapClientException {
         URL url = URLUtil.makeURLWithPath(urlStr, param);
-        boolean isHttps = URLUtil.isHttps(url);
-        RdapResponse response = createTemplate(isHttps)
-                .execute(httpMethod, url);
+        RdapResponse response = createTemplate().execute(httpMethod, url);
         return response.getResponseBody(type);
     }
 
@@ -95,25 +92,19 @@ public class RdapQueryClient {
         Map<String, String> map = new HashMap<String, String>();
         map.put(key, value);
         URL url = URLUtil.makeURLWithParam(urlStr, map);
-        boolean isHttps = URLUtil.isHttps(url);
-        RdapResponse response = createTemplate(isHttps)
-                .execute(httpMethod, url);
+        RdapResponse response = createTemplate().execute(httpMethod, url);
         return response.getResponseBody(type);
     }
 
-    private RdapRestTemplate createTemplate(boolean isHttps) {
-        RdapRestTemplate template;
-        if (isHttps) {
-            if(StringUtil.isEmpty(filePath)){
-                template = new HttpsTemplate();
-            }else{
-                template = new HttpsTemplate(filePath, password);
-            }
-        } else {
-            template = new HttpTemplate();
+    private RdapRestTemplate createTemplate() {
+        RdapRestTemplate template = new RdapRestTemplate();
+        if(!StringUtil.isEmpty(filePath)){
+            template.setFilePath(filePath);
+            template.setPassword(password);
         }
         template.setConnectTimeout(connectTimeout);
         template.setReadTimeout(readTimeout);
+        template.setMediaType(mediaTypeJson);
         return template;
     }
 

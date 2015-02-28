@@ -4,33 +4,26 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
-import org.restfulwhois.rdap.client.service.impl.HttpsTemplate.TrustType;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.SSLUtil;
+import org.restfulwhois.rdap.client.util.StringUtil;
+import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 
 public class RdapRestTemplate {
-    private String MEDIA_TYPE;
+    private String mediaType;
     private int connectTimeout;
     private int readTimeout;
-    private TrustType trustType;
     private String filePath;
     private String password;
-
-    public RdapRestTemplate() {
-        this.MEDIA_TYPE = "application/json;charset=UTF-8";
-    }
 
     public RdapResponse execute(HttpMethodType httpMethod, URL url)
             throws RdapClientException {
@@ -44,50 +37,40 @@ public class RdapRestTemplate {
         return doExecute(this.prepareExecute(url, httpMethod), body);
     }
 
-    private URLConnection prepareExecute(URL url,
-            HttpMethodType httpMethod) throws RdapClientException{
+    private HttpURLConnection prepareExecute(URL url, HttpMethodType httpMethod)
+            throws RdapClientException {
         try {
-            URLConnection urlConn = url.openConnection();
-            urlConn.setConnectTimeout(connectTimeout);
-            urlConn.setReadTimeout(readTimeout);
-            urlConn.setUseCaches(false);
-            
-            urlConn.setDoInput(true);
+            HttpURLConnection httpUrlConn = (HttpURLConnection)url.openConnection();
+            httpUrlConn.setConnectTimeout(connectTimeout);
+            httpUrlConn.setReadTimeout(readTimeout);
+            httpUrlConn.setUseCaches(false);
+            httpUrlConn.setInstanceFollowRedirects(true);
+            httpUrlConn.setRequestMethod(httpMethod.name());
+            httpUrlConn.setDoInput(true);
             if (httpMethod.equals(HttpMethodType.GET)
                     || httpMethod.equals(HttpMethodType.DELETE)) {
-                urlConn.setDoOutput(false);
+                httpUrlConn.setDoOutput(false);
             } else {
-                urlConn.setDoOutput(true);
-                urlConn.setRequestProperty("content-type", MEDIA_TYPE);
+                httpUrlConn.setDoOutput(true);
+                httpUrlConn.setRequestProperty("content-type", mediaType);
             }
-            
-            urlConn.setRequestMethod(httpMethod.name());
-            urlConn.setInstanceFollowRedirects(true);
-            if (!trustType.equals(TrustType.DEFAULT)) {
-                SSLContext sslContext = SSLContext.getInstance("TLS");
-                KeyStore ks = SSLUtil.loadKeyStore(filePath, password);
-                TrustManager[] managers = SSLUtil.getTrustManager(ks);
-                sslContext.init(null, managers, null);
-                httpsURLConn.setSSLSocketFactory(sslContext.getSocketFactory());
+
+            if (URLUtil.isHttps(url)) {
+                this.setSSLSocketFactory((HttpsURLConnection) httpUrlConn);
             }
-            return httpsURLConn;
+            return httpUrlConn;
         } catch (IOException e) {
-            throw new RdapClientException(e.getMessage());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RdapClientException(e.getMessage());
-        } catch (KeyManagementException e) {
             throw new RdapClientException(e.getMessage());
         }
     }
 
-    private RdapResponse doExecute(URLConnection urlConnection,
-            String body) throws RdapClientException{
-        HttpsURLConnection httpsURLConn = (HttpsURLConnection) urlConnection;
+    private RdapResponse doExecute(HttpURLConnection urlConnection, String body)
+            throws RdapClientException {
         RdapResponse response = new RdapResponse();
         try {
-            httpsURLConn.connect();
-            if (httpsURLConn.getDoOutput() && body != null) {
-                OutputStream out = httpsURLConn.getOutputStream();
+            urlConnection.connect();
+            if (urlConnection.getDoOutput() && body != null) {
+                OutputStream out = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(out, "utf-8"));
                 writer.write(body);
@@ -95,15 +78,15 @@ public class RdapRestTemplate {
                 writer.close();
                 out.close();
             }
-            int code = httpsURLConn.getResponseCode();
+            int code = urlConnection.getResponseCode();
             response.setResponseCode(code);
-            response.setResponseMessage(httpsURLConn.getResponseMessage());
+            response.setResponseMessage(urlConnection.getResponseMessage());
             try {
                 SimpleHttpStatusCode.valueOf(code);
                 if (code == 200) {
-                    response.setIn(httpsURLConn.getInputStream());
+                    response.setIn(urlConnection.getInputStream());
                 } else {
-                    response.setIn(httpsURLConn.getErrorStream());
+                    response.setIn(urlConnection.getErrorStream());
                 }
             } catch (IllegalArgumentException iae) {
             }
@@ -114,16 +97,22 @@ public class RdapRestTemplate {
         return response;
     }
 
-    public enum TrustType{
-        DEFAULT, KEYSTORE;
-    }
-    
-    public String getMEDIA_TYPE() {
-        return MEDIA_TYPE;
+    private void setSSLSocketFactory(HttpsURLConnection httpsUrlConn)
+            throws RdapClientException {
+        if (!StringUtil.isEmpty(filePath)) {
+            KeyStore ks = SSLUtil.loadKeyStore(filePath, password);
+            TrustManager[] managers = SSLUtil.getTrustManager(ks);
+            httpsUrlConn.setSSLSocketFactory(SSLUtil
+                    .getSSLSocketFactory(managers));
+        }
     }
 
-    public void setMEDIA_TYPE(String mEDIA_TYPE) {
-        MEDIA_TYPE = mEDIA_TYPE;
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
 
     public int getConnectTimeout() {

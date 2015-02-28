@@ -5,8 +5,6 @@ import java.net.URL;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
-import org.restfulwhois.rdap.client.service.impl.HttpTemplate;
-import org.restfulwhois.rdap.client.service.impl.HttpsTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
 import org.restfulwhois.rdap.client.util.StringUtil;
@@ -23,8 +21,9 @@ public class RdapUpdateClient {
 
     private int connectTimeout = 3000;
     private int readTimeout = 10000;
-    private String urlStr;
+    private final String mediaTypeJson = "application/json;charset=UTF-8";
     private final String UPDATE = "u";
+    private String urlStr;
     private String filePath;
     private String password;
 
@@ -84,25 +83,20 @@ public class RdapUpdateClient {
         } else {
             url = URLUtil.makeURLWithPath(urlStr, UPDATE, dto.getUpdateUri());
         }
-        boolean isHttps = URLUtil.isHttps(url);
-        RdapResponse response = createTemplate(isHttps).execute(httpMethod,
+        RdapResponse response = createTemplate().execute(httpMethod,
                 url, body);
         return response.getResponseBody(UpdateResponse.class);
     }
 
-    private RdapRestTemplate createTemplate(boolean isHttps) {
-        RdapRestTemplate template;
-        if (isHttps) {
-            if(StringUtil.isEmpty(filePath)){
-                template = new HttpsTemplate();
-            }else{
-                template = new HttpsTemplate(filePath, password);
-            }
-        } else {
-            template = new HttpTemplate();
+    private RdapRestTemplate createTemplate() {
+        RdapRestTemplate template = new RdapRestTemplate();
+        if(!StringUtil.isEmpty(filePath)){
+            template.setFilePath(filePath);
+            template.setPassword(password);
         }
         template.setConnectTimeout(connectTimeout);
         template.setReadTimeout(readTimeout);
+        template.setMediaType(mediaTypeJson);
         return template;
     }
 
