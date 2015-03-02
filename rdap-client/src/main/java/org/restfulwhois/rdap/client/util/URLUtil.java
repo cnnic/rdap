@@ -97,7 +97,7 @@ public class URLUtil {
 
     public static boolean isHttps(URL url) {
         String protocol = url.getProtocol();
-        if (protocol.equals(ProtocolType.HTTPS.name())) {
+        if (protocol.equalsIgnoreCase(ProtocolType.HTTPS.name())) {
             return true;
         }
         return false;
