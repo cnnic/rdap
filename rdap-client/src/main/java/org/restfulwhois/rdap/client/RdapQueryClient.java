@@ -31,68 +31,64 @@ public class RdapQueryClient {
     }
 
     public IpDto queryIp(String address) throws RdapClientException {
-        return query(IpDto.class, HttpMethodType.GET, "ip", address);
+        return query(IpDto.class, "ip", address);
     }
 
     public IpDto queryIp(String address, int cidrLength)
             throws RdapClientException {
-        return query(IpDto.class, HttpMethodType.GET, "ip", address,
-                String.valueOf(cidrLength));
+        return query(IpDto.class, "ip", address, String.valueOf(cidrLength));
     }
 
     public DomainDto queryDomain(String name) throws RdapClientException {
-        return query(DomainDto.class, HttpMethodType.GET, "domain", name);
+        return query(DomainDto.class, "domain", name);
     }
 
     public NameserverDto queryNameserver(String name)
             throws RdapClientException {
-        return query(NameserverDto.class, HttpMethodType.GET, "nameserver",
-                name);
+        return query(NameserverDto.class, "nameserver", name);
     }
 
     public AutnumDto queryAutnum(String autnum) throws RdapClientException {
-        return query(AutnumDto.class, HttpMethodType.GET, "autnum", autnum);
+        return query(AutnumDto.class, "autnum", autnum);
     }
 
     public EntityDto queryEntity(String handle) throws RdapClientException {
-        return query(EntityDto.class, HttpMethodType.GET, "entity", handle);
+        return query(EntityDto.class, "entity", handle);
     }
 
     public IpDto searchDomainByName(String param) throws RdapClientException {
-        return search(IpDto.class, HttpMethodType.GET, "name", param);
+        return search(IpDto.class, "name", param);
     }
 
     public NameserverDto searchNameserverByName(String param)
             throws RdapClientException {
-        return search(NameserverDto.class, HttpMethodType.GET, "name", param);
+        return search(NameserverDto.class, "name", param);
     }
 
     public EntityDto searchEntityByFn(String param) throws RdapClientException {
-        return search(EntityDto.class, HttpMethodType.GET, "fn", param);
+        return search(EntityDto.class, "fn", param);
     }
 
     public EntityDto searchEntityByHandle(String param)
             throws RdapClientException {
-        return search(EntityDto.class, HttpMethodType.GET, "handle", param);
+        return search(EntityDto.class, "handle", param);
     }
 
     public Help help() throws RdapClientException {
-        return query(Help.class, HttpMethodType.GET, "help");
+        return query(Help.class, "help");
     }
 
-    private <T> T query(Class<T> type, HttpMethodType httpMethod,
-            String... param) throws RdapClientException {
+    private <T> T query(Class<T> type, String... param) throws RdapClientException {
         URL url = URLUtil.makeURLWithPath(urlStr, param);
-        RdapResponse response = createTemplate().execute(httpMethod, url);
+        RdapResponse response = createTemplate().execute(HttpMethodType.GET, url);
         return response.getResponseBody(type);
     }
 
-    private <T> T search(Class<T> type, HttpMethodType httpMethod, String key,
-            String value) throws RdapClientException {
+    private <T> T search(Class<T> type, String key, String value) throws RdapClientException {
         Map<String, String> map = new HashMap<String, String>();
         map.put(key, value);
         URL url = URLUtil.makeURLWithParam(urlStr, map);
-        RdapResponse response = createTemplate().execute(httpMethod, url);
+        RdapResponse response = createTemplate().execute(HttpMethodType.GET, url);
         return response.getResponseBody(type);
     }
 
