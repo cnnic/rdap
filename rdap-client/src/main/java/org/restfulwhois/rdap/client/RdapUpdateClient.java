@@ -3,6 +3,7 @@ package org.restfulwhois.rdap.client;
 import java.net.URL;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.service.RdapClientConfig;
 import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
@@ -19,16 +20,11 @@ import org.restfulwhois.rdap.common.dto.UpdateResponse;
 
 public class RdapUpdateClient {
 
-    private int connectTimeout = 3000;
-    private int readTimeout = 10000;
-    private final String mediaTypeJson = "application/json;charset=UTF-8";
     private final String UPDATE = "u";
-    private String urlStr;
-    private String filePath;
-    private String password;
+    private RdapClientConfig config;
 
-    public RdapUpdateClient(String url) {
-        this.urlStr = url;
+    public RdapUpdateClient(RdapClientConfig config) {
+        this.config = config;
     }
 
     public UpdateResponse create(BaseDto dto) throws RdapClientException {
@@ -78,10 +74,10 @@ public class RdapUpdateClient {
         String body = JsonUtil.toJson(dto);
         URL url;
         if (!httpMethod.equals(HttpMethodType.POST)) {
-            url = URLUtil.makeURLWithPath(urlStr, UPDATE, dto.getUpdateUri(),
+            url = URLUtil.makeURLWithPath(config.getUrl(), UPDATE, dto.getUpdateUri(),
                     dto.getHandle());
         } else {
-            url = URLUtil.makeURLWithPath(urlStr, UPDATE, dto.getUpdateUri());
+            url = URLUtil.makeURLWithPath(config.getUrl(), UPDATE, dto.getUpdateUri());
         }
         RdapResponse response = createTemplate().execute(httpMethod,
                 url, body);
@@ -90,46 +86,14 @@ public class RdapUpdateClient {
 
     private RdapRestTemplate createTemplate() {
         RdapRestTemplate template = new RdapRestTemplate();
-        if(!StringUtil.isEmpty(filePath)){
-            template.setFilePath(filePath);
-            template.setPassword(password);
+        if(!StringUtil.isEmpty(config.getKeyStoreFilePath())){
+            template.setFilePath(config.getKeyStoreFilePath());
+            template.setPassword(config.getKeyStorePassword());
         }
-        template.setConnectTimeout(connectTimeout);
-        template.setReadTimeout(readTimeout);
-        template.setMediaType(mediaTypeJson);
+        template.setConnectTimeout(config.getConnectTimeout());
+        template.setReadTimeout(config.getReadTimeout());
+        template.setMediaType(config.getMediaType());
         return template;
-    }
-
-    public int getConnectTimeout() {
-        return connectTimeout;
-    }
-
-    public void setConnectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
-    }
-
-    public int getReadTimeout() {
-        return readTimeout;
-    }
-
-    public void setReadTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
 }

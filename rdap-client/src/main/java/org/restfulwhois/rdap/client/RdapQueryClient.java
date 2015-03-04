@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.service.RdapClientConfig;
 import org.restfulwhois.rdap.client.service.RdapResponse;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
@@ -19,15 +20,10 @@ import org.restfulwhois.rdap.common.model.Help;
 
 public class RdapQueryClient {
 
-    private int connectTimeout = 3000;
-    private int readTimeout = 10000;
-    private final String mediaTypeJson = "application/json;charset=UTF-8";
-    private String urlStr;
-    private String filePath;
-    private String password;
+    private RdapClientConfig config;
 
-    public RdapQueryClient(String urlStr) {
-        this.urlStr = urlStr;
+    public RdapQueryClient(RdapClientConfig config) {
+        this.config = config;
     }
 
     public IpDto queryIp(String address) throws RdapClientException {
@@ -78,70 +74,34 @@ public class RdapQueryClient {
         return query(Help.class, "help");
     }
 
-    private <T> T query(Class<T> type, String... param) throws RdapClientException {
-        URL url = URLUtil.makeURLWithPath(urlStr, param);
-        RdapResponse response = createTemplate().execute(HttpMethodType.GET, url);
+    private <T> T query(Class<T> type, String... param)
+            throws RdapClientException {
+        URL url = URLUtil.makeURLWithPath(config.getUrl(), param);
+        RdapResponse response = createTemplate().execute(HttpMethodType.GET,
+                url);
         return response.getResponseBody(type);
     }
 
-    private <T> T search(Class<T> type, String key, String value) throws RdapClientException {
+    private <T> T search(Class<T> type, String key, String value)
+            throws RdapClientException {
         Map<String, String> map = new HashMap<String, String>();
         map.put(key, value);
-        URL url = URLUtil.makeURLWithParam(urlStr, map);
-        RdapResponse response = createTemplate().execute(HttpMethodType.GET, url);
+        URL url = URLUtil.makeURLWithParam(config.getUrl(), map);
+        RdapResponse response = createTemplate().execute(HttpMethodType.GET,
+                url);
         return response.getResponseBody(type);
     }
 
     private RdapRestTemplate createTemplate() {
         RdapRestTemplate template = new RdapRestTemplate();
-        if(!StringUtil.isEmpty(filePath)){
-            template.setFilePath(filePath);
-            template.setPassword(password);
+        if (!StringUtil.isEmpty(config.getKeyStoreFilePath())) {
+            template.setFilePath(config.getKeyStoreFilePath());
+            template.setPassword(config.getKeyStorePassword());
         }
-        template.setConnectTimeout(connectTimeout);
-        template.setReadTimeout(readTimeout);
-        template.setMediaType(mediaTypeJson);
+        template.setConnectTimeout(config.getConnectTimeout());
+        template.setReadTimeout(config.getReadTimeout());
+        template.setMediaType(config.getMediaType());
         return template;
-    }
-
-    public int getConnectTimeout() {
-        return connectTimeout;
-    }
-
-    public void setConnectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
-    }
-
-    public int getReadTimeout() {
-        return readTimeout;
-    }
-
-    public void setReadTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
-    }
-
-    public String getUrlStr() {
-        return urlStr;
-    }
-
-    public void setUrlStr(String urlStr) {
-        this.urlStr = urlStr;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
 }
