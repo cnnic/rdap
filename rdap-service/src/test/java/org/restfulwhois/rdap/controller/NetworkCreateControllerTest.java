@@ -354,9 +354,9 @@ public class NetworkCreateControllerTest extends BaseTest {
         mockMvc.perform(
                 post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
                         .content(content))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.errorCode").value(409))
                 .andExpect(jsonPath("$.subErrorCode").value(4091))
                 .andExpect(
                         jsonPath("$.description").value(
