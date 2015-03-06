@@ -7,9 +7,7 @@ import java.util.Map;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.service.RdapClientConfig;
 import org.restfulwhois.rdap.client.service.RdapResponse;
-import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
-import org.restfulwhois.rdap.client.util.StringUtil;
 import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
@@ -18,12 +16,10 @@ import org.restfulwhois.rdap.common.dto.IpDto;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.model.Help;
 
-public class RdapQueryClient {
-
-    private RdapClientConfig config;
+public class RdapQueryClient extends RdapClient{
 
     public RdapQueryClient(RdapClientConfig config) {
-        this.config = config;
+        super(config);
     }
 
     public IpDto queryIp(String address) throws RdapClientException {
@@ -90,18 +86,6 @@ public class RdapQueryClient {
         RdapResponse response = createTemplate().execute(HttpMethodType.GET,
                 url);
         return response.getResponseBody(type);
-    }
-
-    private RdapRestTemplate createTemplate() {
-        RdapRestTemplate template = new RdapRestTemplate();
-        if (!StringUtil.isEmpty(config.getKeyStoreFilePath())) {
-            template.setFilePath(config.getKeyStoreFilePath());
-            template.setPassword(config.getKeyStorePassword());
-        }
-        template.setConnectTimeout(config.getConnectTimeout());
-        template.setReadTimeout(config.getReadTimeout());
-        template.setMediaType(config.getMediaType());
-        return template;
     }
 
 }
