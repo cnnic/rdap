@@ -48,22 +48,22 @@ public class RdapQueryClient extends RdapClient{
         return query(EntityDto.class, "entity", handle);
     }
 
-    public IpDto searchDomainByName(String param) throws RdapClientException {
-        return search(IpDto.class, "name", param);
+    public DomainDto searchDomainByName(String param) throws RdapClientException {
+        return search(DomainDto.class, "name", param, SearchUri.DOMAIN);
     }
 
     public NameserverDto searchNameserverByName(String param)
             throws RdapClientException {
-        return search(NameserverDto.class, "name", param);
+        return search(NameserverDto.class, "name", param, SearchUri.NAMESERVER);
     }
 
     public EntityDto searchEntityByFn(String param) throws RdapClientException {
-        return search(EntityDto.class, "fn", param);
+        return search(EntityDto.class, "fn", param, SearchUri.ENTITY);
     }
 
     public EntityDto searchEntityByHandle(String param)
             throws RdapClientException {
-        return search(EntityDto.class, "handle", param);
+        return search(EntityDto.class, "handle", param, SearchUri.ENTITY);
     }
 
     public Help help() throws RdapClientException {
@@ -78,14 +78,28 @@ public class RdapQueryClient extends RdapClient{
         return response.getResponseBody(type);
     }
 
-    private <T> T search(Class<T> type, String key, String value)
+    private <T> T search(Class<T> type, String key, String value, SearchUri uri)
             throws RdapClientException {
         Map<String, String> map = new HashMap<String, String>();
         map.put(key, value);
-        URL url = URLUtil.makeURLWithParam(config.getUrl(), map);
+        URL url = URLUtil.makeURLWithPathAndParam(config.getUrl(), map, uri.getUri());
         RdapResponse response = createTemplate().execute(HttpMethodType.GET,
                 url);
         return response.getResponseBody(type);
     }
 
+    private enum SearchUri{
+        DOMAIN("domains"),
+        NAMESERVER("nameservers"),
+        ENTITY("entities");
+        
+        String uri;
+        private SearchUri(String uri){
+            this.uri = uri;
+        }
+        
+        private String getUri(){
+            return this.uri;
+        }
+    }
 }

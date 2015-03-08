@@ -5,17 +5,22 @@ import java.util.List;
 
 import org.restfulwhois.rdap.client.RdapUpdateClient;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.service.RdapClientConfig;
 import org.restfulwhois.rdap.common.dto.IpDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 import org.restfulwhois.rdap.common.dto.embedded.RemarkDto;
 
 public class RdapUpdateClientSample {
+    public RdapClientConfig config(){
+        String url = "http://www.sample.com";
+        RdapClientConfig config = new RdapClientConfig(url);
+        config.setConnectTimeout(10000);
+        config.setReadTimeout(10000);
+        return config;
+    }
 
     public UpdateResponse createSample() {
-        String url = "http://www.sample.com";
-        RdapUpdateClient client = new RdapUpdateClient(url);
-        client.setConnectTimeout(6000);
-        client.setReadTimeout(150000);
+        RdapUpdateClient client = new RdapUpdateClient(config());
 
         IpDto ipDto = new IpDto();
         ipDto.setHandle("ip-1");
@@ -37,10 +42,7 @@ public class RdapUpdateClientSample {
     }
 
     public UpdateResponse updateSample() {
-        String url = "http://www.sample.com";
-        RdapUpdateClient client = new RdapUpdateClient(url);
-        client.setConnectTimeout(6000);
-        client.setReadTimeout(150000);
+        RdapUpdateClient client = new RdapUpdateClient(config());
 
         IpDto ipDto = new IpDto();
         ipDto.setHandle("ip-1");
@@ -63,10 +65,7 @@ public class RdapUpdateClientSample {
     }
 
     public UpdateResponse deleteSample() {
-        String url = "http://www.sample.com";
-        RdapUpdateClient client = new RdapUpdateClient(url);
-        client.setConnectTimeout(6000);
-        client.setReadTimeout(150000);
+        RdapUpdateClient client = new RdapUpdateClient(config());
 
         UpdateResponse response;
         try {

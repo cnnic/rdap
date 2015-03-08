@@ -4,7 +4,7 @@ import org.restfulwhois.rdap.client.service.RdapClientConfig;
 import org.restfulwhois.rdap.client.service.RdapRestTemplate;
 import org.restfulwhois.rdap.client.util.StringUtil;
 
-public class RdapClient {
+class RdapClient {
     protected RdapClientConfig config;
     
     protected RdapClient(RdapClientConfig config){

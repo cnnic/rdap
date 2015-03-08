@@ -58,7 +58,6 @@ public class RdapRestTemplate {
             if (URLUtil.isHttps(url)) {
                 this.setSSLSocketFactory((HttpsURLConnection) httpUrlConn);
             }
-            httpUrlConn.setRequestProperty("cookie", "_c_sso_tgc=TGT-13-De7nEEK7PpXQvHnfi4xEHbPbPuwvB1A2PYrblk7OskkOgVeD6W-cas; JSESSIONID=0BD318392E4000F49B8E8EBCD4F70C6E-n1.miaodi");
             return httpUrlConn;
         } catch (IOException e) {
             throw new RdapClientException(e.getMessage());
