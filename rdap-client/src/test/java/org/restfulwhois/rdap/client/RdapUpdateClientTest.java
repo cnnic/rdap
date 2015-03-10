@@ -1,4 +1,4 @@
-package org.restfulwhois.rdap.client.core.update;
+package org.restfulwhois.rdap.client;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.client.RdapUpdateClient;
 import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.service.RdapClientConfig;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.EntityDto;
@@ -31,14 +32,20 @@ public class RdapUpdateClientTest {
     MockHttpServer mockHttpServer;
     int port = 8080;
     String url = "http://127.0.0.1:8081";
-    RdapUpdateClient client = new RdapUpdateClient(url);
+    RdapUpdateClient client;
 
     @Before
     public void startServer() {
         mockHttpServer = new MockHttpServer(port);
         mockHttpServer.startServer();
-        client.setConnectTimeout(100000);
-        client.setReadTimeout(100000);
+        initClient();
+    }
+    
+    public void initClient(){
+        RdapClientConfig config = new RdapClientConfig(url);
+        config.setConnectTimeout(10000);
+        config.setReadTimeout(10000);
+        client = new RdapUpdateClient(config);
     }
 
     public void setContent200(String objectType) {

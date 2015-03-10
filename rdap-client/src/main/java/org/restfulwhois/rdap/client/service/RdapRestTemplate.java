@@ -6,19 +6,24 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyStore;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.TrustManager;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
+import org.restfulwhois.rdap.client.util.SSLUtil;
+import org.restfulwhois.rdap.client.util.StringUtil;
+import org.restfulwhois.rdap.client.util.URLUtil;
 import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 
 public class RdapRestTemplate {
-    private String MEDIA_TYPE;
+    private String mediaType;
     private int connectTimeout;
     private int readTimeout;
-
-    public RdapRestTemplate() {
-        this.MEDIA_TYPE = "application/json;charset=UTF-8";
-    }
+    private String filePath;
+    private String password;
 
     public RdapResponse execute(HttpMethodType httpMethod, URL url)
             throws RdapClientException {
@@ -35,37 +40,37 @@ public class RdapRestTemplate {
     private HttpURLConnection prepareExecute(URL url, HttpMethodType httpMethod)
             throws RdapClientException {
         try {
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url
-                    .openConnection();
-            httpURLConnection.setConnectTimeout(connectTimeout);
-            httpURLConnection.setReadTimeout(readTimeout);
-            httpURLConnection.setUseCaches(false);
-            httpURLConnection.setRequestMethod(httpMethod.name());
-            httpURLConnection.setDoInput(true);
+            HttpURLConnection httpUrlConn = (HttpURLConnection)url.openConnection();
+            httpUrlConn.setConnectTimeout(connectTimeout);
+            httpUrlConn.setReadTimeout(readTimeout);
+            httpUrlConn.setUseCaches(false);
+            httpUrlConn.setInstanceFollowRedirects(true);
+            httpUrlConn.setRequestMethod(httpMethod.name());
+            httpUrlConn.setDoInput(true);
             if (httpMethod.equals(HttpMethodType.GET)
                     || httpMethod.equals(HttpMethodType.DELETE)) {
-                httpURLConnection.setDoOutput(false);
-                httpURLConnection.setInstanceFollowRedirects(false);
+                httpUrlConn.setDoOutput(false);
             } else {
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setInstanceFollowRedirects(true);
-                httpURLConnection
-                        .setRequestProperty("content-type", MEDIA_TYPE);
+                httpUrlConn.setDoOutput(true);
+                httpUrlConn.setRequestProperty("content-type", mediaType);
             }
-            return httpURLConnection;
+
+            if (URLUtil.isHttps(url)) {
+                this.setSSLSocketFactory((HttpsURLConnection) httpUrlConn);
+            }
+            return httpUrlConn;
         } catch (IOException e) {
             throw new RdapClientException(e.getMessage());
         }
-
     }
 
-    private RdapResponse doExecute(HttpURLConnection httpURLConnection,
-            String body) throws RdapClientException {
+    private RdapResponse doExecute(HttpURLConnection urlConnection, String body)
+            throws RdapClientException {
         RdapResponse response = new RdapResponse();
         try {
-            httpURLConnection.connect();
-            if (httpURLConnection.getDoOutput() && body != null) {
-                OutputStream out = httpURLConnection.getOutputStream();
+            urlConnection.connect();
+            if (urlConnection.getDoOutput() && body != null) {
+                OutputStream out = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(out, "utf-8"));
                 writer.write(body);
@@ -73,15 +78,15 @@ public class RdapRestTemplate {
                 writer.close();
                 out.close();
             }
-            int code = httpURLConnection.getResponseCode();
+            int code = urlConnection.getResponseCode();
             response.setResponseCode(code);
-            response.setResponseMessage(httpURLConnection.getResponseMessage());
+            response.setResponseMessage(urlConnection.getResponseMessage());
             try {
                 SimpleHttpStatusCode.valueOf(code);
                 if (code == 200) {
-                    response.setIn(httpURLConnection.getInputStream());
+                    response.setIn(urlConnection.getInputStream());
                 } else {
-                    response.setIn(httpURLConnection.getErrorStream());
+                    response.setIn(urlConnection.getErrorStream());
                 }
             } catch (IllegalArgumentException iae) {
             }
@@ -92,12 +97,22 @@ public class RdapRestTemplate {
         return response;
     }
 
-    public String getMEDIA_TYPE() {
-        return MEDIA_TYPE;
+    private void setSSLSocketFactory(HttpsURLConnection httpsUrlConn)
+            throws RdapClientException {
+        if (!StringUtil.isEmpty(filePath)) {
+            KeyStore ks = SSLUtil.loadKeyStore(filePath, password);
+            TrustManager[] managers = SSLUtil.getTrustManager(ks);
+            httpsUrlConn.setSSLSocketFactory(SSLUtil
+                    .getSSLSocketFactory(managers));
+        }
     }
 
-    public void setMEDIA_TYPE(String mEDIA_TYPE) {
-        MEDIA_TYPE = mEDIA_TYPE;
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
 
     public int getConnectTimeout() {
@@ -114,6 +129,22 @@ public class RdapRestTemplate {
 
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }
