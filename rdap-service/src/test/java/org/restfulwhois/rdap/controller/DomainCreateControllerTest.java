@@ -282,7 +282,7 @@ public class DomainCreateControllerTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(400))
-                .andExpect(jsonPath("$.subErrorCode").value(4010));
+                .andExpect(jsonPath("$.subErrorCode").value(40010));
     }
 
     @Test
