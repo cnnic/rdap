@@ -8,18 +8,16 @@
 	<name>rdap</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<rdap.version>0.1-SNAPSHOT</rdap.version>
+		<rdap.version>1.0</rdap.version>
 		<dependency.spring.version>4.0.0.RELEASE</dependency.spring.version>
 		<dependency.jackson.version>2.3.2</dependency.jackson.version>
 		<maven.test.jvmargs>-Xmx1024m -Xms128m</maven.test.jvmargs>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
 	<modules>
-		<module>rdap-webapp</module>
-		<module>rdap-proxy43</module>
 		<module>rdap-common</module>
-		<module>rdap-initdb</module>
-    <module>rdap-service</module>
+    	<module>rdap-service</module>
+		<module>rdap-proxy43</module>
   </modules>
 	<build>
 		<finalName>rdap</finalName>
