@@ -54,7 +54,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 	It's ok if response contains 'rdapConformance'. 
 	
 ### RDAP proxy43 Install
-[Port43 Install](https://github.com/cnnic/rdap/wiki/Port43-install-&-usage)
+[Proxy43 Install](https://github.com/cnnic/rdap/wiki/Proxy43-install-&-usage)
 ### Api Doc
 [Query Api](https://github.com/cnnic/rdap/wiki/Query-Api)     
 [Update Api](https://github.com/cnnic/rdap/wiki/Update-Api)
