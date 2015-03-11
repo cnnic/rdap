@@ -13,13 +13,13 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 
    [Download](http://tomcat.apache.org/download-70.cgi) and [Install Tomcat7](http://tomcat.apache.org/tomcat-7.0-doc/setup.html) or higer version, and HTTP port use default port 8080 (see [here](http://tomcat.apache.org/tomcat-7.0-doc/RUNNING.txt) if use other port).  
     Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.    
-4. Get war file 'rdap.war'.  
-   There are two methods to get war file 
-   * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-webapp/build/rdap.war) builded by JDK7. 
+4. Get war file.  
+   There are two methods to get RDAP war file 
+   * Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-service/build/rdap-service-1.0.war) builded by JDK7. 
    * [Build war file from source](https://github.com/cnnic/rdap/wiki/%5Binstall%5DBuild-war-file-from-source)   
-5. Deploy rdap.war to tomcat. 
+5. Deploy RDAP war to tomcat. 
    * Create folder 'rdap' in dir $TOMCAT_HOME/webapps/
-   * Unzip rdap.war to $TOMCAT_HOME/webapps/rdap/
+   * Unzip RDAP war file to $TOMCAT_HOME/webapps/rdap/
    * Edit database configuration file [jdbc.properties](https://github.com/cnnic/rdap/wiki/jdbc.properties)
    * Edit global configuration file [rdap.properties](https://github.com/cnnic/rdap/wiki/rdap.properties) 
 6. Init database.  
