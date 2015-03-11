@@ -148,7 +148,7 @@ public class domainCreateServiceTest extends BaseTest {
         UpdateResponse response = createService.execute(dto);
         assertNotNull(response);
         assertEquals(400, response.getErrorCode());
-        assertEquals(4010, response.getSubErrorCode());
+        assertEquals(40010, response.getSubErrorCode());
     }
 
     @Test
@@ -160,7 +160,7 @@ public class domainCreateServiceTest extends BaseTest {
         UpdateResponse response = createService.execute(dto);
         assertNotNull(response);
         assertEquals(400, response.getErrorCode());
-        assertEquals(4010, response.getSubErrorCode());
+        assertEquals(40010, response.getSubErrorCode());
     }
 
     @Test
@@ -176,7 +176,7 @@ public class domainCreateServiceTest extends BaseTest {
         UpdateResponse response = createService.execute(dto);
         assertNotNull(response);
         assertEquals(400, response.getErrorCode());
-        assertEquals(4010, response.getSubErrorCode());
+        assertEquals(40010, response.getSubErrorCode());
     }
 
     @Test
@@ -192,7 +192,7 @@ public class domainCreateServiceTest extends BaseTest {
         UpdateResponse response = createService.execute(dto);
         assertNotNull(response);
         assertEquals(400, response.getErrorCode());
-        assertEquals(4010, response.getSubErrorCode());
+        assertEquals(40010, response.getSubErrorCode());
     }
 
     @Test
@@ -208,7 +208,7 @@ public class domainCreateServiceTest extends BaseTest {
         UpdateResponse response = createService.execute(dto);
         assertNotNull(response);
         assertEquals(400, response.getErrorCode());
-        assertEquals(4010, response.getSubErrorCode());
+        assertEquals(40010, response.getSubErrorCode());
     }
 
     @Test
@@ -224,7 +224,7 @@ public class domainCreateServiceTest extends BaseTest {
         UpdateResponse response = createService.execute(dto);
         assertNotNull(response);
         assertEquals(400, response.getErrorCode());
-        assertEquals(4010, response.getSubErrorCode());
+        assertEquals(40010, response.getSubErrorCode());
     }
 
     @Test
