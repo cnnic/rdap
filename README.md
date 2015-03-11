@@ -1,4 +1,4 @@
-### rdap-webapp Install  
+### RDAP service Install  
 
 Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.  
 
@@ -53,7 +53,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 	
 	It's ok if response contains 'rdapConformance'. 
 	
-### rdap-port43 Install
+### RDAP proxy43 Install
 [Port43 Install](https://github.com/cnnic/rdap/wiki/Port43-install-&-usage)
 ### Api Doc
 [Query Api](https://github.com/cnnic/rdap/wiki/Query-Api)     
