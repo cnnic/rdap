@@ -56,7 +56,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 ### rdap-port43 Install
 [Port43 Install](https://github.com/cnnic/rdap/wiki/Port43-install-&-usage)
 ### Api Doc
-[Api Doc](https://github.com/cnnic/rdap/wiki/Api-Doc)
+[Query Api](https://github.com/cnnic/rdap/wiki/Query-Api)      [Update Api](https://github.com/cnnic/rdap/wiki/Update-Api)
 ### Known Issues
 [Known Issues](https://github.com/cnnic/rdap/wiki/Known%20Issues)
 ### License
