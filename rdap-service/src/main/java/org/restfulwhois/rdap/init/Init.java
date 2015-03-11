@@ -121,7 +121,7 @@ public final class Init {
             initDao.createDatabase();
             initDao.resetDataSourceUrl();
             initDao.initSchema();
-            initDao.initBaseData();
+//            initDao.initBaseData();
         } catch (Exception e) {
             LOGGER.error("initSchema error:", e);
         }
