@@ -6,8 +6,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 
 2. Install [Mysql5](http://dev.mysql.com/downloads/mysql), or higher version. (Skip this step if already installed)   
 
-   The user used for RDAP must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege.  
-   For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html).  
+   Create user 'rdap' and grant privilege please ref [here](https://github.com/cnnic/rdap/wiki/%5Binstall%5D-Mysql-privilege).
    
 3. Install Tomcat7, or higher version. (Skip this step if already installed)   
 
