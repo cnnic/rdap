@@ -2,9 +2,9 @@
 
 Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.  
 
-1. Install JDK 7, or higher version. (Skip this step if already installed)   
+1. Install [JDK7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), or higher version. (Skip this step if already installed)   
 
-2. Install Mysql5, or higher version. (Skip this step if already installed)   
+2. Install [Mysql5](http://dev.mysql.com/downloads/mysql), or higher version. (Skip this step if already installed)   
 
    The user used for RDAP must has CREATE/DROP/SELECT/INSERT/UPDATE/DELETE/INDEX/ALTER database/table/index privilege.  
    For Mysql privilege please ref [here](http://dev.mysql.com/doc/refman/5.1/en/grant.html).  
