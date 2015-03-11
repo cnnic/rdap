@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<RDAP_DOMAIN DOMAIN_ID='1' HANDLE='1' LDH_NAME='cnnic.cn'
-		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' />
-	<RDAP_VARIANT VARIANT_ID='1' LDH_NAME='variant1'
-		UNICODE_NAME='unicodeName1' IDNTABLE='idntable1' />
-	<REL_DOMAIN_VARIANT REL_VARIANT_ID='1' DOMAIN_ID='1'
-		VARIANT_TYPE='registered' VARIANT_ID='1' />
-</dataset>

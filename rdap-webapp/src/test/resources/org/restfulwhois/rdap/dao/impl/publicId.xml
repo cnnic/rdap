@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<RDAP_DOMAIN DOMAIN_ID='1' HANDLE='1' LDH_NAME='cnnic.cn'
-		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh' />
-	<RDAP_PUBLICID PUBLIC_ID='1' IDENTIFIER='identifier'
-		TYPE='type' />
-	<REL_PUBLICID_REGISTRATION REL_PUBLICID_ID='1'
-		REL_ID='1' REL_OBJECT_TYPE='domain' PUBLIC_ID='1' />
-</dataset>

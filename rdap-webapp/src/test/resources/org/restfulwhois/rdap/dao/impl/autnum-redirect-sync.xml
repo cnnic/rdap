@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<RDAP_AUTNUM_REDIRECT AS_REDIRECT_ID='1'
-		START_AUTNUM="1" END_AUTNUM="100" REDIRECT_URL='http://cnnic.cn/rdap' />
-	<RDAP_AUTNUM_REDIRECT AS_REDIRECT_ID='2'
-		START_AUTNUM="1000" END_AUTNUM="2000" REDIRECT_URL='http://cnnic.cn/rdap' />
-</dataset>

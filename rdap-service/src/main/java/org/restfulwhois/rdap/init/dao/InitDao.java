@@ -142,6 +142,7 @@ public class InitDao {
     /**
      * init base data:RDAP_ERRORMESSAGE and RDAP_CONFORMANCE.
      */
+    @Deprecated
     public void initBaseData() {
         LOGGER.info("initBaseData begin...");
         LOGGER.info("file:{},database:{}", SQL_RESOURCE_DATA_PATH,
