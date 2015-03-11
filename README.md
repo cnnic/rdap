@@ -30,7 +30,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 	```
    		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
 		CLASSPATH=.:$CLASSPATH
-		java -Djava.ext.dirs=../lib org.restfulwhois.rdap.init.Init initschema      #DROP database 'jdbc.url.dbName', and recreate it, and create table, load base data.
+		java -Djava.ext.dirs=../lib org.restfulwhois.rdap.init.Init initschema      #DROP database 'jdbc.url.dbName', and recreate it, and create table.
 	```
 	
 7. Start up tomcat 
