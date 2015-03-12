@@ -54,11 +54,8 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 	
 ### RDAP proxy43 Install
 [Proxy43 Install](https://github.com/cnnic/rdap/wiki/Proxy43-install-&-usage)
-### Api Doc
-[Query Api](https://github.com/cnnic/rdap/wiki/Query-Api)     
-[Update Api](https://github.com/cnnic/rdap/wiki/Update-Api)
-### Known Issues
-[Known Issues](https://github.com/cnnic/rdap/wiki/Known%20Issues)
+### RDAP reference
+[RDAP reference](https://github.com/cnnic/rdap/wiki/RDAP-reference)     
 ### License
 Simplified BSD License
 ### Contribute
