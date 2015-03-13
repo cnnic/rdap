@@ -47,18 +47,35 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author zhanyq
- * 
- */
+* <pre>
+* autnum update DAO mainly update RDAP_AUTNUM According to autnum.
+* Meantime update RDAP_AUTNUM_STATUS.
+* And update remark, event, link object as inner objects。
+* 
+* all methods override the counterpart in AbstractUpdateDao.
+* </pre>
+* 
+* @author zhanyq
+* 
+*/
 @Repository
 public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
+   /**
+     * create autnum sql.
+     */
     private static final String SQL_CREATE_AUTNUM =
             "INSERT INTO RDAP_AUTNUM"
              + " (HANDLE,START_AUTNUM,END_AUTNUM,NAME,TYPE,COUNTRY,LANG,PORT43,"
              + " CUSTOM_PROPERTIES) values(?,?,?,?,?,?,?,?,?)";
+    /**
+     * update autnum sql.
+     */    
     private static final String SQL_UPDATE_AUTNUM = "UPDATE RDAP_AUTNUM"
-            + " SET START_AUTNUM=?,END_AUTNUM=?,NAME=?,TYPE=?,COUNTRY=?,LANG=?,PORT43=?,"
-            + " CUSTOM_PROPERTIES=? WHERE AS_ID=?";
+            + " SET START_AUTNUM=?,END_AUTNUM=?,NAME=?,TYPE=?,COUNTRY=?,"
+            + " LANG=?,PORT43=?, CUSTOM_PROPERTIES=? WHERE AS_ID=?";
+    /**
+     * delete autnum sql.
+     */
     private static final String SQL_DELETE_AUTNUM =
             "DELETE FROM RDAP_AUTNUM WHERE AS_ID=?";
     /**
@@ -66,7 +83,14 @@ public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
      */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(AutnumUpdateDaoImpl.class);
-
+    /**
+     * save  autnum to RDAP_AUTNUM.
+     * 
+     * @param model
+     *            an autnum object.
+     * @return Autnum
+     *            autnum.
+     */
     @Override
     public Autnum save(final Autnum model) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -83,7 +107,7 @@ public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
                 ps.setString(5, model.getType());
                 ps.setString(6, model.getCountry());
                 ps.setString(7, model.getLang());
-                ps.setString(8, model.getPort43());               
+                ps.setString(8, model.getPort43());
                 ps.setString(9, model.getCustomPropertiesJsonVal());
                 return ps;
             }
@@ -91,12 +115,25 @@ public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
         model.setId(keyHolder.getKey().longValue());
         return model;
     }
+    /**
+     * save  autnum status to RDAP_AUTNUM_STATUS.
+     * 
+     * @param model
+     *            an autnum object.
+     *
+     */
 
     @Override
     public void saveStatus(Autnum model) {
         saveStatus(model, model.getStatus(), "RDAP_AUTNUM_STATUS", "AS_ID");
     }
-
+    /**
+     * update  autnum to RDAP_AUTNUM.
+     * 
+     * @param model
+     *            an autnum object.
+     * 
+     */
     @Override
     public void update(final Autnum model) {
         jdbcTemplate.update(SQL_UPDATE_AUTNUM, new PreparedStatementSetter() {
@@ -107,13 +144,20 @@ public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
                 ps.setString(4, model.getType());
                 ps.setString(5, model.getCountry());
                 ps.setString(6, model.getLang());
-                ps.setString(7, model.getPort43());               
+                ps.setString(7, model.getPort43());
                 ps.setString(8, model.getCustomPropertiesJsonVal());
                 ps.setLong(9, model.getId());
             }
         });
     }
 
+    /**
+     * delete  autnum from RDAP_AUTNUM.
+     * 
+     * @param model
+     *            an autnum object.
+     *
+     */
     @Override
     public void delete(final Autnum model) {
         jdbcTemplate.update(SQL_DELETE_AUTNUM, new PreparedStatementSetter() {
@@ -122,18 +166,37 @@ public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
             }
         });
     }
-
+    
+    /**
+     * delete autnum status from RDAP_AUTNUM_STATUS.
+     * 
+     * @param model
+     *            an autnum object.
+     *
+     */
     @Override
     public void deleteStatus(Autnum model) {
         deleteStatus(model, "RDAP_AUTNUM_STATUS", "AS_ID");
     }
-
+    /**
+     * update autnum status.
+     * 
+     * @param autnum
+     *            an autnum object.
+     *
+     */
     @Override
-    public void updateStatus(Autnum domain) {
-        deleteStatus(domain);
-        saveStatus(domain);
+    public void updateStatus(Autnum autnum) {
+        deleteStatus(autnum);
+        saveStatus(autnum);
     }
-
+    /**
+     * query autnum  by as_id.
+     * 
+     * @param handle
+     *           handle.
+     *@return Long
+     */
     @Override
     public Long findIdByHandle(String handle) {
         return super.findIdByHandle(handle, "AS_ID", "RDAP_AUTNUM");
