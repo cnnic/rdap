@@ -130,7 +130,7 @@ public abstract class NetworkUpdateBaseServiceImpl extends
         IpVersion[] ipVersions = IpVersion.values();
         for (IpVersion version : ipVersions) {
             if (version.getName().equals(ipVersionStr)) {
-            	ipVersion = version;
+                 ipVersion = version;
             }
         }
         if (null == ipVersion) {

@@ -61,13 +61,22 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
      */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(EntityUpdateDaoImpl.class);
+    /**
+     * SQL_SAVE_ENTITY.
+     */
     private static final String SQL_SAVE_ENTITY =
             "INSERT INTO RDAP_ENTITY"
                     + " (HANDLE,KIND,FN,EMAIL,TITLE,ORG,URL,PORT43,LANG,CUSTOM_PROPERTIES)"
                     + " values(?,?,?,?,?,?,?,?,?,?)";
+    /**
+     * SQL_UPDATE_ENTITY.
+     */
     private static final String SQL_UPDATE_ENTITY = "UPDATE RDAP_ENTITY"
             + " SET KIND=?,FN=?,EMAIL=?,TITLE=?,ORG=?,URL=?,PORT43=?,LANG=?"
             + " ,CUSTOM_PROPERTIES=? WHERE ENTITY_ID=?";
+    /**
+     * SQL_DELETE_ENTITY.
+     */
     private static final String SQL_DELETE_ENTITY =
             "DELETE FROM RDAP_ENTITY where ENTITY_ID=?";
 

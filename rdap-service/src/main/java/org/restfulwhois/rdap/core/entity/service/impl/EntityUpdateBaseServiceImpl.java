@@ -59,9 +59,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class EntityUpdateBaseServiceImpl extends
         AbstractUpdateService<EntityDto, Entity> {
+   /**
+     * entityAddressDao.
+     */
     @Autowired
     protected UpdateDao<EntityAddress, EntityAddressDto> entityAddressDao;
-
+    /**
+     * entityTelDao.
+     */
     @Autowired
     protected UpdateDao<EntityTelephone, EntityTelephoneDto> entityTelDao;
     /**
@@ -69,13 +74,19 @@ public abstract class EntityUpdateBaseServiceImpl extends
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EntityUpdateBaseServiceImpl.class);
-
+   /**
+    * @param dto entityDto.
+    * @return entity.
+    */
     protected Entity convertDtoToModel(EntityDto dto) {
         Entity entity = convertDtoToEntity(dto);
         super.convertCustomProperties(dto, entity);
         return entity;
     }
-
+    /**
+     * 
+     * @param entity entity.
+     */
     protected void saveEntityAddresses(Entity entity) {
         LOGGER.debug("save entityAddresses ...");
         EntityDto dto = (EntityDto) entity.getDto();
@@ -86,7 +97,10 @@ public abstract class EntityUpdateBaseServiceImpl extends
         }
         entityAddressDao.saveAsInnerObjects(entity, entityAddressList);
     }
-
+    /**
+     * 
+     * @param entity entity.
+     */
     protected void saveEntityTels(Entity entity) {
         LOGGER.debug("save entityTelephones ...");
         EntityDto dto = (EntityDto) entity.getDto();
@@ -97,34 +111,55 @@ public abstract class EntityUpdateBaseServiceImpl extends
         }
         entityTelDao.saveAsInnerObjects(entity, entityTelList);
     }
-
+    /**
+     * 
+     * @param entity entity.
+     */
     protected void deleteEntityAddresses(Entity entity) {
         LOGGER.debug("delete entityAddresses ...");
         entityAddressDao.deleteAsInnerObjects(entity);
     }
-
+    /**
+     * 
+     * @param entity entity.
+     */
     protected void deleteEntityTels(Entity entity) {
         LOGGER.debug("delete entityTelephones ...");
         entityTelDao.deleteAsInnerObjects(entity);
     }
-
+    /**
+     * 
+     * @param entity entity.
+     */
     protected void updateEntityAddresses(Entity entity) {
         deleteEntityAddresses(entity);
         saveEntityAddresses(entity);
     }
-
+    /**
+     * 
+     * @param entity entity.
+     */
     protected void updateEntityTels(Entity entity) {
         deleteEntityTels(entity);
         saveEntityTels(entity);
     }
-
+    /**
+     * 
+     * @param dto entityDto.
+     * @return entity.
+     */
     private Entity convertDtoToEntity(EntityDto dto) {
         Entity entity = new Entity();
         BeanUtil.copyProperties(dto, entity, "entities", "events", "remarks",
                 "links", "publicIds", "addresses", "telephones");
         return entity;
     }
-
+    /**
+     * 
+     * @param dto entityDto.
+     * @param validationResult validationResult.
+     * @return ValidationResult
+     */
     protected ValidationResult validateForSaveAndUpdate(EntityDto dto,
             ValidationResult validationResult) {
         checkNotEmptyAndMaxLengthForHandle(dto.getHandle(), validationResult);
@@ -143,7 +178,11 @@ public abstract class EntityUpdateBaseServiceImpl extends
         validateBaseDto(dto, validationResult);
         return validationResult;
     }
-
+    /**
+     * 
+     * @param dto entityDto.
+     * @param validationResult validationResult.
+     */
     private void checkEntityAddress(EntityDto dto,
             ValidationResult validationResult) {
         List<EntityAddressDto> entityAddressList = dto.getAddresses();
@@ -180,7 +219,11 @@ public abstract class EntityUpdateBaseServiceImpl extends
                     validationResult);
         }
     }
-
+    /**
+     * 
+     * @param dto entityDto.
+     * @param validationResult validationResult.
+     */
     private void
             checkEntityTel(EntityDto dto, ValidationResult validationResult) {
         List<EntityTelephoneDto> entityTelList = dto.getTelephones();

@@ -155,17 +155,26 @@ public abstract class DomainUpdateBaseServiceImpl extends
 
     /**
      * 
-     * @param domain
+     * @param domain domain.       
      */
     protected void deleteSecureDns(Domain domain) {
         secureDnsUpdateDao.deleteAsInnerObjects(domain);
     }
+    /**
+     * 
+     * @param dto domainDto.
+     * @param domain  domain.
+     */
 
     protected void updateSecureDns(DomainDto dto, Domain domain) {
         deleteSecureDns(domain);
         saveSecureDns(dto, domain);
     }
-
+    /**
+     * 
+     * @param dto domainDto.
+     * @param domain domain.
+     */
     protected void saveVariants(DomainDto dto, Domain domain) {
         LOGGER.debug("save variants...");
         List<VariantDto> variantDtos = dto.getVariants();
@@ -175,16 +184,27 @@ public abstract class DomainUpdateBaseServiceImpl extends
         }
         variantUpdateDao.saveAsInnerObjects(domain, variantDtos);
     }
-
+    /**
+     * 
+     * @param domain domain.
+     */
     protected void deleteVariants(Domain domain) {
         variantUpdateDao.deleteAsInnerObjects(domain);
     }
-
+    /**
+     * 
+     * @param dto dto.
+     * @param domain domain.
+     */
     protected void updateVariants(DomainDto dto, Domain domain) {
         deleteVariants(domain);
         saveVariants(dto, domain);
     }
-
+    /**
+     * 
+     * @param dto domainDto.
+     * @return domain 
+     */
     private Domain convertDtoToDomain(DomainDto dto) {
         Domain domain = new Domain();
         BeanUtil.copyProperties(dto, domain, "variants", "nameservers",
@@ -209,7 +229,12 @@ public abstract class DomainUpdateBaseServiceImpl extends
             domain.setNetworkId(networkId);
         }
     }
-
+   /**
+    * 
+    * @param domainDto domainDto.
+    * @param validationResult validationResult.
+    * @return ValidationResult
+    */
     protected ValidationResult validateWithoutType(DomainDto domainDto,
             ValidationResult validationResult) {
         checkNotEmptyAndMaxLength(domainDto.getLdhName(), MAX_LENGTH_LDHNAME,
@@ -224,7 +249,11 @@ public abstract class DomainUpdateBaseServiceImpl extends
         validateBaseDto(domainDto, validationResult);
         return validationResult;
     }
-
+    /**
+     * 
+     * @param domainDto domainDto.
+     * @param validationResult validationResult.
+     */
     private void checkSecureDns(DomainDto domainDto,
             ValidationResult validationResult) {
         SecureDnsDto secureDns = domainDto.getSecureDNS();
@@ -236,7 +265,11 @@ public abstract class DomainUpdateBaseServiceImpl extends
         checkDsData(secureDns, validationResult);
         checkKeyData(secureDns, validationResult);
     }
-
+    /**
+     * 
+     * @param secureDns secureDns.
+     * @param validationResult validationResult.
+     */
     private void checkKeyData(SecureDnsDto secureDns,
             ValidationResult validationResult) {
         List<KeyDataDto> keyDatas = secureDns.getKeyData();
@@ -257,7 +290,11 @@ public abstract class DomainUpdateBaseServiceImpl extends
             checkLinks(keyData.getLinks(), validationResult);
         }
     }
-
+    /**
+     * 
+     * @param secureDns secureDns.
+     * @param validationResult validationResult.
+     */
     private void checkDsData(SecureDnsDto secureDns,
             ValidationResult validationResult) {
         List<DsDataDto> dsDatas = secureDns.getDsData();
@@ -278,7 +315,11 @@ public abstract class DomainUpdateBaseServiceImpl extends
             checkLinks(dsData.getLinks(), validationResult);
         }
     }
-
+    /**
+     * 
+     * @param domainDto domainDto.
+     * @param validationResult validationResult.
+     */
     private void checkVariants(DomainDto domainDto,
             ValidationResult validationResult) {
         List<VariantDto> variants = domainDto.getVariants();
@@ -351,19 +392,31 @@ public abstract class DomainUpdateBaseServiceImpl extends
                     .build4008Error(fieldName));
         }
     }
-
+    /**
+     * 
+     * @return nameserverDao.
+     */
     public UpdateDao<Nameserver, NameserverDto> getNameserverDao() {
         return nameserverDao;
     }
-
+    /**
+     * 
+     * @return secureDnsUpdateDao.
+     */
     public UpdateDao<SecureDns, SecureDnsDto> getSecureDnsUpdateDao() {
         return secureDnsUpdateDao;
     }
-
+    /**
+     * 
+     * @return variantUpdateDao.
+     */
     public UpdateDao<Variants, VariantDto> getVariantUpdateDao() {
         return variantUpdateDao;
     }
-
+    /**
+     * 
+     * @return networkDao.
+     */
     public UpdateDao<Network, IpDto> getNetworkDao() {
         return networkDao;
     }

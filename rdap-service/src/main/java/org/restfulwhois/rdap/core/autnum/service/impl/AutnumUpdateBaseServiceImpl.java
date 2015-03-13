@@ -55,7 +55,9 @@ public abstract class AutnumUpdateBaseServiceImpl extends
             .getLogger(AutnumUpdateBaseServiceImpl.class);
 
     /**
-     * dto dto.
+     * @param dto 
+     *      autnumdto.
+     * @return Autnum.
      */
     protected Autnum convertDtoToModel(AutnumDto dto) {
         Autnum autnum = convertDtoToAutnum(dto);
