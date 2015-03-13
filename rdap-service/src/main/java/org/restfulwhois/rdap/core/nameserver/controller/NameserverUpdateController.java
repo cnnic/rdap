@@ -76,9 +76,9 @@ public class NameserverUpdateController {
 
     /**
      * 
-     * @param nsDto
-     * @param request
-     * @return
+     * @param nsDto nsDto.
+     * @param request request.
+     * @return ResponseEntity ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "" }, method = RequestMethod.POST)
@@ -92,10 +92,10 @@ public class NameserverUpdateController {
 
     /**
      * 
-     * @param nsDto
-     * @param handle
-     * @param request
-     * @return
+     * @param nsDto nsDto.
+     * @param handle handle.
+     * @param request request.
+     * @return ResponseEntity ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
@@ -110,9 +110,9 @@ public class NameserverUpdateController {
 
     /**
      * 
-     * @param handle
-     * @param request
-     * @return
+     * @param handle handle.
+     * @param request request.
+     * @return ResponseEntity ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.DELETE)

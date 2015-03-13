@@ -61,7 +61,7 @@ public abstract class EntityUpdateBaseServiceImpl extends
         AbstractUpdateService<EntityDto, Entity> {
     @Autowired
     protected UpdateDao<EntityAddress, EntityAddressDto> entityAddressDao;
-    
+
     @Autowired
     protected UpdateDao<EntityTelephone, EntityTelephoneDto> entityTelDao;
     /**
@@ -71,7 +71,7 @@ public abstract class EntityUpdateBaseServiceImpl extends
             .getLogger(EntityUpdateBaseServiceImpl.class);
 
     protected Entity convertDtoToModel(EntityDto dto) {
-    	Entity entity = convertDtoToEntity(dto);
+        Entity entity = convertDtoToEntity(dto);
         super.convertCustomProperties(dto, entity);
         return entity;
     }
@@ -86,7 +86,7 @@ public abstract class EntityUpdateBaseServiceImpl extends
         }
         entityAddressDao.saveAsInnerObjects(entity, entityAddressList);
     }
-    
+
     protected void saveEntityTels(Entity entity) {
         LOGGER.debug("save entityTelephones ...");
         EntityDto dto = (EntityDto) entity.getDto();
@@ -102,7 +102,7 @@ public abstract class EntityUpdateBaseServiceImpl extends
         LOGGER.debug("delete entityAddresses ...");
         entityAddressDao.deleteAsInnerObjects(entity);
     }
-    
+
     protected void deleteEntityTels(Entity entity) {
         LOGGER.debug("delete entityTelephones ...");
         entityTelDao.deleteAsInnerObjects(entity);
@@ -112,84 +112,94 @@ public abstract class EntityUpdateBaseServiceImpl extends
         deleteEntityAddresses(entity);
         saveEntityAddresses(entity);
     }
-    
+
     protected void updateEntityTels(Entity entity) {
-    	deleteEntityTels(entity);
-    	saveEntityTels(entity);
+        deleteEntityTels(entity);
+        saveEntityTels(entity);
     }
 
     private Entity convertDtoToEntity(EntityDto dto) {
-    	Entity entity = new Entity();
-        BeanUtil.copyProperties(dto, entity, "entities", "events",
-                "remarks", "links", "publicIds", "addresses", "telephones");
+        Entity entity = new Entity();
+        BeanUtil.copyProperties(dto, entity, "entities", "events", "remarks",
+                "links", "publicIds", "addresses", "telephones");
         return entity;
     }
 
     protected ValidationResult validateForSaveAndUpdate(EntityDto dto,
             ValidationResult validationResult) {
         checkNotEmptyAndMaxLengthForHandle(dto.getHandle(), validationResult);
-        checkNotEmptyAndMaxLength(dto.getFn(), MAX_LENGTH_255,
-                 "fn", validationResult);
-        checkMaxLength(dto.getKind(), MAX_LENGTH_255,
-                "kind", validationResult);
-    	checkMaxLength(dto.getEmail(), MAX_LENGTH_255,
-                "email", validationResult);
-    	checkMaxLength(dto.getTitle(), MAX_LENGTH_255,
-    	        "title", validationResult);
-    	checkMaxLength(dto.getOrg(), MAX_LENGTH_255,
-                "org", validationResult);
-    	checkMaxLength(dto.getUrl(), MAX_LENGTH_PORT43, "url",
+        checkNotEmptyAndMaxLength(dto.getFn(), MAX_LENGTH_255, "fn",
                 validationResult);
-    	checkEntityAddress(dto, validationResult);
-    	checkEntityTel(dto, validationResult);
-    	checkPublicIds(dto.getPublicIds(), validationResult);
-    	validateBaseDto(dto, validationResult);
+        checkMaxLength(dto.getKind(), MAX_LENGTH_255, "kind", validationResult);
+        checkMaxLength(dto.getEmail(), MAX_LENGTH_255, "email",
+                validationResult);
+        checkMaxLength(dto.getTitle(), MAX_LENGTH_255, "title",
+                validationResult);
+        checkMaxLength(dto.getOrg(), MAX_LENGTH_255, "org", validationResult);
+        checkMaxLength(dto.getUrl(), MAX_LENGTH_PORT43, "url", validationResult);
+        checkEntityAddress(dto, validationResult);
+        checkEntityTel(dto, validationResult);
+        checkPublicIds(dto.getPublicIds(), validationResult);
+        validateBaseDto(dto, validationResult);
         return validationResult;
     }
 
     private void checkEntityAddress(EntityDto dto,
             ValidationResult validationResult) {
-    	 List<EntityAddressDto> entityAddressList = dto.getAddresses();
-         if (null == entityAddressList || entityAddressList.isEmpty()) {
-             return;
-         }        
-         for (EntityAddressDto entityAddress : entityAddressList) {
-             checkMaxLength(entityAddress.getCountry(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"country", validationResult);
-             checkMaxLength(entityAddress.getExtendedAddress(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"extendedAddress", validationResult);
-             checkMaxLength(entityAddress.getLocality(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"locality", validationResult);
-             checkMaxLength(entityAddress.getPostalcode(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"postalcode", validationResult);
-             checkMaxLength(entityAddress.getPostbox(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"postbox", validationResult);             
-             checkMaxLength(entityAddress.getTypes(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"types", validationResult);
-             checkMaxLength(entityAddress.getStreetAddress(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"streetAddress", validationResult);
-             checkMaxLength(entityAddress.getRegion(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"region", validationResult);
-             checkMinMaxInt(entityAddress.getPref(), ERROR_PROP_NAME_PREFIX_ENTITY_ADDR+"pref", 
-            		 validationResult);
-         }
+        List<EntityAddressDto> entityAddressList = dto.getAddresses();
+        if (null == entityAddressList || entityAddressList.isEmpty()) {
+            return;
+        }
+        for (EntityAddressDto entityAddress : entityAddressList) {
+            checkMaxLength(entityAddress.getCountry(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "country",
+                    validationResult);
+            checkMaxLength(entityAddress.getExtendedAddress(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "extendedAddress",
+                    validationResult);
+            checkMaxLength(entityAddress.getLocality(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "locality",
+                    validationResult);
+            checkMaxLength(entityAddress.getPostalcode(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "postalcode",
+                    validationResult);
+            checkMaxLength(entityAddress.getPostbox(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "postbox",
+                    validationResult);
+            checkMaxLength(entityAddress.getTypes(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "types",
+                    validationResult);
+            checkMaxLength(entityAddress.getStreetAddress(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "streetAddress",
+                    validationResult);
+            checkMaxLength(entityAddress.getRegion(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "region",
+                    validationResult);
+            checkMinMaxInt(entityAddress.getPref(),
+                    ERROR_PROP_NAME_PREFIX_ENTITY_ADDR + "pref",
+                    validationResult);
+        }
     }
-    
-    private void checkEntityTel(EntityDto dto,
-            ValidationResult validationResult) {
-    	 List<EntityTelephoneDto> entityTelList = dto.getTelephones();
-         if (null == entityTelList || entityTelList.isEmpty()) {
-             return;
-         }        
-         for (EntityTelephoneDto entityTelephone : entityTelList) {
-             checkMaxLength(entityTelephone.getExtNumber(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_TEL+"extNumber", validationResult);
-             checkMaxLength(entityTelephone.getNumber(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_TEL+"number", validationResult);
-             checkMaxLength(entityTelephone.getTypes(), MAX_LENGTH_255,
-                     ERROR_PROP_NAME_PREFIX_ENTITY_TEL+"types", validationResult);             
-             checkMinMaxInt(entityTelephone.getPref(), ERROR_PROP_NAME_PREFIX_ENTITY_TEL+"pref", 
-            		 validationResult);
-         }
+
+    private void
+            checkEntityTel(EntityDto dto, ValidationResult validationResult) {
+        List<EntityTelephoneDto> entityTelList = dto.getTelephones();
+        if (null == entityTelList || entityTelList.isEmpty()) {
+            return;
+        }
+        for (EntityTelephoneDto entityTelephone : entityTelList) {
+            checkMaxLength(entityTelephone.getExtNumber(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_TEL + "extNumber",
+                    validationResult);
+            checkMaxLength(entityTelephone.getNumber(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_TEL + "number",
+                    validationResult);
+            checkMaxLength(entityTelephone.getTypes(), MAX_LENGTH_255,
+                    ERROR_PROP_NAME_PREFIX_ENTITY_TEL + "types",
+                    validationResult);
+            checkMinMaxInt(entityTelephone.getPref(),
+                    ERROR_PROP_NAME_PREFIX_ENTITY_TEL + "pref",
+                    validationResult);
+        }
     }
 }

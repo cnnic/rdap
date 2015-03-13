@@ -54,14 +54,20 @@ public abstract class AutnumUpdateBaseServiceImpl extends
     private static final Logger LOGGER = LoggerFactory
             .getLogger(AutnumUpdateBaseServiceImpl.class);
 
+    /**
+     * dto dto.
+     */
     protected Autnum convertDtoToModel(AutnumDto dto) {
         Autnum autnum = convertDtoToAutnum(dto);
         super.convertCustomProperties(dto, autnum);
         return autnum;
     }   
    
-    
-
+    /**
+     * 
+     * @param dto dto.
+     * @return Autnum.
+     */
     private Autnum convertDtoToAutnum(AutnumDto dto) {
         Autnum autnum = new Autnum();
         BeanUtil.copyProperties(dto, autnum, "entities", "events",
@@ -69,6 +75,12 @@ public abstract class AutnumUpdateBaseServiceImpl extends
         return autnum;
     }
 
+    /**
+     * 
+     * @param dto dto.
+     * @param validationResult validationResult.
+     * @return ValidationResult.
+     */
     protected ValidationResult validateForSaveAndUpdate(AutnumDto dto,
             ValidationResult validationResult) {
         LOGGER.debug("validate for save and update ...");

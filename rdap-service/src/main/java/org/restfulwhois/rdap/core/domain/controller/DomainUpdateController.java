@@ -76,12 +76,13 @@ public class DomainUpdateController {
     private UpdateService<DomainDto, Domain> deleteService;
 
     /**
-     * create domain.
+     * create.
      * 
-     * @param domainName
+     * @param domainDto
+     *            domainDto.
      * @param request
-     * @return
-     * @throws DecodeException
+     *            request.
+     * @return ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "" }, method = RequestMethod.POST)
@@ -94,12 +95,14 @@ public class DomainUpdateController {
     }
 
     /**
-     * update domain.
      * 
-     * @param domainName
+     * @param domainDto
+     *            domainDto.
+     * @param handle
+     *            handle.
      * @param request
-     * @return
-     * @throws DecodeException
+     *            request.
+     * @return ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
@@ -113,12 +116,10 @@ public class DomainUpdateController {
     }
 
     /**
-     * delete domain.
      * 
-     * @param domainName
-     * @param request
-     * @return
-     * @throws DecodeException
+     * @param handle handle.
+     * @param request request.
+     * @return ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.DELETE)

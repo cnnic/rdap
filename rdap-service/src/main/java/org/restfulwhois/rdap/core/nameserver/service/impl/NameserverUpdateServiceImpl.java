@@ -30,9 +30,7 @@
  */
 package org.restfulwhois.rdap.core.nameserver.service.impl;
 
-import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
-import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;

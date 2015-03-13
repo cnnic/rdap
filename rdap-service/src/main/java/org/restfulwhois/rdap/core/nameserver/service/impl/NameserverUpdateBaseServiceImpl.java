@@ -65,9 +65,9 @@ public abstract class NameserverUpdateBaseServiceImpl extends
             .getLogger(NameserverUpdateBaseServiceImpl.class);
 
     protected Nameserver convertDtoToModel(NameserverDto dto) {
-        Nameserver Nameserver = convertDtoToNameserver(dto);
-        super.convertCustomProperties(dto, Nameserver);
-        return Nameserver;
+        Nameserver nameserver = convertDtoToNameserver(dto);
+        super.convertCustomProperties(dto, nameserver);
+        return nameserver;
     }
 
     protected void saveIpAddresses(Nameserver nameserver) {
@@ -94,10 +94,10 @@ public abstract class NameserverUpdateBaseServiceImpl extends
     }
 
     private Nameserver convertDtoToNameserver(NameserverDto dto) {
-        Nameserver Nameserver = new Nameserver();
-        BeanUtil.copyProperties(dto, Nameserver, "entities", "events",
+        Nameserver nameserver = new Nameserver();
+        BeanUtil.copyProperties(dto, nameserver, "entities", "events",
                 "remarks", "links");
-        return Nameserver;
+        return nameserver;
     }
 
     protected ValidationResult validateForSaveAndUpdate(NameserverDto dto,
