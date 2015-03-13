@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="jiashuo"
-		EVENT_DATE="2014-01-01 00:01:01" />
-	<REL_EVENT_REGISTRATION REL_EVENT_ID="1" REL_ID="1"
-		REL_OBJECT_TYPE="autnum" EVENT_ID="1" />
-</dataset>

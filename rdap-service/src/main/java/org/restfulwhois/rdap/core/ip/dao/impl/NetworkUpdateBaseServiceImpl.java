@@ -65,7 +65,7 @@ public abstract class NetworkUpdateBaseServiceImpl extends
     
 
     private Network convertDtoToNetwork(IpDto dto) {
-    	Network network = new Network();
+        Network network = new Network();
         BeanUtil.copyProperties(dto, network, "entities", "events",
                 "remarks", "links");
         return network;

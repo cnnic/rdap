@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<RDAP_CONFORMANCE conformance_id="1" rdap_conformance="rdap_level_0" />
-	<RDAP_CONFORMANCE conformance_id="2" rdap_conformance="rdap_level_0" />
-	<RDAP_CONFORMANCE conformance_id="3" rdap_conformance="cnnic_level_0" />
-</dataset>
