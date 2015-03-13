@@ -52,13 +52,22 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
+    /**
+     * SQL_CREATE_AUTNUM.
+     */
     private static final String SQL_CREATE_AUTNUM =
             "INSERT INTO RDAP_AUTNUM"
              + " (HANDLE,START_AUTNUM,END_AUTNUM,NAME,TYPE,COUNTRY,LANG,PORT43,"
              + " CUSTOM_PROPERTIES) values(?,?,?,?,?,?,?,?,?)";
+    /**
+     * SQL_UPDATE_AUTNUM.
+     */
     private static final String SQL_UPDATE_AUTNUM = "UPDATE RDAP_AUTNUM"
             + " SET START_AUTNUM=?,END_AUTNUM=?,NAME=?,TYPE=?,COUNTRY=?,LANG=?,PORT43=?,"
             + " CUSTOM_PROPERTIES=? WHERE AS_ID=?";
+    /**
+     * SQL_DELETE_AUTNUM.
+     */
     private static final String SQL_DELETE_AUTNUM =
             "DELETE FROM RDAP_AUTNUM WHERE AS_ID=?";
     /**

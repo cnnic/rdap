@@ -70,12 +70,24 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class DomainUpdateBaseServiceImpl extends
         AbstractUpdateService<DomainDto, Domain> {
+    /**
+     * 
+     */
     @Autowired
     protected UpdateDao<Nameserver, NameserverDto> nameserverDao;
+    /**
+     * 
+     */
     @Autowired
     private UpdateDao<SecureDns, SecureDnsDto> secureDnsUpdateDao;
+    /**
+     * 
+     */
     @Autowired
     private UpdateDao<Variants, VariantDto> variantUpdateDao;
+    /**
+     * 
+     */
     @Autowired
     protected UpdateDao<Network, IpDto> networkDao;
     /**
@@ -84,6 +96,12 @@ public abstract class DomainUpdateBaseServiceImpl extends
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainUpdateBaseServiceImpl.class);
 
+    /**
+     * 
+     * @param dto
+     *            dto.
+     * @return Domain.
+     */
     protected Domain convertDtoToModelWithoutType(DomainDto dto) {
         Domain domain = convertDtoToDomain(dto);
         super.convertCustomProperties(dto, domain);
@@ -91,21 +109,38 @@ public abstract class DomainUpdateBaseServiceImpl extends
         return domain;
     }
 
+    /**
+     * 
+     * @param domain domain.
+     */
     protected void saveNameservers(Domain domain) {
         LOGGER.debug("save ns rel ...");
         nameserverDao.saveRel(domain);
     }
 
+    /**
+     * 
+     * @param domain domain.
+     */
     protected void deleteNameserversRel(Domain domain) {
         LOGGER.debug("delete ns rel ...");
         getNameserverDao().deleteRel(domain);
     }
 
+    /**
+     * 
+     * @param domain domain.
+     */
     protected void updateNameserversRel(Domain domain) {
         deleteNameserversRel(domain);
         saveNameservers(domain);
     }
 
+    /**
+     * 
+     * @param dto dto.
+     * @param domain domain.
+     */
     protected void saveSecureDns(DomainDto dto, Domain domain) {
         LOGGER.debug("save secureDns...");
         SecureDnsDto secureDnsDto = dto.getSecureDNS();
@@ -118,6 +153,10 @@ public abstract class DomainUpdateBaseServiceImpl extends
         secureDnsUpdateDao.saveAsInnerObjects(domain, secureDnsDtos);
     }
 
+    /**
+     * 
+     * @param domain
+     */
     protected void deleteSecureDns(Domain domain) {
         secureDnsUpdateDao.deleteAsInnerObjects(domain);
     }
@@ -273,8 +312,11 @@ public abstract class DomainUpdateBaseServiceImpl extends
     /**
      * 
      * @param typeStr
+     *            typeStr.
      * @param fieldName
+     *            fieldName.
      * @param validationResult
+     *            validationResult.
      */
     protected void checkDomainTypeNotEmptyAndValid(String typeStr,
             ValidationResult validationResult) {
@@ -286,8 +328,11 @@ public abstract class DomainUpdateBaseServiceImpl extends
     /**
      * 
      * @param typeStr
+     *            typeStr.
      * @param fieldName
+     *            fieldName.
      * @param validationResult
+     *            validationResult.
      */
     protected void checkDomainTypeValid(String typeStr, String fieldName,
             ValidationResult validationResult) {
