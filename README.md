@@ -19,7 +19,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
     Installed Tomcat root folder called '$TOMCAT_HOME', which contains folders:bin,conf,lib,webapps,etc.    
 4. Get RDAP war file.  
    There are two methods to get RDAP war file:   
-   * You can Get [war file](https://github.com/cnnic/rdap/raw/dev/rdap-service/build/rdap-service-1.0.war) builded by JDK7. 
+   * You can Get [war file](https://github.com/cnnic/rdap/raw/master/rdap-service/build/rdap-service-1.0.war) builded by JDK7. 
    * Or [Build war file from source](https://github.com/cnnic/rdap/wiki/%5Binstall%5DBuild-war-file-from-source)   
 5. Deploy RDAP war to tomcat. 
    * Create folder 'rdap' in dir $TOMCAT_HOME/webapps/
