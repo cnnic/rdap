@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+   <RDAP_DSDATA  KEY_TAG='1' ALGORITHM='1'
+		DIGEST='1-ds-dt-200-50'
+		DIGEST_TYPE='1' />
+	<REL_SECUREDNS_DSKEY  REL_DSKEY_TYPE='dsData' SECUREDNS_ID='1'/>
+	<!-- link -->
+	<RDAP_LINK  VALUE="http://sina.com.cn"
+        REL="up" HREF="http://sina.com.cn" MEDIA="screen"
+        TYPE="application/rdap+json" TITLE="little title" />
+    <REL_LINK_OBJECT    REL_OBJECT_TYPE="dsData" />
+    <RDAP_LINK_HREFLANG   HREFLANG="en" />
+    <RDAP_LINK_HREFLANG   HREFLANG="zh" />
+</dataset>

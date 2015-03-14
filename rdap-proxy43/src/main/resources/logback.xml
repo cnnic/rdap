@@ -9,10 +9,10 @@
 	</appender>
 	<appender name="fileAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>logs/proxy43_access.log</File>
+		<File>logs/proxy43.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>%d{yyyy-MM-dd}.proxy43_access.%i.log
+			<fileNamePattern>%d{yyyy-MM-dd}.proxy43.%i.log
 			</fileNamePattern>
 			<maxHistory>20</maxHistory>
 			<TimeBasedFileNamingAndTriggeringPolicy

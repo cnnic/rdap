@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_VCARD_TEL   TYPE='home;voice'
+		GLOBAL_NUMBER='+58813179' EXT_NUMBER='3179' PREF='1' />
+	<RDAP_VCARD_TEL   TYPE='work;voice'
+		GLOBAL_NUMBER='+1-555-555-1235' EXT_NUMBER='1234' PREF='2' />
+</dataset>

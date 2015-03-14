@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_NAMESERVER NAMESERVER_ID='1' HANDLE='h1' LDH_NAME='cnnic.cn'
+		UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh'
+		CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_ID='1' STATUS="validated" />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_ID='1' STATUS="update prohibited" />
+	<RDAP_NAMESERVER_IP  NAMESERVER_ID='1' IP='0xDAF1FFFF' VERSION='v4' />
+</dataset>

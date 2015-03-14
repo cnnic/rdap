@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_SECUREDNS ZONE_SIGNED='1' DELEGATION_SIGNED='1'
+		MAX_SIGLIFE='600' />
+	<!-- keyData -->
+	<RDAP_KEYDATA FLAGS='1' ALGORITHM='1' PUBLIC_KEY='1-kd-dt-200-50'
+		PROTOCOL='1' />
+	<REL_SECUREDNS_DSKEY REL_DSKEY_TYPE='keyData' />
+	<!-- dsData -->
+	<RDAP_DSDATA KEY_TAG='1' ALGORITHM='1' DIGEST='1-ds-dt-200-50'
+		DIGEST_TYPE='1' />
+	<REL_SECUREDNS_DSKEY REL_DSKEY_TYPE='dsData' />
+</dataset>

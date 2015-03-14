@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <RDAP_ENTITY ENTITY_ID='1' HANDLE='h1' KIND='individual'
+        FN='john' EMAIL='john@gmail.com' TITLE='CEO' ORG='org' URL='http://john.com'
+        PORT43='whois.example.net' CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />
+    <RDAP_ENTITY_STATUS ENTITY_STATUS_ID="1" ENTITY_ID="1"
+        STATUS="validated" />
+    <RDAP_ENTITY_STATUS ENTITY_STATUS_ID="2" ENTITY_ID="1"
+        STATUS="update prohibited" />
+</dataset>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_VCARD_ADR   POST_BOX='6'
+		EXT_ADR='2' STREET='南四街四号' CITY='北京' SP='北京'
+		POSTAL_CODE='100190' COUNTRY='中国' TYPE='work' PREF='1' />
+	<RDAP_VCARD_ADR   POST_BOX='1'
+		EXT_ADR='3' STREET='中关村南四街四号' CITY='北京' 
+		POSTAL_CODE='100120' COUNTRY='中国' TYPE='home' PREF='2' />
+</dataset>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- 1 ip V6 -->
+	<RDAP_IP IP_ID='1' HANDLE='h1' NAME='ip1.cn'
+		STARTADDRESS='0x0000000000000000200106A800000000' ENDADDRESS='0x0000000000000000200106A8FFFFFFFF'
+		VERSION='v6' TYPE='ip1.cn' PORT43='port43' LANG='en' PARENT_HANDLE='pH'
+		CIDR='1' CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />
+	<RDAP_IP_STATUS IP_STATUS_ID="11" IP_ID="1" STATUS="validated" />
+	<RDAP_IP_STATUS IP_STATUS_ID="12" IP_ID="1"
+		STATUS="update prohibited" />
+</dataset>

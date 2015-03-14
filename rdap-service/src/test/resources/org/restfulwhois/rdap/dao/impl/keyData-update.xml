@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>	
+	<RDAP_KEYDATA FLAGS='1' ALGORITHM='1'
+		PUBLIC_KEY='1-kd-dt-200-50'
+		PROTOCOL='1' />
+	<REL_SECUREDNS_DSKEY  REL_DSKEY_TYPE='keyData'  SECUREDNS_ID='1' />
+	<!-- link -->
+	<RDAP_LINK  VALUE="http://sina.com.cn"
+		REL="up" HREF="http://sina.com.cn" MEDIA="screen"
+		TYPE="application/rdap+json" />
+	<REL_LINK_OBJECT 	REL_OBJECT_TYPE="keyData" />
+	 <RDAP_LINK_HREFLANG   HREFLANG="en" />
+    <RDAP_LINK_HREFLANG   HREFLANG="zh" />
+</dataset>

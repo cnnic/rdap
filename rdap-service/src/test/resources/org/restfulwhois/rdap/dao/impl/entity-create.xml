@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_ENTITY  HANDLE='h1' KIND='individual'
+        FN='00miss' EMAIL='100_1@cnnic.cn' TITLE='team leader' ORG='中国互联网络信息中心' URL='00miss.cnnic.cn'
+        PORT43='whois.example.net' LANG='zh' CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />
+    <RDAP_ENTITY_STATUS  STATUS="validated" />
+    <RDAP_ENTITY_STATUS   STATUS="active" />
+</dataset>

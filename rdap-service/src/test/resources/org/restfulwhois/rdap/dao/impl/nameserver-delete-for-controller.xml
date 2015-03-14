@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<RDAP_NAMESERVER NAMESERVER_ID="1" HANDLE='h1'
+		LDH_NAME='cnnic.cn' UNICODE_NAME='cnnic.cn' PORT43='port43' LANG='zh'
+		CUSTOM_PROPERTIES='{"customKey1":"customValue1","customKey2":"customValue2"}' />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_ID="1"
+		STATUS="validated" />
+	<RDAP_NAMESERVER_STATUS NAMESERVER_ID="1"
+		STATUS="update prohibited" />
+	<!-- ip -->
+	<RDAP_NAMESERVER_IP  NAMESERVER_ID='1' IP='0xDAF1FFFF' VERSION='v4' />
+	<RDAP_NAMESERVER_IP  NAMESERVER_ID='1' IP='0xDAF1FFFF' VERSION='v6' />
+	<!-- event -->
+	<RDAP_EVENT EVENT_ID="1" EVENT_ACTION="action1" EVENT_ACTOR="jiashuo"
+		EVENT_DATE="2014-01-01 00:01:01" />
+	<REL_EVENT_REGISTRATION REL_EVENT_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="nameServer" EVENT_ID="1" />
+	<RDAP_LINK LINK_ID="1" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" TITLE="Title1 of Link1" />
+	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="1"
+		REL_OBJECT_TYPE="event" LINK_ID="1" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='1' LINK_ID="1"
+		HREFLANG="en" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='2' LINK_ID="1"
+		HREFLANG="zh" />
+	<!-- entities rel -->
+	<REL_ENTITY_REGISTRATION REL_ENTITY_ID='11'
+		REL_ID='1' REL_OBJECT_TYPE='nameServer' ENTITY_ID='1' ENTITY_ROLE="registrar" />
+	<!-- remark -->
+	<RDAP_NOTICE NOTICE_ID="1" TITLE="Terms of Use" TYPE="remark" />
+	<REL_NOTICE_REGISTRATION REL_NOTICE_ID="1"
+		REL_ID="1" REL_OBJECT_TYPE="nameServer" NOTICE_ID="1" />
+	<!-- remark desc -->
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="1"
+		NOTICE_ID="1" DESCRIPTION="description1" />
+	<RDAP_NOTICE_DESCRIPTION NOTICE_DESC_ID="2"
+		NOTICE_ID="1" DESCRIPTION="description2" />
+	<!-- remark link -->
+	<RDAP_LINK LINK_ID="2" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" />
+	<REL_LINK_OBJECT REL_LINK_ID="2" REL_ID="1"
+		REL_OBJECT_TYPE="remark" LINK_ID="2" />
+	<!-- link -->
+	<RDAP_LINK LINK_ID="3" VALUE="http://example.com/context_uri"
+		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
+		TYPE="application/json" TITLE="Title1 of Link1" />
+	<REL_LINK_OBJECT REL_LINK_ID="3" REL_ID="1"
+		REL_OBJECT_TYPE="nameServer" LINK_ID="3" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='3' LINK_ID="3"
+		HREFLANG="en" />
+	<RDAP_LINK_HREFLANG HREFLANG_ID='4' LINK_ID="3"
+		HREFLANG="zh" />
+</dataset>
+

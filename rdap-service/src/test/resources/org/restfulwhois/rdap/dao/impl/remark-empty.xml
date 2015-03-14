@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!-- notice 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<RDAP_NOTICE />
+	<REL_NOTICE_REGISTRATION  />
+	<!-- notice desc -->
+	<RDAP_NOTICE_DESCRIPTION />
+	<RDAP_LINK  />
+	<REL_LINK_OBJECT />
+</dataset>
