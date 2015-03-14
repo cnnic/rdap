@@ -63,13 +63,21 @@ public class NameserverUpdateController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverUpdateController.class);
-
+   /**
+    * nameserver create service.
+    */
     @Autowired
     @Qualifier("nameserverCreateServiceImpl")
     private UpdateService<NameserverDto, Nameserver> createService;
+    /**
+     * nameserver update service.
+     */
     @Autowired
     @Qualifier("nameserverUpdateServiceImpl")
     private UpdateService<NameserverDto, Nameserver> updateService;
+    /**
+     * nameserver delete service.
+     */
     @Autowired
     @Qualifier("nameserverDeleteServiceImpl")
     private UpdateService<NameserverDto, Nameserver> deleteService;

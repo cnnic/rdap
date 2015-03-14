@@ -64,13 +64,21 @@ public class DomainUpdateController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainUpdateController.class);
-
+    /**
+     * domain create service.
+     */
     @Autowired
     @Qualifier("domainCreateServiceImpl")
     private UpdateService<DomainDto, Domain> createService;
+    /**
+     * domain update service.
+     */
     @Autowired
     @Qualifier("domainUpdateServiceImpl")
     private UpdateService<DomainDto, Domain> updateService;
+    /**
+     * domain delete service.
+     */
     @Autowired
     @Qualifier("domainDeleteServiceImpl")
     private UpdateService<DomainDto, Domain> deleteService;

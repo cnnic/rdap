@@ -54,13 +54,22 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
+   /**
+     * SQL_CREATE_DOMAIN
+     */
     private static final String SQL_CREATE_DOMAIN =
             "INSERT INTO RDAP_DOMAIN"
                     + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"
                     + " values(?,?,?,?,?,?,?,?)";
+    /**
+     * SQL_UPDATE_DOMAIN.
+     */
     private static final String SQL_UPDATE_DOMAIN = "UPDATE RDAP_DOMAIN"
             + " SET LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
             + " ,CUSTOM_PROPERTIES=? WHERE DOMAIN_ID=?";
+    /**
+     * SQL_DELETE_DOMAIN.
+     */
     private static final String SQL_DELETE_DOMAIN =
             "DELETE FROM RDAP_DOMAIN WHERE DOMAIN_ID=?";
     /**
