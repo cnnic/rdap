@@ -6,7 +6,12 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 
 2. Install [Mysql5](http://dev.mysql.com/downloads/mysql), or higher version. (Skip this step if already installed)   
 
-   Create user 'rdap' and grant privilege please ref [here](https://github.com/cnnic/rdap/wiki/%5Binstall%5D-Mysql-privilege).
+   Create user 'rdap' and grant privilege:   
+   ```
+      GRANT ALL PRIVILEGES ON *.* TO 'rdap'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+      FLUSH PRIVILEGES;
+   ```   
+   More details please ref [here](https://github.com/cnnic/rdap/wiki/%5Binstall%5D-Mysql-privilege).   
    
 3. Install Tomcat7, or higher version. (Skip this step if already installed)   
 
