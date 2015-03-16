@@ -37,7 +37,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 		java -Djava.ext.dirs=../lib org.restfulwhois.rdap.init.Init initschema
 	```
 	
-7. Start up tomcat 
+7. Start and shutdown 
    * Start up tomcat 
    
 	```
@@ -56,7 +56,18 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 	```
 	
 	It's ok if response contains 'rdapConformance'. 
-	
+   * Shutdown tomcat 
+    	```
+	[in Linux/OS X, open a shell and execute command:]
+		cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
+		bin/shutdown.sh
+	[in Windows, open command prompt window and execute command:]
+		cd $TOMCAT_HOME/bin		#$TOMCAT_HOME must be replaced by real dir
+		shutdown.bat
+	```
+   * Log    
+     Log file is $TOMCAT_HOME/logs/catalina.out.   
+
 ### RDAP proxy43 Install
 [Proxy43 Install](https://github.com/cnnic/rdap/wiki/Proxy43-install-&-usage)
 ### RDAP reference
