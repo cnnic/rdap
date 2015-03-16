@@ -354,8 +354,6 @@ public abstract class DomainUpdateBaseServiceImpl extends
      * 
      * @param typeStr
      *            typeStr.
-     * @param fieldName
-     *            fieldName.
      * @param validationResult
      *            validationResult.
      */

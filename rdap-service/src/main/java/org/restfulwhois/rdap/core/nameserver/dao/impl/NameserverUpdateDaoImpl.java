@@ -41,7 +41,6 @@ import org.restfulwhois.rdap.common.dto.BaseDto;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.NameserverDto;
 import org.restfulwhois.rdap.common.dto.embedded.HandleDto;
-import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Nameserver;
 import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
@@ -66,13 +65,22 @@ public class NameserverUpdateDaoImpl extends
      */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverUpdateDaoImpl.class);
+    /**
+     * SQL save nameserver.
+     */
     private static final String SQL_SAVE_NAMESERVER =
             "INSERT INTO RDAP_NAMESERVER"
                     + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,CUSTOM_PROPERTIES)"
                     + " values(?,?,?,?,?,?)";
+    /**
+     * SQL update nameserver by ID.
+     */
     private static final String SQL_UPDATE_NAMESERVER = "UPDATE RDAP_NAMESERVER"
             + " SET LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?"
             + " ,CUSTOM_PROPERTIES=? where NAMESERVER_ID=?";
+    /**
+     * SQL delete nameserver by ID.
+     */
     private static final String SQL_DELETE_NAMESERVER =
             "DELETE FROM RDAP_NAMESERVER where NAMESERVER_ID=?";
 

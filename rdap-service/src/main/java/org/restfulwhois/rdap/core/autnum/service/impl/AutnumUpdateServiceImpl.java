@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * update service implementation.
+ * as update service implementation.
  * 
  * @author zhanyq
  * 

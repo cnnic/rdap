@@ -56,14 +56,22 @@ public abstract class NetworkUpdateBaseServiceImpl extends
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NetworkUpdateBaseServiceImpl.class);
 
+    /**
+     * convert DTO to model without ip version.
+     * @param dto dto.
+     * @return Network.
+     */
     protected Network convertDtoToModelWithoutIpVersion(IpDto dto) {
         Network network = convertDtoToNetwork(dto);
         super.convertCustomProperties(dto, network);
         return network;
     }   
    
-    
-
+    /**
+     * convert DTO to network.
+     * @param dto dto.
+     * @return Network.
+     */
     private Network convertDtoToNetwork(IpDto dto) {
         Network network = new Network();
         BeanUtil.copyProperties(dto, network, "entities", "events",
@@ -71,6 +79,12 @@ public abstract class NetworkUpdateBaseServiceImpl extends
         return network;
     }
 
+    /**
+     * validate without IP version.
+     * @param dto dto.
+     * @param validationResult validationResult.
+     * @return validationResult.
+     */
     protected ValidationResult validateWithoutIpVersion(IpDto dto,
             ValidationResult validationResult) {
         LOGGER.debug("validate for save and update ...");
@@ -91,6 +105,12 @@ public abstract class NetworkUpdateBaseServiceImpl extends
         return validationResult;
     }
 
+    /**
+     * check if IP is notEmpty and valid.
+     * @param ip IP.
+     * @param validationResult validationResult.
+     * @param fieldName fieldName.
+     */
     private void checkIpNotEmptyAndValid(String ip,
             ValidationResult validationResult, String fieldName) {
         checkNotEmpty(ip, 

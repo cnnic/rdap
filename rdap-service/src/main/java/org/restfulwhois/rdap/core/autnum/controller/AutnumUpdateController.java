@@ -50,7 +50,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Controller for autnum update.
+ * as number update API.
  * 
  * @author zhanyq
  * 
@@ -86,14 +86,13 @@ public class AutnumUpdateController {
     private UpdateService<AutnumDto, Autnum> deleteService;
 
     /**
-     * create autnum.
+     * create as number.
      * 
      * @param autnumDto
      *        autnumDto
      * @param request
      *        HttpServletRequest
      * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "" }, method = RequestMethod.POST)
@@ -106,7 +105,7 @@ public class AutnumUpdateController {
     }
 
     /**
-     * update autnum.
+     * update as number.
      * 
      * @param autnumDto
      *    autnumDto
@@ -115,7 +114,6 @@ public class AutnumUpdateController {
      * @param request
      *        HttpServletRequest
      * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
@@ -129,14 +127,13 @@ public class AutnumUpdateController {
     }
 
     /**
-     * delete autnum.
+     * delete as number.
      * 
      * @param handle
      *        handle
      * @param request
      *        HttpServletRequest
      * @return JSON formated result,with HTTP code.
-     * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.DELETE)
