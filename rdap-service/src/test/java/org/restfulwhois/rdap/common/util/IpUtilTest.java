@@ -71,7 +71,7 @@ public class IpUtilTest {
         String hex =
                 DatatypeConverter.printHexBinary(IpUtil.ipToByteArray(ip,
                         ipVersion));
-//        System.err.println("0x" + hex);
+        System.err.println("0x" + hex);
     }
 
     @Test
@@ -94,6 +94,24 @@ public class IpUtilTest {
         byte[] bytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
         String ipString = IpUtil.toString(bytes, ipVersion);
         assertEquals("::2001:6a8:0:1", ipString);
+    }
+    @Test
+    public void testIpV6ToString_for_v6_mapped_v4() {
+        String ipPrefix = "::ffff:daf1:6f0b";
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ipPrefix);
+        assertEquals(IpVersion.V6, ipVersion);
+        byte[] bytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
+        String ipToString = IpUtil.toString(bytes, ipVersion);
+        assertEquals("::ffff:218.241.111.11", ipToString);
+    }
+    @Test
+    public void testIpV6ToString_for_not_v6_mapped_v4() {
+        String ipPrefix = "::daf1:6f0b";
+        IpVersion ipVersion = IpUtil.getIpVersionOfIp(ipPrefix);
+        assertEquals(IpVersion.V6, ipVersion);
+        byte[] bytes = IpUtil.ipToByteArray(ipPrefix, ipVersion);
+        String ipToString = IpUtil.toString(bytes, ipVersion);
+        assertEquals(ipPrefix, ipToString);
     }
 
     @Test

@@ -63,22 +63,30 @@ public class NameserverUpdateController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverUpdateController.class);
-
+   /**
+    * nameserver create service.
+    */
     @Autowired
     @Qualifier("nameserverCreateServiceImpl")
     private UpdateService<NameserverDto, Nameserver> createService;
+    /**
+     * nameserver update service.
+     */
     @Autowired
     @Qualifier("nameserverUpdateServiceImpl")
     private UpdateService<NameserverDto, Nameserver> updateService;
+    /**
+     * nameserver delete service.
+     */
     @Autowired
     @Qualifier("nameserverDeleteServiceImpl")
     private UpdateService<NameserverDto, Nameserver> deleteService;
 
     /**
      * 
-     * @param nsDto
-     * @param request
-     * @return
+     * @param nsDto nsDto.
+     * @param request request.
+     * @return ResponseEntity ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "" }, method = RequestMethod.POST)
@@ -92,10 +100,10 @@ public class NameserverUpdateController {
 
     /**
      * 
-     * @param nsDto
-     * @param handle
-     * @param request
-     * @return
+     * @param nsDto nsDto.
+     * @param handle handle.
+     * @param request request.
+     * @return ResponseEntity ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
@@ -110,9 +118,9 @@ public class NameserverUpdateController {
 
     /**
      * 
-     * @param handle
-     * @param request
-     * @return
+     * @param handle handle.
+     * @param request request.
+     * @return ResponseEntity ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.DELETE)

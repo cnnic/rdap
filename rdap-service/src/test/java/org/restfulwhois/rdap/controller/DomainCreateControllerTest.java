@@ -30,7 +30,9 @@
  */
 package org.restfulwhois.rdap.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -39,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -279,7 +282,7 @@ public class DomainCreateControllerTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(400))
-                .andExpect(jsonPath("$.subErrorCode").value(4010));
+                .andExpect(jsonPath("$.subErrorCode").value(40010));
     }
 
     @Test
@@ -698,9 +701,9 @@ public class DomainCreateControllerTest extends BaseTest {
         mockMvc.perform(
                 post(URI_DOMAIN_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
                 .andExpect(content().contentType(rdapJson))
-                .andExpect(jsonPath("$.errorCode").value(400))
+                .andExpect(jsonPath("$.errorCode").value(409))
                 .andExpect(jsonPath("$.subErrorCode").value(4091))
                 .andExpect(
                         jsonPath("$.description").value(
@@ -769,7 +772,7 @@ public class DomainCreateControllerTest extends BaseTest {
         domain.setPort43("port43");
         domain.setLang("zh");
         domain.setType(DomainType.DNR.getName());
-        Map<String, String> customProperties = new HashMap<String, String>();
+        Map<String, String> customProperties = new LinkedHashMap<String, String>();
         customProperties.put("customKey1", "customValue1");
         customProperties.put("customKey2", "customValue2");
         domain.setCustomProperties(customProperties);

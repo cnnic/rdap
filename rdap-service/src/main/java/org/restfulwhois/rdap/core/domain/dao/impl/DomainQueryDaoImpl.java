@@ -87,8 +87,8 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
      * left join domain status SQL.
      */
     private final String SQL_QUERY_DOMAIN_STATUS =
-    		"select * from RDAP_DOMAIN_STATUS status"
-        			+ " where status.DOMAIN_ID = ?";
+            "select * from RDAP_DOMAIN_STATUS status"
+                    + " where status.DOMAIN_ID = ?";
     /**
      * logger.
      */
@@ -342,27 +342,32 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
         return result.get(0);
     }
 
-    public void queryDomainStatus(Domain domain, JdbcTemplate jdbcTemplate){
-    	if(domain != null){
-    		final long domainId = domain.getId();
-        	List<String> result = 
-        		jdbcTemplate.query(new PreparedStatementCreator() {
-    				@Override
-    				public PreparedStatement createPreparedStatement(Connection connection)
-    						throws SQLException {
-    					PreparedStatement ps = 
-    							connection.prepareStatement(SQL_QUERY_DOMAIN_STATUS);
-    					ps.setLong(1, domainId);
-    					return ps;
-    				}
-    			}, new StatusResultSetExtractor());
-        	if (null != result && result.size() != 0) {
-        		domain.setStatus(result);
+    /**
+     * 
+     * @param domain domain.
+     * @param jdbcTemplate jdbcTemplate.
+     */
+    public void queryDomainStatus(Domain domain, JdbcTemplate jdbcTemplate) {
+        if (domain != null) {
+            final long domainId = domain.getId();
+            List<String> result =
+                    jdbcTemplate.query(new PreparedStatementCreator() {
+                        @Override
+                        public PreparedStatement createPreparedStatement(
+                                Connection connection) throws SQLException {
+                            PreparedStatement ps =
+                                    connection
+                                            .prepareStatement(SQL_QUERY_DOMAIN_STATUS);
+                            ps.setLong(1, domainId);
+                            return ps;
+                        }
+                    }, new StatusResultSetExtractor());
+            if (null != result && result.size() != 0) {
+                domain.setStatus(result);
             }
-    	}
+        }
     }
-    
-    
+
     /**
      * extract domain from ResultSet.
      * 
@@ -434,5 +439,5 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
             return result;
         }
     }
-    
+
 }

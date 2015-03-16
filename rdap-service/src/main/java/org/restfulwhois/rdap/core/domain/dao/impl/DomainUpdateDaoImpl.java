@@ -38,6 +38,8 @@ import java.sql.Statement;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
+import org.restfulwhois.rdap.common.model.Network;
+import org.restfulwhois.rdap.common.model.base.BaseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -52,13 +54,22 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
+   /**
+     * SQL_CREATE_DOMAIN
+     */
     private static final String SQL_CREATE_DOMAIN =
             "INSERT INTO RDAP_DOMAIN"
                     + " (HANDLE,LDH_NAME,UNICODE_NAME,PORT43,LANG,TYPE,NETWORK_ID,CUSTOM_PROPERTIES)"
                     + " values(?,?,?,?,?,?,?,?)";
+    /**
+     * SQL_UPDATE_DOMAIN.
+     */
     private static final String SQL_UPDATE_DOMAIN = "UPDATE RDAP_DOMAIN"
             + " SET LDH_NAME=?,UNICODE_NAME=?,PORT43=?,LANG=?,NETWORK_ID=?"
             + " ,CUSTOM_PROPERTIES=? WHERE DOMAIN_ID=?";
+    /**
+     * SQL_DELETE_DOMAIN.
+     */
     private static final String SQL_DELETE_DOMAIN =
             "DELETE FROM RDAP_DOMAIN WHERE DOMAIN_ID=?";
     /**
@@ -134,6 +145,19 @@ public class DomainUpdateDaoImpl extends AbstractUpdateDao<Domain, DomainDto> {
     @Override
     public Long findIdByHandle(String handle) {
         return super.findIdByHandle(handle, "DOMAIN_ID", "RDAP_DOMAIN");
+    }
+    
+    @Override
+    public void deleteRel(BaseModel outerModel) {
+        //delete ARPA domain by network id
+         if (null == outerModel || null == outerModel.getId()) {
+             return;
+         }             
+         if(!(outerModel instanceof Network)){
+             return;
+         }
+         super.delete(String.valueOf(outerModel.getId()),
+                            "RDAP_DOMAIN", "NETWORK_ID");
     }
 
 }

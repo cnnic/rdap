@@ -48,9 +48,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * @author weijunkai
  * 
  */
-@JsonPropertyOrder({ "rdapConformance", "notices", "objectClassName", "handle", "startAddress",
-        "endAddress", "ipVersion", "name", "type", "country", "parentHandle",
-        "status", "entities", "remarks", "links", "port43", "events", "lang" })
+@JsonPropertyOrder({
+        "rdapConformance", "notices", "objectClassName", "handle",
+        "startAddress", "endAddress", "ipVersion", "name", "type", "country",
+        "parentHandle", "status", "entities", "remarks", "links", "port43",
+        "events", "lang" })
 public class Network extends BaseModel {
     /**
      * representing a registry unique identifier of the ip object instance.
@@ -109,7 +111,7 @@ public class Network extends BaseModel {
      */
     private List<Event> events;
     /**
-     * network name  cidr.
+     * network name cidr.
      */
     @JsonIgnore
     private String cidr;
@@ -122,7 +124,7 @@ public class Network extends BaseModel {
     public ModelType getObjectType() {
         return ModelType.IP;
     }
-    
+
     @Override
     public QueryUri getUri() {
         return QueryUri.IP;
@@ -130,9 +132,12 @@ public class Network extends BaseModel {
 
     @Override
     public String generateLinkHref() {
-        return getUri().getName() + getCidr();
+        if (StringUtils.isBlank(cidr)) {
+            return getUri().getName();
+        }
+        return getUri().getName() + cidr;
     }
-    
+
     /**
      * add a status string to status list.
      * 
@@ -417,7 +422,7 @@ public class Network extends BaseModel {
     public void setParentHandle(String parentHandle) {
         this.parentHandle = parentHandle;
     }
-    
+
     /**
      * get cidr.
      * 
@@ -434,9 +439,9 @@ public class Network extends BaseModel {
      *            cidr for set.
      */
     public void setCidr(String cidr) {
-         this.cidr = cidr;
+        this.cidr = cidr;
     }
-    
+
     /**
      * get ObjectClassNameEnum.
      * 
@@ -455,5 +460,5 @@ public class Network extends BaseModel {
     public void setObjectClassName(ObjectClassNameEnum objectClassName) {
         this.objectClassName = objectClassName;
     }
-    
+
 }

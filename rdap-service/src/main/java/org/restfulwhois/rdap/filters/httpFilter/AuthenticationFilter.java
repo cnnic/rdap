@@ -155,6 +155,9 @@ public class AuthenticationFilter implements HttpFilter {
 
     @Override
     public boolean needFilter(HttpServletRequest req, HttpServletResponse res) {
+        if (FilterHelper.isUpdateUri(req)) {
+            return false;
+        }
         return true;
     }
 

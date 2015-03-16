@@ -110,7 +110,7 @@ public class JcardTelephoneConverter implements JcardPropertyConverter {
      * 
      * @param tel
      *            tel.
-     * @param vcard
+     * @param vcard vcard.
      * @return TelUri list if tel number is valid, return null if not.
      */
     private void addTelephoneToVcard(EntityTelephone tel, VCard vcard) {
@@ -146,6 +146,9 @@ public class JcardTelephoneConverter implements JcardPropertyConverter {
     private List<TelephoneType> parseTelephoneTypes(String typesStr) {
         List<TelephoneType> types = new ArrayList<TelephoneType>();
         String[] typeSplitStrArray = StringUtils.split(typesStr, ";");
+        if(null == typeSplitStrArray){
+            return types;
+        }
         for (String typeSplit : typeSplitStrArray) {
             TelephoneType type = TelephoneType.find(typeSplit);
             if (null != type) {

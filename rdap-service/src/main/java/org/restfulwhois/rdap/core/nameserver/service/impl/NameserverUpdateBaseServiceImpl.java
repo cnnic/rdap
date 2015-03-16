@@ -56,6 +56,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class NameserverUpdateBaseServiceImpl extends
         AbstractUpdateService<NameserverDto, Nameserver> {
+   /**
+     * ipAddressDto.
+     */
     @Autowired
     protected UpdateDao<IPAddress, IpAddressDto> ipAddressDao;
     /**
@@ -63,13 +66,19 @@ public abstract class NameserverUpdateBaseServiceImpl extends
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NameserverUpdateBaseServiceImpl.class);
-
+    /**
+     * @param dto nameserverDto.
+     * @return nameserver.
+     */
     protected Nameserver convertDtoToModel(NameserverDto dto) {
-        Nameserver Nameserver = convertDtoToNameserver(dto);
-        super.convertCustomProperties(dto, Nameserver);
-        return Nameserver;
+        Nameserver nameserver = convertDtoToNameserver(dto);
+        super.convertCustomProperties(dto, nameserver);
+        return nameserver;
     }
-
+    /**
+     * 
+     * @param nameserver nameserver.
+     */
     protected void saveIpAddresses(Nameserver nameserver) {
         LOGGER.debug("save ipAddresses ...");
         NameserverDto dto = (NameserverDto) nameserver.getDto();
@@ -82,24 +91,39 @@ public abstract class NameserverUpdateBaseServiceImpl extends
         ipAddressList.add(ipAddressDto);
         ipAddressDao.saveAsInnerObjects(nameserver, ipAddressList);
     }
-
+    /**
+     * 
+     * @param nameserver nameserver.
+     */
     protected void deleteIpAddresses(Nameserver nameserver) {
         LOGGER.debug("delete ipAddresses ...");
         ipAddressDao.deleteAsInnerObjects(nameserver);
     }
-
+    /**
+     * 
+     * @param nameserver nameserver.
+     */
     protected void updateIpAddresses(Nameserver nameserver) {
         deleteIpAddresses(nameserver);
         saveIpAddresses(nameserver);
     }
-
+    /**
+     * 
+     * @param dto  nameserverDto.
+     * @return nameserver.
+     */
     private Nameserver convertDtoToNameserver(NameserverDto dto) {
-        Nameserver Nameserver = new Nameserver();
-        BeanUtil.copyProperties(dto, Nameserver, "entities", "events",
+        Nameserver nameserver = new Nameserver();
+        BeanUtil.copyProperties(dto, nameserver, "entities", "events",
                 "remarks", "links");
-        return Nameserver;
+        return nameserver;
     }
-
+    /**
+     * 
+     * @param dto namerserverDto.
+     * @param validationResult validationResult.
+     * @return validationResult.
+     */
     protected ValidationResult validateForSaveAndUpdate(NameserverDto dto,
             ValidationResult validationResult) {
         checkNotEmptyAndMaxLength(dto.getLdhName(), MAX_LENGTH_LDHNAME,
@@ -111,7 +135,11 @@ public abstract class NameserverUpdateBaseServiceImpl extends
         validateBaseDto(dto, validationResult);
         return validationResult;
     }
-
+    /**
+     * 
+     * @param dto nameserverDto.
+     * @param validationResult validationResult.
+     */
     private void checkIpAddress(NameserverDto dto,
             ValidationResult validationResult) {
         IpAddressDto ipAddressDto = dto.getIpAddresses();
@@ -120,7 +148,12 @@ public abstract class NameserverUpdateBaseServiceImpl extends
         }
         checkIpList(ipAddressDto.getIpList(), "ipAddresses", validationResult);
     }
-
+    /**
+     * 
+     * @param ipList ipList.
+     * @param fieldName fieldName.
+     * @param validationResult validationResult.
+     */
     private void checkIpList(List<String> ipList, String fieldName,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {

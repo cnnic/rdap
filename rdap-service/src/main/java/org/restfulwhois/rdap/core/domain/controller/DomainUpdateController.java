@@ -64,24 +64,33 @@ public class DomainUpdateController {
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DomainUpdateController.class);
-
+    /**
+     * domain create service.
+     */
     @Autowired
     @Qualifier("domainCreateServiceImpl")
     private UpdateService<DomainDto, Domain> createService;
+    /**
+     * domain update service.
+     */
     @Autowired
     @Qualifier("domainUpdateServiceImpl")
     private UpdateService<DomainDto, Domain> updateService;
+    /**
+     * domain delete service.
+     */
     @Autowired
     @Qualifier("domainDeleteServiceImpl")
     private UpdateService<DomainDto, Domain> deleteService;
 
     /**
-     * create domain.
+     * create.
      * 
-     * @param domainName
+     * @param domainDto
+     *            domainDto.
      * @param request
-     * @return
-     * @throws DecodeException
+     *            request.
+     * @return ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "" }, method = RequestMethod.POST)
@@ -94,12 +103,14 @@ public class DomainUpdateController {
     }
 
     /**
-     * update domain.
      * 
-     * @param domainName
+     * @param domainDto
+     *            domainDto.
+     * @param handle
+     *            handle.
      * @param request
-     * @return
-     * @throws DecodeException
+     *            request.
+     * @return ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
@@ -113,12 +124,10 @@ public class DomainUpdateController {
     }
 
     /**
-     * delete domain.
      * 
-     * @param domainName
-     * @param request
-     * @return
-     * @throws DecodeException
+     * @param handle handle.
+     * @param request request.
+     * @return ResponseEntity.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.DELETE)

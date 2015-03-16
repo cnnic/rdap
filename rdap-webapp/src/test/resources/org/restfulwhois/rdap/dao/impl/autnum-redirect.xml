@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-	<RDAP_AUTNUM_REDIRECT AS_REDIRECT_ID='1'
-		START_AUTNUM="1" END_AUTNUM="100" REDIRECT_URL='http://cnnic.cn/rdap' />
-	<RDAP_AUTNUM AS_ID="1" HANDLE="handle1" START_AUTNUM="1000"
-		END_AUTNUM="2000" NAME="name1" TYPE="alocated" COUNTRY="zh" LANG="cn"
-		PORT43="port43" />
-</dataset>

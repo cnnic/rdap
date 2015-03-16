@@ -30,11 +30,21 @@
  */
 package org.restfulwhois.rdap.core.ip.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
 import org.restfulwhois.rdap.common.dto.IpDto;
 import org.restfulwhois.rdap.common.model.Network;
+import org.restfulwhois.rdap.common.util.IpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -48,25 +58,101 @@ public class NetworkUpdateDaoImpl extends AbstractUpdateDao<Network, IpDto> {
      */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(NetworkUpdateDaoImpl.class);
+    
+    /**
+     * save sql.
+     */
+    private static final String SQL_SAVE_IP =
+            "INSERT INTO RDAP_IP"
+                  + " (HANDLE,ENDADDRESS,STARTADDRESS,VERSION,NAME,TYPE,"
+                  + " COUNTRY,PARENT_HANDLE,PORT43,LANG,CIDR,CUSTOM_PROPERTIES)"
+                  + " values(?,?,?,?,?,?,?,?,?,?,?,?)";
+    /**
+     * update sql.
+     */
+    private static final String SQL_UPDATE_IP = "UPDATE RDAP_IP"
+            + " SET ENDADDRESS=?,STARTADDRESS=?,VERSION=?,NAME=?,TYPE=?,"
+            + " COUNTRY=?,PARENT_HANDLE=?,PORT43=?,LANG=?,"
+            + " CIDR=?,CUSTOM_PROPERTIES=? where IP_ID=?";
+   /**
+    * delete sql.
+    */
+    private static final String SQL_DELETE_IP =
+            "DELETE FROM RDAP_IP where IP_ID=?";
 
     @Override
-    public Network save(Network model) {
-        // TODO Auto-generated method stub
-        return null;
+    public Network save(final Network model) {
+         KeyHolder keyHolder = new GeneratedKeyHolder();
+         jdbcTemplate.update(new PreparedStatementCreator() {
+             public PreparedStatement createPreparedStatement(
+                     Connection connection) throws SQLException {
+                 PreparedStatement ps =
+                         connection.prepareStatement(SQL_SAVE_IP,
+                                 Statement.RETURN_GENERATED_KEYS);
+                 ps.setString(1, model.getHandle());
+                 ps.setBytes(2, IpUtil.ipToByteArray(model.getEndAddress()));
+                 ps.setBytes(3, IpUtil.ipToByteArray(model.getStartAddress()));
+                 ps.setString(4, model.getIpVersion().getName());
+                 ps.setString(5, model.getName());
+                 ps.setString(6, model.getType());
+                 ps.setString(7, model.getCountry());
+                 ps.setString(8, model.getParentHandle());
+                 ps.setString(9, model.getPort43());
+                 ps.setString(10, model.getLang());
+                 ps.setString(11, model.getCidr());
+                 ps.setString(12, model.getCustomPropertiesJsonVal());
+                 return ps;
+             }
+         }, keyHolder);
+         model.setId(keyHolder.getKey().longValue());
+         return model;
+     
     }
-
+    
     @Override
-    public void update(Network model) {
-        // TODO Auto-generated method stub
-
+    public void saveStatus(Network model) {
+        saveStatus(model, model.getStatus(), "RDAP_IP_STATUS", 
+                   "IP_ID");
     }
-
+    
     @Override
-    public void delete(Network model) {
-        // TODO Auto-generated method stub
+    public void update(final Network model) {
+        jdbcTemplate.update(SQL_UPDATE_IP, new PreparedStatementSetter() {
+           public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setBytes(1, IpUtil.ipToByteArray(model.getEndAddress()));
+                ps.setBytes(2, IpUtil.ipToByteArray(model.getStartAddress()));
+                ps.setString(3, model.getIpVersion().getName());
+                ps.setString(4, model.getName());
+                ps.setString(5, model.getType());
+                ps.setString(6, model.getCountry());
+                ps.setString(7, model.getParentHandle());
+                ps.setString(8, model.getPort43());
+                ps.setString(9, model.getLang());
+                ps.setString(10, model.getCidr());
+                ps.setString(11, model.getCustomPropertiesJsonVal());
+                ps.setLong(12, model.getId());
+            }
+        });
 
     }
+    @Override
+    public void updateStatus(Network model) {
+        deleteStatus(model);
+        saveStatus(model);
+    }
+    @Override
+    public void delete(final Network model) {
+       jdbcTemplate.update(SQL_DELETE_IP, new PreparedStatementSetter() {
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setLong(1, model.getId());
+            }
+        });
 
+    }
+    @Override
+    public void deleteStatus(Network model) {
+        deleteStatus(model, "RDAP_IP_STATUS", "IP_ID");
+    }
     @Override
     public Long findIdByHandle(String handle) {
         return super.findIdByHandle(handle, "IP_ID", "RDAP_IP");
