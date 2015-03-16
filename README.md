@@ -37,7 +37,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 		java -Djava.ext.dirs=../lib org.restfulwhois.rdap.init.Init initschema
 	```
 	
-7. Start and shutdown 
+7. Start up and shutdown 
    * Start up tomcat 
    
 	```
