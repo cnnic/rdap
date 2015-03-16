@@ -1,5 +1,7 @@
 package org.restfulwhois.rdap.client.service;
 
+import org.restfulwhois.rdap.client.util.URLUtil;
+
 public class RdapClientConfig {
     private final String mediaTypeJson = "application/json;charset=UTF-8";
     private final int connTimeoutDefault = 3000;
@@ -63,4 +65,13 @@ public class RdapClientConfig {
         this.keyStorePassword = keyStorePassword;
     }
     
+    public boolean isHttps(){
+        String protocol = getUrl().substring(0, 5);
+        String https = URLUtil.ProtocolType.HTTPS.name();
+        if(https.equalsIgnoreCase(protocol)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

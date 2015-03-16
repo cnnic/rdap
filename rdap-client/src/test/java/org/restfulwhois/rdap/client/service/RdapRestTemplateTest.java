@@ -33,6 +33,7 @@ public class RdapRestTemplateTest {
         mockHttpServer.startServer();
         template.setConnectTimeout(10000);
         template.setReadTimeout(10000);
+        template.setMediaType("application/json;charset=UTF-8");
     }
 
     public void setContent200() {

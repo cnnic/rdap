@@ -103,7 +103,7 @@ public class URLUtil {
         return false;
     }
 
-    private enum ProtocolType {
+    public enum ProtocolType {
         HTTP, HTTPS;
     }
 }
