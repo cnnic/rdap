@@ -34,7 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
-import org.restfulwhois.rdap.common.exception.DecodeException;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.service.UpdateService;
 import org.restfulwhois.rdap.common.support.RestResponse;

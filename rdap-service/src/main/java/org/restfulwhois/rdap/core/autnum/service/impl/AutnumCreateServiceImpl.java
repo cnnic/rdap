@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * create Autnum service implementation.
+ * create as number service implementation.
  * 
  * @author zhanyq
  * 
