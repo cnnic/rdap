@@ -55,8 +55,8 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 		curl -H Accept:application/rdap+json http://$RDAP_SERVER_IP:$RDAP_SERVER_PORT/rdap/autnum/2100
 	```
 	
-	It's ok if response contains 'rdapConformance'. 
-   * Shutdown tomcat 
+	It's ok if response contains 'rdapConformance'.    
+   * Shutdown tomcat    
     	```
 	[in Linux/OS X, open a shell and execute command:]
 		cd $TOMCAT_HOME		#$TOMCAT_HOME must be replaced by real dir
