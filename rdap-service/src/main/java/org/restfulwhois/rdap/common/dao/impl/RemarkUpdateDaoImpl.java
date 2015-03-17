@@ -57,6 +57,7 @@ import org.springframework.stereotype.Repository;
 import ezvcard.util.StringUtils;
 
 /**
+ * 
  * @author zhanyq
  * 
  */
@@ -75,64 +76,57 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
     @Qualifier("linkUpdateDaoImpl")
     private UpdateDao<Link, LinkDto> linkUpdateDao;
 
-	@Override
-	public Remark save(Remark model) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Remark save(Remark model) {
+         return null;
+    }
 
-	@Override
-	public void update(Remark model) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void update(Remark model) {
 
-	@Override
-	public void delete(Remark model) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void saveAsInnerObjects(BaseModel outerModel, List<RemarkDto> models) {
-		if (null == models || models.size() == 0){
-			return;
-		}
-	    for (RemarkDto remark: models) {
-	    	Long remarkId = createRemark(remark);	    	
-	    	createRelRemark(outerModel, remarkId);	    	
-			createRemarkDescription(remark, remarkId);
-			//create link
-			Remark remarkAsOuter = new Remark();
-			remarkAsOuter.setId(remarkId);
-			linkUpdateDao.saveAsInnerObjects(remarkAsOuter,
-					remark.getLinks());
-						
-	    }
-	}
-	@Override
-	public void deleteAsInnerObjects(BaseModel outerModel) {
-		if (null == outerModel) {
-			return;
-		}
-		List<Long> remarkIds = super.findIdsByOuterIdAndType(outerModel,
-				"NOTICE_ID", "REL_NOTICE_REGISTRATION");
-	    if (null != remarkIds) {
-	    	String remarkIdStr = StringUtils.join(remarkIds, ",");
-	    	//delete remark	    	
+    }
+
+    @Override
+    public void delete(Remark model) {
+
+    }
+    
+    @Override
+    public void saveAsInnerObjects(BaseModel outerModel, List<RemarkDto> models) {
+        if (null == models || models.size() == 0){
+             return;
+        }
+        for (RemarkDto remark: models) {
+            Long remarkId = createRemark(remark);
+            createRelRemark(outerModel, remarkId);
+            createRemarkDescription(remark, remarkId);
+            Remark remarkAsOuter = new Remark();
+            remarkAsOuter.setId(remarkId);
+            linkUpdateDao.saveAsInnerObjects(remarkAsOuter, remark.getLinks());
+        }
+    }
+    
+    @Override
+    public void deleteAsInnerObjects(BaseModel outerModel) {
+        if (null == outerModel) {
+             return;
+        }
+        List<Long> remarkIds = super.findIdsByOuterIdAndType(outerModel,
+                 "NOTICE_ID", "REL_NOTICE_REGISTRATION");
+        if (null != remarkIds) {
+             String remarkIdStr = StringUtils.join(remarkIds, ",");
              super.delete(remarkIdStr, "RDAP_NOTICE", "NOTICE_ID");
-	    	//delete remark  description
              super.delete(remarkIdStr, "RDAP_NOTICE_DESCRIPTION", "NOTICE_ID");
-	    	//delete link	    	
-	        for (Long remarkId:remarkIds) {
-	    		Remark remark = new Remark();
-	    		remark.setId(remarkId);	    		
-	    		linkUpdateDao.deleteAsInnerObjects(remark);
-	    	}
-	    	super.deleteRel(outerModel, "REL_NOTICE_REGISTRATION");
-	    }	    
-	}
-	
-	@Override
+             for (Long remarkId:remarkIds) {
+                  Remark remark = new Remark();
+                  remark.setId(remarkId);
+                  linkUpdateDao.deleteAsInnerObjects(remark);
+             }
+             super.deleteRel(outerModel, "REL_NOTICE_REGISTRATION");
+        }
+    }
+
+    @Override
     public void updateAsInnerObjects(BaseModel outerModel,
              List<RemarkDto> models) {
         if (null == models || models.size() == 0) {
@@ -141,86 +135,82 @@ public class RemarkUpdateDaoImpl extends AbstractUpdateDao<Remark, RemarkDto> {
         deleteAsInnerObjects(outerModel);
         saveAsInnerObjects(outerModel, models);
     }
-	
+
    /**
-	 * create remark.
-	 * @param remark
-	 *        remark object
-	 * @return remarId
-	 *      
-	 */
-	private Long createRemark(final RemarkDto remark) {
+    * create remark.
+    * @param remark
+    *        remark object
+    * @return remarId
+    *
+    */
+    private Long createRemark(final RemarkDto remark) {
         final String sql = "insert into RDAP_NOTICE(TYPE,TITLE)"
-	      +  " values (?,?)";    
+                +  " values (?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
-        	public PreparedStatement createPreparedStatement(
-        			Connection connection) throws SQLException {
-             PreparedStatement ps = connection.prepareStatement(
-            		 sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, ModelType.REMARK.getName());
-				ps.setString(2, remark.getTitle());
-				
-				return ps;
-			}		
+            public PreparedStatement createPreparedStatement(
+                    Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(
+                          sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, ModelType.REMARK.getName());
+                ps.setString(2, remark.getTitle());
+                return ps;
+            }
         }, keyHolder);
-		return keyHolder.getKey().longValue();
-	}
-	
-   /**
-	 * create rel remark registration.
-	 * @param outerModel
-	 *        object of outer object
-	 * @param remarkId
-	 *        remarkId
-	 */
-	private void createRelRemark(final BaseModel outerModel
-			, final Long remarkId) {
-		final String sql = "insert into REL_NOTICE_REGISTRATION(REL_ID,"
-			      +  "REL_OBJECT_TYPE,NOTICE_ID) values (?,?,?)";
-		jdbcTemplate.update(new PreparedStatementCreator() {
-		    public PreparedStatement createPreparedStatement(
-                     Connection connection) throws SQLException {
-		        PreparedStatement ps = connection.prepareStatement(sql);
-		        ps.setLong(1, outerModel.getId());
-		        ps.setString(2, outerModel.getObjectType().getName());
-		        ps.setLong(3, remarkId);
-			    return ps;
-			}				
-	    });		
-	}
-	
-   /**
-	 * create remark description.
-	 * @param remark
-	 *        remark
-	 * @param remarkId
-	 *        remarkId	 
-	 */
-    private void createRemarkDescription(final RemarkDto remark,
-    		final Long remarkId) {
-		final List<String> description = remark.getDescription();
-		if (null == description || description.size() == 0) {
-			return;
-		}
-		final String sql = "insert into RDAP_NOTICE_DESCRIPTION"
-			      +  "(NOTICE_ID, DESCRIPTION) values (?,?)";
-		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-		    public int getBatchSize() {
-		        return description.size();
-		    }
-		    @Override
-			public void setValues(PreparedStatement ps, int i)
-				throws SQLException {
-		    	ps.setLong(1, remarkId); 
-		    	ps.setString(2, description.get(i));
-			}				
-	  });
-	}
+        return keyHolder.getKey().longValue();
+    }
 
-	@Override
-	public Long findIdByHandle(String handle) {
-		// TODO Auto-generated method stub
-		return null;
-	}	
+   /**
+    * create rel remark registration.
+    * @param outerModel
+    *        object of outer object
+    * @param remarkId
+    *        remarkId
+    */
+    private void createRelRemark(final BaseModel outerModel, final Long remarkId) {
+        final String sql = "insert into REL_NOTICE_REGISTRATION(REL_ID,"
+                 +  "REL_OBJECT_TYPE,NOTICE_ID) values (?,?,?)";
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                     Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setLong(1, outerModel.getId());
+                ps.setString(2, outerModel.getObjectType().getName());
+                ps.setLong(3, remarkId);
+                return ps;
+             }
+        });
+    }
+
+   /**
+    * create remark description.
+    * @param remark
+    *        remark
+    * @param remarkId
+    *        remarkId
+    */
+    private void createRemarkDescription(final RemarkDto remark, final Long remarkId) {
+        final List<String> description = remark.getDescription();
+        if (null == description || description.size() == 0) {
+             return;
+        }
+        final String sql = "insert into RDAP_NOTICE_DESCRIPTION"
+                +  "(NOTICE_ID, DESCRIPTION) values (?,?)";
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+           public int getBatchSize() {
+              return description.size();
+            }
+            @Override
+            public void setValues(PreparedStatement ps, int i)
+                       throws SQLException {
+                ps.setLong(1, remarkId); 
+                ps.setString(2, description.get(i));
+            }
+        });
+    }
+
+    @Override
+    public Long findIdByHandle(String handle) {
+         return null;
+    }
 }

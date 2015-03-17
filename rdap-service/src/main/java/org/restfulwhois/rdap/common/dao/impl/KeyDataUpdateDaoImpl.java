@@ -66,8 +66,8 @@ import org.springframework.stereotype.Repository;
 public class KeyDataUpdateDaoImpl extends 
                 AbstractUpdateDao<KeyData, KeyDataDto> {
    /**
-     * logger for record log.
-     */
+    * logger for record log.
+    */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(KeyDataUpdateDaoImpl.class);    
  
@@ -94,72 +94,67 @@ public class KeyDataUpdateDaoImpl extends
 
     @Override
     public KeyData save(KeyData model) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+         return null;
+    }
 
-	@Override
-	public void update(KeyData model) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void update(KeyData model) {
+         
+    }
 
-	@Override
-	public void delete(KeyData model) {
-		// TODO Auto-generated method stub
-		
-	}
-	/**
-	 * batch create KeyData.
-	 * 
-	 * @param outerModel
-	 *        outer object	 
-	 * @param models 
-	 *        KeyData of outer Object
-	 */
-	@Override
-	public  void saveAsInnerObjects(BaseModel outerModel, List<KeyDataDto> models) {
-		if (null == models || models.size() == 0) {
-			return;
-		}
-	    for (KeyDataDto model:models) {
-	    	Long keyDataId = createKeyData(model); 	    	
-	    	secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), 
-	    			ModelType.KEYDATA, keyDataId);
-	    	KeyData keyDataAsOuter = new KeyData();
-	    	keyDataAsOuter.setId(keyDataId);
-	    	//create link
-	       	linkUpdateDao.saveAsInnerObjects(keyDataAsOuter,
-	       			model.getLinks());
-	    	//create event
-		    eventUpdateDao.saveAsInnerObjects(keyDataAsOuter, 
-		    		model.getEvents());
-	    }
-	}
-	
-	@Override
-	public void deleteAsInnerObjects(BaseModel outerModel) {
-		if (null == outerModel) {
-			return;
-		}
-		List<Long> keyDataIds = secureDnsUpdateDao.findIdsByOuterIdAndType(
-				outerModel.getId(), ModelType.KEYDATA);
-	    if (null != keyDataIds) {
-	    	String keyDataIdStr = StringUtils.join(keyDataIds, ",");
-	    	//delete KeyData	    	
-	    	super.delete(keyDataIdStr, "RDAP_KEYDATA", "KEYDATA_ID");
-	    	secureDnsUpdateDao.deleteRelSecureDnsDskey(
-	    			outerModel.getId(), ModelType.KEYDATA);
-	    	for (Long keyDataId : keyDataIds) {
-	    		KeyData keyData = new KeyData();
-		    	keyData.setId(keyDataId);	    		
-	    		linkUpdateDao.deleteAsInnerObjects(keyData);
-		    	eventUpdateDao.deleteAsInnerObjects(keyData);
-	    	}
-	    }
-	}	
-	
-	@Override
+    @Override
+    public void delete(KeyData model) {
+
+    }
+    
+   /**
+    * create KeyData.
+    * 
+    * @param outerModel
+    *        outer object
+    * @param models 
+    *        KeyData of outer Object
+    */
+    @Override
+    public  void saveAsInnerObjects(BaseModel outerModel, List<KeyDataDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        for (KeyDataDto model:models) {
+            Long keyDataId = createKeyData(model);
+            secureDnsUpdateDao.createRelSecureDnsDskey(outerModel.getId(), 
+                      ModelType.KEYDATA, keyDataId);
+            KeyData keyDataAsOuter = new KeyData();
+            keyDataAsOuter.setId(keyDataId);
+            linkUpdateDao.saveAsInnerObjects(keyDataAsOuter,
+                    model.getLinks());
+            eventUpdateDao.saveAsInnerObjects(keyDataAsOuter, 
+                    model.getEvents());
+        }
+    }
+
+    @Override
+    public void deleteAsInnerObjects(BaseModel outerModel) {
+        if (null == outerModel) {
+            return;
+        }
+        List<Long> keyDataIds = secureDnsUpdateDao.findIdsByOuterIdAndType(
+                outerModel.getId(), ModelType.KEYDATA);
+        if (null != keyDataIds) {
+            String keyDataIdStr = StringUtils.join(keyDataIds, ",");
+            super.delete(keyDataIdStr, "RDAP_KEYDATA", "KEYDATA_ID");
+            secureDnsUpdateDao.deleteRelSecureDnsDskey(
+                   outerModel.getId(), ModelType.KEYDATA);
+            for (Long keyDataId : keyDataIds) {
+                KeyData keyData = new KeyData();
+                keyData.setId(keyDataId);
+                linkUpdateDao.deleteAsInnerObjects(keyData);
+                eventUpdateDao.deleteAsInnerObjects(keyData);
+            }
+       }
+    }
+
+    @Override
     public void updateAsInnerObjects(BaseModel outerModel,
              List<KeyDataDto> models) {
         if (null == models || models.size() == 0) {
@@ -168,34 +163,34 @@ public class KeyDataUpdateDaoImpl extends
         deleteAsInnerObjects(outerModel);
         saveAsInnerObjects(outerModel, models);
     }
-	
-	/**
-	 * @param model
-	 *        KeyData
-	 * @return keyDataId.
-	 */
+
+   /**
+    * create key data.
+    * @param model
+    *        KeyData
+    * @return keyDataId.
+    */
     private Long createKeyData(final KeyDataDto model) {
         final String sql = "insert into RDAP_KEYDATA(FLAGS,"
-	      +  "PROTOCOL,PUBLIC_KEY,ALGORITHM) values (?,?,?,?)";    
+             +  "PROTOCOL,PUBLIC_KEY,ALGORITHM) values (?,?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
-        	public PreparedStatement createPreparedStatement(Connection connection) 
-        			throws SQLException {           
+             public PreparedStatement createPreparedStatement(Connection connection) 
+                   throws SQLException {           
              PreparedStatement ps = connection.prepareStatement(
-            		 sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setInt(1, model.getFlags());
-				ps.setInt(2, model.getProtocol());
-				ps.setString(3, model.getPublicKey());
-				ps.setInt(4, model.getAlgorithm());
-				return ps;
-			}		
+                         sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, model.getFlags());
+                ps.setInt(2, model.getProtocol());
+                ps.setString(3, model.getPublicKey());
+                ps.setInt(4, model.getAlgorithm());
+                return ps;
+             }
         }, keyHolder);
-		return keyHolder.getKey().longValue();
-	}
+        return keyHolder.getKey().longValue();
+    }
 
-	@Override
-	public Long findIdByHandle(String handle) {
-		// TODO Auto-generated method stub
-		return null;
-	}		
+    @Override
+    public Long findIdByHandle(String handle) {
+         return null;
+    }
 }
