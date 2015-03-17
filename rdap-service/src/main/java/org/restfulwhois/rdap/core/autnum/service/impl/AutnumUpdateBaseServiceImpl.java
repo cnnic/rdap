@@ -56,7 +56,7 @@ public abstract class AutnumUpdateBaseServiceImpl extends
 
     /**
      * covert autnumDto to autnum.
-     * meantime covert custom properties.
+     * include covert custom properties.
      * @param dto 
      *      autnumdto.
      * @return Autnum.

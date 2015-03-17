@@ -60,8 +60,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
    /**
-     * logger for record log.
-     */
+    * logger for record log.
+    */
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(LinkUpdateDaoImpl.class);    
  
@@ -130,89 +130,88 @@ public class LinkUpdateDaoImpl extends AbstractUpdateDao<Link, LinkDto> {
     }
     
    /**
-     * create link hreflang.
-     * @param linkDto 
-     *        link
-     * @param linkId
-     *        linkId
-     */
-	private void createLinkHreflang(final LinkDto linkDto, final Long linkId) {
-		final List<String> hreflang = linkDto.getHreflang();
-		final List<String> notEmptyHreflangs = StringUtil.getNotEmptyStringList(hreflang);
-		if(notEmptyHreflangs.isEmpty()){
-		    return;
-		}
-		final String sql = "insert into RDAP_LINK_HREFLANG(HREFLANG, LINK_ID)"
+    * create link hreflang.
+    * @param linkDto 
+    *        link
+    * @param linkId
+    *        linkId
+    */
+    private void createLinkHreflang(final LinkDto linkDto, final Long linkId) {
+        final List<String> hreflang = linkDto.getHreflang();
+        final List<String> notEmptyHreflangs = StringUtil.getNotEmptyStringList(hreflang);
+        if(notEmptyHreflangs.isEmpty()){
+            return;
+        }
+        final String sql = "insert into RDAP_LINK_HREFLANG(HREFLANG, LINK_ID)"
                     +  " values (?,?)";
-		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-		    public int getBatchSize() {
-		        return notEmptyHreflangs.size();
-		    }
-		    @Override
-              public void setValues(PreparedStatement ps, int i)
-              	throws SQLException {
-		    	ps.setString(1, notEmptyHreflangs.get(i));
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                 return notEmptyHreflangs.size();
+            }
+            @Override
+            public void setValues(PreparedStatement ps, int i)
+                       throws SQLException {
+                ps.setString(1, notEmptyHreflangs.get(i));
                 ps.setLong(2, linkId);                
+            }
+              
+        });
+    }
+
+   /**
+    * create link relation.
+    * @param outerObjectId
+    *        object id of outer object
+    * @param outerModelType
+    *        model type of outer object
+    * @param linkId
+    *        linkId
+    */
+    private void createRelLink(final Long outerObjectId, final ModelType
+              outerModelType, final Long linkId) {
+         final String sql = "insert into REL_LINK_OBJECT(REL_ID,REL_OBJECT_TYPE,LINK_ID)"
+                    +  " values (?,?,?)"; 
+         jdbcTemplate.update(new PreparedStatementCreator() {
+              public PreparedStatement createPreparedStatement(Connection connection) 
+                        throws SQLException {
+                   PreparedStatement ps = connection.prepareStatement(sql);
+                   ps.setLong(1, outerObjectId);
+                   ps.setString(2, outerModelType.getName());
+                   ps.setLong(3, linkId);
+                   return ps;
               }
-              	
-		    });
-	}
-	/**
-	 * 
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param outerModelType
-	 *        model type of outer object
-	 * @param linkId
-	 *        linkId
-	 */
-	private void createRelLink(final Long outerObjectId, final ModelType
-              outerModelType,	final Long linkId) {
-		final String sql = "insert into REL_LINK_OBJECT(REL_ID,REL_OBJECT_TYPE,LINK_ID)"
-                    +  " values (?,?,?)"; 		       
-		       jdbcTemplate.update(new PreparedStatementCreator() {
-		           public PreparedStatement createPreparedStatement(Connection connection) 
-		                      throws SQLException {           
-		            PreparedStatement ps = connection.prepareStatement(
-		            		sql);
-		            ps.setLong(1, outerObjectId);
-		            ps.setString(2, outerModelType.getName());
-		            ps.setLong(3, linkId);
-              		return ps;
-              		}
-              	
-		        });
-		
-	}
-	/**
-	 * @param link
-	 *        link
-	 * @return linkId.
-	 */
-    private Long createLink(final LinkDto link) {		
+          });
+    }
+
+   /**
+    * create link.
+    * @param link
+    *        link
+    * @return linkId.
+    */
+    private Long createLink(final LinkDto link) {
         final String sql = "insert into RDAP_LINK(VALUE,REL,HREF,MEDIA,TYPE,TITLE)"
-	      +  " values (?,?,?,?,?,?)";    
+                +  " values (?,?,?,?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
-        	public PreparedStatement createPreparedStatement(Connection connection) 
+            public PreparedStatement createPreparedStatement(Connection connection) 
                       throws SQLException {           
-             PreparedStatement ps = connection.prepareStatement(
-            		 sql, Statement.RETURN_GENERATED_KEYS);
-              	ps.setString(1, link.getValue());
-              	ps.setString(2, link.getRel());
-              	ps.setString(3, link.getHref());
-              	ps.setString(4, link.getMedia());
-              	ps.setString(5, link.getType());
-              	ps.setString(6, link.getTitle());
-              	return ps;
-              }		
+                PreparedStatement ps = connection.prepareStatement(
+                    sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, link.getValue());
+                ps.setString(2, link.getRel());
+                ps.setString(3, link.getHref());
+                ps.setString(4, link.getMedia());
+                ps.setString(5, link.getType());
+                ps.setString(6, link.getTitle());
+                return ps;
+            }
         }, keyHolder);
-		return keyHolder.getKey().longValue();
-	}
+        return keyHolder.getKey().longValue();
+    }
 
-	@Override
-	public Long findIdByHandle(String handle) {
-		// TODO Auto-generated method stub
-		return null;
-	}	
+    @Override
+    public Long findIdByHandle(String handle) {
+        return null;
+    }
 }

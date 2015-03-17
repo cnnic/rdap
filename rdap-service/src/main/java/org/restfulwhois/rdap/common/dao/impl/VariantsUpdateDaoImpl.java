@@ -39,7 +39,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.restfulwhois.rdap.common.dao.AbstractUpdateDao;
-import org.restfulwhois.rdap.common.dto.embedded.PublicIdDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantDto;
 import org.restfulwhois.rdap.common.dto.embedded.VariantNameDto;
 import org.restfulwhois.rdap.common.model.Variants;
@@ -70,55 +69,51 @@ public class VariantsUpdateDaoImpl extends
             .getLogger(VariantsUpdateDaoImpl.class);  
 
     @Override
-	public Variants save(Variants model) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Variants save(Variants model) {
+        return null;
+    }
 
-	@Override
-	public void update(Variants model) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void update(Variants model) {
 
-	@Override
-	public void delete(Variants model) {
-		// TODO Auto-generated method stub
-		
-	}
-	/**
-	 * batch create Variants.
-	 * 
-	 * @param outerModel
-	 *         outer object	
-	 * @param models 
-	 *        Variants of outer Object
-	 */
-	@Override
-	public void saveAsInnerObjects(BaseModel outerModel,
-			List<VariantDto> models) {
-		if (null == models || models.size() == 0) {
-			return;
-		}
-	    for (VariantDto model: models) {
-	    	  createVariants(outerModel.getId(), model);	    	  
-	    }
-	}
-	
-	@Override
-	public void deleteAsInnerObjects(BaseModel outerModel) {
-		if (null == outerModel) {
-			return;
-		}
-		List<Long> variantIds = findIdsByOuterIdAndType(outerModel);
-		
-		if (null != variantIds) {
-	    	String variantIdStr = StringUtils.join(variantIds, ",");
-	    	super.delete(variantIdStr, "RDAP_VARIANT", "VARIANT_ID");
-	    	super.delete(String.valueOf(outerModel.getId()),
-	    			"REL_DOMAIN_VARIANT", "DOMAIN_ID");
-		}
-	}
+    }
+
+    @Override
+    public void delete(Variants model) {
+
+    }
+    
+    /**
+     * create Variants.
+     * 
+     * @param outerModel
+     *         outer object
+     * @param models 
+     *        Variants of outer Object
+     */
+    @Override
+    public void saveAsInnerObjects(BaseModel outerModel, List<VariantDto> models) {
+       if (null == models || models.size() == 0) {
+            return;
+       }
+       for (VariantDto model: models) {
+            createVariants(outerModel.getId(), model);
+       }
+    }
+
+    @Override
+    public void deleteAsInnerObjects(BaseModel outerModel) {
+       if (null == outerModel) {
+           return;
+       }
+       List<Long> variantIds = findIdsByOuterIdAndType(outerModel);
+       if (null != variantIds) {
+            String variantIdStr = StringUtils.join(variantIds, ",");
+            super.delete(variantIdStr, "RDAP_VARIANT", "VARIANT_ID");
+            super.delete(String.valueOf(outerModel.getId()),
+                 "REL_DOMAIN_VARIANT", "DOMAIN_ID");
+       }
+    }
 
     @Override
     public void updateAsInnerObjects(BaseModel outerModel,
@@ -129,99 +124,99 @@ public class VariantsUpdateDaoImpl extends
         deleteAsInnerObjects(outerModel);
         saveAsInnerObjects(outerModel, models);
     }
-	/**
-	 * @param domainId
-	 *        object id of outer object	
-	 * @param model 
-	 *        Variants object
-	 *         
-	 */
-	private void createVariants(Long domainId, VariantDto model) {
-	    List<String> relations = model.getRelation();
-		List<VariantNameDto> variantList = model.getVariantNames();
-		if (null == variantList || variantList.size() == 0) {
-			return;
-		}
-		for (VariantNameDto variant:variantList) {
+    
+    /**
+     * save variants.
+     * @param domainId
+     *        object id of outer object
+     * @param model 
+     *        Variants object
+     */
+    private void createVariants(Long domainId, VariantDto model) {
+        List<String> relations = model.getRelation();
+        List<VariantNameDto> variantList = model.getVariantNames();
+        if (null == variantList || variantList.size() == 0) {
+             return;
+        }
+        for (VariantNameDto variant:variantList) {
             Long variantId = createVariant(variant, model.getIdnTable());
-			createRelDomainVariant(domainId, variantId, relations);
-		}
-	}
-	/**
-	 * 
-	 * @param domainId
-	 *        domainId
-	 * @param variantId
-	 *       variantId
-	 * @param relations
-	 *         relations
-	 */
-	private void createRelDomainVariant(final Long domainId, 
-			        final Long variantId, List<String> relations) {
-	    final List<String> notEmptyRelations = StringUtil.
-	    		getNotEmptyStringList(relations);
-	    if (notEmptyRelations.isEmpty()) {
+            createRelDomainVariant(domainId, variantId, relations);
+        }
+    }
+    
+    /**
+     * create relation between domain with variant.
+     * @param domainId
+     *        domainId
+     * @param variantId
+     *       variantId
+     * @param relations
+     *         relations
+     */
+    private void createRelDomainVariant(final Long domainId, 
+                final Long variantId, List<String> relations) {
+        final List<String> notEmptyRelations = StringUtil.
+                getNotEmptyStringList(relations);
+        if (notEmptyRelations.isEmpty()) {
             return;
         }
-		final String sql = "insert into REL_DOMAIN_VARIANT("
+        final String sql = "insert into REL_DOMAIN_VARIANT("
                + "DOMAIN_ID,VARIANT_TYPE,VARIANT_ID) values (?,?,?)";
-		jdbcTemplate.batchUpdate(sql, 
-				new BatchPreparedStatementSetter() {
-		    public int getBatchSize() {
-		        return notEmptyRelations.size();
-		    }
-		    @Override
-			public void setValues(PreparedStatement ps, int i)
-				throws SQLException {
-		    	ps.setLong(1, domainId); 
-		    	ps.setString(2, notEmptyRelations.get(i));
-		    	ps.setLong(3, variantId);
-			}				
-	  });
-		
-	}
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                 return notEmptyRelations.size();
+            }
+            @Override
+            public void setValues(PreparedStatement ps, int i) 
+                     throws SQLException {
+                ps.setLong(1, domainId); 
+                ps.setString(2, notEmptyRelations.get(i));
+                ps.setLong(3, variantId);
+            }
+       });
+    }
 
-	/**
-	 * 
-	 * @param variant
-	 *        VariantNameDto
-	 * @param idnTable
-	 *        idnTable
-	 * @return id
-	 */
+    /**
+     * save variant.
+     * @param variant
+     *        VariantNameDto
+     * @param idnTable
+     *        idnTable
+     * @return id
+     */
     private Long createVariant(final VariantNameDto variant,
-    		final String idnTable) {
+               final String idnTable) {
         final String sql = "insert into RDAP_VARIANT(LDH_NAME,"
-	      +  " UNICODE_NAME,IDNTABLE) values (?,?,?)";    
+                 +  " UNICODE_NAME,IDNTABLE) values (?,?,?)";    
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
-        	public PreparedStatement createPreparedStatement(
-        			Connection connection) throws SQLException {
-             PreparedStatement ps = connection.prepareStatement(
-            		 sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, variant.getLdhName());
-				ps.setString(2, variant.getUnicodeName());
-				ps.setString(3, idnTable);
-				return ps;
-			}		
+            public PreparedStatement createPreparedStatement(
+                      Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(
+                       sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, variant.getLdhName());
+                ps.setString(2, variant.getUnicodeName());
+                ps.setString(3, idnTable);
+                return ps;
+           }
         }, keyHolder);
-		return keyHolder.getKey().longValue();
-	}
+        return keyHolder.getKey().longValue();
+    }
 
-	@Override
-	public Long findIdByHandle(String handle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/**
-	 * 
-	 * @param outerModel
-	 *        outer object
-	 * @return ids
-	 */
-	public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
-		final String sql = "SELECT VARIANT_ID as ID from "
-				+ "REL_DOMAIN_VARIANT where DOMAIN_ID = ?";
+    @Override
+    public Long findIdByHandle(String handle) {
+        return null;
+    }
+    
+    /**
+     * query variant id by outerId and type.
+     * @param outerModel
+     *        outer object
+     * @return ids
+     */
+     public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
+        final String sql = "SELECT VARIANT_ID as ID from "
+                 + "REL_DOMAIN_VARIANT where DOMAIN_ID = ?";
         LOGGER.debug("find VARIANT_ID exist,sql:{}", sql);
         List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
@@ -239,5 +234,5 @@ public class VariantsUpdateDaoImpl extends
             return ids;
         }
         return null;
-    }	
+    }
 }

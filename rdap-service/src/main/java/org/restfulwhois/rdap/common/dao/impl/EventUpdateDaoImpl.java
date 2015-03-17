@@ -57,6 +57,8 @@ import org.springframework.stereotype.Repository;
 import ezvcard.util.StringUtils;
 
 /**
+ * event update DAO.
+ * 
  * @author zhanyq
  * 
  */
@@ -75,74 +77,62 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
     @Qualifier("linkUpdateDaoImpl")
     private UpdateDao<Link, LinkDto> linkUpdateDao;
 
-	@Override
-	public Event save(Event model) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+   @Override
+   public Event save(Event model) {
+        return null;
+   }
 
-	@Override
-	public void update(Event model) {
-		// TODO Auto-generated method stub
-		
-	}
+   @Override
+   public void update(Event model) {
 
-	@Override
-	public void delete(Event model) {
-		// TODO Auto-generated method stub
-		
-	}
-	/**
-	 * batch create Event.
-	 * 
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param outerModelType
-	 *        model type of outer object
-	 * @param models 
-	 *        events of outer Object
-	 */
-	@Override
-	public void saveAsInnerObjects(BaseModel outerModel, List<EventDto> models) {
-		if (null == models || models.size() == 0){
-			return;
-		}
-	    for (EventDto model: models) {
-	    	Long eventId = createEvent(model); 	    
-	    	createRelEvent(outerModel.getId(), outerModel.getObjectType(), eventId);
-	    	//create link
-	    	Event eventAsOuter = new Event();
-	    	eventAsOuter.setId(eventId);
-	    	linkUpdateDao.saveAsInnerObjects(eventAsOuter, model.getLinks());
-	    	
-			
-	    }
-	}
-	@Override
-	public void deleteAsInnerObjects(BaseModel outerModel) {
-		if (null == outerModel) {
-			return;
-		}
-		List<Long> eventIds = findIdsByOuterIdAndType(outerModel);
-	    if (null != eventIds) {
-	    	String eventIdsStr = StringUtils.join(eventIds, ",");
-	    	//delete event	    	
-	    	super.delete(eventIdsStr, "RDAP_EVENT", "EVENT_ID");
-	    	//delete link
-	    	for(Long eventId:eventIds){
-	    		Event event = new Event();
-	    		event.setId(eventId);
-	    		linkUpdateDao.deleteAsInnerObjects(event);
-	    	}
-	    	//delete relEvent
-	    	super.deleteRel(outerModel,"REL_EVENT_REGISTRATION");
-	    	
-	    }
-	
-	    
-	}
-	
-	@Override
+   }
+
+   @Override
+   public void delete(Event model) {
+        
+   }
+
+   /**
+    * batch create Event.
+    * 
+    * @param outerModel
+    *        outer object.
+    * @param models 
+    *        events of outer Object.
+    */
+    @Override
+    public void saveAsInnerObjects(BaseModel outerModel, List<EventDto> models) {
+        if (null == models || models.size() == 0){
+            return;
+        }
+        for (EventDto model: models) {
+            Long eventId = createEvent(model);
+            createRelEvent(outerModel.getId(), outerModel.getObjectType(), eventId);
+            Event eventAsOuter = new Event();
+            eventAsOuter.setId(eventId);
+            linkUpdateDao.saveAsInnerObjects(eventAsOuter, model.getLinks());
+        }
+    }
+    
+   @Override
+   public void deleteAsInnerObjects(BaseModel outerModel) {
+        if (null == outerModel) {
+            return;
+        }
+        List<Long> eventIds = findIdsByOuterIdAndType(outerModel);
+        if (null != eventIds) {
+            String eventIdsStr = StringUtils.join(eventIds, ",");
+            super.delete(eventIdsStr, "RDAP_EVENT", "EVENT_ID");
+            for(Long eventId:eventIds){
+                Event event = new Event();
+                event.setId(eventId);
+                linkUpdateDao.deleteAsInnerObjects(event);
+            }
+            super.deleteRel(outerModel,"REL_EVENT_REGISTRATION");
+        }
+    }
+
+    @Override
     public void updateAsInnerObjects(BaseModel outerModel,
              List<EventDto> models) {
         if (null == models || models.size() == 0) {
@@ -151,65 +141,69 @@ public class EventUpdateDaoImpl extends AbstractUpdateDao<Event, EventDto> {
         deleteAsInnerObjects(outerModel);
         saveAsInnerObjects(outerModel, models);
     }
-	
+
    /**
-	 * create Event.
-	 * @param model
-	 *        Event object
-	 * @return eventId.
-	 */
-	private Long createEvent(final EventDto model) {
+    * create Event.
+    * @param model
+    *        Event object
+    * @return eventId.
+    */
+   private Long createEvent(final EventDto model) {
         final String sql = "insert into RDAP_EVENT(EVENT_ACTION,EVENT_ACTOR,EVENT_DATE)"
-	      +  " values (?,?,?)";       
+                       +  " values (?,?,?)";       
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
-        	public PreparedStatement createPreparedStatement(Connection connection)
-        			throws SQLException {           
-             PreparedStatement ps = connection.prepareStatement(
-            		 sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, model.getEventAction());
-				ps.setString(2, model.getEventActor());
-				ps.setString(3, DateUtil.formatUTC(DateUtil.parseUTC(model.getEventDate())));
-				return ps;
-			}		
+            public PreparedStatement createPreparedStatement(Connection connection)
+                     throws SQLException {           
+                PreparedStatement ps = connection.prepareStatement(
+                     sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, model.getEventAction());
+                ps.setString(2, model.getEventActor());
+                ps.setString(3, DateUtil.formatUTC(DateUtil.parseUTC(model.getEventDate())));
+                return ps;
+            }
         }, keyHolder);
-		return keyHolder.getKey().longValue();
-	}
-	
-	/**
-	 * create rel Event
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param outerModelType
-	 *        model type of outer object
-	 * @param eventId
-	 *        eventId
-	 */
-	private void createRelEvent(final Long outerObjectId, final ModelType
-			outerModelType,	final Long eventId) {
-		final String sql = "insert into REL_EVENT_REGISTRATION(REL_ID,REL_OBJECT_TYPE,EVENT_ID)"
-			      +  " values (?,?,?)"; 		       
-		       jdbcTemplate.update(new PreparedStatementCreator() {
-		           public PreparedStatement createPreparedStatement(Connection connection) 
-		        			throws SQLException {           
-		            PreparedStatement ps = connection.prepareStatement(
-		            		sql);
-		            ps.setLong(1, outerObjectId);
-		            ps.setString(2, outerModelType.getName());
-		            ps.setLong(3, eventId);
-					return ps;
-					}				
-		 });		
-	}
-	
-	@Override
-	public Long findIdByHandle(String handle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
-		 return super.findIdsByOuterIdAndType(outerModel, "EVENT_ID", "REL_EVENT_REGISTRATION");
-	}
-	
+        return keyHolder.getKey().longValue();
+    }
+
+   /**
+    * create rel Event
+    * @param outerObjectId
+    *        object id of outer object
+    * @param outerModelType
+    *        model type of outer object
+    * @param eventId
+    *        eventId
+    */
+    private void createRelEvent(final Long outerObjectId, final ModelType
+              outerModelType, final Long eventId) {
+         final String sql = "insert into REL_EVENT_REGISTRATION(REL_ID,REL_OBJECT_TYPE,EVENT_ID)"
+                          +  " values (?,?,?)"; 
+         jdbcTemplate.update(new PreparedStatementCreator() {
+              public PreparedStatement createPreparedStatement(Connection connection) 
+                    throws SQLException {           
+                    PreparedStatement ps = connection.prepareStatement(sql);
+                    ps.setLong(1, outerObjectId);
+                    ps.setString(2, outerModelType.getName());
+                    ps.setLong(3, eventId);
+                    return ps;
+              }
+         });
+    }
+
+    @Override
+    public Long findIdByHandle(String handle) {
+        return null;
+    }
+ 
+   /**
+    * query event id by outer id and type.
+    * @param outerModel
+    *         outer object.
+    * @return list
+    */
+    public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
+         return super.findIdsByOuterIdAndType(outerModel, "EVENT_ID", "REL_EVENT_REGISTRATION");
+    }
+
 }
