@@ -86,7 +86,7 @@ public class DomainQueryDaoImpl extends AbstractQueryDao<Domain> {
     /**
      * left join domain status SQL.
      */
-    private final String SQL_QUERY_DOMAIN_STATUS =
+    public static final String SQL_QUERY_DOMAIN_STATUS =
             "select * from RDAP_DOMAIN_STATUS status"
                     + " where status.DOMAIN_ID = ?";
     /**

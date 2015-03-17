@@ -47,13 +47,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
- * <pre>
- * autnum update DAO mainly update autnum  in RDAP_AUTNUM.
- * Meantime update related status in RDAP_AUTNUM_STATUS.
  * 
- * all methods overwrite the counterpart in AbstractUpdateDao.
- * </pre>
- * 
+ * as number update DAO.
  * @author zhanyq
  * 
  */
@@ -67,13 +62,13 @@ public class AutnumUpdateDaoImpl extends AbstractUpdateDao<Autnum, AutnumDto> {
              + " (HANDLE,START_AUTNUM,END_AUTNUM,NAME,TYPE,COUNTRY,LANG,PORT43,"
              + " CUSTOM_PROPERTIES) values(?,?,?,?,?,?,?,?,?)";
     /**
-     * SQL_UPDATE_AUTNUM.
+     * SQL update by as ID.
      */
     private static final String SQL_UPDATE_AUTNUM = "UPDATE RDAP_AUTNUM"
             + " SET START_AUTNUM=?,END_AUTNUM=?,NAME=?,TYPE=?,COUNTRY=?,LANG=?,PORT43=?,"
             + " CUSTOM_PROPERTIES=? WHERE AS_ID=?";
     /**
-     * SQL_DELETE_AUTNUM.
+     * SQL delete by as ID.
      */
     private static final String SQL_DELETE_AUTNUM =
             "DELETE FROM RDAP_AUTNUM WHERE AS_ID=?";

@@ -119,8 +119,6 @@ public class EntityTelDao extends AbstractQueryDao<EntityTelephone> {
      * 
      * @param rs
      *            ResultSet.
-     * @param entityTel
-     *            entityTel.
      * @return EntityTelephone EntityTelephone.
      * @throws SQLException
      *             SQLException.

@@ -38,7 +38,7 @@ import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.core.autnum.validator.AsValidator;
 
 /**
- * autnum query parameter bean.
+ * as number query parameter bean.
  * 
  * @author jiashuo
  * 

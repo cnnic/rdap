@@ -111,7 +111,6 @@ public class JcardTelephoneConverter implements JcardPropertyConverter {
      * @param tel
      *            tel.
      * @param vcard vcard.
-     * @return TelUri list if tel number is valid, return null if not.
      */
     private void addTelephoneToVcard(EntityTelephone tel, VCard vcard) {
         if (tel.isEmpty()) {
