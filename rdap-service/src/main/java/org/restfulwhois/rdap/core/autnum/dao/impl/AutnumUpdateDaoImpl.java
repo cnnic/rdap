@@ -47,6 +47,13 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
+ * <pre>
+ * autnum update DAO mainly update autnum  in RDAP_AUTNUM.
+ * Meantime update related status in RDAP_AUTNUM_STATUS.
+ * 
+ * all methods overwrite the counterpart in AbstractUpdateDao.
+ * </pre>
+ * 
  * @author zhanyq
  * 
  */

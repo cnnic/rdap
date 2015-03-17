@@ -51,6 +51,12 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
+ * <pre>
+ * entity update DAO update entity in database,
+ * Meantime update related status in RDAP_ENTITY_STATUS.
+ * all methods overwrite the counterpart in AbstractUpdateDao. 
+ * </pre>
+ * 
  * @author zhanyq
  * 
  */
@@ -150,7 +156,7 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
     }
 
     /**
-     * 
+     * save the relation between entity with object.
      * @param outerModel
      *            outer object
      */
@@ -189,7 +195,8 @@ public class EntityUpdateDaoImpl extends AbstractUpdateDao<Entity, EntityDto> {
     }
 
     /**
-     * 
+     * save the relation between entity with object to database.
+     *
      * @param outerModel
      *            outerModel.
      * @param entityHandleDto
