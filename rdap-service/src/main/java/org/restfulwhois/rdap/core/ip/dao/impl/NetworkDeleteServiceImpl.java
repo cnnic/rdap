@@ -56,6 +56,9 @@ public class NetworkDeleteServiceImpl extends NetworkUpdateBaseServiceImpl {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(NetworkDeleteServiceImpl.class);
 
+    /**
+     * domainDao.
+     */
     @Autowired
     private UpdateDao<Domain, DomainDto> domainDao;
     

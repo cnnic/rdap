@@ -62,6 +62,7 @@ import ezvcard.util.StringUtils;
 
 
 /**
+ * secureDns update DAO.
  * @author zhanyq
  * 
  */
@@ -88,71 +89,61 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
     private UpdateDao<DsData, DsDataDto>  dsDataUpdateDao;
 
     @Override
-	public SecureDns save(SecureDns model) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public SecureDns save(SecureDns model) {
+        return null;
+    }
 
-	@Override
-	public void update(SecureDns model) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void update(SecureDns model) {
 
-	@Override
-	public void delete(SecureDns model) {
-		// TODO Auto-generated method stub
-		
-	}
-	/**
-	 * batch create SecureDns.
-	 * 
-	 * @param outerModel
-	 *         outer object	 
-	 * @param models 
-	 *        SecureDns of outer Object
-	 */
-	@Override
-	public  void saveAsInnerObjects(BaseModel outerModel,
-			List<SecureDnsDto> models) {
-		if (null == models || models.size() == 0) {
-			return;
-		}
-	    for (SecureDnsDto model: models) {
-	    	Long secureDnsId = createSecureDns(model, outerModel.getId()); 
-	    	SecureDns secureDnsAsOuter = new SecureDns();
-	    	secureDnsAsOuter.setId(secureDnsId);
-	    	//create KeyData	    	
-	    	keyDataUpdateDao.saveAsInnerObjects(secureDnsAsOuter,
-	    			model.getKeyData());	    	
-	    	//create DsData            
-            dsDataUpdateDao.saveAsInnerObjects(secureDnsAsOuter, 
-            		model.getDsData());	    	
-	    }
-	}
-	
-	@Override
-	public void deleteAsInnerObjects(BaseModel outerModel) {
-		if (null == outerModel) {
-			return;
-		}
-		List<Long> secureDnsIds = findIdsByOuterIdAndType(outerModel);
-	    if (null != secureDnsIds) {
-	    	String secureDnsIdStr = StringUtils.join(secureDnsIds, ",");
-	    	//delete SecureDns	    		
-	    	super.delete(secureDnsIdStr, "RDAP_SECUREDNS", "SECUREDNS_ID");
-	    	for (Long secureDnsId : secureDnsIds) {
-	    		SecureDns secureDns = new SecureDns();
-	    		secureDns.setId(secureDnsId);
-	    		//delete KeyData
-		    	keyDataUpdateDao.deleteAsInnerObjects(secureDns);
-		    	//delete DsData
-		    	dsDataUpdateDao.deleteAsInnerObjects(secureDns); 	
-	    	}
-	    }
-	}	
-	
-	@Override
+    }
+
+    @Override
+    public void delete(SecureDns model) {
+
+    }
+    
+    /**
+     * create SecureDns.
+     * 
+     * @param outerModel
+     *         outer object
+     * @param models 
+     *        SecureDns of outer Object
+     */
+    @Override
+    public  void saveAsInnerObjects(BaseModel outerModel, List<SecureDnsDto> models) {
+        if (null == models || models.size() == 0) {
+             return;
+        }
+        for (SecureDnsDto model: models) {
+            Long secureDnsId = createSecureDns(model, outerModel.getId()); 
+            SecureDns secureDnsAsOuter = new SecureDns();
+            secureDnsAsOuter.setId(secureDnsId);
+            keyDataUpdateDao.saveAsInnerObjects(secureDnsAsOuter, model.getKeyData());
+            dsDataUpdateDao.saveAsInnerObjects(secureDnsAsOuter, model.getDsData());
+         }
+    }
+
+    @Override
+    public void deleteAsInnerObjects(BaseModel outerModel) {
+        if (null == outerModel) {
+             return;
+        }
+        List<Long> secureDnsIds = findIdsByOuterIdAndType(outerModel);
+        if (null != secureDnsIds) {
+            String secureDnsIdStr = StringUtils.join(secureDnsIds, ",");
+            super.delete(secureDnsIdStr, "RDAP_SECUREDNS", "SECUREDNS_ID");
+            for (Long secureDnsId : secureDnsIds) {
+                SecureDns secureDns = new SecureDns();
+                secureDns.setId(secureDnsId);
+                keyDataUpdateDao.deleteAsInnerObjects(secureDns);
+                dsDataUpdateDao.deleteAsInnerObjects(secureDns); 
+            }
+       }
+    }
+
+    @Override
     public void updateAsInnerObjects(BaseModel outerModel,
              List<SecureDnsDto> models) {
         if (null == models || models.size() == 0) {
@@ -161,73 +152,72 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
         deleteAsInnerObjects(outerModel);
         saveAsInnerObjects(outerModel, models);
     }
-	/**
-	 * @param model
-	 *        SecureDns object
-	 *  @param outerObjectId
-	 *         object id of outer object
-	 * @return secureDnsId.
-	 */
-    private Long createSecureDns(final SecureDnsDto model,
-    		final Long outerObjectId) {		
-        final String sql = "insert into RDAP_SECUREDNS(ZONE_SIGNED,"
-	      +  "DELEGATION_SIGNED,MAX_SIGLIFE,DOMAIN_ID) values (?,?,?,?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
-        	public PreparedStatement createPreparedStatement(
-        			Connection connection) throws SQLException {
-             PreparedStatement ps = connection.prepareStatement(
-            		 sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setBoolean(1, model.isZoneSigned());
-				ps.setBoolean(2, model.isDelegationSigned());
-				ps.setInt(3, model.getMaxSigLife());
-				ps.setLong(4, outerObjectId);
-				return ps;
-			}		
-        }, keyHolder);
-		return keyHolder.getKey().longValue();
-	}
     
     /**
-	 * 
-	 * @param outerObjectId
-	 *        object id of outer object
-	 * @param modelType
-	 *        model type of  object
-	 * @param dsKeyId
-	 *        keyDataId or DsDataId
-	 */
-	public void createRelSecureDnsDskey(final Long outerObjectId, 
-			final ModelType modelType,	final Long dsKeyId) {
-		final String sql = "insert into REL_SECUREDNS_DSKEY"
-			+ "(SECUREDNS_ID,REL_DSKEY_TYPE,REL_ID) values (?,?,?)";
-		jdbcTemplate.update(new PreparedStatementCreator() {
-		    public PreparedStatement createPreparedStatement(
-		         Connection connection)	throws SQLException {
-		      PreparedStatement ps = connection.prepareStatement(sql);
-		      ps.setLong(1, outerObjectId);
-		      ps.setString(2, modelType.getName());
-		      ps.setLong(3, dsKeyId);
-			  return ps;
-			}
-		 });
-	}
+     * @param model
+     *        SecureDns object
+     *  @param outerObjectId
+     *         object id of outer object
+     * @return secureDnsId.
+     */
+    private Long createSecureDns(final SecureDnsDto model, final Long outerObjectId) {
+        final String sql = "insert into RDAP_SECUREDNS(ZONE_SIGNED,"
+                 +  "DELEGATION_SIGNED,MAX_SIGLIFE,DOMAIN_ID) values (?,?,?,?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                        Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(
+                        sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setBoolean(1, model.isZoneSigned());
+                ps.setBoolean(2, model.isDelegationSigned());
+                ps.setInt(3, model.getMaxSigLife());
+                ps.setLong(4, outerObjectId);
+                return ps;
+            }
+        }, keyHolder);
+        return keyHolder.getKey().longValue();
+    }
+    
+    /**
+     * create secureDns relation 
+     * @param outerObjectId
+     *        object id of outer object
+     * @param modelType
+     *        model type of  object
+     * @param dsKeyId
+     *        keyDataId or DsDataId
+     */
+    public void createRelSecureDnsDskey(final Long outerObjectId, 
+              final ModelType modelType, final Long dsKeyId) {
+        final String sql = "insert into REL_SECUREDNS_DSKEY"
+               + "(SECUREDNS_ID,REL_DSKEY_TYPE,REL_ID) values (?,?,?)";
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            public PreparedStatement createPreparedStatement(
+                       Connection connection) throws SQLException {
+              PreparedStatement ps = connection.prepareStatement(sql);
+              ps.setLong(1, outerObjectId);
+              ps.setString(2, modelType.getName());
+              ps.setLong(3, dsKeyId);
+              return ps;
+            }
+        });
+    }
 
-	@Override
-	public Long findIdByHandle(String handle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/**
-	 * 
-	 * @param outerModel
-	 *        outer object
-	 * @return ids
-	 */
-	
-	public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
-		final String sql = "SELECT SECUREDNS_ID as ID from "
-				+ " RDAP_SECUREDNS where DOMAIN_ID = ?";
+    @Override
+    public Long findIdByHandle(String handle) {
+         return null;
+    }
+    
+   /**
+     * query secureDnsId by domainId.
+     * @param outerModel
+     *        outer object
+     * @return ids
+     */
+    public List<Long> findIdsByOuterIdAndType(final BaseModel outerModel) {
+        final String sql = "SELECT SECUREDNS_ID as ID from "
+               + " RDAP_SECUREDNS where DOMAIN_ID = ?";
         LOGGER.debug("check SECUREDNS_ID exist,sql:{}", sql);
         List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
@@ -245,20 +235,20 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
             return ids;
         }
         return null;
-    }	
-	
-	/**
-	 * 
-	 * @param secureDnsId
-	 *       secureDnsId
-	 * @param modelType
-	 *    object type
-	 */
-	public void deleteRelSecureDnsDskey(final Long secureDnsId,
-			final ModelType modelType) {
-		final String sql = "delete from REL_SECUREDNS_DSKEY where"
-				+ " SECUREDNS_ID = ? and REL_DSKEY_TYPE= ?";
-		jdbcTemplate.update(new PreparedStatementCreator() {
+    }
+
+    /**
+     * delete secureDns relation
+     * @param secureDnsId
+     *       secureDnsId
+     * @param modelType
+     *    object type
+     */
+    public void deleteRelSecureDnsDskey(final Long secureDnsId,
+                 final ModelType modelType) {
+        final String sql = "delete from REL_SECUREDNS_DSKEY where"
+                   + " SECUREDNS_ID = ? and REL_DSKEY_TYPE= ?";
+        jdbcTemplate.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql);
@@ -266,21 +256,21 @@ public class SecureDnsUpdateDaoImpl extends AbstractUpdateDao<SecureDns, SecureD
                 ps.setString(2, modelType.getName());
                 return ps;
             }       
-		});
-		
-	}
-	/**
-	 * 
-	 * @param outerModelId
-	 *        outerModelId
-	 * @param modelType
-	 *        object type
-	 * @return ids
-	 */
-	public List<Long> findIdsByOuterIdAndType(final Long outerModelId,
-			final ModelType modelType) {
-		final String sql = "SELECT REL_ID from REL_SECUREDNS_DSKEY"
-		     + " where SECUREDNS_ID = ? and REL_DSKEY_TYPE =?";
+        });
+    }
+
+    /**
+     * query rel_id from REL_SECUREDNS_DSKEY by outerModelId and type.
+     * @param outerModelId
+     *        outerModelId
+     * @param modelType
+     *        object type
+     * @return ids
+     */
+     public List<Long> findIdsByOuterIdAndType(final Long outerModelId,
+                final ModelType modelType) {
+       final String sql = "SELECT REL_ID from REL_SECUREDNS_DSKEY"
+              + " where SECUREDNS_ID = ? and REL_DSKEY_TYPE =?";
         LOGGER.debug("check SECUREDNS_ID exist,sql:{}", sql);
         List<Long> ids = jdbcTemplate.query(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(

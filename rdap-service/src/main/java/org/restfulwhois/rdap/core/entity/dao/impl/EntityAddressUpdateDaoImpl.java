@@ -48,6 +48,10 @@ import org.springframework.stereotype.Repository;
 
 
 /**
+ * entity address update DAO update entity address in database.
+ * <p>
+ * entity address use update method as an outer object interface.
+ * 
  * @author zhanyq
  * 
  */
@@ -76,12 +80,12 @@ public class EntityAddressUpdateDaoImpl extends
 
     }
     /**
-     * batch create link.
+     * create entityAddress.
      * 
      * @param outerModel
-     *         outer object
+     *         outer object.
      * @param models
-     *        links of outer Object
+     *        entityAddressDto.
      */
     @Override
     public void saveAsInnerObjects(final BaseModel outerModel,
@@ -144,9 +148,9 @@ public class EntityAddressUpdateDaoImpl extends
     }
     
     /**
-     * 
+     * get not empty entityAddressDto list.
      * @param entityAddressList
-     * entityAddressList
+     *             entityAddressList
      * @return notEmptyList
      */
     private  List<EntityAddressDto> getNotEmptyList(

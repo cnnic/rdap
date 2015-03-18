@@ -83,10 +83,13 @@ public class NameserverUpdateController {
     private UpdateService<NameserverDto, Nameserver> deleteService;
 
     /**
-     * 
-     * @param nsDto nsDto.
-     * @param request request.
-     * @return ResponseEntity ResponseEntity.
+     * create nameserver.
+     * @param nsDto 
+     *             nsDto.
+     *  @param request
+     *        HttpServletRequest
+     * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "" }, method = RequestMethod.POST)
@@ -99,11 +102,15 @@ public class NameserverUpdateController {
     }
 
     /**
-     * 
-     * @param nsDto nsDto.
-     * @param handle handle.
-     * @param request request.
-     * @return ResponseEntity ResponseEntity.
+     * update nameserver.
+     * @param nsDto 
+     *             nsDto.
+     * @param handle 
+     *             handle.
+     * @param request
+     *            HttpServletRequest.
+     * @return JSON formated result,with HTTP code.
+     * @throws DecodeException.
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.PUT)
@@ -117,10 +124,13 @@ public class NameserverUpdateController {
     }
 
     /**
-     * 
-     * @param handle handle.
-     * @param request request.
-     * @return ResponseEntity ResponseEntity.
+     * delete nameserver.
+     * @param handle 
+     *            handle.
+     * @param request 
+     *             HttpServletRequest.
+     * @return JSON formated result,with HTTP code.
+     * @throws DecodeException
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = { "/{handle}" }, method = RequestMethod.DELETE)
