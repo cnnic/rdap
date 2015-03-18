@@ -6,9 +6,9 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 
 2. Install [Mysql5](http://dev.mysql.com/downloads/mysql), or higher version. (Skip this step if already installed)   
 
-   Create user 'rdap' and grant privilege:   
+   Create user 'rdap' and grant privilege: ($RDAP_SERVER_IP must change to rdap server IP, $MYSQL_PASSWORD change to 'rdap' user's password)
    ```
-      GRANT ALL PRIVILEGES ON *.* TO 'rdap'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+      GRANT ALL PRIVILEGES ON *.* TO 'rdap'@'$RDAP_SERVER_IP' IDENTIFIED BY '$MYSQL_PASSWORD';
       FLUSH PRIVILEGES;
    ```   
    More details please ref [here](https://github.com/cnnic/rdap/wiki/%5Binstall%5D-Mysql-privilege).   
