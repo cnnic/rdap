@@ -48,6 +48,9 @@ import org.springframework.stereotype.Repository;
 
 
 /**
+ * entity telephone update DAO update entity telephone in database. it is
+ * an object belonged to entity,and use update method as interface.
+ * 
  * @author zhanyq
  * 
  */
@@ -76,12 +79,12 @@ public class EntityTelUpdateDaoImpl extends
 
     }
     /**
-     * batch create link.
+     * create entity telephone.
      * 
      * @param outerModel
-     *         outer object
+     *         outer object.
      * @param models
-     *        links of outer Object
+     *        entityTelephoneDto.
      */
     @Override
     public void saveAsInnerObjects(final BaseModel outerModel,
@@ -137,9 +140,9 @@ public class EntityTelUpdateDaoImpl extends
         return null;
     }
     /**
-     * 
+     * get not empty entityTelephoneDto list.
      * @param entityTelList
-     * entityTelList
+     *               entityTelList.
      * @return notEmptyList
      */
     public static List<EntityTelephoneDto> getNotEmptyList(

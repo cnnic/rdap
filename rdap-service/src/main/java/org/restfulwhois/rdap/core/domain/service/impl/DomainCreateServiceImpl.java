@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.core.domain.service.impl;
 import org.restfulwhois.rdap.common.dto.DomainDto;
 import org.restfulwhois.rdap.common.model.Domain;
 import org.restfulwhois.rdap.common.model.Domain.DomainType;
-import org.restfulwhois.rdap.common.validation.UpdateValidationError;
 import org.restfulwhois.rdap.common.validation.ValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

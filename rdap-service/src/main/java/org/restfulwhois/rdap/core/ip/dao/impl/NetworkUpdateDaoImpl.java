@@ -48,6 +48,12 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
+ * <pre>
+ * network update DAO update ip in database,
+ * Meantime update related status in RDAP_IP_STATUS.
+ * all methods overwrite the counterpart in AbstractUpdateDao. 
+ * </pre>
+ * 
  * @author jiashuo
  * 
  */

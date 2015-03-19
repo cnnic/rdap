@@ -41,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * update service implementation.
+ * as update service implementation.
  * 
  * @author zhanyq
  * 
@@ -55,6 +55,8 @@ public abstract class AutnumUpdateBaseServiceImpl extends
             .getLogger(AutnumUpdateBaseServiceImpl.class);
 
     /**
+     * covert autnumDto to autnum.
+     * include covert custom properties.
      * @param dto 
      *      autnumdto.
      * @return Autnum.
@@ -66,6 +68,7 @@ public abstract class AutnumUpdateBaseServiceImpl extends
     }   
    
     /**
+     * covert autnumDto to autnum.
      * 
      * @param dto dto.
      * @return Autnum.
@@ -78,7 +81,7 @@ public abstract class AutnumUpdateBaseServiceImpl extends
     }
 
     /**
-     * 
+     * validate dto. 
      * @param dto dto.
      * @param validationResult validationResult.
      * @return ValidationResult.

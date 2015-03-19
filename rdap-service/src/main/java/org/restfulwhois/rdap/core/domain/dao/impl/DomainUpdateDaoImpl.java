@@ -49,6 +49,12 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
+ * <pre>
+ * domain update DAO update domain  in database,
+ * Meantime update related status in RDAP_DOMAIN_STATUS.
+ * all methods overwrite the counterpart in AbstractUpdateDao. 
+ * </pre>
+ * 
  * @author jiashuo
  * 
  */

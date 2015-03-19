@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * delete service implementation.
+ * as delete service implementation.
  * 
  * @author zhanyq
  * 
