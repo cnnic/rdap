@@ -34,7 +34,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 
 	```
    		cd $TOMCAT_HOME/webapps/rdap/WEB-INF/classes
-		CLASSPATH=.:$CLASSPATH
+		CLASSPATH=.:$CLASSPATH   #in windows this command can be ignored
 		java -Djava.ext.dirs=../lib org.restfulwhois.rdap.init.Init initschema
 	```
 	
