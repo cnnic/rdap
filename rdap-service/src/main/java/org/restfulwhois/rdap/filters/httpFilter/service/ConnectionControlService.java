@@ -188,8 +188,8 @@ public final class ConnectionControlService {
      * increment concurrent query count, and check if exceed max count.MUST call
      * decrementAndGetCurrentQueryCount after query.
      * 
-     * @param ip
-     * 
+     * @param ip 
+     *         ip.
      * @return true if exceed, false if not.
      */
     public static boolean
@@ -215,6 +215,7 @@ public final class ConnectionControlService {
      * decrement current query count.
      * 
      * @param ip
+     *     ip.
      */
     public static void decrementAndGetCurrentQueryCount(String ip) {
         LOGGER.debug("decrementAndGetCurrentQueryCount.");

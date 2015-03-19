@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.restfulwhois.rdap.common.dto.UpdateResponse;
 import org.restfulwhois.rdap.common.filter.FilterHelper;
 import org.restfulwhois.rdap.common.filter.HttpFilter;
-import org.restfulwhois.rdap.common.model.ErrorMessage;
 import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.support.RestResponse;
 import org.restfulwhois.rdap.common.validation.UpdateValidationError;

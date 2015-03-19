@@ -74,12 +74,12 @@ public final class IpUtil {
     /**
      * hex char size for v4.
      */
-    private static final int hexCharSizeV4 = IpUtil
+    private static final int HEX_CHAR_SIZE_V4 = IpUtil
             .getHexCharSize(IpVersion.V4);
     /**
      * hex char size for v6.
      */
-    private static final int hexCharSizeV6 = IpUtil
+    private static final int HEX_CHAR_SIZE_V6 = IpUtil
             .getHexCharSize(IpVersion.V6);
 
     /**
@@ -310,10 +310,10 @@ public final class IpUtil {
             String ipVersionColumnName) {
         String conditionTpl = "LENGTH(HEX(%s))= %s and %s='%s'";
         String conditionV4 =
-                String.format(conditionTpl, ipColumnName, hexCharSizeV4,
+                String.format(conditionTpl, ipColumnName, HEX_CHAR_SIZE_V4,
                         ipVersionColumnName, IpVersion.V4.getName());
         String conditionV6 =
-                String.format(conditionTpl, ipColumnName, hexCharSizeV6,
+                String.format(conditionTpl, ipColumnName, HEX_CHAR_SIZE_V6,
                         ipVersionColumnName, IpVersion.V6.getName());
         return "(" + conditionV4 + " or " + conditionV6 + ")";
     }

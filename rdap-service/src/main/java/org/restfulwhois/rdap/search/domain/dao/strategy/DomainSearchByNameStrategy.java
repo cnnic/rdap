@@ -120,7 +120,7 @@ public class DomainSearchByNameStrategy extends AbstractDomainSearchStrategy {
             }
         }, domainDao.new DomainWithStatusResultSetExtractor());
         for(Domain domain : result){
-        	domainDao.queryDomainStatus(domain, jdbcTemplate);
+            domainDao.queryDomainStatus(domain, jdbcTemplate);
         }
         return result;
     }

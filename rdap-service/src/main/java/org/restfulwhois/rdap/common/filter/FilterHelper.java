@@ -65,8 +65,8 @@ public final class FilterHelper {
     /**
      * check if is update URI.
      * 
-     * @param uri
-     *            URI.
+     * @param request
+     *             HttpServletRequest.
      * @return true if is update URI, false if not.
      */
     public static boolean isUpdateUri(HttpServletRequest request) {

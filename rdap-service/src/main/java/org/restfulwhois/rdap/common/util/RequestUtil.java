@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * @author jiashuo
  * 
  */
-public class RequestUtil {
+public final class RequestUtil {
     /**
      * constructor.
      */

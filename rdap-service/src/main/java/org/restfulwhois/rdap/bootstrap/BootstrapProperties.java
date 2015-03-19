@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.bootstrap;
 
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 /**
  * The properties in this class is read from property file.
