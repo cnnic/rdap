@@ -37,7 +37,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
 		CLASSPATH=.:$CLASSPATH   #in windows this command can be ignored
 		java -Djava.ext.dirs=../lib org.restfulwhois.rdap.init.Init initschema
 	```   
-    If it throws exception in windows environment, you can initial database by execute 'source $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/init/mysql/init-schema.sql' in Mysql shell.   
+    If it throws exception in this step(maybe for windows), you can initial database by execute 'source $TOMCAT_HOME/webapps/rdap/WEB-INF/classes/init/mysql/init-schema.sql' in Mysql shell.   
 7. Start up and shutdown 
    * Start up tomcat 
    
