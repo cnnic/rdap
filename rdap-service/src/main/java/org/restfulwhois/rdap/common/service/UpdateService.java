@@ -37,11 +37,21 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
 /**
  * update service interface.
  * 
+ * @param <DTO> 
+ *       object derived from BaseDto. 
+ * @param <MODEL> 
+ *      object derived from BaseModel.
  * @author jiashuo
  * 
  */
 public interface UpdateService<DTO extends BaseDto, MODEL extends BaseModel> {
 
+    /**
+     * update method.
+     * @param dto
+     *    dto.
+     * @return updateResponse.
+     */
     UpdateResponse execute(DTO dto);
 
 }

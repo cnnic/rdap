@@ -4,13 +4,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-public class BeanUtil {
+/**
+ * bean util.
+ * @author jiashuo
+ *
+ */
+public final class BeanUtil {
+    /**
+     * private constructor.
+     */
+    private BeanUtil(){
+        super();
+    }
     /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(BeanUtil.class);
 
+    /**
+     * object copy.
+     * @param source
+     *     source object.
+     * @param target
+     *      target object.
+     * @param ignoreProperties
+     *     ignoreProperties.
+     */
     public static void copyProperties(Object source, Object target,
             String... ignoreProperties) {
         try {

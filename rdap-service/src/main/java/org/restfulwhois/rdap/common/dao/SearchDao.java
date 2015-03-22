@@ -37,7 +37,8 @@ import org.restfulwhois.rdap.common.support.QueryParam;
 
 /**
  * SearchDao.
- * 
+ * @param <T>
+ *   object derived from BaseModel.
  * @author jiashuo
  * 
  */

@@ -55,11 +55,11 @@ public class SubnetUtils {
     /**
      * pattern for ip reg.
      */
-    private static final Pattern addressPattern = Pattern.compile(IP_ADDRESS);
+    private static final Pattern ADDRESS_PATTERN = Pattern.compile(IP_ADDRESS);
     /**
      * pattern for cidr reg.
      */
-    private static final Pattern cidrPattern = Pattern.compile(SLASH_FORMAT);
+    private static final Pattern CIDR_PATTERN = Pattern.compile(SLASH_FORMAT);
     /**
      * bit size.
      */
@@ -91,9 +91,10 @@ public class SubnetUtils {
      * @param cidrNotation
      *            A CIDR-notation string, e.g. "192.168.0.1/16"
      * @throws IllegalArgumentException
-     *             if the parameter is invalid, i.e. does not match n.n.n.n/m
-     *             where n=1-3 decimal digits, m = 1-3 decimal digits in range
-     *             1-32
+     *    
+     *  if the parameter is invalid, i.e. does not match n.n.n.n/m
+     *     where n=1-3 decimal digits, m = 1-3 decimal digits in range
+     *      1-32
      */
     public SubnetUtils(String cidrNotation) {
         calculate(cidrNotation);
@@ -321,9 +322,10 @@ public class SubnetUtils {
      * 
      * @param mask
      *            mask.
+     * @throws IllegalArgumentException.
      */
     private void calculate(String mask) {
-        Matcher matcher = cidrPattern.matcher(mask);
+        Matcher matcher = CIDR_PATTERN.matcher(mask);
 
         if (matcher.matches()) {
             address = matchAddress(matcher);
@@ -353,7 +355,7 @@ public class SubnetUtils {
      * @return int.
      */
     private int toInteger(String address) {
-        Matcher matcher = addressPattern.matcher(address);
+        Matcher matcher = ADDRESS_PATTERN.matcher(address);
         if (matcher.matches()) {
             return matchAddress(matcher);
         } else {
@@ -387,7 +389,7 @@ public class SubnetUtils {
      * @return int[].
      */
     private int[] toArray(int val) {
-        int ret[] = new int[4];
+        int[] ret = new int[4];
         for (int j = 3; j >= 0; --j) {
             ret[j] |= ((val >>> 8 * (3 - j)) & (0xff));
         }
