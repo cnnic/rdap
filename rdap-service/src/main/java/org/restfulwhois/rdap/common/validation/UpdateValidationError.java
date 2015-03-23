@@ -30,7 +30,6 @@
  */
 package org.restfulwhois.rdap.common.validation;
 
-import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -41,10 +40,26 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * 
  */
 public final class UpdateValidationError implements ValidationError {
+    /**
+     * httpStatusCode.
+     */
     private int httpStatusCode;
+    /**
+     * error code.
+     */
     private int errorCode;
+    /**
+     * error description.
+     */
     private String description;
-
+    
+    /**
+     * constructor.
+     * @param error
+     *    error.
+     * @param errorMessageParams
+     *     errorMessageParams.
+     */
     public UpdateValidationError(ServiceErrorCode error,
             Object... errorMessageParams) {
         super();
@@ -55,65 +70,144 @@ public final class UpdateValidationError implements ValidationError {
                         (Object[]) errorMessageParams);
     }
 
+    /**
+     * build4001Error.
+     * @return ValidationError.
+     */
     public static ValidationError build4001Error() {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4001);
     }
 
+    /**
+     * build4002Error.
+     * @param errorMessageParam
+     *    errorMessageParam.
+     * @return ValidationError.
+     */
     public static ValidationError build4002Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4002,
                 errorMessageParam);
     }
 
+    /**
+     * build4003Error.
+     * @param fieldName
+     *    fieldName.
+     * @param maxLength
+     *      maxLength.
+     * @return ValidationError.
+     */
     public static ValidationError build4003Error(String fieldName,
             String maxLength) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4003,
                 fieldName, maxLength);
     }
 
+    /**
+     * build4007Error.
+     * @param errorMessageParam
+     *    errorMessageParam.
+     * @return ValidationError.
+     */
     public static ValidationError build4007Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4007,
                 errorMessageParam);
     }
     
+    /**
+     * build4008Error.
+     * @param errorMessageParam
+     *    errorMessageParam.
+     * @return ValidationError.
+     */
     public static ValidationError build4008Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4008,
                 errorMessageParam);
     }
 
+    /**
+     * build4009Error.
+     * @return ValidationError.
+     */
     public static ValidationError build4009Error() {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4009);
     }
 
-    public static ValidationError build4010Error(String fieldName,
+    /**
+     * build40010Error
+     * @param fieldName
+     *     fieldName.
+     * @param minValue
+     *    minValue.
+     * @param maxValue
+     *    maxValue.
+     * @return ValidationError
+     */
+    public static ValidationError build40010Error(String fieldName,
             Integer minValue, Long maxValue) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_40010,
                 fieldName, minValue, maxValue);
     }
 
-    public static ValidationError build4010Error(String fieldName,
+    /**
+     * build40010Error.
+     * @param fieldName
+     *    fieldName.
+     * @param minValue
+     *   minValue (string).
+     * @param maxValue
+     *    maxValue (string).
+     * @return build4010Error
+     */
+    public static ValidationError build40010Error(String fieldName,
             String minValue, String maxValue) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_40010,
                 fieldName, minValue, maxValue);
     }
 
+    /**
+     * build4031Error.
+     * @return ValidationError.
+     */
     public static ValidationError build4031Error() {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4031);
     }
     
+    /**
+     * build4041Error.
+     * @param errorMessageParam
+     *     errorMessageParam.
+     * @return ValidationError.
+     */
     public static ValidationError build4041Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4041,
                 errorMessageParam);
     }
 
+    /**
+     * build4091Error.
+     * @param errorMessageParam
+     *    errorMessageParam.
+     * @return ValidationError.
+     */
     public static ValidationError build4091Error(String errorMessageParam) {
         return new UpdateValidationError(ServiceErrorCode.ERROR_4091,
                 errorMessageParam);
     }
 
+    /**
+     * get httpStatuscode.
+     * @return integer.
+     */
     public int getHttpStatusCode() {
         return httpStatusCode;
     }
 
+    /**
+     * set httpStatusCode.
+     * @param httpStatusCode
+     *    httpStatusCode.
+     */
     public void setHttpStatusCode(int httpStatusCode) {
         this.httpStatusCode = httpStatusCode;
     }

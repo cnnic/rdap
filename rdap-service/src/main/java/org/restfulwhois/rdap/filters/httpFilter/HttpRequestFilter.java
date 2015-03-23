@@ -77,6 +77,9 @@ public class HttpRequestFilter implements HttpFilter {
      */
     private static final List<String> QUERY_ALLOW_METHODS =
             new ArrayList<String>();
+    /**
+     * update allow methods.
+     */
     private static final List<String> UPDATE_ALLOW_METHODS =
             new ArrayList<String>();
     /**
@@ -143,6 +146,12 @@ public class HttpRequestFilter implements HttpFilter {
         return true;
     }
 
+    /**
+     * check content type for update.
+     * @param request
+     *     HttpServletRequest.
+     * @return true or false.
+     */
     private boolean checkContentTypeForUpdate(HttpServletRequest request) {
         String contentTypeHeader = request.getHeader("Content-Type");
         LOGGER.debug("contentTypeHeader:{}", contentTypeHeader);

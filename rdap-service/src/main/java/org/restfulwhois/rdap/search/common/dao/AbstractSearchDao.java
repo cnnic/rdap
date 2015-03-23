@@ -40,7 +40,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * abstract search DAO.
- * 
+ * @param <T>
+ *    object derived from baseModel.
  * @author jiashuo
  * 
  */

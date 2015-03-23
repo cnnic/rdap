@@ -36,7 +36,6 @@ import java.util.List;
 import org.restfulwhois.rdap.common.filter.QueryFilter;
 import org.restfulwhois.rdap.common.filter.QueryFilterManager;
 import org.restfulwhois.rdap.common.filter.QueryFilterResult;
-import org.restfulwhois.rdap.common.support.MappingExceptionResolver;
 import org.restfulwhois.rdap.common.support.PrincipalHolder;
 import org.restfulwhois.rdap.common.support.QueryParam;
 import org.restfulwhois.rdap.common.support.RestResponse;

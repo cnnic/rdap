@@ -39,7 +39,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 /**
  * 
  * search strategy.
- * 
+ * @param <T>
+ *      object derived from BaseModel.
  * @author jiashuo
  */
 public interface SearchStrategy<T extends BaseModel> {

@@ -34,7 +34,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.restfulwhois.rdap.common.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +46,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author jiashuo
  * 
  */
-public class JsonUtil {
+public final class JsonUtil {
+    /**
+     * private constructor.
+     */
+    private JsonUtil(){
+        super();
+    }
     /**
      * logger.
      */
@@ -62,19 +67,19 @@ public class JsonUtil {
     /**
      * deserialize JSON to map.
      * 
-     * @param restResponse
+     * @param json
      *            restResponse.
      * @return map.
      * @throws ServiceException
      */
-    public static Map<String, String> deserializeJsonToMap(String JSON) {
+    public static Map<String, String> deserializeJsonToMap(String json) {
         Map<String, String> result = new LinkedHashMap<String, String>();
-        if (StringUtils.isBlank(JSON)) {
+        if (StringUtils.isBlank(json)) {
             return result;
         }
         try {
             result =
-                    objectMapper.readValue(JSON,
+                    objectMapper.readValue(json,
                             new TypeReference<LinkedHashMap<String, String>>() {
                             });
         } catch (Exception e) {
@@ -83,6 +88,12 @@ public class JsonUtil {
         return result;
     }
 
+    /**
+     * serialize map to json.
+     * @param map
+     *        map.
+     * @return string 
+     */
     public static String serializeMap(Map<String, String> map) {
         if (null == map) {
             return null;

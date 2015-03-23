@@ -50,6 +50,12 @@ import com.googlecode.ipv6.IPv6NetworkMask;
  */
 public final class ArpaUtil {
     /**
+     * private constructor.
+     */
+    private ArpaUtil(){
+        super();
+    }
+    /**
      * logger.
      */
     protected static final Logger LOGGER = LoggerFactory

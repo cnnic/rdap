@@ -33,7 +33,6 @@ package org.restfulwhois.rdap.common.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;

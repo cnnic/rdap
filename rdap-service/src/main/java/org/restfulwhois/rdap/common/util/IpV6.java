@@ -41,7 +41,7 @@ import com.googlecode.ipv6.IPv6Network;
  * @author jiashuo
  * 
  */
-public class IpV6 {
+public final class IpV6 {
     
     /**
      * constructor.

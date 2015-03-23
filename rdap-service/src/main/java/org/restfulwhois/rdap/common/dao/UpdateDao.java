@@ -39,36 +39,109 @@ import org.restfulwhois.rdap.common.model.base.BaseModel;
  * update DAO interface.
  * 
  * @param <T>
- *            object driving from BaseModel.
+ *            object derived from BaseModel.
+ * @param <DTO>
+ *      object derived from BaseDto.
  * @author jiashuo
  * 
  */
 public interface UpdateDao<T extends BaseModel, DTO extends BaseDto> {
 
+    /**
+     * 
+     * @param handle
+     *    handle.
+     * @return long
+     */
     Long findIdByHandle(String handle);
     
+    /**
+     * save method.
+     * @param model
+     *    model.
+     * @return object.
+     */
     T save(T model);
 
+    /**
+     * update method.
+     * @param model
+     *   model
+     */
     void update(T model);
 
+    /**
+     * delete method.
+     * @param model
+     *     model.
+     */
     void delete(T model);
 
+    /**
+     * save status.
+     * @param model
+     *     model.
+     */
     void saveStatus(T model);
     
+    /**
+     * update status.
+     * @param model
+     *    model.
+     */
     void updateStatus(T model);
     
+    /**
+     * delete status.
+     * @param model
+     *    model.
+     */
     void deleteStatus(T model);
     
+    /**
+     * save the relation between entity and other object.
+     * @param outerModel
+     *    outer object.
+     */
     void saveRel(BaseModel outerModel);
     
+    /**
+     * update the relation between entity and other object.
+     * @param outerModel
+     *    outer object.
+     */
     void updateRel(BaseModel outerModel);
     
+    /**
+     * delete the relation between entity and other object
+     * @param outerModel
+     *    outer object.
+     */
     void deleteRel(BaseModel outerModel);
     
+    /**
+     * save model list, as nested models of other Model.
+     * @param outerModel
+     *    outer object.
+     * @param models
+     *     object list.
+     */
     void saveAsInnerObjects(BaseModel outerModel, List<DTO> models);
 
+    /**
+     * update model list, as nested models of other Model.
+     * @param outerModel
+     *     outer object.
+     * @param models
+     *    object list.
+     */
     void updateAsInnerObjects(BaseModel outerModel, List<DTO> models);
     
+    /**
+     * delete model list, as nested models of other Model.
+     * @param outerModel
+     *   outer object.
+     */
     void deleteAsInnerObjects(BaseModel outerModel);
     
 }
