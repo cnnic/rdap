@@ -37,19 +37,51 @@ package org.restfulwhois.rdap.common.dto;
  * 
  */
 public enum SimpleHttpStatusCode {
-
-	OK_200(200, ""), 
-    ERROR_400(400, ""), 
+    /**
+     * OK.
+     */
+    OK_200(200, ""),
+    /**
+     * 400 error.
+     */
+    ERROR_400(400, ""),
+    /**
+     * 404 error.
+     */
     NOT_FOUND_404(404, ""),
-    CONFLICT_409(409, ""), 
-    METHOD_NOT_ALLOWED_405(405, ""), 
+    /**
+     * 409 error.
+     */
+    CONFLICT_409(409, ""),
+    /**
+     * 405 error.
+     */
+    METHOD_NOT_ALLOWED_405(405, ""),
+    /**
+     * 415 error.
+     */
     UNSUPPORTED_MEDIA_TYPE_415(415, ""),
+    /**
+     * 500 error.
+     */
     INTERNAL_SERVER_ERROR_500(500, "");
-
+    /**
+     * value.
+     */
     private final int value;
-
+    /**
+     * reasonPhrase.
+     */
     private final String reasonPhrase;
 
+    /**
+     * constructor.
+     * 
+     * @param value
+     *            value.
+     * @param reasonPhrase
+     *            reasonPhrase.
+     */
     private SimpleHttpStatusCode(int value, String reasonPhrase) {
         this.value = value;
         this.reasonPhrase = reasonPhrase;
@@ -57,6 +89,8 @@ public enum SimpleHttpStatusCode {
 
     /**
      * Return the integer value of this status code.
+     * 
+     * @return int val.
      */
     public int value() {
         return this.value;
@@ -64,14 +98,13 @@ public enum SimpleHttpStatusCode {
 
     /**
      * Return the reason phrase of this status code.
+     * 
+     * @return reasonPhrase.
      */
     public String getReasonPhrase() {
         return reasonPhrase;
     }
 
-    /**
-     * Return a string representation of this status code.
-     */
     @Override
     public String toString() {
         return Integer.toString(value);
@@ -83,8 +116,6 @@ public enum SimpleHttpStatusCode {
      * @param statusCode
      *            the numeric value of the enum to be returned
      * @return the enum constant with the specified numeric value
-     * @throws IllegalArgumentException
-     *             if this enum has no constant for the specified numeric value
      */
     public static SimpleHttpStatusCode valueOf(int statusCode) {
         for (SimpleHttpStatusCode status : values()) {
