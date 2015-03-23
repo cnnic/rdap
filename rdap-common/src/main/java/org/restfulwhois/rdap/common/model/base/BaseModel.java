@@ -55,10 +55,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 @JsonInclude(Include.NON_EMPTY)
 public class BaseModel {
-
+    /**
+     * dto.
+     */
     @JsonIgnore
     private BaseDto dto;
-    
+    /**
+     * customPropertyPrefix.
+     */
     @JsonIgnore
     private String customPropertyPrefix;
 
@@ -93,7 +97,9 @@ public class BaseModel {
     @JsonIgnore
     private Map<String, String> customProperties =
             new LinkedHashMap<String, String>();
-
+    /**
+     * customPropertiesJsonVal.
+     */
     @JsonIgnore
     private String customPropertiesJsonVal;
 
@@ -328,20 +334,42 @@ public class BaseModel {
         this.customPropertyPrefix = customPropertyPrefix;
     }
 
+    /**
+     * get customPropertiesJsonVal.
+     * 
+     * @return customPropertiesJsonVal.
+     */
     public String getCustomPropertiesJsonVal() {
         return customPropertiesJsonVal;
     }
 
+    /**
+     * set customPropertiesJsonVal.
+     * 
+     * @param customPropertiesJsonVal
+     *            customPropertiesJsonVal.
+     */
     public void setCustomPropertiesJsonVal(String customPropertiesJsonVal) {
         this.customPropertiesJsonVal = customPropertiesJsonVal;
     }
 
+    /**
+     * get dto.
+     * 
+     * @return dto.
+     */
     public BaseDto getDto() {
         return dto;
     }
 
+    /**
+     * set dto.
+     * 
+     * @param dto
+     *            dto.
+     */
     public void setDto(BaseDto dto) {
         this.dto = dto;
     }
-    
+
 }

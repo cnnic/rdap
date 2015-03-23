@@ -4,41 +4,127 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dto.BaseDto;
 
-public class KeyDataDto extends BaseDto{
-	private int flags;
-	private int protocol;
-	private int algorithm;
-	private String publicKey;
-	private List<EventDto> events;
-	public int getFlags() {
-		return flags;
-	}
-	public void setFlags(int flags) {
-		this.flags = flags;
-	}
-	public int getProtocol() {
-		return protocol;
-	}
-	public void setProtocol(int protocol) {
-		this.protocol = protocol;
-	}
-	public int getAlgorithm() {
-		return algorithm;
-	}
-	public void setAlgorithm(int algorithm) {
-		this.algorithm = algorithm;
-	}
-	public String getPublicKey() {
-		return publicKey;
-	}
-	public void setPublicKey(String publicKey) {
-		this.publicKey = publicKey;
-	}
-	public List<EventDto> getEvents() {
-		return events;
-	}
-	public void setEvents(List<EventDto> events) {
-		this.events = events;
-	}
-	
+/**
+ * KeyDataDto.
+ * 
+ * @author jiashuo
+ * 
+ */
+public class KeyDataDto extends BaseDto {
+    /**
+     * flags.
+     */
+    private int flags;
+    /**
+     * protocol.
+     */
+    private int protocol;
+    /**
+     * algorithm.
+     */
+    private int algorithm;
+    /**
+     * publicKey.
+     */
+    private String publicKey;
+    /**
+     * events.
+     */
+    private List<EventDto> events;
+
+    /**
+     * get flags.
+     * 
+     * @return flags.
+     */
+    public int getFlags() {
+        return flags;
+    }
+
+    /**
+     * set flags.
+     * 
+     * @param flags
+     *            flags.
+     */
+    public void setFlags(int flags) {
+        this.flags = flags;
+    }
+
+    /**
+     * get protocol.
+     * 
+     * @return protocol.
+     */
+    public int getProtocol() {
+        return protocol;
+    }
+
+    /**
+     * set protocol.
+     * 
+     * @param protocol
+     *            protocol.
+     */
+    public void setProtocol(int protocol) {
+        this.protocol = protocol;
+    }
+
+    /**
+     * get algorithm.
+     * 
+     * @return algorithm.
+     */
+    public int getAlgorithm() {
+        return algorithm;
+    }
+
+    /**
+     * set algorithm.
+     * 
+     * @param algorithm
+     *            algorithm.
+     */
+    public void setAlgorithm(int algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    /**
+     * get publicKey.
+     * 
+     * @return publicKey.
+     */
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    /**
+     * set publicKey.
+     * 
+     * @param publicKey
+     *            publicKey.
+     */
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    /**
+     * get events.
+     * 
+     * @return events events.
+     */
+    public List<EventDto> getEvents() {
+        return events;
+    }
+
+    /**
+     * set events.
+     * 
+     * @param events
+     *            events.
+     */
+    public void setEvents(List<EventDto> events) {
+        this.events = events;
+    }
+
 }

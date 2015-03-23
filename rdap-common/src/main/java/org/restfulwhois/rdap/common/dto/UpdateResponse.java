@@ -38,19 +38,42 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
+ * UpdateResponse.
  * 
  * @author jiashuo
  * 
  */
 @JsonInclude(Include.NON_DEFAULT)
 public class UpdateResponse {
+    /**
+     * httpStatusCode.
+     */
     @JsonIgnore
     private int httpStatusCode;
+    /**
+     * handle.
+     */
     private String handle;
+    /**
+     * errorCode.
+     */
     private int errorCode;
+    /**
+     * subErrorCode.
+     */
     private int subErrorCode;
+    /**
+     * description list.
+     */
     private List<String> description = new ArrayList<String>();
 
+    /**
+     * build success response.
+     * 
+     * @param handle
+     *            handle.
+     * @return UpdateResponse.
+     */
     public static UpdateResponse buildSuccessResponse(String handle) {
         UpdateResponse response = new UpdateResponse();
         response.setHttpStatusCode(SimpleHttpStatusCode.OK_200.value());
@@ -58,6 +81,19 @@ public class UpdateResponse {
         return response;
     }
 
+    /**
+     * build error response.
+     * 
+     * @param handle
+     *            handle.
+     * @param subErrorCode
+     *            subErrorCode.
+     * @param httpStatusCode
+     *            httpStatusCode.
+     * @param description
+     *            description.
+     * @return UpdateResponse.
+     */
     public static UpdateResponse buildErrorResponse(String handle,
             int subErrorCode, int httpStatusCode, String description) {
         UpdateResponse response = new UpdateResponse();
@@ -69,6 +105,17 @@ public class UpdateResponse {
         return response;
     }
 
+    /**
+     * build error response.
+     * 
+     * @param subErrorCode
+     *            subErrorCode.
+     * @param httpStatusCode
+     *            httpStatusCode.
+     * @param description
+     *            description.
+     * @return UpdateResponse.
+     */
     public static UpdateResponse buildErrorResponse(int subErrorCode,
             int httpStatusCode, String description) {
         UpdateResponse response = new UpdateResponse();
@@ -79,46 +126,107 @@ public class UpdateResponse {
         return response;
     }
 
+    /**
+     * add description.
+     * 
+     * @param desc
+     *            desc.
+     */
     private void addDescription(String desc) {
         this.description.add(desc);
     }
 
+    /**
+     * get httpStatusCode.
+     * 
+     * @return httpStatusCode.
+     */
     public int getHttpStatusCode() {
         return httpStatusCode;
     }
 
+    /**
+     * set httpStatusCode.
+     * 
+     * @param httpStatusCode
+     *            httpStatusCode.
+     */
     public void setHttpStatusCode(int httpStatusCode) {
         this.httpStatusCode = httpStatusCode;
     }
 
+    /**
+     * get handle.
+     * 
+     * @return handle.
+     */
     public String getHandle() {
         return handle;
     }
 
+    /**
+     * set handle.
+     * 
+     * @param handle
+     *            handle.
+     */
     public void setHandle(String handle) {
         this.handle = handle;
     }
 
+    /**
+     * get errorCode.
+     * 
+     * @return errorCode.
+     */
     public int getErrorCode() {
         return errorCode;
     }
 
+    /**
+     * set errorCode.
+     * 
+     * @param errorCode
+     *            errorCode.
+     */
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
 
+    /**
+     * get description.
+     * 
+     * @return description.
+     */
     public List<String> getDescription() {
         return description;
     }
 
+    /**
+     * set description.
+     * 
+     * @param description
+     *            description.
+     */
     public void setDescription(List<String> description) {
         this.description = description;
     }
 
+    /**
+     * get subErrorCode.
+     * 
+     * @return subErrorCode.
+     */
     public int getSubErrorCode() {
         return subErrorCode;
     }
 
+    /**
+     * set subErrorCode.
+     * 
+     * @param subErrorCode
+     *            subErrorCode.
+     */
     public void setSubErrorCode(int subErrorCode) {
         this.subErrorCode = subErrorCode;
     }

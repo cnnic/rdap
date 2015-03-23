@@ -34,13 +34,11 @@ import java.util.List;
 
 import org.restfulwhois.rdap.common.dto.embedded.EventDto;
 import org.restfulwhois.rdap.common.dto.embedded.LinkDto;
-import org.restfulwhois.rdap.common.model.Event;
-import org.restfulwhois.rdap.common.model.Link;
 
 /**
  * DsData as specified by RFC 4034.
  * 
- * @author jiashuo
+ * @author jiashuo.
  * 
  */
 public class DsDataDto extends BaseDto {
