@@ -69,7 +69,7 @@ public class IpInBytes {
      * 
      * @return startAddress string.
      */
-    public String getAsString() {
+    public  String getAsString() {
         return IpUtil.toString(bytes, ipVersion);
     }
 

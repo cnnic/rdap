@@ -514,8 +514,9 @@ public final class StringUtil {
 
     /**
      * 
-     * @param stringList
-     * @return
+     * @param stringList 
+     *       string list.
+     * @return string list.
      */
     public static List<String> getNotEmptyStringList(List<String> stringList) {
         List<String> notEmptyStringList = new ArrayList<String>();

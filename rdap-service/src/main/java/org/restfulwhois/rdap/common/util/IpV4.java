@@ -41,7 +41,7 @@ import org.restfulwhois.rdap.common.util.SubnetUtils.SubnetInfo;
  * @author jiashuo
  * 
  */
-public class IpV4 {
+public final class IpV4 {
 
     /**
      * constructor.

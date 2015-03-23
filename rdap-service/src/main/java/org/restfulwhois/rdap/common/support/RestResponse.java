@@ -127,9 +127,7 @@ public class RestResponse {
      * create response with HTTP status code 200.
      * 
      * @param response
-     *            model T of response.
-     * @param <T>
-     *            a model
+     *            model T of response.   
      * @return ResponseEntity<T> ResponseEntity model.
      */
     public static ResponseEntity<UpdateResponse> createUpdateResponse(

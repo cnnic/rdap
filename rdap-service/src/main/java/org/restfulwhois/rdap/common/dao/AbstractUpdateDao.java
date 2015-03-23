@@ -52,23 +52,45 @@ import org.springframework.jdbc.core.RowMapper;
  * 
  * @param <T>
  *            object derived from BaseModel.
+ * @param <DTO> 
+ *            object derived from BaseDto.
  * @author jiashuo
  * 
  */
 public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto>
         implements UpdateDao<T, DTO> {
+    /**
+     * TPL_FIND_ID_BY_HANDLE.
+     */
     private static final String TPL_FIND_ID_BY_HANDLE =
             "SELECT %s as ID from %s where HANDLE = ?";
+    
+    /**
+     * TPL_CREATE_STATUS.
+     */
     private static final String TPL_CREATE_STATUS =
             "INSERT INTO %s(%s,STATUS) values(?,?)";
+    
+    /**
+     * TPL_DELETE_STATUS.
+     */
     private static final String TPL_DELETE_STATUS = "DELETE FROM %s WHERE %s=?";
-
+    
+    /**
+     * TPL_FINDIDS_BY_OUTERIDANDTYPE.
+     */
     private static final String TPL_FINDIDS_BY_OUTERIDANDTYPE =
             "SELECT %s as ID from %s where REL_ID = ? and REL_OBJECT_TYPE = ? ";
-
+    
+    /**
+     * TPL_DELETE_REL_BY_OUTERIDANDTYPE.
+     */
     private static final String TPL_DELETE_REL_BY_OUTERIDANDTYPE =
             "DELETE FROM  %s where REL_ID = ? and REL_OBJECT_TYPE = ? ";
 
+    /**
+     * TPL_DELETE_BY_ID.
+     */
     private static final String TPL_DELETE_BY_ID =
             "delete from %s where %s in ( %s )";
     /**
@@ -89,6 +111,16 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
                 "must be implemented in sub class if I'am called.");
     }
 
+    /**
+     * query id by handle.
+     * @param handle
+     *        handle.
+     * @param idColumnName
+     *           idColumnName.
+     * @param tableName 
+     *          tableName.
+     * @return id
+     */
     protected Long findIdByHandle(final String handle, String idColumnName,
             String tableName) {
         final String sql =
@@ -153,7 +185,17 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         throw new UnsupportedOperationException(
                 "must be implemented in sub class if I'am called.");
     }
-
+    /**
+     * save status.
+     * @param model 
+     *       object derived from BaseModel. 
+     * @param statusList 
+     *       status list.
+     * @param tableName
+     *        table name.
+     * @param outerModelIdColumnName
+     *         outerModelIdColumnName.
+     */
     protected void saveStatus(final T model, final List<String> statusList,
             String tableName, String outerModelIdColumnName) {
         final List<String> notEmptyStatusList =
@@ -179,6 +221,15 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         });
     }
 
+    /**
+     * delete status.
+     * @param model 
+     *        object extends BaseModel.
+     * @param tableName
+     *          table name.
+     * @param modelIdColumnName
+     *         modelIdColumnName.
+     */
     protected void deleteStatus(final T model, String tableName,
             String modelIdColumnName) {
         if (null == model || null == model.getId()) {
@@ -200,6 +251,16 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
                 "must be implemented in sub class if I'am called.");
     }
 
+    /**
+     * query id by outer id and type.
+     * @param outerModel
+     *        outer object.
+     * @param idColumnName
+     *      idColumnName.
+     * @param tableName
+     *        tableName. 
+     * @return  id list
+     */
     protected List<Long> findIdsByOuterIdAndType(final BaseModel outerModel,
             String idColumnName, String tableName) {
         final String sql =
@@ -225,7 +286,13 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         return null;
 
     }
-
+    /**
+     * delete relation.
+     * @param outerModel
+     *        outer object. 
+     * @param tableName
+     *        table name.
+     */
     protected void deleteRel(final BaseModel outerModel, String tableName) {
         final String sql =
                 String.format(TPL_DELETE_REL_BY_OUTERIDANDTYPE, tableName);
@@ -237,6 +304,15 @@ public abstract class AbstractUpdateDao<T extends BaseModel, DTO extends BaseDto
         });
     }
 
+    /**
+     * delete data.
+     * @param ids
+     *       ids.
+     * @param tableName
+     *        table name.
+     * @param idColumnName
+     *         idColumnName.
+     */
     protected void delete(final String ids, final String tableName,
             final String idColumnName) {
         final String sql =

@@ -74,7 +74,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * abstract update service.
- * 
+ * @param <DTO>
+ *     object derived from BaseDto.
+ * @param <MODEL>
+ *     object derived from BaseModel.
  * @author jiashuo
  * 
  */
@@ -86,16 +89,34 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
     private static final Logger LOGGER = LoggerFactory
             .getLogger(AbstractUpdateService.class);
 
+    /**
+     * update dao.
+     */
     @Autowired
     private UpdateDao<MODEL, DTO> dao;
+    /**
+     * event dao.
+     */
     @Autowired
     private UpdateDao<Event, EventDto> eventDao;
+    /**
+     * link dao.
+     */
     @Autowired
     private UpdateDao<Link, LinkDto> linkDao;
+    /**
+     * remark dao.
+     */
     @Autowired
     private UpdateDao<Remark, RemarkDto> remarkDao;
+    /**
+     * public id dao.
+     */
     @Autowired
     private UpdateDao<PublicId, PublicIdDto> publicIdDao;
+    /**
+     * entity dao.
+     */
     @Autowired
     private UpdateDao<Entity, EntityDto> entityDao;
 
@@ -118,12 +139,36 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         return response;
     }
 
-    abstract protected void execute(MODEL model);
+    /**
+     * 
+     * @param model
+     *     object derived from BaseModel.
+     */
+    protected abstract  void execute(MODEL model);
+    
+    /**
+     * covert dto to model.
+     * @param dto 
+     *        object.
+     * @return model 
+     */
+    protected abstract  MODEL convertDtoToModel(DTO dto);
 
-    abstract protected MODEL convertDtoToModel(DTO dto);
-
-    abstract protected ValidationResult validate(DTO dto);
-
+    /**
+     * validate dto.
+     * @param dto
+     *      dto. 
+     * @return ValidationResult 
+     */
+    protected abstract  ValidationResult validate(DTO dto);
+    
+    /**
+     * validate inner object include status,entities,remarks etc.
+     * @param dto
+     *   baseDto.
+     * @param validationResult
+     *           validationResult.
+     */
     protected void validateBaseDto(BaseDto dto,
             ValidationResult validationResult) {
         checkMaxLengthForStatus(dto.getStatus(), validationResult);
@@ -135,6 +180,11 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         checkMaxLengthForLang(dto.getLang(), validationResult);
     }
 
+    /**
+     * save inner object include entitesRel,remarks,links,events.
+     * @param model
+     *      model.
+     */
     protected void saveBaseModel(MODEL model) {
         saveEntitiesRel(model);
         BaseDto dto = model.getDto();
@@ -143,6 +193,12 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         saveEvents(dto.getEvents(), model);
     }
 
+    /**
+     * update inner object include entitesRel,remarks,links,events.
+     *
+     * @param model
+     *   model.
+     */
     protected void updateBaseModel(MODEL model) {
         BaseDto dto = model.getDto();
         updateEntitiesRel(model);
@@ -151,6 +207,11 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         updateEvents(dto.getEvents(), model);
     }
 
+    /**
+     * delete inner object include entitesRel,remarks,links,events.
+     * @param model
+     *      model.
+     */
     protected void deleteBaseModelRel(MODEL model) {
         deleteEntitiesRel(model);
         deleteRemarks(model);
@@ -158,6 +219,15 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         deleteEvents(model);
     }
 
+    /**
+     * check ip is Valid.
+     * @param ip
+     *       ip.
+     * @param fieldName
+     *      fieldName.
+     * @param validationResult
+     *    validationResult.     
+     */
     protected void checkIp(String ip, String fieldName,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -173,6 +243,13 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * covert customProperties.
+     * @param dto
+     *    dto.
+     * @param model
+     *     model.
+     */
     protected void convertCustomProperties(DTO dto, MODEL model) {
         Map<String, String> customProperties = dto.getCustomProperties();
         model.setCustomProperties(customProperties);
@@ -183,6 +260,15 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 .serializeMap(customProperties));
     }
 
+    /**
+     * check string list is not empty.
+     * @param values
+     *      values.
+     * @param fieldName
+     *    fieldName.
+     * @param validationResult
+     *     validationResult.
+     */
     protected void checkNotEmpty(List<String> values, String fieldName,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -191,6 +277,15 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         UpdateValidateUtil.checkNotEmpty(values, fieldName, validationResult);
     }
 
+    /**
+     * check value not empty.
+     * @param value
+     *      value.
+     * @param fieldName
+     *     fieldName.
+     * @param validationResult
+     *     validationResult.
+     */
     protected void checkNotEmpty(String value, String fieldName,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -199,6 +294,15 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         UpdateValidateUtil.checkNotEmpty(value, fieldName, validationResult);
     }
 
+    /**
+     * check value not null.
+     * @param value
+     *     value.
+     * @param fieldName
+     *    fieldName.
+     * @param validationResult
+     *     validationResult.
+     */
     protected void checkNotNull(Object value, String fieldName,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -207,6 +311,17 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         UpdateValidateUtil.checkNotNull(value, fieldName, validationResult);
     }
 
+    /**
+     * check maxLength.
+     * @param value
+     *       value.
+     * @param maxLength
+     *       maxLength.
+     * @param fieldName
+     *       fieldName.
+     * @param validationResult
+     *     validationResult.
+     */
     protected void checkMaxLength(String value, int maxLength,
             String fieldName, ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -216,12 +331,32 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
 
+    /**
+     * check not empty and max length.
+     * @param value 
+     *      value.
+     * @param maxLength
+     *     maxLength.
+     * @param fieldName
+     *      fieldName.
+     * @param validationResult
+     *      validationResult.
+     */
     protected void checkNotEmptyAndMaxLength(String value, int maxLength,
             String fieldName, ValidationResult validationResult) {
         checkNotEmpty(value, fieldName, validationResult);
         checkMaxLength(value, maxLength, fieldName, validationResult);
     }
 
+    /**
+     * check an  integer  between  maximum with minimum.
+     * @param value
+     *    value.
+     * @param fieldName
+     *     FieldName.
+     * @param validationResult
+     *     validationResult
+     */
     protected void checkMinMaxInt(Integer value, String fieldName,
             ValidationResult validationResult) {
         UpdateValidateUtil.checkMinMaxInt(value,
@@ -230,6 +365,15 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
 
+    /**
+     * check an integer is not null and between maximum with minimum.
+     * @param value
+     *     value.
+     * @param fieldName
+     *    fieldName.
+     * @param validationResult
+     *    validationResult.
+     */
     protected void checkNotNullAndMinMaxInt(Integer value, String fieldName,
             ValidationResult validationResult) {
         checkNotNull(value, fieldName, validationResult);
@@ -239,6 +383,15 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
 
+    /**
+     * check an big integer is not null and between maximum with minimum.
+     * @param value
+     *   value.
+     * @param fieldName
+     *    fieldName.
+     * @param validationResult
+     *   validationResult.
+     */
     protected void checkNotNullAndMinMaxBigInt(Long value, String fieldName,
             ValidationResult validationResult) {
         checkNotNull(value, fieldName, validationResult);
@@ -248,6 +401,15 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
     
+    /**
+     * check an tiny integer between maximum with minimum.
+     * @param value
+     *     value.
+     * @param fieldName
+     *    fieldName.
+     * @param validationResult
+     *    validationResult.
+     */
     protected void checkMinMaxTinyInt(int value, String fieldName,
             ValidationResult validationResult) {
         UpdateValidateUtil.checkMinMaxInt(value,
@@ -256,12 +418,26 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationResult);
     }
 
+    /**
+     * check status max length.
+     * @param statusValue
+     *    statusValue.
+     * @param validationResult
+     *     validationResult.
+     */
     protected void checkMaxLengthForStatus(String statusValue,
             ValidationResult validationResult) {
         checkMaxLength(statusValue, MAX_LENGTH_STATUS, "status",
                 validationResult);
     }
 
+    /**
+     * check status max length.
+     * @param statusList
+     *    status list.
+     * @param validationResult
+     *    validationResult.
+     */
     protected void checkMaxLengthForStatus(List<String> statusList,
             ValidationResult validationResult) {
         if (null == statusList) {
@@ -272,23 +448,51 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * check the length of lang  is less than the maximum length.
+     * @param langValue
+     *    langValue.
+     * @param validationResult
+     *    validationResult.
+     */
     protected void checkMaxLengthForLang(String langValue,
             ValidationResult validationResult) {
         checkMaxLength(langValue, MAX_LENGTH_LANG, "lang", validationResult);
     }
 
+    /**
+     * check the length of port43 is less than the maximum length.
+     * @param port43Value
+     *    port43Value.
+     * @param validationResult
+     *    validationResult.
+     */
     protected void checkMaxLengthForPort43(String port43Value,
             ValidationResult validationResult) {
         checkMaxLength(port43Value, MAX_LENGTH_PORT43, "port43",
                 validationResult);
     }
 
+    /**
+     * check handle not empty and length is less than maximum length.
+     * @param handleValue
+     *   handleValue.
+     * @param validationResult
+     *    validationResult.
+     */
     protected void checkNotEmptyAndMaxLengthForHandle(String handleValue,
             ValidationResult validationResult) {
         checkNotEmptyAndMaxLength(handleValue, MAX_LENGTH_HANDLE, "handle",
                 validationResult);
     }
 
+    /**
+     * check event.
+     * @param events
+     *    events.
+     * @param validationResult
+     *     validationResult.
+     */
     protected void checkEvents(List<EventDto> events,
             ValidationResult validationResult) {
         if (null == events) {
@@ -307,6 +511,13 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * check publicId.
+     * @param publicIds
+     *   publicIds.
+     * @param validationResult
+     *    validationResult.
+     */
     protected void checkPublicIds(List<PublicIdDto> publicIds,
             ValidationResult validationResult) {
         if (null == publicIds) {
@@ -321,6 +532,13 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * check remark.
+     * @param remarks
+     *    remarks.
+     * @param validationResult
+     *    validationResult.
+     */
     protected void checkRemarks(List<RemarkDto> remarks,
             ValidationResult validationResult) {
         if (null == remarks) {
@@ -340,6 +558,13 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * check link.
+     * @param links
+     *    links
+     * @param validationResult
+     *    validationResult
+     */
     protected void checkLinks(List<LinkDto> links,
             ValidationResult validationResult) {
         if (null == links) {
@@ -369,6 +594,13 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * check entity.
+     * @param entities
+     *     entities.
+     * @param validationResult
+     *      validationResult.
+     */
     protected void checkEntities(List<EntityHandleDto> entities,
             ValidationResult validationResult) {
         if (null == entities) {
@@ -384,6 +616,13 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * check handle not exist for create.
+     * @param handle
+     *    handle.
+     * @param validationResult
+     *   validationResult.
+     */
     protected void checkHandleNotExistForCreate(String handle,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -396,6 +635,13 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * check handle exist for update.
+     * @param handle
+     *     handle.
+     * @param validationResult
+     *     validationResult.
+     */
     protected void checkHandleExistForUpdate(String handle,
             ValidationResult validationResult) {
         if (validationResult.hasError()) {
@@ -408,80 +654,179 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
         }
     }
 
+    /**
+     * save events.
+     * @param events
+     *    event list.
+     * @param model
+     *    outer object associated.
+     */
     protected void saveEvents(List<EventDto> events, MODEL model) {
         LOGGER.debug("save events...");
         eventDao.saveAsInnerObjects(model, events);
     }
 
+    /**
+     * delete events.
+     * @param model
+     *    outer object associated.
+     */
     protected void deleteEvents(MODEL model) {
         LOGGER.debug("delete events...");
         eventDao.deleteAsInnerObjects(model);
     }
 
+    /**
+     * update events.
+     * @param events
+     *    event list.
+     * @param model
+     *    outer object associated.
+     */
     protected void updateEvents(List<EventDto> events, MODEL model) {
         deleteEvents(model);
         saveEvents(events, model);
     }
 
+    /**
+     * save links.
+     * @param links
+     *    link list.
+     * @param model
+     *    outer object associated.
+     */
     protected void saveLinks(List<LinkDto> links, MODEL model) {
         LOGGER.debug("save links...");
         linkDao.saveAsInnerObjects(model, links);
     }
-
+    
+    /**
+     * delete links.     
+     * @param model
+     *    outer object associated.
+     */
     protected void deleteLinks(MODEL model) {
         LOGGER.debug("delete links...");
         linkDao.deleteAsInnerObjects(model);
     }
 
+    /**
+     * update links.
+     * @param links
+     *    link list.
+     * @param model
+     *    outer object associated.
+     */
     protected void updateLinks(List<LinkDto> links, MODEL model) {
         deleteLinks(model);
         saveLinks(links, model);
     }
 
+    /**
+     * save remarks.
+     * @param remarks
+     *    remark list.
+     * @param model
+     *    outer object associated.
+     */
     protected void saveRemarks(List<RemarkDto> remarks, MODEL model) {
         LOGGER.debug("save remarks...");
         remarkDao.saveAsInnerObjects(model, remarks);
     }
 
+    /**
+     * delete remarks.
+     * @param model
+     *    outer object associated.
+     */
     protected void deleteRemarks(MODEL model) {
         LOGGER.debug("delete remarks...");
         remarkDao.deleteAsInnerObjects(model);
     }
 
+    /**
+     * update remarks.
+     * @param remarks
+     *    remark list.
+     * @param model
+     *    outer object associated.
+     */
     protected void updateRemarks(List<RemarkDto> remarks, MODEL model) {
         deleteRemarks(model);
         saveRemarks(remarks, model);
     }
 
+    /**
+     * save publicIds.
+     * @param publicIds
+     *     publicIds
+     * @param model
+     *   outer object associated.
+     */
     protected void savePublicIds(List<PublicIdDto> publicIds, MODEL model) {
         LOGGER.debug("save publicIds...");
         publicIdDao.saveAsInnerObjects(model, publicIds);
     }
 
+    /**
+     * delete publicIds.
+     * @param model
+     *   outer object associated.
+     */
     protected void deletePublicIds(MODEL model) {
         LOGGER.debug("delete publicIds...");
         publicIdDao.deleteAsInnerObjects(model);
     }
 
+    /**
+     * update publicIds.
+     * @param publicIds
+     *    publicIds.
+     * @param model
+     *     model.
+     */
     protected void updatePublicIds(List<PublicIdDto> publicIds, MODEL model) {
         deletePublicIds(model);
         savePublicIds(publicIds, model);
     }
 
+    /**
+     * save entity relation.
+     * @param model
+     *    model.
+     */
     protected void saveEntitiesRel(MODEL model) {
         LOGGER.debug("save entities rel...");
         entityDao.saveRel(model);
     }
 
+    /**
+     * delete entity relation.
+     * @param model
+     *    model.
+     */
     protected void deleteEntitiesRel(MODEL model) {
         entityDao.deleteRel(model);
     }
 
+    /**
+     * update entity relation. 
+     * @param model
+     *    model.
+     */
     protected void updateEntitiesRel(MODEL model) {
         deleteEntitiesRel(model);
         saveEntitiesRel(model);
     }
 
+    /**
+     * handle error.
+     * @param dto
+     *   dto.
+     * @param validationResult
+     *      validationResult.
+     * @return  updateResponse.
+     */
     private UpdateResponse handleError(BaseDto dto,
             ValidationResult validationResult) {
         ValidationError error = validationResult.getFirstError();
@@ -491,6 +836,10 @@ public abstract class AbstractUpdateService<DTO extends BaseDto, MODEL extends B
                 validationError.getMessage());
     }
 
+    /**
+     * get dao.
+     * @return dao.
+     */
     public UpdateDao<MODEL, DTO> getDao() {
         return dao;
     }
