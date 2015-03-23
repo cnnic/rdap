@@ -44,104 +44,243 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
+ * BaseDto.
  * 
- * @author jiashuo
+ * @author jiashuo.
  * 
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BaseDto {
-
+    /**
+     * handle.
+     */
     private String handle;
+    /**
+     * entities.
+     */
     private List<EntityHandleDto> entities;
-	private List<String> status;
-	private List<RemarkDto> remarks;
-	private List<LinkDto> links;
-	private String port43;
-	private List<EventDto> events;
-	private String lang;
+    /**
+     * status.
+     */
+    private List<String> status;
+    /**
+     * remarks.
+     */
+    private List<RemarkDto> remarks;
+    /**
+     * links.
+     */
+    private List<LinkDto> links;
+    /**
+     * port43.
+     */
+    private String port43;
+    /**
+     * events.
+     */
+    private List<EventDto> events;
+    /**
+     * lang.
+     */
+    private String lang;
+    /**
+     * customProperties.
+     */
     private Map<String, String> customProperties =
             new LinkedHashMap<String, String>();
 
+    /**
+     * add custom property.
+     * 
+     * @param key
+     *            key.
+     * @param value
+     *            value.
+     */
     public void addCustomProperty(String key, String value) {
         if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(value)) {
             customProperties.put(key, value);
         }
     }
 
+    /**
+     * get handle.
+     * 
+     * @return handle.
+     */
     public String getHandle() {
         return handle;
     }
 
+    /**
+     * set handle.
+     * 
+     * @param handle
+     *            handle.
+     */
     public void setHandle(String handle) {
         this.handle = handle;
     }
-    
+
+    /**
+     * get entities.
+     * 
+     * @return entities.
+     */
     public List<EntityHandleDto> getEntities() {
-		return entities;
-	}
+        return entities;
+    }
 
-	public void setEntities(List<EntityHandleDto> entities) {
-		this.entities = entities;
-	}
+    /**
+     * set entities.
+     * 
+     * @param entities
+     *            entities.
+     */
+    public void setEntities(List<EntityHandleDto> entities) {
+        this.entities = entities;
+    }
 
-	public List<String> getStatus() {
-		return status;
-	}
+    /**
+     * get status.
+     * 
+     * @return status.
+     */
+    public List<String> getStatus() {
+        return status;
+    }
 
-	public void setStatus(List<String> status) {
-		this.status = status;
-	}
+    /**
+     * set status.
+     * 
+     * @param status
+     *            status.
+     */
+    public void setStatus(List<String> status) {
+        this.status = status;
+    }
 
-	public List<RemarkDto> getRemarks() {
-		return remarks;
-	}
+    /**
+     * get remarks.
+     * 
+     * @return remarks.
+     */
+    public List<RemarkDto> getRemarks() {
+        return remarks;
+    }
 
-	public void setRemarks(List<RemarkDto> remarks) {
-		this.remarks = remarks;
-	}
+    /**
+     * set remarks.
+     * 
+     * @param remarks
+     *            remarks.
+     */
+    public void setRemarks(List<RemarkDto> remarks) {
+        this.remarks = remarks;
+    }
 
-	public List<LinkDto> getLinks() {
-		return links;
-	}
+    /**
+     * get links.
+     * 
+     * @return links.
+     */
+    public List<LinkDto> getLinks() {
+        return links;
+    }
 
-	public void setLinks(List<LinkDto> links) {
-		this.links = links;
-	}
+    /**
+     * set links.
+     * 
+     * @param links
+     *            links.
+     */
+    public void setLinks(List<LinkDto> links) {
+        this.links = links;
+    }
 
-	public String getPort43() {
-		return port43;
-	}
+    /**
+     * get port43.
+     * 
+     * @return port43.
+     */
+    public String getPort43() {
+        return port43;
+    }
 
-	public void setPort43(String port43) {
-		this.port43 = port43;
-	}
+    /**
+     * set port43.
+     * 
+     * @param port43
+     *            port43.
+     */
+    public void setPort43(String port43) {
+        this.port43 = port43;
+    }
 
-	public List<EventDto> getEvents() {
-		return events;
-	}
+    /**
+     * get events.
+     * 
+     * @return events.
+     */
+    public List<EventDto> getEvents() {
+        return events;
+    }
 
-	public void setEvents(List<EventDto> events) {
-		this.events = events;
-	}
-	
-	public String getLang() {
+    /**
+     * set events.
+     * 
+     * @param events
+     *            events.
+     */
+    public void setEvents(List<EventDto> events) {
+        this.events = events;
+    }
+
+    /**
+     * get lang.
+     * 
+     * @return lang.
+     */
+    public String getLang() {
         return lang;
     }
 
+    /**
+     * set lang.
+     * 
+     * @param lang
+     *            lang.
+     */
     public void setLang(String lang) {
         this.lang = lang;
     }
 
+    /**
+     * get customProperties.
+     * 
+     * @return customProperties.
+     */
     public Map<String, String> getCustomProperties() {
         return customProperties;
     }
 
+    /**
+     * set customProperties.
+     * 
+     * @param customProperties
+     *            customProperties.
+     */
     public void setCustomProperties(Map<String, String> customProperties) {
         this.customProperties = customProperties;
     }
-    
+
+    /**
+     * get update URI.
+     * 
+     * @return URI.
+     */
     @JsonIgnore
-    public String getUpdateUri(){
+    public String getUpdateUri() {
         return this.getClass().getSimpleName().replace("Dto", "").toLowerCase();
     }
 

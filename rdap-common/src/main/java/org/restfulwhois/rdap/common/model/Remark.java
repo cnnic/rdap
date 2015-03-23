@@ -39,8 +39,8 @@ import org.restfulwhois.rdap.common.model.base.ModelType;
  * 
  */
 public class Remark extends BaseNotice {
-	 @Override
-	    public ModelType getObjectType() {
-	        return ModelType.REMARK;
-	    }
+    @Override
+    public ModelType getObjectType() {
+        return ModelType.REMARK;
+    }
 }

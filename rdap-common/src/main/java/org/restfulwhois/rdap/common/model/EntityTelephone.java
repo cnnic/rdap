@@ -61,9 +61,9 @@ public class EntityTelephone extends BaseModel {
     /**
      * build text tel.
      * 
-     * @param number
-     * @param extNumber
-     * @return
+     * @param number number.
+     * @param extNumber extNumber.
+     * @return EntityTelephone.
      */
     public static EntityTelephone buildTextTel(String number, String extNumber) {
         EntityTelephone tel = new EntityTelephone();

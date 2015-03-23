@@ -90,11 +90,6 @@ public class SubnetUtils {
      * 
      * @param cidrNotation
      *            A CIDR-notation string, e.g. "192.168.0.1/16"
-     * @throws IllegalArgumentException
-     *    
-     *  if the parameter is invalid, i.e. does not match n.n.n.n/m
-     *     where n=1-3 decimal digits, m = 1-3 decimal digits in range
-     *      1-32
      */
     public SubnetUtils(String cidrNotation) {
         calculate(cidrNotation);
@@ -108,10 +103,6 @@ public class SubnetUtils {
      *            An IP address, e.g. "192.168.0.1"
      * @param mask
      *            A dotted decimal netmask e.g. "255.255.0.0"
-     * @throws IllegalArgumentException
-     *             if the address or mask is invalid, i.e. does not match
-     *             n.n.n.n where n=1-3 decimal digits and the mask is not all
-     *             zeros
      */
     public SubnetUtils(String address, String mask) {
         calculate(toCidrNotation(address, mask));
@@ -322,7 +313,10 @@ public class SubnetUtils {
      * 
      * @param mask
      *            mask.
-     * @throws IllegalArgumentException.
+     *    
+     *  if the parameter is invalid, i.e. does not match n.n.n.n/m
+     *     where n=1-3 decimal digits, m = 1-3 decimal digits in range
+     *      1-32
      */
     private void calculate(String mask) {
         Matcher matcher = CIDR_PATTERN.matcher(mask);

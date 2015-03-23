@@ -3,9 +3,14 @@ package org.restfulwhois.rdap.common.dto.embedded;
 import java.util.List;
 
 import org.restfulwhois.rdap.common.dto.BaseDto;
-import org.restfulwhois.rdap.common.model.Link;
 
-public class RemarkDto extends BaseDto{
+/**
+ * RemarkDto.
+ * 
+ * @author jiashuo.
+ * 
+ */
+public class RemarkDto extends BaseDto {
     /**
      * title.
      */
@@ -13,23 +18,44 @@ public class RemarkDto extends BaseDto{
     /**
      * description.
      */
-    private List<String> description;  
+    private List<String> description;
 
-	public List<String> getDescription() {
-		return description;
-	}
+    /**
+     * get description.
+     * 
+     * @return description.
+     */
+    public List<String> getDescription() {
+        return description;
+    }
 
-	public void setDescription(List<String> description) {
-		this.description = description;
-	}
+    /**
+     * set description.
+     * 
+     * @param description
+     *            description.
+     */
+    public void setDescription(List<String> description) {
+        this.description = description;
+    }
 
+    /**
+     * get title.
+     * 
+     * @return title.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * set title.
+     * 
+     * @param title
+     *            title.
+     */
     public void setTitle(String title) {
         this.title = title;
     }
-   
-	
+
 }
