@@ -4,7 +4,7 @@ This project is a starting point for registries to build rdap service so that th
 The project is written in Java. Modules:  
 ![architecture](https://raw.githubusercontent.com/cnnic/rdap/master/doc/image/classdiagram/architecture.png)
 
-### RDAP service Install  
+### rdap-service Install  
 
 Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.  
 
@@ -77,7 +77,7 @@ Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, Cent
    * Log    
      Log file is $TOMCAT_HOME/logs/catalina.out.   
 
-### RDAP proxy43 Install
+### rdap-proxy43 Install
 [Proxy43 Install](https://github.com/cnnic/rdap/wiki/Proxy43-install-&-usage)
 ### RDAP reference
 [RDAP reference](https://github.com/cnnic/rdap/wiki/RDAP-reference)     
