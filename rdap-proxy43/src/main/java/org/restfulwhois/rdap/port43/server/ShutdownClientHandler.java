@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
  * @author jiashuo
  * 
  */
+@SuppressWarnings("rawtypes")
 public final class ShutdownClientHandler extends SimpleChannelInboundHandler {
     /**
      * logger.

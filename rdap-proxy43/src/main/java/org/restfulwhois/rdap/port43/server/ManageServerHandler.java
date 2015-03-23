@@ -74,7 +74,16 @@ public final class ManageServerHandler extends
         super.channelActive(ctx);
     }
 
-//    @Override
+    /**
+     * messageReceived.
+     * 
+     * @param ctx
+     *            ctx.
+     * @param msg
+     *            msg.
+     * @throws Exception
+     *             Exception.
+     */
     protected void messageReceived(ChannelHandlerContext ctx, String msg)
             throws Exception {
         LOGGER.info("receive manage cmd:{}", msg);
@@ -95,7 +104,7 @@ public final class ManageServerHandler extends
     @Override
     protected void channelRead0(ChannelHandlerContext arg0, String arg1)
             throws Exception {
-        messageReceived(arg0,arg1);
+        messageReceived(arg0, arg1);
     }
 
 }

@@ -63,7 +63,7 @@ public class ManageServerInitializer extends ChannelInitializer<SocketChannel> {
     /**
      * server handler.
      */
-    private static ManageServerHandler MANAGE_HANDLER =
+    private static final ManageServerHandler MANAGE_HANDLER =
             new ManageServerHandler();
 
     @Override

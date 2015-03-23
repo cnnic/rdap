@@ -76,7 +76,7 @@ public class TextFormater implements Formater {
     /**
      * tabs for format.
      */
-    private final static String MAX_INDENTS = StringUtils.repeat("\t",
+    private static final String MAX_INDENTS = StringUtils.repeat("\t",
             MAX_INDENT_SIZE);
 
     @Override
@@ -130,7 +130,7 @@ public class TextFormater implements Formater {
             result.append(KEY_VALUE_SEPARATOR);
             result.append(displayValue);
             result.append(LINE_SEPARATOR);
-        }else if (object instanceof Map) {
+        } else if (object instanceof Map) {
             result.append(MAX_INDENTS, 0, getDepth());
             result.append(key);
             result.append(KEY_VALUE_SEPARATOR);
@@ -141,13 +141,13 @@ public class TextFormater implements Formater {
         } else if (object instanceof List) {
             formatList(key, (List) object, result);
         } else {
-            //primitive type: string, integer ...
+            // primitive type: string, integer ...
             result.append(MAX_INDENTS, 0, getDepth());
             result.append(key);
             result.append(KEY_VALUE_SEPARATOR);
             result.append(object);
             result.append(LINE_SEPARATOR);
-        } 
+        }
     }
 
     /**

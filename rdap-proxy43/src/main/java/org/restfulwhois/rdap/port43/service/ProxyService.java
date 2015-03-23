@@ -113,8 +113,8 @@ public class ProxyService {
      * @param commandStr
      *            commandStr.
      * @return query result.
-     * @throws ServiceException
-     *             ServiceException.
+     * @throws Exception
+     *             Exception.
      */
     public String execute(String commandStr) throws Exception {
         LOGGER.info("receive query:{}", commandStr);
