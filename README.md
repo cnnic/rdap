@@ -1,5 +1,5 @@
 ### Introduction    
-RDAP: Registration Data Access Protocol([RDAP protocol](http://datatracker.ietf.org/wg/weirds/)) for Domain Registries and Regional Internet Registries.   
+RDAP: Registration Data Access Protocol([RDAP protocol](http://datatracker.ietf.org/wg/weirds/)), for Domain Registries and Regional Internet Registries.   
 This project is a starting point for registries to build rdap service so that they need not to start from scratch.   
 The project is written in Java. Modules:  
 ![architecture](https://raw.githubusercontent.com/cnnic/rdap/master/doc/image/classdiagram/architecture.png)
