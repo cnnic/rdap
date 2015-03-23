@@ -50,6 +50,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JsonUtil {
     /**
+     * constructor.
+     */
+    public JsonUtil() {
+        super();
+    }
+
+    /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
@@ -72,6 +79,13 @@ public class JsonUtil {
         return "";
     }
 
+    /**
+     * toJsonWithPrettyFormat.
+     * 
+     * @param object
+     *            object.
+     * @return JSON.
+     */
     public static String toJsonWithPrettyFormat(Object object) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -90,6 +104,8 @@ public class JsonUtil {
      *            restResponse.
      * @return map.
      */
+    @SuppressWarnings({
+            "rawtypes", "unchecked" })
     public static Map deserializateJsonToMap(RestResponse restResponse) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map result = null;
@@ -101,7 +117,8 @@ public class JsonUtil {
                 LOGGER.info(
                         "response code from RDAP server is 301,set location to result:{}",
                         restResponse.getLocationHeader());
-                result.put("redirect location", restResponse.getLocationHeader());
+                result.put("redirect location",
+                        restResponse.getLocationHeader());
             }
         } catch (Exception e) {
             LOGGER.error("deserializateJsonToMap error:{}", e);

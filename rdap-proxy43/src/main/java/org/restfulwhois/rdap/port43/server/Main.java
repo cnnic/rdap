@@ -64,7 +64,7 @@ public final class Main {
     /**
      * all servers.
      */
-    public static final List<Server> allServer = new ArrayList<Server>();
+    public static List<Server> allServer = new ArrayList<Server>();
 
     /**
      * main method.

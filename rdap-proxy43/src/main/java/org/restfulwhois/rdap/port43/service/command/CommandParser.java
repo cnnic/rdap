@@ -49,6 +49,13 @@ import org.slf4j.LoggerFactory;
  */
 public class CommandParser {
     /**
+     * constructor.
+     */
+    public CommandParser() {
+        super();
+    }
+
+    /**
      * logger.
      */
     private static final Logger LOGGER = LoggerFactory
@@ -60,11 +67,10 @@ public class CommandParser {
      * 
      * @param commandStr
      *            command string.
-     * @return Command.
-     * @throws ServiceException
-     *             ServiceException.
+     * @return Command. ServiceException.
      */
-    public static Command parse(String commandStr) throws ServiceException {
+    @SuppressWarnings("unchecked")
+    public static Command parse(String commandStr) {
         LOGGER.debug("parse command:{}", commandStr);
         commandStr = validateAndFormatCommandStr(commandStr);
         String[] commandSplits = StringUtils.split(commandStr);
@@ -128,11 +134,8 @@ public class CommandParser {
      * @param commandStr
      *            commandStr.
      * @return formated command.
-     * @throws ServiceException
-     *             if validate error.
      */
-    private static String validateAndFormatCommandStr(String commandStr)
-            throws ServiceException {
+    private static String validateAndFormatCommandStr(String commandStr) {
         if (StringUtils.isBlank(commandStr)) {
             LOGGER.error("commandStr is empty.");
             throw new ServiceException("invalid command");

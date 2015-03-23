@@ -57,27 +57,28 @@ public class DomainSearchHandler extends QueryHandler {
         List<String> argumentList = command.getArgumentList();
         throwExceptionIfArguementIsEmpty(argumentList);
         String uri = "domains?";
-        String OPTION_NAME =
-                CommandOption.DOMAIN_SEARCH_BY_NAME.getOption();
-        String OPTION_NSLDHNAME =
+        String optionName = CommandOption.DOMAIN_SEARCH_BY_NAME.getOption();
+        String optionNsLdhName =
                 CommandOption.DOMAIN_SEARCH_BY_NSLDHNAME.getOption();
-        String OPTION_NSIP = CommandOption.DOMAIN_SEARCH_BY_NSIP.getOption();
-        if (isPrefixedArgument(argumentList.get(0), OPTION_NSLDHNAME + PARAM_SEPARATOR)) {
+        String optionNsIp = CommandOption.DOMAIN_SEARCH_BY_NSIP.getOption();
+        if (isPrefixedArgument(argumentList.get(0), optionNsLdhName
+                + PARAM_SEPARATOR)) {
             // search by nsLdhName.
-        	String argumentWithoutPrefix =
-                    removePrefix(argumentList.get(0), OPTION_NSLDHNAME);
-            argumentWithoutPrefix = urlEncode(argumentWithoutPrefix);
-            uri = uri + OPTION_NSLDHNAME + "=" + argumentWithoutPrefix;
-            System.out.println(uri);
-        } else if (isPrefixedArgument(argumentList.get(0), OPTION_NSIP + PARAM_SEPARATOR)) {
-        	// search by nsIp.
             String argumentWithoutPrefix =
-                    removePrefix(argumentList.get(0), OPTION_NSIP);
+                    removePrefix(argumentList.get(0), optionNsLdhName);
             argumentWithoutPrefix = urlEncode(argumentWithoutPrefix);
-            uri = uri + OPTION_NSIP + "=" + argumentWithoutPrefix;
+            uri = uri + optionNsLdhName + "=" + argumentWithoutPrefix;
+            System.out.println(uri);
+        } else if (isPrefixedArgument(argumentList.get(0), optionNsIp
+                + PARAM_SEPARATOR)) {
+            // search by nsIp.
+            String argumentWithoutPrefix =
+                    removePrefix(argumentList.get(0), optionNsIp);
+            argumentWithoutPrefix = urlEncode(argumentWithoutPrefix);
+            uri = uri + optionNsIp + "=" + argumentWithoutPrefix;
         } else {
-        	// search by name.
-        	uri = uri + OPTION_NAME + "=" + urlEncode(argumentList.get(0));
+            // search by name.
+            uri = uri + optionName + "=" + urlEncode(argumentList.get(0));
         }
         return uri;
     }

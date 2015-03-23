@@ -55,19 +55,19 @@ public class NameserverSearchHandler extends QueryHandler {
         List<String> argumentList = command.getArgumentList();
         throwExceptionIfArguementIsEmpty(argumentList);
         String uri = "nameservers?";
-        String OPTION_IP = CommandOption.NAMESERVER_SEARCH_BY_IP.getOption();
-        String OPTION_NAME =
+        String optionIp = CommandOption.NAMESERVER_SEARCH_BY_IP.getOption();
+        String optionName =
                 CommandOption.NAMESERVER_SEARCH_BY_NAME.getOption();
-        if (isPrefixedArgument(argumentList.get(0), OPTION_IP + PARAM_SEPARATOR)) {
+        if (isPrefixedArgument(argumentList.get(0), optionIp + PARAM_SEPARATOR)) {
             // search by ip.
             String argumentWithoutPrefix =
-                    removePrefix(argumentList.get(0), OPTION_IP);
+                    removePrefix(argumentList.get(0), optionIp);
             argumentWithoutPrefix = urlEncode(argumentWithoutPrefix);
-            uri = uri + OPTION_IP + "=" + argumentWithoutPrefix;
+            uri = uri + optionIp + "=" + argumentWithoutPrefix;
         } else {// search by name.
             List<String> argumntList = command.getArgumentList();
             throwExceptionIfArguementIsEmpty(argumntList);
-            uri = uri + OPTION_NAME + "=" + urlEncode(argumntList.get(0));
+            uri = uri + optionName + "=" + urlEncode(argumntList.get(0));
         }
         return uri;
     }

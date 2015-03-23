@@ -41,31 +41,67 @@ import java.util.List;
  */
 public enum CommandOption {
     /**
-     * not with arg
+     * IP_OR_DOMAIN_QUERY.
      */
-    IP_OR_DOMAIN_QUERY("", false, "query ip/domain"), DOMAIN_SEARCH("domains",
-            false, "domain search"), ENTITY_QUERY("entity", false,
-            "query entity by handle"), ENTITY_SEARCH("entities", false,
-            "search entity by handle/name"), NAMESERVER_QUERY("nameserver",
-            false, "query nameserver by name"), NAMESERVER_SEARCH(
-            "nameservers", false, "search nameserver by name"), AS("as", false,
-            "query as number"),
+    IP_OR_DOMAIN_QUERY("", false, "query ip/domain"),
+    /**
+     * DOMAIN_SEARCH.
+     */
+    DOMAIN_SEARCH("domains", false, "domain search"),
+    /**
+     * ENTITY_QUERY.
+     */
+    ENTITY_QUERY("entity", false, "query entity by handle"),
+    /**
+     * ENTITY_SEARCH.
+     */
+    ENTITY_SEARCH("entities", false, "search entity by handle/name"),
+    /**
+     * NAMESERVER_QUERY.
+     */
+    NAMESERVER_QUERY("nameserver", false, "query nameserver by name"),
+    /**
+     * NAMESERVER_SEARCH.
+     */
+    NAMESERVER_SEARCH("nameservers", false, "search nameserver by name"),
+    /**
+     * AS.
+     */
+    AS("as", false, "query as number"),
 
     /**
-     * has arg
+     * has arg.
      */
     ENTITY_SEARCH_FN("fn", true, "search entity by name"),
+    /**
+     * ENTITY_SEARCH_HANDLE.
+     */
     ENTITY_SEARCH_HANDLE("handle", true, "search entity by handle"),
+    /**
+     * NAMESERVER_SEARCH_BY_IP.
+     */
     NAMESERVER_SEARCH_BY_IP("ip", true, "search nameserver by ip"),
+    /**
+     * NAMESERVER_SEARCH_BY_NAME.
+     */
     NAMESERVER_SEARCH_BY_NAME("name", true, "search nameserver by name"),
+    /**
+     * DOMAIN_SEARCH_BY_NAME.
+     */
     DOMAIN_SEARCH_BY_NAME("name", true, "search domain by name"),
+    /**
+     * DOMAIN_SEARCH_BY_NSLDHNAME.
+     */
     DOMAIN_SEARCH_BY_NSLDHNAME("nsLdhName", true, "search domain by nsLdhName"),
+    /**
+     * DOMAIN_SEARCH_BY_NSIP.
+     */
     DOMAIN_SEARCH_BY_NSIP("nsIp", true, "search nameserver by ip");
 
     /**
      * all options that are not with args.This is used to parse query type.
      */
-    private static List<CommandOption> OPTIONS_NOT_WITH_ARGS =
+    private static final List<CommandOption> OPTIONS_NOT_WITH_ARGS =
             new ArrayList<CommandOption>();
     /**
      * init.
@@ -94,6 +130,12 @@ public enum CommandOption {
      */
     private String description;
 
+    /**
+     * constructor.
+     * 
+     * @param option
+     *            option.
+     */
     private CommandOption(String option) {
         this.option = option;
     }
@@ -103,6 +145,8 @@ public enum CommandOption {
      * 
      * @param option
      *            option.
+     * @param hasArg
+     *            hasArg.
      * @param description
      *            description.
      */
@@ -158,8 +202,8 @@ public enum CommandOption {
     /**
      * set hasArg.
      * 
-     * @param hasArg hasArg.
-     *            .
+     * @param hasArg
+     *            hasArg. .
      */
     public void setHasArg(boolean hasArg) {
         this.hasArg = hasArg;

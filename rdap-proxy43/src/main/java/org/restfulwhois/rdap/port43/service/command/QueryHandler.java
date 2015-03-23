@@ -97,6 +97,8 @@ public abstract class QueryHandler {
     /**
      * generate URI to query RDAP server.
      * 
+     * @param command
+     *            command.
      * @return URI.
      */
     public String generateRequestURI(Command command) {
@@ -107,6 +109,8 @@ public abstract class QueryHandler {
     /**
      * generate request URI, used to send request to RDAP server.
      * 
+     * @param command
+     *            command.
      * @return request URI.
      */
     protected String getRelativeRequestURI(Command command) {
@@ -130,11 +134,8 @@ public abstract class QueryHandler {
      * 
      * @param argumentList
      *            argument list.
-     * @throws ServiceException
-     *             if argument is empty.
      */
-    protected void throwExceptionIfArguementIsEmpty(List<String> argumentList)
-            throws ServiceException {
+    protected void throwExceptionIfArguementIsEmpty(List<String> argumentList) {
         if (null == argumentList || argumentList.isEmpty()) {
             throw new ServiceException("invalid argument");
         }
