@@ -1,3 +1,9 @@
+### Introduction    
+RDAP: Registration Data Access Protocol([RDAP protocol](http://datatracker.ietf.org/wg/weirds/)) for Domain Registries and Regional Internet Registries.   
+This project is a starting point for registries to build rdap service so that they need not to start from scratch.   
+The project is written in Java. Modules:  
+![architecture](https://raw.githubusercontent.com/cnnic/rdap/master/doc/image/classdiagram/architecture.png)
+
 ### RDAP service Install  
 
 Tested Operating environment : Red Hat Enterprise Linux Server release 5.3, CentOS release 5.7, Win7, Win8, OS X 10.8.4.  
