@@ -9,7 +9,14 @@ import java.util.TimerTask;
  * @author jiashuo
  * 
  */
-public class ClearRateLimitMapTimer {
+public final class ClearRateLimitMapTimer {
+    /**
+     * constructor.
+     */
+    private ClearRateLimitMapTimer() {
+        super();
+    }
+
     /**
      * interval in milliseconds.
      */

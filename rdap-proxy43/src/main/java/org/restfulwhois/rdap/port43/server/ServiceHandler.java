@@ -73,7 +73,14 @@ public class ServiceHandler extends SimpleChannelInboundHandler<String> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
     }
 
-//    @Override
+    /**
+     * messageReceived.
+     * 
+     * @param ctx
+     *            ctx.
+     * @param request
+     *            request.
+     */
     public void messageReceived(ChannelHandlerContext ctx, String request) {
         InetSocketAddress socketAddress =
                 (InetSocketAddress) ctx.channel().remoteAddress();
@@ -130,6 +137,6 @@ public class ServiceHandler extends SimpleChannelInboundHandler<String> {
     @Override
     protected void channelRead0(ChannelHandlerContext arg0, String arg1)
             throws Exception {
-        messageReceived(arg0,arg1);
+        messageReceived(arg0, arg1);
     }
 }

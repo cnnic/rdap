@@ -88,10 +88,21 @@ public class RestResponse {
         this.body = body;
     }
 
+    /**
+     * get locationHeader.
+     * 
+     * @return locationHeader.
+     */
     public String getLocationHeader() {
         return locationHeader;
     }
 
+    /**
+     * set locationHeader.
+     * 
+     * @param locationHeader
+     *            locationHeader.
+     */
     public void setLocationHeader(String locationHeader) {
         this.locationHeader = locationHeader;
     }

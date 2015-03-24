@@ -50,7 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * rest client. TODO:refactor.
+ * rest client.
  * 
  * @author weijunkai,jiashuo
  * 
@@ -83,7 +83,7 @@ public final class RestClient {
      *            url.
      * @return rest response.
      */
-    public RestResponse execute(String url) throws ServiceException {
+    public RestResponse execute(String url) {
         CloseableHttpClient client = HttpClients.createDefault();
         RequestConfig requestConfig =
                 RequestConfig.custom().setRedirectsEnabled(false).build();
