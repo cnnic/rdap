@@ -40,8 +40,8 @@ public class RdapQueryClient extends RdapClient{
         return query(NameserverDto.class, "nameserver", name);
     }
 
-    public AutnumDto queryAutnum(String autnum) throws RdapClientException {
-        return query(AutnumDto.class, "autnum", autnum);
+    public AutnumDto queryAutnum(long autnum) throws RdapClientException {
+        return query(AutnumDto.class, "autnum", String.valueOf(autnum));
     }
 
     public EntityDto queryEntity(String handle) throws RdapClientException {

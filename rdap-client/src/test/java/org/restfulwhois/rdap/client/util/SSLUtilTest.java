@@ -3,8 +3,6 @@ package org.restfulwhois.rdap.client.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
-import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 

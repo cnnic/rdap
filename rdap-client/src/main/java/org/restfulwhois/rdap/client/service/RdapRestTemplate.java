@@ -46,7 +46,7 @@ public class RdapRestTemplate {
                 httpUrlConn.setDoOutput(true);
                 httpUrlConn.setRequestProperty("content-type", mediaType);
             }
-
+            httpUrlConn.setRequestProperty("accept", mediaType);
             return httpUrlConn;
         } catch (IOException e) {
             throw new RdapClientException(e.getMessage());

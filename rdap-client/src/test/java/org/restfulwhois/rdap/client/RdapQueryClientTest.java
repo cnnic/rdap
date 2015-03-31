@@ -112,11 +112,11 @@ public class RdapQueryClientTest {
         AutnumDto autnum;
         try {
             setContent200("autnum");
-            autnum = client.queryAutnum("autnumName");
+            autnum = client.queryAutnum(2100);
         } catch (RdapClientException e) {
             autnum = null;
         }
-        assertEquals("/autnum/autnumName", mockHttpServer.getRequestUrl());
+        assertEquals("/autnum/2100", mockHttpServer.getRequestUrl());
         assertEquals("autnum-1", autnum.getHandle());
     }
     
