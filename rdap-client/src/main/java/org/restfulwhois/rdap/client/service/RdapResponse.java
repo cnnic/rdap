@@ -8,10 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
+import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
 
 public class RdapResponse {
     private int responseCode;
+    private HttpMethodType methodType;
     private String responseMessage;
     private InputStream in;
     private Map<String, String> unknownPropertiesMap;
@@ -20,6 +22,7 @@ public class RdapResponse {
     public <T> T getResponseBody(Class<T> responseType)
             throws RdapClientException {
         T t = null;
+        
         if (getIn() != null)
             t = convert(getIn(), responseType);
         return t;
@@ -37,11 +40,16 @@ public class RdapResponse {
             }
             reader.close();
             in.close();
-            if (isSaveUnknownProperties()) {
-                unknownPropertiesMap = new HashMap<String, String>();
+            if(responseCode == 200 || !getMethodType().equals(HttpMethodType.GET)){
+                if (isSaveUnknownProperties()) {
+                    unknownPropertiesMap = new HashMap<String, String>();
+                }
+                return JsonUtil.toObject(sb.toString(), responseType,
+                        unknownPropertiesMap);
+            }else{
+                return null;
             }
-            return JsonUtil.toObject(sb.toString(), responseType,
-                    unknownPropertiesMap);
+            
         } catch (IOException io) {
             throw new RdapClientException(io.getMessage());
         } catch (RdapClientException rce) {
@@ -55,6 +63,14 @@ public class RdapResponse {
 
     public void setResponseCode(int responseCode) {
         this.responseCode = responseCode;
+    }
+    
+    public HttpMethodType getMethodType() {
+        return methodType;
+    }
+
+    public void setMethodType(HttpMethodType methodType) {
+        this.methodType = methodType;
     }
 
     public String getResponseMessage() {
