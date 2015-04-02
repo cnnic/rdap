@@ -70,6 +70,7 @@ public class RdapRestTemplate {
             int code = urlConnection.getResponseCode();
             response.setResponseCode(code);
             response.setResponseMessage(urlConnection.getResponseMessage());
+            response.setMethodType(HttpMethodType.valueOf(urlConnection.getRequestMethod()));
             try {
                 SimpleHttpStatusCode.valueOf(code);
                 if (code == 200) {
