@@ -15,8 +15,27 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.restfulwhois.rdap.client.exception.RdapClientException;
 
-public class SSLUtil {
+/**
+ * Operations on SSL setting
+ * @author M.D.
+ *
+ */
+public final class SSLUtil {
+    
+    /**
+     * constructor
+     */
+    private SSLUtil(){}
 
+    /**
+     * Load a .keystore file with file path and it's password
+     * @param filePath the .keystore file path
+     * @param password the .keystore file password
+     * @return KeyStore
+     * @throws RdapClientException if there is an I/O problem or the .keystore 
+     * file can not be found or the .keystore file can not be loaded then the 
+     * RdapClientException will be thrown
+     */
     public static KeyStore loadKeyStore(String filePath, String password)
             throws RdapClientException {
         KeyStore ks;
@@ -36,6 +55,12 @@ public class SSLUtil {
         return ks;
     }
 
+    /**
+     * Get trust managers from ks.
+     * @param ks loaded keystore
+     * @return TrustManager
+     * @throws RdapClientException if this operation fails
+     */
     public static TrustManager[] getTrustManager(KeyStore ks)
             throws RdapClientException {
 
@@ -54,6 +79,12 @@ public class SSLUtil {
         return tm;
     }
 
+    /**
+     * Get SSLSocketFactory from managers
+     * @param managers TrustManager
+     * @return SSLSocketFactory
+     * @throws RdapClientException if this operation fails
+     */
     public static SSLSocketFactory getSSLSocketFactory(TrustManager[] managers)
             throws RdapClientException {
         try {

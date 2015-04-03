@@ -11,6 +11,11 @@ import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.client.util.JsonUtil;
 
+/**
+ * 
+ * @author M.D.
+ *
+ */
 public class RdapResponse {
     private int responseCode;
     private HttpMethodType methodType;
