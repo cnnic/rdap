@@ -1,5 +1,25 @@
 package org.restfulwhois.rdap.client.util;
 
+/**
+ * HttpMethod
+ * @author M.D.
+ *
+ */
 public enum HttpMethodType {
-    GET, PUT, POST, DELETE;
+    /**
+     * GET
+     */
+    GET, 
+    /**
+     * PUT
+     */
+    PUT, 
+    /**
+     * POST
+     */
+    POST, 
+    /**
+     * DELETE
+     */
+    DELETE;
 }

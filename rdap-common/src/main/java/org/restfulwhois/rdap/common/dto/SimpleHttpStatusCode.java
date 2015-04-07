@@ -40,6 +40,7 @@ public enum SimpleHttpStatusCode {
 
 	OK_200(200, ""), 
     ERROR_400(400, ""), 
+    FORBIDDEN_403(403, ""),
     NOT_FOUND_404(404, ""),
     CONFLICT_409(409, ""), 
     METHOD_NOT_ALLOWED_405(405, ""), 
