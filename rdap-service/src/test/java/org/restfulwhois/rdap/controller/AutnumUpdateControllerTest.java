@@ -49,6 +49,7 @@ import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.JsonHelper;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -77,7 +78,7 @@ public class AutnumUpdateControllerTest extends BaseTest {
 
     private MockMvc mockMvc;
 
-    final private String rdapJson = "application/rdap+json;charset=UTF-8";
+    final private String rdapJson = RdapProperties.RESPONSE_CONTENT_TYPE;
 
     @Before
     public void setup() {

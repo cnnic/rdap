@@ -63,11 +63,6 @@ public class RdapControllerDomainRedirectTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
-    
-    /**
-     * output json.
-     */
-    final private String rdapJson = "application/rdap+json";
 
     @Before
     public void setup() {

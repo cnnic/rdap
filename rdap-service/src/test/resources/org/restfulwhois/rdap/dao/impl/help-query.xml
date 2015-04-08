@@ -8,7 +8,7 @@
 		NOTICE_ID="2" DESCRIPTION="descriptionRemark" />
 	<RDAP_LINK LINK_ID="21" VALUE="http://example.com/context_uri"
 		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
-		TYPE="application/json" />
+		TYPE="application/rdap+json;charset=UTF-8" />
 	<REL_LINK_OBJECT REL_LINK_ID="21" REL_ID="21"
 		REL_OBJECT_TYPE="remark" LINK_ID="21" />
 	<!-- help -->
@@ -19,7 +19,7 @@
 		NOTICE_ID="3" DESCRIPTION="descriptionRemark" />
 	<RDAP_LINK LINK_ID="22" VALUE="http://example.com/context_uri"
 		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
-		TYPE="application/json" />
+		TYPE="application/rdap+json;charset=UTF-8" />
 	<REL_LINK_OBJECT REL_LINK_ID="22" REL_ID="3"
 		REL_OBJECT_TYPE="notice" LINK_ID="22" />
 

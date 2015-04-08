@@ -52,6 +52,7 @@ import org.restfulwhois.rdap.BaseTest;
 import org.restfulwhois.rdap.JsonHelper;
 import org.restfulwhois.rdap.common.dto.AutnumDto;
 import org.restfulwhois.rdap.common.dto.embedded.EventDto;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.util.UpdateValidateUtil;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.restfulwhois.rdap.dao.impl.EntityUpdateDaoTest;
@@ -84,8 +85,7 @@ public class AutnumCreateControllerTest extends BaseTest {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
-
-    final private String rdapJson = "application/rdap+json;charset=UTF-8";
+    final private String rdapJson = RdapProperties.RESPONSE_CONTENT_TYPE;
 
     @Before
     public void setup() {
@@ -216,7 +216,7 @@ public class AutnumCreateControllerTest extends BaseTest {
                 post(URI_AUTNUM_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(RdapProperties.RESPONSE_CONTENT_TYPE))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4001))
                 .andExpect(
@@ -414,7 +414,7 @@ public class AutnumCreateControllerTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)).content(
                         invalidContent))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(RdapProperties.RESPONSE_CONTENT_TYPE))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4001))
                 .andExpect(

@@ -74,11 +74,6 @@ public class RdapControllerIpTest extends BaseTest {
     final private String URI_IP = "/ip/";
 
     /**
-     * output json.
-     */
-    final private String rdapJson = "application/rdap+json";
-
-    /**
      * set up mockMvc.
      */
     @Before

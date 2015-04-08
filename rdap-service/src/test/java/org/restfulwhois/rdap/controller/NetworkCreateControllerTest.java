@@ -88,8 +88,6 @@ public class NetworkCreateControllerTest extends BaseTest {
 
     private MockMvc mockMvc;
 
-    final private String rdapJson = "application/rdap+json;charset=UTF-8";
-
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -330,7 +328,7 @@ public class NetworkCreateControllerTest extends BaseTest {
                 post(URI_IP_U).contentType(MediaType.parseMediaType(rdapJson))
                         .content(invalidContent))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4001))
                 .andExpect(

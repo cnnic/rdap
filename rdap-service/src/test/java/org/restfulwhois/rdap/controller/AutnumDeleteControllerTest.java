@@ -39,6 +39,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.restfulwhois.rdap.BaseTest;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.validation.ServiceErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -67,7 +68,7 @@ public class AutnumDeleteControllerTest extends BaseTest {
 
     private MockMvc mockMvc;
 
-    final private String rdapJson = "application/rdap+json;charset=UTF-8";
+    final private String rdapJson = RdapProperties.RESPONSE_CONTENT_TYPE;
 
     @Before
     public void setup() {
@@ -117,8 +118,7 @@ public class AutnumDeleteControllerTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(
-                        content().contentType(
-                                "application/rdap+json;charset=UTF-8"))
+                        content().contentType(RdapProperties.RESPONSE_CONTENT_TYPE))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.subErrorCode").value(4041))
                 .andExpect(

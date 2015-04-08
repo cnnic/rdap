@@ -71,8 +71,6 @@ public class DomainDeleteControllerTest extends BaseTest {
 
     private MockMvc mockMvc;
 
-    final private String rdapJson = "application/rdap+json;charset=UTF-8";
-
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -130,8 +128,7 @@ public class DomainDeleteControllerTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)))
                 .andExpect(status().isNotFound())
                 .andExpect(
-                        content().contentType(
-                                "application/rdap+json;charset=UTF-8"))
+                        content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(404))
                 .andExpect(jsonPath("$.subErrorCode").value(4041))
                 .andExpect(
