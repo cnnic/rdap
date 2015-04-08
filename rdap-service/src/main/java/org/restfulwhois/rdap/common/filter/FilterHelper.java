@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.restfulwhois.rdap.common.support.RdapProperties;
 import org.restfulwhois.rdap.common.util.StringUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -90,7 +91,7 @@ public final class FilterHelper {
      */
     public static void writeResponse(ResponseEntity responseEntity,
             HttpServletResponse response) throws IOException {
-        response.setHeader("Content-Type", "application/rdap+json");
+        response.setHeader("Content-Type", RdapProperties.RESPONSE_CONTENT_TYPE);
         HttpHeaders headers = responseEntity.getHeaders();
         Set<String> headerKeys = headers.keySet();
         for (String headerKey : headerKeys) {

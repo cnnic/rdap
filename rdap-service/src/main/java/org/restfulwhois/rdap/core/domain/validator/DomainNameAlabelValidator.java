@@ -60,7 +60,7 @@ public class DomainNameAlabelValidator implements Validator {
         String[] splits = StringUtils.split(q, ".");
         for (String split : splits) {
             if (2 != StringUtils.indexOf(split, "--")) {
-                return;
+                continue;
             }
             if (!IdnaUtil.checkIfValidALabelDomain(q)) {
                 validationResult.addError(QueryValidationError.build400Error());

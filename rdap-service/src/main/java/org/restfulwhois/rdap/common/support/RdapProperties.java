@@ -50,6 +50,12 @@ import org.restfulwhois.rdap.common.util.StringUtil;
 public class RdapProperties {
 
     /**
+     * response content type.
+     */
+    public static final String RESPONSE_CONTENT_TYPE =
+            "application/rdap+json;charset=UTF-8";
+
+    /**
      * custom property prefix.
      */
     private static String customPropertyPrefix;
