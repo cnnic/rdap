@@ -96,6 +96,8 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
         DbUnitTestExecutionListener.class })
 @Transactional
 public abstract class BaseTest {
+    
+    protected static String rdapJson = RdapProperties.RESPONSE_CONTENT_TYPE;
 
     private static final String DEFAULT_RELATIVATE_DATAFILE_PATH =
             "org/restfulwhois/rdap/dao/impl/";

@@ -8,7 +8,7 @@
 	<!-- link -->
 	<RDAP_LINK LINK_ID="1" VALUE="http://example.com/context_uri"
 		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
-		TYPE="application/json" />
+		TYPE="application/rdap+json;charset=UTF-8" />
 	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="1"
 		REL_OBJECT_TYPE="dsData" LINK_ID="1" />
 </dataset>

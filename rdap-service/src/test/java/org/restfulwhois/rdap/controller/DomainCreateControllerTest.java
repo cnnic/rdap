@@ -91,8 +91,6 @@ public class DomainCreateControllerTest extends BaseTest {
 
     private MockMvc mockMvc;
 
-    final private String rdapJson = "application/rdap+json;charset=UTF-8";
-
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -222,7 +220,7 @@ public class DomainCreateControllerTest extends BaseTest {
                 post(URI_DOMAIN_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4001))
                 .andExpect(
@@ -242,7 +240,7 @@ public class DomainCreateControllerTest extends BaseTest {
                 post(URI_DOMAIN_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4001))
                 .andExpect(
@@ -309,7 +307,7 @@ public class DomainCreateControllerTest extends BaseTest {
                 post(URI_DOMAIN_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4001))
                 .andExpect(
@@ -378,7 +376,7 @@ public class DomainCreateControllerTest extends BaseTest {
                 post(URI_DOMAIN_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4001))
                 .andExpect(
@@ -547,7 +545,7 @@ public class DomainCreateControllerTest extends BaseTest {
                         MediaType.parseMediaType(rdapJson)).content(
                         invalidContent))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.subErrorCode").value(4001))
                 .andExpect(
@@ -751,7 +749,7 @@ public class DomainCreateControllerTest extends BaseTest {
                 get(URI_DOMAIN_U).contentType(
                         MediaType.parseMediaType(rdapJson)).content(content))
                 .andExpect(status().isMethodNotAllowed())
-                .andExpect(content().contentType("application/rdap+json"))
+                .andExpect(content().contentType(rdapJson))
                 .andExpect(jsonPath("$.errorCode").value(405))
                 .andExpect(jsonPath("$.subErrorCode").doesNotExist());
     }

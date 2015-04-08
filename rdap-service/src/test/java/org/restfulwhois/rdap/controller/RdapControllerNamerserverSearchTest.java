@@ -67,10 +67,6 @@ public class RdapControllerNamerserverSearchTest extends BaseTest {
      * ns search URI.
      */
     private static final String URI_NS_SEARCH = "/nameservers?";
-    /**
-     * output json.
-     */
-    private final String rdapJson = "application/rdap+json";
 
     @Autowired
     private WebApplicationContext wac;

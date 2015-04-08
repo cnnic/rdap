@@ -67,11 +67,6 @@ public class RdapControllerEntityTest extends BaseTest {
 
     private MockMvc mockMvc;
 
-    /**
-     * output json.
-     */
-    final private String rdapJson = "application/rdap+json";
-
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();

@@ -21,7 +21,7 @@
 		REL_OBJECT_TYPE="nameServer" EVENT_ID="1" />
 	<!-- links -->
 	<RDAP_LINK LINK_ID="1" VALUE="http://nameserverlink" REL="self"
-		HREF="http://nameserverlink" MEDIA="screen" TYPE="application/json" 
+		HREF="http://nameserverlink" MEDIA="screen" TYPE="application/rdap+json;charset=UTF-8" 
 		TITLE="Title1 of Link1"/>
 	<REL_LINK_OBJECT REL_LINK_ID="1" REL_ID="11"
 		REL_OBJECT_TYPE="nameserver" LINK_ID="1" />
@@ -39,7 +39,7 @@
 		NOTICE_ID="1" DESCRIPTION="description2" />
 	<RDAP_LINK LINK_ID="102" VALUE="http://example.com/context_uri"
 		REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
-		TYPE="application/json" />
+		TYPE="application/rdap+json;charset=UTF-8" />
 	<REL_LINK_OBJECT REL_LINK_ID="102" REL_ID="1"
 		REL_OBJECT_TYPE="remark" LINK_ID="102" />
 

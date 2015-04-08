@@ -73,11 +73,6 @@ public class RdapControllerHelpTest extends BaseTest {
     final private String urlPath = "/help";
 
     /**
-     * output json.
-     */
-    final private String rdapJson = "application/rdap+json";
-
-    /**
      * set up mockMvc.
      */
     @Before
