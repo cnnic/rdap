@@ -43,14 +43,14 @@ public class RdapQueryClient extends RdapClient{
 
     /**
      * Query IpDto by address and cidrLength
-     * @param address ip address
+     * @param cidrPrefix ip address
      * @param cidrLength cidr length
      * @return IpDto
      * @throws RdapClientException if fail to query
      */
-    public IpDto queryIp(String address, int cidrLength)
+    public IpDto queryIp(String cidrPrefix, int cidrLength)
             throws RdapClientException {
-        return query(IpDto.class, "ip", address, String.valueOf(cidrLength));
+        return query(IpDto.class, "ip", cidrPrefix, String.valueOf(cidrLength));
     }
 
     /**
@@ -96,44 +96,75 @@ public class RdapQueryClient extends RdapClient{
 
     /**
      * Search domain by name
-     * @param param domain name
+     * @param name domain name
      * @return DomainDto
      * @throws RdapClientException if fail to search
      */
-    public DomainDto searchDomainByName(String param) throws RdapClientException {
-        return search(DomainDto.class, "name", param, SearchUri.DOMAIN);
+    public DomainDto searchDomainByName(String name) throws RdapClientException {
+        return search(DomainDto.class, "name", name, SearchUri.DOMAIN);
+    }
+    
+    /**
+     * Search domain by ns ldhName
+     * @param nsLdhName ns ldhName
+     * @return DomainDto
+     * @throws RdapClientException if fail to search
+     */
+    public DomainDto searchDomainByNsLdhName(String nsLdhName)
+            throws RdapClientException {
+        return search(DomainDto.class, "nsLdhName", nsLdhName, SearchUri.DOMAIN);
+    }
+    
+    /**
+     * Search domain by ns ip
+     * @param nsIp ns ip
+     * @return DomainDto
+     * @throws RdapClientException if fail to search
+     */
+    public DomainDto searchDomainByNsIp(String nsIp) throws RdapClientException {
+        return search(DomainDto.class, "nsIp", nsIp, SearchUri.DOMAIN);
     }
 
     /**
      * Search nameserver by name
-     * @param param nameserver name
+     * @param name nameserver name
      * @return NameserverDto
      * @throws RdapClientException if fail to search
      */
-    public NameserverDto searchNameserverByName(String param)
+    public NameserverDto searchNameserverByName(String name)
             throws RdapClientException {
-        return search(NameserverDto.class, "name", param, SearchUri.NAMESERVER);
+        return search(NameserverDto.class, "name", name, SearchUri.NAMESERVER);
     }
 
     /**
+     * Search nameserver by ip
+     * @param ip ip address
+     * @return NameserverDto
+     * @throws RdapClientException if fail to search
+     */
+    public NameserverDto searchNameserverByIp(String ip) throws RdapClientException{
+        return search(NameserverDto.class, "ip", ip, SearchUri.NAMESERVER);
+    }
+    
+    /**
      * Search EntityDto by entity name
-     * @param param entity name
+     * @param name entity name
      * @return EntityDto
      * @throws RdapClientException if fail to search
      */
-    public EntityDto searchEntityByFn(String param) throws RdapClientException {
-        return search(EntityDto.class, "fn", param, SearchUri.ENTITY);
+    public EntityDto searchEntityByFn(String name) throws RdapClientException {
+        return search(EntityDto.class, "fn", name, SearchUri.ENTITY);
     }
 
     /**
      * Search EntityDto by handle
-     * @param param handle
+     * @param handle handle
      * @return EntityDto
      * @throws RdapClientException if fail to search
      */
-    public EntityDto searchEntityByHandle(String param)
+    public EntityDto searchEntityByHandle(String handle)
             throws RdapClientException {
-        return search(EntityDto.class, "handle", param, SearchUri.ENTITY);
+        return search(EntityDto.class, "handle", handle, SearchUri.ENTITY);
     }
 
     /**
