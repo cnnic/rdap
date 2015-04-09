@@ -1,6 +1,7 @@
 package org.restfulwhois.rdap.client.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +15,12 @@ public class URLUtilTest {
     String url = "http://www.baidu.com";
     String path = "/ip/192.168.1.1";
     String param = "?p2=2&p1=1";
+    String param1 = "?p1=1&p2=2";
     String urlWithPath = url + path;
     String urlWithParam = url + param;
-    String urlWithPathAndParma = url + path + param;
+    String urlWithParam1 = url + param1;
+    String urlWithPathAndParam = url + path + param;
+    String urlWithPathAndParam1 = url + path + param1;
 
     @Test
     public void test_makeURL() {
@@ -70,7 +74,7 @@ public class URLUtilTest {
             urlString = null;
         }
 
-        assertEquals(urlWithParam, urlString);
+        assertTrue(urlWithParam.equals(urlString)||urlWithParam1.equals(urlString)); 
     }
 
     @Test
@@ -86,7 +90,8 @@ public class URLUtilTest {
             urlString = null;
         }
 
-        assertEquals(urlWithPathAndParma, urlString);
+        assertTrue(urlWithPathAndParam.equals(urlString)
+                ||urlWithPathAndParam1.equals(urlString));
     }
 
     @Test
@@ -105,6 +110,7 @@ public class URLUtilTest {
             urlString = null;
         }
 
-        assertEquals(urlWithPathAndParma, urlString);
+        assertTrue(urlWithPathAndParam.equals(urlString)
+                ||urlWithPathAndParam1.equals(urlString));
     }
 }
