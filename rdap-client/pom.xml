@@ -8,7 +8,7 @@
 		<artifactId>rdap</artifactId>
 		<version>${rdap.version}</version>
 	</parent>
-	<groupId>org.restfulwhois.rdap.client.client</groupId>
+	<groupId>org.restfulwhois.rdap</groupId>
 	<artifactId>rdap-client</artifactId>
 	<version>${rdap.version}</version>
 	<name>rdap-client</name>
@@ -63,4 +63,48 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+    <build>
+        <finalName>rdap-client-${rdap.version}</finalName>
+	    <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*.properties</exclude>
+                        <exclude>assemble/**</exclude>
+                    </excludes>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.restfulwhois.rdap.port43.server.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.restfulwhois.rdap.port43.server.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+	</build>	
 </project>

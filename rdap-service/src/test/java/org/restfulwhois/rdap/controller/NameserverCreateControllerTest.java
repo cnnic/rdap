@@ -78,8 +78,6 @@ public class NameserverCreateControllerTest extends BaseTest {
 
     private MockMvc mockMvc;
 
-    final private String rdapJson = "application/rdap+json;charset=UTF-8";
-
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();

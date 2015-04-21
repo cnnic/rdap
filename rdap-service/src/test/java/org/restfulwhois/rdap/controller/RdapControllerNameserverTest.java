@@ -68,10 +68,6 @@ public class RdapControllerNameserverTest extends BaseTest {
      * nameserver query URI.
      */
     final private String URI_NS_Q = "/nameserver/";
-    /**
-     * output json.
-     */
-    final private String rdapJson = "application/rdap+json";
 
     @Before
     public void setup() {

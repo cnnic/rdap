@@ -16,8 +16,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonUtil {
+/**
+ * To handle json and dto object convert each other.
+ * @author M.D.
+ *
+ */
+public final class JsonUtil {
 
+    /**
+     * ObjectMapper instance
+     */
     private static ObjectMapper objectMapper;
 
     static {
@@ -25,9 +33,17 @@ public class JsonUtil {
         objectMapper.configure(
                 DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
+    
+    /**
+     * constructor
+     */
+    private JsonUtil(){}
 
     /**
      * Converts object to json string.
+     * @param object dto object
+     * @return json string
+     * @throws RdapClientException if fail to convert
      */
     public static String toJson(Object object) throws RdapClientException {
         try {
@@ -40,6 +56,11 @@ public class JsonUtil {
 
     /**
      * Converts json string to object.
+     * @param json json string
+     * @param objectType dto class type
+     * @param <T> dto class type
+     * @return dto object
+     * @throws RdapClientException if fail to convert
      */
     public static <T> T toObject(String json, Class<T> objectType)
             throws RdapClientException {
@@ -49,9 +70,15 @@ public class JsonUtil {
     /**
      * Converts json string to object and saves unkonwn properties into the
      * paramter unkonwnPropertiesMap.
+     * @param json json string
+     * @param objectType dto class type
+     * @param unknownPropertiesMap 
+     * @param <T> dto class type
+     * @return dto object
+     * @throws RdapClientException if fail to convert
      */
     public static <T> T toObject(String json, Class<T> objectType,
-            Map<String, String> unkonwnPropertiesMap)
+            Map<String, String> unknownPropertiesMap)
             throws RdapClientException {
 
         T object = null;
@@ -61,13 +88,20 @@ public class JsonUtil {
             throw new RdapClientException(makeMessage(
                     ExceptionMessage.JSON_TO_OBJECT_ERROR, e));
         }
-        if (unkonwnPropertiesMap != null) {
+        if (unknownPropertiesMap != null) {
             Map<String, String> map = unidentifiedFields(json, objectType);
-            unkonwnPropertiesMap.putAll(map);
+            unknownPropertiesMap.putAll(map);
         }
         return object;
     }
 
+    /**
+     * Convert unknown property to map.
+     * @param json json string
+     * @param model Class type
+     * @return Map<String, String>
+     * @throws RdapClientException if fail to convert
+     */
     private static Map<String, String> unidentifiedFields(String json,
             Class<?> model) throws RdapClientException {
         Map<String, String> rtnMap = new HashMap<String, String>();
@@ -107,6 +141,12 @@ public class JsonUtil {
         return rtnMap;
     }
 
+    /**
+     * To creat exception message
+     * @param em ExceptionMessage 
+     * @param e Exception
+     * @return message string
+     */
     private static String makeMessage(ExceptionMessage em, Exception e) {
         return em.getMessage() + e.getMessage();
     }

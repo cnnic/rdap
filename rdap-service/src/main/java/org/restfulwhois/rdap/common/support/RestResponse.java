@@ -146,7 +146,7 @@ public class RestResponse {
      * @return ResponseEntity<T> ResponseEntity model.
      */
     public static <T> ResponseEntity<T> createResponse200(T response) {
-        HttpHeaders headers = generateCrossOriginHeader();
+        HttpHeaders headers = generateContentTypeAndCrossOriginHeader();
         return new ResponseEntity<T>(response, headers, HttpStatus.OK);
     }
 
@@ -182,9 +182,10 @@ public class RestResponse {
      * 
      * @return http headers.
      */
-    private static HttpHeaders generateCrossOriginHeader() {
+    private static HttpHeaders generateContentTypeAndCrossOriginHeader() {
         HttpHeaders headers = new HttpHeaders();
         addCrossOriginHeader(headers);
+        addContentTypeHeader(headers);
         return headers;
     }
 
@@ -196,6 +197,15 @@ public class RestResponse {
      */
     private static void addCrossOriginHeader(HttpHeaders headers) {
         headers.add("Access-Control-Allow-Origin", "*");
+    }
+    /**
+     * add content type headers.
+     * 
+     * @param headers
+     *            headers.
+     */
+    private static void addContentTypeHeader(HttpHeaders headers) {
+        headers.add("Content-Type", RdapProperties.RESPONSE_CONTENT_TYPE);
     }
 
     /**
@@ -307,7 +317,7 @@ public class RestResponse {
             HttpStatus errorStatus) {
         ErrorMessage errorMessage =
                 getErrorMessageByErrorCode(errorStatus.toString());
-        HttpHeaders headers = generateCrossOriginHeader();
+        HttpHeaders headers = generateContentTypeAndCrossOriginHeader();
         ResponseEntity<ErrorMessage> responseEntity =
                 new ResponseEntity<ErrorMessage>(errorMessage, headers,
                         errorStatus);

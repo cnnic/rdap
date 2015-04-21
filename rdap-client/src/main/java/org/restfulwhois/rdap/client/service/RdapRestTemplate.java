@@ -11,61 +11,100 @@ import org.restfulwhois.rdap.client.exception.RdapClientException;
 import org.restfulwhois.rdap.client.util.HttpMethodType;
 import org.restfulwhois.rdap.common.dto.SimpleHttpStatusCode;
 
+/**
+ * Send http request.
+ * @author M.D.
+ *
+ */
 public class RdapRestTemplate {
-    private String MEDIA_TYPE;
+    /**
+     * content-type and accept
+     */
+    private String mediaType;
+    /**
+     * connection timeout
+     */
     private int connectTimeout;
+    /**
+     * read timeout
+     */
     private int readTimeout;
 
-    public RdapRestTemplate() {
-        this.MEDIA_TYPE = "application/json;charset=UTF-8";
-    }
-
+    /**
+     * Execute http request
+     * @param httpMethod GET or DELETE
+     * @param url url
+     * @return RdapResponse
+     * @throws RdapClientException if fail to execute http request or fail to 
+     * convert json to object
+     */
     public RdapResponse execute(HttpMethodType httpMethod, URL url)
             throws RdapClientException {
 
         return doExecute(this.prepareExecute(url, httpMethod), null);
     }
 
+    /**
+     * Execute http request
+     * @param httpMethod POST or PUT
+     * @param url url
+     * @param body request body
+     * @return RdapResponse
+     * @throws RdapClientException if fail to execute http request or fail to 
+     * convert json to object
+     */
     public RdapResponse execute(HttpMethodType httpMethod, URL url, String body)
             throws RdapClientException {
 
         return doExecute(this.prepareExecute(url, httpMethod), body);
     }
 
-    private HttpURLConnection prepareExecute(URL url, HttpMethodType httpMethod)
-            throws RdapClientException {
+    /**
+     * Create HttpURLConnection instance
+     * @param url url
+     * @param httpMethod GET,PUT,POST or DELETE
+     * @return HttpURLConnection
+     * @throws RdapClientException if fail to create
+     */
+    protected HttpURLConnection prepareExecute(URL url,
+            HttpMethodType httpMethod) throws RdapClientException {
         try {
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url
+            HttpURLConnection httpUrlConn = (HttpURLConnection) url
                     .openConnection();
-            httpURLConnection.setConnectTimeout(connectTimeout);
-            httpURLConnection.setReadTimeout(readTimeout);
-            httpURLConnection.setUseCaches(false);
-            httpURLConnection.setRequestMethod(httpMethod.name());
-            httpURLConnection.setDoInput(true);
+            httpUrlConn.setConnectTimeout(connectTimeout);
+            httpUrlConn.setReadTimeout(readTimeout);
+            httpUrlConn.setUseCaches(false);
+            httpUrlConn.setInstanceFollowRedirects(true);
+            httpUrlConn.setRequestMethod(httpMethod.name());
+            httpUrlConn.setDoInput(true);
             if (httpMethod.equals(HttpMethodType.GET)
                     || httpMethod.equals(HttpMethodType.DELETE)) {
-                httpURLConnection.setDoOutput(false);
-                httpURLConnection.setInstanceFollowRedirects(false);
+                httpUrlConn.setDoOutput(false);
             } else {
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setInstanceFollowRedirects(true);
-                httpURLConnection
-                        .setRequestProperty("content-type", MEDIA_TYPE);
+                httpUrlConn.setDoOutput(true);
+                httpUrlConn.setRequestProperty("content-type", mediaType);
             }
-            return httpURLConnection;
+            httpUrlConn.setRequestProperty("accept", mediaType);
+            return httpUrlConn;
         } catch (IOException e) {
             throw new RdapClientException(e.getMessage());
         }
-
     }
 
-    private RdapResponse doExecute(HttpURLConnection httpURLConnection,
+    /**
+     * Send request
+     * @param urlConnection HttpURLConnection
+     * @param body request body
+     * @return RdapResponse
+     * @throws RdapClientException if fail to send
+     */
+    protected RdapResponse doExecute(HttpURLConnection urlConnection,
             String body) throws RdapClientException {
         RdapResponse response = new RdapResponse();
         try {
-            httpURLConnection.connect();
-            if (httpURLConnection.getDoOutput() && body != null) {
-                OutputStream out = httpURLConnection.getOutputStream();
+            urlConnection.connect();
+            if (urlConnection.getDoOutput() && body != null) {
+                OutputStream out = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(out, "utf-8"));
                 writer.write(body);
@@ -73,15 +112,16 @@ public class RdapRestTemplate {
                 writer.close();
                 out.close();
             }
-            int code = httpURLConnection.getResponseCode();
+            int code = urlConnection.getResponseCode();
             response.setResponseCode(code);
-            response.setResponseMessage(httpURLConnection.getResponseMessage());
+            response.setResponseMessage(urlConnection.getResponseMessage());
+            response.setMethodType(HttpMethodType.valueOf(urlConnection.getRequestMethod()));
             try {
                 SimpleHttpStatusCode.valueOf(code);
                 if (code == 200) {
-                    response.setIn(httpURLConnection.getInputStream());
+                    response.setIn(urlConnection.getInputStream());
                 } else {
-                    response.setIn(httpURLConnection.getErrorStream());
+                    response.setIn(urlConnection.getErrorStream());
                 }
             } catch (IllegalArgumentException iae) {
             }
@@ -92,26 +132,50 @@ public class RdapRestTemplate {
         return response;
     }
 
-    public String getMEDIA_TYPE() {
-        return MEDIA_TYPE;
+    /**
+     * mediaType getter
+     * @return mediaType
+     */
+    public String getMediaType() {
+        return mediaType;
     }
 
-    public void setMEDIA_TYPE(String mEDIA_TYPE) {
-        MEDIA_TYPE = mEDIA_TYPE;
+    /**
+     * mediaType setter
+     * @param mediaType String
+     */
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
 
+    /**
+     * connectTimeout getter
+     * @return connectTimeout
+     */
     public int getConnectTimeout() {
         return connectTimeout;
     }
 
+    /**
+     * connectTimeout setter
+     * @param connectTimeout milliseconds
+     */
     public void setConnectTimeout(int connectTimeout) {
         this.connectTimeout = connectTimeout;
     }
 
+    /**
+     * readTimeout getter
+     * @return readTimeout
+     */
     public int getReadTimeout() {
         return readTimeout;
     }
 
+    /**
+     * readTimeout setter
+     * @param readTimeout milliseconds
+     */
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
     }

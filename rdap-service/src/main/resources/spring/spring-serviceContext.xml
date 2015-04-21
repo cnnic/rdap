@@ -45,10 +45,10 @@
 			<value>3</value>
 		</property>
 		<property name="maxStatements">
-			<value>100</value>
+			<value>0</value>
 		</property>
 		<property name="idleConnectionTestPeriod">
-			<value>60</value>
+			<value>1000</value>
 		</property>
 		<property name="preferredTestQuery">
 			<value>select 1</value>

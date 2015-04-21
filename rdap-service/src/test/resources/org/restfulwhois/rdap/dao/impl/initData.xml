@@ -36,7 +36,7 @@
     <!-- notice link -->
  <!--    <RDAP_LINK LINK_ID="1022" VALUE="http://example.com/context_uri"
         REL="self" HREF="http://example.com/context_uri" MEDIA="screen"
-        TYPE="application/json" />
+        TYPE="application/rdap+json;charset=UTF-8" />
     <REL_LINK_OBJECT REL_LINK_ID="1022" REL_ID="115"
         REL_OBJECT_TYPE="notice" LINK_ID="1022" />
         
