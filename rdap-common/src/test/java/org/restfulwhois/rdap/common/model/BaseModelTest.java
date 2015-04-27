@@ -35,5 +35,16 @@ package org.restfulwhois.rdap.common.model;
  *
  */
 public class BaseModelTest {
-
+public static void main(String[] args) {
+//    int[] a = new int[Integer.MAX_VALUE-80];
+    int i =8;
+    int j = 3;
+    System.err.println(i=j);
+//    System.err.println(8>>>2);
+//    System.err.println(8>>>3);
+//    System.err.println(8>>4);
+//    System.err.println(8>>>4);
+//    System.err.println(-8>>>5);
+//    System.err.println(-8>>5);
+}
 }
